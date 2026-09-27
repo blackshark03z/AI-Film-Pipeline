@@ -2,7 +2,7 @@
 
 ## Project state
 
-**Lifecycle:** SLICE-0006 live PROVE at authentication/isolation gate; prior live external effect remains INCONCLUSIVE
+**Lifecycle:** SLICE-0006 E2E PROVEN; prior SLICE-0004 external effect remains INCONCLUSIVE
 **Current slice:** `SLICE-0006 — Fresh Flow Live Canary with Durable Dispatch Evidence`
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
@@ -45,15 +45,15 @@ baseline identity.
 
 ## In progress
 
-- SLICE-0006 Attempts 1–4 each reserved once in a separate fresh project and remain externally INCONCLUSIVE. All four projects are quarantined. Budget used: 4 of 5. A fifth fresh project is empty and has zero jobs/dispatches, but Veo Fast and Lite showed insufficient-credit warnings. The video-mode/exact-prompt credit gate now stops before reservation. Full offline suite: 111 passed. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
+- SLICE-0006 final Attempt 5 proved one complete live Veo video path in a fresh project on the Owner-selected `hoangbsea` account. The original bounded poll timed out; read-only recovery of the existing job bound the sole provider-observed identity, officially downloaded one valid 8-second 1280×720 video, persisted a SHA-256 Asset and freshly read back complete lineage. Five reservations were consumed across the slice; no job was redispatched. Attempts 1–4 remain quarantined. Exact Generate RPC request/response and provider-native acceptance remain unqualified, so dispatch semantics stay `AT_MOST_ONCE_WITH_POSSIBLE_LOSS`. Full suite: 111 passed. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
 
 ## Blocked
 
-- The initial active and candidate sessions returned AUTH_REQUIRED. Normal operator sign-in restored READY. Attempt 1's source checked Generate enabled before filling the editor; Flow presented an initially disabled button. Attempt 2's observer stopped without persisting a diagnostic type. Attempt 3's observer recorded a request callback error. Attempt 4 timed out without video identity. New browser contexts showed image mode by default. No Generate may occur on the old or quarantined Attempt 1–4 projects. Existing account credits showed insufficient for a verified Veo 3.1 Generate on the fifth clean project; no billing change is authorized. Both active and candidate sessions later returned AUTH_REVOKED, and AI Film preflight returned AUTH_REQUIRED.
+- Historical gates: Attempts 1–4 remain quarantined and must never be redispatched. The earlier fifth project was clean but inaccessible from the Owner-selected account; it received no job or Generate. Owner login on the correct account and a new dedicated binding resolved the authentication/credit gate without any billing change. Provider-native acceptance/idempotency is still unqualified.
 
 ## Next authorized action
 
-Freeze the video-mode/credit-gated candidate and stop at the Owner authentication and credit authority boundary. The fifth project has no GenerationAttempt/ProviderJob and no Generate; one transaction remains authorized in this slice if the Owner restores normal authentication and usable credits through account action. Recheck all live gates before any continuation. Do not reuse quarantined projects or start SLICE-0007.
+Freeze and report the SLICE-0006 candidate. The final attempt is PROVEN under the work package's explicit E2E criteria; Generate budget is exhausted at 5 of 5. Stop at the SLICE-0006 boundary. Do not reuse quarantined projects or start SLICE-0007.
 
 ## Next slice after PROVEN
 
