@@ -61,7 +61,10 @@ def test_runtime_profile_notes_do_not_enter_compiler_identity():
 def test_frozen_motion_rule_requires_purpose_even_when_schema_is_permissive():
     raw = json.loads((ROOT / "fixtures" / "dialogue_closeup.json").read_text(encoding="utf-8"))
     raw["camera"]["movement"]["purpose"] = None
-    validate_contract("shot_spec", raw)
+    # The authorized representation alignment now rejects this in JSON Schema too.
+    from jsonschema import ValidationError
+    with pytest.raises(ValidationError):
+        validate_contract("shot_spec", raw)
     with pytest.raises(ValueError, match="movement requires a purpose"):
         ShotSpec.model_validate(raw)
 

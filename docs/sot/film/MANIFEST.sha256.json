@@ -26,6 +26,6 @@
   "schemas/qc_report.schema.json": "c07b0c8595fc5ab92f9d33d8a2dd0c3a01cb36e208eae385c6ce96c9f91e2d83",
   "schemas/repair_decision.schema.json": "16129516df5547fe158d3406fce78484da8d869be169c0af1a8d648bc9aee23e",
   "schemas/routing_decision.schema.json": "b2b797c4c5a479e91cce3533220084ddb54dfb4af5e5e223f85ede7876b02d77",
-  "schemas/shot_spec.schema.json": "69bad516ad58a050da8210ab6a03979ec5c850c9dcd54067624a21badec97b00",
+  "schemas/shot_spec.schema.json": "8512ca641d673c1e7b25964fac0e57811d7875073b819519b60ac80dfef44176",
   "schemas/world_state.schema.json": "47a6a7add710997def5d0cfc6791f456e7d24036ae9c79dba7007263855e7c5c"
 }

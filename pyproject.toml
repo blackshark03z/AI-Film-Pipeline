@@ -5,6 +5,9 @@ description = "Lean local-first AI film production pipeline"
 requires-python = ">=3.11"
 dependencies = ["pydantic>=2,<3", "jsonschema>=4,<5"]
 
+[project.optional-dependencies]
+flow = ["patchright>=1,<2"]
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"

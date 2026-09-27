@@ -3,7 +3,7 @@
 ## Project state
 
 **Lifecycle:** BUILD candidate complete / Tech Lead PROVE pending
-**Current slice:** `SLICE-0002 — Film Core Vertical Skeleton`
+**Current slice:** `SLICE-0003 — Accept Core + Flow/Veo Adapter Preflight`
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
 
@@ -45,7 +45,7 @@ baseline identity.
 
 ## In progress
 
-- Tech Lead adjudication of the exact SLICE-0002 candidate.
+- SLICE-0003 candidate freeze and Tech Lead adjudication; authenticated Flow readiness remains unverified.
 
 ## Blocked
 
@@ -53,8 +53,8 @@ baseline identity.
 
 ## Next authorized action
 
-Stop at the SLICE-0002 boundary after candidate freeze/readback. Tech Lead owns acceptance and any later slice. Do not merge into `main` or start SLICE-0003.
+Stop at the SLICE-0003 boundary. Do not merge this candidate into main or begin live generation / SLICE-0004.
 
 ## Next slice after PROVEN
 
-Tech Lead may define SLICE-0003 after independently adjudicating SLICE-0002 evidence.
+Tech Lead accepted SLICE-0002 at 7041252d9e6b0c6bc7589d606fe30f45b302c1b8; main was fast-forwarded to that exact revision. SLICE-0003 adds authorized schema representation alignment and a read-only Flow provider boundary. No authenticated preflight was run because local Flow environment configuration is absent. A live canary requires a later authorized slice.

@@ -1,870 +1,733 @@
-# WORK PACKAGE — SLICE-0002: FILM CORE VERTICAL SKELETON
+# WORK PACKAGE — SLICE-0003: ACCEPT CORE + FLOW/VEO ADAPTER PREFLIGHT
 
 **Status:** READY FOR BUILD  
-**Lifecycle:** SLICE → BUILD → PROVE  
+**Lifecycle:** BOUND delta → SLICE → BUILD → PROVE  
 **Worker authority:** Bounded autonomous execution  
-**Recommended worker:** GPT-6 Sol / Medium  
+**Recommended worker:** GPT-6 Sol / Medium
+
 **Repository:** `blackshark03z/AI-Film-Pipeline`  
-**Base branch:** `main`  
-**Expected starting HEAD:** `cde1c1576221cfdde64edd201b66ee7715744069`  
-**Previously proven bootstrap baseline:** `da1cec733cc7df352f5de976794be76674f8bfab`
+**Proven candidate:** `7041252d9e6b0c6bc7589d606fe30f45b302c1b8`  
+**Candidate branch:** `slice-0002-film-core-vertical-skeleton`
 
 ---
 
-## 1. Authority and reading order
+# 1. Tech Lead adjudication
 
-This Work Package is the active **CURRENT SLICE contract** for this execution attempt.
+`SLICE-0002 — Film Core Vertical Skeleton` is **PROVEN**.
 
-Before implementation, read:
-
-1. `docs/sot/development/AI_NATIVE_DEV_MODEL_SOT_v1_FROZEN.md`
-2. `docs/sot/film/00_SOT_INDEX.md`
-3. `docs/sot/film/02_CANONICAL_DOMAIN_MODEL.md`
-4. `docs/sot/film/03_CINEMATIC_CONTROL_SPEC.md`
-5. `docs/sot/film/04_SHOTSPEC_V1.md`
-6. `docs/sot/film/05_PROMPT_COMPILER.md`
-7. `docs/sot/film/06_PROVIDER_CAPABILITIES.md`
-8. `docs/sot/film/08_ASSET_LINEAGE_COST.md`
-9. `docs/sot/film/11_IMPLEMENTATION_PLAN.md`
-10. `docs/operating/PROJECT_OPERATING_PROFILE.md`
-11. `docs/operating/IMPLEMENTATION_STATUS.md`
-
-The repository's previous `CURRENT_SLICE.md` describes the completed bootstrap slice and must not be interpreted as the active task after this Work Package is received.
-
-Persist this Work Package verbatim as a project execution artifact before substantial implementation. Do not change its acceptance semantics.
-
----
-
-# 2. Outcome
-
-Build and prove the smallest provider-neutral **Film Core vertical skeleton**:
+The exact candidate accepted by Tech Lead is:
 
 ```text
-existing ShotSpec fixture
-        ↓
-Pydantic domain model
-        ↓
-canonical serialization + hash
-        ↓
-deterministic Prompt Compiler
-        ↓
-PromptPlan
-        ↓
-RoutingDecision
-        ↓
-provider-neutral dry-run request
-        ↓
-GenerationAttempt
-        ↓
-SQLite persistence
-        ↓
-readback / exact lineage proof
+7041252d9e6b0c6bc7589d606fe30f45b302c1b8
 ```
 
-The purpose of this slice is to prove that the frozen Film architecture can exist as working code **before introducing live provider/browser/cookie complexity**.
+The next slice may proceed only from the exact accepted Film Core.
 
 ---
 
-# 3. Product/System Truth that must remain frozen
+# 2. BOUND delta — schema representation alignment
 
-The worker MUST preserve these invariants:
+This is NOT a change to Film System Truth.
 
-1. `ShotSpec / Film State` is canonical; provider prompts are derived artifacts.
-2. Continuity is explicit data.
-3. Creative state is separate from runtime/provider state.
-4. Providers are replaceable adapters.
-5. Provider cookies, sessions, browser selectors and credentials never enter Film Core.
-6. `ShotSpec → PromptPlan → RoutingDecision → GenerationAttempt → ProviderJob/Asset` identities must be deterministic and traceable.
-7. Unsupported provider controls must be explicit; they may not silently disappear.
-8. No blind retry logic is introduced.
-9. V1 persistence remains filesystem + JSON/SQLite.
-10. Model IDs, pricing and transport quirks are runtime/config concerns, not Film IR.
-11. Existing JSON Schemas are authoritative contracts for this slice.
-12. Frozen SoT semantics must not be changed to simplify implementation.
+Frozen Film Truth already states:
 
-If implementation reveals that one of these truths is internally contradictory, stop and report a potential **BOUND delta** rather than silently changing it.
+> A camera movement other than `locked` requires a dramatic purpose.
 
----
+The Python domain model enforces this invariant, but the current ShotSpec JSON Schema still permits a moving camera with `purpose: null`.
 
-# 4. In scope
+Align the machine-readable JSON Schema with the already-frozen invariant.
 
-The worker owns HOW, but the resulting system must provide the following behavior.
-
-## 4.1 Domain models
-
-Implement typed Python domain models sufficient for this vertical path.
-
-At minimum:
+Required semantic outcome:
 
 ```text
-ShotSpec
-ProviderCapabilities
-PromptPlan
-RoutingDecision
-GenerationAttempt
+movement.type == locked
+→ purpose may be absent/null
+
+movement.type != locked
+→ purpose must be a non-empty string
 ```
 
-Add other supporting models only when genuinely required.
+Do not change the underlying cinematic rule.
 
-The three existing ShotSpec fixtures must load through the implementation successfully.
-
-Pydantic is the expected V1 choice unless a concrete repository constraint gives a better reason otherwise.
+Add regression evidence proving JSON Schema and Python validation now agree.
 
 ---
 
-## 4.2 Schema compatibility
+# 3. Outcome
 
-The existing JSON Schema remains authoritative.
+Establish the first **real provider boundary** without performing video generation.
 
-Required:
+Target vertical path:
 
 ```text
-fixtures/*.json
+PROVEN Film Core
       ↓
-JSON Schema validation
-      ↓
-Pydantic model validation
-```
-
-The implementation must not require changing the meaning of existing fixtures merely to make parsing easier.
-
-Round-trip serialization must preserve the semantic content of the ShotSpec.
-
----
-
-## 4.3 Canonical serialization and hashing
-
-Implement deterministic canonical serialization for objects that participate in lineage.
-
-At minimum establish deterministic hashes for:
-
-```text
-ShotSpec
-PromptPlan input
-```
-
-Requirements:
-
-- same semantic input → same canonical representation;
-- dictionary/property ordering must not change the hash;
-- whitespace formatting must not change the hash;
-- the hash algorithm must be explicit;
-- runtime secrets must never contribute to creative-state hashes.
-
-SHA-256 is acceptable unless an existing repository constraint justifies another stable algorithm.
-
----
-
-## 4.4 Deterministic Prompt Compiler core
-
-Implement the deterministic compiler path described by the Film SoT.
-
-Input conceptually:
-
-```text
-ShotSpec
-+ relevant creative state
-+ ProviderCapabilities
-+ compiler version/policy
-```
-
-Output:
-
-```text
-PromptPlan
-```
-
-The compiler must preserve canonical blocks equivalent to:
-
-```text
-SHOT / DRAMATIC PURPOSE
-SUBJECT / CHARACTER LOCK
-ACTION / PERFORMANCE
-ENVIRONMENT / WORLD LOCK
-CAMERA / LENS / MOVEMENT
-BLOCKING / START-END STATE
-LIGHTING / STYLE
-AUDIO / DIALOGUE
-CONTINUITY CONSTRAINTS
-NEGATIVE / FORBIDDEN BEHAVIOR
-```
-
-Not every block must contain data for every shot.
-
-No Gemini or other LLM call is required in this slice.
-
-The deterministic compiler is the subject being proven.
-
----
-
-## 4.5 Capability degradation
-
-Create at least two deterministic test capability profiles, for example:
-
-```text
-provider_full
-provider_limited
-```
-
-They are synthetic test providers, not claims about real Veo/Seedance capability.
-
-Prove that when a requested control is unsupported, PromptPlan explicitly records:
-
-```text
-unsupported_controls
-degraded_controls
-warnings
-```
-
-No requested control may silently vanish.
-
----
-
-## 4.6 RoutingDecision
-
-Implement a minimal deterministic routing mechanism sufficient to prove the architecture.
-
-It does NOT need to know whether Veo or Seedance is better.
-
-For this slice routing may select among synthetic providers using:
-
-```text
-required capabilities
-provider health/availability
-supported controls
-```
-
-The decision must record why the selected provider was chosen.
-
-Do not implement a speculative scoring/ML routing system.
-
----
-
-## 4.7 Provider-neutral dry-run adapter
-
-Implement a provider abstraction sufficient to compile a PromptPlan into a dry-run request.
-
-No network call.
-
-No cookie.
-
-No API key.
-
-No browser automation.
-
-No Google Flow.
-
-No Dola/Elyum.
-
-The dry-run provider must return enough deterministic execution information to create a `GenerationAttempt`.
-
-It may produce a synthetic `ProviderJob` if useful, but live ProviderJob semantics are not being proven yet.
-
----
-
-## 4.8 GenerationAttempt
-
-Create a GenerationAttempt that binds at minimum:
-
-```text
-generation_attempt_id
-shot_id
-shot_spec_version
-shot_spec_hash
-prompt_plan_hash
-routing_decision_id
-provider_id
-status
-timestamps
-```
-
-The exact ShotSpec/PromptPlan lineage must be reconstructable.
-
----
-
-## 4.9 SQLite persistence
-
-Persist the vertical-path runtime records to SQLite.
-
-The smallest acceptable implementation is preferred.
-
-Required proof:
-
-```text
-write GenerationAttempt
-        ↓
-close/reopen or new DB access
-        ↓
-read exact persisted record
-        ↓
-lineage identifiers still match
-```
-
-Do not introduce:
-
-```text
-Postgres
-Redis
-Temporal
-object storage
-queue infrastructure
-ORM complexity without need
-```
-
-SQLite schema design belongs to the worker as implementation HOW.
-
----
-
-## 4.10 Tests
-
-Add focused tests sufficient to prove the acceptance claims.
-
-Candidate-authored tests are useful BUILD evidence but do not by themselves redefine acceptance.
-
-Existing bootstrap tests must continue to pass.
-
----
-
-# 5. Explicitly out of scope
-
-Do NOT implement in SLICE-0002:
-
-```text
-real Gemini API calls
-Google Flow browser/cookie integration
-real Veo generation
-Dola integration
-Elyum integration
-Seedance generation
-provider account/session management
-live provider capability discovery
-paid actions
-image generation
-Stable Diffusion / ComfyUI
-automatic visual QC
-RepairDecision execution loop
-FFmpeg rough cut
-Resolve integration
-web UI
-Postgres / Redis / Temporal
-distributed workers
-3D / Blender / Unreal
-LoRA / fine-tuning
-production deployment
-```
-
-Do not inspect or port `AutoVideoPipeline` unless a concrete core abstraction question genuinely requires reference material.
-
-Live Flow reuse belongs to a later slice.
-
----
-
-# 6. Acceptance claims
-
-Acceptance is immutable during this execution attempt.
-
-## A — Frozen truth preserved
-
-No frozen Development SoT or Film SoT semantic content is modified.
-
-PASS requires no implementation-driven weakening of existing contracts.
-
----
-
-## B — Existing ShotSpec fixtures work
-
-All three canonical fixtures:
-
-```text
-dialogue_closeup.json
-continuity_two_shot.json
-action_reveal.json
-```
-
-must:
-
-1. validate against the existing JSON Schema;
-2. load into the Python domain model;
-3. serialize successfully;
-4. preserve semantically relevant fields.
-
----
-
-## C — Canonical hashing is deterministic
-
-Equivalent semantic ShotSpec inputs must produce the same canonical hash.
-
-At least one test must prove property/key ordering does not change the result.
-
----
-
-## D — Prompt compilation is deterministic
-
-For the same:
-
-```text
-ShotSpec
 ProviderCapabilities
-compiler version/policy
+      ↓
+Flow/Veo Adapter
+      ↓
+existing AutoVideoPipeline mechanics
+      ↓
+local configuration/session boundary
+      ↓
+read-only preflight / doctor
+      ↓
+normalized ProviderHealth
 ```
 
-the deterministic core must produce equivalent:
+The goal is to prove that Google Flow can be connected as a replaceable production engine **without leaking browser/cookie/session implementation into Film Core**.
 
-```text
-canonical blocks
-input hash
-mapped controls
-unsupported controls
-degraded controls
-warnings
-```
-
-Repeated execution must not introduce uncontrolled variation.
+No video is generated in this slice.
 
 ---
 
-## E — Capability degradation is explicit
+# 4. Reuse source
 
-When a synthetic provider does not support a requested control:
-
-```text
-unsupported_controls
-```
-
-must identify it.
-
-If text fallback/degradation occurs:
+Primary brownfield reuse source:
 
 ```text
-degraded_controls
+blackshark03z/AutoVideoPipeline
 ```
 
-must identify what happened.
+Worker must inspect the current accessible repository and record the **exact source revision** used for analysis/reuse.
 
-Silent omission = FAIL.
+Relevant existing concepts known to be worth inspecting include:
+
+```text
+Flow/Veo client
+session/cookie handling
+project binding
+preflight
+cookie expiry validation
+FlowVideoGenerator
+download/correlation mechanics
+doctor/health patterns
+```
+
+Do not blindly copy its architecture.
+
+Use:
+
+```text
+SEARCH
+→ REUSE
+→ COMPOSE
+→ ADAPT
+→ EXTEND
+→ BUILD LAST
+```
+
+Extract only the mechanics needed behind the new provider contract.
+
+`AutoVideoPipeline` is an implementation/reuse source, NOT System Truth for the new project.
 
 ---
 
-## F — Routing is explainable
+# 5. Baseline integration
 
-A synthetic RoutingDecision must include:
+Before feature implementation:
+
+1. Verify the proven candidate SHA exists remotely.
+2. Ensure `main` has not acquired unexpected divergent work.
+3. Integrate the exact proven Film Core into `main`.
+
+Preferred if topology permits:
 
 ```text
-selected provider
-required capabilities
-reason(s)
-fallback information if applicable
+fast-forward main
+→ 7041252d9e6b0c6bc7589d606fe30f45b302c1b8
 ```
 
-No opaque random choice.
+The exact accepted code should not be unnecessarily rewritten or recreated.
+
+After integration, create a new isolated branch for SLICE-0003.
+
+Recommended:
+
+```text
+slice-0003-flow-veo-adapter-preflight
+```
+
+If `main` has unexpected drift or cannot safely integrate the exact proven candidate:
+
+```text
+STOP → INCONCLUSIVE_BASELINE
+```
+
+Do not silently rebase onto unknown work.
 
 ---
 
-## G — Dry-run execution is provider-neutral
+# 6. In scope
 
-A dry-run provider request can be generated from PromptPlan without:
+## 6.1 Provider contract
+
+Introduce or formalize the provider layer appropriate for a real adapter.
+
+At minimum it must conceptually support:
 
 ```text
-provider credentials
+capabilities()
+preflight()
+submit()
+poll()
+fetch_outputs()
+cancel()
+```
+
+Only `capabilities()` and `preflight()` need real implementation for Flow in this slice.
+
+Other methods may deliberately return a clear:
+
+```text
+NOT_IMPLEMENTED_IN_SLICE_0003
+```
+
+They must not accidentally trigger provider mutations.
+
+Implementation structure belongs to the worker.
+
+---
+
+## 6.2 Flow/Veo adapter
+
+Create a replaceable Flow/Veo provider adapter.
+
+Film Core must interact with Flow only through this boundary.
+
+Forbidden leakage into Film Core:
+
+```text
 cookies
-browser sessions
-live network calls
-provider-specific state leaking into ShotSpec
+session files
+browser selectors
+Flow project IDs
+private transport URLs
+browser/CDP implementation
+download-page ordering
 ```
 
+These are adapter/runtime concerns.
+
 ---
 
-## H — GenerationAttempt lineage is exact
+## 6.3 Provider health model
 
-A generated attempt must refer to the exact:
+Normalize preflight into a provider-neutral health result.
+
+It should distinguish at least conceptually:
 
 ```text
-ShotSpec version/hash
-PromptPlan hash
-RoutingDecision ID
-provider ID
+READY
+UNAVAILABLE
+AUTH_REQUIRED
+MISCONFIGURED
+INCONCLUSIVE
 ```
 
-used to create it.
+Include useful evidence/diagnostic data without exposing secrets.
+
+Do not collapse ambiguous remote state into READY or FAILED.
 
 ---
 
-## I — SQLite round-trip works
+## 6.4 Real capability profile
 
-The attempt must survive persistence/readback with lineage fields intact.
-
-A fresh DB handle/process-equivalent read should be used rather than merely returning an in-memory object.
-
----
-
-## J — Existing checks remain green
-
-All existing bootstrap tests plus new slice tests must pass.
-
-The worker must not modify tests or frozen schemas solely to convert a failing candidate into PASS.
-
----
-
-## K — No unintended external effects
-
-This slice performs no:
+Create a Flow/Veo capability profile based only on capabilities actually established from:
 
 ```text
-paid generation
-provider mutation
-credential use
-browser automation
-external video creation
+existing working transport
++
+observed implementation
++
+verified provider behavior/documentation where available
 ```
 
-Any unexpected external call is a slice violation.
+Do not invent model/version capabilities.
 
----
+If a capability is not established, fail closed.
 
-# 7. Required evidence
-
-Final evidence must include at minimum:
+For the current boolean capability representation:
 
 ```text
-1. starting baseline SHA
-2. candidate SHA
-3. branch name
-4. git diff --stat / changed-file inventory
-5. confirmation that frozen SoT semantic files were not modified
-6. JSON Schema + Pydantic fixture validation result
-7. complete test-suite result
-8. deterministic-hash proof
-9. compiler/degradation proof
-10. SQLite persistence/readback proof
-11. git status --short
+unverified
+→ false
 ```
 
-If the candidate branch is pushed to GitHub, also provide:
+and record the uncertainty in notes/evidence.
+
+Do not treat `false` as proof that the underlying Veo product universally lacks that feature; it means the current adapter profile has not established usable support.
+
+Exact model/tier name remains runtime information.
+
+---
+
+## 6.5 Configuration/secrets boundary
+
+Secrets must stay outside Git.
+
+Allowed mechanisms include environment variables and ignored local secret/session paths.
+
+Repository may contain only examples such as:
 
 ```text
-remote branch
-remote candidate SHA readback
+FLOW_COOKIE_PATH
+FLOW_SESSION_PATH
 ```
 
-The exact revision reported as the candidate must be the exact revision on which the evidence was collected.
-
----
-
-# 8. Worker authority
-
-The worker MAY autonomously:
-
-- create a feature branch;
-- choose local module/class/function decomposition;
-- add replaceable Python dependencies when justified;
-- modify `pyproject.toml`;
-- implement models/compiler/persistence/tests;
-- refactor bootstrap skeleton;
-- create local test helpers;
-- create synthetic provider capability fixtures;
-- create SQLite migrations/schema initialization as needed;
-- run all local tests repeatedly;
-- fix implementation bugs;
-- push a non-main candidate branch if GitHub authorization already exists;
-- self-progress through all internal gates below.
-
-The worker does NOT need Owner approval for routine engineering decisions within this boundary.
-
----
-
-# 9. External authority
-
-Pre-authorized:
+Never:
 
 ```text
-local file changes
-local Git commits
-creation of a non-main feature branch
-non-destructive GitHub readback
-push of candidate branch to the existing private repository
+real cookie values
+session tokens
+API keys
+authenticated browser storage
+```
+
+Tests must not need real secrets.
+
+---
+
+## 6.6 Read-only preflight
+
+If an already-configured local Flow session is available, worker MAY perform a **read-only** provider preflight.
+
+Allowed read-only effects:
+
+```text
+validate configuration
+load local session metadata
+check cookie/session validity
+verify expected project/account binding
+perform non-mutating health/readback required by preflight
 ```
 
 Not authorized:
 
 ```text
-merge to main
+create video
+submit generation
+delete project
+modify Flow project
+refresh credentials through bypass mechanisms
+solve CAPTCHA
+bypass anti-bot/security checks
+extract protected tokens
+```
+
+If authenticated preflight requires manual login, CAPTCHA, fresh credential acquisition, or unavailable operator action:
+
+```text
+do not bypass
+→ report AUTH_REQUIRED / INCONCLUSIVE
+```
+
+A real authenticated Flow session is NOT required for the implementation portion to pass.
+
+The adapter must remain testable with fake/mocked transport state.
+
+---
+
+# 7. Existing AutoVideoPipeline reuse evidence
+
+Worker must produce a small reuse record containing:
+
+```text
+source repository
+source revision
+source files inspected
+
+REUSED:
+- ...
+
+ADAPTED:
+- ...
+
+NOT REUSED:
+- ...
+
+WHY:
+- ...
+```
+
+Do not copy large modules merely because they already exist.
+
+Prefer extracting stable mechanics behind the Film provider interface.
+
+---
+
+# 8. Explicitly out of scope
+
+Do NOT perform:
+
+```text
+Flow/Veo video generation
+paid generation
+Seedance
+Dola integration
+Elyum integration
+automatic QC
+RepairDecision execution
+asset downloading from a new generation
+rough cut
+Gemini runtime calls
+web UI
+Postgres/Redis/Temporal
+3D
+image generation
+fine-tuning
+```
+
+Do not implement speculative generalized browser automation infrastructure.
+
+---
+
+# 9. Acceptance claims
+
+Acceptance is immutable for this execution attempt.
+
+## A — Proven Film Core preserved
+
+The exact accepted behavior from SLICE-0002 remains green.
+
+---
+
+## B — Schema alignment
+
+JSON Schema and Pydantic both reject:
+
+```text
+movement != locked
++
+missing/null/empty purpose
+```
+
+and permit a locked shot without a movement purpose.
+
+Existing canonical fixtures still pass.
+
+---
+
+## C — Provider boundary exists
+
+Flow implementation is isolated behind a replaceable provider interface.
+
+No Flow/browser/session semantics enter ShotSpec or other creative Film State.
+
+---
+
+## D — No secrets committed
+
+Repository contains no live Flow credential/session material.
+
+---
+
+## E — Capability profile is conservative
+
+Only established current-adapter capabilities are enabled.
+
+Unknown/unverified capability is not silently marked supported.
+
+---
+
+## F — Preflight is normalized
+
+Synthetic preflight tests prove conversion into provider-neutral health states.
+
+At minimum cover:
+
+```text
+ready
+auth/session missing
+misconfigured
+ambiguous/inconclusive
+```
+
+---
+
+## G — Fail closed
+
+Unavailable or uncertain Flow transport cannot be routed as healthy/ready.
+
+---
+
+## H — Brownfield reuse is evidenced
+
+The worker records exact AutoVideoPipeline revision and what was reused/adapted/rejected.
+
+---
+
+## I — No generation occurs
+
+No video-generation request is submitted in SLICE-0003.
+
+---
+
+## J — Regression stays green
+
+All previously proven Film Core tests and new adapter tests pass.
+
+---
+
+# 10. Required tests
+
+At minimum:
+
+```text
+schema camera-purpose invariant
+Flow capabilities mapping
+Flow preflight READY mapping
+missing-session/auth mapping
+misconfiguration mapping
+INCONCLUSIVE mapping
+no-secret fixture/config behavior
+Film Core regression
+```
+
+External network tests must be isolated from deterministic unit tests.
+
+A live read-only preflight, if performed, is evidence in addition to tests, not a replacement for them.
+
+---
+
+# 11. Required evidence
+
+Final report must include:
+
+```text
+starting main SHA
+SLICE-0003 branch
+candidate SHA
+remote SHA if pushed
+
+AutoVideoPipeline source revision
+reuse record
+
+schema-alignment proof
+full test result
+changed-file inventory
+Flow boundary explanation
+capability profile evidence
+
+whether real read-only preflight was attempted:
+YES / NO
+
+if YES:
+provider health result
+non-secret evidence
+
+secret scan
+git status
+```
+
+No cookie/token value may appear in evidence.
+
+---
+
+# 12. Worker authority
+
+Worker MAY autonomously:
+
+```text
+fast-forward main to exact PROVEN candidate if safe
+create SLICE-0003 branch
+inspect/clone/read AutoVideoPipeline
+selectively reuse code
+add provider modules
+refactor local provider abstraction
+align JSON Schema to existing frozen rule
+add tests
+add example config
+run read-only Flow preflight if existing credentials are already locally available
+push candidate feature branch
+perform non-destructive GitHub readback
+```
+
+Worker does not need Owner relay for routine engineering decisions inside these boundaries.
+
+---
+
+# 13. Not authorized
+
+Worker MUST NOT:
+
+```text
+generate a video
+perform paid provider action
+merge completed SLICE-0003 candidate to main
 force push
-delete branches
 make repository public
-change repository visibility/settings
-use Gemini keys
-use Flow/Dola/Elyum cookies or credentials
-perform paid generation
-modify external provider state
+commit credentials
+obtain/bypass CAPTCHA
+bypass provider security
+modify frozen Film/System truth
+start Seedance work
+begin SLICE-0004
 ```
 
 ---
 
-# 10. Branch / candidate isolation
+# 14. Internal gates
 
-Start from:
-
-```text
-main@cde1c1576221cfdde64edd201b66ee7715744069
-```
-
-Recommended branch:
+## Gate 0 — Accept prior candidate
 
 ```text
-slice-0002-film-core-vertical-skeleton
+7041252... verified
+→ safely integrated into main
+→ new slice branch created
 ```
 
-If `main` no longer points to the expected starting revision:
-
-**STOP before implementation and report BASELINE_DRIFT.**
-
-Do not silently rebase the contract onto an unknown newer baseline.
-
-Do not merge the finished candidate into `main`.
-
----
-
-# 11. Internal gates
-
-The worker may progress automatically when each gate passes.
-
-## Gate 0 — Baseline
+## Gate 1 — Contract alignment
 
 ```text
-expected main SHA confirmed
-working tree clean
+camera-purpose JSON Schema
+↔
+Pydantic invariant
 ```
 
----
+PASS.
 
-## Gate 1 — Contract integrity
+## Gate 2 — Reuse discovery
 
 ```text
-SoT understood
-Work Package persisted unchanged
-no frozen semantics modified
+AutoVideoPipeline exact revision frozen
+relevant mechanics identified
+reuse decision recorded
 ```
 
----
-
-## Gate 2 — Domain model
+## Gate 3 — Provider abstraction
 
 ```text
-3 canonical fixtures
-→ JSON Schema PASS
-→ Python model PASS
-→ serialization PASS
+Film Core
+→ generic provider boundary
+→ Flow adapter
 ```
 
----
+No transport leakage.
 
-## Gate 3 — Canonical identity
+## Gate 4 — Capability mapping
+
+Conservative capability profile validated.
+
+## Gate 5 — Preflight tests
+
+All normalized health states pass deterministic tests.
+
+## Gate 6 — Optional real read-only preflight
+
+If locally possible without new authority:
 
 ```text
-canonical serialization PASS
-deterministic ShotSpec hash PASS
+existing Flow session
+→ adapter preflight
+→ normalized health
 ```
 
----
+No generation.
 
-## Gate 4 — Compiler
+If unavailable:
 
 ```text
-fixture
-→ PromptPlan
-→ deterministic output
-→ capability degradation explicit
+record NOT_RUN / AUTH_REQUIRED
 ```
 
----
-
-## Gate 5 — Routing / dry provider
-
-```text
-PromptPlan
-→ explainable RoutingDecision
-→ synthetic provider request
-→ GenerationAttempt
-```
-
-No network activity.
-
----
-
-## Gate 6 — Persistence
-
-```text
-GenerationAttempt
-→ SQLite
-→ fresh readback
-→ exact lineage recovered
-```
-
----
+This alone does not fail the slice.
 
 ## Gate 7 — Regression
 
-```text
-existing bootstrap tests PASS
-new slice tests PASS
-git diff hygiene PASS
-```
-
----
+Full suite green.
 
 ## Gate 8 — Candidate freeze
 
 ```text
-exact candidate commit created
-working tree clean
-evidence collected against that exact commit
+exact commit
+clean tree
+remote readback if pushed
 ```
 
-If pushing the candidate branch is possible:
-
-```text
-push
-→ remote readback
-→ exact SHA match
-```
-
-Then STOP at the slice boundary.
+STOP.
 
 ---
 
-# 12. Stop conditions
+# 15. Stop conditions
 
-Stop and return `INCONCLUSIVE` or `DISPROVEN` as appropriate if:
+Stop if:
 
-- repository baseline differs from the expected starting SHA;
-- a frozen SoT invariant appears internally inconsistent;
-- existing schema cannot be implemented without changing its semantics;
-- implementation requires a live provider or secret;
-- implementation requires a consequential architecture choice outside current System Truth;
-- an external operation produces ambiguous state;
-- a required dependency cannot be safely obtained;
-- tests can pass only by weakening acceptance;
-- no-progress/retry limits are reached;
-- scope needs to expand materially.
+- exact SLICE-0002 candidate cannot be safely integrated;
+- SoT would need semantic modification;
+- provider connection requires bypassing protection;
+- secret/session material would need to enter Git;
+- adapter requires a consequential architecture change outside existing boundaries;
+- external state becomes materially ambiguous with no read-only reconcile path;
+- generation appears necessary to satisfy this slice;
+- scope materially expands.
 
-Do not solve a stop condition by silently increasing scope.
+Do not convert an external ambiguity into a retry loop.
 
 ---
 
-# 13. Explicit non-goals for technical elegance
+# 16. Final report
 
-Do not optimize for:
-
-```text
-maximum abstraction
-future microservices
-future cloud scale
-generic plugin ecosystem
-all-provider support
-perfect ORM design
-full production observability
-enterprise deployment
-```
-
-Optimize for:
-
-```text
-correct canonical model
-deterministic compiler
-traceable lineage
-simple persistence
-clear provider boundary
-tests that expose architectural drift
-```
-
----
-
-# 14. Expected final candidate
-
-At the end of BUILD, this should work conceptually:
-
-```text
-load fixture
-    ↓
-ShotSpec model
-    ↓
-canonical hash
-    ↓
-compile
-    ↓
-PromptPlan
-    ↓
-route
-    ↓
-RoutingDecision
-    ↓
-dry-run provider request
-    ↓
-GenerationAttempt
-    ↓
-SQLite persist
-    ↓
-fresh readback
-    ↓
-exact lineage match
-```
-
-That is the only end-to-end vertical path required by this slice.
-
----
-
-# 15. Final report format
-
-Return exactly this structure:
+Return:
 
 ```text
 RESULT: PROVEN | DISPROVEN | INCONCLUSIVE
 
 SLICE:
-SLICE-0002 — Film Core Vertical Skeleton
+SLICE-0003 — Accept Core + Flow/Veo Adapter Preflight
 
-BASELINE_SHA:
+PRIOR_PROVEN_SHA:
+MAIN_AFTER_INTEGRATION_SHA:
 CANDIDATE_SHA:
 BRANCH:
-REMOTE_SHA: <if pushed>
+REMOTE_SHA:
 
 GATES:
-0 Baseline: PASS/FAIL
-1 Contract integrity: PASS/FAIL
-2 Domain model: PASS/FAIL
-3 Canonical identity: PASS/FAIL
-4 Prompt compiler: PASS/FAIL
-5 Routing/dry provider: PASS/FAIL
-6 SQLite persistence: PASS/FAIL
+0 Prior candidate integration: PASS/FAIL
+1 Contract alignment: PASS/FAIL
+2 Reuse discovery: PASS/FAIL
+3 Provider abstraction: PASS/FAIL
+4 Capability mapping: PASS/FAIL
+5 Preflight tests: PASS/FAIL
+6 Real read-only preflight: PASS/NOT_RUN/INCONCLUSIVE
 7 Regression: PASS/FAIL
-8 Candidate freeze/readback: PASS/FAIL
+8 Candidate freeze: PASS/FAIL
+
+AUTOVIDEOPIPELINE_SOURCE:
+revision:
+files inspected:
+
+REUSED:
+- ...
+
+ADAPTED:
+- ...
+
+REJECTED:
+- ...
 
 IMPLEMENTED:
 - ...
 
-ACCEPTANCE:
-A Frozen truth preserved: PASS/FAIL
-B ShotSpec fixtures: PASS/FAIL
-C Deterministic hashing: PASS/FAIL
-D Deterministic compiler: PASS/FAIL
-E Capability degradation: PASS/FAIL
-F Explainable routing: PASS/FAIL
-G Provider-neutral dry run: PASS/FAIL
-H Exact attempt lineage: PASS/FAIL
-I SQLite round-trip: PASS/FAIL
-J Existing checks green: PASS/FAIL
-K No unintended external effects: PASS/FAIL
-
 TESTS:
 - ...
 
-EVIDENCE:
-- ...
+LIVE_PREFLIGHT:
+attempted: YES/NO
+result:
+evidence:
+
+EXTERNAL_EFFECTS:
+video generations: 0
+paid actions: 0
+
+SECRETS_COMMITTED:
+NONE
 
 SOT_FILES_CHANGED:
-- NONE
+NONE
 or
-- <files + reason; this normally prevents PROVEN>
+<explicit representation alignment + Tech Lead-authorized reason>
 
 OPEN_ISSUES:
 - ...
@@ -872,20 +735,12 @@ OPEN_ISSUES:
 TRUTH_CHALLENGES:
 - NONE
 or
-- <potential SHAPE/BOUND delta>
+- ...
 
 NEXT:
-- Ready for Tech Lead PROVE / SLICE-0003
+Ready for Tech Lead PROVE / live Flow canary slice
 or
-- Must not proceed
+Must not proceed
 ```
 
----
-
-# 16. Completion rule
-
-Do not begin SLICE-0003 automatically.
-
-A successful BUILD candidate is not itself authorization for the next slice.
-
-Freeze the exact candidate, return evidence, and stop for Tech Lead PROVE.
+Do not begin the live-generation slice automatically.
