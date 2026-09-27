@@ -70,3 +70,7 @@ Resumed from a3cae9bfc510e2d61ba1b3536ff346091f605ee1 on the same branch. Gates 
 ## New Flow project continuation
 
 Exactly one Owner-authorized project creation succeeded using existing AutoVideoPipeline helpers. Candidate preflight CONNECTED / valid=true; activation ok and exact new binding verified. AI-Film-Pipeline preflight INCONCLUSIVE / PROJECT_READBACK_INCONCLUSIVE; stopped before generation. Dispatch count 0; no live ProviderJob/Asset. Full suite 40 passed. See SLICE_0004_RESUME.md. Required READY gate must be established before any future live canary. SLICE-0005 not started.
+
+## Flow readback repair and Gate 5 stop
+
+Gate 4 repaired and live READY / PROJECT_READBACK_READY. Exact URL identity normalization and bounded verified ProseMirror prompt readiness covered by full suite (51 passed). Shared exact identity check also used by runtime navigation. Frozen repair proceeded to Gate 5, which stopped at STABLE_CORRELATION_SURFACE_UNVERIFIED before any ProviderJob or dispatch. Runtime SQLite readback: zero ProviderJobs, dispatch_count=0. INCONCLUSIVE; live exact correlation remains unqualified. No further project or generation created; SLICE-0005 not started.
