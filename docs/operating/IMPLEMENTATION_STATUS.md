@@ -2,7 +2,7 @@
 
 ## Project state
 
-**Lifecycle:** SLICE / pre-BUILD bootstrap  
+**Lifecycle:** PROVE / bootstrap complete  
 **Current slice:** `SLICE-0001 — Bootstrap Repository and Freeze Baseline`  
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
@@ -16,9 +16,21 @@
 
 ## Repository identity
 
-GitHub repository: `PENDING_WORKER_BOOTSTRAP`  
-Default branch: `PENDING_WORKER_BOOTSTRAP`  
-Accepted baseline SHA: `PENDING_PROVE`
+GitHub repository: `https://github.com/blackshark03z/AI-Film-Pipeline` (private)  
+Default branch: `main`  
+Accepted baseline SHA: `da1cec733cc7df352f5de976794be76674f8bfab`
+
+The accepted baseline is the first commit containing the frozen package. This
+status handoff is a later documentation commit; it does not change the accepted
+baseline identity.
+
+## Bootstrap proof summary
+
+- Both supplied SHA-256 manifests matched all 56 bootstrap and 29 Film SoT entries.
+- All 30 JSON files parsed; the three promoted ShotSpec fixtures validated against `schemas/shot_spec.schema.json`.
+- The bootstrap tests passed (2 tests).
+- A credential-pattern scan of 57 staged files found no key, cookie, session, or private-key values; no sensitive or virtual-environment paths were staged.
+- The first commit had a clean working tree. GitHub readback showed private repository `blackshark03z/AI-Film-Pipeline`, default branch `main`, and remote `main` at the exact accepted baseline SHA.
 
 ## Done
 
@@ -27,6 +39,7 @@ Accepted baseline SHA: `PENDING_PROVE`
 - Film Pipeline V1 SoT frozen.
 - Bootstrap package assembled.
 - Current Slice defined.
+- SLICE-0001 baseline committed, pushed, and read back at the accepted SHA.
 
 ## In progress
 
@@ -38,15 +51,7 @@ Accepted baseline SHA: `PENDING_PROVE`
 
 ## Next authorized action
 
-Execute `SLICE-0001` exactly as written:
-1. initialize repository;
-2. validate package;
-3. commit;
-4. create/use private GitHub repo;
-5. push;
-6. read back exact revision;
-7. update this file;
-8. stop at slice boundary.
+Stop at the SLICE-0001 boundary. Tech Lead may issue `SLICE-0002 — Film Core Vertical Skeleton` after reviewing this proof. No Film Core implementation is authorized by this handoff.
 
 ## Next slice after PROVEN
 
