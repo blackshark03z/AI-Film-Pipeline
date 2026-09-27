@@ -53,7 +53,11 @@ baseline identity.
 
 ## Next authorized action
 
-Freeze and report the SLICE-0006 candidate. The final attempt is PROVEN under the work package's explicit E2E criteria; Generate budget is exhausted at 5 of 5. Stop at the SLICE-0006 boundary. Do not reuse quarantined projects or start SLICE-0007.
+Freeze and report the SLICE-0007 QC candidate. The real Attempt-5 Asset has a technical PASS and a durable QCReport with `needs_human_review`; human take selection remains pending. Stop at the SLICE-0007 boundary. No Flow or Seedance Generate and no repair execution is authorized in this slice.
+
+## SLICE-0007 QC kernel and human review
+
+The accepted SLICE-0006 Asset was consumed without regeneration. The six QC solution lanes were compared and a hybrid was selected: deterministic technical gate, advisory temporal/Gemini observations, and human authority for visual, continuity, editorial and take selection. Exact lineage and SHA-256 passed; full decode and duration/metadata checks passed. Five review frames and a contact sheet were packaged with the candidate. `QCReportV1` was persisted and freshly rederived from 20 immutable evidence records; it remains `needs_human_review`, with zero SelectedTakes and zero RepairDecisions. PASS, FAIL and unresolved branches are deterministic tests, including byte/artifact tamper refusal. See `SLICE_0007_QC_ARCHITECTURE.md`, `SLICE_0007_EVIDENCE.md`, and `qc_slice0007/REVIEW_PACKET.md`.
 
 ## Next slice after PROVEN
 
