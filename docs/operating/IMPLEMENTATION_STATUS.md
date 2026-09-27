@@ -2,8 +2,8 @@
 
 ## Project state
 
-**Lifecycle:** BUILD candidate complete / Tech Lead PROVE pending
-**Current slice:** `SLICE-0003 — Accept Core + Flow/Veo Adapter Preflight`
+**Lifecycle:** BUILD stopped / OPERATOR_AUTH_GATE
+**Current slice:** `SLICE-0004 â€” Single Flow/Veo Live Canary & Exact Lineage`
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
 
@@ -45,7 +45,7 @@ baseline identity.
 
 ## In progress
 
-- SLICE-0003 candidate freeze and Tech Lead adjudication; authenticated Flow readiness remains unverified.
+- SLICE-0004 is stopped at OPERATOR_AUTH_GATE. No live submit occurred.
 
 ## Blocked
 
@@ -53,8 +53,12 @@ baseline identity.
 
 ## Next authorized action
 
-Stop at the SLICE-0003 boundary. Do not merge this candidate into main or begin live generation / SLICE-0004.
+Operator must restore normal Flow authentication before resuming SLICE-0004. Do not dispatch unless preflight is READY and all remaining pre-dispatch gates pass.
 
 ## Next slice after PROVEN
 
 Tech Lead accepted SLICE-0002 at 7041252d9e6b0c6bc7589d606fe30f45b302c1b8; main was fast-forwarded to that exact revision. SLICE-0003 adds authorized schema representation alignment and a read-only Flow provider boundary. No authenticated preflight was run because local Flow environment configuration is absent. A live canary requires a later authorized slice.
+
+## SLICE-0004 stop evidence
+
+Prior candidate c2ef1a97920e48348102bea4e4796a4357a2fd31 was accepted and fast-forwarded into main. Authenticated read-only preflight returned AUTH_REQUIRED / PROJECT_READBACK_AUTH_REQUIRED. Dispatch count remains 0. See SLICE_0004_EVIDENCE.md. Stop pending normal operator authentication; do not begin SLICE-0005.
