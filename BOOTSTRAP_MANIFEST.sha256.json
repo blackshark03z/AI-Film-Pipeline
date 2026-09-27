@@ -1,10 +1,10 @@
 {
-  ".gitignore": "e2221cdc5a8b707545b2a4f81e29f631eb6bbd1715733c98e0836ca9b4b5e84b",
+  ".gitignore": "aa9fc35bd5e0b443a5bd1791f9da3ee6cb337074020379e0249f87d6476698ee",
   "README.md": "e0dc4eff382530248c7cda70be2cf9254a5b7485eb233f8627056d2bc3492b4c",
   "WORKER_HANDOFF.md": "19646c8b4f64f75f59e0c587f168709cbd266d2bf67becdb02a4d7c316f1ab7d",
   "config/runtime.example.yaml": "176dcda7822e9f36ea906139fc0455bb9bc7e7ba6c83893e7ba11b96f8b76f0f",
-  "docs/operating/CURRENT_SLICE.md": "3704d79f1dd808af6d70676ed78dafd51d7d4ee042263f5ea457e9ee6773ad41",
-  "docs/operating/IMPLEMENTATION_STATUS.md": "d3d26a62fc116a0610f63a407315544717c70942a19ceadd8b05ad2d9f7e5a04",
+  "docs/operating/CURRENT_SLICE.md": "7708e581de0fb8cb740ee92958c6fd9703541ea4294a8a1992c14db5419e3ef9",
+  "docs/operating/IMPLEMENTATION_STATUS.md": "8cd5c6f1185327c243447ec94472f4b1e0cebe7236f09c7e17bb6313df53da6a",
   "docs/operating/PROJECT_OPERATING_PROFILE.md": "20b843d7670508cedf4880ccd45cfb87a8c75fc7910ad7cc2fc420287b936f9e",
   "docs/sot/development/AI_NATIVE_DEV_MODEL_SOT_v1_FROZEN.md": "f695deb17253e15374deca9f837ef8feb280d8404dfb2ef3d50e2cb1e723bf7d",
   "docs/sot/film/00_SOT_INDEX.md": "ef56a09afd164ca74df6d8f59dc2c57c9a62840825f8a40170e01389243742f4",
@@ -41,7 +41,7 @@
   "fixtures/continuity_two_shot.json": "380a7b2d369a91b30f4fd6053cf7f0403a6965ca9c6b4d54f487d573e7073551",
   "fixtures/dialogue_closeup.json": "3ab5d5c741b04a2fa21a53b9eb19088df92cd6026a25b33412ec07ac11383c01",
   "projects/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "pyproject.toml": "6eb44c5bc6790ae91f4b26938b3ad4c8eddc8ab7a6b89966d87d5533622fdb4e",
+  "pyproject.toml": "0576362a9d50e287d212358a4030787e4bf44cfd600a2bb3f6deb02f865f0d25",
   "schemas/asset.schema.json": "7ec2acd49af92b7dda4f60498d2c337eff35cbd8e62eb705a42edd51112684da",
   "schemas/character.schema.json": "b84600ce1882ec2ccd7073f113093fed5fcd31be1cc7c2c75c799910a5d5268a",
   "schemas/edit_manifest.schema.json": "50048363651d1c738205fe1bf20ec9396a371a92168e0e53bfff44369881f8a3",
@@ -54,5 +54,12 @@
   "schemas/shot_spec.schema.json": "69bad516ad58a050da8210ab6a03979ec5c850c9dcd54067624a21badec97b00",
   "schemas/world_state.schema.json": "47a6a7add710997def5d0cfc6791f456e7d24036ae9c79dba7007263855e7c5c",
   "src/film_pipeline/__init__.py": "4a15d00558f2892387c684094b606f346dfde56e0a65fa8cc59581011d0c66b1",
-  "tests/test_bootstrap_contract.py": "166e7b06317e005362017c4fce30e66a4856c1b17ffda0aa5cb0724d76ae488c"
+  "src/film_pipeline/compiler.py": "2f4bcc6da238171ac23868f0b5a1a44f918893c97e88853c8f7f84aef45aa78c",
+  "src/film_pipeline/core.py": "415327429090acca284a51d24f5b2211768100bf5c92393784f74354577016f0",
+  "src/film_pipeline/execution.py": "90617b24ed8f9dd51cff01ae65164e2b7df43e440be3691b5e84954a0d108b51",
+  "src/film_pipeline/store.py": "1c6fecf4f5f86bc81120505789663bb81219c611010528463a131acb06e7f85e",
+  "tests/fixtures/provider_full.json": "41eb5ae4e927fdef56ae48be6ee001ea9701e185d4654fe2ee0483f3fbd36bfd",
+  "tests/fixtures/provider_limited.json": "bf32522eb488aeda6ecb64872095bba3baddd0b5a410c77edaae508f8bfeba30",
+  "tests/test_bootstrap_contract.py": "166e7b06317e005362017c4fce30e66a4856c1b17ffda0aa5cb0724d76ae488c",
+  "tests/test_film_core_slice.py": "6c081a71739b4ab74193abb6e51e98b8dd831a695d4160bc9ae366a34566334c"
 }

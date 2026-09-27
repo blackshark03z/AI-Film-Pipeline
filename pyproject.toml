@@ -3,6 +3,14 @@ name = "ai-film-pipeline"
 version = "0.0.0"
 description = "Lean local-first AI film production pipeline"
 requires-python = ">=3.11"
+dependencies = ["pydantic>=2,<3", "jsonschema>=4,<5"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

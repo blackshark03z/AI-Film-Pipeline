@@ -2,8 +2,8 @@
 
 ## Project state
 
-**Lifecycle:** PROVE / bootstrap complete  
-**Current slice:** `SLICE-0001 — Bootstrap Repository and Freeze Baseline`  
+**Lifecycle:** BUILD candidate complete / Tech Lead PROVE pending
+**Current slice:** `SLICE-0002 — Film Core Vertical Skeleton`
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
 
@@ -40,10 +40,12 @@ baseline identity.
 - Bootstrap package assembled.
 - Current Slice defined.
 - SLICE-0001 baseline committed, pushed, and read back at the accepted SHA.
+- SLICE-0002 work package received and persisted verbatim as `CURRENT_SLICE.md` on branch `slice-0002-film-core-vertical-skeleton` from `main@cde1c1576221cfdde64edd201b66ee7715744069`.
+- Provider-neutral Film Core skeleton implemented with fixture validation, canonical hashes, deterministic prompt plans, synthetic routing/dry run, and SQLite lineage readback. The local full suite passes (12 tests).
 
 ## In progress
 
-- None before worker bootstrap.
+- Tech Lead adjudication of the exact SLICE-0002 candidate.
 
 ## Blocked
 
@@ -51,10 +53,8 @@ baseline identity.
 
 ## Next authorized action
 
-Stop at the SLICE-0001 boundary. Tech Lead may issue `SLICE-0002 — Film Core Vertical Skeleton` after reviewing this proof. No Film Core implementation is authorized by this handoff.
+Stop at the SLICE-0002 boundary after candidate freeze/readback. Tech Lead owns acceptance and any later slice. Do not merge into `main` or start SLICE-0003.
 
 ## Next slice after PROVEN
 
-Tech Lead may issue `SLICE-0002 — Film Core Vertical Skeleton` using the implementation plan in the Film SoT.
-
-Do not start SLICE-0002 until SLICE-0001 is PROVEN.
+Tech Lead may define SLICE-0003 after independently adjudicating SLICE-0002 evidence.

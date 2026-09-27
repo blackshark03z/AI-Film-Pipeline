@@ -1,0 +1,11 @@
+{
+  "profile_version": "synthetic-v1",
+  "provider_id": "provider_full",
+  "transport_type": "other",
+  "supports_text_to_video": true,
+  "supports_image_input": true,
+  "supports_multi_reference": true,
+  "supports_native_audio": true,
+  "supports_duration_control": true,
+  "supports_negative_prompt": true
+}
