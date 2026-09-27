@@ -66,3 +66,7 @@ Prior candidate c2ef1a97920e48348102bea4e4796a4357a2fd31 was accepted and fast-f
 ## SLICE-0004 authorized resume
 
 Resumed from a3cae9bfc510e2d61ba1b3536ff346091f605ee1 on the same branch. Gates 2–3 implemented: ProviderJob/Asset persistence, atomic one-submit reservation, read-only reconciliation, strict output correlation, media validation/hash and fresh lineage readback. 40 deterministic tests pass. Authenticated preflight remains AUTH_REQUIRED / PROJECT_READBACK_AUTH_REQUIRED. Stop at OPERATOR_AUTH_GATE with 0 submit transactions. No main merge or SLICE-0005. See SLICE_0004_RESUME.md; prior stop evidence remains intact.
+
+## New Flow project continuation
+
+Exactly one Owner-authorized project creation succeeded using existing AutoVideoPipeline helpers. Candidate preflight CONNECTED / valid=true; activation ok and exact new binding verified. AI-Film-Pipeline preflight INCONCLUSIVE / PROJECT_READBACK_INCONCLUSIVE; stopped before generation. Dispatch count 0; no live ProviderJob/Asset. Full suite 40 passed. See SLICE_0004_RESUME.md. Required READY gate must be established before any future live canary. SLICE-0005 not started.

@@ -23,3 +23,13 @@ Each actual submitted request carries a persisted execution-unique job marker in
 The browser transport independently rejects a nonreserved/submitted job and consumes an in-memory invocation guard before any click. The durable executor remains the sole authorized dispatch path. Recovery uses the fixed ignored projects/flow_canary/runtime.sqlite path.
 
 Operator action remains normal login and updating the existing configured session/cookie binding. Browser authentication performed elsewhere has not established readiness for these existing files. Do not paste credentials into chat. Original one-submit authorization remains unused; no new slice is created.
+
+## New project binding continuation (2026-09-27)
+
+Owner authorized exactly one project creation using the currently authenticated candidate cookie. Starting candidate: 4f5d21a519c74c6dea34229122aac46930aaadd5. Existing active cookie, candidate cookie and session files were present. The Owner reported PROJECT_ACCESS_DENIED for the old binding; it was not retried. No live runtime database or ProviderJob existed; generation dispatch count was 0.
+
+Reused local AutoVideoPipeline@99b2a33e55db84f216ebc9706682d84c74c3b871 create_flow_project, preflight_flow_session and activate_flow_candidate. A creation invocation receipt was reserved before calling the existing helper; exactly one helper invocation returned CREATED. New project ID: 51ea107f-20b9-4222-a133-b4ccbfb1963b. Project URL: https://flow.google.com/project/51ea107f-20b9-4222-a133-b4ccbfb1963b. This operational binding identity is recorded under explicit Owner request.
+
+Candidate preflight: CONNECTED, valid=true. Existing activation helper returned ok after its own CONNECTED check; active cookie was atomically promoted and session binding updated. Exact new binding was independently read back locally without exposing session contents.
+
+AI-Film-Pipeline FlowVeoProvider.preflight returned INCONCLUSIVE / PROJECT_READBACK_INCONCLUSIVE. Its readiness check did not establish the required usable project surface. STOP before generation as explicitly required by the continuation. No further project creation or old-project retry was attempted. No live ProviderJob, generation submit, output or Asset exists. Generation dispatch count remains 0. Gates 5–10 are not reached. Full regression: 40 passed. This is INCONCLUSIVE, not live-canary proof. New project creation and binding succeeded; provider READY remains unproven. No frozen SoT or implementation source changed.
