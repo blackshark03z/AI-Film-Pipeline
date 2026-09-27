@@ -5,6 +5,7 @@ Raw UI response bodies and thumbnail URLs remain memory-only. No RPC replay.
 import asyncio
 import hashlib
 import json
+import re
 import secrets
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -17,9 +18,79 @@ from ..core import sha256
 
 
 class FlowNetworkTransport(FlowLiveTransport):
+    async def prepare_video_mode(self):
+        # Fresh Flow projects open in image mode in a new browser context.
+        # These are settings clicks only; no Generate control is touched.
+        if await project_surface_readback(self.page, self.project_id) != 'PROJECT_READBACK_READY':
+            raise ValueError('BOUND_PROJECT_NOT_READY')
+        settings = self.page.locator('button:has-text("Nano Banana 2")')
+        if await settings.count() != 1:
+            raise ValueError('IMAGE_MODE_SETTINGS_CONTROL_UNVERIFIED')
+        await settings.click()
+        video = self.page.get_by_text('Video', exact=True)
+        if await video.count() != 1:
+            raise ValueError('VIDEO_MODE_CONTROL_UNVERIFIED')
+        await video.click()
+        frames = self.page.get_by_text(re.compile(r'^(Frames|Khung)'), exact=False)
+        await frames.first.wait_for(state='visible', timeout=5000)
+        if await frames.count() != 1:
+            raise ValueError('FRAME_MODE_CONTROL_UNVERIFIED')
+        await frames.click()
+        model = self.page.locator('button:has-text("Omni 1.1 Flash")')
+        await model.first.wait_for(state='visible', timeout=5000)
+        if await model.count() != 1:
+            raise ValueError('VIDEO_MODEL_CONTROL_UNVERIFIED')
+        await model.click()
+        fast = self.page.get_by_text('Veo 3.1 - Fast', exact=True)
+        if await fast.count() != 1:
+            raise ValueError('VEO_FAST_MODEL_UNAVAILABLE')
+        await fast.click()
+        one = self.page.get_by_text('x1', exact=True)
+        if await one.count() != 1:
+            raise ValueError('SINGLE_VIDEO_CONTROL_UNVERIFIED')
+        await one.click()
+        for control in (video, frames, one):
+            selected = await control.evaluate('(e)=>e.closest("mat-button-toggle")?.classList.contains("mat-button-toggle-checked")===true')
+            if not selected:
+                raise ValueError('VIDEO_MODE_SELECTION_UNVERIFIED')
+        chosen = self.page.locator('button:has-text("Veo 3.1 - Fast")')
+        if await chosen.count() != 1 or not await chosen.is_visible():
+            raise ValueError('VEO_FAST_SELECTION_UNVERIFIED')
+        await self.page.keyboard.press('Escape')
+        credit_warning = self.page.locator('button.prompt-warning-button')
+        if await credit_warning.count():
+            raise ValueError('FLOW_VIDEO_CREDITS_INSUFFICIENT')
+        if await self.page.locator('button.generate-icon-button').count() != 1:
+            raise ValueError('FLOW_VIDEO_GENERATE_CONTROL_UNAVAILABLE')
+
     async def _click_pinned_generate(self, element):
         # The guarded element must be the clicked element. Detachment fails closed.
         await element.click(timeout=10000)
+
+    async def preview_prompt(self, prompt):
+        # This happens before reservation. It fills the exact would-be request
+        # but never presses Generate, so credit and validation state can settle.
+        editor = self.page.locator(PROMPT_SELECTOR)
+        if await editor.count() != 1 or not await editor.is_visible() or not await editor.is_editable():
+            raise ValueError('PREVIEW_EDITOR_UNAVAILABLE')
+        await self._fill_prompt(editor, prompt)
+        if await self._prompt_value(editor) != prompt:
+            raise ValueError('EXACT_PREVIEW_PROMPT_UNVERIFIED')
+        button = self.page.locator('button.generate-icon-button')
+        ready_checks = 0
+        for _ in range(20):
+            if await self.page.locator('button.prompt-warning-button').count():
+                raise ValueError('FLOW_VIDEO_CREDITS_INSUFFICIENT')
+            if await button.count() == 1 and await button.is_enabled():
+                ready_checks += 1
+                if ready_checks >= 4:
+                    if await self._prompt_value(editor) == prompt:
+                        return sha256(prompt)
+                    raise ValueError('EXACT_PREVIEW_PROMPT_DRIFT')
+            else:
+                ready_checks = 0
+            await self.page.wait_for_timeout(250)
+        raise ValueError('PREVIEW_GENERATE_CONTROL_NOT_ENABLED')
 
     def set_evidence_sink(self, sink, job):
         self._sink, self._job = sink, job
@@ -203,6 +274,8 @@ class FlowNetworkTransport(FlowLiveTransport):
             raise ValueError('GENERATE_BUTTON_NOT_ENABLED_AFTER_VERIFIED_PROMPT')
         if await editor.count() != 1 or await self._prompt_value(editor) != prompt:
             raise ValueError('EXACT_SUBMISSION_PROMPT_DRIFT_BEFORE_CLICK')
+        if await self.page.locator('button.prompt-warning-button').count():
+            raise ValueError('FLOW_VIDEO_CREDITS_INSUFFICIENT')
         guarded_button = await button.element_handle()
         if guarded_button is None:
             raise ValueError('GENERATE_BUTTON_DETACHED_BEFORE_GUARD')

@@ -86,6 +86,31 @@ def test_request_observer_does_not_read_unrelated_post_body(url, diagnostic):
     assert facts == ([('OBSERVATION_FAILURE', {'diagnostic': diagnostic})] if diagnostic else [])
 
 
+def test_exact_prompt_preview_stops_at_credit_warning_without_generate():
+    transport = FlowNetworkTransport(FlowConfig())
+    state = {'filled': False, 'clicks': 0}
+    class Editor:
+        async def count(self): return 1
+        async def is_visible(self): return True
+        async def is_editable(self): return True
+    class Warning:
+        async def count(self): return int(state['filled'])
+    class Generate:
+        async def count(self): return 0
+        async def is_enabled(self): return False
+        async def click(self): state['clicks'] += 1
+    editor, warning, generate = Editor(), Warning(), Generate()
+    transport.page = SimpleNamespace(locator=lambda selector: warning if selector == 'button.prompt-warning-button'
+        else generate if selector == 'button.generate-icon-button' else editor)
+    async def fill(_, prompt): state['filled'] = True
+    async def value(_): return 'exact prompt' if state['filled'] else ''
+    transport._fill_prompt = fill
+    transport._prompt_value = value
+    with pytest.raises(ValueError, match='FLOW_VIDEO_CREDITS_INSUFFICIENT'):
+        asyncio.run(transport.preview_prompt('exact prompt'))
+    assert state['clicks'] == 0
+
+
 def test_network_submit_rejects_repeat_before_any_browser_action():
     transport = FlowNetworkTransport(FlowConfig())
     transport._submit_invoked = True

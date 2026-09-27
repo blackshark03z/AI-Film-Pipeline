@@ -72,3 +72,23 @@ The immediate failure cannot be reconstructed from the original process: the tra
 - Project disposition: `QUARANTINED_UNCERTAIN`; no further Generate there. Slice budget: **3 used, 2 remaining**.
 
 Remedy options considered: ignore callback errors (unsafe incomplete evidence), allow an output without network evidence (weakens the specified proof), or filter to the exact Flow POST endpoint before reading a body and retain explicit stage diagnostics. Selected the last. A relevant request body/classifier/journal failure still fails closed; unrelated POST bodies are not read. Two intercepted cases plus the full 110-test suite pass. Attempt 4 requires another independently empty project.
+
+## Attempt 4 — bounded polling without video identity
+
+- Source candidate at reservation: `6cdb6deedfe29f1c345bf06fff7c354ac4f7e22d`.
+- Fresh dedicated Flow project: `9543b970-a9ab-461a-98d2-2bc8e6767e50`; candidate preflight `CONNECTED / valid=true`, activation `ok`, AI Film preflight `READY / PROJECT_READBACK_READY`.
+- Stable passive baseline: 0 identities, 17 responses, 0 video tiles, 0 concurrent indicators. Journal initially had 0 jobs and was writable.
+- GenerationAttempt: `attempt_04591f963c47b8a25709040c226f7669862b7bf35b8538d970c12269ef65f1a5`.
+- ProviderJob: `job_30fbba2250359ed4fd665511800033597235735b4cdecb69272300dca5a2302b`; dispatch_count=1, submission_state=`SUBMISSION_RESERVED`, status=`RUNNING` at bounded timeout.
+- Durable facts: `RESERVED`, `PROMPT_VERIFIED`, `CLICK_ARMED`, `TRUSTED_CLICK_OBSERVED`, `PROMPT_ACCEPTANCE_TRANSITION`. No qualified request, response, acceptance, provider video identity, binding or Asset. The canary returned `INCONCLUSIVE` because the 60-poll window ended without completion. An independent read-only view during that window also showed 0 identities, 0 video tiles and 0 progress indicators; absence does not cancel the external uncertainty.
+- Project disposition: `QUARANTINED_UNCERTAIN`; never Generate there again. Slice budget: **4 used, 1 remaining**.
+
+A later read-only screenshot of the project displayed `Nano Banana 2` in the creation settings. New browser contexts opened fresh projects in image mode. The source had never selected or verified Veo video mode before the prior four reservations. This falsifies the assumed video submit surface; it does not prove what external image effects, if any, those clicks caused. The projects and jobs remain quarantined.
+
+## Final fresh project — blocked before Attempt 5 reservation
+
+- Fresh dedicated Flow project: `bb651601-cd00-447a-bd05-c6839580f56c`; candidate preflight `CONNECTED / valid=true`, activation `ok`, AI Film preflight `READY / PROJECT_READBACK_READY`.
+- Read-only empty baseline: 0 identities, 17 observed responses and 0 video tiles. No GenerationAttempt or ProviderJob exists in its fresh runtime DB; dispatch_count=0.
+- The normal settings menu was inspected without Generate. Video → Frames → `Veo 3.1 - Fast` → x1 displayed a 20-credit cost and an explicit insufficient-credit warning. `Veo 3.1 - Lite` → x1 displayed a 10-credit cost and the same warning. With Fast selected, the visible control was `prompt-warning-button` labelled as insufficient credits; the normal Generate button was absent.
+- Source now configures and verifies Veo Fast video mode before creating a new job. It checks the credit warning and Generate-control presence before freezing/reserving. An independent review identified that an empty prompt could conceal a later credit warning; source now also previews the exact prospective frozen prompt, waits for a stable enabled Generate control without clicking it, and verifies its hash against the subsequently frozen job before any reservation. Recovery of existing jobs remains independent of this new-job gate. The live no-Generate pre-dispatch run before the exact-prompt refinement returned `INCONCLUSIVE / FLOW_VIDEO_CREDITS_INSUFFICIENT / dispatch_count=0`; the DB had 0 jobs. The exact-prompt refinement passed the full 111-test suite, including a no-click credit-warning case. Its live execution could not be completed because both active and candidate Flow sessions then returned `AUTH_REVOKED / valid=false`; AI Film preflight returned `AUTH_REQUIRED / PROJECT_READBACK_AUTH_REQUIRED`. No fifth Generate was invoked or reserved.
+- Project disposition: `CLEAN` with no generation. The fifth authorization remains unused; slice total **4 used, 1 remaining**. No billing or subscription action was taken. Stop at Owner authentication and credit authority boundary.

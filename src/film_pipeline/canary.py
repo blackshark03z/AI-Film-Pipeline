@@ -6,7 +6,7 @@ from pathlib import Path
 from .compiler import compile_prompt
 from .core import load_shot, sha256
 from .execution import DryRunProvider, route
-from .live_runtime import LiveRuntimeExecutor
+from .live_runtime import LiveRuntimeExecutor, make_provider_job
 from .providers.flow_network import FlowNetworkTransport as FlowLiveTransport
 from .providers.flow_veo import FlowConfig, FlowVeoProvider
 from .store import SQLiteStore
@@ -45,6 +45,13 @@ async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_
             if job.project_binding_id != sha256(transport.project_id):
                 raise ValueError('RECOVERY_PROJECT_MISMATCH')
         else:
+            try:
+                await transport.prepare_video_mode()
+            except ValueError as exc:
+                diagnostic = str(exc)
+                if diagnostic not in {'FLOW_VIDEO_CREDITS_INSUFFICIENT', 'FLOW_VIDEO_GENERATE_CONTROL_UNAVAILABLE'}:
+                    diagnostic = 'VIDEO_MODE_PREFLIGHT_INCONCLUSIVE'
+                return {'result': 'INCONCLUSIVE', 'diagnostic': diagnostic, 'dispatch_count': 0}
             shot = load_shot(Path(__file__).resolve().parents[2] / 'fixtures/flow_canary.json')
             caps = provider.capabilities()
             plan = compile_prompt(shot, caps)
@@ -54,9 +61,21 @@ async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_
             snapshot = await transport.snapshot()
             if (await provider.preflight()).state != 'READY':
                 return {'result': 'INCONCLUSIVE', 'diagnostic': 'PREDISPATCH_NOT_READY', 'dispatch_count': 0}
+            prospective = make_provider_job(attempt, project_binding_id=sha256(transport.project_id),
+                                            pre_dispatch_snapshot=snapshot)
+            preview_prompt = plan.provider_prompt + '\nExecution correlation: ' + prospective.provider_job_id
+            try:
+                preview_hash = await transport.preview_prompt(preview_prompt)
+            except ValueError as exc:
+                diagnostic = str(exc)
+                if diagnostic not in {'FLOW_VIDEO_CREDITS_INSUFFICIENT', 'PREVIEW_GENERATE_CONTROL_NOT_ENABLED'}:
+                    diagnostic = 'VIDEO_PROMPT_PREVIEW_INCONCLUSIVE'
+                return {'result': 'INCONCLUSIVE', 'diagnostic': diagnostic, 'dispatch_count': 0}
             job = executor.freeze_path(shot, plan, decision, attempt,
                 project_binding_id=sha256(transport.project_id),
                 pre_dispatch_snapshot=snapshot)
+            if job.provider_job_id != prospective.provider_job_id or job.correlation_evidence['submission_prompt_hash'] != preview_hash:
+                raise ValueError('FROZEN_PROMPT_PREVIEW_MISMATCH')
             # Freeze is durable before the only reservation/click path.
             try:
                 job = await executor.submit_once(job.provider_job_id)
