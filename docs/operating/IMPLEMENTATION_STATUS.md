@@ -45,15 +45,15 @@ baseline identity.
 
 ## In progress
 
-- SLICE-0006 is awaiting normal authenticated Flow state and an isolated project binding. Budget used: 0 of 5. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
+- SLICE-0006 has a fresh authenticated candidate session and is awaiting a safely isolated project binding. Budget used: 0 of 5. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
 
 ## Blocked
 
-- Active and candidate Flow session preflights both returned AUTH_REQUIRED / PROJECT_READBACK_AUTH_REQUIRED. No Generate may occur before READY.
+- The initial active and candidate sessions returned AUTH_REQUIRED. Normal operator sign-in restored candidate READY against the old project; cross-attempt isolation is the remaining gate. No Generate may occur on the old project.
 
 ## Next authorized action
 
-After normal operator authentication, prove READY and a correlation domain isolated from the prior uncertain SLICE-0004 attempt. Then execute one fresh canary under the SLICE-0006 maximum-five authorization, stopping on full proof. Preserve the prior consumed budget and INCONCLUSIVE state.
+Select and validate a correlation domain isolated from the prior uncertain SLICE-0004 attempt, promote the candidate only after project preflight, then execute one fresh canary under the SLICE-0006 maximum-five authorization, stopping on full proof. Preserve the prior consumed budget and INCONCLUSIVE state.
 
 ## Next slice after PROVEN
 

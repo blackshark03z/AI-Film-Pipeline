@@ -13,11 +13,13 @@
 - Active cookie and session files: present outside Git; contents not logged or copied.
 - Active Flow provider preflight: `AUTH_REQUIRED / PROJECT_READBACK_AUTH_REQUIRED`.
 - Candidate Flow provider preflight: `AUTH_REQUIRED / PROJECT_READBACK_AUTH_REQUIRED`.
-- Operator normal authentication: pending.
+- Operator normal authentication: completed through the existing headed AutoVideoPipeline login helper. It exported a fresh candidate cookie atomically to the configured local path; no cookie value was logged.
+- Fresh candidate Flow provider preflight against the prior bound project: `READY / PROJECT_READBACK_READY`.
+- Candidate account read-only project discovery: 21 accessible project IDs, including the prior bound project. No project was selected or created by this discovery.
 - Separate project/isolation: pending proof.
 - Fresh GenerationAttempts: 0.
 - Fresh ProviderJobs: 0.
 - Live Generate reservations/transactions conservatively used: **0 of 5**.
 - Assets: 0.
 
-No Generate, project creation, credential promotion or prior-job reconciliation occurred during this initial gate. The next live effect requires READY and safe isolation evidence first.
+No Generate, project creation, credential promotion or prior-job reconciliation occurred during this initial gate. The candidate is READY against the old project, but that project is unsafe for a new exact-delta attempt while the prior effect remains uncertain. The next live effect requires a separate, proven correlation domain first.
