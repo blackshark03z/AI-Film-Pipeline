@@ -32,6 +32,8 @@ class FlowLiveTransport:
         session = json.loads(self.config.session_path.read_text(encoding='utf-8'))
         self.project_id = session['project_id']
         self.page = await self.context.new_page()
+        if hasattr(self, '_observe_page'):
+            self._observe_page()
         await self.page.goto(f'https://flow.google.com/project/{self.project_id}', timeout=30000)
         if project_url_state(self.page.url, self.project_id) != 'MATCH':
             raise ValueError('BOUND_PROJECT_NOT_READY')

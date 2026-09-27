@@ -7,7 +7,7 @@ from .compiler import compile_prompt
 from .core import load_shot, sha256
 from .execution import DryRunProvider, route
 from .live_runtime import LiveRuntimeExecutor
-from .providers.flow_live import FlowLiveTransport
+from .providers.flow_network import FlowNetworkTransport as FlowLiveTransport
 from .providers.flow_veo import FlowConfig, FlowVeoProvider
 from .store import SQLiteStore
 
@@ -49,7 +49,7 @@ async def run_canary(config: FlowConfig, *, poll_limit=60, poll_interval=5):
                 return {'result': 'INCONCLUSIVE', 'diagnostic': 'PREDISPATCH_NOT_READY', 'dispatch_count': 0}
             job = executor.freeze_path(shot, plan, decision, attempt,
                 project_binding_id=sha256(transport.project_id),
-                pre_dispatch_snapshot={'asset_ids': snapshot['asset_ids']})
+                pre_dispatch_snapshot=snapshot)
             # Freeze is durable before the only reservation/click path.
             try:
                 job = await executor.submit_once(job.provider_job_id)
