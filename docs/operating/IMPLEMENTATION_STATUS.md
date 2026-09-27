@@ -2,7 +2,7 @@
 
 ## Project state
 
-**Lifecycle:** BUILD stopped / OPERATOR_AUTH_GATE
+**Lifecycle:** PROVE stopped / EXTERNAL_EFFECT_INCONCLUSIVE
 **Current slice:** `SLICE-0004 â€” Single Flow/Veo Live Canary & Exact Lineage`
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
@@ -74,3 +74,7 @@ Exactly one Owner-authorized project creation succeeded using existing AutoVideo
 ## Flow readback repair and Gate 5 stop
 
 Gate 4 repaired and live READY / PROJECT_READBACK_READY. Exact URL identity normalization and bounded verified ProseMirror prompt readiness covered by full suite (51 passed). Shared exact identity check also used by runtime navigation. Frozen repair proceeded to Gate 5, which stopped at STABLE_CORRELATION_SURFACE_UNVERIFIED before any ProviderJob or dispatch. Runtime SQLite readback: zero ProviderJobs, dispatch_count=0. INCONCLUSIVE; live exact correlation remains unqualified. No further project or generation created; SLICE-0005 not started.
+
+## Latest SLICE-0004 network diagnostic and live stop
+
+Existing-video identity-to-official-download diagnostic PROVEN (Outcome B). Story Auto decoder/baseline/exact tile download mechanics adapted and deterministic suite 70 passed. Live preflight READY. Frozen source 5b5e294263890f97dfd55c225292a6d598667161 progressed through Gate 5. Atomic dispatch reservation committed 1 before the sole transport invocation; no confirmed Generate receipt returned. Job SUBMISSION_RESERVED / INCONCLUSIVE, no external output or Asset. Read-only reconciliation finds no current output/activity, which does not authorize retry. Fresh core/job lineage readback passes; full Asset lineage remains unproven. Conservative budget consumed: 1; exact external submit count unconfirmed (0 or 1). NO further Generate under this authorization. See SLICE_0004_NETWORK_MEDIA.md. No frozen SoT change or SLICE-0005.
