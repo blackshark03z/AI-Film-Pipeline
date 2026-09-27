@@ -1,2 +1,3 @@
 # Keep the owner-supplied slice contract byte-for-byte in Git.
 docs/operating/CURRENT_SLICE.md -text
+docs/operating/SLICE_0004_WORK_PACKAGE.md -text

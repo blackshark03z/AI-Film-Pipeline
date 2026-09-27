@@ -12,13 +12,20 @@ from .providers.flow_veo import FlowConfig, FlowVeoProvider
 from .store import SQLiteStore
 
 
-async def run_canary(config: FlowConfig, *, poll_limit=60, poll_interval=5):
+async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_path=None, poll_limit=60, poll_interval=5):
+    # SLICE-0005 is deterministic remediation, with no fresh Generate authority.
+    # Recovery is exposed through the executor and never through this submit gate.
+    if not authorize_new_submit:
+        return {'result': 'INCONCLUSIVE', 'diagnostic': 'FRESH_GENERATE_AUTHORIZATION_REQUIRED', 'dispatch_count': 0}
+    prior_path = Path('projects/flow_canary/runtime.sqlite').resolve()
+    if runtime_path is None or Path(runtime_path).resolve() == prior_path:
+        raise ValueError('FRESH_AUTHORIZED_RUNTIME_PATH_REQUIRED')
     provider = FlowVeoProvider(config)
     health = await provider.preflight()
     if health.state != 'READY':
         return {'result': 'INCONCLUSIVE', 'preflight': health.payload(), 'dispatch_count': 0}
     transport = FlowLiveTransport(config)
-    store = SQLiteStore(Path('projects/flow_canary/runtime.sqlite'))
+    store = SQLiteStore(Path(runtime_path))
     store.initialize()
     executor = LiveRuntimeExecutor(store, transport)
     try:

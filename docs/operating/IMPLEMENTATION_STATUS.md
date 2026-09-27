@@ -2,8 +2,8 @@
 
 ## Project state
 
-**Lifecycle:** PROVE stopped / EXTERNAL_EFFECT_INCONCLUSIVE
-**Current slice:** `SLICE-0004 â€” Single Flow/Veo Live Canary & Exact Lineage`
+**Lifecycle:** SLICE-0005 deterministic PROVE complete; prior live external effect remains INCONCLUSIVE
+**Current slice:** `SLICE-0005 — Durable Flow Dispatch Evidence & Recovery Semantics`
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
 
@@ -45,7 +45,7 @@ baseline identity.
 
 ## In progress
 
-- SLICE-0004 is stopped at EXTERNAL_EFFECT_INCONCLUSIVE after the sole dispatch reservation. No confirmed Generate receipt exists.
+- No implementation in progress. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
 
 ## Blocked
 
@@ -53,7 +53,7 @@ baseline identity.
 
 ## Next authorized action
 
-Read-only reconciliation of the existing reserved ProviderJob only. Do not submit another Generate under this authorization; preserve the consumed budget and INCONCLUSIVE state.
+A fresh live Generate requires a new, explicit authorization and fresh attempt. Preserve the prior consumed budget and INCONCLUSIVE state.
 
 ## Next slice after PROVEN
 
@@ -78,3 +78,7 @@ Gate 4 repaired and live READY / PROJECT_READBACK_READY. Exact URL identity norm
 ## Latest SLICE-0004 network diagnostic and live stop
 
 Existing-video identity-to-official-download diagnostic PROVEN (Outcome B). Story Auto decoder/baseline/exact tile download mechanics adapted and deterministic suite 70 passed. Live preflight READY. Frozen source 5b5e294263890f97dfd55c225292a6d598667161 progressed through Gate 5. Atomic dispatch reservation committed 1 before the sole transport invocation; no confirmed Generate receipt returned. Job SUBMISSION_RESERVED / INCONCLUSIVE, no external output or Asset. Read-only reconciliation finds no current output/activity, which does not authorize retry. Fresh core/job lineage readback passes; full Asset lineage remains unproven. Conservative budget consumed: 1; exact external submit count unconfirmed (0 or 1). NO further Generate under this authorization. See SLICE_0004_NETWORK_MEDIA.md. No frozen SoT change or SLICE-0005.
+
+## SLICE-0005 deterministic completion
+
+The prior SLICE-0004 database and job remain byte-identical, with dispatch_count 1 and INCONCLUSIVE. SLICE-0005 evaluated all six dispatch/recovery lanes and selected an append-only SQLite evidence journal, passive sanitized request/response observation, immutable exact-output binding and acquisition receipts, plus conservative at-most-once handling. Browser trusted-click evidence is written through before transport return; HTTP 200 is not treated as provider acceptance. Recovery after reservation never calls Generate. F0–F9 failure windows, offline browser interception, binding conflict and locally recoverable validated download are covered by 103 passing tests. No live Generate or prior-job reconciliation occurred. Current text-video Generate contract and native acceptance/idempotency remain unqualified. See `SLICE_0005_PROTOCOL.md`. A future fresh canary needs explicit new authorization; QC has not begun.

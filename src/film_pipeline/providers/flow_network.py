@@ -11,17 +11,41 @@ from urllib.parse import urlsplit
 from .flow_live import FlowLiveTransport
 from .flow_response import FlowResponseModelDecoder
 from .flow_veo import PROMPT_SELECTOR, project_surface_readback
+from .flow_dispatch_network import generate_request_metadata
+from ..core import sha256
 
 
 class FlowNetworkTransport(FlowLiveTransport):
+    def set_evidence_sink(self, sink, job):
+        self._sink, self._job = sink, job
+
+    def _record(self, kind, data=None):
+        if not hasattr(self, '_sink'):
+            raise ValueError('DURABLE_EVIDENCE_SINK_REQUIRED')
+        self._sink.record(kind, data)
+
     async def _prompt_value(self, editor):
         if await editor.evaluate('e=>e.tagName') == 'TEXTAREA':
             return await editor.input_value()
         return await editor.inner_text()
 
+    async def _fill_prompt(self, editor, prompt):
+        if await editor.evaluate('e=>e.tagName') == 'TEXTAREA':
+            await editor.fill(prompt)
+            return
+        await editor.fill('')
+        # Native soft breaks preserve internal blank lines in contenteditable.
+        for index, line in enumerate(prompt.split('\n')):
+            if index:
+                await editor.press('Shift+Enter')
+            if line:
+                await self.page.keyboard.insert_text(line)
+
     async def _wait_prompt_reset(self, editor):
         for _ in range(40):
             if not (await self._prompt_value(editor)).strip():
+                if hasattr(self, '_sink'):
+                    self._record('PROMPT_ACCEPTANCE_TRANSITION')
                 return True
             await self.page.wait_for_timeout(250)
         return False
@@ -30,6 +54,25 @@ class FlowNetworkTransport(FlowLiveTransport):
         self.decoder = FlowResponseModelDecoder(self.project_id)
         self._tasks = set()
         self._observer_failed = False
+        self._armed = False
+        self._requests = {}
+        def request_observed(request):
+            if not self._armed or not hasattr(self, '_job'):
+                return
+            try:
+                metadata = generate_request_metadata(request.method, request.url, request.post_data,
+                    self.project_id, self._job.correlation_evidence['prompt'])
+                if metadata is None:
+                    return
+                if self._requests:
+                    self._record('AMBIGUOUS_EVIDENCE', {'diagnostic': 'MULTIPLE_GENERATE_REQUESTS'})
+                    self._observer_failed = True
+                    return
+                self._record('GENERATE_REQUEST_OBSERVED', metadata)
+                self._requests[request] = metadata['request_hash']
+            except Exception:
+                self._observer_failed = True
+        self.page.on('request', request_observed)
         def response_received(response):
             task = asyncio.create_task(self._observe(response))
             self._tasks.add(task)
@@ -40,6 +83,11 @@ class FlowNetworkTransport(FlowLiveTransport):
         if response.request.resource_type not in {'xhr', 'fetch'} or urlsplit(response.url).hostname != 'flow.google.com':
             return
         try:
+            request_hash = self._requests.get(response.request)
+            if request_hash:
+                self._record('PROVIDER_RESPONSE_OBSERVED', {'request_hash': request_hash,
+                    'status': response.status})
+                # No currently qualified acceptance parser. HTTP200 is not acceptance.
             body = await asyncio.wait_for(response.text(), timeout=10)
             self.decoder.observe_body(body)
         except Exception:
@@ -89,6 +137,8 @@ class FlowNetworkTransport(FlowLiveTransport):
     async def submit(self, job, prompt):
         if self._submit_invoked or job is None or job.dispatch_count != 1 or job.submission_state != 'SUBMISSION_RESERVED':
             raise ValueError('DURABLE_FIRST_DISPATCH_RESERVATION_REQUIRED')
+        if sha256(self.project_id) != job.project_binding_id:
+            raise ValueError('FROZEN_PROJECT_BINDING_MISMATCH')
         self._submit_invoked = True
         editor = self.page.locator(PROMPT_SELECTOR)
         button = self.page.locator('button.generate-icon-button')
@@ -96,15 +146,42 @@ class FlowNetworkTransport(FlowLiveTransport):
             raise ValueError('UNAMBIGUOUS_SUBMIT_SURFACE_REQUIRED')
         if not await editor.is_visible() or not await editor.is_editable() or not await button.is_enabled():
             raise ValueError('SUBMIT_SURFACE_NOT_READY')
-        await editor.fill(prompt)
+        await self._fill_prompt(editor, prompt)
         actual = await self._prompt_value(editor)
         if actual != prompt:
             raise ValueError('EXACT_SUBMISSION_PROMPT_UNVERIFIED')
-        await button.evaluate("""e=>{window.__filmTrustedGenerate=false;
-          e.addEventListener('click',ev=>{window.__filmTrustedGenerate=ev.isTrusted},{once:true})}""")
-        await button.click(timeout=10000)
-        trusted = await self.page.evaluate('window.__filmTrustedGenerate === true')
-        reset = await self._wait_prompt_reset(editor)
+        self._record('PROMPT_VERIFIED', {'prompt_sha256': sha256(prompt)})
+        # Patchright expose_binding misses already-created isolated contexts.
+        # A native CDP binding delivers the event directly to the durable sink.
+        cdp = await self.page.context.new_cdp_session(self.page)
+        receipt = asyncio.get_running_loop().create_future()
+        binding = '__filmTrusted_' + secrets.token_hex(12)
+        def trusted_click(event):
+            if event.get('name') != binding or receipt.done():
+                return
+            try:
+                trusted = event.get('payload') == 'true'
+                if trusted:
+                    self._record('TRUSTED_CLICK_OBSERVED')
+                receipt.set_result(trusted)
+            except Exception as exc:
+                receipt.set_exception(exc)
+        cdp.on('Runtime.bindingCalled', trusted_click)
+        try:
+            await cdp.send('Runtime.enable')
+            await cdp.send('Runtime.addBinding', {'name': binding})
+            await button.evaluate("""(e,binding)=>{
+              e.addEventListener('click',ev=>window[binding](JSON.stringify(ev.isTrusted)),{once:true})}
+              """, binding)
+            self._record('CLICK_ARMED')
+            self._armed = True
+            await button.click(timeout=10000)
+            trusted = await asyncio.wait_for(receipt, timeout=10)
+            reset = await self._wait_prompt_reset(editor)
+        finally:
+            if not receipt.done():
+                receipt.cancel()
+            await cdp.detach()
         return {'external_job_id': None, 'correlation_evidence': {
             'official_generate_click_completed': True,
             'trusted_generate_click': trusted, 'prompt_acceptance_transition': reset,
@@ -112,8 +189,19 @@ class FlowNetworkTransport(FlowLiveTransport):
 
     async def poll(self, job):
         await self._drain()
+        if hasattr(self, '_sink'):
+            facts = self._sink.facts()
+            kinds = {f['kind'] for f in facts}
+            if 'AMBIGUOUS_EVIDENCE' in kinds:
+                return {'status': 'INCONCLUSIVE', 'output_ids': []}
+            bound = self._sink.bindings()
+            if bound:
+                return {'status': 'SUCCEEDED', 'output_ids': [b['output_id'] for b in bound]}
+            durable_causal = {'PROMPT_VERIFIED', 'CLICK_ARMED', 'TRUSTED_CLICK_OBSERVED', 'PROMPT_ACCEPTANCE_TRANSITION'} <= kinds
+        else:
+            durable_causal = False
         if not all(job.correlation_evidence.get(k) for k in
-                   ('official_generate_click_completed', 'trusted_generate_click', 'prompt_acceptance_transition')):
+                   ('official_generate_click_completed', 'trusted_generate_click', 'prompt_acceptance_transition')) and not durable_causal:
             return {'status': 'INCONCLUSIVE', 'output_ids': []}
         baseline = set(job.pre_dispatch_snapshot['asset_ids'])
         new = {i for i in self.decoder.identities() if i.identity not in baseline}
@@ -128,6 +216,8 @@ class FlowNetworkTransport(FlowLiveTransport):
             return {'status': 'INCONCLUSIVE', 'output_ids': []}
         if len(matches) != 1:
             return {'status': 'RUNNING', 'output_ids': []}
+        if hasattr(self, '_sink'):
+            self._record('REMOTE_IDENTITY_OBSERVED', {'output_id': target.identity, 'method': 'passive_response_exact_tuple_tile'})
         return {'status': 'SUCCEEDED', 'output_ids': [target.identity],
                 'correlation_evidence': {'observed_identity': target.identity,
                   'identity_binding_hash': hashlib.sha256((job.provider_job_id + target.identity).encode()).hexdigest()}}

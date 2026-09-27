@@ -49,7 +49,7 @@ class FakeTransport:
         return destination
 
 
-def make_executor(tmp_path, transport):
+def make_executor(tmp_path, transport, *, project_binding_id="safe-project-binding"):
     raw_profile = json.loads((ROOT / "tests/fixtures/provider_full.json").read_text())
     validate_contract("provider_capabilities", raw_profile)
     profile = ProviderCapabilities.model_validate(raw_profile)
@@ -61,7 +61,7 @@ def make_executor(tmp_path, transport):
     attempt = dry.create_attempt(shot, plan, decision, request, started_at="2026-09-27T00:00:00+00:00")
     store = SQLiteStore(tmp_path / "runtime.sqlite")
     executor = LiveRuntimeExecutor(store, transport)
-    job = executor.freeze_path(shot, plan, decision, attempt, project_binding_id="safe-project-binding",
+    job = executor.freeze_path(shot, plan, decision, attempt, project_binding_id=project_binding_id,
                                pre_dispatch_snapshot={"existing_asset_ids": ["old-asset"]})
     return executor, store, attempt, job
 
