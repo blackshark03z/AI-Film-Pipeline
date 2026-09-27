@@ -1,709 +1,636 @@
-# SLICE-0005 — Durable Flow Dispatch Evidence & Recovery Semantics
+# SLICE-0006 — Fresh Flow Live Canary with Durable Dispatch Evidence
 
-## Context
+## Authorization
 
-Prior slice:
-
-`SLICE-0004 — Single Flow/Veo Live Canary & Exact Lineage`
-
-ended:
+Owner explicitly authorizes:
 
 ```text
-INCONCLUSIVE_EXTERNAL_EFFECT
+MAXIMUM 5 fresh Google Flow/Veo Generate transactions
 ```
 
-The single-submit budget was consumed conservatively.
+for this slice.
 
-Do NOT reuse that ProviderJob.
+This is a maximum budget, NOT a requirement to use all 5.
 
-Do NOT rewrite its history.
+Stop immediately once one full end-to-end canary is PROVEN unless additional execution is strictly necessary to resolve a specific acceptance criterion.
 
-Known proven facts:
+Each Generate must use:
 
 ```text
-Flow authentication                    PROVEN
-Bound project preflight                 PROVEN
-Passive response identity baseline      PROVEN
-Exact response identity delta model     PROVEN deterministically
-Identity → exact video tile             PROVEN live
-Exact tile → official Download          PROVEN live
-Official downloaded video validation    PROVEN live
-No gallery ordering dependency          PROVEN
+fresh GenerationAttempt
+fresh ProviderJob
+dispatch_count starts at 0
+maximum one Generate per ProviderJob
 ```
 
-Unresolved:
-
-```text
-After durable local dispatch reservation,
-did the external Generate transaction actually occur?
-```
-
-The prior attempt ended with:
-
-```text
-dispatch_count = 1
-submission_state = SUBMISSION_RESERVED
-confirmed_generate_transactions = UNKNOWN (0 or 1)
-```
-
-No redispatch is authorized for that attempt.
+Never redispatch the same attempt.
 
 ---
 
-# 1. Goal
+# 1. Starting baseline
 
-Design and prove the strongest practical dispatch/recovery protocol available for Google Flow browser transport.
-
-Primary question:
-
-> After a crash, timeout, browser failure, process failure, or transport exception around Generate, how much can the system prove about whether the external effect occurred?
-
-Do not assume the answer is merely "add more local logging".
-
-Explore the full solution space first.
-
----
-
-# 2. Mandatory exploration before implementation
-
-Use:
+Accepted deterministic remediation candidate:
 
 ```text
-SEARCH
-→ REUSE
-→ COMPOSE
-→ ADAPT
-→ BUILD LAST
+42cc74c2cab1cc0dfb25333d9dc721b4ae79e6df
 ```
 
-Investigate all relevant existing implementations before choosing the protocol.
-
-Primary brownfield sources:
+SLICE-0005 status:
 
 ```text
-D:\Story Auto\story-auto
-D:\Video\AutoVideoPipeline
+PROVEN deterministic
+103 tests PASS
 ```
 
-Also inspect current AI-Film-Pipeline source.
-
-Search conceptually for:
-
-```text
-idempotency
-request id
-request_id
-operation
-operation_id
-creation
-generation
-submit
-dispatch
-acceptance
-response
-RPC
-XHR
-fetch
-mutation
-retry
-reconcile
-receipt
-client token
-nonce
-request token
-provider identity
-```
-
-Do not limit investigation to filenames already known.
-
----
-
-# 3. Solution-space lanes
-
-Evaluate all lanes below.
-
-## Lane A — Provider-native operation/idempotency identity
-
-Highest priority.
-
-Inspect the actual Generate network transaction and determine whether Flow sends or returns any stable value such as:
-
-```text
-request identifier
-client-generated request token
-operation identifier
-creation identifier
-mutation identifier
-provider correlation token
-```
-
-Do NOT assign semantic names to unknown UUIDs without proof.
-
-Questions:
-
-```text
-Does the Generate request contain a unique client value?
-Does Flow return a stable operation/creation identity?
-Can that identity later be queried or observed?
-Does repeating an identical request with the same identity deduplicate?
-```
-
-Do NOT experimentally replay a consequential Generate request merely to test idempotency.
-
-Only use passive observation or non-consequential evidence unless explicitly authorized later.
-
-If provider-native idempotency exists and is safely usable:
-
-prefer it over all browser-derived approximations.
-
----
-
-## Lane B — Generate network request/response receipt
-
-Determine whether the browser click produces an observable request that itself proves external dispatch.
-
-Arm request/response observers BEFORE click.
-
-Potential evidence:
-
-```text
-Generate request observed
-request fingerprint
-request timestamp
-request body safe hash
-bound project
-HTTP/provider response received
-provider acceptance response
-returned provider identity
-```
-
-Persist only sanitized evidence.
-
-Never persist:
-
-```text
-cookies
-Authorization
-signed URLs
-raw secret-bearing payloads
-```
-
-If a request can be proven to have left the browser, distinguish:
-
-```text
-CLICK_OBSERVED
-REQUEST_OBSERVED
-PROVIDER_RESPONSE_OBSERVED
-```
-
-These are not equivalent.
-
----
-
-## Lane C — Durable local dispatch journal
-
-Evaluate stage-by-stage local durability.
-
-Possible states:
-
-```text
-NOT_RESERVED
-
-RESERVED
-
-PROMPT_VERIFIED
-
-CLICK_ARMED
-
-TRUSTED_CLICK_OBSERVED
-
-GENERATE_REQUEST_OBSERVED
-
-PROVIDER_ACCEPTANCE_OBSERVED
-
-REMOTE_IDENTITY_OBSERVED
-
-SUBMITTED
-```
-
-Do not add all states unless each materially improves recovery semantics.
-
-The journal must be:
-
-```text
-append-safe or monotonic
-durable
-crash-readable
-attempt-scoped
-immutable where possible
-```
-
-Every state must have a precise meaning.
-
----
-
-## Lane D — Remote post-crash reconciliation
-
-Explore what can be learned after losing the original browser process.
-
-Given:
-
-```text
-exact project
-exact attempt
-exact prompt hash / correlation marker
-pre-dispatch network baseline
-known reservation
-```
-
-determine whether a fresh authenticated browser can establish:
-
-```text
-no provider operation exists
-one exact operation/output exists
-multiple ambiguous operations exist
-unknown
-```
-
-Possible evidence:
-
-```text
-response identities
-project operation metadata
-video tiles
-prompt history
-provider activity indicators
-creation timestamps
-remote operation state
-```
-
-Remote absence must NOT automatically mean zero dispatch.
-
-Define precisely when absence can and cannot prove anything.
-
----
-
-## Lane E — Isolation as a proof amplifier
-
-Evaluate dedicated-project/single-flight semantics.
-
-For a controlled canary or production execution mode:
-
-```text
-one bound project
-one active GenerationAttempt
-stable empty/known baseline
-no concurrent generation
-```
-
-Determine what this isolation lets reconciliation prove that a shared project cannot.
-
-Do NOT rely on isolation alone if provider evidence remains ambiguous.
-
----
-
-## Lane F — Conservative at-most-once fallback
-
-If Flow exposes no sufficiently durable provider receipt or idempotency mechanism:
-
-retain:
-
-```text
-reserve-before-side-effect
-+
-never blind retry after uncertainty
-```
-
-This means some generations may be lost.
-
-That is acceptable if the alternative is duplicate external effects.
-
-Document this explicitly as:
+Known execution semantics:
 
 ```text
 AT_MOST_ONCE_WITH_POSSIBLE_LOSS
 ```
 
-not "exactly once".
+Do NOT claim exactly-once.
 
-Never claim mathematical exactly-once semantics unless provider capabilities actually support it.
-
----
-
-# 4. Important architecture distinction
-
-Separate three concepts:
+Prior SLICE-0004 attempt/job remains historical and immutable:
 
 ```text
-Dispatch Intent
-External Dispatch Evidence
-Output Attribution
-```
-
-They are different.
-
-Example:
-
-```text
-reservation persisted
-```
-
-proves Dispatch Intent.
-
-```text
-Generate request observed leaving browser
-```
-
-proves stronger external-effect evidence.
-
-```text
-provider acceptance response
-```
-
-is stronger still.
-
-```text
-new provider response identity
-```
-
-supports Output Attribution.
-
-Do not collapse these into one `SUBMITTED` boolean.
-
----
-
-# 5. Required failure-window analysis
-
-Model at least these crash points:
-
-```text
-F0 before reservation
-
-F1 after reservation
-   before prompt fill
-
-F2 after prompt fill
-   before click
-
-F3 during click
-   before request observable
-
-F4 request leaves browser
-   before provider response
-
-F5 provider accepts
-   before local durable acceptance write
-
-F6 provider identity appears
-   before local binding write
-
-F7 binding persisted
-   before download
-
-F8 during download
-
-F9 after download
-   before Asset persistence
-```
-
-For every window define:
-
-```text
-what local evidence exists
-what remote evidence may exist
-whether redispatch is allowed
-whether reconciliation is possible
-terminal classification
-```
-
----
-
-# 6. Desired recovery matrix
-
-Produce a table conceptually like:
-
-```text
-Evidence                                 Recovery
-
-reservation only                         reconcile; never blind retry
-
-trusted click only                       reconcile; no retry
-
-Generate request observed                reconcile; no retry
-
-provider acceptance observed             mark dispatched; reconcile output
-
-provider identity observed               bind exact identity
-
-identity binding persisted               resume acquisition only
-
-validated download exists                persist/recover Asset
-
-ambiguous remote state                   INCONCLUSIVE
-```
-
-Do not hardcode these conclusions before investigation; validate them against actual Flow behavior.
-
----
-
-# 7. Reuse Story Auto where applicable
-
-Story Auto already provides strong mechanisms for:
-
-```text
-passive response observation
-quiescent baseline
-exact identity delta
-dispatch evidence concepts
-identity binding
-exact video acquisition
-```
-
-Reuse these semantics rather than rewriting them.
-
-But independently inspect whether Story Auto has stronger dispatch evidence/recovery behavior than the current AI-Film port.
-
-If Story Auto solved a failure window already:
-
-reuse it.
-
----
-
-# 8. Current AI-Film issue to correct
-
-Current runtime effectively has:
-
-```text
-reserve durable
-→ transport.submit()
-→ transport returns all evidence
-→ persist SUBMITTED
-```
-
-This creates an uncertainty interval covering the whole transport call.
-
-The new design should minimize that interval.
-
-Do NOT simply move `submitted_at` earlier.
-
-Persist only evidence that has actually occurred.
-
----
-
-# 9. Provider-side observation preferred over UI observation
-
-Evidence strength order:
-
-```text
-provider-native idempotency/operation identity
->
-provider network acceptance/receipt
->
-provider response identity
->
-browser trusted event
->
-DOM transition
->
-timing/UI heuristics
-```
-
-Prefer stronger evidence whenever available.
-
-UI evidence may complement network evidence but should not override it.
-
----
-
-# 10. No consequential live Generate during initial BUILD/PROVE
-
-This slice begins with:
-
-```text
-code inspection
-network-model inspection
-deterministic implementation
-tests
-failure simulation
-```
-
-No fresh live Generate is automatically authorized.
-
-Existing media/download diagnostics may be used read-only where useful.
-
-A new live canary requires a fresh explicit authorization after deterministic proof is complete.
-
----
-
-# 11. Deterministic proof requirements
-
-Add tests covering at least:
-
-```text
-crash after reserve
-crash before click
-crash after trusted click
-crash after Generate request observation
-crash after provider acceptance
-crash after provider identity observation
-crash after identity binding
-crash during download
-crash after valid download before Asset persistence
-```
-
-Also prove:
-
-```text
-restart never causes blind Generate
-reconciliation never creates a second submit
-journal states cannot move backwards
-ambiguous evidence fails closed
-provider identity cannot be rebound to a different attempt
-download can resume without Generate after identity binding
-```
-
----
-
-# 12. Investigate recovery of already-downloaded media
-
-If exact provider identity is bound and a valid downloaded file exists but DB Asset persistence failed:
-
-the system should preferably be able to:
-
-```text
-validate existing immutable file
-→ SHA-256
-→ reconstruct/persist Asset
-```
-
-without downloading or generating again.
-
-Prove this deterministically.
-
----
-
-# 13. Architecture decision output
-
-Before implementation is accepted, write an explicit comparison:
-
-```text
-OPTION_A_PROVIDER_IDEMPOTENCY
-availability:
-strength:
-cost:
-selected/rejected:
-
-OPTION_B_NETWORK_RECEIPT
-availability:
-strength:
-cost:
-selected/rejected:
-
-OPTION_C_DURABLE_JOURNAL
-availability:
-strength:
-cost:
-selected/rejected:
-
-OPTION_D_REMOTE_RECONCILIATION
-availability:
-strength:
-cost:
-selected/rejected:
-
-OPTION_E_ISOLATED_PROJECT
-availability:
-strength:
-cost:
-selected/rejected:
-
-OPTION_F_AT_MOST_ONCE_FALLBACK
-availability:
-strength:
-cost:
-selected/rejected:
-```
-
-Then state the composed protocol actually chosen.
-
----
-
-# 14. Keep architecture minimal
-
-Do not build a generic distributed transaction framework.
-
-This is a Flow adapter problem.
-
-Prefer the smallest protocol that closes the proven failure windows.
-
-No Kafka.
-No workflow engine.
-No new distributed datastore.
-No custom orchestration framework.
-
-SQLite remains acceptable unless evidence proves otherwise.
-
----
-
-# 15. Prior SLICE-0004 history
-
-Never mutate:
-
-```text
-attempt_c4c8...
-job_f1f239...
 dispatch_count = 1
-INCONCLUSIVE
+status = INCONCLUSIVE
 ```
 
-Treat it as historical evidence.
-
-No reset.
-
-No attempt reuse.
-
-No second Generate for it.
+Never reuse or mutate it.
 
 ---
 
-# 16. Acceptance
+# 2. Proven components already available
 
-This slice is PROVEN only when:
+Do not redesign these unless live evidence disproves them:
 
 ```text
-full solution space was evaluated
-chosen dispatch evidence protocol is explicit
-failure-window matrix is complete
-durable implementation passes deterministic crash tests
-no restart path can blind-submit
-network identity/output attribution remains intact
-official Download path remains exact
-prior INCONCLUSIVE attempt remains untouched
+Flow authentication
+exact project binding
+project preflight
+passive response observer
+stable response identity baseline
+exact identity delta
+identity → exact video tile
+exact tile → official Download
+video technical validation
+SHA-256
+durable dispatch journal
+immutable output binding
+download recovery
+Asset recovery
+restart/no-blind-retry semantics
 ```
-
-A live generation is NOT required to prove the deterministic remediation itself.
 
 ---
 
-# 17. End-of-slice recommendation
+# 3. Goal
 
-After deterministic PROVEN status, report whether a fresh live canary is justified.
-
-If yes, specify exactly what new evidence the live canary must prove:
+Prove at least one fresh complete live path:
 
 ```text
-fresh attempt
+ShotSpec
+→ PromptPlan
+→ RoutingDecision
+→ GenerationAttempt
+→ ProviderJob
 → durable reservation
-→ Generate transaction evidence
-→ provider acceptance evidence
-→ exact new response identity
-→ persisted identity binding
-→ exact official download
-→ technical validation
+→ exactly one normal UI Generate
+→ durable dispatch evidence
+→ sanitized network request/response evidence
+→ provider acceptance evidence IF genuinely qualified
+→ exact new provider-observed identity
+→ immutable identity binding
+→ exact video tile
+→ official Download
+→ ffprobe/media validation
 → SHA-256
-→ Asset
+→ Asset persistence
 → fresh SQLite lineage readback
 ```
 
-Do not execute it without fresh authorization.
+---
 
-Do NOT begin QC work yet.
+# 4. Five-transaction budget semantics
+
+Maintain a slice-level counter:
+
+```text
+live_generate_budget_max = 5
+live_generate_transactions_used = N
+```
+
+Hard invariant:
+
+```text
+0 <= N <= 5
+```
+
+A transaction is considered consumed conservatively once its durable dispatch reservation reaches the external-effect boundary.
+
+Never restore budget because:
+
+```text
+no output was seen
+request evidence was missing
+browser crashed
+timeout occurred
+provider state was ambiguous
+```
+
+---
+
+# 5. Per-attempt rules
+
+For attempt K:
+
+```text
+Attempt_K
+ProviderJob_K
+dispatch_count = 0
+```
+
+Before Generate require:
+
+```text
+preflight READY
+exact project binding
+stable baseline
+no known concurrent generation
+observer healthy
+journal writable
+frozen prompt verified
+dispatch_count == 0
+```
+
+Then:
+
+```text
+reserve
+→ dispatch_count = 1
+→ exactly one Generate invocation maximum
+```
+
+After this point:
+
+```text
+NEVER call Generate again for Attempt_K
+```
+
+regardless of timeout, exception or ambiguity.
+
+---
+
+# 6. Stop-on-success rule
+
+If an attempt proves:
+
+```text
+Generate evidence
++
+exact output identity
++
+immutable binding
++
+official Download
++
+technical validation
++
+SHA-256
++
+Asset
++
+fresh lineage readback
+```
+
+then:
+
+```text
+SLICE-0006 = PROVEN
+```
+
+Stop.
+
+Do not spend remaining Generate budget for repetition merely to increase confidence.
+
+---
+
+# 7. Inconclusive-attempt rule
+
+If Attempt_K becomes:
+
+```text
+INCONCLUSIVE_EXTERNAL_EFFECT
+```
+
+then:
+
+```text
+Attempt_K budget consumed
+Attempt_K frozen permanently
+no retry
+```
+
+Before starting Attempt_K+1, prove that the next attempt will not be contaminated by late output from Attempt_K.
+
+Acceptable ways include, in strength order:
+
+```text
+provider-visible terminal/failure evidence for Attempt_K
+
+OR
+
+strong isolated execution surface with no possible aliasing
+
+OR
+
+a separately isolated project already authorized/available
+
+OR
+
+another method whose independence is explicitly proven
+```
+
+Do NOT proceed merely because the UI currently shows no output.
+
+Remote absence is not proof of zero prior dispatch.
+
+---
+
+# 8. Cross-attempt contamination
+
+This is critical.
+
+If an earlier uncertain attempt could still produce a late response identity in the same project, do NOT start a later attempt in that same correlation domain unless the attribution model can mathematically separate them.
+
+Forbidden:
+
+```text
+Attempt_1 uncertain
+→ immediately Generate Attempt_2
+→ assume first new output belongs to Attempt_2
+```
+
+That destroys exact lineage.
+
+If safe isolation cannot be established:
+
+```text
+STOP
+RESULT = INCONCLUSIVE
+remaining budget unused
+```
+
+Safety is more important than consuming all 5 transactions.
+
+---
+
+# 9. Provider acceptance qualification
+
+Observe Generate request and response passively.
+
+Persist sanitized facts only.
+
+Possible stages:
+
+```text
+RESERVED
+PROMPT_VERIFIED
+CLICK_ARMED
+TRUSTED_CLICK_OBSERVED
+GENERATE_REQUEST_OBSERVED
+GENERATE_RESPONSE_OBSERVED
+PROVIDER_ACCEPTANCE_OBSERVED   # only if independently qualified
+REMOTE_IDENTITY_OBSERVED
+OUTPUT_BOUND
+```
+
+Do NOT infer:
+
+```text
+HTTP 200 == provider accepted generation
+```
+
+unless the actual Flow contract proves that.
+
+If Flow does not expose a durable acceptance receipt:
+
+record:
+
+```text
+provider_acceptance = UNQUALIFIED
+delivery_semantics = AT_MOST_ONCE_WITH_POSSIBLE_LOSS
+```
+
+This does not automatically fail the E2E canary if output lineage is otherwise proven.
+
+---
+
+# 10. Network evidence
+
+Capture only safe facts:
+
+```text
+request observed
+safe endpoint/path classification
+timestamp
+method
+safe request fingerprint/hash
+response observed
+status
+safe response fingerprint/hash
+provider-observed identity
+```
+
+Never persist:
+
+```text
+Cookie
+Authorization
+signed URLs
+raw secret-bearing bodies
+```
+
+---
+
+# 11. Output attribution
+
+Use the proven Story Auto-derived mechanism:
+
+```text
+baseline identities
+→ one Generate
+→ current identities
+→ exact delta
+```
+
+Interpretation:
+
+```text
+0 new
+→ bounded wait/reconciliation
+
+1 new
+→ candidate identity
+
+>1 new
+→ OUTPUT_ATTRIBUTION_AMBIGUOUS
+→ attempt INCONCLUSIVE
+```
+
+Never choose via:
+
+```text
+latest
+newest
+first
+last
+gallery order
+DOM position
+filename order
+```
+
+---
+
+# 12. Binding before acquisition
+
+Mandatory order:
+
+```text
+provider-observed identity
+→ validate exact attempt ownership
+→ immutable bind to ProviderJob/GenerationAttempt
+→ persist binding
+→ then and only then acquire video
+```
+
+A crash after binding must allow:
+
+```text
+resume acquisition
+```
+
+without Generate.
+
+---
+
+# 13. Official acquisition
+
+Preferred proven path:
+
+```text
+bound provider identity
+→ exact flow-video-tile
+→ exact tile menu
+→ official Download
+→ 720p
+→ expect_download
+```
+
+Do not use direct network-byte replay unless separately proven safe and equivalent.
+
+---
+
+# 14. Asset proof
+
+After download:
+
+```text
+validate non-empty file
+ffprobe
+duration > 0
+width > 0
+height > 0
+valid video stream
+SHA-256
+persist Asset
+```
+
+Then perform fresh DB reconstruction/readback.
+
+Required lineage:
+
+```text
+ShotSpec
+→ PromptPlan
+→ RoutingDecision
+→ GenerationAttempt
+→ ProviderJob
+→ ProviderObservedIdentity
+→ Asset
+```
+
+---
+
+# 15. Recovery cases
+
+If crash occurs:
+
+### After identity binding
+
+Resume only:
+
+```text
+exact acquisition
+→ validation
+→ Asset persistence
+```
+
+Never Generate.
+
+### During download
+
+Resume acquisition for the same bound identity only.
+
+### After valid bytes but before Asset DB persistence
+
+Use deterministic recovery:
+
+```text
+validate existing owned file
+→ verify receipt/hash
+→ persist Asset
+```
+
+No provider call required if local proof is sufficient.
+
+---
+
+# 16. Attempt loop
+
+Conceptually:
+
+```text
+for attempt_number in 1..5:
+
+    create fresh attempt/job
+
+    prove preconditions
+
+    execute at most one Generate
+
+    reconcile
+
+    if complete lineage PROVEN:
+        STOP PROVEN
+
+    if attempt safely terminal but no usable output:
+        determine whether another fresh attempt is safe
+
+    if attempt uncertain and next attempt cannot be isolated:
+        STOP INCONCLUSIVE
+
+STOP after 5 consumed transactions
+```
+
+Do not mechanically loop.
+
+Every next attempt requires proof that attribution remains uncontaminated.
+
+---
+
+# 17. No architecture expansion unless live evidence requires it
+
+SLICE-0005 already explored the broad solution space.
+
+Do not redesign the whole adapter during live execution.
+
+However, if live evidence falsifies a deterministic assumption:
+
+```text
+stop
+capture sanitized evidence
+classify root cause
+```
+
+Then evaluate alternative solutions broadly before modifying architecture.
+
+Do not tunnel into the first hypothesis.
+
+---
+
+# 18. Acceptance
+
+SLICE-0006 is PROVEN when at least one fresh attempt has:
+
+```text
+exactly one Generate maximum
+durable dispatch evidence
+exact provider output attribution
+immutable identity binding
+exact official Download
+valid video
+SHA-256 Asset
+complete SQLite lineage
+fresh readback
+no secret leakage
+no gallery-order dependency
+no blind retry
+```
+
+Provider-native idempotency is NOT required.
+
+Provider acceptance receipt is NOT required unless Flow demonstrably exposes one.
+
+---
+
+# 19. Final report
+
+Return:
+
+```text
+RESULT:
+PROVEN | INCONCLUSIVE | DISPROVEN
+
+SLICE:
+SLICE-0006
+
+GENERATE_BUDGET:
+  authorized: 5
+  used:
+  remaining:
+
+ATTEMPTS:
+  - attempt:
+    provider_job:
+    dispatch_count:
+    terminal_state:
+    request_observed:
+    response_observed:
+    provider_acceptance:
+    provider_identity:
+    asset_sha256:
+    contamination_risk:
+
+PROVEN_ATTEMPT:
+
+DISPATCH_PROTOCOL:
+  semantics: AT_MOST_ONCE_WITH_POSSIBLE_LOSS
+  native_idempotency:
+  acceptance_receipt:
+
+OUTPUT_LINEAGE:
+  identity_method:
+  binding:
+  acquisition:
+  validation:
+  fresh_readback:
+
+REGRESSION:
+  tests:
+
+CANDIDATE_SHA:
+REMOTE_SHA:
+WORKING_TREE:
+SECRETS_COMMITTED:
+SOT_FILES_CHANGED:
+
+STOP_REASON:
+```
+
+Hard maximum:
+
+```text
+Generate transactions used <= 5
+```

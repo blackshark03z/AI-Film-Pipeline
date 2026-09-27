@@ -2,8 +2,8 @@
 
 ## Project state
 
-**Lifecycle:** SLICE-0005 deterministic PROVE complete; prior live external effect remains INCONCLUSIVE
-**Current slice:** `SLICE-0005 — Durable Flow Dispatch Evidence & Recovery Semantics`
+**Lifecycle:** SLICE-0006 live PROVE at authentication/isolation gate; prior live external effect remains INCONCLUSIVE
+**Current slice:** `SLICE-0006 — Fresh Flow Live Canary with Durable Dispatch Evidence`
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
 
@@ -45,15 +45,15 @@ baseline identity.
 
 ## In progress
 
-- No implementation in progress. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
+- SLICE-0006 is awaiting normal authenticated Flow state and an isolated project binding. Budget used: 0 of 5. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
 
 ## Blocked
 
-- None known.
+- Active and candidate Flow session preflights both returned AUTH_REQUIRED / PROJECT_READBACK_AUTH_REQUIRED. No Generate may occur before READY.
 
 ## Next authorized action
 
-A fresh live Generate requires a new, explicit authorization and fresh attempt. Preserve the prior consumed budget and INCONCLUSIVE state.
+After normal operator authentication, prove READY and a correlation domain isolated from the prior uncertain SLICE-0004 attempt. Then execute one fresh canary under the SLICE-0006 maximum-five authorization, stopping on full proof. Preserve the prior consumed budget and INCONCLUSIVE state.
 
 ## Next slice after PROVEN
 
