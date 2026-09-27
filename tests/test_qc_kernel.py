@@ -5,8 +5,9 @@ from pathlib import Path
 import pytest
 
 from film_pipeline.live_runtime import Asset
+from film_pipeline.core import sha256
 from film_pipeline.qc import (QCStore, derive_disposition, derive_report, evidence,
-                              human_decision)
+                              human_decision, HumanDecision)
 from film_pipeline.store import SQLiteStore
 
 
@@ -51,6 +52,7 @@ def test_human_approval_finalizes_exact_asset_take():
     asset = sample_asset()
     decision = human_decision(asset=asset, reviewer_id="owner_fixture", action="APPROVE",
                               visual_pass=True, continuity_pass=True, editorial_pass=True)
+    assert decision.source == "human_review"
     report = derive_report(asset, evidence_set(asset), decision)
     take = derive_disposition("SHOT", asset, report, decision)
     assert report.report["decision"] == "pass"
@@ -254,3 +256,90 @@ def test_missing_review_frame_invalidates_fresh_readback(tmp_path):
     frame.write_bytes(b"changed frame")
     with pytest.raises(ValueError, match="artifact changed"):
         QCStore(SQLiteStore(runtime.path)).read(asset, pending.report["qc_report_id"])
+
+
+def test_owner_approval_successor_is_human_backed_exact_and_idempotent(tmp_path):
+    from test_live_runtime import FakeTransport, make_executor
+    from film_pipeline.qc_runner import finalize_owner_approval
+
+    executor, runtime, attempt, job = make_executor(tmp_path, FakeTransport())
+    asyncio.run(executor.submit_once(job.provider_job_id))
+    asyncio.run(executor.reconcile(job.provider_job_id))
+    asset = asyncio.run(executor.download_assets(job.provider_job_id, tmp_path / "outputs"))[0]
+    rows = evidence_set(asset, vlm=True)
+    qc = QCStore(runtime)
+    prior, _ = qc.save(asset, rows)
+    original_ids = set(prior.evidence_ids)
+    original_payloads = {}
+    c = runtime._connect()
+    try:
+        for key in original_ids:
+            original_payloads[key] = c.execute("SELECT payload FROM qc_evidence WHERE id=?", (key,)).fetchone()[0]
+    finally:
+        c.close()
+
+    first = finalize_owner_approval(runtime.path, prior.report["qc_report_id"],
+                                    asset.sha256, Path(asset.uri_or_path))
+    second = finalize_owner_approval(runtime.path, prior.report["qc_report_id"],
+                                     asset.sha256, Path(asset.uri_or_path))
+    assert first == second
+    assert first["final_decision"] == "pass"
+    assert first["human_authority"] == "human"
+    assert first["human_source"] == "owner_explicit_review"
+    assert first["selected_take"]["shot_id"] == "FLOW_CANARY_001"
+    assert first["selected_take"]["generation_attempt_id"] == attempt.generation_attempt_id
+    assert first["selected_take"]["asset_id"] == asset.asset_id
+    assert first["selected_take"]["qc_report_id"] == first["final_report_id"]
+    assert first["selected_take"]["selection_authority"] == "human_with_vlm_assist"
+    assert first["counts"] == {"qc_evidence": len(rows) + 3, "human_qc_decisions": 1,
+                               "qc_reports": 2, "selected_takes": 1, "repair_decisions": 0}
+    old, old_disposition = QCStore(SQLiteStore(runtime.path)).read(asset, prior.report["qc_report_id"])
+    final, take = QCStore(SQLiteStore(runtime.path)).read(asset, first["final_report_id"])
+    assert old.report["decision"] == "needs_human_review" and old_disposition is None
+    assert final.prior_report_id == prior.report["qc_report_id"]
+    assert original_ids.issubset(final.evidence_ids)
+    assert len(final.evidence_ids) == len(original_ids) + 3
+    assert take.selected_take_id == first["selected_take"]["selected_take_id"]
+    c = runtime._connect()
+    try:
+        for key, payload in original_payloads.items():
+            assert c.execute("SELECT payload FROM qc_evidence WHERE id=?", (key,)).fetchone()[0] == payload
+        new_rows = [json.loads(row[0]) for row in c.execute("SELECT payload FROM qc_evidence").fetchall()
+                    if json.loads(row[0])["evidence_id"] not in original_ids]
+        assert {row["gate"] for row in new_rows} == {"visual", "continuity", "editorial"}
+        assert all(row["evaluator_type"] == "human" and row["confidence"] is None and
+                   row["time_range_s"] is None for row in new_rows)
+    finally:
+        c.close()
+
+
+def test_owner_approval_wrong_sha_leaves_prior_unmodified(tmp_path):
+    from test_live_runtime import FakeTransport, make_executor
+    from film_pipeline.qc_runner import finalize_owner_approval
+
+    executor, runtime, _attempt, job = make_executor(tmp_path, FakeTransport())
+    asyncio.run(executor.submit_once(job.provider_job_id))
+    asyncio.run(executor.reconcile(job.provider_job_id))
+    asset = asyncio.run(executor.download_assets(job.provider_job_id, tmp_path / "outputs"))[0]
+    prior, _ = QCStore(runtime).save(asset, evidence_set(asset))
+    with pytest.raises(ValueError, match="expected proven Asset"):
+        finalize_owner_approval(runtime.path, prior.report["qc_report_id"],
+                                "0" * 64, Path(asset.uri_or_path))
+    c = runtime._connect()
+    try:
+        assert c.execute("SELECT COUNT(*) FROM selected_takes").fetchone()[0] == 0
+        assert c.execute("SELECT COUNT(*) FROM qc_reports").fetchone()[0] == 1
+    finally:
+        c.close()
+
+
+def test_legacy_human_decision_identity_remains_readable():
+    asset = sample_asset()
+    current = human_decision(asset=asset, reviewer_id="historical_owner", action="APPROVE",
+                             visual_pass=True, continuity_pass=True, editorial_pass=True)
+    prior_payload = current.model_dump(mode="json", exclude={"decision_id", "authority", "source"})
+    legacy = HumanDecision.model_validate({"decision_id": "human_" + sha256(prior_payload),
+                                           **prior_payload})
+    assert legacy.authority == "human"
+    assert legacy.source == "human_review"
+    assert "authority" not in legacy.payload() and "source" not in legacy.payload()

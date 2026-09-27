@@ -53,11 +53,15 @@ baseline identity.
 
 ## Next authorized action
 
-Freeze and report the SLICE-0007 QC candidate. The real Attempt-5 Asset has a technical PASS and a durable QCReport with `needs_human_review`; human take selection remains pending. Stop at the SLICE-0007 boundary. No Flow or Seedance Generate and no repair execution is authorized in this slice.
+Freeze and report the SLICE-0007 closure candidate. The Owner explicitly APPROVED the exact real take. A human-authoritative QCReport successor is `pass` and exactly one SelectedTake points to the proven Asset. Stop at the SLICE-0007 boundary; SLICE-0008 has not started. No Flow or Seedance Generate and no repair execution occurred in this continuation.
 
 ## SLICE-0007 QC kernel and human review
 
 The accepted SLICE-0006 Asset was consumed without regeneration. The six QC solution lanes were compared and a hybrid was selected: deterministic technical gate, advisory temporal/Gemini observations, and human authority for visual, continuity, editorial and take selection. Exact lineage and SHA-256 passed; full decode and duration/metadata checks passed. Five review frames and a contact sheet were packaged with the candidate. `QCReportV1` was persisted and freshly rederived from 20 immutable evidence records; it remains `needs_human_review`, with zero SelectedTakes and zero RepairDecisions. PASS, FAIL and unresolved branches are deterministic tests, including byte/artifact tamper refusal. See `SLICE_0007_QC_ARCHITECTURE.md`, `SLICE_0007_EVIDENCE.md`, and `qc_slice0007/REVIEW_PACKET.md`.
+
+## SLICE-0007 Owner approval closure
+
+The Owner's explicit `APPROVE` was recorded as a separate human decision with `authority=human` and `source=owner_explicit_review`; no viewing timestamps or confidence were invented. Three human gate evidence records were appended. The original machine/VLM report remains `needs_human_review` with its 20 evidence references unchanged. The finalized successor `QCReportV1` is `pass`, contains all prior evidence plus human evidence, and links to the prior report. Exactly one `SelectedTake` has `human_with_vlm_assist` authority and exact ShotSpec/GenerationAttempt/Asset/final-report lineage. A repeated finalization yielded the same IDs and row counts; no RepairDecision was created. See `SLICE_0007_OWNER_APPROVAL_EVIDENCE.md`. SLICE-0007 is PROVEN AND CLOSED; ready for a separately authorized SLICE-0008.
 
 ## Next slice after PROVEN
 

@@ -66,6 +66,8 @@ class HumanDecision(ContractModel):
     asset_id: str
     generation_attempt_id: str
     reviewer_id: str
+    authority: Literal["human"] = "human"
+    source: Literal["human_review", "owner_explicit_review"] = "human_review"
     action: Literal["APPROVE", "REJECT", "NEEDS_REVIEW"]
     visual_pass: bool | None = None
     continuity_pass: bool | None = None
@@ -78,6 +80,12 @@ class HumanDecision(ContractModel):
     @model_validator(mode="after")
     def check_authority(self):
         basis = self.model_dump(mode="json", exclude={"decision_id"})
+        # Earlier V1 human records did not carry explicit authority/source.
+        # Their immutable IDs must remain readable after these provenance fields
+        # were added; new records include both fields in the hash basis.
+        for field in ("authority", "source"):
+            if field not in self.model_fields_set:
+                basis.pop(field, None)
         if self.decision_id != "human_" + sha256(basis):
             raise ValueError("human decision identity mismatch")
         if not self.reviewer_id.strip():
@@ -99,9 +107,11 @@ def human_decision(*, asset: Asset, reviewer_id: str, action: str,
                    visual_pass: bool | None = None, continuity_pass: bool | None = None,
                    editorial_pass: bool | None = None, failure_codes: list[str] | None = None,
                    failure_observations: dict[str, str] | None = None,
-                   notes: list[str] | None = None, vlm_assisted: bool = False) -> HumanDecision:
+                   notes: list[str] | None = None, vlm_assisted: bool = False,
+                   source: Literal["human_review", "owner_explicit_review"] = "human_review") -> HumanDecision:
     data = dict(asset_id=asset.asset_id, generation_attempt_id=asset.source_attempt_id,
-                reviewer_id=reviewer_id, action=action, visual_pass=visual_pass,
+                reviewer_id=reviewer_id, authority="human", source=source,
+                action=action, visual_pass=visual_pass,
                 continuity_pass=continuity_pass, editorial_pass=editorial_pass,
                 failure_codes=sorted(set(failure_codes or [])),
                 failure_observations=failure_observations or {}, notes=notes or [],
@@ -109,10 +119,21 @@ def human_decision(*, asset: Asset, reviewer_id: str, action: str,
     return HumanDecision(decision_id="human_" + sha256(data), **data)
 
 
+def owner_approval_evidence(asset: Asset) -> list[QCEvidence]:
+    """Owner's explicit gate approval; no invented timestamps or confidence."""
+    source = [{"path": asset.uri_or_path, "sha256": asset.sha256}]
+    return [evidence(asset=asset, evaluator_type="human",
+                     evaluator_version="owner_explicit_review-v1", gate=gate,
+                     criterion="owner_approval", observation=f"Owner explicitly approved the {gate} gate.",
+                     verdict="pass", source_artifacts=source)
+            for gate in HUMAN_GATES]
+
+
 class QCReportRecord(ContractModel):
     asset_id: str
     evidence_ids: list[str]
     human_decision_id: str | None
+    prior_report_id: str | None = None
     report: dict
 
 
@@ -128,7 +149,8 @@ class SelectedTake(ContractModel):
 
 
 def derive_report(asset: Asset, evidence_rows: list[QCEvidence],
-                  human: HumanDecision | None = None) -> QCReportRecord:
+                  human: HumanDecision | None = None,
+                  prior_report_id: str | None = None) -> QCReportRecord:
     if not evidence_rows or any(e.asset_id != asset.asset_id or
                                 e.generation_attempt_id != asset.source_attempt_id for e in evidence_rows):
         raise ValueError("QC evidence must belong to exact Asset")
@@ -184,13 +206,16 @@ def derive_report(asset: Asset, evidence_rows: list[QCEvidence],
     failure_codes = sorted(set(technical_issues + (human.failure_codes if human else [])))
     basis = {"policy": POLICY_VERSION, "asset_id": asset.asset_id,
              "evidence_ids": ids, "human_decision_id": human.decision_id if human else None}
+    if prior_report_id:
+        basis["prior_report_id"] = prior_report_id
     report = {"qc_report_id": "qcr_" + sha256(basis),
               "generation_attempt_id": asset.source_attempt_id, "decision": decision,
               **gates, "failure_codes": failure_codes,
               "notes": ["Subjective gates require human authority; advisory evidence alone cannot select a take."]}
     validate_contract("qc_report", report)
     return QCReportRecord(asset_id=asset.asset_id, evidence_ids=ids,
-                          human_decision_id=human.decision_id if human else None, report=report)
+                          human_decision_id=human.decision_id if human else None,
+                          prior_report_id=prior_report_id, report=report)
 
 
 def derive_disposition(shot_id: str, asset: Asset, record: QCReportRecord,
@@ -307,9 +332,25 @@ class QCStore:
                 raise ValueError("QC review artifact changed or missing")
 
     def save(self, asset: Asset, evidence_rows: list[QCEvidence],
-             human: HumanDecision | None = None) -> tuple[QCReportRecord, SelectedTake | dict | None]:
+             human: HumanDecision | None = None,
+             prior_report_id: str | None = None) -> tuple[QCReportRecord, SelectedTake | dict | None]:
         shot, _, _, _, _, _ = self._exact_asset(asset)
-        record = derive_report(asset, evidence_rows, human)
+        prior = None
+        if prior_report_id:
+            prior, prior_disposition = self.read(asset, prior_report_id)
+            if (prior.report["decision"] != "needs_human_review" or prior_disposition is not None
+                    or prior.human_decision_id is not None or human is None):
+                raise ValueError("QC predecessor must be an unresolved machine report")
+            old_ids = set(prior.evidence_ids)
+            rows_by_id = {e.evidence_id: e for e in evidence_rows}
+            if not old_ids.issubset(rows_by_id):
+                raise ValueError("historical QC evidence must be retained")
+            additions = [e for e in evidence_rows if e.evidence_id not in old_ids]
+            if (human.action == "APPROVE" and
+                    {e.gate for e in additions if e.evaluator_type == "human" and e.verdict == "pass"}
+                    != set(HUMAN_GATES)):
+                raise ValueError("approval successor requires human evidence for every subjective gate")
+        record = derive_report(asset, evidence_rows, human, prior_report_id)
         disposition = derive_disposition(shot.shot_id, asset, record, human)
         for e in evidence_rows:
             self._validate_review_artifacts(e)
@@ -321,6 +362,7 @@ class QCStore:
         c = self.runtime._connect()
         try:
             with c:
+                c.execute("BEGIN IMMEDIATE")
                 for e in evidence_rows:
                     self._insert(c, "qc_evidence", e.evidence_id, canonical_json(e.payload()),
                                  ("asset_id", "attempt_id"), (e.asset_id, e.generation_attempt_id))
@@ -331,6 +373,10 @@ class QCStore:
                              ("asset_id", "human_decision_id"),
                              (asset.asset_id, human.decision_id if human else None))
                 if isinstance(disposition, SelectedTake):
+                    for (existing_payload,) in c.execute("SELECT payload FROM selected_takes").fetchall():
+                        existing = SelectedTake.model_validate(json.loads(existing_payload))
+                        if existing.shot_id == shot.shot_id and existing.selected_take_id != disposition.selected_take_id:
+                            raise ValueError("shot already has a different SelectedTake")
                     self._insert(c, "selected_takes", disposition.selected_take_id,
                                  canonical_json(disposition.payload()), ("asset_id", "report_id"),
                                  (asset.asset_id, record.report["qc_report_id"]))
@@ -371,7 +417,21 @@ class QCStore:
                 human = HumanDecision.model_validate(json.loads(hrow[1]))
                 if human.decision_id != row[1]:
                     raise ValueError("human decision identity mismatch")
-            if derive_report(asset, evidence_rows, human) != record:
+            if record.prior_report_id:
+                prior_row = c.execute("SELECT asset_id,payload FROM qc_reports WHERE id=?",
+                                      (record.prior_report_id,)).fetchone()
+                if not prior_row or prior_row[0] != asset.asset_id:
+                    raise ValueError("QC predecessor lineage mismatch")
+                prior = QCReportRecord.model_validate(json.loads(prior_row[1]))
+                if (prior.report["decision"] != "needs_human_review" or prior.human_decision_id is not None
+                        or not set(prior.evidence_ids).issubset(record.evidence_ids)):
+                    raise ValueError("QC predecessor history mismatch")
+                added = [e for e in evidence_rows if e.evidence_id not in prior.evidence_ids]
+                if (human and human.action == "APPROVE" and
+                        {e.gate for e in added if e.evaluator_type == "human" and e.verdict == "pass"}
+                        != set(HUMAN_GATES)):
+                    raise ValueError("QC human successor evidence mismatch")
+            if derive_report(asset, evidence_rows, human, record.prior_report_id) != record:
                 raise ValueError("QC report derivation mismatch")
             disposition = derive_disposition(shot.shot_id, asset, record, human)
             if isinstance(disposition, SelectedTake):
@@ -383,6 +443,11 @@ class QCStore:
                 if not drow or drow[:2] != (asset.asset_id, report_id) or \
                         SelectedTake.model_validate(json.loads(drow[2])) != disposition:
                     raise ValueError("SelectedTake readback mismatch")
+                selected_for_shot = [SelectedTake.model_validate(json.loads(row[0]))
+                                     for row in c.execute("SELECT payload FROM selected_takes").fetchall()
+                                     if json.loads(row[0]).get("shot_id") == shot.shot_id]
+                if len(selected_for_shot) != 1:
+                    raise ValueError("duplicate SelectedTake for shot")
             elif isinstance(disposition, dict):
                 drow = c.execute("SELECT report_id,payload FROM repair_decisions WHERE id=?",
                                  (disposition["repair_decision_id"],)).fetchone()

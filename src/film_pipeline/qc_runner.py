@@ -11,7 +11,8 @@ from urllib.parse import quote
 
 from .core import canonical_json
 from .live_runtime import Asset, file_sha256
-from .qc import QCStore, POLICY_VERSION, evidence, human_decision, technical_evidence
+from .qc import (QCStore, POLICY_VERSION, QCEvidence, SelectedTake, evidence,
+                 human_decision, owner_approval_evidence, technical_evidence)
 from .qc_media import (CONTINUITY_CRITERIA, EDITORIAL_CRITERIA, VISUAL_CRITERIA,
                        gemini_advisory, make_review_media)
 from .store import SQLiteStore
@@ -161,13 +162,81 @@ def decide(db_path: Path, attempt_id: str, job_id: str, asset_id: str,
             "fresh_readback": True}
 
 
+def finalize_owner_approval(db_path: Path, prior_report_id: str, expected_asset_sha256: str,
+                            expected_video_path: Path) -> dict:
+    """Finalize one explicit Owner APPROVE against the existing pending report."""
+    store = SQLiteStore(db_path)
+    connection = store._connect()
+    try:
+        assets = [Asset.model_validate(json.loads(row[0])) for row in
+                  connection.execute("SELECT payload FROM assets").fetchall()]
+    finally:
+        connection.close()
+    matches = [asset for asset in assets if asset.sha256 == expected_asset_sha256 and
+               Path(asset.uri_or_path).resolve() == expected_video_path.resolve()]
+    if len(matches) != 1:
+        raise ValueError("expected proven Asset is not unique in persisted lineage")
+    asset = matches[0]
+    store, shot, asset = exact_lineage(db_path, asset.source_attempt_id,
+                                      asset.provider_job_id, asset.asset_id)
+    qc = QCStore(store)
+    prior, prior_disposition = qc.read(asset, prior_report_id)
+    if (prior.report["decision"] != "needs_human_review" or prior_disposition is not None
+            or prior.human_decision_id is not None or not prior.report["technical"]["pass"]
+            or prior.report["failure_codes"]):
+        raise ValueError("prior QC report is not eligible for Owner approval")
+    connection = store._connect()
+    try:
+        rows = [connection.execute("SELECT payload FROM qc_evidence WHERE id=?", (key,)).fetchone()
+                for key in prior.evidence_ids]
+    finally:
+        connection.close()
+    if any(row is None for row in rows):
+        raise ValueError("historical QC evidence missing")
+    original = [QCEvidence.model_validate(json.loads(row[0])) for row in rows]
+    human = human_decision(asset=asset, reviewer_id="owner", action="APPROVE",
+                           visual_pass=True, continuity_pass=True, editorial_pass=True,
+                           notes=["Owner explicitly returned APPROVE for this real take."],
+                           vlm_assisted=True, source="owner_explicit_review")
+    record, disposition = qc.save(asset, original + owner_approval_evidence(asset),
+                                  human, prior_report_id=prior_report_id)
+    fresh_qc = QCStore(SQLiteStore(db_path))
+    fresh, fresh_disposition = fresh_qc.read(asset, record.report["qc_report_id"])
+    old, _ = fresh_qc.read(asset, prior_report_id)
+    if (fresh != record or fresh_disposition != disposition or old != prior
+            or record.report["decision"] != "pass" or not isinstance(disposition, SelectedTake)
+            or disposition.selection_authority != "human_with_vlm_assist"
+            or disposition.shot_id != shot.shot_id or disposition.asset_id != asset.asset_id
+            or disposition.generation_attempt_id != asset.source_attempt_id
+            or disposition.qc_report_id != record.report["qc_report_id"]
+            or file_sha256(Path(asset.uri_or_path)) != expected_asset_sha256):
+        raise ValueError("Owner approval fresh readback mismatch")
+    connection = store._connect()
+    try:
+        counts = {table: connection.execute("SELECT COUNT(*) FROM " + table).fetchone()[0]
+                  for table in ("qc_evidence", "human_qc_decisions", "qc_reports",
+                                "selected_takes", "repair_decisions")}
+    finally:
+        connection.close()
+    if counts["selected_takes"] != 1 or counts["repair_decisions"] != 0:
+        raise ValueError("approval produced unexpected disposition count")
+    return {"prior_report_id": prior_report_id, "final_report_id": record.report["qc_report_id"],
+            "final_decision": "pass", "human_decision_id": human.decision_id,
+            "human_authority": human.authority, "human_source": human.source,
+            "selected_take": disposition.model_dump(mode="json"),
+            "asset_sha256": asset.sha256, "historical_evidence_preserved": True,
+            "fresh_readback": True, "counts": counts}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Exact Asset QC; no provider Generate path")
-    parser.add_argument("action", choices=["run", "decide"])
+    parser.add_argument("action", choices=["run", "decide", "owner-approve"])
     parser.add_argument("--db", required=True, type=Path)
-    parser.add_argument("--attempt-id", required=True)
-    parser.add_argument("--job-id", required=True)
-    parser.add_argument("--asset-id", required=True)
+    parser.add_argument("--attempt-id")
+    parser.add_argument("--job-id")
+    parser.add_argument("--asset-id")
+    parser.add_argument("--asset-sha256")
+    parser.add_argument("--video-path", type=Path)
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--gemini-key-file", type=Path)
     parser.add_argument("--gemini-model")
@@ -183,6 +252,15 @@ def main() -> None:
     parser.add_argument("--vlm-assisted", action="store_true",
                         help="Reviewer explicitly used VLM observations in the decision")
     args = parser.parse_args()
+    if args.action == "owner-approve":
+        if not args.pending_report_id or not args.asset_sha256 or not args.video_path:
+            parser.error("owner-approve requires prior report, Asset SHA-256 and exact video path")
+        result = finalize_owner_approval(args.db, args.pending_report_id,
+                                         args.asset_sha256, args.video_path)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    if not args.attempt_id or not args.job_id or not args.asset_id:
+        parser.error("run/decide requires exact attempt, job and Asset ids")
     if args.action == "run":
         if not args.output_dir:
             parser.error("run requires --output-dir")
