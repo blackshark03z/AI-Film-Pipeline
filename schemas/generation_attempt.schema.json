@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GenerationAttemptV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "generation_attempt_id",
+    "shot_id",
+    "shot_spec_version",
+    "shot_spec_hash",
+    "prompt_plan_hash",
+    "routing_decision_id",
+    "provider_id",
+    "status",
+    "started_at"
+  ],
+  "properties": {
+    "generation_attempt_id": {
+      "type": "string"
+    },
+    "shot_id": {
+      "type": "string"
+    },
+    "shot_spec_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "shot_spec_hash": {
+      "type": "string"
+    },
+    "prompt_plan_hash": {
+      "type": "string"
+    },
+    "routing_decision_id": {
+      "type": "string"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "provider_job_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "created",
+        "submitted",
+        "running",
+        "succeeded",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "started_at": {
+      "type": "string"
+    },
+    "completed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "output_asset_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "error_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "error_detail": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "qc_report_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

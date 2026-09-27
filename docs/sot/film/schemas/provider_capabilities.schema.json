@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProviderCapabilitiesV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profile_version",
+    "provider_id",
+    "transport_type"
+  ],
+  "properties": {
+    "profile_version": {
+      "type": "string"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "transport_type": {
+      "type": "string",
+      "enum": [
+        "official_api",
+        "browser_cookie",
+        "gateway",
+        "manual",
+        "other"
+      ]
+    },
+    "supports_text_to_video": {
+      "type": "boolean",
+      "default": true
+    },
+    "supports_image_input": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_start_frame": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_end_frame": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_multi_reference": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_seed": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_native_audio": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_duration_control": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_aspect_ratio": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_resolution_control": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_negative_prompt": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_batch": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_cancel": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_stable_external_job_id": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+[project]
+name = "ai-film-pipeline"
+version = "0.0.0"
+description = "Lean local-first AI film production pipeline"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

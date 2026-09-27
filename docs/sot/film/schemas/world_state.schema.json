@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WorldStateSnapshotV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "snapshot_id",
+    "scene_id",
+    "location_id",
+    "characters",
+    "props"
+  ],
+  "properties": {
+    "snapshot_id": {
+      "type": "string"
+    },
+    "scene_id": {
+      "type": "string"
+    },
+    "location_id": {
+      "type": "string"
+    },
+    "location_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "time_of_day": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "weather": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "key_light_direction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "character_id",
+          "look_state_id"
+        ],
+        "properties": {
+          "character_id": {
+            "type": "string"
+          },
+          "look_state_id": {
+            "type": "string"
+          },
+          "position": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "orientation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "emotion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "injury_dirt_wetness": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "props": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "prop_id",
+          "state"
+        ],
+        "properties": {
+          "prop_id": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "owner_or_position": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "knowledge_state": {
+      "type": "object"
+    }
+  }
+}

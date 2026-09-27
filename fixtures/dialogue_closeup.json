@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SC01_SH03",
+  "scene_id": "SC01",
+  "dramatic_purpose": "Reveal that Linh understands Minh is hiding something without saying it aloud.",
+  "duration_target_s": 5.5,
+  "shot_type": "dialogue",
+  "characters": [
+    {
+      "character_id": "LINH",
+      "identity_version": "ID_V1",
+      "look_state_id": "LOOK_NIGHT_01",
+      "behavior_state": "restrained_suspicion",
+      "role_in_shot": "primary"
+    }
+  ],
+  "environment": {
+    "location_id": "APT_LIVING",
+    "location_version": "LOC_V1",
+    "time_of_day": "night",
+    "weather": "rain",
+    "atmosphere": "quiet tense interior"
+  },
+  "camera": {
+    "framing": "MCU",
+    "height": "eye_level",
+    "lens_intent": "portrait",
+    "focal_hint_mm": 65,
+    "movement": {
+      "type": "dolly_in",
+      "purpose": "increase pressure only after the realization lands",
+      "timing": "locked first 2s, then extremely subtle push"
+    }
+  },
+  "blocking": {
+    "start": "Linh faces frame right toward Minh, shoulders still",
+    "action_beats": [
+      "eyes break contact for one beat",
+      "short inhale",
+      "eyes return to Minh"
+    ],
+    "end": "Linh remains facing frame right with restrained expression",
+    "prop_interactions": []
+  },
+  "performance": {
+    "observable_beats": [
+      "short inhale",
+      "eyes react before head",
+      "no gesticulation"
+    ],
+    "forbidden": [
+      "crying",
+      "exaggerated fear",
+      "large head turn"
+    ]
+  },
+  "lighting": {
+    "key_direction": "camera_left",
+    "contrast": "low_key",
+    "notes": "cool window light with warm practical behind"
+  },
+  "continuity": {
+    "screen_direction": "left_to_right",
+    "eyeline": "frame_right",
+    "start_state": {
+      "phone": "table",
+      "wardrobe": "LOOK_NIGHT_01"
+    },
+    "end_state": {
+      "phone": "table",
+      "wardrobe": "LOOK_NIGHT_01"
+    },
+    "previous_shot_id": "SC01_SH02",
+    "critical_invariants": [
+      "identity",
+      "wardrobe",
+      "phone stays on table",
+      "eyeline frame_right"
+    ]
+  },
+  "audio": {
+    "dialogue": null,
+    "dialogue_character_id": null,
+    "room_tone": "distant rain",
+    "sfx_intent": "subtle room tone only"
+  },
+  "references": {
+    "character_asset_ids": [
+      "CHAR_LINH_REF_V1"
+    ],
+    "location_asset_ids": [
+      "APT_LIVING_REF_V1"
+    ],
+    "wardrobe_asset_ids": [
+      "WARDROBE_LINH_NIGHT_V1"
+    ],
+    "other_asset_ids": []
+  },
+  "constraints": {
+    "must_preserve": [
+      "restrained performance",
+      "screen direction",
+      "phone on table"
+    ],
+    "must_avoid": [
+      "orbit",
+      "handheld",
+      "smile"
+    ]
+  },
+  "editorial": {
+    "cut_purpose": "reaction/realization",
+    "handles_s": 0.4,
+    "pickup_priority": "normal"
+  }
+}

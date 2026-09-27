@@ -1,0 +1,35 @@
+# Secrets / credentials
+.env
+.env.*
+*.cookie
+*.cookies
+*session*.json
+api_keys/
+secrets/
+
+# Runtime / generated state
+state/
+projects/*
+!projects/.gitkeep
+outputs/
+downloads/
+cache/
+logs/
+*.sqlite
+*.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

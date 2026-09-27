@@ -1,0 +1,45 @@
+# Example only. No secrets in committed config.
+
+llm:
+  primary:
+    provider: gemini
+    model: VERIFY_AT_RUNTIME
+    api_key_env_pool:
+      - GEMINI_API_KEY_01
+  interactive_escalation:
+    provider: chatgpt_codex
+    runtime_api: false
+
+providers:
+  flow_veo:
+    enabled: true
+    transport: browser_cookie
+    model: VERIFY_AT_RUNTIME
+    cookie_path_env: FLOW_COOKIE_PATH
+    session_path_env: FLOW_SESSION_PATH
+    capability_profile: config/providers/flow_veo.capabilities.yaml
+
+  seedance_dola:
+    enabled: true
+    transport: browser_cookie_or_gateway
+    model: VERIFY_AT_RUNTIME
+    capability_profile: config/providers/seedance_dola.capabilities.yaml
+
+  seedance_elyum:
+    enabled: true
+    transport: browser_cookie_or_gateway
+    model: VERIFY_AT_RUNTIME
+    capability_profile: config/providers/seedance_elyum.capabilities.yaml
+
+storage:
+  database: ./state/film_pipeline.sqlite3
+  assets_root: ./projects
+
+editorial:
+  rough_cut_engine: ffmpeg
+  finishing_truth: davinci_resolve
+
+policy:
+  max_attempts_per_shot: 4
+  require_repair_decision_after_failure: true
+  allow_blind_retry_on_transient_transport_error: true

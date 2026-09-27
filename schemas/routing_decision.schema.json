@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RoutingDecisionV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "routing_decision_id",
+    "shot_id",
+    "provider_id",
+    "reasons",
+    "required_capabilities",
+    "difficulty"
+  ],
+  "properties": {
+    "routing_decision_id": {
+      "type": "string"
+    },
+    "shot_id": {
+      "type": "string"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "required_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "difficulty": {
+      "type": "object"
+    },
+    "fallback_provider_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "benchmark_policy_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

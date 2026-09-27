@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SC02_SH01",
+  "scene_id": "SC02",
+  "dramatic_purpose": "Establish the spatial relationship between Linh and Minh before the argument begins.",
+  "duration_target_s": 6.0,
+  "shot_type": "establishing",
+  "characters": [
+    {
+      "character_id": "LINH",
+      "identity_version": "ID_V1",
+      "look_state_id": "LOOK_DAY_02",
+      "behavior_state": "guarded",
+      "role_in_shot": "left_subject"
+    },
+    {
+      "character_id": "MINH",
+      "identity_version": "ID_V1",
+      "look_state_id": "LOOK_DAY_01",
+      "behavior_state": "defensive",
+      "role_in_shot": "right_subject"
+    }
+  ],
+  "environment": {
+    "location_id": "CAFE_01",
+    "location_version": "LOC_V1",
+    "time_of_day": "late_afternoon",
+    "weather": "overcast",
+    "atmosphere": "quiet neighborhood cafe"
+  },
+  "camera": {
+    "framing": "TWO_SHOT",
+    "height": "eye_level",
+    "lens_intent": "normal",
+    "focal_hint_mm": 40,
+    "movement": {
+      "type": "locked",
+      "purpose": null,
+      "timing": "full shot"
+    }
+  },
+  "blocking": {
+    "start": "Linh seated frame left, Minh frame right across small table",
+    "action_beats": [
+      "Minh places a key on the table between them",
+      "Linh looks at the key but does not reach for it"
+    ],
+    "end": "key remains centered on table, both remain seated",
+    "prop_interactions": [
+      "Minh right hand places KEY_01 center table"
+    ]
+  },
+  "performance": {
+    "observable_beats": [
+      "Linh gaze shifts to key",
+      "Minh withdraws hand slowly"
+    ],
+    "forbidden": [
+      "standing",
+      "touching hands",
+      "crossing positions"
+    ]
+  },
+  "lighting": {
+    "key_direction": "camera_left",
+    "contrast": "soft",
+    "notes": "window motivated"
+  },
+  "continuity": {
+    "screen_direction": "stable_axis",
+    "eyeline": "Linh frame_right / Minh frame_left",
+    "start_state": {
+      "KEY_01": "Minh right hand"
+    },
+    "end_state": {
+      "KEY_01": "center table"
+    },
+    "previous_shot_id": null,
+    "critical_invariants": [
+      "Linh stays frame left",
+      "Minh stays frame right",
+      "KEY_01 ends center table"
+    ]
+  },
+  "audio": {
+    "dialogue": null,
+    "dialogue_character_id": null,
+    "room_tone": "low cafe ambience",
+    "sfx_intent": "key touches wooden table"
+  },
+  "references": {
+    "character_asset_ids": [
+      "CHAR_LINH_REF_V1",
+      "CHAR_MINH_REF_V1"
+    ],
+    "location_asset_ids": [
+      "CAFE_01_REF_V1"
+    ],
+    "wardrobe_asset_ids": [],
+    "other_asset_ids": [
+      "KEY_01_REF_V1"
+    ]
+  },
+  "constraints": {
+    "must_preserve": [
+      "180-degree axis",
+      "key placement"
+    ],
+    "must_avoid": [
+      "camera crossing axis",
+      "orbit"
+    ]
+  },
+  "editorial": {
+    "cut_purpose": "geography master",
+    "handles_s": 0.5,
+    "pickup_priority": "high"
+  }
+}

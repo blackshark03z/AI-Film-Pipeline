@@ -1,0 +1,450 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.ai-film/schemas/shot_spec.schema.json",
+  "title": "ShotSpecV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "spec_version",
+    "shot_id",
+    "scene_id",
+    "dramatic_purpose",
+    "duration_target_s",
+    "shot_type",
+    "characters",
+    "camera",
+    "blocking",
+    "continuity"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "spec_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "shot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scene_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dramatic_purpose": {
+      "type": "string",
+      "minLength": 3
+    },
+    "duration_target_s": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "shot_type": {
+      "type": "string",
+      "enum": [
+        "establishing",
+        "insert",
+        "cutaway",
+        "reaction",
+        "dialogue",
+        "performance",
+        "action",
+        "transition",
+        "hero",
+        "other"
+      ]
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "character_id",
+          "identity_version",
+          "look_state_id"
+        ],
+        "properties": {
+          "character_id": {
+            "type": "string"
+          },
+          "identity_version": {
+            "type": "string"
+          },
+          "look_state_id": {
+            "type": "string"
+          },
+          "behavior_state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "role_in_shot": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "default": []
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "location_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "location_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "time_of_day": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "weather": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "atmosphere": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "framing",
+        "height",
+        "lens_intent",
+        "movement"
+      ],
+      "properties": {
+        "framing": {
+          "type": "string",
+          "enum": [
+            "ECU",
+            "CU",
+            "MCU",
+            "MS",
+            "MLS",
+            "WS",
+            "EWS",
+            "OTS",
+            "TWO_SHOT",
+            "INSERT",
+            "CUTAWAY"
+          ]
+        },
+        "height": {
+          "type": "string",
+          "enum": [
+            "eye_level",
+            "low",
+            "high",
+            "overhead",
+            "ground_level",
+            "dutch"
+          ]
+        },
+        "lens_intent": {
+          "type": "string",
+          "enum": [
+            "ultrawide",
+            "wide",
+            "normal",
+            "portrait",
+            "telephoto",
+            "macro",
+            "custom"
+          ]
+        },
+        "focal_hint_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "movement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "locked",
+                "pan",
+                "tilt",
+                "dolly_in",
+                "dolly_out",
+                "tracking",
+                "orbit",
+                "handheld",
+                "crane",
+                "rack_focus",
+                "custom"
+              ]
+            },
+            "purpose": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "timing": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "blocking": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "action_beats",
+        "end"
+      ],
+      "properties": {
+        "start": {
+          "type": "string"
+        },
+        "action_beats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "end": {
+          "type": "string"
+        },
+        "prop_interactions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "observable_beats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "lighting": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key_direction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "contrast": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "continuity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "screen_direction",
+        "eyeline",
+        "start_state",
+        "end_state"
+      ],
+      "properties": {
+        "screen_direction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "eyeline": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "start_state": {
+          "type": "object"
+        },
+        "end_state": {
+          "type": "object"
+        },
+        "previous_shot_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "critical_invariants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "audio": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dialogue": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dialogue_character_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "room_tone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sfx_intent": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "character_asset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "location_asset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "wardrobe_asset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "other_asset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "must_preserve": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "must_avoid": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "editorial": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cut_purpose": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "handles_s": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "pickup_priority": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "low",
+            "normal",
+            "high",
+            null
+          ]
+        }
+      }
+    }
+  }
+}

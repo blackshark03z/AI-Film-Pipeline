@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RepairDecisionV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "repair_decision_id",
+    "shot_id",
+    "from_attempt_id",
+    "failure_codes",
+    "strategy",
+    "changes",
+    "next_action"
+  ],
+  "properties": {
+    "repair_decision_id": {
+      "type": "string"
+    },
+    "shot_id": {
+      "type": "string"
+    },
+    "from_attempt_id": {
+      "type": "string"
+    },
+    "failure_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "strategy": {
+      "type": "string",
+      "enum": [
+        "shotspec_repair",
+        "prompt_recompile",
+        "provider_control_change",
+        "alternate_provider",
+        "split_shot",
+        "pickup",
+        "editorial_workaround",
+        "transient_transport_retry",
+        "human_review"
+      ]
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "budget_note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "requires_human_approval": {
+      "type": "boolean"
+    }
+  }
+}

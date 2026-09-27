@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QCReportV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "qc_report_id",
+    "generation_attempt_id",
+    "decision",
+    "technical",
+    "visual",
+    "continuity",
+    "editorial"
+  ],
+  "properties": {
+    "qc_report_id": {
+      "type": "string"
+    },
+    "generation_attempt_id": {
+      "type": "string"
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail",
+        "needs_human_review"
+      ]
+    },
+    "technical": {
+      "$ref": "#/$defs/checks"
+    },
+    "visual": {
+      "$ref": "#/$defs/checks"
+    },
+    "continuity": {
+      "$ref": "#/$defs/checks"
+    },
+    "editorial": {
+      "$ref": "#/$defs/checks"
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "failure_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pass",
+        "issues"
+      ],
+      "properties": {
+        "pass": {
+          "type": "boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AssetV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "asset_id",
+    "asset_type",
+    "origin",
+    "uri_or_path"
+  ],
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "asset_type": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "string",
+      "enum": [
+        "source",
+        "reference",
+        "generated",
+        "derived",
+        "editorial"
+      ]
+    },
+    "uri_or_path": {
+      "type": "string"
+    },
+    "sha256": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mime_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duration_s": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "width": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "height": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "source_attempt_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provider_asset_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rights_metadata": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CharacterV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "character_id",
+    "identity_version",
+    "visual_identity",
+    "behavioral_identity",
+    "look_states"
+  ],
+  "properties": {
+    "character_id": {
+      "type": "string"
+    },
+    "identity_version": {
+      "type": "string"
+    },
+    "visual_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "face_geometry": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "body_proportions": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "age_range": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hair": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "skin": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "silhouette": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unique_traits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "behavioral_identity": {
+      "type": "object",
+      "properties": {
+        "baseline": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "vocal_identity": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rights_reference": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "look_states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "look_state_id",
+          "description"
+        ],
+        "properties": {
+          "look_state_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "wardrobe": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "hair": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "makeup": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "accessories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "condition": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

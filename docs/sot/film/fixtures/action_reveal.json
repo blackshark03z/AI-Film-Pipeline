@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SC03_SH05",
+  "scene_id": "SC03",
+  "dramatic_purpose": "Reveal the open back door and motivate Linh to stop moving forward.",
+  "duration_target_s": 4.8,
+  "shot_type": "action",
+  "characters": [
+    {
+      "character_id": "LINH",
+      "identity_version": "ID_V1",
+      "look_state_id": "LOOK_RAIN_01",
+      "behavior_state": "alert",
+      "role_in_shot": "primary"
+    }
+  ],
+  "environment": {
+    "location_id": "HOUSE_HALL",
+    "location_version": "LOC_V1",
+    "time_of_day": "night",
+    "weather": "storm",
+    "atmosphere": "wet dark hallway"
+  },
+  "camera": {
+    "framing": "MLS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "focal_hint_mm": 28,
+    "movement": {
+      "type": "tracking",
+      "purpose": "follow Linh until the reveal, then stop to emphasize danger",
+      "timing": "track first 3s, lock on reveal"
+    }
+  },
+  "blocking": {
+    "start": "Linh enters from frame left moving toward back hall",
+    "action_beats": [
+      "takes two careful steps",
+      "notices back door moving in wind",
+      "stops before crossing doorway"
+    ],
+    "end": "Linh stopped foreground left, open door visible background right",
+    "prop_interactions": []
+  },
+  "performance": {
+    "observable_beats": [
+      "movement slows before stop",
+      "chin lifts slightly toward door"
+    ],
+    "forbidden": [
+      "running",
+      "falling",
+      "turning back"
+    ]
+  },
+  "lighting": {
+    "key_direction": "background_right",
+    "contrast": "high",
+    "notes": "cold exterior spill through open door"
+  },
+  "continuity": {
+    "screen_direction": "left_to_right",
+    "eyeline": "background_right",
+    "start_state": {
+      "wetness": "rain-soaked shoulders"
+    },
+    "end_state": {
+      "position": "foreground left stopped",
+      "wetness": "unchanged"
+    },
+    "previous_shot_id": "SC03_SH04",
+    "critical_invariants": [
+      "open door background right",
+      "Linh does not cross doorway",
+      "screen direction left_to_right"
+    ]
+  },
+  "audio": {
+    "dialogue": null,
+    "dialogue_character_id": null,
+    "room_tone": "storm",
+    "sfx_intent": "door hinge + wind"
+  },
+  "references": {
+    "character_asset_ids": [
+      "CHAR_LINH_REF_V1"
+    ],
+    "location_asset_ids": [
+      "HOUSE_HALL_REF_V1"
+    ],
+    "wardrobe_asset_ids": [
+      "WARDROBE_LINH_RAIN_V1"
+    ],
+    "other_asset_ids": []
+  },
+  "constraints": {
+    "must_preserve": [
+      "door background right",
+      "stopping point",
+      "wet look"
+    ],
+    "must_avoid": [
+      "orbit",
+      "door changing side",
+      "extra people"
+    ]
+  },
+  "editorial": {
+    "cut_purpose": "action reveal",
+    "handles_s": 0.4,
+    "pickup_priority": "normal"
+  }
+}

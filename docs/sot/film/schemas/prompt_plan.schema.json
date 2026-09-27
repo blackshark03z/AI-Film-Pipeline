@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PromptPlanV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "prompt_plan_id",
+    "compiler_version",
+    "input_hash",
+    "shot_id",
+    "shot_spec_version",
+    "provider_id",
+    "canonical_blocks",
+    "provider_prompt",
+    "mapped_controls",
+    "unsupported_controls",
+    "degraded_controls",
+    "warnings"
+  ],
+  "properties": {
+    "prompt_plan_id": {
+      "type": "string"
+    },
+    "compiler_version": {
+      "type": "string"
+    },
+    "input_hash": {
+      "type": "string"
+    },
+    "shot_id": {
+      "type": "string"
+    },
+    "shot_spec_version": {
+      "type": "integer"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "canonical_blocks": {
+      "type": "object"
+    },
+    "provider_prompt": {
+      "type": "string"
+    },
+    "mapped_controls": {
+      "type": "object"
+    },
+    "unsupported_controls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "degraded_controls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
