@@ -2,8 +2,8 @@
 
 ## Project state
 
-**Lifecycle:** SLICE-0006 E2E PROVEN; prior SLICE-0004 external effect remains INCONCLUSIVE
-**Current slice:** `SLICE-0006 — Fresh Flow Live Canary with Durable Dispatch Evidence`
+**Lifecycle:** SLICE-0008 editorial rough cut PROVEN; prior SLICE-0004 external effect remains INCONCLUSIVE
+**Current slice:** `SLICE-0008 — EditManifest + Rough Cut Kernel + Editorial Provenance`
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
 
@@ -53,7 +53,7 @@ baseline identity.
 
 ## Next authorized action
 
-Freeze and report the SLICE-0007 closure candidate. The Owner explicitly APPROVED the exact real take. A human-authoritative QCReport successor is `pass` and exactly one SelectedTake points to the proven Asset. Stop at the SLICE-0007 boundary; SLICE-0008 has not started. No Flow or Seedance Generate and no repair execution occurred in this continuation.
+Freeze and report the SLICE-0008 candidate at its boundary. The approved Slice7 SelectedTake now belongs to a persisted EditManifest and a validated local one-clip rough cut; fresh SQLite readback covers exact source and render lineage. Do not start SLICE-0009 or invoke AI generation.
 
 ## SLICE-0007 QC kernel and human review
 
@@ -62,6 +62,10 @@ The accepted SLICE-0006 Asset was consumed without regeneration. The six QC solu
 ## SLICE-0007 Owner approval closure
 
 The Owner's explicit `APPROVE` was recorded as a separate human decision with `authority=human` and `source=owner_explicit_review`; no viewing timestamps or confidence were invented. Three human gate evidence records were appended. The original machine/VLM report remains `needs_human_review` with its 20 evidence references unchanged. The finalized successor `QCReportV1` is `pass`, contains all prior evidence plus human evidence, and links to the prior report. Exactly one `SelectedTake` has `human_with_vlm_assist` authority and exact ShotSpec/GenerationAttempt/Asset/final-report lineage. A repeated finalization yielded the same IDs and row counts; no RepairDecision was created. See `SLICE_0007_OWNER_APPROVAL_EVIDENCE.md`. SLICE-0007 is PROVEN AND CLOSED; ready for a separately authorized SLICE-0008.
+
+## SLICE-0008 editorial rough cut
+
+The A–H editorial solution space was compared before build. Existing `EditManifestV1` remains canonical; a small FFmpeg renderer produces derived local rough-cut evidence. The exact approved Slice7 SelectedTake and passing final QCReport were resolved from SQLite, the Asset bytes/hash and ShotSpec/GenerationAttempt lineage were checked, and a one-clip EditManifest was persisted. Its 8-second 1280×720 H.264/AAC rough cut was remuxed, fully decoded, hashed, persisted and freshly read back. Three synthetic clips prove ordering, trims, normalization and duration independently of the one-clip real project. Full regression: 130 passed. No AI generation, PickupRequest, frozen SoT change or secret-bearing artifact. See `SLICE_0008_EDITORIAL_ARCHITECTURE.md` and `SLICE_0008_EVIDENCE.md`.
 
 ## Next slice after PROVEN
 
