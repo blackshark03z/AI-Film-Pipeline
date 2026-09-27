@@ -43,6 +43,25 @@ def test_incomplete_observer_cannot_supply_baseline():
         asyncio.run(transport._drain())
 
 
+def test_response_read_failure_is_classified_without_exposing_exception():
+    transport = FlowNetworkTransport(FlowConfig())
+    facts = []
+    transport._sink = SimpleNamespace(record=lambda kind, data: facts.append((kind, data)))
+    transport._failure_recorded = False
+    transport._observer_failed = False
+    transport._requests = {}
+    transport.decoder = SimpleNamespace(observe_body=lambda body: None)
+    class Request: resource_type = 'xhr'
+    class Response:
+        request = Request()
+        url = 'https://flow.google.com/_/AiSandboxAngularFrontend/data/batchexecute'
+        status = 200
+        async def text(self): raise RuntimeError('private response body and token')
+    asyncio.run(transport._observe(Response()))
+    assert transport._observer_failed
+    assert facts == [('OBSERVATION_FAILURE', {'diagnostic': 'BODY_READ_ERROR'})]
+
+
 def test_network_submit_rejects_repeat_before_any_browser_action():
     transport = FlowNetworkTransport(FlowConfig())
     transport._submit_invoked = True

@@ -48,3 +48,14 @@ Remediation options considered before changing source: (A) fill exact prompt, ve
 - Source correction: verify prompt, wait boundedly for enabled button, verify prompt again, attach a synchronous capture guard to the exact button element, and click that pinned element only. Prompt drift or DOM replacement blocks the click. CDP trusted-click remains evidence of the UI event only, never provider acceptance.
 - Offline intercepted browser cases: 8 passed, including never-enabled, prompt drift before enable, prompt mutation on pointerdown, and guarded-button replacement. Full regression: 107 passed. Independent reviewer found no remaining material issue in the guarded click change.
 - Attempt 2 GenerationAttempt/ProviderJob: not yet created. Dispatch_count and slice budget remain 0 for this attempt; total slice used remains **1 of 5**.
+
+## Attempt 2 — quarantined uncertainty
+
+- GenerationAttempt: `attempt_99a6b502d81297adb250cc9a76fb5c1e6bebc2a161b66bab618de8f55d7d743e`.
+- ProviderJob: `job_8f798e18dc48465971ebb8d5b3426b32616a6334d2936b55ad4f46e2a831c6cc`; dispatch_count=1, submission_state=`SUBMISSION_RESERVED`, status=`INCONCLUSIVE`.
+- Durable facts: `RESERVED`, `PROMPT_VERIFIED`, `CLICK_ARMED`, `TRUSTED_CLICK_OBSERVED`, `PROMPT_ACCEPTANCE_TRANSITION`. No qualified Generate request, provider response, acceptance, remote identity, binding, download or Asset was journaled. Trusted click and prompt reset are UI evidence only.
+- The immediate canary ended `INCONCLUSIVE`. A later read-only re-open of this project found 0 decoded identities, 0 rendered video tiles, 0 progress indicators; passive observer drain was healthy and a read-only poll returned `RUNNING`. This does not resolve whether the original click caused an external transaction.
+- Project disposition: `QUARANTINED_UNCERTAIN`. No second Generate or output attribution is permitted there.
+- Slice budget: **2 used, 3 remaining**.
+
+The immediate failure cannot be reconstructed from the original process: the transport and executor previously erased exception type, and reopening the page creates a new healthy observer. Read-only checks found no current output or progress, but absence is not a no-dispatch receipt. Considered three remedies: treating click/reset or empty UI as success/failure (unsound), ignoring response read failures (would make identity observation incomplete), and recording a bounded failure code while retaining fail-closed polling. Selected the third. The source now writes only a fixed diagnostic code such as `BODY_READ_ERROR` or `RESPONSE_MODEL_LIMIT_OR_COLLISION` to the dispatch journal when the passive observer fails. Exception text, response body, URLs and credentials are never recorded. Full offline suite: 108 passed. Any new attempt still requires a separate fresh project with an independently empty baseline.

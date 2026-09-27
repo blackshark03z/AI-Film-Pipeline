@@ -45,15 +45,15 @@ baseline identity.
 
 ## In progress
 
-- SLICE-0006 Attempt 1 reserved once and ended INCONCLUSIVE with only `RESERVED` durable. Its fresh project is quarantined. Budget used: 1 of 5. The button readiness/prompt guard is corrected, 107 tests pass, and a separate empty project is READY for Attempt 2. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
+- SLICE-0006 Attempts 1 and 2 each reserved once and ended INCONCLUSIVE in separate fresh projects. Both projects are quarantined. Budget used: 2 of 5. Attempt 2 durably observed an exact trusted UI click and prompt reset, but no qualified Generate request, response, or output identity. A bounded passive-observer failure code was added for the next isolated attempt; 108 offline tests pass. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
 
 ## Blocked
 
-- The initial active and candidate sessions returned AUTH_REQUIRED. Normal operator sign-in restored READY. Attempt 1's source checked Generate enabled before filling the editor; Flow presented an initially disabled button. No Generate may occur on the old or quarantined Attempt 1 project. Attempt 2 has an independently empty and READY project.
+- The initial active and candidate sessions returned AUTH_REQUIRED. Normal operator sign-in restored READY. Attempt 1's source checked Generate enabled before filling the editor; Flow presented an initially disabled button. Attempt 2's observer stopped without persisting a diagnostic type. No Generate may occur on the old or quarantined Attempt 1/2 projects.
 
 ## Next authorized action
 
-Freeze the corrected source, then execute Attempt 2 once on its fresh isolated project. Preserve both prior consumed budgets and INCONCLUSIVE states. Stop on the first complete canary proof.
+Freeze the diagnostic source, create a third fresh project, prove its independent empty baseline and all other live gates, then execute at most one Generate for Attempt 3. Preserve both prior consumed budgets and INCONCLUSIVE states. Stop on the first complete canary proof.
 
 ## Next slice after PROVEN
 

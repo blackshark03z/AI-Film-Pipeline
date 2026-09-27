@@ -10,7 +10,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from .flow_live import FlowLiveTransport
-from .flow_response import FlowResponseModelDecoder
+from .flow_response import FlowResponseModelDecoder, FlowResponseModelError
 from .flow_veo import PROMPT_SELECTOR, project_surface_readback
 from .flow_dispatch_network import generate_request_metadata
 from ..core import sha256
@@ -59,6 +59,7 @@ class FlowNetworkTransport(FlowLiveTransport):
         self.decoder = FlowResponseModelDecoder(self.project_id)
         self._tasks = set()
         self._observer_failed = False
+        self._failure_recorded = False
         self._armed = False
         self._requests = {}
         def request_observed(request):
@@ -76,13 +77,19 @@ class FlowNetworkTransport(FlowLiveTransport):
                 self._record('GENERATE_REQUEST_OBSERVED', metadata)
                 self._requests[request] = metadata['request_hash']
             except Exception:
-                self._observer_failed = True
+                self._observation_failure('REQUEST_OBSERVER_ERROR')
         self.page.on('request', request_observed)
         def response_received(response):
             task = asyncio.create_task(self._observe(response))
             self._tasks.add(task)
             task.add_done_callback(self._tasks.discard)
         self.page.on('response', response_received)
+
+    def _observation_failure(self, diagnostic):
+        self._observer_failed = True
+        if hasattr(self, '_sink') and not self._failure_recorded:
+            self._failure_recorded = True
+            self._record('OBSERVATION_FAILURE', {'diagnostic': diagnostic})
 
     async def _observe(self, response):
         if response.request.resource_type not in {'xhr', 'fetch'} or urlsplit(response.url).hostname != 'flow.google.com':
@@ -93,15 +100,27 @@ class FlowNetworkTransport(FlowLiveTransport):
                 self._record('PROVIDER_RESPONSE_OBSERVED', {'request_hash': request_hash,
                     'status': response.status})
                 # No currently qualified acceptance parser. HTTP200 is not acceptance.
-            body = await asyncio.wait_for(response.text(), timeout=10)
+            try:
+                body = await asyncio.wait_for(response.text(), timeout=10)
+            except asyncio.TimeoutError:
+                self._observation_failure('BODY_READ_TIMEOUT')
+                return
+            except Exception:
+                self._observation_failure('BODY_READ_ERROR')
+                return
             self.decoder.observe_body(body)
+        except FlowResponseModelError:
+            self._observation_failure('RESPONSE_MODEL_LIMIT_OR_COLLISION')
         except Exception:
             # Incomplete evidence cannot silently qualify an output.
-            self._observer_failed = True
+            self._observation_failure('RESPONSE_OBSERVER_ERROR')
 
     async def _drain(self):
         if self._tasks:
-            await asyncio.wait_for(asyncio.gather(*list(self._tasks)), timeout=12)
+            try:
+                await asyncio.wait_for(asyncio.gather(*list(self._tasks)), timeout=12)
+            except asyncio.TimeoutError:
+                self._observation_failure('OBSERVER_DRAIN_TIMEOUT')
         if self._observer_failed:
             raise ValueError('PASSIVE_RESPONSE_EVIDENCE_INCOMPLETE')
 

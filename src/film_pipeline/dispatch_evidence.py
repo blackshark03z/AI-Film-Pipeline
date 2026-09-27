@@ -13,6 +13,7 @@ from .core import canonical_json, sha256
 PROTOCOL = 'flow-dispatch-evidence-v1'
 RANK = {
     'AMBIGUOUS_EVIDENCE': 0,
+    'OBSERVATION_FAILURE': 0,
     'RESERVED': 1, 'PROMPT_VERIFIED': 2, 'CLICK_ARMED': 3,
     'TRUSTED_CLICK_OBSERVED': 4, 'PROMPT_ACCEPTANCE_TRANSITION': 4,
     'GENERATE_REQUEST_OBSERVED': 5, 'PROVIDER_RESPONSE_OBSERVED': 6,
@@ -22,6 +23,7 @@ RANK = {
 }
 FIELDS = {
     'AMBIGUOUS_EVIDENCE': {'diagnostic'},
+    'OBSERVATION_FAILURE': {'diagnostic'},
     'RESERVED': {'intent_hash'}, 'PROMPT_VERIFIED': {'prompt_sha256'}, 'CLICK_ARMED': set(),
     'TRUSTED_CLICK_OBSERVED': set(), 'PROMPT_ACCEPTANCE_TRANSITION': set(),
     'GENERATE_REQUEST_OBSERVED': {'request_hash', 'body_sha256', 'contract'},
