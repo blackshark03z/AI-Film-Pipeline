@@ -23,3 +23,28 @@
 - Assets: 0.
 
 No Generate, project creation, credential promotion or prior-job reconciliation occurred during this initial gate. The candidate is READY against the old project, but that project is unsafe for a new exact-delta attempt while the prior effect remains uncertain. The next live effect requires a separate, proven correlation domain first.
+
+## Attempt 1 — quarantined uncertainty
+
+- Source candidate at reservation: `3884499e4da702e556877b1ead987c1b28a9c409`.
+- Fresh dedicated Flow project: `d223e652-1ebc-4db1-929b-c2d84cab70f4`; project creation used the existing authenticated helper. Candidate preflight `CONNECTED / valid=true`, atomic activation `ok`, AI Film preflight `READY / PROJECT_READBACK_READY`.
+- Pre-dispatch passive baseline: 0 identities, 17 observed responses, 0 rendered video tiles, 0 generation indicators. Fresh runtime DB began with 0 ProviderJobs; SQLite journal schema and write transaction were available.
+- GenerationAttempt: `attempt_bd569035b0b8c857f551d96f7a74aa61acf71ccb9dbf0a6d242d1277944d656e`.
+- ProviderJob: `job_f7c54cac2162702395ab8743ce4e8f9bf5cc4c55f0d3ad0deaad08e46a2f4021`; dispatch_count=1, submission_state=`SUBMISSION_RESERVED`, status=`INCONCLUSIVE`.
+- Durable facts: `RESERVED` only. No durable prompt verification, click, request, response, acceptance, provider identity, binding or Asset. The exact external Generate count remains unknown under the conservative reservation rule.
+- Project disposition: `QUARANTINED_UNCERTAIN`. No second Generate or output attribution is permitted there.
+- Slice budget: **1 used, 4 remaining**.
+
+Read-only inspection after the stop found one visible editable ProseMirror prompt and one visible Generate button, disabled while the prompt is empty. The frozen submit path tested button enabled **before** filling. This is a strong explanation for the pre-prompt stop, but the original exception type was not persisted, so it is an inference rather than a proved external-effect classification. The prior uncertainty remains unchanged.
+
+Remediation options considered before changing source: (A) fill exact prompt, verify readback, then wait boundedly for enabled Generate; (B) move fill before durable reservation, which changes the submit boundary and increases rework; (C) click while disabled, which cannot generate reliably. Choose A as the smallest safe correction. Offline tests must reproduce Flow's initially disabled button and prove no click when it never enables. Attempt 2 must use a separately created empty project and fresh job.
+
+## Attempt 2 pre-dispatch preparation
+
+- Fresh dedicated Flow project: `22da5179-8ab7-4ac8-9993-2b8e3faf4d67`, distinct from both prior uncertain projects.
+- Candidate project preflight: `CONNECTED / valid=true`; safe activation: `ok / CONNECTED`; AI Film active preflight: `READY / PROJECT_READBACK_READY`.
+- Stable passive snapshot: 0 provider response identities, 17 observed responses, 0 rendered video tiles, 0 concurrent indicators.
+- Safe editor dry check, with no Generate: button initially disabled; full compiled multiline prompt with a shape-matched test correlation marker read back exactly; button enabled after fill; exact readback still held after enable.
+- Source correction: verify prompt, wait boundedly for enabled button, verify prompt again, attach a synchronous capture guard to the exact button element, and click that pinned element only. Prompt drift or DOM replacement blocks the click. CDP trusted-click remains evidence of the UI event only, never provider acceptance.
+- Offline intercepted browser cases: 8 passed, including never-enabled, prompt drift before enable, prompt mutation on pointerdown, and guarded-button replacement. Full regression: 107 passed. Independent reviewer found no remaining material issue in the guarded click change.
+- Attempt 2 GenerationAttempt/ProviderJob: not yet created. Dispatch_count and slice budget remain 0 for this attempt; total slice used remains **1 of 5**.

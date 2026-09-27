@@ -348,7 +348,9 @@ def test_journal_corruption_is_detected_on_fresh_read(tmp_path):
         SQLiteStore(store.path).read_dispatch_facts(job.provider_job_id)
 
 
-@pytest.mark.parametrize('failure', [None, 'CLICK_ARMED', 'TRUSTED_CLICK_OBSERVED', 'double_request'])
+@pytest.mark.parametrize('failure', [None, 'CLICK_ARMED', 'TRUSTED_CLICK_OBSERVED', 'double_request',
+                                     'never_enable', 'mutate_before_enable', 'mutate_on_pointerdown',
+                                     'replace_guarded_button'])
 def test_offline_browser_write_through_receipts_and_failure_boundaries(tmp_path, monkeypatch, failure):
     from patchright.async_api import async_playwright
     project = '11111111-2222-3333-4444-555555555555'
@@ -364,7 +366,7 @@ def test_offline_browser_write_through_receipts_and_failure_boundaries(tmp_path,
             browser = await driver.chromium.launch(headless=True)
             try:
                 page = await browser.new_page()
-                html = '<div class="ProseMirror" contenteditable="true" style="white-space:pre-wrap"></div><button class="generate-icon-button">Generate fixture</button>'
+                html = '<div class="ProseMirror" contenteditable="true" style="white-space:pre-wrap"></div><button class="generate-icon-button" disabled>Generate fixture</button>'
                 async def route(request):
                     # ALL traffic is intercepted: this test cannot reach Flow.
                     if '/project/' in request.request.url:
@@ -376,8 +378,20 @@ def test_offline_browser_write_through_receipts_and_failure_boundaries(tmp_path,
                 transport.page, transport.project_id = page, project
                 transport._observe_page()
                 await page.goto('https://flow.google.com/project/' + project)
-                await page.evaluate("""([project,doubleRequest])=>{
-                  window.fixtureClicks=0;document.querySelector('button').onclick=()=>{
+                await page.evaluate("""([project,doubleRequest,neverEnable,mutateBeforeEnable,mutateOnPointerdown,expected])=>{
+                  window.fixtureClicks=0;
+                  const editor=document.querySelector('.ProseMirror');
+                  const button=document.querySelector('button');
+                  editor.addEventListener('input',()=>{
+                    if(mutateBeforeEnable){
+                      if(editor.innerText===expected&&!window.mutationScheduled){
+                        window.mutationScheduled=true;
+                        setTimeout(()=>{editor.innerText+=' altered';button.disabled=false},150);
+                      }
+                    }else if(!neverEnable)button.disabled=!editor.innerText.trim();
+                  });
+                  if(mutateOnPointerdown)button.addEventListener('pointerdown',()=>{editor.innerText+=' altered'},{once:true});
+                  button.onclick=()=>{
                     window.fixtureClicks++;
                     const prompt=document.querySelector('.ProseMirror').innerText;
                     const payload=JSON.stringify([[["MZZa6b",JSON.stringify([[project,prompt]]),null,"generic"]]]);
@@ -386,9 +400,23 @@ def test_offline_browser_write_through_receipts_and_failure_boundaries(tmp_path,
                     if(doubleRequest)fetch('/_/AiSandboxAngularFrontend/data/batchexecute',{method:'POST',body});
                     document.querySelector('.ProseMirror').innerText='';
                   };
-                }""", [project, failure == 'double_request'])
+                }""", [project, failure == 'double_request', failure == 'never_enable',
+                         failure == 'mutate_before_enable', failure == 'mutate_on_pointerdown',
+                         job.correlation_evidence['prompt']])
+                if failure == 'replace_guarded_button':
+                    original_click = transport._click_pinned_generate
+                    async def replace_then_click(element):
+                        await page.evaluate("""()=>{
+                          const button=document.querySelector('button');
+                          const replacement=button.cloneNode(true);
+                          replacement.onclick=()=>window.fixtureClicks++;
+                          button.replaceWith(replacement);
+                        }""")
+                        await original_click(element)
+                    transport._click_pinned_generate = replace_then_click
                 executor.transport = transport
-                if failure in {'CLICK_ARMED', 'TRUSTED_CLICK_OBSERVED'}:
+                if failure in {'CLICK_ARMED', 'TRUSTED_CLICK_OBSERVED', 'never_enable',
+                               'mutate_before_enable', 'mutate_on_pointerdown', 'replace_guarded_button'}:
                     with pytest.raises(Exception):
                         await executor.submit_once(job.provider_job_id)
                 else:
@@ -397,7 +425,9 @@ def test_offline_browser_write_through_receipts_and_failure_boundaries(tmp_path,
                 if transport._tasks:
                     await asyncio.gather(*list(transport._tasks))
                 clicks = await page.evaluate('window.fixtureClicks')
-                assert clicks == (0 if failure == 'CLICK_ARMED' else 1)
+                assert clicks == (0 if failure in {'CLICK_ARMED', 'never_enable',
+                                                   'mutate_before_enable', 'mutate_on_pointerdown',
+                                                   'replace_guarded_button'} else 1)
                 facts = SQLiteStore(store.path).read_dispatch_facts(job.provider_job_id)
                 kinds = {f['kind'] for f in facts}
                 assert 'PROVIDER_ACCEPTANCE_OBSERVED' not in kinds
@@ -406,6 +436,14 @@ def test_offline_browser_write_through_receipts_and_failure_boundaries(tmp_path,
                             'GENERATE_REQUEST_OBSERVED', 'PROVIDER_RESPONSE_OBSERVED'} <= kinds
                 if failure == 'double_request':
                     assert 'AMBIGUOUS_EVIDENCE' in kinds
+                if failure == 'never_enable':
+                    assert 'PROMPT_VERIFIED' in kinds and 'CLICK_ARMED' not in kinds
+                if failure == 'mutate_before_enable':
+                    assert 'PROMPT_VERIFIED' in kinds and 'CLICK_ARMED' not in kinds
+                if failure == 'mutate_on_pointerdown':
+                    assert 'CLICK_ARMED' in kinds and 'TRUSTED_CLICK_OBSERVED' not in kinds
+                if failure == 'replace_guarded_button':
+                    assert 'CLICK_ARMED' in kinds and 'TRUSTED_CLICK_OBSERVED' not in kinds
                 assert 'fake-auth-marker' not in json.dumps(facts)
                 assert store.read_provider_job(job.provider_job_id).submitted_at is None
                 with pytest.raises(RuntimeError, match='budget already consumed'):

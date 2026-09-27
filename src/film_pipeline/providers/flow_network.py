@@ -4,6 +4,7 @@ Raw UI response bodies and thumbnail URLs remain memory-only. No RPC replay.
 """
 import asyncio
 import hashlib
+import json
 import secrets
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -16,6 +17,10 @@ from ..core import sha256
 
 
 class FlowNetworkTransport(FlowLiveTransport):
+    async def _click_pinned_generate(self, element):
+        # The guarded element must be the clicked element. Detachment fails closed.
+        await element.click(timeout=10000)
+
     def set_evidence_sink(self, sink, job):
         self._sink, self._job = sink, job
 
@@ -144,13 +149,26 @@ class FlowNetworkTransport(FlowLiveTransport):
         button = self.page.locator('button.generate-icon-button')
         if await editor.count() != 1 or await button.count() != 1:
             raise ValueError('UNAMBIGUOUS_SUBMIT_SURFACE_REQUIRED')
-        if not await editor.is_visible() or not await editor.is_editable() or not await button.is_enabled():
+        if not await editor.is_visible() or not await editor.is_editable() or not await button.is_visible():
             raise ValueError('SUBMIT_SURFACE_NOT_READY')
         await self._fill_prompt(editor, prompt)
         actual = await self._prompt_value(editor)
         if actual != prompt:
             raise ValueError('EXACT_SUBMISSION_PROMPT_UNVERIFIED')
         self._record('PROMPT_VERIFIED', {'prompt_sha256': sha256(prompt)})
+        # Flow keeps Generate disabled until the editor contains a prompt.
+        # Wait only after exact readback; an unenabled control never gets a click.
+        for _ in range(20):
+            if await button.is_enabled():
+                break
+            await self.page.wait_for_timeout(250)
+        else:
+            raise ValueError('GENERATE_BUTTON_NOT_ENABLED_AFTER_VERIFIED_PROMPT')
+        if await editor.count() != 1 or await self._prompt_value(editor) != prompt:
+            raise ValueError('EXACT_SUBMISSION_PROMPT_DRIFT_BEFORE_CLICK')
+        guarded_button = await button.element_handle()
+        if guarded_button is None:
+            raise ValueError('GENERATE_BUTTON_DETACHED_BEFORE_GUARD')
         # Patchright expose_binding misses already-created isolated contexts.
         # A native CDP binding delivers the event directly to the durable sink.
         cdp = await self.page.context.new_cdp_session(self.page)
@@ -160,7 +178,8 @@ class FlowNetworkTransport(FlowLiveTransport):
             if event.get('name') != binding or receipt.done():
                 return
             try:
-                trusted = event.get('payload') == 'true'
+                payload = json.loads(event.get('payload', 'null'))
+                trusted = payload == {'trusted': True, 'exact': True}
                 if trusted:
                     self._record('TRUSTED_CLICK_OBSERVED')
                 receipt.set_result(trusted)
@@ -170,13 +189,22 @@ class FlowNetworkTransport(FlowLiveTransport):
         try:
             await cdp.send('Runtime.enable')
             await cdp.send('Runtime.addBinding', {'name': binding})
-            await button.evaluate("""(e,binding)=>{
-              e.addEventListener('click',ev=>window[binding](JSON.stringify(ev.isTrusted)),{once:true})}
-              """, binding)
+            await guarded_button.evaluate("""(e,args)=>{
+              e.addEventListener('click',ev=>{
+                const matches=document.querySelectorAll(args.selector);
+                const editor=matches.length===1?matches[0]:null;
+                const actual=editor?(editor.tagName==='TEXTAREA'?editor.value:editor.innerText):null;
+                const exact=actual===args.prompt;
+                if(!exact){ev.preventDefault();ev.stopImmediatePropagation()}
+                window[args.binding](JSON.stringify({trusted:ev.isTrusted,exact}));
+              },{capture:true,once:true})}
+              """, {'binding': binding, 'selector': PROMPT_SELECTOR, 'prompt': prompt})
             self._record('CLICK_ARMED')
             self._armed = True
-            await button.click(timeout=10000)
+            await self._click_pinned_generate(guarded_button)
             trusted = await asyncio.wait_for(receipt, timeout=10)
+            if not trusted:
+                raise ValueError('TRUSTED_EXACT_GENERATE_CLICK_UNVERIFIED')
             reset = await self._wait_prompt_reset(editor)
         finally:
             if not receipt.done():
