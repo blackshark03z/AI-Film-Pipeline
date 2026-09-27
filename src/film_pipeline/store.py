@@ -46,6 +46,22 @@ class SQLiteStore:
                     FOREIGN KEY (prompt_plan_hash) REFERENCES prompt_plans(hash),
                     FOREIGN KEY (routing_decision_id) REFERENCES routing_decisions(id)
                 );
+                CREATE TABLE IF NOT EXISTS provider_jobs (
+                    id TEXT PRIMARY KEY,
+                    generation_attempt_id TEXT NOT NULL,
+                    provider_id TEXT NOT NULL,
+                    dispatch_count INTEGER NOT NULL CHECK (dispatch_count IN (0, 1)),
+                    payload TEXT NOT NULL,
+                    FOREIGN KEY (generation_attempt_id) REFERENCES generation_attempts(id)
+                );
+                CREATE TABLE IF NOT EXISTS assets (
+                    id TEXT PRIMARY KEY,
+                    generation_attempt_id TEXT NOT NULL,
+                    provider_job_id TEXT NOT NULL,
+                    payload TEXT NOT NULL,
+                    FOREIGN KEY (generation_attempt_id) REFERENCES generation_attempts(id),
+                    FOREIGN KEY (provider_job_id) REFERENCES provider_jobs(id)
+                );
             """)
             connection.commit()
         finally:
@@ -117,3 +133,135 @@ class SQLiteStore:
                 or shot.shot_id != plan.shot_id or shot.shot_id != attempt.shot_id):
             raise ValueError("persisted lineage integrity failure")
         return shot, plan, route, attempt
+
+    # Runtime records are deliberately mutable: remote provider state changes as
+    # it is reconciled.  Creative/planning records above remain immutable.
+    def save_provider_job(self, job) -> None:
+        from .live_runtime import ProviderJob
+
+        if not isinstance(job, ProviderJob):
+            raise TypeError("job must be ProviderJob")
+        connection = self._connect()
+        try:
+            with connection:
+                attempt = connection.execute(
+                    "SELECT payload FROM generation_attempts WHERE id = ?",
+                    (job.generation_attempt_id,),
+                ).fetchone()
+                if attempt is None or json.loads(attempt[0]).get("provider_id") != job.provider_id:
+                    raise ValueError("provider job attempt lineage mismatch")
+                existing = connection.execute(
+                    "SELECT generation_attempt_id, provider_id, dispatch_count FROM provider_jobs WHERE id = ?",
+                    (job.provider_job_id,),
+                ).fetchone()
+                if existing is not None:
+                    if existing[:2] != (job.generation_attempt_id, job.provider_id):
+                        raise ValueError("provider job identity collision")
+                    if existing[2] > job.dispatch_count:
+                        raise ValueError("provider job dispatch count cannot regress")
+                connection.execute(
+                    "INSERT INTO provider_jobs (id, generation_attempt_id, provider_id, dispatch_count, payload) "
+                    "VALUES (?, ?, ?, ?, ?) "
+                    "ON CONFLICT(id) DO UPDATE SET dispatch_count=excluded.dispatch_count, payload=excluded.payload",
+                    (job.provider_job_id, job.generation_attempt_id, job.provider_id,
+                     job.dispatch_count, canonical_json(job.model_dump(mode="json"))),
+                )
+        finally:
+            connection.close()
+
+    def reserve_dispatch(self, provider_job_id: str):
+        """Irreversibly consume the one-submit budget before calling transport.
+
+        A crash between this commit and the browser action is intentionally
+        uncertain.  Recovery reconciles this job and can never manufacture a
+        second submit.
+        """
+        from .live_runtime import ProviderJob
+
+        connection = self._connect()
+        try:
+            connection.execute("BEGIN IMMEDIATE")
+            row = connection.execute(
+                "SELECT payload FROM provider_jobs WHERE id = ?", (provider_job_id,)
+            ).fetchone()
+            if row is None:
+                raise KeyError(provider_job_id)
+            job = ProviderJob.model_validate(json.loads(row[0]))
+            if job.dispatch_count == 1:
+                raise RuntimeError("single dispatch budget already consumed")
+            used = connection.execute(
+                "SELECT COUNT(*) FROM provider_jobs WHERE dispatch_count = 1"
+            ).fetchone()[0]
+            if used:
+                raise RuntimeError("single dispatch budget already consumed")
+            reserved = job.model_copy(update={
+                "dispatch_count": 1,
+                "submission_state": "SUBMISSION_RESERVED",
+                "status": "INCONCLUSIVE",
+            })
+            connection.execute(
+                "UPDATE provider_jobs SET dispatch_count = 1, payload = ? WHERE id = ?",
+                (canonical_json(reserved.model_dump(mode="json")), provider_job_id),
+            )
+            connection.commit()
+            return reserved
+        except Exception:
+            connection.rollback()
+            raise
+        finally:
+            connection.close()
+
+    def read_provider_job(self, provider_job_id: str):
+        from .live_runtime import ProviderJob
+
+        connection = self._connect()
+        try:
+            row = connection.execute("SELECT payload FROM provider_jobs WHERE id = ?", (provider_job_id,)).fetchone()
+            if row is None:
+                raise KeyError(provider_job_id)
+            return ProviderJob.model_validate(json.loads(row[0]))
+        finally:
+            connection.close()
+
+    def save_asset(self, asset) -> None:
+        from .live_runtime import Asset
+
+        if not isinstance(asset, Asset):
+            raise TypeError("asset must be Asset")
+        connection = self._connect()
+        try:
+            with connection:
+                job = connection.execute(
+                    "SELECT generation_attempt_id FROM provider_jobs WHERE id = ?", (asset.provider_job_id,)
+                ).fetchone()
+                if job is None or job[0] != asset.source_attempt_id:
+                    raise ValueError("asset provider job lineage mismatch")
+                payload = canonical_json(asset.model_dump(mode="json"))
+                connection.execute(
+                    "INSERT OR IGNORE INTO assets (id, generation_attempt_id, provider_job_id, payload) VALUES (?, ?, ?, ?)",
+                    (asset.asset_id, asset.source_attempt_id, asset.provider_job_id, payload),
+                )
+                stored = connection.execute("SELECT payload FROM assets WHERE id = ?", (asset.asset_id,)).fetchone()
+                if stored is None or stored[0] != payload:
+                    raise ValueError("immutable asset identity collision")
+        finally:
+            connection.close()
+
+    def read_runtime_lineage(self, attempt_id: str, provider_job_id: str):
+        from .live_runtime import Asset
+
+        path = self.read_path(attempt_id)
+        job = self.read_provider_job(provider_job_id)
+        if job.generation_attempt_id != attempt_id:
+            raise ValueError("provider job does not belong to attempt")
+        connection = self._connect()
+        try:
+            rows = connection.execute(
+                "SELECT payload FROM assets WHERE provider_job_id = ? ORDER BY id", (provider_job_id,)
+            ).fetchall()
+        finally:
+            connection.close()
+        assets = tuple(Asset.model_validate(json.loads(row[0])) for row in rows)
+        if any(asset.source_attempt_id != attempt_id for asset in assets):
+            raise ValueError("asset does not belong to attempt")
+        return (*path, job, assets)

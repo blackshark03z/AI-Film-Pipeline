@@ -62,3 +62,7 @@ Tech Lead accepted SLICE-0002 at 7041252d9e6b0c6bc7589d606fe30f45b302c1b8; main 
 ## SLICE-0004 stop evidence
 
 Prior candidate c2ef1a97920e48348102bea4e4796a4357a2fd31 was accepted and fast-forwarded into main. Authenticated read-only preflight returned AUTH_REQUIRED / PROJECT_READBACK_AUTH_REQUIRED. Dispatch count remains 0. See SLICE_0004_EVIDENCE.md. Stop pending normal operator authentication; do not begin SLICE-0005.
+
+## SLICE-0004 authorized resume
+
+Resumed from a3cae9bfc510e2d61ba1b3536ff346091f605ee1 on the same branch. Gates 2–3 implemented: ProviderJob/Asset persistence, atomic one-submit reservation, read-only reconciliation, strict output correlation, media validation/hash and fresh lineage readback. 40 deterministic tests pass. Authenticated preflight remains AUTH_REQUIRED / PROJECT_READBACK_AUTH_REQUIRED. Stop at OPERATOR_AUTH_GATE with 0 submit transactions. No main merge or SLICE-0005. See SLICE_0004_RESUME.md; prior stop evidence remains intact.

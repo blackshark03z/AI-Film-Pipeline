@@ -56,9 +56,10 @@ async def browser_readback(cookies: list[dict], project_id: str) -> str:
 
 
 class FlowVeoProvider:
-    def __init__(self, config: FlowConfig, readback: Callable[[list[dict], str], Awaitable[str]] = browser_readback):
+    def __init__(self, config: FlowConfig, readback: Callable[[list[dict], str], Awaitable[str]] = browser_readback, *, live_executor=None):
         self._config = config
         self._readback = readback
+        self._live_executor = live_executor
 
     def capabilities(self) -> ProviderCapabilities:
         return ProviderCapabilities(
@@ -133,12 +134,18 @@ class FlowVeoProvider:
             return self._health('INCONCLUSIVE', 'READBACK_ERROR')
 
     async def submit(self, request):
+        if self._live_executor is not None:
+            return await self._live_executor.submit_once(request)
         raise NotImplementedError('NOT_IMPLEMENTED_IN_SLICE_0003')
 
     async def poll(self, provider_job_id):
+        if self._live_executor is not None:
+            return await self._live_executor.reconcile(provider_job_id)
         raise NotImplementedError('NOT_IMPLEMENTED_IN_SLICE_0003')
 
     async def fetch_outputs(self, provider_job_id):
+        if self._live_executor is not None:
+            return await self._live_executor.download_assets(provider_job_id, Path('projects/flow_canary/outputs'))
         raise NotImplementedError('NOT_IMPLEMENTED_IN_SLICE_0003')
 
     async def cancel(self, provider_job_id):
