@@ -74,4 +74,3 @@ class FlowResponseModelDecoderTests(unittest.TestCase):
     def test_invalid_project_identity_is_rejected(self):
         with self.assertRaises(ValueError):
             FlowResponseModelDecoder("not-a-project-uuid")
-
