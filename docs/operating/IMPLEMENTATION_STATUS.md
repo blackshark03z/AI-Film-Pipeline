@@ -45,7 +45,7 @@ baseline identity.
 
 ## In progress
 
-- SLICE-0004 is stopped at OPERATOR_AUTH_GATE. No live submit occurred.
+- SLICE-0004 is stopped at EXTERNAL_EFFECT_INCONCLUSIVE after the sole dispatch reservation. No confirmed Generate receipt exists.
 
 ## Blocked
 
@@ -53,7 +53,7 @@ baseline identity.
 
 ## Next authorized action
 
-Operator must restore normal Flow authentication before resuming SLICE-0004. Do not dispatch unless preflight is READY and all remaining pre-dispatch gates pass.
+Read-only reconciliation of the existing reserved ProviderJob only. Do not submit another Generate under this authorization; preserve the consumed budget and INCONCLUSIVE state.
 
 ## Next slice after PROVEN
 
