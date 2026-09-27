@@ -1,9 +1,8 @@
 """Bounded canary transport. Correlation is required; gallery order is unused."""
 import json
 from pathlib import Path
-from urllib.parse import urlparse
 
-from .flow_veo import FlowConfig
+from .flow_veo import FlowConfig, project_url_state
 
 
 class FlowLiveTransport:
@@ -34,7 +33,7 @@ class FlowLiveTransport:
         self.project_id = session['project_id']
         self.page = await self.context.new_page()
         await self.page.goto(f'https://flow.google.com/project/{self.project_id}', timeout=30000)
-        if urlparse(self.page.url).path.rstrip('/') != f'/project/{self.project_id}':
+        if project_url_state(self.page.url, self.project_id) != 'MATCH':
             raise ValueError('BOUND_PROJECT_NOT_READY')
 
     async def close(self):

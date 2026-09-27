@@ -95,3 +95,58 @@ def test_environment_config_does_not_export_paths(monkeypatch):
     monkeypatch.delenv('FLOW_PROJECT_ID', raising=False)
     assert FlowConfig.from_environment() == FlowConfig()
     assert 'cookie' not in repr(FlowConfig())
+
+
+@pytest.mark.parametrize('url,expected', [
+    ('https://flow.google.com/project/unit-project', 'MATCH'),
+    ('https://flow.google.com/u/1/project/unit-project/', 'MATCH'),
+    ('https://flow.google.com/u/2/project/unit-project?something=harmless', 'MATCH'),
+    ('https://flow.google.com/project/different', 'PROJECT_URL_MISMATCH'),
+    ('https://flow.google.com/', 'PROJECT_URL_MISMATCH'),
+    ('https://flow.google.com/404', 'PROJECT_URL_MISMATCH'),
+    ('https://flow.google.com/about', 'AUTH_REQUIRED'),
+    ('https://accounts.google.com/signin', 'AUTH_REQUIRED'),
+    ('https://evil.example/project/unit-project', 'PROJECT_URL_MISMATCH'),
+])
+def test_exact_project_url_variants(url, expected):
+    from film_pipeline.providers.flow_veo import project_url_state
+    assert project_url_state(url, 'unit-project') == expected
+
+
+def test_bounded_prompt_surface():
+    from film_pipeline.providers.flow_veo import project_surface_readback, PROMPT_SELECTOR
+    class Control:
+        async def is_visible(self): return True
+        async def is_enabled(self): return True
+        async def is_editable(self): return True
+    class Page:
+        url = 'https://flow.google.com/u/2/project/unit-project'
+        def __init__(self, delay, amount): self.waits = 0; self.delay = delay; self.amount = amount
+        def locator(self, selector):
+            assert selector == PROMPT_SELECTOR
+            return self
+        async def count(self): return self.amount if self.waits >= self.delay else 0
+        def nth(self, i): return Control()
+        async def wait_for_timeout(self, ms): self.waits += 1
+    delayed = Page(2, 1)
+    assert asyncio.run(project_surface_readback(delayed, 'unit-project', checks=4)) == 'PROJECT_READBACK_READY'
+    assert delayed.waits == 2
+    absent = Page(0, 0)
+    assert asyncio.run(project_surface_readback(absent, 'unit-project', checks=4)) == 'PROJECT_PROMPT_SURFACE_MISSING'
+    assert absent.waits == 3
+    assert asyncio.run(project_surface_readback(Page(0, 2), 'unit-project', checks=2)) == 'PROJECT_SURFACE_TIMEOUT'
+
+
+def test_irrelevant_textareas_do_not_qualify():
+    from film_pipeline.providers.flow_veo import project_surface_readback
+    from patchright.async_api import async_playwright
+    async def check():
+        async with async_playwright() as driver:
+            browser = await driver.chromium.launch(headless=True)
+            try:
+                page = await browser.new_page()
+                await page.route('https://flow.google.com/**', lambda route: route.fulfill(body='<textarea></textarea><textarea class="g-recaptcha-response"></textarea>'))
+                await page.goto('https://flow.google.com/project/unit-project')
+                assert await project_surface_readback(page, 'unit-project', checks=1) == 'PROJECT_PROMPT_SURFACE_MISSING'
+            finally: await browser.close()
+    asyncio.run(check())

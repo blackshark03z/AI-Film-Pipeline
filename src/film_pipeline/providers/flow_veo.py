@@ -29,8 +29,43 @@ class FlowConfig:
         )
 
 
+def project_url_state(url: str, project_id: str) -> str:
+    parsed = urlparse(url)
+    if parsed.hostname == 'accounts.google.com' or (parsed.hostname == 'flow.google.com' and parsed.path.startswith('/about')):
+        return 'AUTH_REQUIRED'
+    if parsed.scheme != 'https' or parsed.hostname != 'flow.google.com' or parsed.username or parsed.password:
+        return 'PROJECT_URL_MISMATCH'
+    match = re.fullmatch(r'/(?:u/[0-9]+/)?project/([A-Za-z0-9_-]+)/?', parsed.path)
+    return 'MATCH' if match and match.group(1) == project_id else 'PROJECT_URL_MISMATCH'
+
+
+# Verified live Flow editor; CAPTCHA/search/title controls are excluded.
+PROMPT_SELECTOR = 'div.ProseMirror[contenteditable="true"], textarea[placeholder*="prompt" i], textarea[placeholder*="describe" i]'
+
+
+async def project_surface_readback(page, project_id: str, *, checks: int = 40, interval_ms: int = 250) -> str:
+    saw_candidate = False
+    for index in range(checks):
+        identity = project_url_state(page.url, project_id)
+        if identity != 'MATCH':
+            return identity
+        controls = page.locator(PROMPT_SELECTOR)
+        usable = 0
+        for i in range(await controls.count()):
+            control = controls.nth(i)
+            saw_candidate = True
+            if await control.is_visible() and await control.is_enabled() and await control.is_editable():
+                usable += 1
+        if usable == 1:
+            # Identity and usability are independently required at readback.
+            return 'PROJECT_READBACK_READY' if project_url_state(page.url, project_id) == 'MATCH' else 'PROJECT_URL_MISMATCH'
+        if index + 1 < checks:
+            await page.wait_for_timeout(interval_ms)
+    return 'PROJECT_SURFACE_TIMEOUT' if saw_candidate else 'PROJECT_PROMPT_SURFACE_MISSING'
+
+
 async def browser_readback(cookies: list[dict], project_id: str) -> str:
-    """Navigate only to the bound project. Do not click, submit or refresh auth."""
+    """Read-only navigation and bounded project/editor verification."""
     from patchright.async_api import async_playwright
     async with async_playwright() as driver:
         browser = await driver.chromium.launch(headless=True)
@@ -39,18 +74,11 @@ async def browser_readback(cookies: list[dict], project_id: str) -> str:
             await context.add_cookies(cookies)
             page = await context.new_page()
             response = await page.goto(f'https://flow.google.com/project/{project_id}', timeout=30000)
+            if project_url_state(page.url, project_id) == 'AUTH_REQUIRED':
+                return 'AUTH_REQUIRED'
             if response is None or response.status >= 400:
                 return 'UNAVAILABLE'
-            parsed = urlparse(page.url)
-            if parsed.hostname == 'accounts.google.com' or parsed.path.startswith('/about'):
-                return 'AUTH_REQUIRED'
-            if parsed.hostname != 'flow.google.com' or parsed.path.rstrip('/') != f'/project/{project_id}':
-                return 'INCONCLUSIVE'
-            # A matching URL alone does not establish a usable project surface.
-            prompt = page.locator('textarea')
-            if await prompt.count() != 1 or not await prompt.is_visible() or not await prompt.is_enabled():
-                return 'INCONCLUSIVE'
-            return 'READY'
+            return await project_surface_readback(page, project_id)
         finally:
             await browser.close()
 
@@ -124,6 +152,10 @@ class FlowVeoProvider:
             return self._health('MISCONFIGURED', 'LOCAL_STATE_INVALID')
         try:
             state = await self._readback(clean, project_id)
+            if state == 'PROJECT_READBACK_READY':
+                return self._health('READY', state)
+            if state in {'PROJECT_URL_MISMATCH', 'PROJECT_SURFACE_TIMEOUT', 'PROJECT_PROMPT_SURFACE_MISSING'}:
+                return self._health('INCONCLUSIVE', state)
             if state not in {'READY', 'UNAVAILABLE', 'AUTH_REQUIRED', 'MISCONFIGURED', 'INCONCLUSIVE'}:
                 state = 'INCONCLUSIVE'
             return self._health(state, 'PROJECT_READBACK_' + state)
