@@ -59,3 +59,16 @@ Remediation options considered before changing source: (A) fill exact prompt, ve
 - Slice budget: **2 used, 3 remaining**.
 
 The immediate failure cannot be reconstructed from the original process: the transport and executor previously erased exception type, and reopening the page creates a new healthy observer. Read-only checks found no current output or progress, but absence is not a no-dispatch receipt. Considered three remedies: treating click/reset or empty UI as success/failure (unsound), ignoring response read failures (would make identity observation incomplete), and recording a bounded failure code while retaining fail-closed polling. Selected the third. The source now writes only a fixed diagnostic code such as `BODY_READ_ERROR` or `RESPONSE_MODEL_LIMIT_OR_COLLISION` to the dispatch journal when the passive observer fails. Exception text, response body, URLs and credentials are never recorded. Full offline suite: 108 passed. Any new attempt still requires a separate fresh project with an independently empty baseline.
+
+## Attempt 3 — quarantined request observer failure
+
+- Source candidate at reservation: `32337c42207019d01b801244bdd18ba14fbf83f0`.
+- Fresh dedicated Flow project: `0d480008-9319-4fdc-9d1e-6bdad5c7fe6b`; candidate preflight `CONNECTED / valid=true`, activation `ok`, AI Film preflight `READY / PROJECT_READBACK_READY`.
+- Stable passive baseline: 0 identities, 17 responses, 0 video tiles, 0 concurrent indicators. Fresh journal had 0 jobs and accepted a write transaction.
+- GenerationAttempt: `attempt_a79533a97f1f01506b66f0fe2486b96d79fa9a61c2a16b1e5771af38a163ed6b`.
+- ProviderJob: `job_f33b926463a82ace6640ecb84ad4b32134e667ecd0be0b640e7deca7c467890f`; dispatch_count=1, submission_state=`SUBMISSION_RESERVED`, status=`INCONCLUSIVE`.
+- Durable facts: `RESERVED`, `PROMPT_VERIFIED`, `CLICK_ARMED`, `TRUSTED_CLICK_OBSERVED`, `OBSERVATION_FAILURE` with fixed code `REQUEST_OBSERVER_ERROR`, `PROMPT_ACCEPTANCE_TRANSITION`. No qualified Generate request, response, acceptance, identity, binding or Asset.
+- The observer callback originally inspected `post_data` for **every** request after arming, including unrelated browser traffic. A read failure or another exception anywhere in that callback could terminate exact observation. The fixed code does not identify which operation failed; this remains a hypothesis, not an external-effect classification.
+- Project disposition: `QUARANTINED_UNCERTAIN`; no further Generate there. Slice budget: **3 used, 2 remaining**.
+
+Remedy options considered: ignore callback errors (unsafe incomplete evidence), allow an output without network evidence (weakens the specified proof), or filter to the exact Flow POST endpoint before reading a body and retain explicit stage diagnostics. Selected the last. A relevant request body/classifier/journal failure still fails closed; unrelated POST bodies are not read. Two intercepted cases plus the full 110-test suite pass. Attempt 4 requires another independently empty project.

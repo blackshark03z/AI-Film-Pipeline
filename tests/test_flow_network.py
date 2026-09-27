@@ -62,6 +62,30 @@ def test_response_read_failure_is_classified_without_exposing_exception():
     assert facts == [('OBSERVATION_FAILURE', {'diagnostic': 'BODY_READ_ERROR'})]
 
 
+@pytest.mark.parametrize('url,diagnostic', [
+    ('https://flow.google.com/project/unit', None),
+    ('https://flow.google.com/_/AiSandboxAngularFrontend/data/batchexecute', 'FLOW_POST_BODY_UNAVAILABLE'),
+])
+def test_request_observer_does_not_read_unrelated_post_body(url, diagnostic):
+    transport = FlowNetworkTransport(FlowConfig())
+    transport.project_id = '11111111-2222-3333-4444-555555555555'
+    transport._job = SimpleNamespace(correlation_evidence={'prompt': 'exact prompt'})
+    facts, listeners = [], {}
+    transport._sink = SimpleNamespace(record=lambda kind, data: facts.append((kind, data)))
+    transport.page = SimpleNamespace(on=lambda kind, callback: listeners.update({kind: callback}))
+    transport._observe_page()
+    transport._armed = True
+    class Request:
+        method = 'POST'
+        @property
+        def post_data(self): raise RuntimeError('private response token')
+    request = Request()
+    request.url = url
+    listeners['request'](request)
+    assert transport._observer_failed == bool(diagnostic)
+    assert facts == ([('OBSERVATION_FAILURE', {'diagnostic': diagnostic})] if diagnostic else [])
+
+
 def test_network_submit_rejects_repeat_before_any_browser_action():
     transport = FlowNetworkTransport(FlowConfig())
     transport._submit_invoked = True

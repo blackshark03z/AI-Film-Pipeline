@@ -45,15 +45,15 @@ baseline identity.
 
 ## In progress
 
-- SLICE-0006 Attempts 1 and 2 each reserved once and ended INCONCLUSIVE in separate fresh projects. Both projects are quarantined. Budget used: 2 of 5. Attempt 2 durably observed an exact trusted UI click and prompt reset, but no qualified Generate request, response, or output identity. A bounded passive-observer failure code was added for the next isolated attempt; 108 offline tests pass. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
+- SLICE-0006 Attempts 1, 2 and 3 each reserved once and ended INCONCLUSIVE in separate fresh projects. All three projects are quarantined. Budget used: 3 of 5. Attempt 3 durably recorded a trusted UI click, prompt reset and a request-observer error, but no qualified Generate request, response, or output identity. The observer now filters unrelated requests before reading POST data and records a bounded failure stage; 110 offline tests pass. Prior SLICE-0004 live effect remains EXTERNAL_EFFECT_INCONCLUSIVE.
 
 ## Blocked
 
-- The initial active and candidate sessions returned AUTH_REQUIRED. Normal operator sign-in restored READY. Attempt 1's source checked Generate enabled before filling the editor; Flow presented an initially disabled button. Attempt 2's observer stopped without persisting a diagnostic type. No Generate may occur on the old or quarantined Attempt 1/2 projects.
+- The initial active and candidate sessions returned AUTH_REQUIRED. Normal operator sign-in restored READY. Attempt 1's source checked Generate enabled before filling the editor; Flow presented an initially disabled button. Attempt 2's observer stopped without persisting a diagnostic type. Attempt 3's observer recorded a request callback error. No Generate may occur on the old or quarantined Attempt 1/2/3 projects.
 
 ## Next authorized action
 
-Freeze the diagnostic source, create a third fresh project, prove its independent empty baseline and all other live gates, then execute at most one Generate for Attempt 3. Preserve both prior consumed budgets and INCONCLUSIVE states. Stop on the first complete canary proof.
+Freeze the endpoint-filtered source, create a fourth fresh project, prove its independent empty baseline and all other live gates, then execute at most one Generate for Attempt 4. Preserve all prior consumed budgets and INCONCLUSIVE states. Stop on the first complete canary proof.
 
 ## Next slice after PROVEN
 

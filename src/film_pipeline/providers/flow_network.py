@@ -66,18 +66,36 @@ class FlowNetworkTransport(FlowLiveTransport):
             if not self._armed or not hasattr(self, '_job'):
                 return
             try:
-                metadata = generate_request_metadata(request.method, request.url, request.post_data,
+                method, url = request.method, request.url
+            except Exception:
+                self._observation_failure('REQUEST_ENVELOPE_ERROR')
+                return
+            parsed = urlsplit(url)
+            if (method != 'POST' or parsed.scheme != 'https' or parsed.hostname != 'flow.google.com'
+                    or parsed.path != '/_/AiSandboxAngularFrontend/data/batchexecute'):
+                return
+            try:
+                body = request.post_data
+            except Exception:
+                self._observation_failure('FLOW_POST_BODY_UNAVAILABLE')
+                return
+            try:
+                metadata = generate_request_metadata(method, url, body,
                     self.project_id, self._job.correlation_evidence['prompt'])
-                if metadata is None:
-                    return
-                if self._requests:
-                    self._record('AMBIGUOUS_EVIDENCE', {'diagnostic': 'MULTIPLE_GENERATE_REQUESTS'})
-                    self._observer_failed = True
-                    return
+            except Exception:
+                self._observation_failure('REQUEST_CLASSIFIER_ERROR')
+                return
+            if metadata is None:
+                return
+            if self._requests:
+                self._record('AMBIGUOUS_EVIDENCE', {'diagnostic': 'MULTIPLE_GENERATE_REQUESTS'})
+                self._observer_failed = True
+                return
+            try:
                 self._record('GENERATE_REQUEST_OBSERVED', metadata)
                 self._requests[request] = metadata['request_hash']
             except Exception:
-                self._observation_failure('REQUEST_OBSERVER_ERROR')
+                self._observation_failure('REQUEST_JOURNAL_OR_TRACK_ERROR')
         self.page.on('request', request_observed)
         def response_received(response):
             task = asyncio.create_task(self._observe(response))
