@@ -1,0 +1,16 @@
+{
+  "contract_version": "0.1.0",
+  "job_id": "bad_hash",
+  "media": [
+    {
+      "media_id": "generic_image",
+      "media_type": "image",
+      "storage": "embedded",
+      "locator": {
+        "kind": "package_relative",
+        "path": "media/color.ppm"
+      },
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}

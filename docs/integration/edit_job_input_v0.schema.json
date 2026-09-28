@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EditJobInputV0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "job_id",
+    "media"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "0.1.0"
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "media": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/media"
+      }
+    },
+    "user_intent": {
+      "type": "object"
+    },
+    "optional_timeline_hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "source_format",
+        "data"
+      ],
+      "properties": {
+        "authority": {
+          "const": "suggestion"
+        },
+        "source_format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    },
+    "optional_transcripts": {
+      "type": [
+        "object",
+        "array"
+      ]
+    },
+    "optional_subtitles": {
+      "type": [
+        "object",
+        "array"
+      ]
+    },
+    "optional_semantic_metadata": {
+      "type": "object"
+    },
+    "optional_provenance": {
+      "type": "object"
+    },
+    "optional_references": {
+      "type": [
+        "object",
+        "array"
+      ]
+    },
+    "optional_constraints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/constraint"
+      }
+    },
+    "frozen_constraints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/constraint"
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[A-Za-z0-9_.-]+[/:][A-Za-z0-9_.-]+$"
+      },
+      "additionalProperties": {
+        "type": "object"
+      }
+    }
+  },
+  "$defs": {
+    "portable_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*[\\\\:])(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*//)(?!.*/$).+$"
+    },
+    "locator": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "path"
+          ],
+          "properties": {
+            "kind": {
+              "const": "package_relative"
+            },
+            "path": {
+              "$ref": "#/$defs/portable_path"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "root_id",
+            "path"
+          ],
+          "properties": {
+            "kind": {
+              "const": "root_relative"
+            },
+            "root_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.-]+$"
+            },
+            "path": {
+              "$ref": "#/$defs/portable_path"
+            }
+          }
+        }
+      ]
+    },
+    "media": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "media_id",
+        "media_type",
+        "locator",
+        "storage"
+      ],
+      "properties": {
+        "media_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "media_type": {
+          "enum": [
+            "video",
+            "audio",
+            "image",
+            "timeline"
+          ]
+        },
+        "locator": {
+          "$ref": "#/$defs/locator"
+        },
+        "storage": {
+          "enum": [
+            "embedded",
+            "referenced"
+          ]
+        },
+        "duration_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "provenance_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "storage": {
+                "const": "embedded"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "locator": {
+                "properties": {
+                  "kind": {
+                    "const": "package_relative"
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "locator": {
+                "properties": {
+                  "kind": {
+                    "const": "root_relative"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constraint_id",
+        "requirement"
+      ],
+      "properties": {
+        "constraint_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requirement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "media_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

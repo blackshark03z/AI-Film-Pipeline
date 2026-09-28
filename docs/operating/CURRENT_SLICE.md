@@ -1,4 +1,4 @@
-# SLICE-0008 — EditManifest + Rough Cut Kernel + Editorial Provenance
+# SLICE-0009 — AutoEdit Compatibility Baseline v0
 
 ## Worker model
 
@@ -7,888 +7,667 @@ Primary model: GPT-5.6 Sol
 Thinking effort: High
 ```
 
-After the editorial architecture decision is frozen and implementation becomes mechanical:
+After boundary decisions are frozen:
 
 ```text
-GPT-5.6 Sol / Medium is sufficient
+GPT-5.6 Sol / Medium
 ```
 
 ---
 
-# 1. Accepted baseline
+# 1. Starting point
 
-Start from:
-
-```text
-9ed65e6000518daa8270cdffa38470e3300d724c
-```
-
-SLICE-0007 is PROVEN AND CLOSED.
-
-Exact approved take:
+Accepted baseline:
 
 ```text
-selected_take_id:
-take_a4f85e57ca88fe9629eb0c377ca6751711116c2f61425d9595d75ba09898647b
-
-shot_id:
-FLOW_CANARY_001
-
-generation_attempt_id:
-attempt_600664fc7042d7e7c7321afe521b758f64da312f70d679552b027eb1b145a6b5
-
-asset_id:
-asset_c45abad93f33adbf43a6da62f3a04091b1cb712314ef209e6d84bea31a653c01
-
-asset_sha256:
-c5014f1438dd8b4e1fbcd85df85fc5216bf91985b2164d0afbe5c3a0695abacf
+bdaac47501c9822a6b8037817ec1803358a7873d
 ```
 
-Human selection authority:
+SLICE-0008 is PROVEN.
+
+Film Pipeline currently proves:
 
 ```text
-human_with_vlm_assist
+SelectedTake
+→ EditManifest
+→ local rough cut
+→ provenance
 ```
 
-Do not reopen QC.
-
-Do not regenerate media.
+Do not expand Film Pipeline into a full post-production engine in this slice.
 
 ---
 
 # 2. Goal
 
-Prove:
+Prevent future mismatch between:
 
 ```text
-SelectedTake
-→ EditManifest
-→ deterministic editorial plan
-→ rough-cut media artifact
-→ validation
-→ provenance/readback
-```
-
-while preserving a clean boundary between:
-
-```text
-editorial intent
+AI-Film-Pipeline
 ```
 
 and:
 
 ```text
-render implementation
+AutoEdit
 ```
 
-The rough cut is NOT the final film master.
+before AutoEdit implementation begins.
+
+This slice does NOT implement AutoEdit.
+
+It freezes only:
+
+```text
+system boundary
+ownership
+compatibility envelope
+producer fixture
+contract expectations
+```
+
+Do NOT freeze the full future EditIR.
 
 ---
 
-# 3. Frozen domain semantics
+# 3. Fundamental relationship
 
-Use existing `EditManifestV1`.
-
-Do not redesign or replace it merely because another format is more convenient.
-
-Canonical editorial state:
+Freeze:
 
 ```text
+AI-Film-Pipeline
+= one optional upstream producer for AutoEdit
+```
+
+It has no architectural privilege.
+
+AutoEdit must also remain able to ingest:
+
+```text
+raw footage
+podcast/interview
+screen recording
+gameplay
+existing timeline/project
+stock media
+AI-generated media
+future producers
+```
+
+Therefore Film-specific concepts must not become required AutoEdit kernel inputs.
+
+---
+
+# 4. Ownership
+
+Freeze ownership boundaries.
+
+## AI-Film-Pipeline owns
+
+```text
+Story
+Scene
+WorldState
+ShotSpec
+PromptPlan
+RoutingDecision
+GenerationAttempt
+ProviderJob
+Asset provenance
+QCReport
+RepairDecision
 SelectedTake
-PickupRequest
-EditManifest
-MasterRecord
 ```
 
-Relationship:
+## AutoEdit owns
 
 ```text
-SelectedTake
-→ EditManifest usage
-
-EditManifest
-→ PickupRequest?
-→ new ShotSpec / GenerationAttempt if necessary
+MediaIndex
+EditIR
+editorial planning
+clip selection within allowed inputs
+trims
+timing
+tracks
+audio
+graphics
+VFX
+color
+preview
+edit critique
+edit repair
+final post-production execution
 ```
 
-Do not create PickupRequest unless actual editorial evidence requires one.
+## Shared integration boundary owns only
+
+```text
+cross-system input/output representation
+contract versioning
+portable identifiers
+media references
+constraints
+provenance links
+```
+
+No shared database.
 
 ---
 
-# 4. Real slice limitation
+# 5. EditManifest semantics
 
-The real project currently contains only one approved SelectedTake.
+Current Film `EditManifestV1` remains valid.
 
-Therefore the real rough cut will naturally be:
+But freeze this interpretation:
 
 ```text
-one clip
+Film EditManifest
+= producer-side editorial intent / suggested assembly / handoff
 ```
 
-This is acceptable for proving real provenance and render plumbing.
-
-However, one clip cannot prove:
+It is NOT:
 
 ```text
-ordering of multiple shots
-cut boundaries
-multi-clip trims
-timeline duration accumulation
-duplicate/missing ordering protection
+AutoEdit EditIR
 ```
 
-Therefore prove those semantics separately with deterministic local fixtures/tests.
-
-Do NOT generate additional AI video solely to make the test look more realistic.
-
----
-
-# 5. Mandatory solution-space exploration
-
-Before implementation, compare all credible editorial strategies.
-
-Use:
+and NOT necessarily:
 
 ```text
-SEARCH
-→ REUSE
-→ COMPARE
-→ COMPOSE
-→ BUILD LAST
+final editorial authority
 ```
 
-Inspect:
+AutoEdit may change:
 
 ```text
-current repository
-AutoVideoPipeline
-existing FFmpeg helpers
-installed local video tooling
-existing Resolve/export utilities if any
-```
-
-Do not assume FFmpeg is automatically the answer.
-
----
-
-# 6. Option A — EditManifest only
-
-Architecture:
-
-```text
-SelectedTake
-→ EditManifest JSON/SQLite
-```
-
-Strength:
-
-```text
-simple
-provider-neutral
-perfect provenance
-no render complexity
-```
-
-Weakness:
-
-```text
-does not prove actual media assembly
-```
-
-Evaluate but likely insufficient alone for SLICE-0008 acceptance.
-
----
-
-# 7. Option B — FFmpeg concat/remux
-
-Possible pipeline:
-
-```text
-EditManifest
-→ resolved source files
-→ concat plan
-→ FFmpeg
-→ rough_cut.mp4
-```
-
-Evaluate:
-
-```text
-stream copy where compatible
-versus
-controlled re-encode
-```
-
-Do not blindly use `-c copy` if trims/keyframes make output semantics unreliable.
-
-Strength:
-
-```text
-lightweight
-mature
-fast
-already aligned with implementation plan
-```
-
-Weakness:
-
-```text
-format compatibility
-keyframe trim behavior
-mixed media characteristics
-```
-
----
-
-# 8. Option C — FFmpeg filtergraph
-
-Possible use for:
-
-```text
-precise trims
-scale/pad normalization
-framerate normalization
-audio handling
-multi-clip concat
-```
-
-Strength:
-
-```text
-deterministic
-precise
-flexible
-```
-
-Weakness:
-
-```text
-more complexity
-usually requires re-encode
-```
-
-Compare against simple concat.
-
-Do not build a giant generic FFmpeg abstraction.
-
----
-
-# 9. Option D — EDL
-
-Evaluate EDL as a Resolve/editorial interchange option.
-
-Strength:
-
-```text
-simple
-well understood
-easy timeline interchange
-```
-
-Weakness:
-
-```text
-limited metadata
-timecode constraints
-weak modern feature representation
-```
-
-Do not select solely because it is historically common.
-
----
-
-# 10. Option E — FCPXML / Resolve-compatible XML
-
-Evaluate whether generating a lightweight Resolve-importable interchange file materially improves V1.
-
-Strength:
-
-```text
-stronger editor handoff
-timeline reconstruction
-```
-
-Weakness:
-
-```text
-schema/version complexity
-Resolve-specific edge cases
-additional testing burden
-```
-
-Do not make Resolve XML the canonical Film state.
-
-It may only be a derived export from EditManifest.
-
----
-
-# 11. Option F — OpenTimelineIO
-
-Evaluate OTIO.
-
-Questions:
-
-```text
-already installed?
-already reused somewhere?
-does it reduce complexity now?
-does the current one-shot pipeline need it?
-```
-
-Current SoT previously positions OTIO as a later upgrade, so do not introduce it merely for architectural elegance.
-
-Select only if concrete reuse/economic evidence justifies it.
-
----
-
-# 12. Option G — direct DaVinci Resolve scripting
-
-Evaluate but treat cautiously.
-
-Potential:
-
-```text
-create project
-import media
-create timeline
-place clips
-```
-
-Benefits:
-
-```text
-direct production integration
-```
-
-Risks:
-
-```text
-local Resolve dependency
-version/API coupling
-headless/runtime complexity
-harder deterministic testing
-```
-
-Do not make Resolve runtime availability required for Film Core.
-
----
-
-# 13. Option H — Remotion / browser video rendering
-
-Explicitly evaluate and likely reject for this kernel unless surprising reuse exists.
-
-The pipeline already has immutable real media clips.
-
-Rendering them through Chromium/React generally adds:
-
-```text
-CPU overhead
-encoding overhead
-browser dependency
-unnecessary abstraction
-```
-
-Do not reuse technology merely because it exists elsewhere.
-
----
-
-# 14. Required architecture decision
-
-Before BUILD, produce:
-
-```text
-OPTION_A_MANIFEST_ONLY
-availability:
-strength:
-weakness:
-decision:
-
-OPTION_B_FFMPEG_CONCAT
-availability:
-strength:
-weakness:
-decision:
-
-OPTION_C_FFMPEG_FILTERGRAPH
-availability:
-strength:
-weakness:
-decision:
-
-OPTION_D_EDL
-availability:
-strength:
-weakness:
-decision:
-
-OPTION_E_FCPXML_RESOLVE
-availability:
-strength:
-weakness:
-decision:
-
-OPTION_F_OTIO
-availability:
-strength:
-weakness:
-decision:
-
-OPTION_G_RESOLVE_SCRIPTING
-availability:
-strength:
-weakness:
-decision:
-
-OPTION_H_REMOTION
-availability:
-strength:
-weakness:
-decision:
-```
-
-Then document the smallest sufficient composition.
-
-Likely target shape, but DO NOT assume before investigation:
-
-```text
-canonical EditManifest
-+
-FFmpeg rough-cut renderer
-+
-optional derived editor handoff artifact
-```
-
----
-
-# 15. EditManifest construction
-
-Construct the real manifest strictly from persisted SelectedTake data.
-
-Do not type asset IDs from memory if store readback is available.
-
-For each clip prove:
-
-```text
-shot exists
-SelectedTake exists
-SelectedTake belongs to shot
-SelectedTake points to Asset
-QCReport final decision = pass
-Asset SHA matches local bytes
-```
-
-Reject unapproved assets.
-
-Reject arbitrary GenerationAttempt output that has not become SelectedTake.
-
----
-
-# 16. Manifest identity
-
-Manifest ID should be deterministic from canonical editorial intent.
-
-Same:
-
-```text
-project
-ordered clips
-source trims
-target durations
-```
-
-should produce the same logical manifest ID.
-
-Changing:
-
-```text
-clip order
-selected take
 trim
+order
+pacing
+transition
+sound
+graphics
+VFX
 ```
 
-must change manifest identity.
-
-Do not include absolute machine-specific filesystem paths in canonical identity.
+unless a constraint is explicitly frozen.
 
 ---
 
-# 17. Ordering rules
+# 6. Generic compatibility envelope
 
-`order` must form an unambiguous timeline.
+Define a conceptual v0 envelope.
 
-For V1 prefer:
+Do NOT over-specify implementation.
 
-```text
-1..N
-```
-
-with:
+Target concept:
 
 ```text
-no duplicate order
-no missing selected_take_id
-no missing asset_id
+EditJobInputV0
+├── contract_version
+├── job_id
+├── media[]
+├── optional_timeline_hint
+├── optional_transcripts
+├── optional_subtitles
+├── optional_semantic_metadata
+├── optional_provenance
+├── user_intent
+├── optional_references
+├── optional_constraints
+└── frozen_constraints
 ```
 
-The schema alone may not enforce uniqueness; runtime validation should.
+Important:
 
-Do not silently sort malformed manifests and pretend they were valid.
+```text
+media[]
+```
+
+must be sufficient for a minimal producer.
+
+Film-specific data belongs under optional enrichment.
 
 ---
 
-# 18. Trim semantics
+# 7. Media entry
 
-Define exact semantics for:
-
-```text
-source_in_s
-source_out_s
-target_duration_s
-```
-
-At minimum:
+Minimum conceptual fields:
 
 ```text
-source_in_s >= 0
-source_out_s > source_in_s when provided
-source_out_s <= actual media duration + documented tolerance
+media_id
+uri or portable locator
+media_type
+duration if known
+sha256 if local immutable bytes exist
+provenance reference if available
 ```
 
-Define whether `target_duration_s` is:
+Optional Film enrichment may include:
 
 ```text
-validation intent
+asset_id
+selected_take_id
+shot_id
+scene_id
+QC status
+ShotSpec-derived intent
+continuity metadata
+camera intent
+dramatic purpose
 ```
 
-or:
-
-```text
-request for retiming
-```
-
-For V1, strongly prefer:
-
-```text
-no implicit speed change
-```
-
-unless current SoT says otherwise.
-
-If target duration differs from trimmed duration, flag rather than silently retime.
+AutoEdit must not require these enrichment fields.
 
 ---
 
-# 19. Audio policy
+# 8. Timeline hint
 
-Explicitly decide V1 behavior.
-
-Possible:
+Film Pipeline may export current `EditManifest` as:
 
 ```text
-preserve source audio
-strip audio
-preserve only when stream exists
+optional_timeline_hint
 ```
 
-Do not accidentally lose source audio because FFmpeg invocation omitted it.
-
-Do not invent music/sound design in this slice.
-
-Record chosen policy.
-
----
-
-# 20. Timeline normalization
-
-Evaluate whether V1 should normalize:
+Semantics:
 
 ```text
-resolution
-pixel format
-frame rate
-audio sample rate
+suggested editorial starting point
 ```
 
-before concat.
-
-For current single real clip, no unnecessary transformation is required.
-
-For deterministic multi-clip fixtures, prove behavior when clip properties differ.
-
-Prefer explicit fail/normalize rules over FFmpeg implicit behavior.
-
----
-
-# 21. RoughCutRecord
-
-Do NOT automatically create a new canonical Film entity unless existing schema/model already provides one.
-
-First search for existing representation.
-
-If none exists, rough-cut render metadata may remain implementation/runtime evidence:
+not:
 
 ```text
-manifest_id
-output_path
-output_sha256
-duration
-resolution
-codec
-render_method
-render_command_fingerprint
-created_from_manifest
+mandatory final timeline
 ```
 
-Canonical truth remains:
+Each field must distinguish:
 
 ```text
-EditManifest
-```
-
-not FFmpeg command lines.
-
----
-
-# 22. Real rough cut
-
-Use:
-
-```text
-FLOW_CANARY_001
-```
-
-and its approved SelectedTake.
-
-Generate:
-
-```text
-rough cut media file
-```
-
-from exactly that selected asset.
-
-No AI generation occurs.
-
-Validate:
-
-```text
-file exists
-non-empty
-ffprobe valid
-video stream exists
-duration consistent with manifest
-expected resolution
-full decode succeeds
-SHA-256 recorded
-```
-
----
-
-# 23. Provenance
-
-Must be able to traverse:
-
-```text
-rough cut
-→ EditManifest
-→ clip
-→ SelectedTake
-→ final QCReport
-→ Asset
-→ GenerationAttempt
-→ ShotSpec
-```
-
-Fresh storage/readback must prove the links.
-
-Do not allow a rendered rough cut with unverifiable source lineage.
-
----
-
-# 24. Deterministic multi-clip proof
-
-Because the live project has only one take, construct local deterministic test media.
-
-Allowed:
-
-```text
-small FFmpeg-generated color/test clips
-existing fixture media
-other deterministic synthetic local media
-```
-
-Not allowed:
-
-```text
-Flow Generate
-Seedance Generate
-external paid generation
-```
-
-Tests must prove:
-
-```text
-2–3 clips ordered correctly
-clip order affects manifest/render
-trims work
-timeline duration is correct
-duplicate order rejected
-invalid source bounds rejected
-missing SelectedTake rejected
-non-approved Asset rejected
-missing file rejected
-wrong SHA rejected
-```
-
----
-
-# 25. Render reproducibility
-
-Distinguish:
-
-```text
-editorial reproducibility
+suggestion
 ```
 
 from:
 
 ```text
-byte-identical encoder reproducibility
+frozen constraint
 ```
 
-The primary V1 guarantee is:
-
-```text
-same canonical manifest resolves to the same editorial sequence
-```
-
-Do not claim byte-identical H.264 output across FFmpeg versions/platforms unless actually proven and controlled.
-
-Record FFmpeg version where useful.
+Do not infer frozen authority merely because Film supplied a value.
 
 ---
 
-# 26. Resolve handoff
+# 9. Frozen constraints
 
-Produce a decision, not necessarily a full integration.
+Create explicit semantics for constraints that AutoEdit must preserve.
 
-At slice end explicitly state one:
+Examples:
 
 ```text
-RESOLVE_HANDOFF = EDIT_MANIFEST_ONLY
+must_use_selected_take
+must_not_reorder
+must_preserve_dialogue
+must_preserve_duration_range
+must_preserve_aspect_ratio
+must_not_crop_character
 ```
 
-or:
+Do NOT build a huge constraint taxonomy.
+
+Create only minimal structure sufficient to distinguish:
 
 ```text
-RESOLVE_HANDOFF = DERIVED_EDL
-```
-
-or:
-
-```text
-RESOLVE_HANDOFF = DERIVED_FCPXML
-```
-
-or another evidence-backed choice.
-
-If no interchange export is justified yet, that is acceptable.
-
-Do not directly automate Resolve merely to check a box.
-
----
-
-# 27. PickupRequest
-
-The real single establishing shot should not create a PickupRequest unless actual editorial evidence finds a missing requirement.
-
-Implement/test the invariant:
-
-```text
-EditManifest can reference zero PickupRequests
-```
-
-Do not fabricate editorial problems.
-
-PickupRequest execution/generation is out of scope.
-
----
-
-# 28. No external-effect authorization
-
-Hard boundary:
-
-```text
-Flow Generate: 0
-Seedance Generate: 0
-Google API consequential generation: 0
-Resolve destructive project modification: 0 unless explicitly authorized later
-```
-
-Local:
-
-```text
-FFmpeg
-ffprobe
-filesystem
-SQLite
-```
-
-are allowed.
-
----
-
-# 29. Independent review
-
-Reviewer must inspect both:
-
-```text
-implementation correctness
-solution-space completeness
-```
-
-Questions:
-
-```text
-Was FFmpeg selected before alternatives were compared?
-Is EditManifest still canonical truth?
-Did render-specific details leak into SelectedTake/ShotSpec?
-Can unapproved Assets enter a timeline?
-Are trims mathematically well-defined?
-Is media provenance complete?
-Are paths machine-dependent inside canonical IDs?
-Did worker overbuild OTIO/Resolve integration prematurely?
-Is a one-clip success being incorrectly claimed as proof of multi-clip editing?
+metadata / suggestion / frozen requirement
 ```
 
 ---
 
-# 30. Acceptance
+# 10. Producer fixture from real SLICE-0008 state
 
-SLICE-0008 is PROVEN when:
+Build one golden fixture from the real proven Film Pipeline state.
+
+Fixture should reference:
 
 ```text
-solution space explored and documented
-EditManifestV1 reused unchanged unless impossible gap proven
-real approved SelectedTake becomes a persisted EditManifest clip
-manifest identity deterministic
-manifest validation rejects invalid lineage/order/trims
-real rough cut is rendered locally
-real rough cut validates and hashes
-rough cut provenance traces to exact SelectedTake/Asset/QC/ShotSpec
-fresh readback succeeds
-multi-clip behavior proven with deterministic fixtures
-no AI generation occurs
+FLOW_CANARY_001
+SelectedTake:
+take_a4f85e57ca88fe9629eb0c377ca6751711116c2f61425d9595d75ba09898647b
+
+Asset:
+asset_c45abad93f33adbf43a6da62f3a04091b1cb712314ef209e6d84bea31a653c01
+
+EditManifest:
+edit_52750848b473f76fd6e14f4007fa30b73a25082017e2d0fa191efcb44526ecc5
+```
+
+Do not embed absolute Windows paths into canonical fixture identity.
+
+Use relative or portable locators.
+
+---
+
+# 11. Additional deterministic fixtures
+
+Create minimal fixture cases:
+
+```text
+one_media_no_timeline
+one_selected_take_with_timeline_hint
+multi_media
+with_transcript
+with_frozen_constraint
+with_optional_film_metadata
+malformed_missing_media
+malformed_bad_version
+malformed_hash_mismatch
+```
+
+No AI generation.
+
+---
+
+# 12. Compatibility rule
+
+A future AutoEdit implementation must be able to accept:
+
+```text
+minimal generic producer fixture
+```
+
+without importing:
+
+```text
+film_pipeline Python modules
+Film SQLite schema
+ShotSpec classes
+QCReport classes
+SelectedTake classes
+```
+
+Film-specific enrichment may improve AutoEdit reasoning but cannot be required.
+
+---
+
+# 13. Producer adapter
+
+Implement only a thin Film-side exporter if necessary:
+
+```text
+Film internal state
+→ EditJobInputV0 fixture/package
+```
+
+No AutoEdit consumer implementation yet.
+
+Do not create:
+
+```text
+HTTP service
+MCP bridge
+message queue
+shared database
+distributed orchestration
+```
+
+Filesystem/package export is sufficient.
+
+---
+
+# 14. Transport
+
+Freeze:
+
+```text
+contract != transport
+```
+
+Initial transport:
+
+```text
+filesystem package
+```
+
+Future transports may include:
+
+```text
+CLI piping
+HTTP
+MCP
+object storage
+queue
+```
+
+without changing semantic contract.
+
+---
+
+# 15. Package form
+
+Prefer something similar to:
+
+```text
+edit_job/
+├── edit_job.json
+├── media/
+│   └── ...
+├── checksums.json
+└── optional/
+    ├── timeline_hint.json
+    ├── transcript.json
+    └── film_metadata.json
+```
+
+Do not require media copying if a safe portable reference is sufficient.
+
+Record whether media is:
+
+```text
+embedded
+referenced
+```
+
+---
+
+# 16. Versioning
+
+Use an explicit compatibility version.
+
+For now:
+
+```text
+0.x
+```
+
+because AutoEdit implementation has not begun.
+
+Meaning:
+
+```text
+experimental compatibility envelope
+not yet stable public API
+```
+
+Do NOT call it `1.0.0` yet.
+
+Do NOT use `"latest"`.
+
+---
+
+# 17. What is deliberately NOT frozen
+
+Explicitly leave open:
+
+```text
+exact EditIR schema
+MediaIndex schema
+AutoEdit persistence model
+backend capability schema
+editor planner protocol
+critic protocol
+repair protocol
+NLE adapters
+OTIO mapping
+Premiere/AE/Resolve implementation
+generic reverse MediaRequest schema
+```
+
+These belong to AutoEdit architecture research.
+
+---
+
+# 18. Reverse direction
+
+Do NOT fully implement AutoEdit → producer communication yet.
+
+Only reserve the conceptual idea:
+
+```text
+AutoEdit may request additional/replacement media
+```
+
+Future generic form might become:
+
+```text
+MediaRequest
+```
+
+Film integration can later map:
+
+```text
+MediaRequest
+→ PickupRequest
+→ ShotSpec
+→ generation
+```
+
+But do not freeze exact schema before AutoEdit research.
+
+---
+
+# 19. Compatibility baseline document
+
+Create:
+
+```text
+docs/integration/AUTOEDIT_COMPATIBILITY_BASELINE_v0.md
+```
+
+It must contain:
+
+```text
+relationship
+ownership
+generic input envelope
+Film enrichment mapping
+EditManifest interpretation
+transport independence
+version policy
+open questions
+non-goals
+```
+
+This document is NOT a replacement for Film SoT or AutoEdit SoT.
+
+It is integration truth only.
+
+---
+
+# 20. Contract tests
+
+Add Film-side producer tests.
+
+Prove:
+
+```text
+exported fixture is deterministic
+same Film state → same canonical package identity
+absolute local paths do not affect identity
+Asset hash retained
+SelectedTake provenance retained
+EditManifest can be included as optional timeline hint
+Film-specific metadata can be removed and package remains structurally valid
+malformed package rejected
+unknown optional fields handled according to chosen v0 rule
+```
+
+---
+
+# 21. Drift prevention
+
+Produce a small compatibility checklist to be copied/reused when AutoEdit repo begins.
+
+Future AutoEdit bootstrap must test against these fixtures.
+
+Required future rule:
+
+```text
+AutoEdit cannot declare ingest V1 PROVEN
+until it consumes the frozen Film producer fixtures
+plus at least one non-Film generic fixture
+```
+
+This prevents AutoEdit from accidentally becoming Film-specific.
+
+---
+
+# 22. No Film SoT rewrite
+
+Do not rewrite frozen Film SoT.
+
+If needed, add only an operating/integration truth delta stating:
+
+```text
+AI-Film-Pipeline is one optional AutoEdit input producer.
+```
+
+No canonical Film entities need removal or renaming.
+
+---
+
+# 23. No AutoEdit implementation
+
+Forbidden in this slice:
+
+```text
+MediaIndex implementation
+EditIR implementation
+EditorBrain
+ModelGateway
+Premiere adapter
+AE adapter
+Resolve adapter
+critic
+repair loop
+```
+
+Those belong to AutoEdit's own architecture lifecycle.
+
+---
+
+# 24. Acceptance
+
+SLICE-0009 is PROVEN when:
+
+```text
+system boundary documented
+ownership documented
+EditManifest handoff semantics documented
+generic EditJobInputV0 envelope documented
+Film-side real golden fixture produced
+generic/minimal fixtures produced
+Film exporter deterministic if implemented
+contract tests pass
+absolute machine paths excluded from canonical identity
+no Film-specific field is structurally mandatory
+transport is explicitly replaceable
+full future EditIR remains unfrozen
+Film SoT remains unchanged
+no AutoEdit implementation begins
 full regression passes
-no secret leakage
-frozen SoT unchanged
 ```
-
-Resolve import is NOT required for PROVEN unless the architecture decision specifically chooses it as required.
 
 ---
 
-# 31. Final report
+# 25. Final report
 
 Return:
 
@@ -897,7 +676,7 @@ RESULT:
 PROVEN | INCONCLUSIVE | DISPROVEN
 
 SLICE:
-SLICE-0008
+SLICE-0009
 
 MODEL:
   model:
@@ -905,65 +684,50 @@ MODEL:
 
 BASELINE_SHA:
 
-EDITORIAL_ARCHITECTURE:
-  canonical:
-  renderer:
-  resolve_handoff:
-  otio:
-  rationale:
+BOUNDARY:
+  film_role:
+  autoedit_role:
+  shared_role:
 
-EDIT_MANIFEST:
-  id:
-  project_id:
-  clip_count:
-  selected_take_ids:
-  deterministic_identity:
-  fresh_readback:
+COMPATIBILITY_ENVELOPE:
+  name:
+  version:
+  required_fields:
+  optional_film_enrichment:
+  timeline_hint_semantics:
+  frozen_constraint_semantics:
 
-REAL_ROUGH_CUT:
-  path:
-  sha256:
-  duration:
-  resolution:
-  codec:
-  audio_policy:
-  full_decode:
-  manifest_match:
+FIXTURES:
+  real_film_fixture:
+  generic_fixture_count:
+  malformed_fixture_count:
 
-PROVENANCE:
-  rough_cut_to_manifest:
-  manifest_to_selected_take:
-  selected_take_to_qc:
-  selected_take_to_asset:
-  asset_to_attempt:
-  attempt_to_shotspec:
-  fresh_readback:
+PRODUCER_EXPORT:
+  implemented:
+  deterministic:
+  portable_paths:
+  package_identity:
 
-MULTI_CLIP_PROOF:
-  fixture_clips:
-  ordering:
-  trims:
-  total_duration:
-  invalid_cases:
+CONTRACT_TESTS:
+  count:
+  result:
 
-PICKUP_REQUEST:
-  created:
-  reason:
-
-GENERATION:
-  flow: 0
-  seedance: 0
+UNFROZEN_AUTOEDIT_AREAS:
+  editir:
+  mediaindex:
+  reverse_media_request:
+  backend_contracts:
 
 REGRESSION:
   tests:
 
-INDEPENDENT_REVIEW:
+SOT_FILES_CHANGED:
 
 CANDIDATE_SHA:
 REMOTE_SHA:
 WORKING_TREE:
 SECRETS_COMMITTED:
-SOT_FILES_CHANGED:
 
 NEXT:
+  AutoEdit may begin architecture/prototype phase against this compatibility baseline.
 ```

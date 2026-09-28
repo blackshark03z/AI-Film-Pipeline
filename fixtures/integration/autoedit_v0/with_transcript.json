@@ -1,0 +1,27 @@
+{
+  "contract_version": "0.1.0",
+  "job_id": "generic_transcript",
+  "media": [
+    {
+      "media_id": "generic_audio",
+      "media_type": "audio",
+      "storage": "embedded",
+      "locator": {
+        "kind": "package_relative",
+        "path": "media/tone.wav"
+      },
+      "sha256": "a36770f6496659756b3ca40f979529c883ad2d96658572151d11fd11c7bf454d",
+      "duration_s": 0.25
+    }
+  ],
+  "optional_transcripts": {
+    "media_id": "generic_audio",
+    "segments": [
+      {
+        "start_s": 0.0,
+        "end_s": 0.25,
+        "text": "Deterministic tone fixture; no speech asserted."
+      }
+    ]
+  }
+}

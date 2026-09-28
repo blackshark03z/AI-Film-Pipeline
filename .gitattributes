@@ -5,3 +5,6 @@ docs/operating/SLICE_0005_WORK_PACKAGE.md -text
 docs/operating/SLICE_0006_WORK_PACKAGE.md -text
 docs/operating/SLICE_0007_OWNER_APPROVAL_WORK_PACKAGE.md -text
 docs/operating/SLICE_0007_WORK_PACKAGE.md -text
+docs/operating/SLICE_0008_WORK_PACKAGE.md -text
+fixtures/integration/autoedit_v0/media/* -text
+fixtures/integration/autoedit_v0/one_selected_take_with_timeline_hint/*.json -text

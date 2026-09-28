@@ -2,8 +2,8 @@
 
 ## Project state
 
-**Lifecycle:** SLICE-0008 editorial rough cut PROVEN; prior SLICE-0004 external effect remains INCONCLUSIVE
-**Current slice:** `SLICE-0008 — EditManifest + Rough Cut Kernel + Editorial Provenance`
+**Lifecycle:** SLICE-0009 producer compatibility baseline PROVEN; prior SLICE-0004 external effect remains INCONCLUSIVE
+**Current slice:** `SLICE-0009 — AutoEdit Compatibility Baseline v0`
 **Film architecture research:** CLOSED  
 **Development lifecycle research:** CLOSED
 
@@ -53,7 +53,7 @@ baseline identity.
 
 ## Next authorized action
 
-Freeze and report the SLICE-0008 candidate at its boundary. The approved Slice7 SelectedTake now belongs to a persisted EditManifest and a validated local one-clip rough cut; fresh SQLite readback covers exact source and render lineage. Do not start SLICE-0009 or invoke AI generation.
+Freeze/report the SLICE-0009 producer compatibility baseline and stop at its boundary. AutoEdit may begin its own architecture/prototype phase against this baseline under its separate work package; no AutoEdit kernel or AI generation begins in this slice.
 
 ## SLICE-0007 QC kernel and human review
 
@@ -66,6 +66,10 @@ The Owner's explicit `APPROVE` was recorded as a separate human decision with `a
 ## SLICE-0008 editorial rough cut
 
 The A–H editorial solution space was compared before build. Existing `EditManifestV1` remains canonical; a small FFmpeg renderer produces derived local rough-cut evidence. The exact approved Slice7 SelectedTake and passing final QCReport were resolved from SQLite, the Asset bytes/hash and ShotSpec/GenerationAttempt lineage were checked, and a one-clip EditManifest was persisted. Its 8-second 1280×720 H.264/AAC rough cut was remuxed, fully decoded, hashed, persisted and freshly read back. Three synthetic clips prove ordering, trims, normalization and duration independently of the one-clip real project. Full regression: 130 passed. No AI generation, PickupRequest, frozen SoT change or secret-bearing artifact. See `SLICE_0008_EDITORIAL_ARCHITECTURE.md` and `SLICE_0008_EVIDENCE.md`.
+
+## SLICE-0009 AutoEdit compatibility baseline
+
+Integration truth defines Film as one optional upstream producer, independent ownership/persistence, a generic experimental `EditJobInputV0` envelope (`0.1.0`), advisory EditManifest handoff and explicit frozen constraints. The thin Film exporter freshly resolves approved persisted lineage and writes a deterministic filesystem package with portable referenced media and checksums. A real golden package, five non-Film generic fixtures and three malformed fixtures are produced. Contract tests: 23 passed; full regression: 153 passed. No Film-specific field is structurally required, and a separate JSON/jsonschema process validates fixtures without Film imports or SQLite. Independent review found a duplicate-JSON-key authority ambiguity; it was fixed with strict recursive parsing and negative tests, then review confirmed no remaining material finding. Full AutoEdit EditIR, MediaIndex, backend/NLE protocols and reverse MediaRequest remain unfrozen. See `docs/integration/AUTOEDIT_COMPATIBILITY_BASELINE_v0.md` and `SLICE_0009_EVIDENCE.md`.
 
 ## Next slice after PROVEN
 

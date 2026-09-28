@@ -1,0 +1,23 @@
+{
+  "contract_version": "0.1.0",
+  "job_id": "generic_enriched",
+  "media": [
+    {
+      "media_id": "generic_image",
+      "media_type": "image",
+      "storage": "embedded",
+      "locator": {
+        "kind": "package_relative",
+        "path": "media/color.ppm"
+      },
+      "sha256": "83c1c13a32583e56e33eafaf162e210ddbdbc5da02399f8a0a0cafa636392a86"
+    }
+  ],
+  "optional_semantic_metadata": {
+    "film": {
+      "shot_id": "FIXTURE_SHOT_001",
+      "camera_intent": "wide",
+      "qc_status": "unspecified"
+    }
+  }
+}
