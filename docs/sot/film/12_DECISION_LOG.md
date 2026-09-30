@@ -29,6 +29,9 @@ Current reality requires it. It is a replaceable transport with preflight, corre
 ### DR-009 — Image-first is optional
 Local Stable Diffusion/ComfyUI is unavailable. The architecture supports future image/keyframe providers without requiring them now.
 
+### DR-010 — Volatile private provider contracts require reverse-qualification on ambiguity
+Undocumented/browser-backed provider contracts are versioned observations, not permanent APIs. A historically proven Flow/Dola/Elyum path may drift at the request, response, catalog, model, reference or session layer without a stable migration notice. When a provider path becomes ambiguous, fail closed: preserve the consumed attempt, reconcile read-only where safe, then reconstruct the **current successful provider operating path** from live evidence before changing the adapter. Do not fix Film Core around stale provider quirks and do not use blind retries to discover a changed contract. Re-qualification requires a bounded canary and a new observed contract/fingerprint before production routing resumes.
+
 ## SUPERSEDED
 
 ### Old heavy infrastructure V1

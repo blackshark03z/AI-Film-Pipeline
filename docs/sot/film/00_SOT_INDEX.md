@@ -96,6 +96,7 @@ Master
 10. V1 defaults to filesystem + JSON/SQLite and one-machine operation.
 11. Model IDs, pricing and provider quirks live in runtime config, never Film IR.
 12. A capability may be unavailable; the system degrades explicitly instead of pretending support.
+13. Private/provider-facing execution contracts are treated as volatile and versioned. A previously proven adapter is historical evidence, not a permanent protocol guarantee. When provider behavior becomes ambiguous or diverges from the last qualified contract, stop mutations, preserve evidence, and re-observe/reconstruct the provider's current successful operating path before changing Film Core or blindly retrying.
 
 ## Package map
 

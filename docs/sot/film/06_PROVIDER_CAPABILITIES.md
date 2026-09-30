@@ -66,6 +66,33 @@ However:
 - Never select "latest output" without correlation evidence.
 - Never use UI/gallery ordering as canonical identity.
 
+## Provider contract drift / reverse-qualification rule
+
+Private, browser-backed and undocumented provider contracts may change without notice, including RPC identifiers, request/response envelopes, model IDs, reference encoding, session/account routing, capability flags and catalog schemas.
+
+Therefore a provider adapter is qualified against an **observed contract version**, not assumed to be permanently valid. The adapter/runtime evidence should retain, where available:
+
+```text
+qualified_at
+contract_version / observed fingerprint
+project/account/session scope
+model identifier(s)
+request structural fingerprint
+response/catalog structural fingerprint
+known-good control evidence
+```
+
+If a previously qualified path becomes ambiguous (for example: HTTP success without attributable output, parser/schema drift, null/empty provider payload, identity mismatch, or UI/manual success while the adapter fails):
+
+1. **STOP provider mutation and blind retries.** Preserve the exact attempt, request hashes, baseline and ambiguity evidence.
+2. **RECONCILE read-only first** against durable provider state when safe.
+3. **REVERSE THE CURRENT WORKING PATH** from an actually successful provider/UI/control execution. Compare wire/request/response/session/model/reference/catalog semantics against the last qualified adapter.
+4. **VERSION THE DELTA** as a provider-contract change. Adapt only the provider layer; do not rewrite ShotSpec/Film State to match provider drift.
+5. **RE-QUALIFY with one bounded canary** before restoring production routing.
+6. If the current contract cannot be uniquely established, keep the provider capability degraded/unavailable and route elsewhere rather than guessing.
+
+Historical Story Auto / AutoVideoPipeline paths are reusable evidence and implementation references, but are never proof that a private Flow/Dola/Elyum contract remains current.
+
 ## Current stack policy
 
 ### Gemini API
