@@ -175,6 +175,41 @@ def parse_rpc(text: str, rpcid: str) -> Any:
     return matched[0]
 
 
+def submission_diagnostics(text: str) -> dict:
+    """Type/structure-only MZZa6b observations. Never infer admission here.
+
+    String values, dictionary keys and numeric values never enter shape hashes.
+    Unparsed bodies are not hashed, logged, retained or recursively inspected.
+    """
+    counts = dict.fromkeys(('null', 'bool', 'int', 'float', 'str', 'list', 'dict'), 0)
+    parsed, shape = False, ['unparsed']
+    try:
+        payload = parse_rpc(text, RPC_VIDEO)
+
+        def safe_shape(value, depth=0):
+            if depth > MAX_JSON_DEPTH:
+                raise ContractError('RESPONSE_DEPTH_EXCEEDED')
+            kind = 'null' if value is None else type(value).__name__
+            if kind not in counts:
+                raise ContractError('RESPONSE_TYPE_UNQUALIFIED')
+            counts[kind] += 1
+            if isinstance(value, list):
+                return ['list', [safe_shape(v, depth + 1) for v in value]]
+            if isinstance(value, dict):
+                # Sort by sanitized value shapes, not secret-bearing key names.
+                return ['dict', sorted([safe_shape(v, depth + 1) for v in value.values()],
+                                       key=lambda v: json.dumps(v, sort_keys=True))]
+            return kind
+
+        shape = safe_shape(payload)
+        parsed = True
+    except (ContractError, ValueError, TypeError, RecursionError):
+        counts = dict.fromkeys(counts, 0)
+    encoded_shape = json.dumps(shape if parsed else ['unparsed'], separators=(',', ':')).encode('utf-8')
+    return {'parsed': parsed, 'type_counts': counts, 'response_bytes_len': len(text.encode('utf-8')),
+        'response_shape_hash': hashlib.sha256(encoded_shape).hexdigest(), 'advisory_only': True}
+
+
 def _deep_decode(value: Any, depth: int = 0) -> Any:
     if depth > MAX_JSON_DEPTH:
         raise ContractError("RESPONSE_DEPTH_EXCEEDED")
@@ -299,6 +334,62 @@ def match_output(
     if len(matches) > 1:
         raise ContractError("OUTPUT_AMBIGUOUS")
     return matches[0] if matches else None
+
+
+def match_r2v_output(records, project_id: str, reference_id: str, provider_job_id: str,
+                     *, baseline_ids: list[str]) -> list | None:
+    """Own an output via project/reference/model/marker/new identity, never marker alone."""
+    from .flow_r2v_prompt import film_marker, MARKER_RE, MODEL
+    marker = film_marker(provider_job_id)
+    _uuid(reference_id, 'REFERENCE_ID_INVALID')
+    _validate_catalog_rows(records, project_id)
+    if (not isinstance(baseline_ids, list)
+            or any(not isinstance(v, str) or not UUID_RE.fullmatch(v) for v in baseline_ids)
+            or len({v.lower() for v in baseline_ids}) != len(baseline_ids)):
+        raise ContractError('OUTPUT_BASELINE_INVALID')
+    baseline = {v.lower() for v in baseline_ids}
+    candidates = [row for row in records if any(marker in text for text in _strings(row))]
+    if len(candidates) > 1:
+        raise ContractError('OUTPUT_MARKER_COLLISION')
+    if not candidates:
+        return None
+    row = candidates[0]
+
+    def owns_prompt(value):
+        if not isinstance(value, str) or MARKER_RE.findall(value) != [marker] or value.count('[FILM-') != 1:
+            raise ContractError('OUTPUT_MARKER_SLOT_MISMATCH')
+
+    if row[0].lower() in baseline:
+        raise ContractError('OUTPUT_PREEXISTING_IDENTITY')
+    if row[0].lower() == reference_id.lower():
+        raise ContractError('OUTPUT_REFERENCE_NOT_DISTINCT')
+    # Length-8 is the qualified video row. Length-7 image rows cannot own R2V.
+    if len(row) != 8:
+        raise ContractError('OUTPUT_VIDEO_SHAPE_UNQUALIFIED')
+    try:
+        owns_prompt(row[5][1])
+        references = row[5][6][1][1]
+        if (not isinstance(references, list) or len(references) != 1
+                or not isinstance(references[0], list) or len(references[0]) != 3
+                or references[0][0] is not None or references[0][1] != 4
+                or references[0][2] != reference_id):
+            raise ContractError('OUTPUT_REFERENCE_MISMATCH')
+        if row[5][6][1][0][0] != MODEL:
+            raise ContractError('OUTPUT_MODEL_MISMATCH')
+        # Core identity slots are mandatory. Redundant lineage, when supplied,
+        # must independently agree; absent optional slots are never fabricated.
+        prompt_lineage = row[5][6][2] if len(row[5][6]) > 2 else None
+        if prompt_lineage is not None:
+            owns_prompt(prompt_lineage[0][2][0][0][0])
+        if row[7] is not None:
+            owns_prompt(row[7][0][7])
+            if row[7][0][12] != MODEL or row[7][2] != [row[0]]:
+                raise ContractError('OUTPUT_LINEAGE_SLOT_MISMATCH')
+    except (IndexError, TypeError, KeyError):
+        raise ContractError('OUTPUT_LINEAGE_SHAPE_DRIFT') from None
+    if row[3] != 'CAE':
+        raise ContractError('OUTPUT_STATUS_UNQUALIFIED')
+    return row
 
 
 def validate_catalog_baseline(meta, records, project_id):

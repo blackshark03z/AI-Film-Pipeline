@@ -1,5 +1,40 @@
 # SLICE-0011 V2 continuation report
 
+## Subsequent implementation-only update
+
+Owner requested compact Flow R2V prompting, sanitized response diagnostics and
+stronger output attribution, with no modification/retry of existing Shot A and
+no dispatch. Implemented the separate `flow-r2v-compact-v1` provider compiler;
+canonical Film PromptPlan stays unchanged. Future adapter prompts use one
+`[FILM-<provider_job_id>]` marker, 149/167 words in current A/B examples.
+MZZa6b diagnostics persist only parse state, fixed type counts, UTF-8 response
+length and a value-free shape hash; they remain advisory and do not prove admission.
+
+Output ownership checks exact project, exactly one qualified reference entry,
+`abra_r2v_8s`, unique marker in primary/available lineage prompt slots, and a new
+UUID relative to baseline. Optional lineage must agree when present. Metadata
+markers, conflicting references/models, duplicate IDs and marker collisions fail
+closed. Existing legacy jobs retain their original immutable prompt contract.
+
+101 focused tests PASS (13.07s), 270 full tests PASS (55.48s), compileall/diff
+PASS. Independent review found/fixed acceptance of additional reference
+entries and confirmed no remaining material blocker. Dramatic purpose,
+performance beats and prop interactions are included. Actual live behavior of
+the new compact prompt/diagnostic path is **unverified**, with no provider calls.
+
+External effects for this update: **0 reference uploads, 0 video submits,
+0 provider read calls, 0 Seedance and 0 billing changes**. Both runtime databases
+are byte-identical before/after; production SHA
+`81cf752dcadf9df60156f77e2971aba47420e9fe68fa8903b18c17cbedcf10bd`, research SHA
+`6054581a1d2fd9824b3a8691f964a11d42b7e9781691612304b7c53869232adf`.
+Shot A still has one consumed attempt/job, INCONCLUSIVE, null output and zero
+bindings. No successor attempt/job, marker, take or assembly was created.
+Owner's pre-existing untracked `scratch/` is preserved and excluded from commit.
+
+Successor proposal: `SLICE_0011_SUCCESSOR_PLAN.md`. No successor runner/gate
+bypass is implemented. Dispatch requires explicit Owner authorization and a
+bounded successor-entry procedure. The historical V2 evidence below is unchanged.
+
 Current evidence supersedes the prior canary-stop report preserved in Git history.
 
 ```json

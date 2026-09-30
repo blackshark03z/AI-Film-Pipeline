@@ -189,8 +189,9 @@ class FlowReferenceRpcSession:
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_CAPTCHA_UNAVAILABLE")
         return token
 
-    def rpc(self, rpc_id: str, body: str, *, on_http_response=None):
-        text = self._rpc_body(rpc_id, body, on_http_response=on_http_response)
+    def rpc(self, rpc_id: str, body: str, *, on_http_response=None, on_submission_diagnostics=None):
+        text = self._rpc_body(rpc_id, body, on_http_response=on_http_response,
+                              on_submission_diagnostics=on_submission_diagnostics)
         try:
             return contract.parse_rpc(text, rpc_id)
         except Exception:
@@ -207,7 +208,8 @@ class FlowReferenceRpcSession:
         except Exception:
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_CATALOG_DRIFT") from None
 
-    def _rpc_body(self, rpc_id: str, body: str, *, on_http_response=None) -> str:
+    def _rpc_body(self, rpc_id: str, body: str, *, on_http_response=None,
+                  on_submission_diagnostics=None) -> str:
         """Return only for strict catalog parser, still never persist raw bytes."""
         meta = self.metadata()
         query = urlencode({"rpcids": rpc_id, "source-path": meta["source"],
@@ -225,6 +227,8 @@ class FlowReferenceRpcSession:
                 text = response.text()
                 if on_http_response:
                     on_http_response(response.status, len(text.encode("utf-8")))
+                if rpc_id == contract.RPC_VIDEO and on_submission_diagnostics:
+                    on_submission_diagnostics(contract.submission_diagnostics(text))
                 if response.status != 200:
                     raise ValueError("HTTP status")
                 if len(text.encode("utf-8")) > 8 * 1024 * 1024:
@@ -307,7 +311,7 @@ class FlowReferenceRpcSession:
         return media_id
 
     def submit_once(self, prompt: str, reference_id: str, request_id: str,
-                    *, before_post=None) -> None:
+                    *, before_post=None, on_diagnostics=None) -> None:
         """Call only after durable ProviderJob reservation."""
         body = contract.build_video(self.project_id, prompt, reference_id,
                                     self.captcha("VIDEO_GENERATION"), request_id)
@@ -317,4 +321,4 @@ class FlowReferenceRpcSession:
         # The qualified transport treats an HTTP 200 with one parsed RPC frame
         # as an acknowledgement only. A null payload is valid; the exact
         # catalog record, never this response, proves acceptance and ownership.
-        self.rpc(contract.RPC_VIDEO, body)
+        self.rpc(contract.RPC_VIDEO, body, on_submission_diagnostics=on_diagnostics)

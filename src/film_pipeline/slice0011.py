@@ -20,6 +20,7 @@ from .live_runtime import (Asset, GenerationAttempt, LiveRuntimeExecutor,
                            file_sha256, inspect_video, make_provider_job, utc_now)
 from .providers import flow_rpc_contract as rpc_contract
 from .providers.flow_reference_upload import OwnerAmbiguityGate, ReferenceUploadStore
+from .providers.flow_r2v_prompt import compile_flow_r2v_prompt, VERSION as R2V_PROMPT_VERSION
 from .sequence import validate_shot_sequence
 from .store import SQLiteStore
 
@@ -231,19 +232,24 @@ def freeze_shot_job(db_path: Path, session, path: tuple,
         provider_id=decision.provider_id, status="created", started_at=started)
     preview = make_provider_job(attempt, project_binding_id=sha256(session.project_id),
                                 pre_dispatch_snapshot=snapshot)
-    prompt = plan.provider_prompt + "\nExecution correlation: " + preview.provider_job_id
-    if rpc_contract.match_output(records, session.project_id, prompt,
-                                 reference_receipt["media_id"]) is not None:
+    compiled = compile_flow_r2v_prompt(plan, preview.provider_job_id)
+    prompt = compiled.text
+    # Empty baseline here detects marker reuse before a fresh intent is frozen.
+    if rpc_contract.match_r2v_output(records, session.project_id, reference_receipt['media_id'],
+                                    preview.provider_job_id, baseline_ids=[]) is not None:
         raise OwnerAmbiguityGate("exact output existed before this shot was dispatched")
     request_hash = sha256({"contract": RPC_CONTRACT, "project": session.project_id,
         "prompt": prompt, "reference_id": reference_receipt["media_id"],
         "job_id": preview.provider_job_id})
-    executor = LiveRuntimeExecutor(store, None)
-    job = executor.freeze_path(shot, plan, decision, attempt,
-        project_binding_id=sha256(session.project_id),
-        pre_dispatch_snapshot=snapshot,
-        extra_correlation_evidence={"reference_binding":
-            _reference_binding(reference_receipt), "rpc_request_hash": request_hash})
+    # Keep the canonical path unchanged. Only this provider's job evidence owns
+    # its compact wire prompt; the generic Film compiler/runtime stays neutral.
+    store.save_path(shot, plan, decision, attempt)
+    job = preview.model_copy(update={'correlation_evidence': {
+        'prompt': prompt, 'prompt_plan_hash': sha256(plan),
+        'submission_prompt_hash': sha256(prompt), 'correlation_marker': compiled.marker,
+        'provider_prompt_compiler': compiled.version,
+        'reference_binding': _reference_binding(reference_receipt), 'rpc_request_hash': request_hash}})
+    store.save_provider_job(job)
     if job.provider_job_id != preview.provider_job_id:
         raise ValueError("provider job identity changed during freeze")
     return store.read_provider_job(job.provider_job_id)
@@ -253,6 +259,17 @@ def _reference_binding(receipt: dict) -> dict:
     return {key: receipt[key] for key in ("asset_id", "reference_sha256",
                                           "project_id", "media_id",
                                           "provider_media_sha256")}
+
+
+def _match_job_output(records, session, job):
+    binding = job.correlation_evidence['reference_binding']
+    if job.correlation_evidence.get('provider_prompt_compiler') == R2V_PROMPT_VERSION:
+        return rpc_contract.match_r2v_output(records, session.project_id, binding['media_id'],
+            job.provider_job_id, baseline_ids=job.pre_dispatch_snapshot['catalog_ids'])
+    # Immutable legacy jobs keep their original exact-prompt contract. No
+    # reinterpretation or rewrite of the ambiguous Shot A is authorized.
+    return rpc_contract.match_output(records, session.project_id,
+        job.correlation_evidence['prompt'], binding['media_id'])
 
 
 class _ExactMediaTransport:
@@ -333,11 +350,15 @@ def submit_and_acquire_shot(db_path: Path, session, job, output_dir: Path,
         raise OwnerAmbiguityGate("frozen request/reference identity mismatch")
     if job.dispatch_count != 0:
         raise OwnerAmbiguityGate("shot submit already reserved; no redispatch")
+    if job.correlation_evidence.get('provider_prompt_compiler') == R2V_PROMPT_VERSION:
+        compiled = compile_flow_r2v_prompt(frozen_path[1], job.provider_job_id)
+        if (prompt != compiled.text or job.correlation_evidence.get('correlation_marker') != compiled.marker
+                or job.correlation_evidence.get('submission_prompt_hash') != sha256(prompt)):
+            raise OwnerAmbiguityGate('compact provider prompt differs from frozen canonical intent')
     baseline = session.catalog()
     if sorted(row[0].lower() for row in baseline) != job.pre_dispatch_snapshot["catalog_ids"]:
         raise OwnerAmbiguityGate("provider catalog changed after frozen baseline")
-    if rpc_contract.match_output(baseline, session.project_id, prompt,
-                                 binding["media_id"]) is not None:
+    if _match_job_output(baseline, session, job) is not None:
         raise OwnerAmbiguityGate("pre-submit output ownership collision")
     reserved = store.reserve_dispatch(job.provider_job_id)
     try:
@@ -348,8 +369,11 @@ def submit_and_acquire_shot(db_path: Path, session, job, output_dir: Path,
                 {"request_hash": request_hash, "body_sha256": body_sha,
                  "contract": RPC_CONTRACT})
 
-        session.submit_once(prompt, binding["media_id"], request_id,
-                            before_post=before_post)
+        submit_options = {'before_post': before_post}
+        if job.correlation_evidence.get('provider_prompt_compiler') == R2V_PROMPT_VERSION:
+            submit_options['on_diagnostics'] = lambda diagnostic: store.record_dispatch_fact(
+                job.provider_job_id, 'R2V_RESPONSE_DIAGNOSTICS', {'request_hash': request_hash, **diagnostic})
+        session.submit_once(prompt, binding["media_id"], request_id, **submit_options)
         armed = next(f for f in store.read_dispatch_facts(job.provider_job_id)
                      if f["kind"] == "RPC_REQUEST_ARMED")
         store.record_dispatch_fact(job.provider_job_id, "GENERATE_REQUEST_OBSERVED",
@@ -358,8 +382,7 @@ def submit_and_acquire_shot(db_path: Path, session, job, output_dir: Path,
             {"request_hash": request_hash, "status": 200})
         deadline = time.monotonic() + poll_seconds
         while True:
-            row = rpc_contract.match_output(session.catalog(), session.project_id,
-                                            prompt, binding["media_id"])
+            row = _match_job_output(session.catalog(), session, job)
             if row is not None:
                 output_id = row[0]
                 if output_id.lower() in job.pre_dispatch_snapshot["catalog_ids"]:
@@ -416,8 +439,7 @@ def reconcile_and_acquire_shot(db_path: Path, session, job,
             or receipt is None or binding != _reference_binding(receipt)):
         raise OwnerAmbiguityGate("reserved request/reference cannot be reconciled")
     try:
-        row = rpc_contract.match_output(session.catalog(), session.project_id,
-            job.correlation_evidence["prompt"], binding["media_id"])
+        row = _match_job_output(session.catalog(), session, job)
     except Exception as exc:
         raise OwnerAmbiguityGate("provider catalog cannot be reconciled") from exc
     if row is None or row[0].lower() in job.pre_dispatch_snapshot["catalog_ids"]:

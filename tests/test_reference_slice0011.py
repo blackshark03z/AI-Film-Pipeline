@@ -199,7 +199,7 @@ class FakeSession:
     def media(self, media_id, kind):
         return self.remote_images.get(media_id)
 
-    def submit_once(self, prompt, reference_id, request_id, *, before_post):
+    def submit_once(self, prompt, reference_id, request_id, *, before_post, on_diagnostics=None):
         self.submits += 1
         before_post("2" * 64)
         raise TimeoutError("HTTP outcome unknown")

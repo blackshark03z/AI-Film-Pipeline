@@ -1,5 +1,43 @@
 # SLICE-0011 execution status
 
+## Latest continuation — compact R2V implementation only
+
+Owner explicitly forbids modifying/retrying the existing Shot A and authorizes
+only a compact provider adapter, sanitized diagnostics, stronger attribution,
+deterministic tests and a successor plan without dispatch. Baseline
+`d958067d20a0961c0f350bdd08085a925aa676c3`; pre-existing untracked `scratch/`
+belongs to the Owner and is preserved/excluded from staging.
+
+Implemented `flow-r2v-compact-v1`: canonical Film compiler/PromptPlan unchanged;
+future Flow job evidence uses concise prose plus exactly one full
+`[FILM-<provider_job_id>]` marker. Current A/B previews: 149/167 words,
+1072/1177 characters. Sanitized MZZa6b diagnostics are type/shape-only, journaled
+before parse/HTTP failure, advisory rank 0, and never imply admission. Attribution
+requires project + one exact structured reference + abra_r2v_8s + qualified
+marker slots + identity absent from baseline + agreeing lineage where present;
+collision/multiple candidates fail closed. Legacy frozen jobs are unchanged.
+
+32 new compact-adapter cases and all prior focused transport tests PASS:
+**101 focused PASS (13.07s), 270 full PASS (55.48s)**. Compileall and
+diff check PASS. Independent review found extra-reference acceptance, fixed
+with exact-one-reference guards and negatives; also preserved nonredundant
+performance/prop intent. Reviewer confirms no material blocker, no provider calls.
+
+**External effects in this implementation continuation: 0 provider calls,
+0 uploads, 0 video submissions, 0 billing/Seedance actions.** Production database
+whole-file SHA before/after is identical:
+`81cf752dcadf9df60156f77e2971aba47420e9fe68fa8903b18c17cbedcf10bd`.
+Research database whole-file SHA unchanged:
+`6054581a1d2fd9824b3a8691f964a11d42b7e9781691612304b7c53869232adf`.
+Readback used SQLite mode=ro: A still one attempt/job, dispatch_count=1,
+INCONCLUSIVE/null output, zero bindings; B has no attempt/job. No successor row
+or actual marker is allocated. CLI ambiguity guard remains intact.
+
+Next: review `SLICE_0011_SUCCESSOR_PLAN.md`. A new successor dispatch requires
+explicit Owner authorization of exact scope/limit and a separately reviewed
+successor-entry procedure. No compact-prompt live qualification is claimed.
+The historical provider stop and recovery evidence below remain valid.
+
 ## Latest result — V2 Shot A OWNER_AMBIGUITY_GATE
 
 Both existing references remain durably VERIFIED at the exact Owner UUIDs;

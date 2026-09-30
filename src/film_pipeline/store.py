@@ -195,7 +195,8 @@ class SQLiteStore:
                         if old.get(field, 'legacy-v1' if field == 'dispatch_protocol' else None) != getattr(job, field):
                             raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
                     for key in ('prompt', 'prompt_plan_hash', 'submission_prompt_hash',
-                                'correlation_marker', 'reference_binding', 'rpc_request_hash'):
+                                'correlation_marker', 'reference_binding', 'rpc_request_hash',
+                                'provider_prompt_compiler'):
                         if old['correlation_evidence'].get(key) != job.correlation_evidence.get(key):
                             raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
                     if old.get('external_job_id') and old['external_job_id'] != job.external_job_id:
@@ -309,6 +310,10 @@ class SQLiteStore:
             request = next((f for f in facts if f['kind'] == 'GENERATE_REQUEST_OBSERVED'), None)
             if request is None or request['data']['request_hash'] != data.get('request_hash'):
                 raise ValueError('RESPONSE_REQUEST_BINDING_MISMATCH')
+        if kind == 'R2V_RESPONSE_DIAGNOSTICS':
+            armed = next((f for f in self.read_dispatch_facts(job_id) if f['kind'] == 'RPC_REQUEST_ARMED'), None)
+            if armed is None or armed['data']['request_hash'] != data.get('request_hash'):
+                raise ValueError('DIAGNOSTICS_REQUEST_BINDING_MISMATCH')
         connection = self._connect()
         try:
             connection.execute('BEGIN IMMEDIATE')

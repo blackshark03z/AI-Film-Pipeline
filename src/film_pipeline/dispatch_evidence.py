@@ -18,6 +18,7 @@ RANK = {
     'RPC_REQUEST_ARMED': 4,
     'TRUSTED_CLICK_OBSERVED': 4, 'PROMPT_ACCEPTANCE_TRANSITION': 4,
     'GENERATE_REQUEST_OBSERVED': 5, 'PROVIDER_RESPONSE_OBSERVED': 6,
+    'R2V_RESPONSE_DIAGNOSTICS': 0,
     'PROVIDER_ACCEPTANCE_OBSERVED': 7, 'REMOTE_IDENTITY_OBSERVED': 8,
     'IDENTITY_BOUND': 9, 'DOWNLOAD_STARTED': 10,
     'DOWNLOAD_VALIDATED': 11, 'ASSET_PERSISTED': 12,
@@ -30,6 +31,8 @@ FIELDS = {
     'TRUSTED_CLICK_OBSERVED': set(), 'PROMPT_ACCEPTANCE_TRANSITION': set(),
     'GENERATE_REQUEST_OBSERVED': {'request_hash', 'body_sha256', 'contract'},
     'PROVIDER_RESPONSE_OBSERVED': {'request_hash', 'status'},
+    'R2V_RESPONSE_DIAGNOSTICS': {'request_hash', 'parsed', 'type_counts',
+        'response_bytes_len', 'response_shape_hash', 'advisory_only'},
     'PROVIDER_ACCEPTANCE_OBSERVED': {'request_hash', 'provider_reference', 'contract'},
     'REMOTE_IDENTITY_OBSERVED': {'output_id', 'method'},
     'IDENTITY_BOUND': {'output_id', 'binding_hash'},
@@ -52,7 +55,20 @@ def validate_fact(kind, data):
     if kind not in FIELDS or not isinstance(data, dict) or set(data) != FIELDS[kind]:
         raise ValueError('INVALID_DISPATCH_FACT')
     for key, value in data.items():
-        if key == 'status':
+        if key == 'parsed':
+            if type(value) is not bool:
+                raise ValueError('INVALID_DIAGNOSTIC_PARSED')
+        elif key == 'advisory_only':
+            if value is not True:
+                raise ValueError('DIAGNOSTICS_MUST_BE_ADVISORY')
+        elif key == 'type_counts':
+            if (not isinstance(value, dict) or set(value) != {'null', 'bool', 'int', 'float', 'str', 'list', 'dict'}
+                    or any(type(v) is not int or v < 0 for v in value.values())):
+                raise ValueError('INVALID_DIAGNOSTIC_TYPE_COUNTS')
+        elif key == 'response_bytes_len':
+            if type(value) is not int or value < 0:
+                raise ValueError('INVALID_DIAGNOSTIC_BYTE_LENGTH')
+        elif key == 'status':
             if type(value) is not int or not 100 <= value <= 599:
                 raise ValueError('INVALID_RESPONSE_STATUS')
         elif key.endswith('sha256') or key.endswith('_hash'):
