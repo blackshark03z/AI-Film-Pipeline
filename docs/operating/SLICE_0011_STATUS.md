@@ -1,5 +1,15 @@
 # SLICE-0011 execution status
 
+## Latest state — live canary OWNER_AMBIGUITY_GATE
+
+Owner completed sign-in in ordinary Chrome opened from the prepared Desktop shortcut and closed that dedicated window. Playwright exported its existing cookies using the ordinary browser-context API; fresh private-RPC runner preflight passed exact project access, 3 catalog records and fingerprint `78ca7a1c3048b2c86802981696ca7e196752a661a027d3f11b8b5edece84e049`. Authentication is resolved.
+
+The one authorized research upload was armed, and its actual HTTP callback observed status **200**, response **647 bytes**. No qualified media UUID was obtained/persisted. Durable research reservation `refup_2773df1c9a68e852ad4ccad0abbe1c12ed9cd7f1ccb02984ef181df9538275dd` has `upload_attempts=1`, legacy `RESERVED`, null identity/provider hash, and four immutable events: `LOCAL_RESERVED → REQUEST_ARMED → HTTP_RESPONSE_OBSERVED → FAILED_AMBIGUOUS`. HTTP200 does not prove upload acceptance or success. Effective stop: **OWNER_AMBIGUITY_GATE**, `upload_response_unresolved`; live qualification is not proven.
+
+Only secret-free local SQLite evidence was read after the stop; **0 provider queries/writes after the gate**. Research allowance is consumed; no retry/replacement/new lineage. Original frozen reservation is unchanged, with 0 GenerationAttempts/ProviderJobs and 0 Shot A/B submits. Original forensic recovery, QC/takes/assembly/export remain unstarted. Canonical ignored timeline SHA `c8f75c6441a8e53dba94cf432553a1fae35ea50e32c9efb4a3a1e8b83b1a9903`.
+
+Next: explicit Owner ambiguity procedure for the research canary. Bounded read-only canary reconciliation requires new Owner direction and authorizes no additional upload. No original recovery/generation until live qualification passes. Existing 42 focused/211 full tests and independent prewrite review establish offline behavior only; production source has not changed during auth/canary operations. Historical auth notes below are superseded by this state.
+
 ## Current continuation stop — 2026-09-30
 
 ### Owner login follow-up: browser ready, cookie transfer pending

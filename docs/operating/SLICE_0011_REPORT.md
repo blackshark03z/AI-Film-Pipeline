@@ -1,19 +1,13 @@
-# SLICE-0011 continuation report — authentication stop
+# SLICE-0011 continuation report — live canary ambiguity stop
 
 ```text
 RESULT:
-OWNER_AUTH_REQUIRED; SLICE-0011 is not PROVEN.
-Current subcondition: browser sign-in/project access confirmed; fresh cookie
-transfer to the private-RPC runner is unavailable through supported browser API.
-Latest operator stop: separate automated Chrome capture encountered Google's
-browser-security sign-in rejection. Capture helper stopped, no cookie saved.
-Ordinary Chrome direct launch rejected by automatic approval review:
-"blocked by policy", no more specific reason; supported Chrome connector absent.
-Owner must open ordinary Chrome manually for standard sign-in; no bypass used.
-Latest handoff: verified Desktop shortcut "Flow - SLICE-0011.lnk" prepared,
-not executed; Owner signs in/closes dedicated ordinary Chrome, then Playwright
-captures that profile's cookies and validates runner preflight. Helper prepared
-and compiled only; manual session/canary still unproven, new provider writes zero.
+OWNER_AMBIGUITY_GATE; SLICE-0011 is not PROVEN.
+Authentication resolved: Owner signed in through ordinary Chrome; Playwright
+exported its dedicated profile cookies and qualified exact-project runner access.
+The authorized research canary consumed its one arm and observed HTTP200,647 bytes,
+but obtained no durably qualified media identity. Effective state FAILED_AMBIGUOUS.
+No provider query/write followed the stop. Original frozen row unchanged.
 
 MODEL:
 model: Codex based on GPT-6 (developer identity); exact serving variant not exposed.
@@ -62,24 +56,34 @@ project: f6b40e79-d6f8-4354-80ae-c863260e96f5
 isolation: distinct synthetic geometric image and dedicated fixed local DB;
            existing project reused; no new project creation.
 reference_sha: dc766e136c039ce4ae25f78dc7555c161a6178e8c835cf3d37600b4d7d0e8b0e
-upload_count: 0; command invoked once, session bootstrap stopped before transport.
+upload_count: one armed upload attempt; successful remote uploads UNKNOWN.
+reservation: refup_2773df1c9a68e852ad4ccad0abbe1c12ed9cd7f1ccb02984ef181df9538275dd
+request_id: e817207e-f0c4-5b90-b425-33230e3f7b9d
+asset_id: asset_88e3948cd04cd4651ff49034e5d38d6d97109a6ec7e28d12d0e01dd303f5396c
+request_body_sha256: 3f0bf242a4d876f8296bebbe37b17cf1bf10b68eeaddfced0bc7aedb60f44c5a
+network_observation: exactly one durable HTTP_RESPONSE_OBSERVED;status200;647 bytes.
+remote_acceptance: UNKNOWN; HTTP200 alone does not establish uploaded resource.
 media_id: null
 media_verified: not reached
 restart_recovery: live unproven; offline covered
-duplicate_uploads: 0 in this continuation; no global zero-duplicate guarantee
-ambiguity: no upload uncertainty introduced; project session unavailable.
-durable_state: 1 reference Asset, 0 reservations, 0 events, 0 attempts, 0 jobs.
-session_evidence: browser launch OK; separate read-only diagnostic HTTP200,
- flow.google.com/about, document complete, no session token/captcha API,
- no login input/signin text, TimeoutError at metadata wait, 0 RPC POSTs.
-auth_cause: cookie expiration unconfirmed. Standard login/project access required.
-login_followup: Owner logged in; original password tab unresponsive. Fresh same-
-browser tab worked; visible account chooser selection hoangbsea opened exact
-project at /u/3/project/f6b40e79-d6f8-4354-80ae-c863260e96f5; UI fully loaded.
-cookie_transfer: supported Codex browser API has no cookie export. Browser context
-cookie API export from previous dedicated owned Flow profile produced a local
-candidate, but its read-only project preflight still returned OwnerAuthRequired.
-Candidate unqualified; no upload/video RPC calls; no canary rerun or arm.
+duplicate_uploads: no additional application attempt/reupload after this canary;
+                  no global zero-duplicate guarantee.
+ambiguity: upload_response_unresolved; precise provider/parser failure unobserved.
+durable_state: 1 reference Asset,1 reservation,4 events,0 video attempts,0 jobs.
+effective_state: FAILED_AMBIGUOUS; legacy row RESERVED;media_id/provider_sha null.
+event_order: LOCAL_RESERVED -> REQUEST_ARMED -> HTTP_RESPONSE_OBSERVED -> FAILED_AMBIGUOUS.
+qualified_session: MANUAL_CHROME_SESSION_PASS;3 catalog records;fingerprint
+ 78ca7a1c3048b2c86802981696ca7e196752a661a027d3f11b8b5edece84e049.
+auth_history: embedded browser lacked cookie export; automated Chrome sign-in was
+ rejected by Google; direct ordinary launch rejected by automatic approval review
+ with "blocked by policy". Owner opened verified Desktop shortcut manually and
+ closed that dedicated Chrome; ordinary Playwright context API exported cookies.
+ No stealth patch, security disabling, challenge bypass or credential decryption.
+initial_canary_invocation: stopped before transport while unauthenticated,0 arms.
+qualified_canary_invocation: one allowed arm/HTTP response; allowance now consumed.
+restart_after_stop: not invoked; never rerun canary or use a new lineage.
+stop_evidence_sha256: c8f75c6441a8e53dba94cf432553a1fae35ea50e32c9efb4a3a1e8b83b1a9903
+provider_queries_after_stop: 0
 
 FROZEN_RESERVATION_RECOVERY:
 reservation_id: refup_1521a9ea3a8582852abbe2b97bf8de4df2ddba6cb689df67c04e06b26021e3ce
@@ -130,23 +134,28 @@ package: none
 media_count: 0
 
 EXTERNAL_EFFECTS (this continuation):
-research_reference_uploads: 0
+research_reference_uploads: 1 armed attempt; successful remote uploads UNKNOWN.
 slice_reference_reuploads: 0
 Flow_video_generations: 0
 Seedance_generations: 0
 billing_changes: 0
 
 AMBIGUITIES_ENCOUNTERED:
-Original frozen upload remains unresolved. New session bootstrap initially returned
-FLOW_REFERENCE_RPC_SESSION_NOT_READY; read-only sanitized diagnosis and visible
-browser evidence establish an authentication/project-access operator gate.
-No upload retry, forensic recovery or video dispatch followed this stop.
+Original frozen upload remains unresolved. Earlier auth operator gates resolved.
+New live canary observed HTTP200 but did not qualify/persist a media UUID;
+upload_response_unresolved stop. No raw authenticated response was retained.
+No retry, canary remote reconciliation, frozen forensic recovery or video dispatch
+followed OWNER_AMBIGUITY_GATE. Both upload allowances now remain consumed/uncertain.
 
 INDEPENDENT_REVIEW:
 Planner design integrated. Reviewer found/fixed production --root bypass and
 canary-artifact restart issue; subsequent review found no material blocker.
 Final /about auth classification and two bootstrap tests also reviewed clean.
 No reviewer provider calls. Live qualification remains unproven.
+Post-canary independent read-only audit: all four event hashes/order match the
+canonical artifact; original frozen row unchanged;0 attempts/jobs both databases;
+canary restart guard stops before opening Flow. No material stop-handling defect.
+HTTP200 does not establish remote acceptance/resource creation. No reviewer writes.
 
 REGRESSION:
 focused 42 PASS; full 211 PASS; compileall src/tests PASS; diff check PASS.
@@ -159,14 +168,12 @@ CANDIDATE_SHA: resolved from final committed HEAD in human handoff.
 REMOTE_SHA: verified remote branch SHA supplied with human handoff after push.
 
 NEXT:
-Owner sign-in and exact project access now confirmed in the visible browser.
-Operator must provide a fresh local cookie JSON export from that authenticated
-Flow session and its path; never paste credential values in chat. Resume the
-same fixed canary lineage using
-the existing unconsumed one-upload allowance, then fresh local readback; only
-after PASS perform authorized bounded frozen forensic reconciliation. Original
-upload may never be retried. No generation until all reference gates pass;
-joint human character review remains mandatory. No SLICE-0012.
+Owner must resolve the new research canary ambiguity before further live work.
+Any later bounded read-only canary reconciliation needs explicit Owner direction;
+it grants no new upload allowance and is not performed by this handoff.
+No frozen forensic recovery until canary qualification passes. Original and canary
+uploads may never be blindly retried/replaced. No generation until all reference
+gates pass; joint human character review remains mandatory. No SLICE-0012.
 ```
 
 ## Files and safe local evidence
@@ -175,4 +182,6 @@ joint human character review remains mandatory. No SLICE-0012.
 - Tests: `tests/test_reference_slice0011.py`, `tests/test_reference_reconcilable_transport.py`.
 - Operating records: this report, `SLICE_0011_STATUS.md`, `SLICE_0011_REFERENCE_RECOVERY.md`.
 - Ignored local bootstrap evidence: `projects/character_continuity/reference_qualification_20260930/session_failure.json`.
+- Ignored qualified session metadata: `projects/character_continuity/reference_qualification_20260930/manual_chrome_session.json` (no cookie values).
+- Ignored canonical stop timeline: `projects/character_continuity/reference_qualification_20260930/canary-stop-c8f75c6441a8e53dba94cf432553a1fae35ea50e32c9efb4a3a1e8b83b1a9903.json`.
 - Ignored research/original SQLite files remain local. Original row read without mutation; uncertain outcome retained.
