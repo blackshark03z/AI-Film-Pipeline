@@ -4,6 +4,14 @@
 
 ### Owner login follow-up: browser ready, cookie transfer pending
 
+### Standard Chrome capture follow-up: Google sign-in rejection
+
+Owner chose a separate Chrome window with automatic local session capture. A plain Playwright/Chrome window with a fresh dedicated profile opened standard Google sign-in; Owner reported Google's “This browser or app may not be secure” rejection. No authenticated project/cookie capture was completed. Google's supported-browser guidance lists software-controlled browsers among possible rejected sign-in environments; the specific cause is not independently confirmed.
+
+The owned capture helper was stopped and its process absence verified. A subsequent direct launch of ordinary Chrome without automation/debugging flags was **rejected by automatic approval review**, returning only `blocked by policy`; no narrower reason was supplied and that launch did not occur. The supported Chrome browser connector also returned `Browser is not available: chrome`. No alternative launch wrapper, security-check disabling, stealth browser, credential entry or challenge bypass was attempted.
+
+Current operator action: open ordinary Chrome manually from Windows, sign in to Flow as `hoangbsea`, open the exact existing project, and report completion. Current gate remains `OWNER_AUTH_REQUIRED`; fresh exported runner session remains unqualified. All new upload/video counts remain zero; original reservation is unchanged. Source: https://support.google.com/accounts/answer/7675428?co=GENIE.Platform%3DDesktop&hl=en .
+
 Owner reported sign-in complete but loading. The original Google password tab was unresponsive to both accessibility and screenshot observations. A fresh tab in the same Codex browser worked. Flow initially used another signed-in account; selecting `hoangbsea` from Google's visible account chooser opened the exact existing project at `/u/3/project/f6b40e79-d6f8-4354-80ae-c863260e96f5`. Its project UI finished loading, and the visible account control confirmed Hoang/hoangbsea. No project/media modification occurred.
 
 The browser authentication step is complete. The remaining **OWNER_AUTH_REQUIRED** action is a fresh local cookie export usable by the private-RPC runner. The supported Codex browser API exposes no cookie/session export capability. An Owner-authorized cookie export from the previously dedicated `google_flow_slice0010_owned_profile` was attempted using the documented browser context API, with no credential decryption or profile copying. Its read-only project preflight still returned `OwnerAuthRequired`; that candidate is unqualified and must not be used for upload. No canary retry or upload arm, frozen recovery, or generation occurred.

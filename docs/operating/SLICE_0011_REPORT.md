@@ -5,6 +5,11 @@ RESULT:
 OWNER_AUTH_REQUIRED; SLICE-0011 is not PROVEN.
 Current subcondition: browser sign-in/project access confirmed; fresh cookie
 transfer to the private-RPC runner is unavailable through supported browser API.
+Latest operator stop: separate automated Chrome capture encountered Google's
+browser-security sign-in rejection. Capture helper stopped, no cookie saved.
+Ordinary Chrome direct launch rejected by automatic approval review:
+"blocked by policy", no more specific reason; supported Chrome connector absent.
+Owner must open ordinary Chrome manually for standard sign-in; no bypass used.
 
 MODEL:
 model: Codex based on GPT-6 (developer identity); exact serving variant not exposed.
