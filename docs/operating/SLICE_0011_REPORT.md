@@ -10,6 +10,10 @@ browser-security sign-in rejection. Capture helper stopped, no cookie saved.
 Ordinary Chrome direct launch rejected by automatic approval review:
 "blocked by policy", no more specific reason; supported Chrome connector absent.
 Owner must open ordinary Chrome manually for standard sign-in; no bypass used.
+Latest handoff: verified Desktop shortcut "Flow - SLICE-0011.lnk" prepared,
+not executed; Owner signs in/closes dedicated ordinary Chrome, then Playwright
+captures that profile's cookies and validates runner preflight. Helper prepared
+and compiled only; manual session/canary still unproven, new provider writes zero.
 
 MODEL:
 model: Codex based on GPT-6 (developer identity); exact serving variant not exposed.
