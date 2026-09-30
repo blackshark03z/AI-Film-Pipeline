@@ -14,7 +14,7 @@ from pathlib import Path
 
 from film_pipeline.providers.flow_reference_rpc import FlowReferenceRpcSession
 from film_pipeline.slice0011 import (
-    ACCOUNT_ID, PROJECT_ID, compile_character_paths, freeze_reference, freeze_shot_job,
+    ACCOUNT_ID, PROJECT_ID, ROOT, compile_character_paths, freeze_reference, freeze_shot_job,
     submit_and_acquire_shot, reconcile_and_acquire_shot,
     upload_reference_once, _existing_job_for_shot,
 )
@@ -25,11 +25,28 @@ from film_pipeline.store import SQLiteStore
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("stage", choices=("preflight", "upload", "shot-a", "shot-b",
-                                          "recover-a", "recover-b"))
-    parser.add_argument("--cookie", type=Path, required=True)
-    parser.add_argument("--root", type=Path, default=Path("projects/character_continuity/slice0011"))
+                                          "recover-a", "recover-b", "reference-canary",
+                                          "reference-canary-readback", "recover-reference"))
+    parser.add_argument("--cookie", type=Path)
     args = parser.parse_args()
-    root = args.root.resolve()
+    if args.stage in {'reference-canary', 'reference-canary-readback', 'recover-reference'}:
+        from film_pipeline.reference_qualification import (
+            run_live_canary, read_live_qualification, recover_frozen_reference)
+        if args.stage == 'reference-canary-readback':
+            result = read_live_qualification()
+        else:
+            if args.cookie is None:
+                raise ValueError('explicit local cookie export required')
+            result = (run_live_canary(args.cookie) if args.stage == 'reference-canary'
+                      else recover_frozen_reference(args.cookie))
+        print(json.dumps(result), flush=True)
+        return 0
+    if args.cookie is None:
+        raise ValueError('explicit local cookie export required')
+    if args.stage in {'shot-a', 'shot-b', 'recover-a', 'recover-b'}:
+        from film_pipeline.reference_qualification import require_production_reference
+        require_production_reference()
+    root = (ROOT / 'projects/character_continuity/slice0011').resolve()
     db_path = root / "runtime.sqlite"
     reference = freeze_reference(db_path, root / "reference")
     _, profile, paths = compile_character_paths(db_path)

@@ -152,24 +152,12 @@ def upload_reference_once(db_path: Path, session, reference: Asset,
     if (reference != frozen or reference.asset_id != REFERENCE_ASSET_ID
             or reference.sha256 != REFERENCE_SHA256):
         raise ValueError("only the frozen SLICE-0011 reference may be uploaded")
-    session.catalog()
-    if session.catalog_fingerprint != rpc_contract.QUALIFIED_BASELINE_FINGERPRINT:
-        raise ValueError("FLOW_REFERENCE_RPC_DRIFT")
     uploads = ReferenceUploadStore(db_path)
-    receipt = uploads.read_verified("flow_veo", project_id, account_id, reference)
-    if receipt is not None:
-        return receipt
-    reservation = uploads.reserve_once("flow_veo", project_id, account_id, reference)
-    try:
-        media_id, media_sha = session.upload_once(
-            Path(reference.uri_or_path), reservation["request_id"], reference.sha256)
-        receipt = uploads.complete(reservation, media_id, media_sha)
-        if uploads.read_verified("flow_veo", project_id, account_id, reference) != receipt:
-            raise OwnerAmbiguityGate("reference upload receipt fresh readback mismatch")
-        return receipt
-    except Exception as exc:
-        raise OwnerAmbiguityGate(
-            "reference upload reserved; provider outcome requires Owner") from exc
+    from .providers.flow_reference_upload import _key
+    progress = uploads.read_progress(_key("flow_veo", project_id, account_id, reference))
+    if progress is None or progress['effective_state'] != 'REMOTE_RESOURCE_VERIFIED':
+        raise OwnerAmbiguityGate('forensic reference recovery required; no production upload authorized')
+    return uploads.read_verified('flow_veo', project_id, account_id, reference)
 
 
 def _existing_job_for_shot(store: SQLiteStore, shot_id: str):

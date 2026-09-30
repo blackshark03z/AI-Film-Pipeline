@@ -1,0 +1,347 @@
+"""Offline state-machine proof; no live provider qualification is claimed."""
+import hashlib
+import io
+import json
+import sqlite3
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from unittest.mock import Mock
+
+import pytest
+from PIL import Image, ImageDraw
+
+from film_pipeline.live_runtime import Asset
+from film_pipeline.store import SQLiteStore
+from film_pipeline.providers import flow_rpc_contract as contract
+from film_pipeline.providers.flow_reference_rpc import FlowReferenceRpcSession
+from film_pipeline.providers.flow_reference_upload import ReferenceUploadStore, OwnerAmbiguityGate, _key
+from film_pipeline.providers.flow_reference_transport import FlowReferenceTransport, image_comparison
+
+PROJECT = '11111111-2222-3333-4444-555555555555'
+REMOTE = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
+OTHER = '99999999-8888-7777-6666-555555555555'
+ACCOUNT = 'project_scoped_unverified_account'
+
+
+def png(color=(20, 80, 140), pattern=True):
+    image = Image.new('RGB', (128, 72), color)
+    if pattern:
+        draw = ImageDraw.Draw(image)
+        draw.rectangle((6, 8, 45, 60), fill=(190, 35, 50))
+        draw.ellipse((58, 10, 109, 62), fill=(50, 190, 130))
+    stream = io.BytesIO()
+    image.save(stream, 'PNG')
+    return stream.getvalue()
+
+
+class Crash(BaseException):
+    pass
+
+
+class Session:
+    project_id = PROJECT
+    catalog_fingerprint = contract.QUALIFIED_BASELINE_FINGERPRINT
+
+    def __init__(self):
+        self.uploads = self.catalogs = self.reads = 0
+        self.remote = {}
+        self.mode = 'normal'
+        self.delays = 0
+        self.on_read = lambda: None
+
+    def upload_reference(self, data, request_id, *, before_post, on_http_response, on_identified):
+        before_post(hashlib.sha256(data).hexdigest())
+        self.uploads += 1
+        if self.mode != 'not_received':
+            self.remote[REMOTE] = data
+        if self.mode in ('lost_response', 'not_received'):
+            raise TimeoutError('simulated response loss')
+        on_http_response(200, 100)
+        if self.mode == 'parse_failure':
+            raise ValueError('simulated parser failure')
+        on_identified(REMOTE)
+        if self.mode == 'crash_after_identity':
+            raise Crash()
+        return REMOTE
+
+    def catalog(self):
+        self.catalogs += 1
+        return [[identity, PROJECT, 'IMAGE', 'CAE', None, None, None] for identity in self.remote]
+
+    def media(self, identity, kind):
+        self.reads += 1
+        self.on_read()
+        if self.delays:
+            self.delays -= 1
+            return None
+        return self.remote.get(identity)
+
+
+def setup(tmp_path):
+    path = tmp_path / 'reference.png'
+    data = png()
+    path.write_bytes(data)
+    asset = Asset(asset_id='asset_test_reference', asset_type='image', origin='reference',
+        uri_or_path=str(path.resolve()), sha256=hashlib.sha256(data).hexdigest(),
+        mime_type='image/png', width=128, height=72, file_size=len(data),
+        rights_metadata={'source_kind': 'deterministic_synthetic_fixture'})
+    runtime = SQLiteStore(tmp_path / 'runtime.sqlite')
+    runtime.initialize()
+    runtime.save_reference_asset(asset)
+    store, session = ReferenceUploadStore(runtime.path), Session()
+    transport = FlowReferenceTransport(store, session, account_id=ACCOUNT,
+        evidence_dir=tmp_path / 'evidence', interval_s=0, probes=2)
+    key = _key('flow_veo', PROJECT, ACCOUNT, asset)
+    return asset, store, session, transport, key
+
+
+def test_normal_identity_is_durable_before_readback(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    session.on_read = lambda: assert_identified(store, key)
+    receipt = transport.ensure_verified(asset)
+    assert receipt['media_id'] == REMOTE and session.uploads == 1
+    stages = [e['stage'] for e in store.events(key)]
+    assert stages == ['LOCAL_RESERVED', 'REQUEST_ARMED', 'HTTP_RESPONSE_OBSERVED',
+                      'REMOTE_RESOURCE_IDENTIFIED', 'REMOTE_RESOURCE_VERIFIED']
+
+
+def assert_identified(store, key):
+    assert ReferenceUploadStore(store.db_path).read_progress(key)['effective_state'] == 'REMOTE_RESOURCE_IDENTIFIED'
+
+
+def test_crash_before_effect_preserves_local_intent_and_can_arm_once(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    store.reserve_local('flow_veo', PROJECT, ACCOUNT, asset)
+    assert store.read_progress(key)['upload_attempts'] == 0
+    assert session.uploads == 0
+    transport.ensure_verified(asset)
+    assert session.uploads == 1
+
+
+@pytest.mark.parametrize('mode', ['lost_response', 'parse_failure'])
+def test_lost_or_unparsed_response_readonly_reconciliation(tmp_path, mode):
+    asset, store, session, transport, key = setup(tmp_path)
+    session.mode = mode
+    with pytest.raises(OwnerAmbiguityGate, match='upload armed'):
+        transport.ensure_verified(asset)
+    assert store.read_progress(key)['media_id'] is None
+    if mode == 'parse_failure':
+        assert any(e['stage'] == 'HTTP_RESPONSE_OBSERVED' for e in store.events(key))
+    receipt = transport.reconcile_only(asset)
+    assert receipt['media_id'] == REMOTE and session.uploads == 1
+
+
+def test_crash_after_identity_restarts_verification_only(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    session.mode = 'crash_after_identity'
+    with pytest.raises(Crash):
+        transport.ensure_verified(asset)
+    assert_identified(store, key)
+    receipt = FlowReferenceTransport(ReferenceUploadStore(store.db_path), session,
+        account_id=ACCOUNT, evidence_dir=tmp_path / 'evidence', interval_s=0).ensure_verified(asset)
+    assert receipt['media_id'] == REMOTE and session.uploads == 1
+
+
+def test_cdn_delay_retains_id_through_all_readbacks(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    session.delays = 2
+    session.on_read = lambda: assert_identified(store, key)
+    transport.ensure_verified(asset)
+    assert session.reads == 3 and session.uploads == 1
+
+
+def test_verified_reference_reused_across_shots_without_network(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    first = transport.ensure_verified(asset)
+    session.catalog = Mock(side_effect=AssertionError('network forbidden'))
+    session.media = Mock(side_effect=AssertionError('network forbidden'))
+    session.upload_reference = Mock(side_effect=AssertionError('upload forbidden'))
+    assert transport.ensure_verified(asset) == first
+    session.upload_reference.assert_not_called()
+    session.catalog.assert_not_called()
+    session.media.assert_not_called()
+
+
+def test_catalog_miss_is_unresolved_never_absence_or_retry(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    session.mode = 'not_received'
+    with pytest.raises(OwnerAmbiguityGate):
+        transport.ensure_verified(asset)
+    with pytest.raises(OwnerAmbiguityGate, match='unresolved'):
+        transport.reconcile_only(asset)
+    assert session.uploads == 1
+    assert store.read_progress(key)['effective_state'] == 'FAILED_AMBIGUOUS'
+
+
+@pytest.mark.parametrize('second', ['matching', 'unreadable'])
+def test_all_candidates_exhausted_before_identity_binding(tmp_path, second):
+    asset, store, session, transport, key = setup(tmp_path)
+    store.reserve_once('flow_veo', PROJECT, ACCOUNT, asset)  # Legacy uncertain row.
+    session.remote = {REMOTE: Path(asset.uri_or_path).read_bytes(),
+                      OTHER: Path(asset.uri_or_path).read_bytes() if second == 'matching' else None}
+    with pytest.raises(OwnerAmbiguityGate):
+        transport.reconcile_only(asset)
+    assert store.read_progress(key)['media_id'] is None
+    assert session.reads >= 2 and session.uploads == 0
+
+
+def test_source_mutation_rejected_without_reservation_or_upload(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    Path(asset.uri_or_path).write_bytes(png((25, 80, 140)))
+    with pytest.raises(ValueError, match='mutation'):
+        transport.ensure_verified(asset)
+    assert store.read_progress(key) is None and session.uploads == 0
+
+
+def test_uniform_color_dhash_collision_is_not_a_strong_match():
+    result = image_comparison(png((10, 10, 10), False), png((220, 220, 220), False))
+    assert result['dhash256_distance'] == 0 and not result['strong_match']
+
+
+def test_resource_identity_immutable_and_journal_append_only(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    transport.ensure_verified(asset)
+    with pytest.raises(OwnerAmbiguityGate, match='changed'):
+        store.record_identified(key, OTHER, method='upload_response', evidence_hash='0' * 64)
+    with sqlite3.connect(store.db_path) as connection:
+        with pytest.raises(sqlite3.IntegrityError, match='immutable'):
+            connection.execute('DELETE FROM reference_upload_events')
+
+
+def test_concurrent_arm_consumes_only_one_budget(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    store.reserve_local('flow_veo', PROJECT, ACCOUNT, asset)
+    def arm():
+        try:
+            store.arm_local(key, '1' * 64)
+            return 'armed'
+        except OwnerAmbiguityGate:
+            return 'refused'
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        assert sorted(pool.map(lambda _: arm(), range(2))) == ['armed', 'refused']
+    assert sum(e['stage'] == 'REQUEST_ARMED' for e in store.events(key)) == 1
+
+
+def test_frozen_legacy_payload_untouched_until_unique_recovery(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    store.reserve_once('flow_veo', PROJECT, ACCOUNT, asset)
+    with sqlite3.connect(store.db_path) as connection:
+        before = connection.execute('SELECT payload FROM reference_uploads').fetchone()[0]
+    assert store.read_progress(key)['effective_state'] == 'LEGACY_RESERVED_UNCERTAIN'
+    with pytest.raises(OwnerAmbiguityGate):
+        transport.reconcile_only(asset)
+    with sqlite3.connect(store.db_path) as connection:
+        assert connection.execute('SELECT payload FROM reference_uploads').fetchone()[0] == before
+    assert session.uploads == 0
+
+
+def test_legacy_payload_tamper_is_detected(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    store.reserve_once('flow_veo', PROJECT, ACCOUNT, asset)
+    with sqlite3.connect(store.db_path) as connection:
+        connection.execute("UPDATE reference_uploads SET media_id=?", (REMOTE,))
+    with pytest.raises(ValueError, match='integrity'):
+        store.read_progress(key)
+
+
+def test_rpc_upload_persists_id_without_calling_media_and_rejects_nested_collision():
+    session = FlowReferenceRpcSession(cookie_path=Path('unused'), project_id=PROJECT)
+    session.captcha = Mock(return_value='test_captcha')
+    session.rpc = Mock(return_value=[[REMOTE, None, None]])
+    session.media = Mock(side_effect=AssertionError('verification forbidden here'))
+    order = []
+    session.upload_reference(png(), PROJECT, before_post=lambda _: order.append('armed'),
+        on_http_response=lambda *args: None, on_identified=lambda _: order.append('identified'))
+    assert order == ['armed', 'identified']
+    session.media.assert_not_called()
+    session.rpc.return_value = [[REMOTE, [OTHER]]]
+    identified = Mock()
+    with pytest.raises(OwnerAmbiguityGate, match='multiple'):
+        session.upload_reference(png(), PROJECT, before_post=lambda _: None,
+            on_http_response=lambda *args: None, on_identified=identified)
+    identified.assert_not_called()
+
+
+def test_actual_http_callback_is_durable_before_parser_failure_and_no_secrets(tmp_path):
+    asset, store, _, _, key = setup(tmp_path)
+    store.reserve_local('flow_veo', PROJECT, ACCOUNT, asset)
+    session = FlowReferenceRpcSession(cookie_path=Path('unused'), project_id=PROJECT)
+    secret = 'secret_dummy_never_persist'
+    session.captcha = Mock(return_value=secret)
+    session.metadata = Mock(return_value={'source': '/project/' + PROJECT,
+        'bl': secret, 'sid': secret, 'hl': 'en', 'at': secret})
+    response = Mock(status=200)
+    response.text.return_value = ")]}'\nnot-json"
+    session.page = Mock()
+    session.page.context.request.post.return_value = response
+    with pytest.raises(Exception, match='RESPONSE_UNQUALIFIED'):
+        session.upload_reference(Path(asset.uri_or_path).read_bytes(), PROJECT,
+            before_post=lambda digest: store.arm_local(key, digest),
+            on_http_response=lambda status, length: store.record_event(key,
+                'HTTP_RESPONSE_OBSERVED', {'status': status, 'response_bytes_len': length}),
+            on_identified=lambda identity: store.record_identified(key, identity,
+                method='upload_response', evidence_hash='2' * 64))
+    assert [event['stage'] for event in store.events(key)] == [
+        'LOCAL_RESERVED', 'REQUEST_ARMED', 'HTTP_RESPONSE_OBSERVED']
+    assert secret.encode() not in store.db_path.read_bytes()
+    assert session.rpc_call_counts['maseQ'] == 1
+    session.page.context.request.post.assert_called_once()
+
+
+def test_verification_failure_keeps_identified_resource_and_never_reuploads(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    session.delays = 20
+    with pytest.raises(OwnerAmbiguityGate, match='retained'):
+        transport.ensure_verified(asset)
+    assert_identified(store, key)
+    session.delays = 0
+    assert transport.ensure_verified(asset)['media_id'] == REMOTE
+    assert session.uploads == 1
+
+
+def test_complete_requires_prior_durable_identity(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    reserved = store.reserve_once('flow_veo', PROJECT, ACCOUNT, asset)
+    with pytest.raises(OwnerAmbiguityGate, match='identified'):
+        store.complete(reserved, REMOTE, '1' * 64)
+
+
+def test_wrong_project_catalog_is_not_a_safe_miss(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    store.reserve_once('flow_veo', PROJECT, ACCOUNT, asset)
+    session.catalog = lambda: [[REMOTE, OTHER, 'IMAGE', 'CAE', None, None, None]]
+    with pytest.raises(contract.ContractError, match='PROJECT_MISMATCH'):
+        transport.reconcile_only(asset)
+    assert session.uploads == 0 and store.read_progress(key)['media_id'] is None
+
+
+@pytest.mark.parametrize('checkpoint', ['identified', 'verified_before_artifact'])
+def test_canary_orchestrator_restart_reconstructs_qualification_without_upload(tmp_path, monkeypatch, checkpoint):
+    from film_pipeline import reference_qualification as qualifier
+    monkeypatch.setattr(qualifier, 'QUALIFICATION_ROOT', tmp_path / 'qualification')
+    database, asset = qualifier.canary_reference()
+    store = ReferenceUploadStore(database)
+    project = qualifier.PROJECT_ID
+    key = _key('flow_veo', project, ACCOUNT, asset)
+    store.reserve_local('flow_veo', project, ACCOUNT, asset)
+    store.arm_local(key, '1' * 64)
+    store.record_event(key, 'HTTP_RESPONSE_OBSERVED', {'status': 200, 'response_bytes_len': 100})
+    store.record_identified(key, REMOTE, method='upload_response', evidence_hash='2' * 64)
+    session = Session()
+    session.project_id = project
+    session.rpc_call_counts = {}
+    session.remote[REMOTE] = Path(asset.uri_or_path).read_bytes()
+    session.__class__.__enter__ = lambda self: self
+    session.__class__.__exit__ = lambda self, *args: None
+    session.upload_reference = Mock(side_effect=AssertionError('re-upload forbidden'))
+    if checkpoint == 'verified_before_artifact':
+        FlowReferenceTransport(store, session, account_id=ACCOUNT,
+            evidence_dir=qualifier.QUALIFICATION_ROOT / 'evidence').verify_identified(
+                asset, store.read_progress(key))
+    monkeypatch.setattr(qualifier, 'FlowReferenceRpcSession', lambda **kwargs: session)
+    result = qualifier.run_live_canary(Path('unused'))
+    assert result['result'] == 'LIVE_UPLOAD_CANARY_PASS'
+    assert result['upload_post_invocations_this_run'] == 0
+    assert qualifier.read_live_qualification() == result
+    assert qualifier.run_live_canary(Path('unused')) == result
+    session.upload_reference.assert_not_called()

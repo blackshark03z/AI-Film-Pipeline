@@ -15,6 +15,7 @@ from film_pipeline.execution import route
 from film_pipeline.live_runtime import Asset
 from film_pipeline.providers.flow_reference_upload import OwnerAmbiguityGate, ReferenceUploadStore
 from film_pipeline.providers import flow_rpc_contract as rpc_contract
+from film_pipeline.providers.flow_reference_transport import FlowReferenceTransport
 from film_pipeline.slice0011 import (REFERENCE_ASSET_ID, REFERENCE_SHA256,
                                      compile_character_paths, freeze_reference,
                                      validate_character_pair, upload_reference_once,
@@ -123,6 +124,8 @@ def test_shared_upload_reservation_is_one_shot_and_reusable_after_receipt(tmp_pa
         uploads.read_verified("flow_veo", project_id, account, item)
     with pytest.raises(OwnerAmbiguityGate, match="already reserved"):
         uploads.reserve_once("flow_veo", project_id, account, item)
+    uploads.record_identified(reservation['id'], "9f2ef342-65e7-4af0-ad3e-a65b921f0e16",
+                              method='fixture_response', evidence_hash='2' * 64)
     receipt = uploads.complete(reservation, "9f2ef342-65e7-4af0-ad3e-a65b921f0e16",
                                "1" * 64)
     assert receipt["upload_attempts"] == 1
@@ -178,13 +181,23 @@ class FakeSession:
         self.records = []
         self.uploads = 0
         self.submits = 0
+        self.remote_images = {}
 
     def catalog(self):
         return self.records
 
-    def upload_once(self, path, request_id, expected_sha256):
+    def upload_reference(self, source_bytes, request_id, *, before_post,
+                         on_http_response, on_identified):
+        before_post('2' * 64)
         self.uploads += 1
-        return "9f2ef342-65e7-4af0-ad3e-a65b921f0e16", "1" * 64
+        media_id = "9f2ef342-65e7-4af0-ad3e-a65b921f0e16"
+        self.remote_images[media_id] = source_bytes
+        on_http_response(200, 100)
+        on_identified(media_id)
+        return media_id
+
+    def media(self, media_id, kind):
+        return self.remote_images.get(media_id)
 
     def submit_once(self, prompt, reference_id, request_id, *, before_post):
         self.submits += 1
@@ -196,7 +209,8 @@ def _prepared_pair(tmp_path):
     db = tmp_path / "runtime.sqlite"
     reference = freeze_reference(db, tmp_path / "reference")
     session = FakeSession()
-    receipt = upload_reference_once(db, session, reference)
+    receipt = FlowReferenceTransport(ReferenceUploadStore(db), session,
+        account_id=ACCOUNT_ID, evidence_dir=tmp_path / 'evidence', interval_s=0).ensure_verified(reference)
     paths = compile_character_paths(db)[2]
     return db, session, receipt, paths
 
@@ -205,12 +219,16 @@ def test_ambiguous_upload_stops_and_restart_cannot_upload_again(tmp_path):
     db = tmp_path / "runtime.sqlite"
     reference = freeze_reference(db, tmp_path / "reference")
     session = FakeSession()
-    session.upload_once = Mock(side_effect=TimeoutError("unknown"))
-    with pytest.raises(OwnerAmbiguityGate, match="upload reserved"):
-        upload_reference_once(db, session, reference)
-    with pytest.raises(OwnerAmbiguityGate, match="reserved without"):
+    def lost_response(*args, **kwargs):
+        kwargs['before_post']('2' * 64)
+        raise TimeoutError('unknown')
+    session.upload_reference = Mock(side_effect=lost_response)
+    with pytest.raises(OwnerAmbiguityGate, match="upload armed"):
+        FlowReferenceTransport(ReferenceUploadStore(db), session, account_id=ACCOUNT_ID,
+            evidence_dir=tmp_path / 'evidence', interval_s=0).ensure_verified(reference)
+    with pytest.raises(OwnerAmbiguityGate, match="forensic"):
         upload_reference_once(db, FakeSession(), reference)
-    assert session.upload_once.call_count == 1
+    assert session.upload_reference.call_count == 1
 
 
 def test_catalog_drift_prevents_upload_reservation(tmp_path):
@@ -219,7 +237,8 @@ def test_catalog_drift_prevents_upload_reservation(tmp_path):
     session = FakeSession()
     session.catalog = Mock(side_effect=ValueError("catalog drift"))
     with pytest.raises(ValueError, match="catalog drift"):
-        upload_reference_once(db, session, reference)
+        FlowReferenceTransport(ReferenceUploadStore(db), session, account_id=ACCOUNT_ID,
+            evidence_dir=tmp_path / 'evidence', interval_s=0).ensure_verified(reference)
     assert session.uploads == 0
     assert ReferenceUploadStore(db).read_verified(
         "flow_veo", PROJECT_ID, ACCOUNT_ID, reference) is None
@@ -235,7 +254,10 @@ def test_slice_upload_authority_cannot_switch_project_or_account(tmp_path):
         upload_reference_once(db, session, reference.model_copy(update={
             "asset_id": "wrong_reference"}))
     assert session.uploads == 0
-    receipt = upload_reference_once(db, session, reference)
+    with pytest.raises(OwnerAmbiguityGate, match='no production upload'):
+        upload_reference_once(db, session, reference)
+    receipt = FlowReferenceTransport(ReferenceUploadStore(db), session, account_id=ACCOUNT_ID,
+        evidence_dir=tmp_path / 'evidence', interval_s=0).ensure_verified(reference)
     with pytest.raises(OwnerAmbiguityGate, match="already reserved"):
         ReferenceUploadStore(db).reserve_once("flow_veo",
             "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", "other", reference)

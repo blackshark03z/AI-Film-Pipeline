@@ -9,15 +9,12 @@ story_auto runtime import is used. Raw authenticated bodies stay in memory.
 from __future__ import annotations
 
 import hashlib
-import io
 import json
 import math
 import re
 import time
 from pathlib import Path
 from urllib.parse import urlencode, urlsplit
-
-from PIL import Image, ImageChops, ImageStat
 
 from . import flow_rpc_contract as contract
 from .flow_reference_upload import OwnerAmbiguityGate
@@ -30,6 +27,10 @@ MAX_MEDIA_BYTES = 256 * 1024 * 1024
 
 
 class FlowReferenceRpcDrift(RuntimeError):
+    pass
+
+
+class OwnerAuthRequired(RuntimeError):
     pass
 
 
@@ -111,11 +112,15 @@ class FlowReferenceRpcSession:
         self._browser = None
         self.page = None
         self.catalog_fingerprint = None
+        self.rpc_call_counts = {}
 
     def __enter__(self):
         from playwright.sync_api import sync_playwright
 
-        cookies = read_cookie_export(self.cookie_path)
+        try:
+            cookies = read_cookie_export(self.cookie_path)
+        except ValueError:
+            raise OwnerAuthRequired('OWNER_AUTH_REQUIRED: valid standard Google Flow cookie export') from None
         try:
             self._driver = sync_playwright().start()
             self._browser = self._driver.chromium.launch(headless=True)
@@ -129,7 +134,18 @@ class FlowReferenceRpcSession:
             self.metadata()
             return self
         except Exception:
+            auth_required = False
+            if self.page is not None:
+                try:
+                    auth_required = self.page.evaluate("""() =>
+                        location.hostname === 'accounts.google.com' ||
+                        !!document.querySelector('input[type="email"],input[type="password"]') ||
+                        /sign in|đăng nhập/i.test(document.body?.innerText || '')""")
+                except Exception:
+                    pass
             self.__exit__(None, None, None)
+            if auth_required:
+                raise OwnerAuthRequired('OWNER_AUTH_REQUIRED: standard Google Flow sign-in') from None
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_SESSION_NOT_READY") from None
 
     def __exit__(self, *_):
@@ -172,29 +188,11 @@ class FlowReferenceRpcSession:
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_CAPTCHA_UNAVAILABLE")
         return token
 
-    def rpc(self, rpc_id: str, body: str):
-        meta = self.metadata()
-        query = urlencode({"rpcids": rpc_id, "source-path": meta["source"],
-            "bl": meta["bl"], "f.sid": meta["sid"], "hl": meta["hl"], "rt": "c"})
+    def rpc(self, rpc_id: str, body: str, *, on_http_response=None):
+        text = self._rpc_body(rpc_id, body, on_http_response=on_http_response)
         try:
-            response = self.page.context.request.post(
-                ORIGIN + "/_/AiSandboxAngularFrontend/data/batchexecute?" + query,
-                data=urlencode({"f.req": body, "at": meta["at"]}),
-                headers={"content-type": "application/x-www-form-urlencoded;charset=UTF-8",
-                         "x-same-domain": "1", "origin": ORIGIN,
-                         "referer": self.project_url},
-                timeout=60000, max_redirects=0, max_retries=0)
-            try:
-                if response.status != 200:
-                    raise ValueError("HTTP status")
-                text = response.text()
-                if len(text.encode("utf-8")) > 8 * 1024 * 1024:
-                    raise ValueError("response size")
-                return contract.parse_rpc(text, rpc_id)
-            finally:
-                response.dispose()
+            return contract.parse_rpc(text, rpc_id)
         except Exception:
-            # The caller distinguishes prewrite reads from a reserved POST.
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_RESPONSE_UNQUALIFIED") from None
 
     def catalog(self) -> list[list]:
@@ -208,12 +206,13 @@ class FlowReferenceRpcSession:
         except Exception:
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_CATALOG_DRIFT") from None
 
-    def _rpc_body(self, rpc_id: str, body: str) -> str:
+    def _rpc_body(self, rpc_id: str, body: str, *, on_http_response=None) -> str:
         """Return only for strict catalog parser, still never persist raw bytes."""
         meta = self.metadata()
         query = urlencode({"rpcids": rpc_id, "source-path": meta["source"],
             "bl": meta["bl"], "f.sid": meta["sid"], "hl": meta["hl"], "rt": "c"})
         try:
+            self.rpc_call_counts[rpc_id] = self.rpc_call_counts.get(rpc_id, 0) + 1
             response = self.page.context.request.post(
                 ORIGIN + "/_/AiSandboxAngularFrontend/data/batchexecute?" + query,
                 data=urlencode({"f.req": body, "at": meta["at"]}),
@@ -222,9 +221,11 @@ class FlowReferenceRpcSession:
                          "referer": self.project_url},
                 timeout=60000, max_redirects=0, max_retries=0)
             try:
+                text = response.text()
+                if on_http_response:
+                    on_http_response(response.status, len(text.encode("utf-8")))
                 if response.status != 200:
                     raise ValueError("HTTP status")
-                text = response.text()
                 if len(text.encode("utf-8")) > 8 * 1024 * 1024:
                     raise ValueError("response size")
                 return text
@@ -270,15 +271,16 @@ class FlowReferenceRpcSession:
         except Exception:
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_MEDIA_UNAVAILABLE") from None
 
-    def upload_once(self, path: Path, request_id: str,
-                    expected_sha256: str) -> tuple[str, str]:
-        """Call only after durable upload reservation; caller owns ambiguity stop."""
-        source_bytes = path.read_bytes()
-        if hashlib.sha256(source_bytes).hexdigest() != expected_sha256:
-            raise OwnerAmbiguityGate("reference bytes changed after reservation")
-        payload = self.rpc(contract.RPC_UPLOAD,
-            contract.build_upload(self.project_id, source_bytes,
-                                  self.captcha("IMAGE_GENERATION"), request_id))
+    def upload_reference(self, source_bytes: bytes, request_id: str, *,
+                         before_post, on_http_response, on_identified) -> str:
+        """Prepare/arm one POST, then persist identity before any media readback."""
+        if not all(callable(callback) for callback in
+                   (before_post, on_http_response, on_identified)):
+            raise ValueError('durable reference lifecycle callbacks required')
+        body = contract.build_upload(self.project_id, source_bytes,
+                                     self.captcha('IMAGE_GENERATION'), request_id)
+        before_post(hashlib.sha256(body.encode('utf-8')).hexdigest())
+        payload = self.rpc(contract.RPC_UPLOAD, body, on_http_response=on_http_response)
         if (not isinstance(payload, list) or len(payload) != 1
                 or not isinstance(payload[0], list) or not payload[0]
                 or not isinstance(payload[0][0], str)
@@ -286,20 +288,10 @@ class FlowReferenceRpcSession:
             raise OwnerAmbiguityGate("reference upload response shape unqualified")
         media_id = payload[0][0]
         if any(isinstance(value, str) and contract.UUID_RE.fullmatch(value)
-               and value != media_id for value in payload[0][1:]):
+               and value.lower() != media_id.lower() for value in contract._walk(payload)):
             raise OwnerAmbiguityGate("reference upload returned multiple identities")
-        returned = self.media(media_id, "image")
-        if returned is None:
-            raise OwnerAmbiguityGate("reference upload media readback unavailable")
-        try:
-            with Image.open(io.BytesIO(source_bytes)) as source, Image.open(io.BytesIO(returned)) as observed:
-                left = source.convert("RGB").resize((64, 64))
-                right = observed.convert("RGB").resize((64, 64))
-                if max(ImageStat.Stat(ImageChops.difference(left, right)).mean) > 8:
-                    raise ValueError("image difference")
-        except Exception:
-            raise OwnerAmbiguityGate("reference upload image readback mismatch") from None
-        return media_id, hashlib.sha256(returned).hexdigest()
+        on_identified(media_id)
+        return media_id
 
     def submit_once(self, prompt: str, reference_id: str, request_id: str,
                     *, before_post=None) -> None:
