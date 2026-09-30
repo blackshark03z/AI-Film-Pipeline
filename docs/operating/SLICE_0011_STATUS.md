@@ -1,5 +1,26 @@
 # SLICE-0011 execution status
 
+## Current result — authorized successor stopped before allocation
+
+Owner's new brief authorized one fresh A successor and at most one MZZa6b submit
+from base `86acfeb1166717ab4ec76c689dd0e862c57ef134`. Implementation revision
+`b86b539e7e5f4e99a228a44dd73332d5da2e7c95` adds a separate fixed-authority entry
+with atomic allocation/reservation, immutable historical snapshots and terminal
+restart guards. 23 successor tests, 133 focused tests and 302 full tests PASS;
+compileall, diff/SoT checks and independent review PASS.
+
+The single live entry stopped with `OwnerAuthRequired` before any RPC or new
+attempt/job allocation: **OWNER_AMBIGUITY_GATE**. MZZa6b=0, reference uploads=0,
+Shot B=0, Dola/Seedance=0. No fresh baseline, actual marker, output, acquired Asset
+or live QC exists. No retry or session refresh was performed. Existing cached
+credential bytes/mtime and both runtime database hashes remain unchanged; the
+historical A job, dispatch_count=1 and ambiguity evidence remain intact.
+SelectedTake=0. Compact-prompt provider/character acceptance remains unverified.
+
+Full authority, prompt preview, local proof, effects and remaining uncertainty:
+`SLICE_0011_SUCCESSOR_EXECUTION.md`. The sections below are historical checkpoints;
+their implementation-only authority has been superseded by the new Owner brief.
+
 ## Latest refinement — compact reduction policy only
 
 Owner authorizes only the `flow-r2v-compact-v1` reduction-policy refinement,

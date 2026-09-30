@@ -58,8 +58,62 @@ Pre-existing Owner scratch/ is preserved and excluded from staging.
 
 Independent review cleared the successor implementation with no material blocker:
 89 offline focused cases PASS, diff check PASS, historical frozen intent unchanged.
-Parent focused suite: 89 cases (the final result is recorded below).
-Live result is pending. This milestone is offline implementation evidence, not
-provider acceptance or visual continuity proof.
+Parent focused suite: 133 PASS (19.91s); successor-only 23 PASS (9.05s).
+This milestone is offline implementation evidence, not provider acceptance or
+visual continuity proof.
 Runtime evidence will be under
 `projects/character_continuity/slice0011/successor_a_compact_v1/`.
+
+## Final live stop — OWNER_AMBIGUITY_GATE
+
+Implementation revision: `b86b539e7e5f4e99a228a44dd73332d5da2e7c95`.
+One invocation of the bounded entry stopped during session authentication with
+`OwnerAuthRequired`. The exact project/session was not established. RPC counts
+are empty: MZZa6b=0, catalog=0, reference uploads=0, Shot B=0, Dola/Seedance=0.
+Browser navigation/authentication was attempted; no generation or billing action
+was invoked. No second session, alternative cookie or login refresh was tried.
+Cached credential bytes, length and modification time remain unchanged.
+
+New successor attempt ID: **not allocated**. New ProviderJob ID: **not allocated**.
+No authority allocation/consumption record was created; there is no actual new
+marker, frozen provider prompt or fresh catalog baseline. This is an auth stop
+before allocation, not compact-prompt provider qualification. The intended
+provider body below is an exact deterministic preview, **430 characters / 70
+words** excluding the placeholder marker. It was not submitted:
+
+```text
+8-second locked eye-level medium close-up, 16:9. Use the exact image reference: one illustrated adult woman with teal bob hair, crimson round glasses, a mustard jacket over a blue shirt, silver triangle earrings and a beauty mark below her right eye; facing slightly right, she breathes gently and blinks once in a daytime living room, window left, sofa and plant right. Keep her face and outfit stable; movements subtle and calm.
+[FILM-<new_provider_job_id>]
+```
+
+Reference Asset:
+`asset_70834935ccb760367645411d115c0c24243f4dd921182ef4b9502cad382062ff`.
+Local SHA256:
+`31ca872d7b608dee61db0f0bdc753e4acaf659c428706ff7da88dfee98c3e531`.
+Verified media UUID: `53b5a413-7bb5-4f97-9be4-2461794a7d80`.
+Intended project: `f6b40e79-d6f8-4354-80ae-c863260e96f5`, model `abra_r2v_8s`,
+8 seconds, 16:9. This continuation did not verify access to that project; the
+receipt remains the existing qualified receipt. Account identity remains
+`project_scoped_unverified_account`, not a freshly verified human account.
+
+Sanitized response diagnostic: **absent**, because there was no MZZa6b response.
+Exact output identity: none. Acquired Asset/SHA: none. Live technical QC: not run.
+Character review packet: not created. SelectedTake: zero. Compact-prompt live
+behavior and visual character continuity remain unverified.
+
+Historical row snapshot before/after SHA256 is identical:
+`d01f12761d25232ee22f4cd47834f9fe83efbbb6be97666524f7f6187f5aea85`.
+Both complete runtime files retain the SHA256 values listed above. Final counts:
+1 historical attempt, 1 historical job, 5 journal facts, 0 output bindings,
+1 reference Asset, 1 historical reference reservation/4 events, 0 QC reports,
+0 SelectedTakes, 0 Shot B attempts. Historical job remains INCONCLUSIVE,
+dispatch_count=1, null output, with its ambiguity fact and original frozen
+intent hash `ca9e145208e22e6e77cbd5e4d334a2960b800a0e99c954367040409a4f4b3f56`.
+Canonical A plan hash remains
+`cbc6cabae3fe2132c6ba6c3b49d78e9994ff3b670549f1980eff82e0cc9da324`.
+
+Durable evidence: `live_result.json`, `historical_before.json`,
+`historical_after.json`, `final_local_proof.json` in the runtime directory above.
+The durable stop now prevents provider access on a repeated invocation. Any
+future session restoration/continuation requires the Owner's explicit procedure
+for this gate; the unused numerical allowance is not permission to retry.
