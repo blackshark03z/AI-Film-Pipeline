@@ -1,5 +1,28 @@
 # SLICE-0011 execution status
 
+## Current result — read-only successor reconciliation: no output observed
+
+Owner explicitly authorized existing consumed successor reconciliation only.
+Base `6c229635bb8c0b59a6edeb409c4af07929623074`; live implementation
+`0c90bb2b2fbb254dcb24827264cf986ec1e18834`. Exact authenticated project/catalog
+read PASS. Current IDs equal all four frozen baseline IDs; delta=[], new candidates=0.
+Inspected all records; no exact successor marker/qualified ownership. Existing
+strict matcher returns None. Verdict **NO_DURABLE_OUTPUT_OBSERVED**, gate
+**OWNER_AMBIGUITY_GATE**. This is current observation, not proof of non-admission.
+
+Provider reconciliation calls: Zzl0ze=1; media/generation/upload/captcha=0.
+No new attempt/job, binding, download, Asset, QC, SelectedTake, B or Dola/Seedance.
+Full SQLite file remains byte-identical; both historical ambiguity histories and
+consumed allowance are unchanged. No provider call after final gate.
+
+Compared actual three sealed/hash-verified successful Story Auto ACQUIRED runs:
+each null31/boolean1/number18/string17/array27/object0 versus successor null1 and
+all others0. Material type-structure difference observed, advisory only. Control
+response lengths/type-shape hashes were not retained; no null-only response
+semantics or retry/acceptance inferred. Eleven focused tests and independent
+34-case review PASS; generic acquisition guard/correlation policy remain intact.
+Full evidence and control provenance: `SLICE_0011_SUCCESSOR_RECONCILIATION.md`.
+
 ## Current result — auth restored; one successor submit; observation lost
 
 Owner authorized restoration of the zero-RPC auth stop and continuation of the

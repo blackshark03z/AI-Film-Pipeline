@@ -62,3 +62,63 @@ are unchanged. Independent review cleared the final path with no material blocke
 reviewer reran 34 reconciliation/successor offline cases PASS. Production database
 remains SHA256 `c9a83cf69324f7439a195b6c63523c81cf6761ebeefce3442fc77bae2265bd61`
 before live reconciliation. Live ownership/outcome remains pending.
+
+## Final read-only verdict — NO_DURABLE_OUTPUT_OBSERVED
+
+Implementation/live revision: `0c90bb2b2fbb254dcb24827264cf986ec1e18834`.
+Authenticated exact-project session and qualified catalog succeeded. Only
+Zzl0ze=1 was invoked; as29s/MZZa6b/maseQ/generation captcha=0. No authentication
+refresh was necessary; the existing isolated Film cookie export worked.
+
+Current catalog IDs:
+
+- `347f9951-5bbc-4910-b6fd-3a17c74e29d2`
+- `53b5a413-7bb5-4f97-9be4-2461794a7d80`
+- `78203d6c-16b9-4cae-a66c-a1f7de58275f`
+- `86a88de1-62a6-4ad6-9df0-07c2a501f2d0`
+
+These are exactly the frozen pre-submit baseline. Exact current-minus-baseline
+delta: **[]**. New candidates: **0**, all examined (none). All four existing
+records were also independently inspected: exact project, status CAE, two image
+rows (length 7) and two prior video rows (length 8), all preexisting. None has the
+successor's exact marker in qualified primary or redundant prompt lineage. The
+prior video rows do not carry the required R2V model/reference ownership.
+Singleton matcher accepts none; unchanged full-catalog matcher returns None.
+`matcher_would_accept=false`, attributed_output_id=null. No output attributable
+to the successor is visible in this current catalog; this does not establish
+that the request was never admitted, never ran, or cannot appear elsewhere/later.
+
+Final gate: **OWNER_AMBIGUITY_GATE**. No binding, download, Asset, technical QC,
+review packet or SelectedTake. No second query after the gate. Additional submit,
+upload, B, Dola/Seedance, provider switch, blind retry and attempt/job creation=0.
+The successor stays INCONCLUSIVE/dispatch_count=1; both ambiguity histories stay.
+
+Actual Story Auto successful controls: three sealed ACQUIRED journals, three
+matching local MP4 hashes, identical nontruncated counts:
+
+| Type (normalized) | Successor | Each successful Story Auto control |
+| --- | ---: | ---: |
+| null | 1 | 31 |
+| boolean | 0 | 1 |
+| number | 0 | 18 |
+| string | 0 | 17 |
+| array | 0 | 27 |
+| object | 0 | 0 |
+
+Both parsed; successor response length 228 UTF-8 bytes. Controls retain no byte
+length or safe type-shape hash. Thus the observed type structure materially
+differs, while byte-length/hash comparison is unavailable. No semantic meaning
+for null-only acknowledgement is established; diagnostic comparison cannot
+authorize acceptance, redispatch or provider rejection/failure conclusions.
+
+READ-ONLY finding persisted in catalog_reconciliation.json and final_report.json
+under successor_reconciliation_v1. The full report includes every record's safe
+ownership facts, each control source/MP4/hash and provider-call counts.
+Production SQLite whole-file before/read-only/final SHA256 stays
+`c9a83cf69324f7439a195b6c63523c81cf6761ebeefce3442fc77bae2265bd61`.
+Historical protected snapshot before/after stays
+`d01f12761d25232ee22f4cd47834f9fe83efbbb6be97666524f7f6187f5aea85`.
+Qualification DB stays
+`6054581a1d2fd9824b3a8691f964a11d42b7e9781691612304b7c53869232adf`.
+No database row was modified. Protected original A, consumed successor, canonical
+ShotSpec/PromptPlan, frozen hashes, counters, receipts and journals are unchanged.
