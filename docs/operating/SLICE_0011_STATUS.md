@@ -1,5 +1,15 @@
 # SLICE-0011 execution status
 
+## Current continuation stop — 2026-09-30
+
+**OWNER_AUTH_REQUIRED**. The reconcilable transport is integrated and independently reviewed; 42 focused tests, 211 full tests, compileall and diff check pass. The one authorized research canary was invoked once but stopped during browser session bootstrap, before any RPC/upload arm. A read-only diagnostic observed HTTP 200 and redirect to `flow.google.com/about` without session metadata/captcha API. Cookie expiration is not confirmed.
+
+Research lineage: `projects/character_continuity/reference_qualification_20260930`; distinct synthetic PNG SHA `dc766e136c039ce4ae25f78dc7555c161a6178e8c835cf3d37600b4d7d0e8b0e`; one reference Asset, **0 reservations, 0 events, 0 upload POSTs, 0 video generations**. The original reservation below is unchanged; frozen forensic recovery and Shot A/B remain unstarted in this continuation. The live canary is **unproven**.
+
+Owner action: sign in to standard Google Flow as `hoangbsea` in the visible login tab, confirm access to exact project `f6b40e79-d6f8-4354-80ae-c863260e96f5`, and refresh the local cookie export. Resume the fixed research lineage under the existing single-upload allowance. Original re-upload remains forbidden. Details: `SLICE_0011_REFERENCE_RECOVERY.md` and `SLICE_0011_REPORT.md`.
+
+The sections below preserve the earlier checkpoint and original ambiguity evidence; they do not qualify the current live transport.
+
 ## Authority and current state
 
 - Accepted baseline: `a3496592950c1270cda96fab2cb10711baee33fa`; initial tree clean. Slice-0010 evidence is closed and untouched.

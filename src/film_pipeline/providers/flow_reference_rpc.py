@@ -139,6 +139,7 @@ class FlowReferenceRpcSession:
                 try:
                     auth_required = self.page.evaluate("""() =>
                         location.hostname === 'accounts.google.com' ||
+                        (location.hostname === 'flow.google.com' && location.pathname === '/about') ||
                         !!document.querySelector('input[type="email"],input[type="password"]') ||
                         /sign in|đăng nhập/i.test(document.body?.innerText || '')""")
                 except Exception:

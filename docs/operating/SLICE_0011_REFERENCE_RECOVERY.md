@@ -25,10 +25,16 @@ Rejected or weakened: pre-POST `WIRE_DISPATCHED`; first-match catalog selection;
 ## Milestones and status
 
 1. Gemini audit and minimal integration: implemented.
-2. Offline matrix: 40 focused tests passed, including required failure windows plus collision, unreadable candidate, source tamper, concurrent arm, HTTP-before-parse persistence, secret exclusion and canary orchestrator restart. These are offline tests only.
-3. Independent prewrite review: no remaining material blocker after fixing production-root bypass and canary artifact restart. Full regression: **209 passed**; compileall and diff check passed. Current live upload-only canary is next; no new provider effects have occurred in this continuation yet.
+2. Offline matrix: 42 focused tests passed, including required failure windows plus collision, unreadable candidate, source tamper, concurrent arm, HTTP-before-parse persistence, secret exclusion, canary orchestrator restart and safe session-bootstrap stops. These are offline tests only.
+3. Independent review: no remaining material blocker after fixing production-root bypass and canary artifact restart; the final auth-stop delta also reviewed clean. Full regression: **211 passed**; compileall and diff check passed. Live canary initialization stopped at **OWNER_AUTH_REQUIRED** before any upload arm or RPC call. A separate read-only diagnostic observed HTTP 200 followed by `flow.google.com/about`, no session token or captcha API. Browser launch works. These observations establish an unavailable project session, not confirmed cookie expiration.
 4. Frozen reference read-only forensic recovery: not started; original row remains unchanged.
 5. Two production I2V shots, reference/paired QC and Owner review: pending reference recovery.
 6. Approval-only final QC/takes, ordered rough cut/export, candidate handoff: pending Owner visual approval.
 
 No Story Auto runtime import, AutoEdit change, provider switch, Seedance generation or billing change.
+
+## Durable stop and next action
+
+The research database has one synthetic reference Asset, zero upload reservations/events and zero attempts/jobs. Research SHA: `dc766e136c039ce4ae25f78dc7555c161a6178e8c835cf3d37600b4d7d0e8b0e`. The original database still has its exact one consumed reservation, `RESERVED`, null remote identity/hash, one reference Asset and zero attempts/jobs. No frozen-reference forensic query was performed; live qualification has not passed.
+
+Local sanitized bootstrap evidence: `projects/character_continuity/reference_qualification_20260930/session_failure.json` (ignored runtime output). Standard Google account login has been opened in the visible Codex browser. Its previous account could not access the exact project, so Owner must sign in as the previously attested `hoangbsea` account. Obtain a refreshed local cookie export without printing its values, then resume the same fixed canary lineage. The additional upload allowance is unconsumed; the original consumed reservation must never be re-uploaded. No automatic SLICE-0012.

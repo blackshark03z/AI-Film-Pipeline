@@ -5,7 +5,7 @@ import json
 import sqlite3
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock
 
 import pytest
 from PIL import Image, ImageDraw
@@ -13,7 +13,8 @@ from PIL import Image, ImageDraw
 from film_pipeline.live_runtime import Asset
 from film_pipeline.store import SQLiteStore
 from film_pipeline.providers import flow_rpc_contract as contract
-from film_pipeline.providers.flow_reference_rpc import FlowReferenceRpcSession
+from film_pipeline.providers.flow_reference_rpc import (
+    FlowReferenceRpcSession, FlowReferenceRpcDrift, OwnerAuthRequired)
 from film_pipeline.providers.flow_reference_upload import ReferenceUploadStore, OwnerAmbiguityGate, _key
 from film_pipeline.providers.flow_reference_transport import FlowReferenceTransport, image_comparison
 
@@ -345,3 +346,26 @@ def test_canary_orchestrator_restart_reconstructs_qualification_without_upload(t
     assert qualifier.read_live_qualification() == result
     assert qualifier.run_live_canary(Path('unused')) == result
     session.upload_reference.assert_not_called()
+
+
+@pytest.mark.parametrize('login_required', [True, False])
+def test_session_bootstrap_failure_stops_before_rpc_and_preserves_safe_auth_gate(monkeypatch, login_required):
+    import playwright.sync_api
+    from film_pipeline.providers import flow_reference_rpc as rpc
+    driver = MagicMock()
+    browser = driver.chromium.launch.return_value
+    page = browser.new_context.return_value.new_page.return_value
+    page.wait_for_function.side_effect = TimeoutError('secret_dummy_browser_failure')
+    page.evaluate.return_value = login_required
+    monkeypatch.setattr(playwright.sync_api, 'sync_playwright', lambda: Mock(start=lambda: driver))
+    monkeypatch.setattr(rpc, 'read_cookie_export', lambda path: [])
+    session = FlowReferenceRpcSession(cookie_path=Path('unused'), project_id=PROJECT)
+    expected = OwnerAuthRequired if login_required else FlowReferenceRpcDrift
+    with pytest.raises(expected) as stopped:
+        session.__enter__()
+    assert 'secret_dummy_browser_failure' not in str(stopped.value)
+    assert "location.pathname === '/about'" in page.evaluate.call_args.args[0]
+    page.context.request.post.assert_not_called()
+    assert session.rpc_call_counts == {}
+    browser.close.assert_called_once()
+    driver.stop.assert_called_once()
