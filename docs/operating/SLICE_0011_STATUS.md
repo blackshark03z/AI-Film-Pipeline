@@ -1,5 +1,39 @@
 # SLICE-0011 execution status
 
+## Latest result — V2 Shot A OWNER_AMBIGUITY_GATE
+
+Both existing references remain durably VERIFIED at the exact Owner UUIDs;
+**0 new reference uploads** in this V2 continuation. Shot A consumed one fresh
+submit: `attempt_3b7fa3f988caeb979db14c6332be05c535aca9af6c3514c459aa74302d48d4ca`,
+`job_26f3a0b279b6d43ca6ad4cff7084ebc552f0ba7ad792c8519e74fd526490a6b8`.
+RPC_REQUEST_ARMED and HTTP200 acknowledgement are durable. After bounded 600s
+catalog polling, no exact owned output was acquired/bound; runner exited with
+OwnerAmbiguityGate, appended AMBIGUOUS_EVIDENCE and stopped. Remote generation
+acceptance/result remains UNKNOWN; an application submit is not a proven video.
+
+**No provider query/write after this gate.** No retry/replacement/recovery/B.
+Shot B has 0 attempts/jobs/submits. Neither clip exists as a proven acquired
+Asset, so technical/character QC and human packet execution remain unstarted.
+SelectedTake=0, manifest/roughcut/export absent. Packet helper is prepared,
+compiled and independently reviewed; actual rendering is unverified.
+
+Final regression: 61 focused PASS; 230 full PASS (45.44s); compileall and diff
+check PASS. Local-only evidence:
+`projects/character_continuity/slice0011/v2_local_proof.json`.
+Next: explicit Owner ambiguity procedure for this exact existing Shot A; no
+additional upload or generation authority is inferred. The sections below
+record completed recovery and preceding checkpoints.
+
+Final audit found the CLI opened a session before checking a recorded shot
+ambiguity. Fixed: local jobs/facts are now checked immediately after argument
+parsing, before every Flow session/command. Eight CLI-stage regressions prove
+the session factory is never invoked. Current-ledger preflight smoke with an
+unused cookie exits locally with OwnerAmbiguityGate and no provider access.
+Final counts: **69 focused PASS (10.30s), 238 full PASS (46.73s)**; compile and
+diff check PASS. Reviewer independently reran all eight guard cases, confirmed
+the gap resolved and found no remaining material blocker. No reviewer provider
+calls. Local proof/report contain the final one-submit/zero-output state.
+
 ## Owner-authorized V2 recovery continuation — 2026-09-30
 
 Resume baseline: clean HEAD `22dfe4b4f721eba462124998f7a35a5ef34b0890`.
@@ -28,6 +62,18 @@ compileall src/tests/tools PASS and diff check PASS. Actual CDN fixture pairs we
 captured read-only: Zzl0ze=1, as29s=2, maseQ=0, MZZa6b=0; both remote byte hashes
 match V2 forensic evidence. Existing SQLite reservations have not yet been
 reconciled in this continuation. Independent review is pending before recovery.
+
+Phase 3 now PASS: independent review found no material blocker. Both EXISTING
+reservations durably VERIFIED via exhaustive read-only catalog reconciliation;
+expected UUIDs matched before binding. Canary remote SHA
+`93fa8edf3093a62f6053b5ae95352d7355d803329b00cb55f336c559216d8c89`, frozen
+remote SHA `af0ad578968002fd6cdfa864cbf2acbafaf3e8f140d8decbb2990cca7f71012f`.
+Canary provenance `catalog_strong_match`, qualification mode
+`recovered_existing_upload`, evidence hash
+`d9ca4976f5ecc9dfb01a2deed2115213f3ac457221e2a70d2e0516185855cf46`.
+Fresh-process qualification readback PASS, second ensure uses zero network.
+Historical FAILED_AMBIGUOUS retained; no new upload. Implementation milestone
+commit `54b6b3f`. Next: one fresh A submit, exact acquisition, then one B submit.
 
 ## Latest state — live canary OWNER_AMBIGUITY_GATE
 

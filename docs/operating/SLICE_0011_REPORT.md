@@ -1,187 +1,374 @@
-# SLICE-0011 continuation report — live canary ambiguity stop
+# SLICE-0011 V2 continuation report
 
-```text
-RESULT:
-OWNER_AMBIGUITY_GATE; SLICE-0011 is not PROVEN.
-Authentication resolved: Owner signed in through ordinary Chrome; Playwright
-exported its dedicated profile cookies and qualified exact-project runner access.
-The authorized research canary consumed its one arm and observed HTTP200,647 bytes,
-but obtained no durably qualified media identity. Effective state FAILED_AMBIGUOUS.
-No provider query/write followed the stop. Original frozen row unchanged.
+Current evidence supersedes the prior canary-stop report preserved in Git history.
 
-MODEL:
-model: Codex based on GPT-6 (developer identity); exact serving variant not exposed.
-thinking_effort: High reasoning used for audit, integration and adjudication;
-                 no independent runtime effort readback available.
-
-BASELINE:
-start_sha: 39e08e03f36aaeadd2cbb84fe61829f516d08a31 (clean, exact branch)
-final_sha: final committed HEAD supplied with human handoff (report is in that commit).
-accepted_slice0010_baseline: a3496592950c1270cda96fab2cb10711baee33fa
-integration_commit: 907f3bb607ed2479498b11697d6cccfea22a586c
-
-GEMINI_HANDOFF_AUDIT:
-accepted_findings: separate upload/identity/verification; immediate UUID durability;
-                   verified reuse; identified restart; uncertain read-only recovery.
-rejected_or_weakened_claims: pre-POST WIRE_DISPATCHED; first matching row; ignored
- unreadable candidates; dHash OR pixel comparison; 64-bit dHash called 256;
- unconditional rearm/identity replacement; incompatible legacy IDs/schema;
- catalog miss as absence/reupload authority; exactly-once/zero-duplicate claims;
- raw authenticated traceback; direct SQL recovery; inherited live qualification.
-implementation_delta: additive immutable hash-linked events; guarded arm/complete;
- immediate unique identity callback; bounded exhaustive strong comparison;
- fixed isolated canary; durable restart artifact reconstruction; production gates.
-
-TRANSPORT:
-state_machine: LOCAL_RESERVED -> REQUEST_ARMED -> HTTP_RESPONSE_OBSERVED (if
- observed) -> REMOTE_RESOURCE_IDENTIFIED -> REMOTE_RESOURCE_VERIFIED;
- FAILED_AMBIGUOUS preserves prior identity; frozen row = LEGACY_RESERVED_UNCERTAIN.
-network_evidence: upload API invocation count is transient, not wire delivery;
- actual returned HTTP status/byte length durable before parse; no WIRE_DISPATCHED.
-identity_persistence: immutable UUID event before as29s/download/decode/comparison.
-recovery_policy: VERIFIED local reuse 0 network; IDENTIFIED exact-ID verification
- only; uncertain read-only reconciliation; multiple/unreadable/bounded miss stops;
- no automatic reupload. Unique match needs stable exhaustive catalog observations.
-delivery_semantics: AT_MOST_ONCE_WITH_POSSIBLE_LOSS.
-
-OFFLINE_PROOF:
-focused_tests: 42 passed, 6.63s.
-failure_matrix: all 12 requested categories covered; extra negative/collision,
- concurrent-arm, payload/identity integrity, HTTP-order, secret-exclusion,
- canary-restart and bootstrap-gate cases pass. Offline behavior only.
-full_tests: 211 passed, 49.23s.
-
-LIVE_UPLOAD_CANARY:
-project: f6b40e79-d6f8-4354-80ae-c863260e96f5
-isolation: distinct synthetic geometric image and dedicated fixed local DB;
-           existing project reused; no new project creation.
-reference_sha: dc766e136c039ce4ae25f78dc7555c161a6178e8c835cf3d37600b4d7d0e8b0e
-upload_count: one armed upload attempt; successful remote uploads UNKNOWN.
-reservation: refup_2773df1c9a68e852ad4ccad0abbe1c12ed9cd7f1ccb02984ef181df9538275dd
-request_id: e817207e-f0c4-5b90-b425-33230e3f7b9d
-asset_id: asset_88e3948cd04cd4651ff49034e5d38d6d97109a6ec7e28d12d0e01dd303f5396c
-request_body_sha256: 3f0bf242a4d876f8296bebbe37b17cf1bf10b68eeaddfced0bc7aedb60f44c5a
-network_observation: exactly one durable HTTP_RESPONSE_OBSERVED;status200;647 bytes.
-remote_acceptance: UNKNOWN; HTTP200 alone does not establish uploaded resource.
-media_id: null
-media_verified: not reached
-restart_recovery: live unproven; offline covered
-duplicate_uploads: no additional application attempt/reupload after this canary;
-                  no global zero-duplicate guarantee.
-ambiguity: upload_response_unresolved; precise provider/parser failure unobserved.
-durable_state: 1 reference Asset,1 reservation,4 events,0 video attempts,0 jobs.
-effective_state: FAILED_AMBIGUOUS; legacy row RESERVED;media_id/provider_sha null.
-event_order: LOCAL_RESERVED -> REQUEST_ARMED -> HTTP_RESPONSE_OBSERVED -> FAILED_AMBIGUOUS.
-qualified_session: MANUAL_CHROME_SESSION_PASS;3 catalog records;fingerprint
- 78ca7a1c3048b2c86802981696ca7e196752a661a027d3f11b8b5edece84e049.
-auth_history: embedded browser lacked cookie export; automated Chrome sign-in was
- rejected by Google; direct ordinary launch rejected by automatic approval review
- with "blocked by policy". Owner opened verified Desktop shortcut manually and
- closed that dedicated Chrome; ordinary Playwright context API exported cookies.
- No stealth patch, security disabling, challenge bypass or credential decryption.
-initial_canary_invocation: stopped before transport while unauthenticated,0 arms.
-qualified_canary_invocation: one allowed arm/HTTP response; allowance now consumed.
-restart_after_stop: not invoked; never rerun canary or use a new lineage.
-stop_evidence_sha256: c8f75c6441a8e53dba94cf432553a1fae35ea50e32c9efb4a3a1e8b83b1a9903
-provider_queries_after_stop: 0
-
-FROZEN_RESERVATION_RECOVERY:
-reservation_id: refup_1521a9ea3a8582852abbe2b97bf8de4df2ddba6cb689df67c04e06b26021e3ce
-catalog/readback evidence: not performed; live canary prerequisite unmet.
-candidate_count: not observed (not zero).
-recovered_media_id: null
-final_state: RESERVED, upload_attempts=1, provider_media_sha256=null; unchanged.
-new_uploads: 0
-reference_asset: asset_70834935ccb760367645411d115c0c24243f4dd921182ef4b9502cad382062ff
-reference_sha: 31ca872d7b608dee61db0f0bdc753e4acaf659c428706ff7da88dfee98c3e531
-original_POST_outcome: remains unresolved; reservation alone is not delivery proof.
-
-SHOT_A:
-attempt: none
-job: none
-dispatch_count: 0
-output_identity: none
-asset: none
-sha: none
-
-SHOT_B:
-attempt: none
-job: none
-dispatch_count: 0
-output_identity: none
-asset: none
-sha: none
-
-QC:
-reference_vs_A: not reached
-reference_vs_B: not reached
-A_vs_B: not reached
-owner_decision: none for SLICE-0011; earlier SLICE-0010 approval not reused.
-
-SELECTED_TAKES:
-A: none
-B: none
-
-ASSEMBLY:
-manifest: none
-rough_cut: none
-sha: none
-decode: not reached
-
-AUTOEDIT_HANDOFF:
-job: none
-package: none
-media_count: 0
-
-EXTERNAL_EFFECTS (this continuation):
-research_reference_uploads: 1 armed attempt; successful remote uploads UNKNOWN.
-slice_reference_reuploads: 0
-Flow_video_generations: 0
-Seedance_generations: 0
-billing_changes: 0
-
-AMBIGUITIES_ENCOUNTERED:
-Original frozen upload remains unresolved. Earlier auth operator gates resolved.
-New live canary observed HTTP200 but did not qualify/persist a media UUID;
-upload_response_unresolved stop. No raw authenticated response was retained.
-No retry, canary remote reconciliation, frozen forensic recovery or video dispatch
-followed OWNER_AMBIGUITY_GATE. Both upload allowances now remain consumed/uncertain.
-
-INDEPENDENT_REVIEW:
-Planner design integrated. Reviewer found/fixed production --root bypass and
-canary-artifact restart issue; subsequent review found no material blocker.
-Final /about auth classification and two bootstrap tests also reviewed clean.
-No reviewer provider calls. Live qualification remains unproven.
-Post-canary independent read-only audit: all four event hashes/order match the
-canonical artifact; original frozen row unchanged;0 attempts/jobs both databases;
-canary restart guard stops before opening Flow. No material stop-handling defect.
-HTTP200 does not establish remote acceptance/resource creation. No reviewer writes.
-
-REGRESSION:
-focused 42 PASS; full 211 PASS; compileall src/tests PASS; diff check PASS.
-
-SOT_FILES_CHANGED: no frozen schemas/capabilities/Slice0010 evidence changed.
-SECRETS_COMMITTED: none; cookies/tokens/request bodies/signed URLs excluded.
-WORKING_TREE: clean after candidate commit; ignored runtime outputs retained.
-
-CANDIDATE_SHA: resolved from final committed HEAD in human handoff.
-REMOTE_SHA: verified remote branch SHA supplied with human handoff after push.
-
-NEXT:
-Owner must resolve the new research canary ambiguity before further live work.
-Any later bounded read-only canary reconciliation needs explicit Owner direction;
-it grants no new upload allowance and is not performed by this handoff.
-No frozen forensic recovery until canary qualification passes. Original and canary
-uploads may never be blindly retried/replaced. No generation until all reference
-gates pass; joint human character review remains mandatory. No SLICE-0012.
+```json
+{
+  "RESULT": {
+    "state": "OWNER_AMBIGUITY_GATE",
+    "slice_status": "PARTIAL; not closed or Owner-approved"
+  },
+  "MODEL": {
+    "identity": "Codex based on GPT-6; exact serving variant unavailable",
+    "reasoning": "High"
+  },
+  "BASELINE": {
+    "start_sha": "22dfe4b4f721eba462124998f7a35a5ef34b0890",
+    "implementation_commit": "54b6b3f8d2085d2cb5e16a26b287890d71b8a79a",
+    "final_sha": "final committed candidate supplied in human handoff; this report is part of that commit",
+    "branch": "codex/slice-0011-reference-i2v-continuity",
+    "accepted_slice0010_baseline": "a3496592950c1270cda96fab2cb10711baee33fa"
+  },
+  "GEMINI_HANDOFF_AUDIT": {
+    "accepted": "primary-slot identity; metadata UUIDs are not resource identities; conjunctive CDN calibration; exact existing media IDs",
+    "limits": "V2 has numerical forensic evidence but no captured raw upload-response fixture; ellipses/byte-length estimates are not live parser replay; perceptual equality is not byte equality",
+    "implementation_delta": "2D primary slot retained; reject project/request/known correlation IDs in that slot and conflicting sibling primary IDs; no recursive UUID search; versioned MAE3/RMS5/tail.02/tile8/dHash256<=4 with equal dimensions"
+  },
+  "TRANSPORT": {
+    "semantics": "AT_MOST_ONCE_WITH_POSSIBLE_LOSS",
+    "identity_durability": "callback before media verification; tested offline. Recovered IDs durably persist before subsequent exact verification.",
+    "reconciliation": "existing reservation only; all image candidates; expected Owner UUID checked before binding; stable exhaustive catalog scans; zero/unreadable/multiple/disagreeing match stops",
+    "claims": "current observed catalog/readback/reuse path live-qualified; corrected upload parser offline-qualified. No fresh upload, permanent stability, exactly-once or complete ambiguity-coverage claim."
+  },
+  "OFFLINE_PROOF": {
+    "focused": "69 passed in 10.30s",
+    "full": "238 passed in 46.73s (final regression)",
+    "compileall": "src/tests/tools PASS",
+    "diff_check": "PASS",
+    "fixtures": "actual Flow CDN bytes for both references; hashes match V2; both compression matches/cross negatives, localized mutation, uniform-color dHash collision, invalid/conflicting primary IDs, immediate durability and restart/recovery checks pass"
+  },
+  "LIVE_UPLOAD_CANARY": {
+    "asset_id": "asset_88e3948cd04cd4651ff49034e5d38d6d97109a6ec7e28d12d0e01dd303f5396c",
+    "database": "D:\\AI FILM MAKER\\AI-Film-Pipeline\\projects\\character_continuity\\reference_qualification_20260930\\runtime.sqlite",
+    "delivery_semantics": "AT_MOST_ONCE_WITH_POSSIBLE_LOSS",
+    "identity_method": "catalog_strong_match",
+    "isolation": "dedicated research database and distinct synthetic reference; existing project",
+    "media_id": "347f9951-5bbc-4910-b6fd-3a17c74e29d2",
+    "original_response_identity_observed": false,
+    "project_id": "f6b40e79-d6f8-4354-80ae-c863260e96f5",
+    "provider_media_sha256": "93fa8edf3093a62f6053b5ae95352d7355d803329b00cb55f336c559216d8c89",
+    "qualification_mode": "recovered_existing_upload",
+    "reconciliation_evidence_hash": "d9ca4976f5ecc9dfb01a2deed2115213f3ac457221e2a70d2e0516185855cf46",
+    "reference_sha256": "dc766e136c039ce4ae25f78dc7555c161a6178e8c835cf3d37600b4d7d0e8b0e",
+    "request_armed_count": 1,
+    "reservation_id": "refup_2773df1c9a68e852ad4ccad0abbe1c12ed9cd7f1ccb02984ef181df9538275dd",
+    "restart_local_readback": true,
+    "result": "LIVE_UPLOAD_CANARY_PASS",
+    "second_ensure_network_calls": 0,
+    "upload_attempts": 1,
+    "upload_count_evidence": "one durable upload arm and one HTTP response; no wire-delivery assertion",
+    "upload_post_invocations_this_run": 0,
+    "wire_dispatch_claimed": false
+  },
+  "FROZEN_RESERVATION_RECOVERY": {
+    "attribution_scope": "unique strongly matching resource in observed project catalog; original POST outcome not retrospectively proven",
+    "final_state": "REMOTE_RESOURCE_VERIFIED",
+    "media_id": "53b5a413-7bb5-4f97-9be4-2461794a7d80",
+    "provider_media_sha256": "af0ad578968002fd6cdfa864cbf2acbafaf3e8f140d8decbb2990cca7f71012f",
+    "qualification_reservation_id": "refup_2773df1c9a68e852ad4ccad0abbe1c12ed9cd7f1ccb02984ef181df9538275dd",
+    "reference_sha256": "31ca872d7b608dee61db0f0bdc753e4acaf659c428706ff7da88dfee98c3e531",
+    "reservation_id": "refup_1521a9ea3a8582852abbe2b97bf8de4df2ddba6cb689df67c04e06b26021e3ce",
+    "result": "FROZEN_REFERENCE_RECOVERED",
+    "slice_reference_reuploads": 0
+  },
+  "DURABLE_REFERENCE_PROOF": [
+    {
+      "database": "reference_qualification_20260930",
+      "counts": {
+        "assets": 1,
+        "generation_attempts": 0,
+        "provider_jobs": 0
+      },
+      "references": [
+        {
+          "effective_state": "REMOTE_RESOURCE_VERIFIED",
+          "events": [
+            {
+              "at": "2026-09-30T05:17:15.289890+00:00",
+              "data": {
+                "binding": {
+                  "account_id": "project_scoped_unverified_account",
+                  "asset_id": "asset_88e3948cd04cd4651ff49034e5d38d6d97109a6ec7e28d12d0e01dd303f5396c",
+                  "id": "refup_2773df1c9a68e852ad4ccad0abbe1c12ed9cd7f1ccb02984ef181df9538275dd",
+                  "media_id": null,
+                  "project_id": "f6b40e79-d6f8-4354-80ae-c863260e96f5",
+                  "provider_id": "flow_veo",
+                  "provider_media_sha256": null,
+                  "reference_sha256": "dc766e136c039ce4ae25f78dc7555c161a6178e8c835cf3d37600b4d7d0e8b0e",
+                  "request_id": "e817207e-f0c4-5b90-b425-33230e3f7b9d",
+                  "state": "LOCAL_RESERVED",
+                  "upload_attempts": 0
+                }
+              },
+              "stage": "LOCAL_RESERVED"
+            },
+            {
+              "at": "2026-09-30T05:17:15.595030+00:00",
+              "data": {
+                "body_sha256": "3f0bf242a4d876f8296bebbe37b17cf1bf10b68eeaddfced0bc7aedb60f44c5a"
+              },
+              "stage": "REQUEST_ARMED"
+            },
+            {
+              "at": "2026-09-30T05:17:23.357227+00:00",
+              "data": {
+                "response_bytes_len": 647,
+                "status": 200
+              },
+              "stage": "HTTP_RESPONSE_OBSERVED"
+            },
+            {
+              "at": "2026-09-30T05:17:23.376984+00:00",
+              "data": {
+                "diagnostic": "upload_response_unresolved"
+              },
+              "stage": "FAILED_AMBIGUOUS"
+            },
+            {
+              "at": "2026-09-30T06:51:40.634410+00:00",
+              "data": {
+                "candidate_count": 2,
+                "evidence_hash": "a333db0e1a6e660c07e726491fe327b11a30ef55fec561ccf068acb357e1cfd7",
+                "match_count": 1,
+                "unresolved_count": 0
+              },
+              "stage": "RECONCILE_PROBED"
+            },
+            {
+              "at": "2026-09-30T06:51:45.323985+00:00",
+              "data": {
+                "candidate_count": 2,
+                "evidence_hash": "d9ca4976f5ecc9dfb01a2deed2115213f3ac457221e2a70d2e0516185855cf46",
+                "match_count": 1,
+                "unresolved_count": 0
+              },
+              "stage": "RECONCILE_PROBED"
+            },
+            {
+              "at": "2026-09-30T06:51:45.328525+00:00",
+              "data": {
+                "evidence_hash": "d9ca4976f5ecc9dfb01a2deed2115213f3ac457221e2a70d2e0516185855cf46",
+                "media_id": "347f9951-5bbc-4910-b6fd-3a17c74e29d2",
+                "method": "catalog_strong_match"
+              },
+              "stage": "REMOTE_RESOURCE_IDENTIFIED"
+            },
+            {
+              "at": "2026-09-30T06:51:45.972004+00:00",
+              "data": {
+                "media_id": "347f9951-5bbc-4910-b6fd-3a17c74e29d2",
+                "provider_media_sha256": "93fa8edf3093a62f6053b5ae95352d7355d803329b00cb55f336c559216d8c89",
+                "verification_hash": "1e4062c9a6fa7eafe813b018026e52fcde3f1fb198f697eee381c4f17a843895"
+              },
+              "stage": "REMOTE_RESOURCE_VERIFIED"
+            }
+          ],
+          "receipt": {
+            "account_id": "project_scoped_unverified_account",
+            "asset_id": "asset_88e3948cd04cd4651ff49034e5d38d6d97109a6ec7e28d12d0e01dd303f5396c",
+            "id": "refup_2773df1c9a68e852ad4ccad0abbe1c12ed9cd7f1ccb02984ef181df9538275dd",
+            "media_id": "347f9951-5bbc-4910-b6fd-3a17c74e29d2",
+            "project_id": "f6b40e79-d6f8-4354-80ae-c863260e96f5",
+            "provider_id": "flow_veo",
+            "provider_media_sha256": "93fa8edf3093a62f6053b5ae95352d7355d803329b00cb55f336c559216d8c89",
+            "reference_sha256": "dc766e136c039ce4ae25f78dc7555c161a6178e8c835cf3d37600b4d7d0e8b0e",
+            "request_id": "e817207e-f0c4-5b90-b425-33230e3f7b9d",
+            "state": "VERIFIED",
+            "upload_attempts": 1
+          },
+          "receipt_sha256": "e85eb07afbd7d606fc88a6e7ce4effe8cc168c9c6be61c7cf774eef9bbbc9675"
+        }
+      ]
+    },
+    {
+      "database": "slice0011",
+      "counts": {
+        "assets": 1,
+        "generation_attempts": 1,
+        "provider_jobs": 1
+      },
+      "references": [
+        {
+          "effective_state": "REMOTE_RESOURCE_VERIFIED",
+          "events": [
+            {
+              "at": "2026-09-30T06:52:28.928715+00:00",
+              "data": {
+                "candidate_count": 2,
+                "evidence_hash": "3f12dcc9e14473e7a8b8fc0a0a7b9318a601e3c8df0839639e501ac9025274dd",
+                "match_count": 1,
+                "unresolved_count": 0
+              },
+              "stage": "RECONCILE_PROBED"
+            },
+            {
+              "at": "2026-09-30T06:52:33.621701+00:00",
+              "data": {
+                "candidate_count": 2,
+                "evidence_hash": "770284061bc2d952a518475d9ab453dc03b3177e0d16554e0e120e59a51fca19",
+                "match_count": 1,
+                "unresolved_count": 0
+              },
+              "stage": "RECONCILE_PROBED"
+            },
+            {
+              "at": "2026-09-30T06:52:33.628011+00:00",
+              "data": {
+                "evidence_hash": "770284061bc2d952a518475d9ab453dc03b3177e0d16554e0e120e59a51fca19",
+                "media_id": "53b5a413-7bb5-4f97-9be4-2461794a7d80",
+                "method": "catalog_strong_match"
+              },
+              "stage": "REMOTE_RESOURCE_IDENTIFIED"
+            },
+            {
+              "at": "2026-09-30T06:52:34.291428+00:00",
+              "data": {
+                "media_id": "53b5a413-7bb5-4f97-9be4-2461794a7d80",
+                "provider_media_sha256": "af0ad578968002fd6cdfa864cbf2acbafaf3e8f140d8decbb2990cca7f71012f",
+                "verification_hash": "329b2f334835ca59b8626126ec375f3dd707e1407fb9a6dbaba63530170ac0b6"
+              },
+              "stage": "REMOTE_RESOURCE_VERIFIED"
+            }
+          ],
+          "receipt": {
+            "account_id": "project_scoped_unverified_account",
+            "asset_id": "asset_70834935ccb760367645411d115c0c24243f4dd921182ef4b9502cad382062ff",
+            "id": "refup_1521a9ea3a8582852abbe2b97bf8de4df2ddba6cb689df67c04e06b26021e3ce",
+            "media_id": "53b5a413-7bb5-4f97-9be4-2461794a7d80",
+            "project_id": "f6b40e79-d6f8-4354-80ae-c863260e96f5",
+            "provider_id": "flow_veo",
+            "provider_media_sha256": "af0ad578968002fd6cdfa864cbf2acbafaf3e8f140d8decbb2990cca7f71012f",
+            "reference_sha256": "31ca872d7b608dee61db0f0bdc753e4acaf659c428706ff7da88dfee98c3e531",
+            "request_id": "05cf88db-2cdb-54d6-8aac-9fa9864a3424",
+            "state": "VERIFIED",
+            "upload_attempts": 1
+          },
+          "receipt_sha256": "6084ad75a4458ad3d293fad6e27549996e23a473c86ea18fd388cda800c73973"
+        }
+      ]
+    }
+  ],
+  "SHOT_A": {
+    "assets": [],
+    "attempt_id": "attempt_3b7fa3f988caeb979db14c6332be05c535aca9af6c3514c459aa74302d48d4ca",
+    "dispatch_count": 1,
+    "dispatch_facts": [
+      {
+        "at": "2026-09-30T06:53:33.237451+00:00",
+        "data": {
+          "intent_hash": "ca9e145208e22e6e77cbd5e4d334a2960b800a0e99c954367040409a4f4b3f56"
+        },
+        "kind": "RESERVED"
+      },
+      {
+        "at": "2026-09-30T06:53:33.449455+00:00",
+        "data": {
+          "body_sha256": "f82fe72ee5cc98ed19d9cb869255f54a3e445a66b55961c0cc60e4d577be22af",
+          "contract": "flow_rpc_r2v_20260920_1",
+          "request_hash": "05a798ce05197ec252c8e9b8503cebbb4e7525b39450fafc5680df538a7b27af"
+        },
+        "kind": "RPC_REQUEST_ARMED"
+      },
+      {
+        "at": "2026-09-30T06:53:33.876235+00:00",
+        "data": {
+          "body_sha256": "f82fe72ee5cc98ed19d9cb869255f54a3e445a66b55961c0cc60e4d577be22af",
+          "contract": "flow_rpc_r2v_20260920_1",
+          "request_hash": "05a798ce05197ec252c8e9b8503cebbb4e7525b39450fafc5680df538a7b27af"
+        },
+        "kind": "GENERATE_REQUEST_OBSERVED"
+      },
+      {
+        "at": "2026-09-30T06:53:33.876235+00:00",
+        "data": {
+          "request_hash": "05a798ce05197ec252c8e9b8503cebbb4e7525b39450fafc5680df538a7b27af",
+          "status": 200
+        },
+        "kind": "PROVIDER_RESPONSE_OBSERVED"
+      },
+      {
+        "at": "2026-09-30T07:03:34.198824+00:00",
+        "data": {
+          "diagnostic": "reference_video_effect_requires_owner"
+        },
+        "kind": "AMBIGUOUS_EVIDENCE"
+      }
+    ],
+    "external_job_id": null,
+    "job_id": "job_26f3a0b279b6d43ca6ad4cff7084ebc552f0ba7ad792c8519e74fd526490a6b8",
+    "output_bindings": [],
+    "plan_hash": "cbc6cabae3fe2132c6ba6c3b49d78e9994ff3b670549f1980eff82e0cc9da324",
+    "reference_binding": {
+      "asset_id": "asset_70834935ccb760367645411d115c0c24243f4dd921182ef4b9502cad382062ff",
+      "media_id": "53b5a413-7bb5-4f97-9be4-2461794a7d80",
+      "project_id": "f6b40e79-d6f8-4354-80ae-c863260e96f5",
+      "provider_media_sha256": "af0ad578968002fd6cdfa864cbf2acbafaf3e8f140d8decbb2990cca7f71012f",
+      "reference_sha256": "31ca872d7b608dee61db0f0bdc753e4acaf659c428706ff7da88dfee98c3e531"
+    },
+    "shot_id": "CHAR_CONTINUITY_A",
+    "status": "INCONCLUSIVE",
+    "submission_state": "SUBMISSION_RESERVED"
+  },
+  "SHOT_B": {
+    "dispatch_count": 0,
+    "job": null,
+    "shot_id": "CHAR_CONTINUITY_B"
+  },
+  "QC": {
+    "technical": "not reached; no exact acquired pair",
+    "reference_vs_A": "not reached",
+    "reference_vs_B": "not reached",
+    "A_vs_B": "not reached",
+    "owner_decision": null,
+    "helper": "tools/slice0011_review.py implemented/reviewed/compiled; unexecuted until both exact clips acquired"
+  },
+  "SELECTED_TAKES": {
+    "A": null,
+    "B": null,
+    "approval": "none; Slice0010 approval not reused"
+  },
+  "ASSEMBLY": {
+    "manifest": null,
+    "rough_cut": null,
+    "sha": null,
+    "decode": "not reached"
+  },
+  "AUTOEDIT_HANDOFF": {
+    "job": null,
+    "package": null,
+    "media_count": 0,
+    "AutoEdit_changed": false
+  },
+  "EXTERNAL_EFFECTS_THIS_V2_CONTINUATION": {
+    "new_reference_uploads": 0,
+    "Flow_fresh_video_submit_count": 1,
+    "confirmed_acquired_video_count": 0,
+    "remote_generation_acceptance": "unknown for any submitted shot without exact output binding; HTTP200 is not success",
+    "Seedance_generations": 0,
+    "billing_changes": 0,
+    "provider_switch": false,
+    "Slice0012_opened": false
+  },
+  "AMBIGUITIES_ENCOUNTERED": {
+    "historical_reference_ambiguity": "resolved by Owner-authorized read-only content recovery; historical event preserved",
+    "current_shot_ambiguity": "A submit HTTP200 but exact output absent at bounded 600s deadline; stop without retry or B",
+    "provider_operations_after_gate": 0
+  },
+  "CURRENT_STOP_EVIDENCE": {
+    "path": "D:\\AI FILM MAKER\\AI-Film-Pipeline\\projects\\character_continuity\\slice0011\\v2-stop-db6a92a854921f84691eb301007d9c00efd7dc9b30d933ba77f6f1d888888e53.json",
+    "sha256": "db6a92a854921f84691eb301007d9c00efd7dc9b30d933ba77f6f1d888888e53",
+    "scope": "local ledger only; no provider read after stop"
+  },
+  "INDEPENDENT_REVIEW": {
+    "verdict": "V2 implementation/recovery/packet clean; final audit found late CLI ambiguity check, fixed by pre-session local guard; reviewer confirmed all eight guard tests PASS and no remaining material blocker",
+    "fixed_defect": "local job/fact stop check before all CLI sessions; eight stage tests prove no session factory invocation; real preflight smoke stops locally with unused cookie",
+    "limits": "no fresh live corrected-upload-parser proof; packet execution/render remains unproven until acquired pair",
+    "reviewer_provider_calls": 0
+  },
+  "REGRESSION": "69 focused/238 full PASS; compile/diff PASS",
+  "SOT_FILES_CHANGED": "no frozen domain schemas, capabilities or closed Slice0010 evidence changed",
+  "SECRETS_COMMITTED": "none; cookie/session values, raw authenticated bodies and signed URLs excluded",
+  "WORKING_TREE": "clean after final candidate commit; runtime ledgers/media/credentials ignored",
+  "NEXT_ACTION": "explicit Owner ambiguity procedure for exact existing Shot A; no redispatch, replacement, B, provider switch or upload"
+}
 ```
-
-## Files and safe local evidence
-
-- Integration: `flow_reference_upload.py`, `flow_reference_rpc.py`, `flow_reference_transport.py`, `reference_qualification.py`, `slice0011.py`, `tools/slice0011_live.py`.
-- Tests: `tests/test_reference_slice0011.py`, `tests/test_reference_reconcilable_transport.py`.
-- Operating records: this report, `SLICE_0011_STATUS.md`, `SLICE_0011_REFERENCE_RECOVERY.md`.
-- Ignored local bootstrap evidence: `projects/character_continuity/reference_qualification_20260930/session_failure.json`.
-- Ignored qualified session metadata: `projects/character_continuity/reference_qualification_20260930/manual_chrome_session.json` (no cookie values).
-- Ignored canonical stop timeline: `projects/character_continuity/reference_qualification_20260930/canary-stop-c8f75c6441a8e53dba94cf432553a1fae35ea50e32c9efb4a3a1e8b83b1a9903.json`.
-- Ignored research/original SQLite files remain local. Original row read without mutation; uncertain outcome retained.

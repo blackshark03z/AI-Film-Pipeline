@@ -1,5 +1,40 @@
 # SLICE-0011 reference transport integration and recovery
 
+## Current stop after reference recovery
+
+Reference recovery below is complete and remains valid. The one authorized
+fresh Shot A request later received HTTP200 acknowledgement but yielded no
+qualified exact output within 600s. Runner stopped at OWNER_AMBIGUITY_GATE;
+no provider operations followed. Shot B was not dispatched; no QC/takes/assembly.
+The current report/status contain the precise existing job lineage. Further
+Shot A read-only reconciliation needs explicit Owner ambiguity direction.
+
+## Current V2 continuation — recovered, 2026-09-30
+
+Owner's new brief supersedes the historical ambiguity stop below. Resume HEAD
+was clean `22dfe4b4f721eba462124998f7a35a5ef34b0890`. Implementation milestone
+`54b6b3f8d2085d2cb5e16a26b287890d71b8a79a` fixes primary response slot parsing,
+removes recursive metadata UUID conflicts and versions the conjunctive CDN
+comparison. 61 focused/230 full tests PASS; compile and diff check PASS;
+independent review found no material blocker.
+
+Both existing reservations are now durably VERIFIED with **zero new uploads**.
+Read-only exhaustive reconciliation matched Owner's expected canary UUID
+`347f9951-5bbc-4910-b6fd-3a17c74e29d2` and original UUID
+`53b5a413-7bb5-4f97-9be4-2461794a7d80` before binding; both CDN byte hashes
+match V2 evidence. The canary retains its historical FAILED_AMBIGUOUS event and
+records honest `catalog_strong_match` / `recovered_existing_upload` provenance.
+Fresh-process local qualification readback and zero-network second ensure PASS.
+
+This live evidence qualifies current catalog/readback/reuse of the existing
+uploaded resources. No new upload was authorized: the corrected upload parser
+is covered by structural offline tests, not a new live response replay. V2's
+illustrative 647-byte response was not a captured raw fixture. No claims of
+permanent RPC stability, exactly-once delivery or complete ambiguity coverage.
+
+Next: bounded one-generation-per-shot A/B, technical QC and Owner character
+review. Historical sections below preserve the earlier checkpoint only.
+
 ## Scope and checkpoint
 
 Owner's 2026-09-30 continuation starts from clean branch `codex/slice-0011-reference-i2v-continuity`, SHA `39e08e03f36aaeadd2cbb84fe61829f516d08a31`.

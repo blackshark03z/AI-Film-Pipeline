@@ -298,6 +298,34 @@ def test_ambiguous_submit_is_one_shot_and_restart_never_redispatches(tmp_path):
     assert session.submits == 1
 
 
+@pytest.mark.parametrize('stage', ['shot-a', 'shot-b', 'recover-a', 'recover-b',
+                                 'preflight', 'upload', 'recover-reference', 'recover-canary'])
+def test_cli_recorded_shot_ambiguity_stops_before_session_or_catalog(tmp_path, monkeypatch, stage):
+    import importlib.util
+    import sys
+    from film_pipeline import slice0011
+    spec = importlib.util.spec_from_file_location('slice0011_live_guard_test',
+        slice0011.ROOT / 'tools/slice0011_live.py')
+    cli = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cli)
+    db, session, receipt, paths = _prepared_pair(tmp_path / 'setup')
+    job = freeze_shot_job(db, session, paths[0], receipt)
+    with pytest.raises(OwnerAmbiguityGate):
+        submit_and_acquire_shot(db, session, job, tmp_path / 'video', poll_seconds=0)
+    store = SQLiteStore(db)
+    monkeypatch.setattr(cli, 'ROOT', tmp_path)
+    database = tmp_path / 'projects/character_continuity/slice0011/runtime.sqlite'
+    database.parent.mkdir(parents=True)
+    database.touch()
+    monkeypatch.setattr(cli, 'SQLiteStore', lambda _: store)
+    factory = Mock(side_effect=AssertionError('provider session forbidden after Owner gate'))
+    monkeypatch.setattr(cli, 'FlowReferenceRpcSession', factory)
+    monkeypatch.setattr(sys, 'argv', ['slice0011_live.py', stage, '--cookie', 'unused'])
+    with pytest.raises(OwnerAmbiguityGate, match='no provider access'):
+        cli.main()
+    factory.assert_not_called()
+
+
 def _catalog_record(prompt, reference_id, output_id):
     raw = json.loads((Path(__file__).parent / "fixtures/flow_rpc_catalog_redacted.json").read_text())["record"]
     replacements = {"OUTPUT": output_id, "PROJECT": PROJECT_ID,

@@ -18,8 +18,21 @@ from film_pipeline.slice0011 import (
     submit_and_acquire_shot, reconcile_and_acquire_shot,
     upload_reference_once, _existing_job_for_shot,
 )
-from film_pipeline.providers.flow_reference_upload import ReferenceUploadStore
+from film_pipeline.providers.flow_reference_upload import ReferenceUploadStore, OwnerAmbiguityGate
 from film_pipeline.store import SQLiteStore
+
+
+def require_no_local_shot_ambiguity() -> None:
+    """An existing Owner gate stops every command before any Flow session."""
+    database = ROOT / 'projects/character_continuity/slice0011/runtime.sqlite'
+    if not database.is_file():
+        return
+    store = SQLiteStore(database)
+    for shot_id in ('CHAR_CONTINUITY_A', 'CHAR_CONTINUITY_B'):
+        job = _existing_job_for_shot(store, shot_id)
+        if job is not None and any(f['kind'] == 'AMBIGUOUS_EVIDENCE'
+                                  for f in store.read_dispatch_facts(job.provider_job_id)):
+            raise OwnerAmbiguityGate('Owner shot ambiguity gate already recorded; no provider access')
 
 
 def main() -> int:
@@ -29,6 +42,7 @@ def main() -> int:
                                           "reference-canary-readback", "recover-canary", "recover-reference"))
     parser.add_argument("--cookie", type=Path)
     args = parser.parse_args()
+    require_no_local_shot_ambiguity()
     if args.stage in {'reference-canary', 'reference-canary-readback', 'recover-canary', 'recover-reference'}:
         from film_pipeline.reference_qualification import (
             run_live_canary, read_live_qualification, recover_existing_canary, recover_frozen_reference)
