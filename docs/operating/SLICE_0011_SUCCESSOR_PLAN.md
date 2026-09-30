@@ -19,9 +19,11 @@ Neither this job nor its historical canonical plan/request will be rewritten.
 
 - Film's canonical compiler and PromptPlan are unchanged. A separate
   `flow-r2v-compact-v1` adapter derives concise cinematic prose from their
-  creative blocks. Current A/B examples are 1072/1177 characters, 149/167 words,
-  including a full-length example marker. Oversize intent fails for explicit
-  reduction; it is not silently truncated.
+  creative blocks. Refined A/B bodies are 430/450 characters, 70/74 words,
+  excluding the final marker. Each has three natural-language sentences. The
+  body limit is 500 characters/75 words. Qualified semantic aliases deduplicate
+  performance and continuity; unfamiliar essential intent or an over-budget
+  body fails before provider mutation. No string truncation is used.
 - The exact reference remains Asset
   `asset_70834935ccb760367645411d115c0c24243f4dd921182ef4b9502cad382062ff`, SHA
   `31ca872d7b608dee61db0f0bdc753e4acaf659c428706ff7da88dfee98c3e531`, remote UUID
@@ -47,19 +49,17 @@ The actual suffix will contain the entire new job ID after authorization and
 intent freezing. This preview is derived from the unchanged canonical A plan.
 
 ```text
-8-second cinematic medium close-up, 16:9, eye level, portrait lens, locked camera.
-Introduce the fictional illustrated woman and establish her stable identity and look.
-Use the exact image reference. one illustrated adult woman faces slightly frame-right
-in the room. subtle natural breathing; one small blink while keeping a calm neutral
-expression; one small natural blink; gentle breathing. the same woman holds the same
-pose and look. day; simple illustrated living room with window left and sofa and
-plant right. Preserve same illustrated adult woman as the exact image reference;
-teal bob hair; crimson round glasses; mustard jacket over blue shirt; silver triangle
-earrings; small beauty mark below her right eye; one person only; no wardrobe or
-identity mutation; reference face and look; illustrated room layout. slightly frame
-right; near camera right. Avoid identity change; wardrobe change; large head turn;
-extra person; identity swap; new accessories; camera movement; scene change.
-[FILM-<new_provider_job_id>]
+8-second locked eye-level medium close-up, 16:9. Use the exact image reference: one illustrated adult woman with teal bob hair, crimson round glasses, a mustard jacket over a blue shirt, silver triangle earrings and a beauty mark below her right eye; facing slightly right, she breathes gently and blinks once in a daytime living room, window left, sofa and plant right. Keep her face and outfit stable; movements subtle and calm.
+[FILM-<provider_job_id>]
+```
+
+## Shot B reduction preview (no attempt created)
+
+450 characters / 74 words excluding the placeholder marker:
+
+```text
+8-second locked eye-level close-up, 16:9. Use the exact image reference: one illustrated adult woman with teal bob hair, crimson round glasses, a mustard jacket over a blue shirt, silver triangle earrings and a beauty mark below her right eye; facing slightly right, she shifts her gaze toward the left window and breathes gently in a daytime living room, window left, sofa and plant right. Keep her face and outfit stable; movements subtle and calm.
+[FILM-<provider_job_id>]
 ```
 
 ## Proposed procedure after explicit Owner authorization
@@ -96,9 +96,8 @@ behavior only. There is **no new live compact-prompt or MZZa6b response proof**
 in this continuation. The existing ambiguous Shot A is not evaluated, recovered,
 modified or retried. A successor attempt remains proposed and uncreated.
 
-Verification: 32 new compact-adapter cases and 101 focused tests PASS (13.07s),
-compileall/diff check PASS. Independent reviewer confirmed the exact-one-reference
-guard, retained creative fields and no allocated successor/dispatch authority.
-Production and research runtime files retain their exact pre-implementation
-SHA256 values recorded in SLICE_0011_STATUS.md. Final full regression:
-**270 passed (55.48s)**. Live compact-prompt behavior remains unverified.
+Latest refinement verification is recorded in SLICE_0011_STATUS.md. Independent
+review covers semantic reduction, essential-meaning rejection, canonical hash
+preservation and the untouched ambiguous job. Live compact-prompt behavior remains
+unverified. Production and research runtime files retain their exact baseline
+SHA256 values. No successor or dispatch authority is allocated by these previews.

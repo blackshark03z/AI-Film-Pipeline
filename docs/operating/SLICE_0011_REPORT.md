@@ -2,6 +2,27 @@
 
 ## Subsequent implementation-only update
 
+### Final reduction-policy refinement
+
+Only the `flow-r2v-compact-v1` provider reduction policy was changed in source.
+Canonical ShotSpec/PromptPlan, attribution, diagnostics and historical Shot A
+remain unchanged. A/B bodies are **430/450 characters, 70/74 words**, excluding
+one final FILM marker; each has three natural-language sentences. Essential
+unknown meanings or bodies exceeding 500 characters/75 words fail before any
+provider mutation. Semantic aliasing removes repeated breathing/blink/gaze
+instructions. Concise continuity replaces covered restrictions; full negatives,
+JSON, schema vocabulary, asset IDs and purpose duplication are not serialized.
+
+Verification: **110 focused PASS (11.94s), 279 full PASS (49.83s)**,
+compileall/diff check PASS. Independent reviewer verified 41 adapter cases and
+confirmed no material blocker after unknown-eyeline validation was fixed.
+Golden canonical plan hashes and both runtime database file hashes are unchanged
+(see SLICE_0011_STATUS.md). External effects: **zero provider calls, zero successor
+attempts, zero historical Shot A mutations**. Live behavior remains unverified.
+Exact preview bodies and placeholder markers are in SLICE_0011_SUCCESSOR_PLAN.md.
+
+### Prior implementation evidence
+
 Owner requested compact Flow R2V prompting, sanitized response diagnostics and
 stronger output attribution, with no modification/retry of existing Shot A and
 no dispatch. Implemented the separate `flow-r2v-compact-v1` provider compiler;

@@ -1,5 +1,6 @@
 """Deterministic provider adaptation tests. All sessions are offline doubles."""
 import copy
+import hashlib
 import json
 from pathlib import Path
 from unittest.mock import Mock
@@ -32,17 +33,37 @@ def plan_for(path):
 @pytest.mark.parametrize('path', [SHOT_A_PATH, SHOT_B_PATH])
 def test_compact_prompt_deterministic_and_canonical_plan_unchanged(path):
     plan = plan_for(path)
+    shot = load_shot(path)
+    shot_before = canonical_json(shot)
     before, digest = canonical_json(plan), sha256(plan)
     adapted = compile_flow_r2v_prompt(plan, JOB)
     assert adapted == compile_flow_r2v_prompt(plan, JOB)
     assert canonical_json(plan) == before and sha256(plan) == digest
     assert adapted.canonical_plan_hash == digest
-    assert len(adapted.text) < 1800 and len(adapted.text.split()) <= 240
+    assert digest == ('cbc6cabae3fe2132c6ba6c3b49d78e9994ff3b670549f1980eff82e0cc9da324'
+                      if path == SHOT_A_PATH else
+                      '1b2bfc7f38e08eaa7899e8d78d60c1ecc6577b545dc59c028e72c075b88a0682')
+    body, marker = adapted.text.rsplit('\n', 1)
+    assert len(body) == (430 if path == SHOT_A_PATH else 450)
+    assert 250 <= len(body) <= 500 and 40 <= len(body.split()) <= 75
+    assert body.count('.') == 3 and '\n' not in body
+    assert marker == film_marker(JOB) and JOB not in body
+    assert canonical_json(load_shot(path)) == shot_before
     assert len(adapted.text) < len(plan.provider_prompt) / 2
     assert adapted.text.count('[FILM-') == 1 and adapted.text.endswith(film_marker(JOB))
     assert 'Execution correlation:' not in adapted.text and 'SHOT / DRAMATIC PURPOSE' not in adapted.text
-    assert '{' not in adapted.text and 'asset_' not in adapted.text
-    assert 'teal bob hair' in adapted.text and 'silver triangle earrings' in adapted.text
+    assert not any(token in body for token in ('{', '}', '[', ']', 'asset_', 'schema_', 'CHAR_', 'ID_V', 'LOOK_V'))
+    assert not any(header in body for header in plan.canonical_blocks)
+    for phrase in ('8-second locked eye-level', 'Use the exact image reference', 'one illustrated adult woman',
+                   'teal bob hair', 'crimson round glasses', 'mustard jacket over a blue shirt',
+                   'silver triangle earrings', 'beauty mark below her right eye',
+                   'window left, sofa and plant right', 'Keep her face and outfit stable', 'subtle and calm'):
+        assert phrase in body
+    assert body.count('breathes gently') == 1
+    if path == SHOT_A_PATH:
+        assert 'medium close-up' in body and body.count('blinks once') == 1
+    else:
+        assert 'eye-level close-up' in body and body.count('shifts her gaze toward the left window') == 1
     second = compile_flow_r2v_prompt(plan, OTHER_JOB)
     assert second.text.rsplit('\n', 1)[0] == adapted.text.rsplit('\n', 1)[0]
     assert second.marker != adapted.marker
@@ -58,7 +79,8 @@ def test_compiler_rejects_missing_reference_and_creative_marker_collision_or_ove
     wrong.canonical_blocks['BLOCKING / START-END STATE']['blocking']['start'] = film_marker(OTHER_JOB)
     with pytest.raises(ValueError, match='MARKER_COLLISION'):
         compile_flow_r2v_prompt(wrong, JOB)
-    wrong.canonical_blocks['BLOCKING / START-END STATE']['blocking']['start'] = 'long creative intent ' * 300
+    wrong = plan.model_copy(deep=True)
+    wrong.canonical_blocks['BLOCKING / START-END STATE']['blocking']['action_beats'] = ['long creative intent ' * 300]
     with pytest.raises(ValueError, match='COMPACT_PROMPT_LIMIT'):
         compile_flow_r2v_prompt(wrong, JOB)
 
@@ -66,12 +88,51 @@ def test_compiler_rejects_missing_reference_and_creative_marker_collision_or_ove
 def test_provider_prompt_carries_nonredundant_performance_and_prop_intent():
     plan = plan_for(SHOT_A_PATH)
     plan.canonical_blocks['ACTION / PERFORMANCE']['performance']['observable_beats'].append('one restrained smile')
-    plan.canonical_blocks['BLOCKING / START-END STATE']['blocking']['prop_interactions'] = ['touch the cup gently']
     before = canonical_json(plan)
     text = compile_flow_r2v_prompt(plan, JOB).text
-    assert 'one restrained smile' in text and 'touch the cup gently' in text
-    assert 'establish her stable identity and look' in text
+    assert 'smiles faintly' in text and 'establish her stable identity and look' not in text
     assert canonical_json(plan) == before
+    plan.canonical_blocks['BLOCKING / START-END STATE']['blocking']['prop_interactions'] = ['touch the cup gently']
+    before = canonical_json(plan)
+    with pytest.raises(ValueError, match='COMPACT_PROMPT_LIMIT'):
+        compile_flow_r2v_prompt(plan, JOB)
+    assert canonical_json(plan) == before  # Essential cup action must not be silently discarded.
+
+
+def test_redundant_meanings_and_negative_lists_do_not_expand_prompt():
+    plan = plan_for(SHOT_A_PATH)
+    expected = compile_flow_r2v_prompt(plan, JOB)
+    plan.canonical_blocks['ACTION / PERFORMANCE']['performance']['observable_beats'] += ['natural breathing', 'one small natural blink']
+    negatives = plan.canonical_blocks['NEGATIVE / FORBIDDEN BEHAVIOR']
+    negatives['must_avoid'] *= 10
+    plan.canonical_blocks['CONTINUITY CONSTRAINTS']['continuity']['critical_invariants'] *= 2
+    reduced = compile_flow_r2v_prompt(plan, JOB)
+    assert reduced.text == expected.text
+    assert 'Avoid ' not in reduced.text and 'identity swap' not in reduced.text
+
+
+@pytest.mark.parametrize('block,field,value,code', [
+    ('BLOCKING / START-END STATE', 'blocking', {'action_beats': ['dance energetically']}, 'ACTION'),
+    ('BLOCKING / START-END STATE', 'blocking', {'start': 'she stands on one leg'}, 'POSE'),
+    ('CAMERA / LENS / MOVEMENT', 'camera', {'movement': {'type': 'pan'}}, 'CAMERA'),
+    ('ENVIRONMENT / WORLD LOCK', 'environment', {'time_of_day': 'night'}, 'ENVIRONMENT'),
+    ('CONTINUITY CONSTRAINTS', 'continuity', {'eyeline': 'looks straight down'}, 'EYELINE'),
+    ('CONTINUITY CONSTRAINTS', 'continuity', {'critical_invariants': ['teal bob hair', 'gold necklace']}, 'SUBJECT|IDENTITY'),
+])
+def test_unqualified_essential_meaning_fails_without_mutating_plan(block, field, value, code):
+    plan = plan_for(SHOT_A_PATH)
+    plan.canonical_blocks[block][field].update(value)
+    before = canonical_json(plan)
+    with pytest.raises(ValueError, match=code):
+        compile_flow_r2v_prompt(plan, JOB)
+    assert canonical_json(plan) == before
+
+
+def test_novel_essential_restriction_requires_explicit_semantic_reduction():
+    plan = plan_for(SHOT_A_PATH)
+    plan.canonical_blocks['CONTINUITY CONSTRAINTS']['must_preserve'].append('keep the cup in her left hand')
+    with pytest.raises(ValueError, match='RESTRICTION'):
+        compile_flow_r2v_prompt(plan, JOB)
 
 
 def row(prompt=None, output=OUTPUT):
@@ -201,6 +262,24 @@ def prepared(tmp_path):
     session.catalog.return_value = []
     job = freeze_shot_job(database, session, paths[0], receipt)
     return database, paths[0][1], session, job
+
+
+def test_reduction_does_not_mutate_existing_ambiguous_shot_a_state(tmp_path):
+    database, plan, _, job = prepared(tmp_path)
+    store = SQLiteStore(database)
+    store.reserve_dispatch(job.provider_job_id)
+    store.record_dispatch_fact(job.provider_job_id, 'AMBIGUOUS_EVIDENCE',
+                               {'diagnostic': 'offline_historical_Shot_A_ambiguity'})
+    before_job = canonical_json(store.read_provider_job(job.provider_job_id))
+    before_facts = canonical_json(store.read_dispatch_facts(job.provider_job_id))
+    before_hash = hashlib.sha256(database.read_bytes()).hexdigest()
+    for path in (SHOT_A_PATH, SHOT_B_PATH):
+        compile_flow_r2v_prompt(plan_for(path), JOB)
+    assert hashlib.sha256(database.read_bytes()).hexdigest() == before_hash
+    assert canonical_json(store.read_provider_job(job.provider_job_id)) == before_job
+    assert canonical_json(store.read_dispatch_facts(job.provider_job_id)) == before_facts
+    assert store.read_provider_job(job.provider_job_id).dispatch_count == 1
+    assert store.read_output_bindings(job.provider_job_id) == []
 
 
 def test_freeze_uses_compact_wire_prompt_preserving_stored_plan_and_job_immutability(tmp_path):

@@ -1,6 +1,40 @@
 # SLICE-0011 execution status
 
-## Latest continuation — compact R2V implementation only
+## Latest refinement — compact reduction policy only
+
+Owner authorizes only the `flow-r2v-compact-v1` reduction-policy refinement,
+offline tests and independent review. Baseline HEAD:
+`051a5a4cee2cde213687f2c16f17fb02b62478cd`. No provider calls, successor
+creation or historical Shot A mutation are authorized or performed.
+
+Provider bodies now contain 3 natural-language sentences: A **430 characters /
+70 words**, B **450 characters / 74 words**, excluding the final marker line.
+The deterministic semantic vocabulary prioritizes camera, exact reference,
+identity anchors, primary performance, room and continuity. Synonymous beats
+collapse once; state/schema/asset identifiers, dramatic-purpose duplication and
+full negative lists stay out of the wire body. Unknown essential meanings and
+over-budget bodies fail before provider mutation; no substring truncation.
+This qualified reducer supports the illustrated portrait envelope. Other
+essential intent requires an explicit semantic mapping, not silent omission.
+
+Canonical ShotSpec and PromptPlan are unchanged. Golden A/B PromptPlan hashes:
+`cbc6cabae3fe2132c6ba6c3b49d78e9994ff3b670549f1980eff82e0cc9da324` /
+`1b2bfc7f38e08eaa7899e8d78d60c1ecc6577b545dc59c028e72c075b88a0682`.
+**110 focused PASS (11.94s), 279 full PASS (49.83s)**; compileall and
+`git diff --check` PASS. Independent review: 41 adapter cases PASS, no material
+blocker after fixing unknown-eyeline rejection and the preservation-test fixture.
+No attribution, diagnostics, runner or canonical compiler policy changed.
+
+Both runtime files are byte-identical to the baseline: production SHA256
+`81cf752dcadf9df60156f77e2971aba47420e9fe68fa8903b18c17cbedcf10bd`, research
+SHA256 `6054581a1d2fd9824b3a8691f964a11d42b7e9781691612304b7c53869232adf`.
+Existing Shot A state and all historical jobs/journals remain unchanged. No
+actual marker or successor row was allocated. Pre-existing Owner `scratch/`
+is preserved and excluded from staging. Updated previews are in
+`SLICE_0011_SUCCESSOR_PLAN.md`; its authorization boundary remains unchanged.
+No live Flow qualification is claimed.
+
+## Prior continuation — compact R2V implementation only
 
 Owner explicitly forbids modifying/retrying the existing Shot A and authorizes
 only a compact provider adapter, sanitized diagnostics, stronger attribution,
