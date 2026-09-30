@@ -1,5 +1,28 @@
 # SLICE-0011 execution status
 
+## Current result — auth restored; one successor submit; observation lost
+
+Owner authorized restoration of the zero-RPC auth stop and continuation of the
+same original one-A allowance. Base `6f5ec950bb66f2dca2c8c6feecc37eb6a2960309`;
+implementation `152444dfc6892633c67c545692302f06f51cbf93`. Both read-only preflights
+PASS: exact project/session/contract/catalog and uniquely verified exact reference.
+43 auth/successor tests and 322 full regression PASS; compile/diff/SoT and independent
+review PASS. Canonical state and compact prompt policy unchanged.
+
+Exactly one new attempt/job was allocated and one MZZa6b sent, with the actual
+430-character compact body plus unique marker. Sanitized response parsed=true,
+228 bytes, payload type null; HTTP200 remains acknowledgement only. No output was
+bound during visible polling. The process/tool session then disappeared without
+completion report; no Python runner remains. Final gate **OWNER_AMBIGUITY_GATE**:
+post-submit observation/recovery ambiguity. Do not claim the bounded poll completed,
+provider admission, generation failure, or compact-prompt success/failure.
+
+No retry/restart/provider query after gate. Shot B=0, new upload=0, Dola/Seedance=0,
+acquired output Asset=0, SelectedTake=0. Historical attempt/job/journal/reference
+unchanged; original auth-stop evidence preserved. New grant consumed once.
+Full IDs, prompt, diagnostics, baseline and evidence: `SLICE_0011_AUTH_RESTORATION.md`.
+The following sections are earlier checkpoints.
+
 ## Current result — authorized successor stopped before allocation
 
 Owner's new brief authorized one fresh A successor and at most one MZZa6b submit

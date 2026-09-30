@@ -65,4 +65,67 @@ Account name is not technically verified; existing project-scoped receipt remain
 and SoT integrity PASS; no production source/canonical policy changes.
 Independent review: no material blocker; reviewer reran 42 offline cases before
 the final delegation test was added. Character/provider acceptance remains
-unverified. Phase 2 is ready under the explicit Owner decision.
+unverified. Phase 2 proceeded under the explicit Owner decision.
+
+## Phase 2 final result — OWNER_AMBIGUITY_GATE
+
+Implementation revision: `152444dfc6892633c67c545692302f06f51cbf93`.
+Execution preflight repeated all five read-only checks successfully before
+allocation (another Zzl0ze=1/as29s=2, no generation/upload). A new fresh baseline
+contained the same four IDs listed above; it was revalidated before reservation.
+
+New successor attempt:
+`attempt_9723d6dd168ac7fe47baf03ad5fd33ef8f9e0c21cf6f8bcc83cfa002a46822aa`.
+New ProviderJob:
+`job_4d11911518710248299682693a3fdb48ec1426ffc0a6ab6d45de615596060d40`.
+Original authority has exactly one allocation and one consumption. The new job
+has dispatch_count=1, INCONCLUSIVE, no external output/binding. The exact prompt
+below was frozen and sent once: **430 body characters / 70 words**, three sentences,
+one final full job marker. Reference/project/model are unchanged from Owner scope:
+`53b5a413-7bb5-4f97-9be4-2461794a7d80` /
+`f6b40e79-d6f8-4354-80ae-c863260e96f5` / `abra_r2v_8s`, 8s, 16:9.
+
+```text
+8-second locked eye-level medium close-up, 16:9. Use the exact image reference: one illustrated adult woman with teal bob hair, crimson round glasses, a mustard jacket over a blue shirt, silver triangle earrings and a beauty mark below her right eye; facing slightly right, she breathes gently and blinks once in a daytime living room, window left, sofa and plant right. Keep her face and outfit stable; movements subtle and calm.
+[FILM-job_4d11911518710248299682693a3fdb48ec1426ffc0a6ab6d45de615596060d40]
+```
+
+One armed request, one MZZa6b response diagnostic and HTTP200 observation are
+durable. Sanitized diagnostic: parsed=true, UTF-8 bytes=228, type counts null=1
+and bool/dict/float/int/list/str=0, advisory_only=true. Response shape hash:
+`f072cbec3bf8841871d4284230c5e983dc211a56837aed862487148f947d1a1f`.
+Request hash:
+`0144fdec7c100466800650379420e9150e4e8b75ac4b80387174f0eed0a56ea4`.
+These observations do not prove provider admission, generation failure, or
+compact-prompt failure. No raw response/request secrets were persisted.
+
+Last visible poll: no owned output, 568 seconds remaining. The execution tool's
+process session subsequently disappeared; local process inventory found no
+Python runner and no completion report. The cause is unknown. Completion of the
+600-second polling bound is NOT established. Exact final catalog-poll count is
+unavailable. This is post-submit observation/recovery ambiguity: STOP, no restart,
+no new Flow query, no retry. Appended AMBIGUOUS_EVIDENCE only to the new job,
+diagnostic `successor_observation_process_lost`, then wrote the local stop report.
+
+Exact output identity: none bound. Acquired Asset/SHA: none. Live technical QC,
+character review packet: not run/created. SelectedTake=0. Provider acceptance and
+remote outcome remain UNKNOWN. No compact-prompt live success or failure claimed.
+Shot B=0; new reference uploads=0; Dola/Seedance=0; no provider calls after this gate.
+
+Historical A snapshot is unchanged at the hash above. Original A remains
+INCONCLUSIVE, dispatch_count=1, null output, with its five original facts and
+ambiguity intact. Prior zero-RPC auth stop retains its exact file hash. Reference
+receipt/events remain unchanged: one historical reservation, four events.
+Qualification DB retains SHA256
+`6054581a1d2fd9824b3a8691f964a11d42b7e9781691612304b7c53869232adf`.
+Canonical A PromptPlan retains
+`cbc6cabae3fe2132c6ba6c3b49d78e9994ff3b670549f1980eff82e0cc9da324`.
+Final counts: 2 attempts, 2 jobs, 11 dispatch facts (5 historical + 6 successor),
+0 bindings, 1 reference Asset, 0 QC reports, 0 SelectedTakes, 0 B attempts.
+
+Evidence: read_only_preflight.json, execution_preflight.json and
+continuation_result.json under auth_restoration_v1; frozen_intent.json,
+historical_before.json, historical_after.json and live_result.json under the
+fixed successor output directory. The original consumed-grant and wrapper proof
+guards prohibit further execution. Continue only under a new explicit Owner
+ambiguity procedure; never infer a second submit from missing output.
