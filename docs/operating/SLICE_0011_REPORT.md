@@ -3,6 +3,8 @@
 ```text
 RESULT:
 OWNER_AUTH_REQUIRED; SLICE-0011 is not PROVEN.
+Current subcondition: browser sign-in/project access confirmed; fresh cookie
+transfer to the private-RPC runner is unavailable through supported browser API.
 
 MODEL:
 model: Codex based on GPT-6 (developer identity); exact serving variant not exposed.
@@ -62,6 +64,13 @@ session_evidence: browser launch OK; separate read-only diagnostic HTTP200,
  flow.google.com/about, document complete, no session token/captcha API,
  no login input/signin text, TimeoutError at metadata wait, 0 RPC POSTs.
 auth_cause: cookie expiration unconfirmed. Standard login/project access required.
+login_followup: Owner logged in; original password tab unresponsive. Fresh same-
+browser tab worked; visible account chooser selection hoangbsea opened exact
+project at /u/3/project/f6b40e79-d6f8-4354-80ae-c863260e96f5; UI fully loaded.
+cookie_transfer: supported Codex browser API has no cookie export. Browser context
+cookie API export from previous dedicated owned Flow profile produced a local
+candidate, but its read-only project preflight still returned OwnerAuthRequired.
+Candidate unqualified; no upload/video RPC calls; no canary rerun or arm.
 
 FROZEN_RESERVATION_RECOVERY:
 reservation_id: refup_1521a9ea3a8582852abbe2b97bf8de4df2ddba6cb689df67c04e06b26021e3ce
@@ -141,9 +150,10 @@ CANDIDATE_SHA: resolved from final committed HEAD in human handoff.
 REMOTE_SHA: verified remote branch SHA supplied with human handoff after push.
 
 NEXT:
-Owner must sign in as the previously attested hoangbsea account, verify exact
-project access and refresh the local cookie export. The Google login form is
-open in the visible Codex browser. Resume the same fixed canary lineage using
+Owner sign-in and exact project access now confirmed in the visible browser.
+Operator must provide a fresh local cookie JSON export from that authenticated
+Flow session and its path; never paste credential values in chat. Resume the
+same fixed canary lineage using
 the existing unconsumed one-upload allowance, then fresh local readback; only
 after PASS perform authorized bounded frozen forensic reconciliation. Original
 upload may never be retried. No generation until all reference gates pass;

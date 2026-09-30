@@ -2,11 +2,19 @@
 
 ## Current continuation stop — 2026-09-30
 
+### Owner login follow-up: browser ready, cookie transfer pending
+
+Owner reported sign-in complete but loading. The original Google password tab was unresponsive to both accessibility and screenshot observations. A fresh tab in the same Codex browser worked. Flow initially used another signed-in account; selecting `hoangbsea` from Google's visible account chooser opened the exact existing project at `/u/3/project/f6b40e79-d6f8-4354-80ae-c863260e96f5`. Its project UI finished loading, and the visible account control confirmed Hoang/hoangbsea. No project/media modification occurred.
+
+The browser authentication step is complete. The remaining **OWNER_AUTH_REQUIRED** action is a fresh local cookie export usable by the private-RPC runner. The supported Codex browser API exposes no cookie/session export capability. An Owner-authorized cookie export from the previously dedicated `google_flow_slice0010_owned_profile` was attempted using the documented browser context API, with no credential decryption or profile copying. Its read-only project preflight still returned `OwnerAuthRequired`; that candidate is unqualified and must not be used for upload. No canary retry or upload arm, frozen recovery, or generation occurred.
+
+Operator action: provide a fresh cookie JSON export from the authenticated `hoangbsea` Flow session and its local path, without pasting credential values in chat. Safe screenshot: ignored local `projects/character_continuity/reference_qualification_20260930/flow_project_ready.png`. Code remains unchanged; 42 focused/211 full test results remain applicable.
+
 **OWNER_AUTH_REQUIRED**. The reconcilable transport is integrated and independently reviewed; 42 focused tests, 211 full tests, compileall and diff check pass. The one authorized research canary was invoked once but stopped during browser session bootstrap, before any RPC/upload arm. A read-only diagnostic observed HTTP 200 and redirect to `flow.google.com/about` without session metadata/captcha API. Cookie expiration is not confirmed.
 
 Research lineage: `projects/character_continuity/reference_qualification_20260930`; distinct synthetic PNG SHA `dc766e136c039ce4ae25f78dc7555c161a6178e8c835cf3d37600b4d7d0e8b0e`; one reference Asset, **0 reservations, 0 events, 0 upload POSTs, 0 video generations**. The original reservation below is unchanged; frozen forensic recovery and Shot A/B remain unstarted in this continuation. The live canary is **unproven**.
 
-Owner action: sign in to standard Google Flow as `hoangbsea` in the visible login tab, confirm access to exact project `f6b40e79-d6f8-4354-80ae-c863260e96f5`, and refresh the local cookie export. Resume the fixed research lineage under the existing single-upload allowance. Original re-upload remains forbidden. Details: `SLICE_0011_REFERENCE_RECOVERY.md` and `SLICE_0011_REPORT.md`.
+Owner action at the initial stop was standard sign-in and refreshed local cookie export. Sign-in/project access has now been confirmed as recorded above; cookie transfer remains pending. Resume the fixed research lineage under the existing single-upload allowance only after current private-RPC preflight passes. Original re-upload remains forbidden. Details: `SLICE_0011_REFERENCE_RECOVERY.md` and `SLICE_0011_REPORT.md`.
 
 The sections below preserve the earlier checkpoint and original ambiguity evidence; they do not qualify the current live transport.
 
