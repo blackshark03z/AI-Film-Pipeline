@@ -26,19 +26,20 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("stage", choices=("preflight", "upload", "shot-a", "shot-b",
                                           "recover-a", "recover-b", "reference-canary",
-                                          "reference-canary-readback", "recover-reference"))
+                                          "reference-canary-readback", "recover-canary", "recover-reference"))
     parser.add_argument("--cookie", type=Path)
     args = parser.parse_args()
-    if args.stage in {'reference-canary', 'reference-canary-readback', 'recover-reference'}:
+    if args.stage in {'reference-canary', 'reference-canary-readback', 'recover-canary', 'recover-reference'}:
         from film_pipeline.reference_qualification import (
-            run_live_canary, read_live_qualification, recover_frozen_reference)
+            run_live_canary, read_live_qualification, recover_existing_canary, recover_frozen_reference)
         if args.stage == 'reference-canary-readback':
             result = read_live_qualification()
         else:
             if args.cookie is None:
                 raise ValueError('explicit local cookie export required')
-            result = (run_live_canary(args.cookie) if args.stage == 'reference-canary'
-                      else recover_frozen_reference(args.cookie))
+            operation = {'reference-canary': run_live_canary, 'recover-canary': recover_existing_canary,
+                         'recover-reference': recover_frozen_reference}[args.stage]
+            result = operation(args.cookie)
         print(json.dumps(result), flush=True)
         return 0
     if args.cookie is None:

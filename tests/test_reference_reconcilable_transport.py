@@ -245,7 +245,7 @@ def test_legacy_payload_tamper_is_detected(tmp_path):
         store.read_progress(key)
 
 
-def test_rpc_upload_persists_id_without_calling_media_and_rejects_nested_collision():
+def test_rpc_upload_persists_id_without_calling_media_and_allows_nested_metadata():
     session = FlowReferenceRpcSession(cookie_path=Path('unused'), project_id=PROJECT)
     session.captcha = Mock(return_value='test_captcha')
     session.rpc = Mock(return_value=[[REMOTE, None, None]])
@@ -257,10 +257,135 @@ def test_rpc_upload_persists_id_without_calling_media_and_rejects_nested_collisi
     session.media.assert_not_called()
     session.rpc.return_value = [[REMOTE, [OTHER]]]
     identified = Mock()
-    with pytest.raises(OwnerAmbiguityGate, match='multiple'):
+    assert session.upload_reference(png(), PROJECT, before_post=lambda _: None,
+        on_http_response=lambda *args: None, on_identified=identified) == REMOTE
+    identified.assert_called_once_with(REMOTE)
+
+
+@pytest.mark.parametrize('payload', [
+    [[REMOTE, PROJECT], [PROJECT, None]],
+    [[REMOTE, {'client': OTHER, 'correlation': [OTHER]}]],
+    [[REMOTE, contract._new_uuid(PROJECT, 'upload-client')],
+     [contract._new_uuid(PROJECT, 'upload-session'), None]],
+])
+def test_upload_primary_slot_allows_project_client_and_correlation_metadata(payload):
+    session = FlowReferenceRpcSession(cookie_path=Path('unused'), project_id=PROJECT)
+    session.captcha = Mock(return_value='test_captcha')
+    session.rpc = Mock(return_value=payload)
+    session.media = Mock(side_effect=AssertionError('verification forbidden here'))
+    identified = Mock()
+    assert session.upload_reference(png(), PROJECT, before_post=lambda _: None,
+        on_http_response=lambda *args: None, on_identified=identified) == REMOTE
+    identified.assert_called_once_with(REMOTE)
+    session.media.assert_not_called()
+
+
+@pytest.mark.parametrize('payload', [
+    [], [[]], [[None]], [['not-a-uuid']], [REMOTE],
+    [[PROJECT]], [[PROJECT.upper()]],
+    [[contract._new_uuid(PROJECT, 'upload-client')]],
+    [[REMOTE, None], [OTHER, None]],
+])
+def test_upload_invalid_or_conflicting_primary_identity_never_persists(payload):
+    session = FlowReferenceRpcSession(cookie_path=Path('unused'), project_id=PROJECT)
+    session.captcha = Mock(return_value='test_captcha')
+    session.rpc = Mock(return_value=payload)
+    identified = Mock()
+    with pytest.raises(OwnerAmbiguityGate):
         session.upload_reference(png(), PROJECT, before_post=lambda _: None,
             on_http_response=lambda *args: None, on_identified=identified)
     identified.assert_not_called()
+
+
+CDN_FIXTURES = Path(__file__).parent / 'fixtures/flow_reference_cdn'
+
+
+@pytest.mark.parametrize('name,local_sha,remote_sha', [
+    ('canary', 'dc766e136c039ce4ae25f78dc7555c161a6178e8c835cf3d37600b4d7d0e8b0e',
+     '93fa8edf3093a62f6053b5ae95352d7355d803329b00cb55f336c559216d8c89'),
+    ('character', '31ca872d7b608dee61db0f0bdc753e4acaf659c428706ff7da88dfee98c3e531',
+     'af0ad578968002fd6cdfa864cbf2acbafaf3e8f140d8decbb2990cca7f71012f'),
+])
+def test_actual_flow_cdn_recompression_matches_with_distinct_byte_hashes(name, local_sha, remote_sha):
+    source = (CDN_FIXTURES / f'{name}-source.png').read_bytes()
+    observed = (CDN_FIXTURES / f'{name}-cdn.bin').read_bytes()
+    assert hashlib.sha256(source).hexdigest() == local_sha
+    assert hashlib.sha256(observed).hexdigest() == remote_sha
+    comparison = image_comparison(source, observed)
+    assert source != observed and comparison['strong_match']
+    assert comparison['dhash256_distance'] == 0
+    assert comparison['large_difference_fraction'] > .002
+    assert comparison['method'] == 'conservative_rgb_and_detail'
+
+
+@pytest.mark.parametrize('left,right', [('canary', 'character'), ('character', 'canary')])
+def test_cdn_cross_reference_negative_fails(left, right):
+    comparison = image_comparison((CDN_FIXTURES / f'{left}-source.png').read_bytes(),
+                                  (CDN_FIXTURES / f'{right}-cdn.bin').read_bytes())
+    assert not comparison['strong_match']
+    assert comparison['max_channel_mae'] > 100 and comparison['dhash256_distance'] > 100
+
+
+def test_localized_mutation_does_not_hide_in_low_global_error():
+    source = (CDN_FIXTURES / 'canary-source.png').read_bytes()
+    image = Image.open(io.BytesIO(source)).convert('RGB')
+    ImageDraw.Draw(image).rectangle((0, 0, 63, 63), fill='white')
+    stream = io.BytesIO()
+    image.save(stream, 'PNG')
+    result = image_comparison(source, stream.getvalue())
+    assert result['max_channel_mae'] < 3 and not result['strong_match']
+
+
+def test_expected_recovery_identity_disagreement_stops_before_binding(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    store.reserve_once('flow_veo', PROJECT, ACCOUNT, asset)
+    session.remote[REMOTE] = Path(asset.uri_or_path).read_bytes()
+    with pytest.raises(OwnerAmbiguityGate, match='Owner evidence'):
+        transport.reconcile_only(asset, expected_media_id=OTHER)
+    assert store.read_progress(key)['media_id'] is None and session.uploads == 0
+
+
+def test_owner_canary_recovery_keeps_ambiguity_history_and_restarts_without_network(tmp_path, monkeypatch):
+    from film_pipeline import reference_qualification as qualifier
+    monkeypatch.setattr(qualifier, 'QUALIFICATION_ROOT', tmp_path / 'qualification')
+    monkeypatch.setattr(qualifier, 'CANARY_MEDIA_ID', REMOTE)
+    database, asset = qualifier.canary_reference()
+    store = ReferenceUploadStore(database)
+    project = qualifier.PROJECT_ID
+    key = _key('flow_veo', project, ACCOUNT, asset)
+    store.reserve_local('flow_veo', project, ACCOUNT, asset)
+    store.arm_local(key, '1' * 64)
+    store.record_event(key, 'HTTP_RESPONSE_OBSERVED', {'status': 200, 'response_bytes_len': 647})
+    store.record_event(key, 'FAILED_AMBIGUOUS', {'diagnostic': 'upload_response_unresolved'})
+    history = store.events(key)
+    session = Session()
+    session.project_id = project
+    session.rpc_call_counts = {}
+    session.remote[REMOTE] = (CDN_FIXTURES / 'canary-cdn.bin').read_bytes()
+    session.remote[OTHER] = (CDN_FIXTURES / 'character-cdn.bin').read_bytes()
+    session.catalog = lambda: [[identity, project, 'IMAGE', 'CAE', None, None, None]
+                               for identity in session.remote]
+    session.__class__.__enter__ = lambda self: self
+    session.__class__.__exit__ = lambda self, *args: None
+    session.upload_reference = Mock(side_effect=AssertionError('re-upload forbidden'))
+    monkeypatch.setattr(qualifier, 'FlowReferenceRpcSession', lambda **kwargs: session)
+    result = qualifier.recover_existing_canary(Path('unused'))
+    assert result['qualification_mode'] == 'recovered_existing_upload'
+    assert result['identity_method'] == 'catalog_strong_match'
+    assert result['original_response_identity_observed'] is False
+    assert result['upload_post_invocations_this_run'] == 0
+    assert store.events(key)[:4] == history
+    assert store.read_progress(key)['effective_state'] == 'REMOTE_RESOURCE_VERIFIED'
+    session.upload_reference.assert_not_called()
+    monkeypatch.setattr(qualifier, 'FlowReferenceRpcSession', Mock(side_effect=AssertionError('network forbidden')))
+    assert qualifier.read_live_qualification() == result
+    assert qualifier.recover_existing_canary(Path('unused')) == result
+    evidence_path = qualifier.QUALIFICATION_ROOT / 'evidence' / f"{result['reconciliation_evidence_hash']}.json"
+    evidence = json.loads(evidence_path.read_text())
+    evidence['unresolved'] = [OTHER]
+    evidence_path.write_text(json.dumps(evidence))
+    with pytest.raises(OwnerAmbiguityGate, match='evidence mismatch'):
+        qualifier.read_live_qualification()
 
 
 def test_actual_http_callback_is_durable_before_parser_failure_and_no_secrets(tmp_path):

@@ -17,7 +17,7 @@ from ..core import canonical_json, sha256
 from . import flow_rpc_contract as contract
 from .flow_reference_upload import OwnerAmbiguityGate, ReferenceUploadStore, _key
 
-COMPARISON_VERSION = 'reference-rgb-dhash256-v1'
+COMPARISON_VERSION = 'reference-rgb-dhash256-v2-flow-cdn-20260930'
 
 
 def image_comparison(source: bytes, observed: bytes) -> dict:
@@ -57,7 +57,10 @@ def image_comparison(source: bytes, observed: bytes) -> dict:
             return value
 
         distance = (dhash(a) ^ dhash(b)).bit_count()
-        strong = mae <= 2 and rms <= 4 and tail <= .002 and tile_mae <= 4.5 and distance <= 4
+        # Flow CDN calibration: true references have MAE <=1.31, RMS <=3.22,
+        # ringing <=.0099, tile MAE <=5.37 and dHash distance 0. Require every
+        # bound; a perceptual hash collision never qualifies content by itself.
+        strong = mae <= 3 and rms <= 5 and tail <= .02 and tile_mae <= 8 and distance <= 4
         return {**result, 'method': 'conservative_rgb_and_detail',
             'strong_match': strong, 'max_channel_mae': mae, 'max_channel_rms': rms,
             'large_difference_fraction': tail, 'max_tile_mae': tile_mae,
@@ -163,11 +166,16 @@ class FlowReferenceTransport:
         return self.store.complete(progress, media_id, comparison['provider_media_sha256'],
                                    verification_hash=digest)
 
-    def reconcile_only(self, asset):
+    def reconcile_only(self, asset, *, expected_media_id=None):
         """No upload path exists here. Missing catalog rows never grant upload."""
         source = self._source(asset)
         key = _key('flow_veo', self.session.project_id, self.account_id, asset)
         progress = self.store.read_progress(key)
+        if expected_media_id is not None:
+            if not isinstance(expected_media_id, str) or not contract.UUID_RE.fullmatch(expected_media_id):
+                raise ValueError('expected reference identity invalid')
+            if progress and progress['media_id'] not in (None, expected_media_id):
+                raise OwnerAmbiguityGate('existing reference identity disagrees with Owner evidence')
         if progress is None or progress['effective_state'] == 'LOCAL_RESERVED':
             raise OwnerAmbiguityGate('existing externally uncertain reference required')
         if progress['effective_state'] == 'REMOTE_RESOURCE_VERIFIED':
@@ -216,6 +224,8 @@ class FlowReferenceTransport:
                 'candidate_hashes': [c.get('comparison', {}).get('provider_media_sha256')
                                      for c in candidates]})
             if len(matches) == 1 and not unresolved and (stable == signature or self.probes == 1):
+                if expected_media_id is not None and matches[0] != expected_media_id:
+                    raise OwnerAmbiguityGate('unique reference match disagrees with Owner evidence')
                 self.store.record_identified(key, matches[0], method='catalog_strong_match',
                                               evidence_hash=digest)
                 return self.verify_identified(asset, self.store.read_progress(key), source)

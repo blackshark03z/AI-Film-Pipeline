@@ -20,6 +20,41 @@ from .store import SQLiteStore
 QUALIFICATION_ROOT = ROOT / 'projects/character_continuity/reference_qualification_20260930'
 SLICE_ROOT = ROOT / 'projects/character_continuity/slice0011'
 FROZEN_RESERVATION = 'refup_1521a9ea3a8582852abbe2b97bf8de4df2ddba6cb689df67c04e06b26021e3ce'
+CANARY_MEDIA_ID = '347f9951-5bbc-4910-b6fd-3a17c74e29d2'
+FROZEN_MEDIA_ID = '53b5a413-7bb5-4f97-9be4-2461794a7d80'
+
+
+def _canary_provenance(store, key, asset, receipt):
+    identified = next(e['data'] for e in store.events(key)
+                      if e['stage'] == 'REMOTE_RESOURCE_IDENTIFIED')
+    method = identified['method']
+    if method == 'upload_response':
+        return {'qualification_mode': 'direct_upload_response', 'identity_method': method}
+    if method != 'catalog_strong_match' or receipt['media_id'] != CANARY_MEDIA_ID:
+        raise OwnerAmbiguityGate('canary recovery identity unqualified')
+    authority_path = QUALIFICATION_ROOT / 'owner_recovery_authority.json'
+    if not authority_path.is_file() or json.loads(authority_path.read_text(encoding='utf-8')) != {
+            'procedure': 'owner_authorized_existing_canary_reconciliation_20260930',
+            'reservation_id': key, 'expected_media_id': CANARY_MEDIA_ID,
+            'reference_sha256': asset.sha256, 'new_upload_authority': 0}:
+        raise OwnerAmbiguityGate('canary recovery authority evidence missing')
+    evidence_hash = identified['evidence_hash']
+    evidence = json.loads((QUALIFICATION_ROOT / 'evidence' / f'{evidence_hash}.json').read_text(encoding='utf-8'))
+    if (sha256(evidence) != evidence_hash
+            or evidence.get('kind') != 'catalog_reference_reconciliation'
+            or evidence.get('reservation_id') != key or evidence.get('project_id') != PROJECT_ID
+            or evidence.get('source_sha256') != asset.sha256
+            or evidence.get('matches') != [CANARY_MEDIA_ID] or evidence.get('unresolved') != []):
+        raise OwnerAmbiguityGate('canary recovery evidence mismatch')
+    candidates = evidence['candidates']
+    matches = [c['media_id'] for c in candidates if c.get('comparison', {}).get('strong_match')]
+    if (matches != [CANARY_MEDIA_ID]
+            or any('comparison' not in c for c in candidates)
+            or len({c['media_id'] for c in candidates}) != len(candidates)):
+        raise OwnerAmbiguityGate('canary recovery candidate evidence incomplete')
+    return {'qualification_mode': 'recovered_existing_upload', 'identity_method': method,
+        'reconciliation_evidence_hash': evidence_hash,
+        'original_response_identity_observed': False}
 
 
 def _write_exact(path: Path, value: dict):
@@ -97,6 +132,30 @@ def run_live_canary(cookie_path: Path) -> dict:
                           post_calls_this_run=counts.get('maseQ', 0))
 
 
+def recover_existing_canary(cookie_path: Path) -> dict:
+    """Owner-authorized recovery of the consumed canary; no upload call exists."""
+    database, asset = canary_reference()
+    store = ReferenceUploadStore(database)
+    key = _key('flow_veo', PROJECT_ID, ACCOUNT_ID, asset)
+    progress = store.read_progress(key)
+    if progress is None or progress['upload_attempts'] != 1:
+        raise OwnerAmbiguityGate('existing consumed canary reservation required')
+    _write_exact(QUALIFICATION_ROOT / 'owner_recovery_authority.json', {
+        'procedure': 'owner_authorized_existing_canary_reconciliation_20260930',
+        'reservation_id': key, 'expected_media_id': CANARY_MEDIA_ID,
+        'reference_sha256': asset.sha256, 'new_upload_authority': 0})
+    if progress['effective_state'] != 'REMOTE_RESOURCE_VERIFIED':
+        with FlowReferenceRpcSession(cookie_path=cookie_path, project_id=PROJECT_ID) as session:
+            transport = FlowReferenceTransport(store, session, account_id=ACCOUNT_ID,
+                evidence_dir=QUALIFICATION_ROOT / 'evidence')
+            transport.reconcile_only(asset, expected_media_id=CANARY_MEDIA_ID)
+            if session.rpc_call_counts.get('maseQ', 0) or session.rpc_call_counts.get('MZZa6b', 0):
+                raise OwnerAmbiguityGate('reference recovery emitted unauthorized provider write')
+    if (QUALIFICATION_ROOT / 'qualification.json').exists():
+        return read_live_qualification()
+    return _finish_canary(database, asset, store, post_calls_this_run=0)
+
+
 def _finish_canary(database, asset, store, *, post_calls_this_run):
     fresh = ReferenceUploadStore(database).read_verified('flow_veo', PROJECT_ID, ACCOUNT_ID, asset)
     reused = FlowReferenceTransport(ReferenceUploadStore(database), _NoNetworkSession(),
@@ -105,10 +164,9 @@ def _finish_canary(database, asset, store, *, post_calls_this_run):
         raise OwnerAmbiguityGate('live canary durable/reuse identity mismatch')
     key = _key('flow_veo', PROJECT_ID, ACCOUNT_ID, asset)
     events = store.events(key)
-    identified = next(e for e in events if e['stage'] == 'REMOTE_RESOURCE_IDENTIFIED')
-    if identified['data']['method'] != 'upload_response':
-        raise OwnerAmbiguityGate('canary requires observed upload response identity')
+    provenance = _canary_provenance(store, key, asset, fresh)
     result = {'result': 'LIVE_UPLOAD_CANARY_PASS', 'project_id': PROJECT_ID,
+        **provenance,
         'isolation': 'dedicated research database and distinct synthetic reference; existing project',
         'database': str(database.resolve()), 'asset_id': asset.asset_id,
         'reference_sha256': asset.sha256, 'reservation_id': key,
@@ -142,6 +200,9 @@ def read_live_qualification() -> dict:
     if receipt is None or any(receipt[k] != result[k] for k in ('media_id', 'provider_media_sha256')):
         raise OwnerAmbiguityGate('live qualification receipt mismatch')
     events = store.events(result['reservation_id'])
+    provenance = _canary_provenance(store, result['reservation_id'], asset, receipt)
+    if any(result.get(k) != v for k, v in provenance.items()):
+        raise OwnerAmbiguityGate('live qualification provenance mismatch')
     stages = [event['stage'] for event in events]
     if (stages.count('REQUEST_ARMED') != 1
             or not stages.index('HTTP_RESPONSE_OBSERVED') < stages.index('REMOTE_RESOURCE_IDENTIFIED')
@@ -183,8 +244,8 @@ def recover_frozen_reference(cookie_path: Path) -> dict:
     with FlowReferenceRpcSession(cookie_path=cookie_path, project_id=PROJECT_ID) as session:
         transport = FlowReferenceTransport(store, session, account_id=ACCOUNT_ID,
             evidence_dir=SLICE_ROOT / 'reference_evidence')
-        receipt = transport.reconcile_only(asset)
-        if session.rpc_call_counts.get('maseQ', 0) != 0:
+        receipt = transport.reconcile_only(asset, expected_media_id=FROZEN_MEDIA_ID)
+        if session.rpc_call_counts.get('maseQ', 0) or session.rpc_call_counts.get('MZZa6b', 0):
             raise OwnerAmbiguityGate('frozen recovery emitted unauthorized upload')
     result = {'result': 'FROZEN_REFERENCE_RECOVERED', 'reservation_id': key,
         'reference_sha256': asset.sha256, 'media_id': receipt['media_id'],
@@ -207,6 +268,7 @@ def require_production_reference() -> dict:
         'flow_veo', PROJECT_ID, ACCOUNT_ID, asset)
     if (receipt is None or result.get('result') != 'FROZEN_REFERENCE_RECOVERED'
             or result.get('media_id') != receipt['media_id']
+            or receipt['media_id'] != FROZEN_MEDIA_ID
             or result.get('reference_sha256') != asset.sha256
             or result.get('slice_reference_reuploads') != 0
             or result.get('qualification_reservation_id') != qualification['reservation_id']):

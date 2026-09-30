@@ -1,5 +1,34 @@
 # SLICE-0011 execution status
 
+## Owner-authorized V2 recovery continuation — 2026-09-30
+
+Resume baseline: clean HEAD `22dfe4b4f721eba462124998f7a35a5ef34b0890`.
+Owner's new brief authorizes parser/CDN-comparison corrections and zero-upload
+reconciliation of canary `347f9951-5bbc-4910-b6fd-3a17c74e29d2` and frozen
+reference `53b5a413-7bb5-4f97-9be4-2461794a7d80`, then maximum one Flow
+reference-video generation per shot A/B. The prior ambiguity stop is historical.
+
+Milestones: (1) minimal parser/matching and explicit recovered-canary provenance;
+(2) focused/full tests, compile and diff check; (3) all-candidate read-only
+reconciliation of existing reservations with expected-ID guards and fresh local
+reuse proof; (4) one A submit/acquisition, then one B submit/acquisition;
+(5) technical QC and one reference/A/B packet, STOP at
+`OWNER_CHARACTER_CONTINUITY_REVIEW_GATE`. Final take selection/assembly require
+new explicit approval of this packet. Zero new reference uploads, no replacement,
+provider switch, Seedance, billing changes or Slice-0012.
+
+V2 forensic JSON has concrete content metrics; its illustrative upload payload
+is not a captured raw response fixture. Corrected upload parsing will have
+offline structural regression evidence. Recovered live qualification must retain
+`catalog_strong_match` provenance and historical `FAILED_AMBIGUOUS` events;
+never manufacture an original `upload_response` observation.
+
+Phase 1/2 evidence: 61 focused tests PASS (8.84s), 230 full tests PASS (49.67s),
+compileall src/tests/tools PASS and diff check PASS. Actual CDN fixture pairs were
+captured read-only: Zzl0ze=1, as29s=2, maseQ=0, MZZa6b=0; both remote byte hashes
+match V2 forensic evidence. Existing SQLite reservations have not yet been
+reconciled in this continuation. Independent review is pending before recovery.
+
 ## Latest state — live canary OWNER_AMBIGUITY_GATE
 
 Owner completed sign-in in ordinary Chrome opened from the prepared Desktop shortcut and closed that dedicated window. Playwright exported its existing cookies using the ordinary browser-context API; fresh private-RPC runner preflight passed exact project access, 3 catalog records and fingerprint `78ca7a1c3048b2c86802981696ca7e196752a661a027d3f11b8b5edece84e049`. Authentication is resolved.

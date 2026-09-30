@@ -282,15 +282,27 @@ class FlowReferenceRpcSession:
                                      self.captcha('IMAGE_GENERATION'), request_id)
         before_post(hashlib.sha256(body.encode('utf-8')).hexdigest())
         payload = self.rpc(contract.RPC_UPLOAD, body, on_http_response=on_http_response)
-        if (not isinstance(payload, list) or len(payload) != 1
+        if (not isinstance(payload, list) or not payload
                 or not isinstance(payload[0], list) or not payload[0]
                 or not isinstance(payload[0][0], str)
                 or not contract.UUID_RE.fullmatch(payload[0][0])):
             raise OwnerAmbiguityGate("reference upload response shape unqualified")
         media_id = payload[0][0]
-        if any(isinstance(value, str) and contract.UUID_RE.fullmatch(value)
-               and value.lower() != media_id.lower() for value in contract._walk(payload)):
-            raise OwnerAmbiguityGate("reference upload returned multiple identities")
+        metadata_ids = {self.project_id.lower(), request_id.lower(),
+            contract._new_uuid(request_id, 'upload-client').lower(),
+            contract._new_uuid(request_id, 'upload-session').lower()}
+        if media_id.lower() in metadata_ids:
+            raise OwnerAmbiguityGate("reference upload primary identity is project or correlation metadata")
+        # Only a sibling record's primary slot can supply another resource ID.
+        # Nested metadata UUIDs are not identities. Unknown resource-like siblings
+        # still fail closed; never resolve a conflict by gallery/record ordering.
+        for sibling in payload[1:]:
+            if (isinstance(sibling, list) and sibling
+                    and isinstance(sibling[0], str)
+                    and contract.UUID_RE.fullmatch(sibling[0])
+                    and sibling[0].lower() not in metadata_ids
+                    and sibling[0].lower() != media_id.lower()):
+                raise OwnerAmbiguityGate("reference upload returned conflicting primary identities")
         on_identified(media_id)
         return media_id
 
