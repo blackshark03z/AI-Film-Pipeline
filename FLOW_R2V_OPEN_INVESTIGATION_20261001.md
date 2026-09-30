@@ -405,7 +405,7 @@ The canary executed end-to-end under automated harness `run_ui_qualification_can
    - Reference Lineage: Bound to `347f9951-5bbc-4910-b6fd-3a17c74e29d2` in `record[5][6][1][1]` `[OBSERVED]`.
 6. **Media Resolution & Exact Acquisition (`as29s`):**  
    Read-only media RPC `as29s` resolved signed CDN URL:  
-   `https://flow-content.google/video/a47636b8-f7fb-4d99-8100-4cb5d989da8d?Expires=1790832136&KeyName=labs-flow-prod-cdn-key&Signature=j_1qEvYvijcxqwFLTKfK92QrUgM` `[OBSERVED]`.  
+   `https://flow-content.google/video/a47636b8-f7fb-4d99-8100-4cb5d989da8d?<signed-query-redacted>` `[OBSERVED]`.  
    Downloaded raw MP4 asset to `projects/character_continuity/canary_ui_20261001/a47636b8-f7fb-4d99-8100-4cb5d989da8d.mp4` (1,057,779 bytes, SHA-256 `7cc88ca3aa0d5f2de474d2ac508755700e92f500b96477557ecc3216924bd26c`) `[OBSERVED]`.
 7. **Technical QC & EOF Verification:**  
    - Codec: H.264 / High Profile  
@@ -441,8 +441,8 @@ A. UI_MUTATION_DETERMINISTICALLY_QUALIFIABLE
 
 ### Forensic Conclusion:
 1. **Direct RPC vs UI Mutation Discrepancy Resolved:**  
-   Headless HTTP POSTs to `MZZa6b` fail closed because Google Flow backend enforces frontend-attached session state. In contrast, provider-native UI mutation within genuine Chrome cleanly satisfies Google Flow ingress criteria `[OBSERVED]`.
+   Repeated direct `MZZa6b` POSTs were observed to return null/no-output while the qualified provider-native UI mutation produced a backend-attributable output. The exact causal mechanism behind this behavioral difference remains `[UNKNOWN]`; frontend-attached session state is a plausible hypothesis, not a proven root cause.
 2. **Deterministic Ownership Preserved:**  
-   By treating UI interaction purely as a one-shot egress trigger and delegating 100% of admission verification, output attribution, and media download to backend RPC contracts (`Zzl0ze`, `as29s`) paired with correlation markers, Film completely eliminates the historical Story Auto ambiguity pattern `[OBSERVED]`.
+   By treating UI interaction purely as a one-shot egress trigger and delegating admission verification, output attribution, and media download to backend evidence (`Zzl0ze`, `as29s`) paired with correlation markers, Film avoids the historical Story Auto newest-card/retry ambiguity pattern in the qualified canary. Any unresolved external effect still fails closed to `OWNER_AMBIGUITY_GATE` `[OBSERVED]`.
 3. **Operational Qualification:**  
    With the successful execution of `PROPOSED_UI_QUALIFICATION_CANARY` (output `a47636b8-f7fb-4d99-8100-4cb5d989da8d`, SHA-256 `7cc88ca3aa...`, 8.0s, 720p, QC PASS), provider-native UI mutation is officially **QUALIFIED** as a production-grade dispatch mechanism for Flow R2V `[OBSERVED]`.
