@@ -324,7 +324,8 @@ def _acquire_bound(db_path: Path, session, job, output_dir: Path) -> Asset:
 
 
 def submit_and_acquire_shot(db_path: Path, session, job, output_dir: Path,
-                            *, poll_seconds: int = 600, progress=None) -> Asset:
+                            *, poll_seconds: int = 600, progress=None,
+                            successor_authority_id: str | None = None) -> Asset:
     """Consume one submit budget, then bind and acquire only one exact owned row."""
     store = SQLiteStore(db_path)
     fresh = store.read_provider_job(job.provider_job_id)
@@ -360,7 +361,11 @@ def submit_and_acquire_shot(db_path: Path, session, job, output_dir: Path,
         raise OwnerAmbiguityGate("provider catalog changed after frozen baseline")
     if _match_job_output(baseline, session, job) is not None:
         raise OwnerAmbiguityGate("pre-submit output ownership collision")
-    reserved = store.reserve_dispatch(job.provider_job_id)
+    if successor_authority_id is None:
+        reserved = store.reserve_dispatch(job.provider_job_id)
+    else:
+        from .slice0011_successor import reserve_successor_dispatch
+        reserved = reserve_successor_dispatch(store, job.provider_job_id, successor_authority_id)
     try:
         request_id = str(uuid.uuid5(uuid.NAMESPACE_URL, job.provider_job_id))
 
@@ -412,7 +417,13 @@ def submit_and_acquire_shot(db_path: Path, session, job, output_dir: Path,
         except Exception:
             pass
         raise OwnerAmbiguityGate("shot reserved; no redispatch; Owner review required") from exc
-    return _acquire_bound(db_path, session, job, output_dir)
+    try:
+        return _acquire_bound(db_path, session, job, output_dir)
+    except Exception as exc:
+        if not any(f['kind'] == 'AMBIGUOUS_EVIDENCE' for f in store.read_dispatch_facts(job.provider_job_id)):
+            store.record_dispatch_fact(job.provider_job_id, 'AMBIGUOUS_EVIDENCE',
+                                       {'diagnostic': 'exact_acquisition_requires_owner'})
+        raise OwnerAmbiguityGate('exact acquisition failed; no retry; Owner review required') from exc
 
 
 def reconcile_and_acquire_shot(db_path: Path, session, job,

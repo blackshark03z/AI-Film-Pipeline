@@ -196,7 +196,8 @@ class SQLiteStore:
                             raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
                     for key in ('prompt', 'prompt_plan_hash', 'submission_prompt_hash',
                                 'correlation_marker', 'reference_binding', 'rpc_request_hash',
-                                'provider_prompt_compiler'):
+                                'provider_prompt_compiler', 'supersedes_attempt', 'supersedes_job',
+                                'successor_authority_id', 'owner_brief_sha256', 'historical_snapshot_sha256'):
                         if old['correlation_evidence'].get(key) != job.correlation_evidence.get(key):
                             raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
                     if old.get('external_job_id') and old['external_job_id'] != job.external_job_id:

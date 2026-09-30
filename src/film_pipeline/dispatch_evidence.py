@@ -43,12 +43,17 @@ FIELDS = {
 
 
 def intent_hash(job):
-    return sha256({'job': job.provider_job_id, 'attempt': job.generation_attempt_id,
+    basis = {'job': job.provider_job_id, 'attempt': job.generation_attempt_id,
         'provider': job.provider_id, 'project': job.project_binding_id,
         'baseline': job.pre_dispatch_snapshot, 'protocol': job.dispatch_protocol,
         'prompt': {k: job.correlation_evidence.get(k) for k in
                    ('prompt', 'prompt_plan_hash', 'submission_prompt_hash',
-                    'correlation_marker', 'reference_binding', 'rpc_request_hash')}})
+                    'correlation_marker', 'reference_binding', 'rpc_request_hash')}}
+    if 'successor_authority_id' in job.correlation_evidence:
+        basis['successor'] = {key: job.correlation_evidence.get(key) for key in
+            ('supersedes_attempt', 'supersedes_job', 'successor_authority_id',
+             'owner_brief_sha256', 'historical_snapshot_sha256')}
+    return sha256(basis)
 
 
 def validate_fact(kind, data):
