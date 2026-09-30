@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "FLOW_CANARY_002",
+  "scene_id": "FLOW_CANARY",
+  "dramatic_purpose": "Move from the empty alley establishing view to a quiet detail of rain and reflected light.",
+  "duration_target_s": 8,
+  "shot_type": "insert",
+  "characters": [],
+  "camera": {"framing": "INSERT", "height": "ground_level", "lens_intent": "normal", "movement": {"type": "locked"}},
+  "environment": {"time_of_day": "night", "weather": "rain", "atmosphere": "quiet reflective urban alley"},
+  "blocking": {"start": "empty wet alley pavement", "action_beats": ["rain falls onto wet pavement", "water moves across the pavement", "distant reflected light shimmers"], "end": "empty wet pavement remains in view"},
+  "continuity": {"screen_direction": null, "eyeline": null, "start_state": {}, "end_state": {}, "previous_shot_id": "FLOW_CANARY_001", "critical_invariants": ["no people", "night remains night", "rain remains present", "wet pavement", "same reflective urban-alley visual world", "no unexplained spatial or event discontinuity"]}
+}

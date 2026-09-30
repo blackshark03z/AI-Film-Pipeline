@@ -14,7 +14,7 @@ from .live_runtime import Asset, file_sha256
 from .qc import (QCStore, POLICY_VERSION, QCEvidence, SelectedTake, evidence,
                  human_decision, owner_approval_evidence, technical_evidence)
 from .qc_media import (CONTINUITY_CRITERIA, EDITORIAL_CRITERIA, VISUAL_CRITERIA,
-                       gemini_advisory, make_review_media)
+                       gemini_advisory, make_pair_sheet, make_review_media)
 from .store import SQLiteStore
 
 
@@ -29,14 +29,15 @@ def exact_lineage(db_path: Path, attempt_id: str, job_id: str, asset_id: str):
 
 
 def write_review_packet(output_dir: Path, shot, asset: Asset, record, media: dict,
-                        vlm: dict, evidence_rows: list, elapsed_s: float) -> Path:
+                        vlm: dict, evidence_rows: list, elapsed_s: float,
+                        pair: dict | None = None) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
     report = record.report
     def link(path: str) -> str:
         relative = os.path.relpath(Path(path).resolve(), output_dir.resolve()).replace("\\", "/")
         return quote(relative, safe="/:._-")
     lines = [
-        "# SLICE-0007 human QC review packet", "",
+        "# Two-shot continuity and Shot 2 QC review" if pair else "# SLICE-0007 human QC review packet", "",
         f"Asset: `{asset.asset_id}`", f"SHA-256: `{asset.sha256}`",
         f"Video: [open exact video]({link(asset.uri_or_path)})", "",
         "## Frozen shot intent", "",
@@ -53,6 +54,18 @@ def write_review_packet(output_dir: Path, shot, asset: Asset, record, media: dic
     ]
     for frame in media["frames"]:
         lines.append(f"- {frame['time_s']}s: [frame]({link(frame['path'])}) · SHA-256 `{frame['sha256']}`")
+    if pair:
+        lines += ["", "## Observed scene continuity", "",
+                  f"Shot 1 approved asset: `{pair['predecessor_asset_id']}`",
+                  f"Shot 1 clip: [open]({link(pair['predecessor_video'])})",
+                  f"Shot 1 frames: [contact sheet]({link(pair['predecessor_contact']['path'])})",
+                  f"Shot 2 frames: [contact sheet]({link(media['contact_sheet']['path'])})",
+                  f"Side-by-side Shot 1 then Shot 2: [comparison]({link(pair['sheet']['path'])})",
+                  "Compare night/day, rain, absence of people, wet pavement, reflective alley world, "
+                  "obvious geography conflict, and whether the locked wide to insert cut works. "
+                  "Exact physical geography is not established by independent generation.", ""]
+        lines += ["The VLM findings below examine sampled Shot 2 frames only; they do not decide "
+                  "the comparison between shots.", ""]
     lines += ["", "Temporal signals are advisory: " + canonical_json(media["signals"]), ""]
     for gate in ("technical", "visual", "continuity", "editorial"):
         item = report[gate]
@@ -70,7 +83,8 @@ def write_review_packet(output_dir: Path, shot, asset: Asset, record, media: dic
                          f"(evidence `{item.evidence_id}`)")
     lines += ["",
               "## Owner decision", "",
-              "Choose **APPROVE**, **REJECT**, or **NEEDS_REVIEW** after viewing the exact video and evidence.",
+              ("Choose **APPROVE** or **REJECT** for Shot 2 after viewing both exact clips and the comparison."
+               if pair else "Choose **APPROVE**, **REJECT**, or **NEEDS_REVIEW** after viewing the exact video and evidence."),
               "APPROVE requires all visual, continuity and editorial criteria to pass. "
               "REJECT requires a failed gate and structured failure code. Technical or critical continuity "
               "failure prevents SelectedTake. No repair generation is authorized here.", "",
@@ -84,28 +98,45 @@ def write_review_packet(output_dir: Path, shot, asset: Asset, record, media: dic
 
 def run_qc(db_path: Path, attempt_id: str, job_id: str, asset_id: str,
            output_dir: Path, *, gemini_key_file: Path | None = None,
-           gemini_model: str | None = None) -> dict:
+           gemini_model: str | None = None, criteria=None,
+           predecessor_asset: Asset | None = None) -> dict:
     started = time.perf_counter()
     store, shot, asset = exact_lineage(db_path, attempt_id, job_id, asset_id)
     technical, metadata = technical_evidence(shot, asset)
     technical_pass = bool(metadata) and all(e.verdict == "pass" for e in technical)
+    gate_criteria = criteria or {"visual": VISUAL_CRITERIA,
+                                  "continuity": CONTINUITY_CRITERIA,
+                                  "editorial": EDITORIAL_CRITERIA}
+    pair = None
     if technical_pass:
-        visual, media = make_review_media(asset, output_dir)
+        visual, media = make_review_media(asset, output_dir, criteria=gate_criteria)
+        if predecessor_asset is not None:
+            _, prior_media = make_review_media(predecessor_asset, output_dir / "shot1")
+            sheet = make_pair_sheet(prior_media, media, output_dir)
+            pair = {"predecessor_asset_id": predecessor_asset.asset_id,
+                    "predecessor_video": predecessor_asset.uri_or_path,
+                    "predecessor_contact": prior_media["contact_sheet"], "sheet": sheet}
+            visual.append(evidence(asset=asset, evaluator_type="ffmpeg",
+                evaluator_version=POLICY_VERSION, gate="continuity",
+                criterion="paired_scene_continuity",
+                observation="Human comparison of the exact predecessor and candidate is required",
+                verdict="uncertain", source_artifacts=[
+                    {"path": predecessor_asset.uri_or_path, "sha256": predecessor_asset.sha256},
+                    prior_media["contact_sheet"], media["contact_sheet"], sheet]))
     else:
         visual = [evidence(asset=asset, evaluator_type="ffmpeg", evaluator_version=POLICY_VERSION,
                            gate=gate, criterion=criterion,
                            observation="Visual review withheld until technical source is valid",
                            verdict="uncertain")
-                  for gate, criteria in (("visual", VISUAL_CRITERIA),
-                                         ("continuity", CONTINUITY_CRITERIA),
-                                         ("editorial", EDITORIAL_CRITERIA))
-                  for criterion, _ in criteria]
+                  for gate, group in gate_criteria.items()
+                  for criterion, _ in group]
         media = {"frames": [], "contact_sheet": None, "signals": {}}
     vlm = {"used": False, "reason": "no qualified configured model", "cost": "unknown"}
     if technical_pass and gemini_key_file and gemini_model:
         try:
             advisory, vlm = gemini_advisory(asset, media["frames"],
-                                            key_file=gemini_key_file, model=gemini_model)
+                                            key_file=gemini_key_file, model=gemini_model,
+                                            criteria=gate_criteria)
             visual.extend(advisory)
         except (OSError, ValueError, RuntimeError):
             vlm = {"used": False, "reason": "configured advisory unavailable or malformed",
@@ -117,7 +148,7 @@ def run_qc(db_path: Path, attempt_id: str, job_id: str, asset_id: str,
         raise ValueError("fresh QC readback mismatch")
     elapsed = time.perf_counter() - started
     packet = write_review_packet(output_dir, shot, asset, record, media, vlm,
-                                 technical + visual, elapsed)
+                                 technical + visual, elapsed, pair=pair)
     return {"report_id": record.report["qc_report_id"], "decision": record.report["decision"],
             "asset_id": asset.asset_id, "asset_sha256": asset.sha256,
             "duration_s": metadata.get("duration_s"), "width": metadata.get("width"),

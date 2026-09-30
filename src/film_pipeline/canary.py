@@ -1,6 +1,7 @@
 """Bounded single-canary orchestration; no implicit retry or new DB per run."""
 import asyncio
 import hashlib
+import json
 from pathlib import Path
 
 from .compiler import compile_prompt
@@ -12,7 +13,8 @@ from .providers.flow_veo import FlowConfig, FlowVeoProvider
 from .store import SQLiteStore
 
 
-async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_path=None, poll_limit=60, poll_interval=5):
+async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_path=None,
+                     shot_path=None, output_dir=None, poll_limit=60, poll_interval=5):
     # SLICE-0005 is deterministic remediation, with no fresh Generate authority.
     # Recovery is exposed through the executor and never through this submit gate.
     if not authorize_new_submit:
@@ -20,6 +22,7 @@ async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_
     prior_path = Path('projects/flow_canary/runtime.sqlite').resolve()
     if runtime_path is None or Path(runtime_path).resolve() == prior_path:
         raise ValueError('FRESH_AUTHORIZED_RUNTIME_PATH_REQUIRED')
+    shot = load_shot(shot_path or Path(__file__).resolve().parents[2] / 'fixtures/flow_canary.json')
     provider = FlowVeoProvider(config)
     health = await provider.preflight()
     if health.state != 'READY':
@@ -33,17 +36,47 @@ async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_
         # Existing reserved intent is recovered first, never replaced or redispatched.
         connection = store._connect()
         try:
-            rows = connection.execute('SELECT id FROM provider_jobs').fetchall()
+            rows = connection.execute('SELECT provider_jobs.id,generation_attempts.payload '
+                'FROM provider_jobs JOIN generation_attempts ON '
+                'generation_attempts.id=provider_jobs.generation_attempt_id').fetchall()
         finally:
             connection.close()
-        if len(rows) > 1:
-            raise ValueError('MULTIPLE_CANARY_INTENTS')
-        if rows:
-            job = store.read_provider_job(rows[0][0])
-            if job.dispatch_count == 0:
-                raise ValueError('EXISTING_UNDISPATCHED_INTENT_REQUIRES_RECONCILIATION')
+        target_rows = [row[0] for row in rows if json.loads(row[1])['shot_id'] == shot.shot_id]
+        if len(target_rows) > 1:
+            raise ValueError('MULTIPLE_SHOT_INTENTS')
+        for job_id, payload in rows:
+            if json.loads(payload)['shot_id'] != shot.shot_id:
+                prior_job = store.read_provider_job(job_id)
+                if prior_job.status != 'SUCCEEDED' or prior_job.dispatch_count != 1:
+                    raise ValueError('UNRESOLVED_OTHER_SHOT_INTENT')
+        if target_rows:
+            job = store.read_provider_job(target_rows[0])
             if job.project_binding_id != sha256(transport.project_id):
                 raise ValueError('RECOVERY_PROJECT_MISMATCH')
+            if job.dispatch_count == 0:
+                if store.read_dispatch_facts(job.provider_job_id):
+                    raise ValueError('UNDISPATCHED_INTENT_HAS_EVIDENCE')
+                frozen_shot, frozen_plan, frozen_route, frozen_attempt = store.read_path(
+                    job.generation_attempt_id)
+                if (sha256(frozen_shot) != sha256(shot)
+                        or frozen_plan.provider_id != job.provider_id
+                        or frozen_route.provider_id != job.provider_id
+                        or frozen_attempt.shot_id != shot.shot_id):
+                    raise ValueError('UNDISPATCHED_INTENT_MISMATCH')
+                await transport.prepare_video_mode()
+                if await transport.snapshot() != job.pre_dispatch_snapshot:
+                    raise ValueError('UNDISPATCHED_BASELINE_CHANGED')
+                if (await provider.preflight()).state != 'READY':
+                    raise ValueError('PREDISPATCH_NOT_READY')
+                preview_hash = await transport.preview_prompt(job.correlation_evidence['prompt'])
+                if preview_hash != job.correlation_evidence['submission_prompt_hash']:
+                    raise ValueError('UNDISPATCHED_PROMPT_PREVIEW_MISMATCH')
+                try:
+                    job = await executor.submit_once(job.provider_job_id)
+                except Exception:
+                    job = store.read_provider_job(job.provider_job_id)
+                    if job.dispatch_count == 0:
+                        raise
         else:
             try:
                 await transport.prepare_video_mode()
@@ -52,7 +85,6 @@ async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_
                 if diagnostic not in {'FLOW_VIDEO_CREDITS_INSUFFICIENT', 'FLOW_VIDEO_GENERATE_CONTROL_UNAVAILABLE'}:
                     diagnostic = 'VIDEO_MODE_PREFLIGHT_INCONCLUSIVE'
                 return {'result': 'INCONCLUSIVE', 'diagnostic': diagnostic, 'dispatch_count': 0}
-            shot = load_shot(Path(__file__).resolve().parents[2] / 'fixtures/flow_canary.json')
             caps = provider.capabilities()
             plan = compile_prompt(shot, caps)
             decision = route(shot, [plan], [caps], {caps.provider_id: True})
@@ -81,6 +113,8 @@ async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_
                 job = await executor.submit_once(job.provider_job_id)
             except Exception:
                 job = store.read_provider_job(job.provider_job_id)
+                if job.dispatch_count == 0:
+                    raise
         for _ in range(poll_limit):
             job = await executor.reconcile(job.provider_job_id)
             if job.status in {'SUCCEEDED', 'FAILED', 'INCONCLUSIVE'}:
@@ -89,7 +123,8 @@ async def run_canary(config: FlowConfig, *, authorize_new_submit=False, runtime_
         if job.status != 'SUCCEEDED':
             return {'result': 'INCONCLUSIVE', 'dispatch_count': job.dispatch_count, 'terminal_state': job.status,
                     'provider_job_id': job.provider_job_id}
-        assets = await executor.download_assets(job.provider_job_id, Path('projects/flow_canary/outputs'))
+        assets = await executor.download_assets(job.provider_job_id,
+            Path(output_dir or 'projects/flow_canary/outputs'))
         recovered = SQLiteStore(store.path).read_runtime_lineage(job.generation_attempt_id, job.provider_job_id)
         if len(recovered[-1]) != len(assets):
             raise ValueError('ASSET_READBACK_MISMATCH')

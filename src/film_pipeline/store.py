@@ -235,8 +235,17 @@ class SQLiteStore:
                 raise RuntimeError('LEGACY_HISTORY_READ_ONLY')
             if job.dispatch_count == 1:
                 raise RuntimeError("single dispatch budget already consumed")
+            attempt_row = connection.execute(
+                "SELECT payload FROM generation_attempts WHERE id=?",
+                (job.generation_attempt_id,),
+            ).fetchone()
+            if attempt_row is None:
+                raise ValueError("reserved job attempt missing")
+            shot_id = json.loads(attempt_row[0])["shot_id"]
             used = connection.execute(
-                "SELECT COUNT(*) FROM provider_jobs WHERE dispatch_count = 1"
+                "SELECT COUNT(*) FROM provider_jobs AS jobs JOIN generation_attempts AS attempts "
+                "ON attempts.id=jobs.generation_attempt_id WHERE jobs.dispatch_count=1 "
+                "AND json_extract(attempts.payload,'$.shot_id')=?", (shot_id,)
             ).fetchone()[0]
             if used:
                 raise RuntimeError("single dispatch budget already consumed")
