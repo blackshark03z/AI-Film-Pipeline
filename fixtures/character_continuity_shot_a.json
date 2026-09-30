@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "CHAR_CONTINUITY_A",
+  "scene_id": "CHAR_CONTINUITY_ROOM",
+  "dramatic_purpose": "Introduce the fictional illustrated woman and establish her stable identity and look.",
+  "duration_target_s": 8,
+  "shot_type": "performance",
+  "characters": [{"character_id": "CHAR_CONTINUITY_001", "identity_version": "ID_V1", "look_state_id": "LOOK_V1", "behavior_state": "calm neutral", "role_in_shot": "single subject"}],
+  "environment": {"location_id": "ILLUSTRATED_ROOM_01", "location_version": "LOC_V1", "time_of_day": "day", "atmosphere": "simple illustrated living room with window left and sofa and plant right"},
+  "camera": {"framing": "MCU", "height": "eye_level", "lens_intent": "portrait", "movement": {"type": "locked"}},
+  "blocking": {"start": "one illustrated adult woman faces slightly frame-right in the room", "action_beats": ["subtle natural breathing", "one small blink while keeping a calm neutral expression"], "end": "the same woman holds the same pose and look"},
+  "performance": {"observable_beats": ["one small natural blink", "gentle breathing"], "forbidden": ["identity change", "wardrobe change", "large head turn", "extra person"]},
+  "continuity": {"screen_direction": "slightly_frame_right", "eyeline": "near_camera_right", "start_state": {"CHAR_CONTINUITY_001_LOOK": "ID_V1 LOOK_V1"}, "end_state": {"CHAR_CONTINUITY_001_LOOK": "ID_V1 LOOK_V1"}, "previous_shot_id": null, "critical_invariants": ["same illustrated adult woman as the exact image reference", "teal bob hair", "crimson round glasses", "mustard jacket over blue shirt", "silver triangle earrings", "small beauty mark below her right eye", "one person only", "no wardrobe or identity mutation"]},
+  "references": {"character_asset_ids": ["asset_70834935ccb760367645411d115c0c24243f4dd921182ef4b9502cad382062ff"]},
+  "constraints": {"must_preserve": ["reference face and look", "illustrated room layout"], "must_avoid": ["identity swap", "new accessories", "camera movement", "scene change"]}
+}

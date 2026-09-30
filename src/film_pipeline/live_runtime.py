@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal, Protocol
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from .core import ContractModel, GenerationAttempt, PromptPlan, RoutingDecision, ShotSpec, sha256
 from .store import SQLiteStore
@@ -54,10 +54,20 @@ class Asset(ContractModel):
     width: int | None = None
     height: int | None = None
     file_size: int
-    source_attempt_id: str
-    provider_job_id: str
+    source_attempt_id: str | None = None
+    provider_job_id: str | None = None
     provider_asset_id: str | None = None
     rights_metadata: dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def require_real_lineage(self) -> "Asset":
+        if self.origin == "reference":
+            if self.source_attempt_id is not None or self.provider_job_id is not None:
+                raise ValueError("reference Asset cannot fabricate generation lineage")
+        elif self.origin == "generated":
+            if not self.source_attempt_id or not self.provider_job_id:
+                raise ValueError("generated Asset requires attempt and provider job")
+        return self
 
 
 class ProviderTransport(Protocol):
@@ -111,7 +121,8 @@ class LiveRuntimeExecutor:
         self.transport = transport
 
     def freeze_path(self, shot: ShotSpec, plan: PromptPlan, route: RoutingDecision, attempt: GenerationAttempt,
-                    *, project_binding_id: str, pre_dispatch_snapshot: dict[str, Any]) -> ProviderJob:
+                    *, project_binding_id: str, pre_dispatch_snapshot: dict[str, Any],
+                    extra_correlation_evidence: dict[str, Any] | None = None) -> ProviderJob:
         self.store.initialize()
         self.store.save_path(shot, plan, route, attempt)
         job = make_provider_job(attempt, project_binding_id=project_binding_id,
@@ -121,10 +132,16 @@ class LiveRuntimeExecutor:
         # Execution-unique marker is transport correlation, not creative intent.
         # It is persisted before submission and must be echoed by owned outputs.
         submission_prompt = plan.provider_prompt + "\nExecution correlation: " + job.provider_job_id
+        if extra_correlation_evidence is not None and (
+                not isinstance(extra_correlation_evidence, dict)
+                or set(extra_correlation_evidence) &
+                {"prompt", "prompt_plan_hash", "submission_prompt_hash", "correlation_marker"}):
+            raise ValueError("extra correlation evidence overlaps frozen prompt identity")
         job = job.model_copy(update={"correlation_evidence": {
             "prompt": submission_prompt, "prompt_plan_hash": sha256(plan),
             "submission_prompt_hash": sha256(submission_prompt),
             "correlation_marker": job.provider_job_id,
+            **(extra_correlation_evidence or {}),
         }})
         self.store.save_provider_job(job)
         return job

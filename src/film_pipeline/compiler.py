@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from .core import PromptPlan, ProviderCapabilities, ShotSpec, canonical_json, sha256, validate_contract
@@ -31,6 +32,7 @@ def compile_prompt(
     *,
     compiler_version: str = COMPILER_VERSION,
     template_version: str = "canonical-blocks-v1",
+    reference_hashes: dict[str, str] | None = None,
 ) -> PromptPlan:
     """Compile the same creative/config inputs to the same schema-valid PromptPlan."""
     blocks = dict(zip(BLOCK_ORDER, (
@@ -45,7 +47,15 @@ def compile_prompt(
         {"continuity": _data(shot.continuity), "must_preserve": shot.constraints.must_preserve if shot.constraints else []},
         {"performance_forbidden": shot.performance.forbidden if shot.performance else [], "must_avoid": shot.constraints.must_avoid if shot.constraints else []},
     )))
-    input_hash = sha256({
+    references = _data(shot.references) or {}
+    reference_ids = [asset for group in references.values() for asset in group]
+    if reference_hashes is not None:
+        if (len(reference_ids) != len(set(reference_ids))
+                or set(reference_hashes) != set(reference_ids)
+                or any(not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value)
+                       for value in reference_hashes.values())):
+            raise ValueError("reference hash binding must match every exact image Asset ID")
+    input_basis = {
         # ShotSpec carries the referenced creative identity/look/location versions.
         # Only declared capability flags enter this derived-input hash. Profile
         # notes and transport metadata are never creative inputs.
@@ -56,9 +66,10 @@ def compile_prompt(
         }),
         "compiler_version": compiler_version,
         "template_version": template_version,
-    })
-    references = _data(shot.references) or {}
-    reference_ids = [asset for group in references.values() for asset in group]
+    }
+    if reference_hashes is not None:
+        input_basis["reference_hashes"] = reference_hashes
+    input_hash = sha256(input_basis)
     mapped: dict[str, Any] = {"text_fallbacks": {}}
     unsupported: list[str] = []
     degraded: list[str] = []
@@ -76,7 +87,10 @@ def compile_prompt(
             warnings.append(f"{capabilities.provider_id} does not support {name}; review textual fallback")
 
     control("duration_control", shot.duration_target_s, capabilities.supports_duration_control, "target duration")
-    control("image_input", reference_ids, capabilities.supports_image_input, "reference asset IDs")
+    image_input = ([{"asset_id": asset_id, "sha256": reference_hashes[asset_id]}
+                    for asset_id in reference_ids] if reference_hashes is not None
+                   else reference_ids)
+    control("image_input", image_input, capabilities.supports_image_input, "reference asset IDs")
     if len(reference_ids) > 1:
         control("multi_reference", reference_ids, capabilities.supports_multi_reference, "multiple reference asset IDs")
     audio_intent = _data(shot.audio)

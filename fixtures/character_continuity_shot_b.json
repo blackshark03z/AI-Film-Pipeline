@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "CHAR_CONTINUITY_B",
+  "scene_id": "CHAR_CONTINUITY_ROOM",
+  "dramatic_purpose": "Continue with a closer, distinct moment while preserving the same fictional woman's identity and look.",
+  "duration_target_s": 8,
+  "shot_type": "reaction",
+  "characters": [{"character_id": "CHAR_CONTINUITY_001", "identity_version": "ID_V1", "look_state_id": "LOOK_V1", "behavior_state": "quiet attention", "role_in_shot": "single subject"}],
+  "environment": {"location_id": "ILLUSTRATED_ROOM_01", "location_version": "LOC_V1", "time_of_day": "day", "atmosphere": "simple illustrated living room with window left and sofa and plant right"},
+  "camera": {"framing": "CU", "height": "eye_level", "lens_intent": "portrait", "movement": {"type": "locked"}},
+  "blocking": {"start": "the same illustrated adult woman appears in a closer portrait, still slightly frame-right", "action_beats": ["her gaze shifts modestly toward the left window", "she keeps a restrained natural expression"], "end": "she holds the closer pose with the same face, hair, glasses and wardrobe"},
+  "performance": {"observable_beats": ["small gaze shift toward window", "natural breathing"], "forbidden": ["identity change", "wardrobe change", "large head turn", "extra person"]},
+  "continuity": {"screen_direction": "slightly_frame_right", "eyeline": "near_camera_right_to_window_left", "start_state": {"CHAR_CONTINUITY_001_LOOK": "ID_V1 LOOK_V1"}, "end_state": {"CHAR_CONTINUITY_001_LOOK": "ID_V1 LOOK_V1"}, "previous_shot_id": "CHAR_CONTINUITY_A", "critical_invariants": ["same illustrated adult woman as Shot A and the exact image reference", "teal bob hair", "crimson round glasses", "mustard jacket over blue shirt", "silver triangle earrings", "small beauty mark below her right eye", "one person only", "no wardrobe or identity mutation"]},
+  "references": {"character_asset_ids": ["asset_70834935ccb760367645411d115c0c24243f4dd921182ef4b9502cad382062ff"]},
+  "constraints": {"must_preserve": ["reference face and look", "illustrated room layout"], "must_avoid": ["identity swap", "new accessories", "camera movement", "scene change"]}
+}

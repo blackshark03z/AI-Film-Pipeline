@@ -15,6 +15,7 @@ RANK = {
     'AMBIGUOUS_EVIDENCE': 0,
     'OBSERVATION_FAILURE': 0,
     'RESERVED': 1, 'PROMPT_VERIFIED': 2, 'CLICK_ARMED': 3,
+    'RPC_REQUEST_ARMED': 4,
     'TRUSTED_CLICK_OBSERVED': 4, 'PROMPT_ACCEPTANCE_TRANSITION': 4,
     'GENERATE_REQUEST_OBSERVED': 5, 'PROVIDER_RESPONSE_OBSERVED': 6,
     'PROVIDER_ACCEPTANCE_OBSERVED': 7, 'REMOTE_IDENTITY_OBSERVED': 8,
@@ -25,6 +26,7 @@ FIELDS = {
     'AMBIGUOUS_EVIDENCE': {'diagnostic'},
     'OBSERVATION_FAILURE': {'diagnostic'},
     'RESERVED': {'intent_hash'}, 'PROMPT_VERIFIED': {'prompt_sha256'}, 'CLICK_ARMED': set(),
+    'RPC_REQUEST_ARMED': {'request_hash', 'body_sha256', 'contract'},
     'TRUSTED_CLICK_OBSERVED': set(), 'PROMPT_ACCEPTANCE_TRANSITION': set(),
     'GENERATE_REQUEST_OBSERVED': {'request_hash', 'body_sha256', 'contract'},
     'PROVIDER_RESPONSE_OBSERVED': {'request_hash', 'status'},
@@ -42,7 +44,8 @@ def intent_hash(job):
         'provider': job.provider_id, 'project': job.project_binding_id,
         'baseline': job.pre_dispatch_snapshot, 'protocol': job.dispatch_protocol,
         'prompt': {k: job.correlation_evidence.get(k) for k in
-                   ('prompt', 'prompt_plan_hash', 'submission_prompt_hash', 'correlation_marker')}})
+                   ('prompt', 'prompt_plan_hash', 'submission_prompt_hash',
+                    'correlation_marker', 'reference_binding', 'rpc_request_hash')}})
 
 
 def validate_fact(kind, data):

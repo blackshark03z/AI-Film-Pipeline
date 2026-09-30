@@ -61,8 +61,8 @@ class SQLiteStore:
                 );
                 CREATE TABLE IF NOT EXISTS assets (
                     id TEXT PRIMARY KEY,
-                    generation_attempt_id TEXT NOT NULL,
-                    provider_job_id TEXT NOT NULL,
+                    generation_attempt_id TEXT,
+                    provider_job_id TEXT,
                     payload TEXT NOT NULL,
                     FOREIGN KEY (generation_attempt_id) REFERENCES generation_attempts(id),
                     FOREIGN KEY (provider_job_id) REFERENCES provider_jobs(id)
@@ -194,7 +194,8 @@ class SQLiteStore:
                     for field in ('project_binding_id', 'pre_dispatch_snapshot', 'dispatch_protocol'):
                         if old.get(field, 'legacy-v1' if field == 'dispatch_protocol' else None) != getattr(job, field):
                             raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
-                    for key in ('prompt', 'prompt_plan_hash', 'submission_prompt_hash', 'correlation_marker'):
+                    for key in ('prompt', 'prompt_plan_hash', 'submission_prompt_hash',
+                                'correlation_marker', 'reference_binding', 'rpc_request_hash'):
                         if old['correlation_evidence'].get(key) != job.correlation_evidence.get(key):
                             raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
                     if old.get('external_job_id') and old['external_job_id'] != job.external_job_id:
@@ -444,6 +445,8 @@ class SQLiteStore:
 
         if not isinstance(asset, Asset):
             raise TypeError("asset must be Asset")
+        if asset.origin != 'generated' or not asset.provider_job_id or not asset.source_attempt_id:
+            raise ValueError("generated output Asset lineage required")
         self._writable_job(asset.provider_job_id)
         binding = next((b for b in self.read_output_bindings(asset.provider_job_id)
                         if b['output_id'] == asset.provider_asset_id), None)
@@ -473,6 +476,99 @@ class SQLiteStore:
                             {'output_id': asset.provider_asset_id, 'asset_id': asset.asset_id})
         finally:
             connection.close()
+
+    @staticmethod
+    def _allow_reference_rows(connection: sqlite3.Connection) -> None:
+        """Upgrade only when a reference is explicitly saved; preserve old rows."""
+        columns = {row[1]: row for row in connection.execute("PRAGMA table_info(assets)")}
+        if not columns:
+            raise ValueError("assets table missing")
+        if not (columns["generation_attempt_id"][3] or columns["provider_job_id"][3]):
+            return
+        connection.execute("PRAGMA foreign_keys=OFF")
+        try:
+            connection.execute("BEGIN IMMEDIATE")
+            connection.execute("CREATE TABLE assets_reference_ready ("
+                "id TEXT PRIMARY KEY, generation_attempt_id TEXT, provider_job_id TEXT, "
+                "payload TEXT NOT NULL, "
+                "FOREIGN KEY (generation_attempt_id) REFERENCES generation_attempts(id), "
+                "FOREIGN KEY (provider_job_id) REFERENCES provider_jobs(id))")
+            connection.execute("INSERT INTO assets_reference_ready "
+                "SELECT id,generation_attempt_id,provider_job_id,payload FROM assets")
+            connection.execute("DROP TABLE assets")
+            connection.execute("ALTER TABLE assets_reference_ready RENAME TO assets")
+            if connection.execute("PRAGMA foreign_key_check").fetchone() is not None:
+                raise ValueError("reference Asset migration would break lineage")
+            connection.commit()
+        except Exception:
+            connection.rollback()
+            raise
+        finally:
+            connection.execute("PRAGMA foreign_keys=ON")
+
+    @staticmethod
+    def _validate_reference_asset(asset) -> None:
+        from .live_runtime import Asset, file_sha256
+        import struct
+
+        if not isinstance(asset, Asset) or asset.origin != "reference" or asset.asset_type != "image":
+            raise ValueError("image reference Asset required")
+        if (asset.source_attempt_id is not None or asset.provider_job_id is not None
+                or asset.provider_asset_id is not None or asset.mime_type != "image/png"):
+            raise ValueError("reference Asset must have local PNG provenance only")
+        path = Path(asset.uri_or_path)
+        if not path.is_absolute() or not path.is_file():
+            raise ValueError("reference Asset local file missing")
+        with path.open("rb") as stream:
+            header = stream.read(24)
+        if (len(header) != 24 or header[:8] != b"\x89PNG\r\n\x1a\n"
+                or header[12:16] != b"IHDR"):
+            raise ValueError("reference Asset is not PNG")
+        width, height = struct.unpack(">II", header[16:24])
+        if (not width or not height or (asset.width, asset.height) != (width, height)
+                or asset.file_size != path.stat().st_size or file_sha256(path) != asset.sha256
+                or not asset.rights_metadata.get("source_kind")):
+            raise ValueError("reference Asset bytes or provenance mismatch")
+        validate_contract("asset", asset.model_dump(mode="json",
+            exclude={"file_size", "provider_job_id"}))
+
+    def save_reference_asset(self, asset) -> None:
+        """Persist ordinary AssetV1 reference bytes without an invented job."""
+        self._validate_reference_asset(asset)
+        connection = self._connect()
+        try:
+            self._allow_reference_rows(connection)
+            payload = canonical_json(asset.model_dump(mode="json"))
+            with connection:
+                connection.execute("INSERT OR IGNORE INTO assets "
+                    "(id,generation_attempt_id,provider_job_id,payload) VALUES (?,NULL,NULL,?)",
+                    (asset.asset_id, payload))
+                row = connection.execute("SELECT generation_attempt_id,provider_job_id,payload "
+                    "FROM assets WHERE id=?", (asset.asset_id,)).fetchone()
+                if row != (None, None, payload):
+                    raise ValueError("immutable reference Asset identity collision")
+        finally:
+            connection.close()
+
+    def read_reference_asset(self, asset_id: str):
+        """Freshly check identity, schema, and immutable local reference bytes."""
+        from .live_runtime import Asset
+
+        connection = self._connect()
+        try:
+            row = connection.execute("SELECT generation_attempt_id,provider_job_id,payload "
+                "FROM assets WHERE id=?", (asset_id,)).fetchone()
+        finally:
+            connection.close()
+        if row is None:
+            raise KeyError(asset_id)
+        if row[0] is not None or row[1] is not None:
+            raise ValueError("Asset is not a reference")
+        asset = Asset.model_validate(json.loads(row[2]))
+        if asset.asset_id != asset_id:
+            raise ValueError("reference Asset identity mismatch")
+        self._validate_reference_asset(asset)
+        return asset
 
     def read_runtime_lineage(self, attempt_id: str, provider_job_id: str):
         from .live_runtime import Asset

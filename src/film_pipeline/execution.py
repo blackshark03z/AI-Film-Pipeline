@@ -16,6 +16,8 @@ def route(
     plans: list[PromptPlan],
     profiles: list[ProviderCapabilities],
     availability: dict[str, bool],
+    *,
+    required_controls: set[str] | None = None,
 ) -> RoutingDecision:
     """Prefer an available profile that loses the fewest requested controls."""
     profile_by_id = {profile.provider_id: profile for profile in profiles}
@@ -26,20 +28,29 @@ def route(
         profile = profile_by_id.get(plan.provider_id)
         if profile is None or plan.shot_id != shot.shot_id:
             raise ValueError("plan/profile/shot identity mismatch")
-        if availability.get(plan.provider_id, False) and profile.supports_text_to_video:
+        qualified = all(
+            control in plan.mapped_controls and control not in plan.unsupported_controls
+            and bool(getattr(profile, f"supports_{control}", False))
+            for control in (required_controls or set())
+        )
+        if availability.get(plan.provider_id, False) and profile.supports_text_to_video and qualified:
             candidates.append(plan)
     if not candidates:
-        raise ValueError("no available text-to-video provider")
+        raise ValueError("no available provider with required mapped controls")
     candidates.sort(key=lambda plan: (len(plan.unsupported_controls), plan.provider_id))
     selected = candidates[0]
     required = sorted((set(selected.mapped_controls) | set(selected.unsupported_controls)) - {"text_fallbacks"})
     if "text_to_video" not in required:
         required.insert(0, "text_to_video")
     fallback_ids = [plan.provider_id for plan in candidates[1:]]
+    policy = ("available-fewest-unsupported-required-v1" if required_controls
+              else "available-fewest-unsupported-v1")
     reasons = [
         f"{selected.provider_id} is available and supports text-to-video",
         f"fewest unsupported requested controls: {len(selected.unsupported_controls)}",
     ]
+    if required_controls:
+        reasons.append("required mapped controls: " + ", ".join(sorted(required_controls)))
     if fallback_ids:
         reasons.append(f"fallback order: {', '.join(fallback_ids)}")
     else:
@@ -50,7 +61,7 @@ def route(
         "plan_input_hash": selected.input_hash,
         "required_capabilities": required,
         "fallback_provider_ids": fallback_ids,
-        "policy": "available-fewest-unsupported-v1",
+        "policy": policy,
     }
     decision = RoutingDecision(
         routing_decision_id=f"route_{sha256(core)}",
@@ -60,7 +71,7 @@ def route(
         required_capabilities=required,
         difficulty={"unsupported_control_count": len(selected.unsupported_controls)},
         fallback_provider_ids=fallback_ids,
-        benchmark_policy_version="available-fewest-unsupported-v1",
+        benchmark_policy_version=policy,
     )
     validate_contract("routing_decision", decision.payload())
     return decision
