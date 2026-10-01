@@ -1,5 +1,10 @@
 # Slice 0011 canonical reference repair and fresh Shot A
 
+**Final live state: OWNER_AMBIGUITY_GATE — BACKEND_IDENTITY_NOT_PROVEN.**
+One native Generate click / one browser-generated request; zero retries,
+zero uploads, zero Shot B. No output is accepted or selected. The new grant is
+consumed. Stop; no further provider access in this attempt.
+
 Owner authority: current chat request, “REPAIR CANONICAL REFERENCE MAPPING +
 RE-PROVE SHOT A”, 2026-10-01. Exactly one fresh A Generate, zero blind retries,
 zero uploads, no Shot B. Base `6b018fcb71f97f35458700ba671de69bfe663d52`.
@@ -94,3 +99,82 @@ claimed. Main-agent verification continues. Regression runs: 373 pass, then
 379 pass after persisted-attestation tests; final pre-live regression:
 **380 passed in 67.47 seconds**, plus runner import smoke check and staged
 `git diff --check`. Canonical Film Core and fixture files have no diff.
+
+## Fresh Shot A result
+
+- OBSERVED source revision exercised:
+  `7045840d7bb5c0116cb71fc29772d954a8d959d5`.
+- OBSERVED attempt:
+  `attempt_abc126a1cab2ee17df989e0b6a3b1aaea01fbff83bbc7ec8faca34e3c51a48a1`.
+- OBSERVED job:
+  `job_3f809a16b36fe1a86b919ffe42cc7c799998cd3941c7d6ed8fdd730d589bbeb5`.
+- OBSERVED grant:
+  `canonical_reproof_6d24d9c888cca862aa999bb42873eb98cb7dc7b2dd673558087b082614ed2dad`.
+- OBSERVED: immutable reservation consumed once; native click once; request
+  guard observed and released one exact project/reference/model/creative-AST
+  request. Required input reference was `53b5…`, not `347f…`.
+- OBSERVED: backend-only catalog reconciliation found no exact marker-bound
+  output within the 240-second bounded polling window. No binding was written.
+  Durable ambiguity fact: `canonical_reproof_owner_gate`.
+- UNKNOWN: provider admission, rejection, eventual completion, fresh output ID,
+  output SHA/duration/resolution, and backend output reference lineage. Sending
+  the request does not establish generation acceptance or completion.
+- NOT PERFORMED: output acquisition, EOF decode, reference-vs-output visual
+  comparison, character/look QC, temporal deformation QC and editorial QC,
+  because no exact output identity was proven. No continuity approval claimed.
+- OBSERVED: post-live historical snapshot remains
+  `30dd5331e4bd0d719e6811801e61029bb8d852ebd027f6ccf00fd2f3e2ee09d7`.
+  Both prior jobs, their evidence and canonical/reference history are preserved.
+
+The mapping/readback repair is locally proven and its live input gate passed.
+Fresh Shot A acceptance is **unverified**, not disproven content or a proven
+wrong-reference generation. Owner review must start from the existing consumed
+job and immutable journal. This handoff does not authorize another Generate.
+
+## Files changed
+
+Production: `dispatch_evidence.py`, `store.py`,
+`providers/flow_r2v_prompt.py`, `providers/flow_reference_rpc.py`,
+`providers/flow_rpc_contract.py`, `providers/flow_media.py`,
+`providers/flow_reference_binding.py`, `providers/flow_canonical_ui.py`,
+`slice0011_canonical_reproof.py` under `src/film_pipeline/`.
+
+Tests: `tests/test_flow_contract_20261001.py`,
+`tests/test_canonical_reference_binding.py`,
+`tests/test_slice0011_canonical_reproof.py`.
+Runner: `tools/slice0011_canonical_a_live.py`.
+Docs: this handoff, reference-binding resolution, UI mutation handoff/status
+and gate evidence. Prior untracked investigation reports/tools, scratch,
+profiles and `uv.lock` are retained outside the delivery commit.
+
+## Durable evidence
+
+All new artifacts are under
+`projects/character_continuity/canonical_a_reproof_20261001/`:
+
+- `reference/refbind_73f8434cfa8ec5766bafdd56f39524aef65939cb94034e2edc8eed29e6c1594e.json`
+  and exact readback bytes: accepted canonical mapping.
+- `geometric_negative_control.json`: independently bound geometric resource
+  rejected even under a simulated conflated receipt.
+- `offline_real_runtime_grant_proof.json`: copied-runtime one-shot/history proof.
+- `pre_generate_proof.json`: committed revision, immutable reference and UI input
+  proof before reservation/click; its state field is the conservative initial
+  default, not a claim that an ambiguity occurred before Generate.
+- `live_result.json`: final counts, job, input proof and ambiguity diagnostic.
+- `post_live_audit.json`: journal, empty output bindings, consumed grant,
+  unchanged history and hashes of preceding artifacts. Signed URLs and auth
+  material are absent.
+
+## Final verification
+
+Post-live full regression: **380 passed in 70.51 seconds**. Pre-live full
+regression: **380 passed in 67.47 seconds**. No production source changes after
+live; the exercised source revision remains
+`7045840d7bb5c0116cb71fc29772d954a8d959d5`. Documentation-only delivery follows
+that source commit. Exact final delivery HEAD and artifact hashes are persisted
+in `projects/character_continuity/canonical_a_reproof_20261001/delivery.json`
+after that commit and reported to the Owner. Tracked delivery changes pass
+`git diff --check`; inherited untracked owner work remains untouched.
+
+Final state: **OWNER_AMBIGUITY_GATE**. No additional provider calls, Generate,
+upload, retry or Shot B after the bounded live attempt stopped.

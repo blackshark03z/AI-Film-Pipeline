@@ -178,3 +178,14 @@ another reference, re-upload, switch project/account, change correlation, or
 generate under this stop record. This continuation's generation grant is unused,
 but that budget does not override the identity gate. A future continuation must
 first re-ground evidence and qualify the production mutation boundary.
+
+
+## 2026-10-01 canonical-reference reproof superseding update
+
+See [canonical A reproof](SLICE_0011_CANONICAL_A_REPROOF.md). The production
+receipt already named `53b5…`; new immutable ID/resource/bytes/content proof
+and fail-closed UI/grant guards are implemented. Historical `347f…` canary
+remains UI mutation evidence only, never canonical-conditioning proof.
+Fresh A: one Generate click, one request, zero retry/upload/B. Backend output
+identity was not proven within the bounded reconciliation window. Final state
+`OWNER_AMBIGUITY_GATE`; no fresh output or continuity QC accepted. Stop.

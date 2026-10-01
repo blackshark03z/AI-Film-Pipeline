@@ -72,3 +72,14 @@ The system Python lacked project dependencies; the existing project environment
 was used. A small uncommitted session change enables explicitly supplied native
 Chrome/profile sessions and removes a hard-coded User-Agent; it is partial work,
 not a qualified mutation adapter. The pending milestones remain unproven.
+
+
+## 2026-10-01 canonical-reference reproof superseding update
+
+See [canonical A reproof](SLICE_0011_CANONICAL_A_REPROOF.md). The production
+receipt already named `53b5…`; new immutable ID/resource/bytes/content proof
+and fail-closed UI/grant guards are implemented. Historical `347f…` canary
+remains UI mutation evidence only, never canonical-conditioning proof.
+Fresh A: one Generate click, one request, zero retry/upload/B. Backend output
+identity was not proven within the bounded reconciliation window. Final state
+`OWNER_AMBIGUITY_GATE`; no fresh output or continuity QC accepted. Stop.

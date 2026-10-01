@@ -120,5 +120,18 @@
     "final_regression": "343 passed in 69.03s; exit 0",
     "compileall": "exit 0",
     "diff_check": "exit 0"
+  },
+  "canonical_reference_reproof_20261001": {
+    "state": "OWNER_AMBIGUITY_GATE",
+    "source_revision": "7045840d7bb5c0116cb71fc29772d954a8d959d5",
+    "job_id": "job_3f809a16b36fe1a86b919ffe42cc7c799998cd3941c7d6ed8fdd730d589bbeb5",
+    "attempt_id": "attempt_abc126a1cab2ee17df989e0b6a3b1aaea01fbff83bbc7ec8faca34e3c51a48a1",
+    "generate_clicks": 1,
+    "provider_generate_requests": 1,
+    "retries": 0,
+    "uploads": 0,
+    "shot_b_generates": 0,
+    "diagnostic": "BACKEND_IDENTITY_NOT_PROVEN",
+    "handoff": "SLICE_0011_CANONICAL_A_REPROOF.md"
   }
 }
