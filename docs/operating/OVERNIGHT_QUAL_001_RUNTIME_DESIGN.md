@@ -127,3 +127,56 @@ Vertical proof: `test_generic_r2v_shot_end_to_end_offline` — ordinary shot
 (`FLOW_CANARY_001` + one synthetic reference) through the full runtime path to
 QC-handoff eligibility, with a locally FFmpeg-generated valid MP4 fixture and
 frozen synthetic provider doubles. Provider access/mutation count: 0.
+
+## C2 FIRST_WORKING (proven 2026-10-01)
+
+- `src/film_pipeline/flow_r2v_runtime.py` + `tests/test_flow_r2v_runtime.py`:
+  **31/31 focused pass**, including the offline end-to-end vertical;
+  105 pass across `test_flow_r2v_boundary`, `test_live_runtime`,
+  `test_dispatch_recovery`, `test_flow_contract_20261001`.
+- Checkpoint `90e547a`.
+
+## C3 ADVERSARIAL REVIEW (findings persisted before repair)
+
+Hostile review performed against the working implementation: cross-component
+invariants, TOCTOU, restart/crash windows, mutable provenance, false-positive
+tests, claims vs code, hidden Slice-0011 coupling, duplicate authority,
+historical drift. Concrete findings:
+
+- **F1 (material — repair):** `attribute_backend_output` silently defaulted a
+  missing/invalid `pre_dispatch_snapshot['catalog_ids']` to an empty baseline
+  and never re-validated the snapshot fingerprint/project at attribution time.
+  A hand-frozen foreign job (raw row, empty snapshot) would lose preexisting-
+  output protection and could own a marker-echo output. Reproduction: raw
+  hostile job insert + runtime reserve/attribute (must fail closed).
+- **F2 (real crash window — fail-closed-stuck, documented, not repaired):**
+  crash between `store.save_path` and `store.save_provider_job` in `freeze`
+  leaves an attempt with no job; restart raises `FLOW_R2V_SHOT_JOB_AMBIGUOUS`.
+  No unsafe outcome is possible (no job → no reservation → no mutation), but
+  the shot is stuck pending manual cleanup. Repair would require a new
+  transactional store API spanning both tables — rejected as out-of-scope risk
+  for the delivery; the gate is fail-closed. Accepted with Owner visibility.
+- **F3 (minor — repair):** `FlowR2VShotRuntime(model=...)` was unvalidated at
+  construction and failed only later inside `MutationIntent`. Repair: qualify
+  the model in `__init__`.
+- **F4 (material — repair):** the runtime exposed no recovery helper; restart
+  classification required every caller to re-implement `recovery_decision`
+  with correct `bound`/`acquired` arguments (the reviewer reproduced the exact
+  mis-call inside the new tests — live evidence of the drift risk). Repair:
+  `FlowR2VShotRuntime.recovery(frozen)` delegating to
+  `LiveRuntimeExecutor.recovery_decision`.
+- **F5 (minor — repair):** `_frozen` could raise `ContractError` instead of
+  `OwnerAmbiguityGate` when a stored reference binding carried an invalid
+  media id — inconsistent gate exception type on the hostile-input path.
+  Repair: explicit gate check before intent construction.
+
+Checks that found no defect (recorded so the absence is evidence, not silence):
+guard double-release is blocked by the journal's unique
+GENERATE_REQUEST_OBSERVED constraint before `route.continue_`; intent dataclass
+fields are never trusted without a fresh store read; `MUTATION_INTENT_BOUND`
+re-derivation catches any post-reservation intent/reference/prompt/UI drift;
+frozen correlation keys (including `reference_binding`) are store-enforced;
+the per-shot one-dispatch budget is enforced inside `reserve_dispatch`
+globally, so a freeze-time race cannot create a second mutation; runtime
+module imports no Slice-0011 module directly or transitively.
+
