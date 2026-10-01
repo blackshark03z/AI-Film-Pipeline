@@ -19,7 +19,9 @@ from .flow_reference_upload import OwnerAmbiguityGate
 class NativeUiProfile:
     """Locale-dependent native-UI literals for one qualified settings envelope."""
 
-    settings_tokens: tuple[str, ...] = ('Video', '·', '720p', '8', 'giây', 'crop_16_9', 'x1')
+    # The previously-qualified live settings readback, byte-for-byte:
+    # ['Video', '·', '720p', '·', '8', 'giây', 'crop_16_9', 'x1'].
+    settings_tokens: tuple[str, ...] = ('Video', '·', '720p', '·', '8', 'giây', 'crop_16_9', 'x1')
     model_group_aria: str = 'Chọn nhóm mô hình'
     checked_toggles: frozenset[str] = frozenset({
         'videocam\nVideo', 'chrome_extension\nThành phần', 'crop_16_9\n16:9', 'x1'})

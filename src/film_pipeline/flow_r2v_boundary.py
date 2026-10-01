@@ -29,6 +29,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .core import canonical_json, sha256
 from .providers import flow_rpc_contract as contract
 from .providers.flow_canonical_ui import (
     DEFAULT_NATIVE_UI,
@@ -47,6 +48,11 @@ from .providers.flow_reference_upload import OwnerAmbiguityGate
 
 MUTATION_AVAILABLE = 'MUTATION_AVAILABLE'
 RECONCILE_ONLY = 'RECONCILE_ONLY'
+
+# Dispatch-evidence kind that durably binds one reserved mutation to the exact
+# qualified intent, attested reference and frozen prompt in the same journal
+# that carries the RESERVED fact. Additive; no second authority system.
+MUTATION_INTENT_BOUND = 'MUTATION_INTENT_BOUND'
 
 # The qualified offline envelope. Anything outside it fails closed rather
 # than drifting into an unqualified mutation.
@@ -81,6 +87,12 @@ class MutationIntent:
             raise OwnerAmbiguityGate('MUTATION_INTENT_ACCOUNT_UNQUALIFIED')
         if self.model not in contract.QUALIFIED_VEO_3_1_MODELS:
             raise OwnerAmbiguityGate('MUTATION_INTENT_MODEL_UNQUALIFIED')
+        # The backend attribution model and the native request guard model are
+        # one and the same: they can never be split or smuggled apart.
+        if self.ui_profile.wire_model != self.model:
+            raise OwnerAmbiguityGate('MUTATION_INTENT_UI_MODEL_MISMATCH')
+        if self.ui_profile.wire_model not in contract.QUALIFIED_VEO_3_1_MODELS:
+            raise OwnerAmbiguityGate('MUTATION_INTENT_UI_MODEL_UNQUALIFIED')
         if (self.duration_s != QUALIFIED_DURATION_S or self.resolution != QUALIFIED_RESOLUTION
                 or self.aspect_ratio != QUALIFIED_ASPECT_RATIO or self.output_count != 1):
             raise OwnerAmbiguityGate('MUTATION_INTENT_SETTINGS_UNQUALIFIED')
@@ -136,18 +148,71 @@ class FlowR2VBoundary:
 
     # --- Durable single dispatch ------------------------------------------
 
-    def reserve_mutation(self, job_id, *, asset, attestation, media_id: str, evidence_dir) -> object:
+    def _require_scope(self, intent: MutationIntent) -> None:
+        """An intent is only consumable by the boundary that owns its scope."""
+        if intent.project_id != self.project_id or intent.account_id != self.account_id:
+            raise OwnerAmbiguityGate('MUTATION_INTENT_SCOPE_MISMATCH')
+
+    def _binding_data(self, intent: MutationIntent, attestation_id: str, prompt: str) -> dict:
+        """The immutable fact binding this mutation to intent/reference/prompt."""
+        prompt_sha256 = sha256(prompt)
+        basis = {'contract': intent.contract_version,
+            'mutation_intent': canonical_json({field: getattr(intent, field) for field in
+                ('project_id', 'account_id', 'reference_media_id', 'model', 'duration_s',
+                 'resolution', 'aspect_ratio', 'output_count')}),
+            'attestation_id': attestation_id, 'prompt_sha256': prompt_sha256}
+        return {'project_id': intent.project_id, 'account_id': intent.account_id,
+            'reference_media_id': intent.reference_media_id, 'model': intent.model,
+            'attestation_id': attestation_id, 'prompt_sha256': prompt_sha256,
+            'intent_hash': sha256(basis)}
+
+    def _require_bound(self, job_id: str, intent: MutationIntent) -> object:
+        """Re-derive the reservation binding; any drift fails closed.
+
+        The binding fact and the RESERVED fact live in the same immutable
+        journal, so the pinned intent/reference/prompt survive restarts and
+        cannot be silently exchanged for another intent afterwards.
+        """
+        self._require_scope(intent)
+        job = self.store.read_provider_job(job_id)
+        if mutation_state(job).state != RECONCILE_ONLY:
+            raise OwnerAmbiguityGate('MUTATION_NOT_RESERVED')
+        bindings = [fact['data'] for fact in self.store.read_dispatch_facts(job_id)
+            if fact['kind'] == MUTATION_INTENT_BOUND]
+        if len(bindings) != 1:
+            raise OwnerAmbiguityGate('MUTATION_INTENT_NOT_BOUND')
+        prompt = job.correlation_evidence.get('prompt')
+        if not isinstance(prompt, str) or not prompt:
+            raise OwnerAmbiguityGate('MUTATION_PROMPT_UNBOUND')
+        if bindings[0] != self._binding_data(intent, bindings[0]['attestation_id'], prompt):
+            raise OwnerAmbiguityGate('MUTATION_INTENT_DRIFT')
+        return job
+
+    def reserve_mutation(self, job_id, *, intent: MutationIntent, asset, attestation,
+                         evidence_dir) -> object:
         """Verify the attested reference, then consume the one mutation budget.
 
-        A job whose dispatch is already consumed can never re-enter here:
-        recovery is reconciliation only and a missing output never re-authorizes
-        a Generate.
+        The reservation and the exact intent/reference/prompt binding are
+        written to the same immutable dispatch journal. A job whose dispatch is
+        already consumed can never re-enter here: recovery is reconciliation
+        only and a missing output never re-authorizes a Generate.
         """
-        self.verify_reference(asset, attestation, media_id=media_id, evidence_dir=evidence_dir)
+        self._require_scope(intent)
+        self.verify_reference(asset, attestation, media_id=intent.reference_media_id,
+            evidence_dir=evidence_dir)
         job = self.store.read_provider_job(job_id)
         if mutation_state(job).state == RECONCILE_ONLY:
             raise OwnerAmbiguityGate('MUTATION_ALREADY_CONSUMED_RECONCILE_ONLY')
-        return self.store.reserve_dispatch(job_id)
+        facts = self.store.read_dispatch_facts(job_id)
+        if any(fact['kind'] == MUTATION_INTENT_BOUND for fact in facts):
+            raise OwnerAmbiguityGate('MUTATION_INTENT_REBIND_FORBIDDEN')
+        prompt = job.correlation_evidence.get('prompt')
+        if not isinstance(prompt, str) or not prompt:
+            raise OwnerAmbiguityGate('MUTATION_PROMPT_UNBOUND')
+        reserved = self.store.reserve_dispatch(job_id)
+        self.store.record_dispatch_fact(job_id, MUTATION_INTENT_BOUND,
+            self._binding_data(intent, attestation['attestation_id'], prompt))
+        return reserved
 
     def reconciliation_only(self, job_id) -> object:
         """Read-only post-effect state; never re-arms a consumed dispatch."""
@@ -159,6 +224,14 @@ class FlowR2VBoundary:
     # --- Provider-native UI: transport only --------------------------------
 
     def request_guard(self, job, intent: MutationIntent) -> OneGenerateGuard:
+        """Arm the one-request guard for the bound reserved mutation only.
+
+        The caller-supplied job handle must carry exactly the frozen prompt of
+        the reserved job; any drift fails closed before a route can be armed.
+        """
+        stored = self._require_bound(job.provider_job_id, intent)
+        if job.correlation_evidence.get('prompt') != stored.correlation_evidence.get('prompt'):
+            raise OwnerAmbiguityGate('MUTATION_PROMPT_DRIFT')
         return OneGenerateGuard(self.store, job, intent.project_id,
             intent.reference_media_id, profile=intent.ui_profile)
 
@@ -168,23 +241,26 @@ class FlowR2VBoundary:
         An observed request and any HTTP success remain transport facts; they
         never establish provider acceptance or output identity.
         """
+        self._require_scope(intent)
         return validate_native_request(method, url, body, project_id=intent.project_id,
             reference_id=intent.reference_media_id, prompt=prompt,
             profile=intent.ui_profile)
 
     # --- Backend-owned output identity -------------------------------------
 
-    def attribute_output(self, records, *, intent: MutationIntent, prompt: str,
+    def attribute_output(self, records, *, intent: MutationIntent,
                          provider_job_id: str, baseline_ids: list[str],
                          reference_filename: str):
         """Own the one fresh backend output or return None (effect UNKNOWN).
 
-        Attribution uses only backend catalog evidence — pre-dispatch baseline,
-        new provider identity, exact marker/reference/model lineage. Preexisting
-        outputs, wrong references, malformed records, marker collisions and
-        multiple candidates fail closed. None of the observed click, request,
-        HTTP, DOM or gallery state can substitute.
+        Attribution is only reachable for the reserved job whose bound intent
+        matches exactly; it uses only backend catalog evidence — pre-dispatch
+        baseline, new provider identity, exact marker/reference/model lineage.
+        Preexisting outputs, wrong references, malformed records, marker
+        collisions and multiple candidates fail closed. None of the observed
+        click, request, HTTP, DOM or gallery state can substitute.
         """
+        self._require_bound(provider_job_id, intent)
         if intent.contract_version != contract.CONTRACT_VERSION_2026_10_01:
             raise OwnerAmbiguityGate('OUTPUT_ATTRIBUTION_CONTRACT_UNQUALIFIED')
         return contract.match_r2v_output_v2026_10_01(
@@ -203,6 +279,7 @@ class FlowR2VBoundary:
 
         Signed URLs are transport only and are never persisted in evidence.
         """
+        self._require_scope(intent)
         if media_id == intent.reference_media_id and kind == 'video':
             raise OwnerAmbiguityGate('OUTPUT_REFERENCE_NOT_DISTINCT')
         resource = parse_media_resource(payload, media_id=media_id,
@@ -217,6 +294,7 @@ class FlowR2VBoundary:
         The same media identity served with different resources, sizes or
         shapes stays ambiguous and fails closed.
         """
+        self._require_scope(intent)
         resources = [parse_media_resource(payload, media_id=media_id,
             project_id=intent.project_id, kind=kind) for payload in payloads]
         representations = {(r.url, r.byte_size, r.mime_type) for r in resources}

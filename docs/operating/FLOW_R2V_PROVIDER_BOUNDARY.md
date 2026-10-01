@@ -21,7 +21,13 @@ lifecycle for any reference-conditioned shot:
    (`FlowR2VBoundary.verify_reference`; malformed/tampered/wrong-scope evidence
    raises `OwnerAmbiguityGate`, never a crash);
 2. durable `ProviderJob` reservation (`reserve_mutation` verifies the attested
-   reference first, then consumes the single dispatch budget);
+   reference first, then consumes the single dispatch budget and writes one
+   `MUTATION_INTENT_BOUND` fact into the same immutable dispatch journal,
+   pinning project, account, reference media ID, model, attestation ID and the
+   frozen prompt hash — the attested reference, reserved mutation reference,
+   native request reference and backend output reference are one end-to-end
+   binding, and no later call accepts a different intent without failing
+   closed on `MUTATION_INTENT_DRIFT`/`SCOPE_MISMATCH`);
 3. provider-native UI input preparation with a parameterized `NativeUiProfile`
    (locale labels, selector text and the wire model string are transport data,
    not code, and never enter Film Core);
@@ -45,8 +51,13 @@ lifecycle for any reference-conditioned shot:
 `MutationIntent` freezes the qualified envelope (project UUID, reference media
 UUID, qualified Veo 3.1 R2V model, 8 s / 720p / 16:9 / output count 1,
 contract `flow-batchexecute/2026-10-01.1`); anything outside it fails closed.
-No hypothesis about provider volatility (why direct RPC writes fail while
-native-UI writes may succeed) is encoded anywhere.
+The intent model and the `NativeUiProfile.wire_model` are one and the same
+value by construction: a profile can never smuggle an unqualified wire model,
+and backend attribution can never qualify a different model than the request
+guard. The default profile's settings readback is the previously-qualified
+live representation `['Video', '·', '720p', '·', '8', 'giây', 'crop_16_9',
+'x1']`, byte-for-byte. No hypothesis about provider volatility (why direct
+RPC writes fail while native-UI writes may succeed) is encoded anywhere.
 
 ## Slice-0011 relationship
 

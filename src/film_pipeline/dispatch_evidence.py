@@ -14,7 +14,7 @@ PROTOCOL = 'flow-dispatch-evidence-v1'
 RANK = {
     'AMBIGUOUS_EVIDENCE': 0,
     'OBSERVATION_FAILURE': 0,
-    'RESERVED': 1, 'PROMPT_VERIFIED': 2, 'CLICK_ARMED': 3,
+    'RESERVED': 1, 'MUTATION_INTENT_BOUND': 1, 'PROMPT_VERIFIED': 2, 'CLICK_ARMED': 3,
     'RPC_REQUEST_ARMED': 4,
     'TRUSTED_CLICK_OBSERVED': 4, 'PROMPT_ACCEPTANCE_TRANSITION': 4,
     'GENERATE_REQUEST_OBSERVED': 5, 'PROVIDER_RESPONSE_OBSERVED': 6,
@@ -26,7 +26,10 @@ RANK = {
 FIELDS = {
     'AMBIGUOUS_EVIDENCE': {'diagnostic'},
     'OBSERVATION_FAILURE': {'diagnostic'},
-    'RESERVED': {'intent_hash'}, 'PROMPT_VERIFIED': {'prompt_sha256'}, 'CLICK_ARMED': set(),
+    'RESERVED': {'intent_hash'},
+    'MUTATION_INTENT_BOUND': {'project_id', 'account_id', 'reference_media_id', 'model',
+                              'attestation_id', 'prompt_sha256', 'intent_hash'},
+    'PROMPT_VERIFIED': {'prompt_sha256'}, 'CLICK_ARMED': set(),
     'RPC_REQUEST_ARMED': {'request_hash', 'body_sha256', 'contract'},
     'TRUSTED_CLICK_OBSERVED': set(), 'PROMPT_ACCEPTANCE_TRANSITION': set(),
     'GENERATE_REQUEST_OBSERVED': {'request_hash', 'body_sha256', 'contract'},
