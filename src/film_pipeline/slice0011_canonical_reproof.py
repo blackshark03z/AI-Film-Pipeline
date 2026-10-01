@@ -4,6 +4,7 @@ from contextlib import closing
 
 from .core import canonical_json, sha256
 from .dispatch_evidence import append_fact, intent_hash
+from .flow_r2v_boundary import FlowR2VBoundary
 from .live_runtime import GenerationAttempt, ProviderJob, make_provider_job, utc_now
 from .providers.flow_reference_binding import verify_attestation
 from .providers.flow_reference_upload import OwnerAmbiguityGate
@@ -81,6 +82,12 @@ def _intent(attestation, history):
 def freeze_reproof(db_path, session, attestation, evidence_dir):
     store = SQLiteStore(db_path)
     _verified(store, attestation, evidence_dir)
+    # Productization linkage: the canonical grant must stay expressible as a
+    # generic qualified mutation intent. The grant identity itself is frozen.
+    FlowR2VBoundary(store, project_id=PROJECT_ID, account_id=ACCOUNT_ID).intent(
+        reference_media_id=REFERENCE_MEDIA_ID, model=MODEL,
+        duration_s=AUTHORITY['duration_s'], resolution='720p',
+        aspect_ratio=AUTHORITY['aspect_ratio'], output_count=AUTHORITY['output_count'])
     if session.project_id != PROJECT_ID:
         raise OwnerAmbiguityGate('CANONICAL_REPROOF_PROJECT_MISMATCH')
     reference, _, paths = compile_character_paths(db_path)

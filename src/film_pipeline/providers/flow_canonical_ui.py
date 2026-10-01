@@ -1,11 +1,34 @@
-"""Native UI inputs bound to a backend catalog identity, with one guarded POST."""
+"""Native UI inputs bound to a backend catalog identity, with one guarded POST.
+
+The browser surface is transport only: it may prepare and release exactly one
+qualified request, and never establishes provider acceptance. Locale labels,
+selector text and the wire model string are transport detail; they live in the
+`NativeUiProfile` and never enter Film Core.
+"""
 import json
+from dataclasses import dataclass, field
 from urllib.parse import parse_qs, urlsplit
 
 from ..core import sha256
 from . import flow_rpc_contract as contract
 from .flow_dispatch_network import generate_request_metadata
 from .flow_reference_upload import OwnerAmbiguityGate
+
+
+@dataclass(frozen=True)
+class NativeUiProfile:
+    """Locale-dependent native-UI literals for one qualified settings envelope."""
+
+    settings_tokens: tuple[str, ...] = ('Video', '·', '720p', '8', 'giây', 'crop_16_9', 'x1')
+    model_group_aria: str = 'Chọn nhóm mô hình'
+    checked_toggles: frozenset[str] = frozenset({
+        'videocam\nVideo', 'chrome_extension\nThành phần', 'crop_16_9\n16:9', 'x1'})
+    model_label: str = 'Veo 3.1 - Lite'
+    wire_model: str = 'veo_3_1_r2v_lite'
+    contract_tag: str = 'native-ui-r2v-canonical-20261001-v1'
+
+
+DEFAULT_NATIVE_UI = NativeUiProfile()
 
 
 def thumbnail_path(url):
@@ -45,24 +68,24 @@ def verify_chip(page, media_id):
         raise OwnerAmbiguityGate('UI_REFERENCE_CHIP_IDENTITY_MISMATCH')
 
 
-def verify_settings(page):
+def verify_settings(page, profile=DEFAULT_NATIVE_UI):
     summary = page.locator('button.settings-trigger-button')
-    if summary.count() != 1 or summary.inner_text().split() != ['Video', '·', '720p', '·', '8', 'giây', 'crop_16_9', 'x1']:
+    if summary.count() != 1 or summary.inner_text().split() != list(profile.settings_tokens):
         raise OwnerAmbiguityGate('UI_OUTPUT_SETTINGS_MISMATCH')
     summary.click()
     try:
-        page.locator('.cdk-overlay-pane button[aria-label="Chọn nhóm mô hình"]').wait_for(timeout=10000)
+        page.locator('.cdk-overlay-pane button[aria-label="' + profile.model_group_aria + '"]').wait_for(timeout=10000)
         selected = page.locator('.cdk-overlay-pane mat-button-toggle.mat-button-toggle-checked').all_inner_texts()
-        if {s.strip() for s in selected} != {'videocam\nVideo', 'chrome_extension\nThành phần', 'crop_16_9\n16:9', 'x1'}:
+        if {s.strip() for s in selected} != set(profile.checked_toggles):
             raise OwnerAmbiguityGate('UI_MODE_OR_COUNT_MISMATCH')
-        models = page.locator('.cdk-overlay-pane button[aria-label="Chọn nhóm mô hình"]')
-        if models.count() != 1 or 'Veo 3.1 - Lite' not in models.inner_text():
+        models = page.locator('.cdk-overlay-pane button[aria-label="' + profile.model_group_aria + '"]')
+        if models.count() != 1 or profile.model_label not in models.inner_text():
             raise OwnerAmbiguityGate('UI_MODEL_MISMATCH')
     finally:
         summary.click()
 
 
-def prepare_inputs(session, records, *, media_id, prompt):
+def prepare_inputs(session, records, *, media_id, prompt, profile=DEFAULT_NATIVE_UI):
     page = session.page
     path = reference_thumbnail(records, media_id, session.project_id)
     if page.locator('button.chip-container img.chip-image').count():
@@ -89,11 +112,12 @@ def prepare_inputs(session, records, *, media_id, prompt):
     if button.count() != 1 or not button.is_enabled():
         raise OwnerAmbiguityGate('UI_GENERATE_CONTROL_UNAVAILABLE')
     return {'media_id': media_id, 'thumbnail_path_sha256': sha256(path),
-        'prompt_sha256': sha256(prompt), 'model': 'veo_3_1_r2v_lite', 'output_count': 1,
+        'prompt_sha256': sha256(prompt), 'model': profile.wire_model, 'output_count': 1,
         'duration_s': 8, 'resolution': '720p', 'aspect_ratio': '16:9'}
 
 
-def validate_native_request(method, url, body, *, project_id, reference_id, prompt):
+def validate_native_request(method, url, body, *, project_id, reference_id, prompt,
+                            profile=DEFAULT_NATIVE_UI):
     """Inspect the browser-created request without creating or rewriting it."""
     metadata = generate_request_metadata(method, url, body, project_id, prompt)
     if metadata is None:
@@ -106,19 +130,20 @@ def validate_native_request(method, url, body, *, project_id, reference_id, prom
             raise OwnerAmbiguityGate('NATIVE_OUTPUT_COUNT_MISMATCH')
         request = requests[0]
         if (request[0] != [None, None, [[[prompt]]]]
-                or request[1] != [[None, reference_id]] or request[2] != 'veo_3_1_r2v_lite'
+                or request[1] != [[None, reference_id]] or request[2] != profile.wire_model
                 or request[3] != 2 or payload[1][5] != project_id):
             raise OwnerAmbiguityGate('NATIVE_REFERENCE_MODEL_PROJECT_MISMATCH')
     except (IndexError, KeyError, TypeError, ValueError):
         raise OwnerAmbiguityGate('NATIVE_REQUEST_SHAPE_DRIFT') from None
-    return {**metadata, 'contract': 'native-ui-r2v-canonical-20261001-v1'}
+    return {**metadata, 'contract': profile.contract_tag}
 
 
 class OneGenerateGuard:
     """Deny uploads and all duplicate/mismatched browser generation requests."""
-    def __init__(self, store, job, project_id, reference_id):
+    def __init__(self, store, job, project_id, reference_id, profile=DEFAULT_NATIVE_UI):
         self.store, self.job = store, job
         self.project_id, self.reference_id = project_id, reference_id
+        self.profile = profile
         self.armed = False
         self.seen = self.sent = 0
         self.error = None
@@ -140,7 +165,7 @@ class OneGenerateGuard:
                 raise OwnerAmbiguityGate('UNRESERVED_OR_DUPLICATE_NATIVE_GENERATE')
             metadata = validate_native_request(r.method, r.url, body,
                 project_id=self.project_id, reference_id=self.reference_id,
-                prompt=self.job.correlation_evidence['prompt'])
+                prompt=self.job.correlation_evidence['prompt'], profile=self.profile)
             self.store.record_dispatch_fact(self.job.provider_job_id, 'GENERATE_REQUEST_OBSERVED', metadata)
             self.sent += 1
             route.continue_()
