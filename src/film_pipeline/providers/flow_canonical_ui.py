@@ -141,11 +141,19 @@ def validate_native_request(method, url, body, *, project_id, reference_id, prom
 
 
 class OneGenerateGuard:
-    """Deny uploads and all duplicate/mismatched browser generation requests."""
-    def __init__(self, store, job, project_id, reference_id, profile=DEFAULT_NATIVE_UI):
+    """Deny uploads and all duplicate/mismatched browser generation requests.
+
+    ``prompt`` is the frozen durable prompt truth validated when the browser
+    request is released. When omitted, the caller-supplied job handle is read
+    (legacy call shape); the reusable boundary always supplies the frozen
+    prompt so a mutable caller handle cannot change route-time qualification.
+    """
+    def __init__(self, store, job, project_id, reference_id, profile=DEFAULT_NATIVE_UI,
+                 prompt=None):
         self.store, self.job = store, job
         self.project_id, self.reference_id = project_id, reference_id
         self.profile = profile
+        self.prompt = prompt if prompt is not None else job.correlation_evidence['prompt']
         self.armed = False
         self.seen = self.sent = 0
         self.error = None
@@ -167,7 +175,7 @@ class OneGenerateGuard:
                 raise OwnerAmbiguityGate('UNRESERVED_OR_DUPLICATE_NATIVE_GENERATE')
             metadata = validate_native_request(r.method, r.url, body,
                 project_id=self.project_id, reference_id=self.reference_id,
-                prompt=self.job.correlation_evidence['prompt'], profile=self.profile)
+                prompt=self.prompt, profile=self.profile)
             self.store.record_dispatch_fact(self.job.provider_job_id, 'GENERATE_REQUEST_OBSERVED', metadata)
             self.sent += 1
             route.continue_()

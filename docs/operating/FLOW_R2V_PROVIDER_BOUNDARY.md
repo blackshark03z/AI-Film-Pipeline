@@ -23,14 +23,23 @@ lifecycle for any reference-conditioned shot:
 2. durable `ProviderJob` reservation (`reserve_mutation` verifies the attested
    reference first, then consumes the single dispatch budget and writes one
    `MUTATION_INTENT_BOUND` fact into the same immutable dispatch journal,
-   pinning project, account, reference media ID, model, attestation ID and the
-   frozen prompt hash — the attested reference, reserved mutation reference,
-   native request reference and backend output reference are one end-to-end
-   binding, and no later call accepts a different intent without failing
-   closed on `MUTATION_INTENT_DRIFT`/`SCOPE_MISMATCH`);
+   pinning project, account, reference media ID, model, attestation ID, the
+   frozen prompt hash and a canonical fingerprint of the qualified native-UI
+   profile — i.e. every transport field that affects qualification of the
+   mutation path. The attested reference, reserved mutation reference, native
+   request reference and backend output reference are one end-to-end binding,
+   and no later call accepts a different intent, profile or prompt without
+   failing closed on `MUTATION_INTENT_DRIFT`/`SCOPE_MISMATCH`/
+   `MUTATION_INTENT_UI_PROFILE_UNQUALIFIED`/`MUTATION_PROMPT_DRIFT`);
 3. provider-native UI input preparation with a parameterized `NativeUiProfile`
    (locale labels, selector text and the wire model string are transport data,
-   not code, and never enter Film Core);
+   not code, and never enter Film Core). Parameterizable representation is
+   distinct from qualification: only the profile in `QUALIFIED_UI_PROFILES`
+   (version `native-ui-qualified-20261001-v1`, currently the previously
+   qualified live profile) is consumable through the mutation path, and the
+   one-request guard validates the browser request against the frozen durable
+   prompt — the value bound at reservation — never against a mutable caller
+   handle;
 4. exactly one authorized mutation (`OneGenerateGuard` releases one exact
    browser-created request; uploads and duplicates are aborted);
 5. external effect UNKNOWN until backend proof (observed request, HTTP success,

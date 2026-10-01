@@ -54,6 +54,24 @@ RECONCILE_ONLY = 'RECONCILE_ONLY'
 # that carries the RESERVED fact. Additive; no second authority system.
 MUTATION_INTENT_BOUND = 'MUTATION_INTENT_BOUND'
 
+# Parameterizable representation vs qualified profile: NativeUiProfile may be
+# constructed freely as transport data, but only the profiles in this qualified
+# set are consumable through the mutation path, and the set has a version of
+# its own that travels inside the durable binding fingerprint.
+QUALIFIED_UI_PROFILES = frozenset({DEFAULT_NATIVE_UI})
+QUALIFIED_UI_PROFILE_VERSION = 'native-ui-qualified-20261001-v1'
+
+
+def ui_profile_fingerprint(profile) -> str:
+    """Deterministic canonical fingerprint of every UI transport field that
+    affects qualification of the provider-native mutation path."""
+    return sha256({'version': QUALIFIED_UI_PROFILE_VERSION,
+        'settings_tokens': list(profile.settings_tokens),
+        'model_group_aria': profile.model_group_aria,
+        'checked_toggles': sorted(profile.checked_toggles),
+        'model_label': profile.model_label, 'wire_model': profile.wire_model,
+        'contract_tag': profile.contract_tag})
+
 # The qualified offline envelope. Anything outside it fails closed rather
 # than drifting into an unqualified mutation.
 QUALIFIED_DURATION_S = 8
@@ -149,17 +167,25 @@ class FlowR2VBoundary:
     # --- Durable single dispatch ------------------------------------------
 
     def _require_scope(self, intent: MutationIntent) -> None:
-        """An intent is only consumable by the boundary that owns its scope."""
+        """An intent is only consumable by the boundary that owns its scope.
+
+        The UI profile is parameterizable transport representation, but only a
+        profile in the qualified set may ride the mutation path; anything else
+        is an unqualified UI contract, not a free variation.
+        """
         if intent.project_id != self.project_id or intent.account_id != self.account_id:
             raise OwnerAmbiguityGate('MUTATION_INTENT_SCOPE_MISMATCH')
+        if intent.ui_profile not in QUALIFIED_UI_PROFILES:
+            raise OwnerAmbiguityGate('MUTATION_INTENT_UI_PROFILE_UNQUALIFIED')
 
     def _binding_data(self, intent: MutationIntent, attestation_id: str, prompt: str) -> dict:
-        """The immutable fact binding this mutation to intent/reference/prompt."""
+        """The immutable fact binding this mutation to intent/reference/prompt/UI."""
         prompt_sha256 = sha256(prompt)
         basis = {'contract': intent.contract_version,
             'mutation_intent': canonical_json({field: getattr(intent, field) for field in
                 ('project_id', 'account_id', 'reference_media_id', 'model', 'duration_s',
                  'resolution', 'aspect_ratio', 'output_count')}),
+            'ui_profile_sha256': ui_profile_fingerprint(intent.ui_profile),
             'attestation_id': attestation_id, 'prompt_sha256': prompt_sha256}
         return {'project_id': intent.project_id, 'account_id': intent.account_id,
             'reference_media_id': intent.reference_media_id, 'model': intent.model,
@@ -228,12 +254,15 @@ class FlowR2VBoundary:
 
         The caller-supplied job handle must carry exactly the frozen prompt of
         the reserved job; any drift fails closed before a route can be armed.
+        Route-time qualification then uses the frozen durable prompt, never the
+        mutable caller handle.
         """
         stored = self._require_bound(job.provider_job_id, intent)
-        if job.correlation_evidence.get('prompt') != stored.correlation_evidence.get('prompt'):
+        frozen_prompt = stored.correlation_evidence.get('prompt')
+        if job.correlation_evidence.get('prompt') != frozen_prompt:
             raise OwnerAmbiguityGate('MUTATION_PROMPT_DRIFT')
         return OneGenerateGuard(self.store, job, intent.project_id,
-            intent.reference_media_id, profile=intent.ui_profile)
+            intent.reference_media_id, profile=intent.ui_profile, prompt=frozen_prompt)
 
     def observe_native_request(self, method, url, body, *, intent: MutationIntent, prompt: str) -> dict:
         """Qualify one browser-created request against the frozen intent.

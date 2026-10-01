@@ -248,16 +248,24 @@ def test_native_request_intent_mismatch_is_rejected(env, defect):
             body, intent=env.intent, prompt=prompt)
 
 
-def test_guard_uses_the_intent_ui_profile(env):
+def test_ui_profile_parameterization_is_transport_level_only(env):
     profile = NativeUiProfile(wire_model=contract.MODEL_VEO_3_1_FAST_LANDSCAPE,
         contract_tag='native-ui-r2v-test-v1')
-    intent = env.boundary.intent(reference_media_id=REMOTE, model=profile.wire_model,
-        ui_profile=profile)
     prompt = env.job.correlation_evidence['prompt']
-    observed = env.boundary.observe_native_request('POST',
+    # Parameterizable representation works at the transport layer...
+    from film_pipeline.providers.flow_canonical_ui import validate_native_request
+    observed = validate_native_request('POST',
         'https://flow.google.com/_/AiSandboxAngularFrontend/data/batchexecute?rpcids=MZZa6b',
-        native_request(prompt, model=profile.wire_model), intent=intent, prompt=prompt)
+        native_request(prompt, model=profile.wire_model), project_id=PROJECT,
+        reference_id=REMOTE, prompt=prompt, profile=profile)
     assert observed['contract'] == 'native-ui-r2v-test-v1'
+    # ...but only the qualified profile/version rides the mutation path.
+    intent = MutationIntent(project_id=PROJECT, account_id=ACCOUNT,
+        reference_media_id=REMOTE, model=profile.wire_model, ui_profile=profile)
+    with pytest.raises(OwnerAmbiguityGate, match='UNQUALIFIED'):
+        env.boundary.observe_native_request('POST',
+            'https://flow.google.com/_/AiSandboxAngularFrontend/data/batchexecute?rpcids=MZZa6b',
+            native_request(prompt, model=profile.wire_model), intent=intent, prompt=prompt)
 
 
 # 8: outbound request plus HTTP success without a backend output stays unresolved.
@@ -556,9 +564,11 @@ def test_model_or_profile_change_after_reservation_blocked(env):
     profile = NativeUiProfile(wire_model=contract.MODEL_VEO_3_1_FAST_LANDSCAPE)
     changed = env.boundary.intent(reference_media_id=REMOTE, model=profile.wire_model,
         ui_profile=profile)
-    with pytest.raises(OwnerAmbiguityGate, match='DRIFT'):
+    # A model change necessarily rides an unqualified profile (Finding 2
+    # closure) and/or a binding fingerprint mismatch: both fail closed.
+    with pytest.raises(OwnerAmbiguityGate, match='DRIFT|UNQUALIFIED'):
         env.boundary.request_guard(stub_for(env), changed)
-    with pytest.raises(OwnerAmbiguityGate, match='DRIFT'):
+    with pytest.raises(OwnerAmbiguityGate, match='DRIFT|UNQUALIFIED'):
         env.boundary.attribute_output([], intent=changed,
             provider_job_id=env.job.provider_job_id, baseline_ids=[],
             reference_filename=REFERENCE_FILENAME)
@@ -612,3 +622,97 @@ def test_failed_substitution_creates_no_dispatch_opportunity(env):
     assert [(f['kind'], f['data']) for f in after_facts] == \
         [(f['kind'], f['data']) for f in before_facts]
     assert env.store.read_provider_job(env.job.provider_job_id).dispatch_count == 1
+
+
+# Review round 3, Finding 4: the durable binding covers every UI transport
+# field that affects qualification, and only the qualified profile/version is
+# consumable through the mutation path.
+def test_ui_profile_fingerprint_covers_every_transport_field():
+    from film_pipeline.flow_r2v_boundary import ui_profile_fingerprint
+    base = NativeUiProfile()
+    assert ui_profile_fingerprint(base) == ui_profile_fingerprint(NativeUiProfile())
+    variants = {
+        'settings_tokens': NativeUiProfile(settings_tokens=('Video', '·', '720p', '·', '4', 'giây', 'crop_16_9', 'x1')),
+        'model_group_aria': NativeUiProfile(model_group_aria='Select model group'),
+        'checked_toggles': NativeUiProfile(checked_toggles=frozenset({'crop_16_9\n16:9', 'x1'})),
+        'model_label': NativeUiProfile(model_label='Veo 3.1 - Fast'),
+        'contract_tag': NativeUiProfile(contract_tag='native-ui-r2v-other-v1'),
+    }
+    prints = {ui_profile_fingerprint(base)}
+    for variant in variants.values():
+        changed = ui_profile_fingerprint(variant)
+        assert changed not in prints
+        prints.add(changed)
+
+
+@pytest.mark.parametrize('field,value', [
+    ('settings_tokens', ('Video', '·', '720p', '·', '4', 'giây', 'crop_16_9', 'x1')),
+    ('model_group_aria', 'Select model group'),
+    ('checked_toggles', frozenset({'videocam\nVideo', 'crop_16_9\n16:9', 'x1'})),
+    ('model_label', 'Veo 3.1 - Fast'),
+    ('contract_tag', 'native-ui-r2v-other-v1'),
+])
+def test_ui_profile_field_drift_after_reservation_blocked(env, field, value):
+    reserve(env)
+    before_facts = env.store.read_dispatch_facts(env.job.provider_job_id)
+    changed = env.boundary.intent(reference_media_id=REMOTE,
+        ui_profile=NativeUiProfile(**{field: value}))
+    with pytest.raises(OwnerAmbiguityGate, match='DRIFT|UNQUALIFIED'):
+        env.boundary.request_guard(stub_for(env), changed)
+    with pytest.raises(OwnerAmbiguityGate, match='DRIFT|UNQUALIFIED'):
+        env.boundary.attribute_output([], intent=changed,
+            provider_job_id=env.job.provider_job_id, baseline_ids=[],
+            reference_filename=REFERENCE_FILENAME)
+    after_facts = env.store.read_dispatch_facts(env.job.provider_job_id)
+    assert [(f['kind'], f['data']) for f in after_facts] == \
+        [(f['kind'], f['data']) for f in before_facts]
+    assert env.store.read_provider_job(env.job.provider_job_id).dispatch_count == 1
+
+
+def test_unqualified_ui_profile_cannot_reserve_or_attribute(env):
+    profile = NativeUiProfile(contract_tag='native-ui-r2v-other-v1')
+    intent = env.boundary.intent(reference_media_id=REMOTE, ui_profile=profile)
+    with pytest.raises(OwnerAmbiguityGate, match='UNQUALIFIED'):
+        reserve(env, intent=intent)
+    assert env.store.read_provider_job(env.job.provider_job_id).dispatch_count == 0
+    with pytest.raises(OwnerAmbiguityGate, match='UNQUALIFIED'):
+        env.boundary.attribute_output([], intent=intent,
+            provider_job_id=env.job.provider_job_id, baseline_ids=[],
+            reference_filename=REFERENCE_FILENAME)
+
+
+# Review round 3, Finding 5: route-time qualification uses the frozen durable
+# prompt, never the mutable caller handle.
+def test_prompt_toctou_after_guard_creation_blocked(env):
+    reserve(env)
+    stub = stub_for(env)
+    guard = env.boundary.request_guard(stub, env.intent)
+    guard.armed = True
+    # Mutate the caller handle after the guard was validly created...
+    drifted = env.job.correlation_evidence['prompt'] + ' drifted'
+    stub.correlation_evidence['prompt'] = drifted
+    # ...and fire a browser request matching the mutated prompt instead of the
+    # prompt that was durably bound at reservation.
+    request = route_of(native_request(drifted))
+    guard.route(request)
+    request.abort.assert_called_once()
+    request.continue_.assert_not_called()
+    assert guard.sent == 0
+    # No second dispatch opportunity appeared.
+    facts = [(f['kind'], f['data']) for f in
+             env.store.read_dispatch_facts(env.job.provider_job_id)]
+    assert [kind for kind, _ in facts] == ['RESERVED', 'MUTATION_INTENT_BOUND']
+    assert env.store.read_provider_job(env.job.provider_job_id).dispatch_count == 1
+    with pytest.raises(OwnerAmbiguityGate, match='RECONCILE_ONLY'):
+        reserve(env)
+
+
+def test_frozen_prompt_still_releases_the_exact_bound_request(env):
+    reserve(env)
+    stub = stub_for(env)
+    guard = env.boundary.request_guard(stub, env.intent)
+    guard.armed = True
+    request = route_of(native_request(env.job.correlation_evidence['prompt']))
+    guard.route(request)
+    request.continue_.assert_called_once()
+    assert guard.sent == 1
