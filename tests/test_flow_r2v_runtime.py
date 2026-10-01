@@ -199,8 +199,9 @@ def test_generic_r2v_shot_end_to_end_offline(tmp_path, runtime_env):
 
     prompt = frozen.job.correlation_evidence['prompt']
     marker = film_marker(job_id)
-    body = prompt.split('\n')[0]
-    assert prompt.endswith('\n' + marker)
+    body = prompt[:len(prompt) - len(marker) - 1]
+    assert prompt.endswith(' ' + marker)
+    assert '\n' not in prompt  # qualified native-UI single-line serialization
     assert prompt.count('[FILM-') == 1
     assert len(body) <= 500 and len(body.split()) <= 75
     assert frozen.job.correlation_evidence['provider_prompt_compiler'] == COMPACT_VERSION
@@ -1258,7 +1259,8 @@ def test_compact_prompt_is_deterministic_and_marked(runtime_env):
     first = compact_r2v_prompt(plan, job_id, model=contract.MODEL_VEO_3_1_LITE)
     second = compact_r2v_prompt(plan, job_id, model=contract.MODEL_VEO_3_1_LITE)
     assert first == second
-    assert first.text.endswith('\n' + first.marker)
+    assert first.text.endswith(' ' + first.marker)
+    assert '\n' not in first.text  # qualified native-UI single-line serialization
     assert first.marker == film_marker(job_id)
     assert first.version == COMPACT_VERSION
 

@@ -149,7 +149,13 @@ def compact_r2v_prompt(plan: PromptPlan, provider_job_id: str, *, model: str) ->
     if len(body) > MAX_PROMPT_CHARS or len(body.split()) > MAX_PROMPT_WORDS:
         raise OwnerAmbiguityGate(
             'FLOW_R2V_COMPACT_PROMPT_LIMIT; explicit creative reduction required')
-    return FlowR2VPrompt(body + '\n' + marker, marker, sha256(plan),
+    # The marker joins the body as one single-line prompt. The qualified
+    # native-UI envelope is proven with exactly this serialization: the
+    # ProseMirror editor readback and the browser wire prompt reproduce a
+    # single line byte-for-byte (the canonical A reproof released its request
+    # through this form); a multi-line frozen prompt cannot pass the qualified
+    # editor readback gate.
+    return FlowR2VPrompt(body + ' ' + marker, marker, sha256(plan),
                          version=COMPACT_VERSION, model=model)
 
 
