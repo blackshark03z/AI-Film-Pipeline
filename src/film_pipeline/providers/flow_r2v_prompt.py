@@ -29,7 +29,7 @@ class FlowR2VPrompt:
     model: str = MODEL
 
 
-def compile_flow_r2v_prompt(plan: PromptPlan, provider_job_id: str) -> FlowR2VPrompt:
+def compile_flow_r2v_prompt(plan: PromptPlan, provider_job_id: str, *, model: str = MODEL) -> FlowR2VPrompt:
     """Semantic reduction for the qualified illustrated-character R2V envelope.
 
     Canonical purpose/state/negatives remain in Film. The wire body prioritizes
@@ -176,4 +176,4 @@ def compile_flow_r2v_prompt(plan: PromptPlan, provider_job_id: str) -> FlowR2VPr
         'Keep her face and outfit stable; movements subtle and calm.')
     if len(body) > MAX_PROMPT_CHARS or len(body.split()) > MAX_PROMPT_WORDS:
         raise ValueError('FLOW_R2V_COMPACT_PROMPT_LIMIT; explicit creative reduction required')
-    return FlowR2VPrompt(body + '\n' + marker, marker, sha256(plan))
+    return FlowR2VPrompt(body + '\n' + marker, marker, sha256(plan), model=model)

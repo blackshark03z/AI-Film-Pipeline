@@ -19,6 +19,18 @@ from typing import Any
 
 
 CONTRACT_VERSION = "flow-batchexecute/2026-09-20.1"
+CONTRACT_VERSION_HISTORICAL = "flow-batchexecute/2026-09-20.1"
+CONTRACT_VERSION_2026_10_01 = "flow-batchexecute/2026-10-01.1"
+
+MODEL_VEO_3_1_FAST_LANDSCAPE = "veo_3_1_r2v_fast_landscape"
+MODEL_VEO_3_1_LITE = "veo_3_1_r2v_lite"
+MODEL_VEO_3_1_QUALITY_LANDSCAPE = "veo_3_1_r2v_quality_landscape"
+QUALIFIED_VEO_3_1_MODELS = {
+    MODEL_VEO_3_1_FAST_LANDSCAPE,
+    MODEL_VEO_3_1_LITE,
+    MODEL_VEO_3_1_QUALITY_LANDSCAPE,
+}
+
 QUALIFIED_BASELINE_FINGERPRINT = (
     "78ca7a1c3048b2c86802981696ca7e196752a661a027d3f11b8b5edece84e049"
 )
@@ -105,6 +117,63 @@ def build_video(
         [None, None, None, None, _new_uuid(request_id, "video-client"), _new_uuid(request_id, "video-session")],
     ]
     return _envelope(RPC_VIDEO, [[request], _context(project_id, captcha), [_new_uuid(request_id, "video-request"), 2]])
+
+
+def build_video_v2026_10_01(
+    project_id: str,
+    prompt: str,
+    reference_id: str,
+    reference_filename: str,
+    captcha: str,
+    request_id: str,
+    *,
+    model: str = MODEL_VEO_3_1_FAST_LANDSCAPE,
+    aspect: int = 2,
+) -> str:
+    """Build the qualified 2026-10-01 Veo 3.1 R2V f.req with inline-reference entity AST."""
+    _request_id(request_id)
+    _uuid(reference_id, "REFERENCE_ID_INVALID")
+    if not isinstance(prompt, str) or not prompt.strip():
+        raise ContractError("PROMPT_INVALID")
+    if not isinstance(reference_filename, str) or not reference_filename.strip():
+        raise ContractError("REFERENCE_FILENAME_INVALID")
+    if model not in QUALIFIED_VEO_3_1_MODELS:
+        raise ContractError("MODEL_INVALID")
+    if aspect != 2:
+        raise ContractError("ASPECT_INVALID")
+
+    prompt_text = prompt if prompt.startswith(" ") else f" {prompt}"
+    prompt_ast = [
+        None,
+        None,
+        [
+            [
+                [None, [[reference_id, reference_filename]]],
+                [prompt_text],
+            ]
+        ],
+    ]
+    reference_slot = [[None, reference_id]]
+    client_session_slot = [
+        None,
+        None,
+        None,
+        None,
+        _new_uuid(request_id, "video-client"),
+        _new_uuid(request_id, "video-session"),
+    ]
+    request = [
+        prompt_ast,
+        reference_slot,
+        model,
+        aspect,  # 2 for 16:9
+        None,
+        client_session_slot,
+    ]
+    return _envelope(
+        RPC_VIDEO,
+        [[request], _context(project_id, captcha), [_new_uuid(request_id, "video-request"), 2]],
+    )
 
 
 def build_catalog(project_id: str) -> str:
@@ -266,6 +335,26 @@ def catalog_records(text: str, project_id: str) -> list[list[Any]]:
     return _validate_catalog_rows(payload[2], project_id)
 
 
+def catalog_records_v2026_10_01(text: str, project_id: str) -> list[list[Any]]:
+    """Read the 2026-10-01 catalog slot, accommodating scene board lists in payload[4]."""
+    payload = parse_rpc(text, RPC_CATALOG)
+    if (not isinstance(payload, list) or len(payload) != 8
+            or payload[0] is not None
+            or (payload[4] is not None and not isinstance(payload[4], list))
+            or payload[5] is not None or payload[6] is not None
+            or not isinstance(payload[3], list) or not payload[3]
+            or not isinstance(payload[7], list) or len(payload[7]) != 5):
+        raise ContractError("CATALOG_ENVELOPE_DRIFT")
+    _validate_catalog_aux(payload)
+    if payload[1] is None and payload[2] is None:
+        _uuid(project_id, "PROJECT_ID_INVALID")
+        return []
+    if (not isinstance(payload[1], list) or not isinstance(payload[2], list)
+            or not payload[2] or len(payload[1]) != len(payload[2])):
+        raise ContractError("CATALOG_ENVELOPE_DRIFT")
+    return _validate_catalog_rows(payload[2], project_id)
+
+
 def _validate_catalog_rows(records, project_id):
     project = _uuid(project_id, "PROJECT_ID_INVALID").lower()
     ids: set[str] = set()
@@ -392,6 +481,92 @@ def match_r2v_output(records, project_id: str, reference_id: str, provider_job_i
     return row
 
 
+def match_r2v_output_v2026_10_01(
+    records: list[list[Any]],
+    project_id: str,
+    reference_id: str,
+    reference_filename: str,
+    provider_job_id: str,
+    *,
+    baseline_ids: list[str],
+    model: str = MODEL_VEO_3_1_FAST_LANDSCAPE,
+) -> list[Any] | None:
+    """Own an output under 2026-10-01 Veo 3.1 contract via exact project/reference/model/marker."""
+    from .flow_r2v_prompt import film_marker, MARKER_RE
+    marker = film_marker(provider_job_id)
+    _uuid(reference_id, "REFERENCE_ID_INVALID")
+    _validate_catalog_rows(records, project_id)
+    if (not isinstance(baseline_ids, list)
+            or any(not isinstance(v, str) or not UUID_RE.fullmatch(v) for v in baseline_ids)
+            or len({v.lower() for v in baseline_ids}) != len(baseline_ids)):
+        raise ContractError("OUTPUT_BASELINE_INVALID")
+    if model not in QUALIFIED_VEO_3_1_MODELS:
+        raise ContractError("OUTPUT_MODEL_MISMATCH")
+
+    baseline = {v.lower() for v in baseline_ids}
+    candidates = [row for row in records if any(marker in text for text in _strings(row))]
+    if len(candidates) > 1:
+        raise ContractError("OUTPUT_MARKER_COLLISION")
+    if not candidates:
+        return None
+    row = candidates[0]
+
+    if row[0].lower() in baseline:
+        raise ContractError("OUTPUT_PREEXISTING_IDENTITY")
+    if row[0].lower() == reference_id.lower():
+        raise ContractError("OUTPUT_REFERENCE_NOT_DISTINCT")
+    if len(row) != 8:
+        raise ContractError("OUTPUT_VIDEO_SHAPE_UNQUALIFIED")
+    if row[3] != "CAE":
+        raise ContractError("OUTPUT_STATUS_UNQUALIFIED")
+
+    try:
+        # Display prompt in row[5][1]
+        display_prompt = row[5][1]
+        if not isinstance(display_prompt, str) or MARKER_RE.findall(display_prompt) != [marker]:
+            raise ContractError("OUTPUT_MARKER_SLOT_MISMATCH")
+
+        # Model in row[5][6][1][0][0]
+        lineage = row[5][6]
+        if lineage[1][0][0] != model:
+            raise ContractError("OUTPUT_MODEL_MISMATCH")
+
+        # Reference in row[5][6][1][1]
+        references = lineage[1][1]
+        if references != [[None, 4, reference_id]]:
+            raise ContractError("OUTPUT_REFERENCE_MISMATCH")
+
+        # Both observed native text-only and inline-reference AST forms are
+        # explicit contracts. Missing AST is never acceptance evidence.
+        ast_node = lineage[2][0][2][0]
+        if len(ast_node) == 1 and len(ast_node[0]) == 1:
+            text_chunk = ast_node[0][0]
+        elif len(ast_node) == 2:
+            ref_pair = ast_node[0][1][0]
+            if ref_pair[0] != reference_id or (reference_filename and ref_pair[1] != reference_filename):
+                raise ContractError("OUTPUT_REFERENCE_MISMATCH")
+            text_chunk = ast_node[1][0]
+        else:
+            raise ContractError("OUTPUT_LINEAGE_SHAPE_DRIFT")
+        if not isinstance(text_chunk, str) or MARKER_RE.findall(text_chunk) != [marker]:
+            raise ContractError("OUTPUT_MARKER_SLOT_MISMATCH")
+
+        # Secondary lineage in row[7]
+        if row[7] is not None:
+            meta_block = row[7][0]
+            if meta_block[12] != model or row[7][2] != [row[0]]:
+                raise ContractError("OUTPUT_LINEAGE_SLOT_MISMATCH")
+            xml_prompt = meta_block[7]
+            if not isinstance(xml_prompt, str) or MARKER_RE.findall(xml_prompt) != [marker]:
+                raise ContractError("OUTPUT_MARKER_SLOT_MISMATCH")
+        else:
+            raise ContractError("OUTPUT_LINEAGE_SHAPE_DRIFT")
+    except (IndexError, TypeError, KeyError):
+        raise ContractError("OUTPUT_LINEAGE_SHAPE_DRIFT") from None
+
+    return row
+
+
 def validate_catalog_baseline(meta, records, project_id):
     validate_session(meta, project_id)
     _validate_catalog_rows(records, project_id)
@@ -409,11 +584,11 @@ def validate_catalog_baseline(meta, records, project_id):
     return fingerprint
 
 
-def sanitize_session(meta: dict[str, Any], project_id: str) -> dict[str, Any]:
+def sanitize_session(meta: dict[str, Any], project_id: str, *, contract_version: str = CONTRACT_VERSION) -> dict[str, Any]:
     """Return safe diagnostics; never return WIZ or captcha token values."""
     validate_session(meta, project_id)
     return {
-        "contract_version": CONTRACT_VERSION,
+        "contract_version": contract_version,
         "qualified_baseline_fingerprint": QUALIFIED_BASELINE_FINGERPRINT,
         "host": meta["host"],
         "source": meta["source"],

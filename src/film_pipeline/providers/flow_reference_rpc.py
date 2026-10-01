@@ -102,11 +102,16 @@ def read_cookie_export(path: Path) -> list[dict]:
 class FlowReferenceRpcSession:
     """One short-lived plain Playwright browser on one exact Flow project."""
 
-    def __init__(self, *, cookie_path: Path, project_id: str):
+    def __init__(self, *, cookie_path: Path | None = None, project_id: str,
+                 native_ui: bool = False, profile_path: Path | None = None):
         if not contract.UUID_RE.fullmatch(project_id):
             raise ValueError("Flow project ID invalid")
-        self.cookie_path = Path(cookie_path)
+        if (cookie_path is None) == (profile_path is None):
+            raise ValueError('exactly one explicit session source required')
+        self.cookie_path = Path(cookie_path) if cookie_path is not None else None
+        self.profile_path = Path(profile_path) if profile_path is not None else None
         self.project_id = project_id
+        self.native_ui = native_ui
         self.project_url = f"{ORIGIN}/project/{project_id}"
         self._driver = None
         self._browser = None
@@ -118,14 +123,23 @@ class FlowReferenceRpcSession:
         from playwright.sync_api import sync_playwright
 
         try:
-            cookies = read_cookie_export(self.cookie_path)
+            cookies = read_cookie_export(self.cookie_path) if self.cookie_path else None
         except ValueError:
             raise OwnerAuthRequired('OWNER_AUTH_REQUIRED: valid standard Google Flow cookie export') from None
         try:
             self._driver = sync_playwright().start()
-            self._browser = self._driver.chromium.launch(headless=True)
-            context = self._browser.new_context(viewport={"width": 1440, "height": 900})
-            context.add_cookies(cookies)
+            if self.profile_path:
+                if not self.native_ui or not self.profile_path.is_dir():
+                    raise ValueError('existing native Chrome profile required')
+                context = self._driver.chromium.launch_persistent_context(
+                    str(self.profile_path), channel='chrome', headless=True,
+                    viewport={"width": 1440, "height": 900})
+                self._browser = context
+            else:
+                self._browser = self._driver.chromium.launch(headless=True,
+                    **({'channel': 'chrome'} if self.native_ui else {}))
+                context = self._browser.new_context(viewport={"width": 1440, "height": 900})
+                context.add_cookies(cookies)
             self.page = context.new_page()
             self.page.goto(self.project_url, wait_until="domcontentloaded", timeout=45000)
             self.page.wait_for_function(
@@ -197,11 +211,15 @@ class FlowReferenceRpcSession:
         except Exception:
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_RESPONSE_UNQUALIFIED") from None
 
-    def catalog(self) -> list[list]:
+    def catalog(self, *, contract_version: str = contract.CONTRACT_VERSION) -> list[list]:
         try:
-            records = contract.catalog_records(
-                self._rpc_body(contract.RPC_CATALOG,
-                    contract.build_catalog(self.project_id)), self.project_id)
+            body = self._rpc_body(
+                contract.RPC_CATALOG, contract.build_catalog(self.project_id)
+            )
+            if contract_version == contract.CONTRACT_VERSION_2026_10_01:
+                records = contract.catalog_records_v2026_10_01(body, self.project_id)
+            else:
+                records = contract.catalog_records(body, self.project_id)
             self.catalog_fingerprint = contract.validate_catalog_baseline(
                 self.metadata(), records, self.project_id)
             return records
@@ -240,26 +258,17 @@ class FlowReferenceRpcSession:
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_READ_UNAVAILABLE") from None
 
     def media(self, media_id: str, kind: str) -> bytes | None:
+        return self.bound_media(media_id, kind).data
+
+    def bound_media(self, media_id: str, kind: str):
+        from .flow_media import parse_media_resource, bind_media_bytes
         if kind not in {"image", "video"}:
             raise ValueError("media kind invalid")
         payload = self.rpc(contract.RPC_MEDIA, contract.build_media(media_id))
-        stack, urls = [payload], set()
-        while stack:
-            node = stack.pop()
-            if isinstance(node, list):
-                stack.extend(node)
-            elif isinstance(node, dict):
-                stack.extend(node.values())
-            elif isinstance(node, str) and node.startswith("https://"):
-                parsed = urlsplit(node)
-                if parsed.hostname == "flow-content.google" and parsed.path.startswith(f"/{kind}/"):
-                    urls.add(node)
-        if not urls:
-            return None
-        if len(urls) != 1:
-            raise OwnerAmbiguityGate("multiple provider media URLs for one identity")
+        resource = parse_media_resource(payload, media_id=media_id,
+            project_id=self.project_id, kind=kind)
         try:
-            response = self.page.context.request.get(next(iter(urls)),
+            response = self.page.context.request.get(resource.url,
                 timeout=60000, max_redirects=0, max_retries=0)
             try:
                 if response.status != 200:
@@ -270,7 +279,8 @@ class FlowReferenceRpcSession:
                 data = response.body()
                 if not data or len(data) > MAX_MEDIA_BYTES:
                     raise ValueError("media invalid")
-                return data
+                return bind_media_bytes(resource, data=data, response_url=response.url,
+                    status=response.status, headers=response.headers)
             finally:
                 response.dispose()
         except Exception:

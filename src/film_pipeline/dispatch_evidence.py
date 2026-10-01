@@ -53,6 +53,8 @@ def intent_hash(job):
         basis['successor'] = {key: job.correlation_evidence.get(key) for key in
             ('supersedes_attempt', 'supersedes_job', 'successor_authority_id',
              'owner_brief_sha256', 'historical_snapshot_sha256')}
+    if 'native_ui_intent' in job.correlation_evidence:
+        basis['native_ui_intent'] = job.correlation_evidence['native_ui_intent']
     return sha256(basis)
 
 
