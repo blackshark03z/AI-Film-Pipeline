@@ -178,45 +178,60 @@ def qualified_catalog_snapshot(records, *, project_id: str,
 
 @dataclass(frozen=True)
 class QualifiedFlowCatalogCapability:
-    """Immutable authority for the runtime's pre-dispatch Flow catalog read.
+    """Authority for the runtime's ONE authoritative pre-dispatch catalog read.
 
-    Minted only for the concrete existing Flow session implementation: the
-    wrapped object must be exactly ``FlowReferenceRpcSession`` (no subclass,
-    wrapper or duck-typed look-alike), its ``catalog_fingerprint`` must be the
-    qualified baseline established by the existing contract validation
-    (``validate_catalog_baseline`` inside the session's own ``catalog()``),
-    and its ``project_id`` must be a valid UUID. ``capture`` binds to the
-    concrete class implementation of ``catalog()``, so neither subclass
-    overrides nor instance-attribute shadowing can replace catalog semantics;
-    only the real implementation (with its full re-validation) can produce a
-    captured observation.
+    Minted for a fresh, exact-type ``FlowReferenceRpcSession`` — before any
+    catalog read exists. Two distinct states are never conflated:
+
+    - SESSION AUTHORITY is qualified at mint time and requires zero reads:
+      the wrapped object must be exactly ``FlowReferenceRpcSession`` (no
+      subclass, wrapper or duck-typed look-alike) with a valid project UUID.
+      A fresh session's ``catalog_fingerprint`` is ``None`` — that is the
+      correct production state for minting.
+    - OBSERVATION QUALIFICATION happens inside ``capture``: the single
+      concrete catalog read must itself establish the qualified baseline
+      fingerprint (via the existing ``validate_catalog_baseline`` inside the
+      session's ``catalog()``), the project scope must remain exactly the
+      minted one, and the exact records returned by that one read are the
+      only source of the frozen snapshot.
+
+    ``capture`` binds to the concrete class implementation, so neither
+    subclass overrides nor instance-attribute shadowing can replace catalog
+    semantics.
     """
 
     session: FlowReferenceRpcSession
 
     def __post_init__(self):
+        # Session-AUTHORITY qualification only; no catalog read happens here.
         if type(self.session) is not FlowReferenceRpcSession:
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
-        if getattr(self.session, 'catalog_fingerprint', None) != \
-                contract.QUALIFIED_BASELINE_FINGERPRINT:
+        project_id = getattr(self.session, 'project_id', '')
+        if not contract.UUID_RE.fullmatch(project_id or ''):
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
-        if not contract.UUID_RE.fullmatch(getattr(self.session, 'project_id', '') or ''):
-            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
+        # Snap the minted project scope; capture verifies it never drifts.
+        object.__setattr__(self, '_minted_project', project_id)
 
     @property
     def project_id(self) -> str:
         return self.session.project_id
 
-    @property
-    def fingerprint(self) -> str:
-        return self.session.catalog_fingerprint
+    def capture(self) -> tuple[list, str]:
+        """The ONE authoritative pre-dispatch observation.
 
-    def capture(self) -> list:
-        """The authoritative observation: the session's own catalog read,
-        bound to the concrete class implementation (instance attribute
-        shadowing and subclass overrides cannot substitute it). The runtime —
-        never the caller — invokes this."""
-        return FlowReferenceRpcSession.catalog(self.session)
+        Invokes the concrete catalog implementation exactly once, then
+        qualifies the OBSERVATION: the fingerprint established by this very
+        read must equal the qualified baseline, and the project scope must
+        still be the minted one. Returns the immutable observation pair
+        ``(records, fingerprint)``.
+        """
+        records = FlowReferenceRpcSession.catalog(self.session)
+        fingerprint = getattr(self.session, 'catalog_fingerprint', None)
+        if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
+        if self.session.project_id != self._minted_project:
+            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_PROJECT_MISMATCH')
+        return records, fingerprint
 
 
 def qualify_flow_catalog_source(session) -> QualifiedFlowCatalogCapability:
@@ -329,14 +344,15 @@ class FlowR2VShotRuntime:
         The pre-dispatch baseline is runtime-captured through the qualified
         provider-read boundary: ``catalog_source`` must be a
         ``QualifiedFlowCatalogCapability`` minted by
-        ``qualify_flow_catalog_source`` for a concrete qualified Flow session.
-        The runtime itself asks that capability exactly once for the
-        authoritative pre-dispatch observation and derives the snapshot from
-        that observation alone. Callers choose WHICH qualified session is
-        used; they cannot manufacture an object that merely looks like a
-        catalog source, and a restart reuses the frozen snapshot without
-        re-capture. The whole Film path plus ProviderJob freeze commits
-        atomically."""
+        ``qualify_flow_catalog_source`` for a fresh, exact-type Flow session —
+        no prior catalog read is required or allowed to matter. The runtime
+        itself asks that capability exactly once for the authoritative
+        pre-dispatch observation (the single read that also establishes the
+        qualified baseline fingerprint) and derives the snapshot from that
+        observation alone. Callers choose WHICH qualified session is used;
+        they cannot manufacture an object that merely looks like a catalog
+        source, and a restart reuses the frozen snapshot without re-capture.
+        The whole Film path plus ProviderJob freeze commits atomically."""
         contract._uuid(reference_media_id, 'REFERENCE_ID_INVALID')
         if not isinstance(catalog_source, QualifiedFlowCatalogCapability):
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
@@ -362,12 +378,13 @@ class FlowR2VShotRuntime:
         prior = self._existing_job_for_shot(shot.shot_id)
         if prior is not None:
             return self._resume_frozen(prior, shot, plan, decision, reference_binding)
-        # The one authoritative pre-dispatch catalog observation, captured by
-        # the runtime through the qualified capability; a restart never
-        # reaches this line again.
-        records = catalog_source.capture()
+        # The ONE authoritative pre-dispatch catalog observation, captured by
+        # the runtime through the qualified capability: exactly one concrete
+        # read that itself establishes the qualified baseline; a restart
+        # never reaches this line again.
+        records, fingerprint = catalog_source.capture()
         snapshot = qualified_catalog_snapshot(records, project_id=self.project_id,
-                                              fingerprint=catalog_source.fingerprint)
+                                              fingerprint=fingerprint)
         preview = make_provider_job(attempt, project_binding_id=self.project_binding_id,
                                     pre_dispatch_snapshot=snapshot)
         compiled = compact_r2v_prompt(plan, preview.provider_job_id, model=self.model)

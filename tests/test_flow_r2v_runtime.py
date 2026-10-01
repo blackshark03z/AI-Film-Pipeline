@@ -88,17 +88,16 @@ class FixtureAcquisitionTransport:
         return destination
 
 
-def offline_flow_session(records, *, project_id=PROJECT,
-                         fingerprint=contract.QUALIFIED_BASELINE_FINGERPRINT):
-    """Test-only seam: an EXACT FlowReferenceRpcSession instance constructed
-    without opening a browser. No subclass and no production change — the
-    object is the concrete class; its catalog_fingerprint holds the
-    established qualified baseline exactly as a live qualified read would
-    leave it. The concrete class catalog() method is patched per-test by the
-    autouse fixture below; production qualification checks stay untouched."""
+def offline_flow_session(records, *, project_id=PROJECT):
+    """Test-only seam: an EXACT, FRESH FlowReferenceRpcSession constructed
+    without opening a browser. Exactly like production, the fresh session's
+    catalog_fingerprint is None until its first qualified catalog read —
+    nothing is pre-qualified here. The concrete class catalog() method is
+    patched per-test by the autouse fixture below and emulates the real
+    lifecycle: one read → validate/establish the qualified fingerprint →
+    return records. Production qualification checks stay untouched."""
     session = FlowReferenceRpcSession(profile_path=Path('offline-unused'),
                                       project_id=project_id)
-    session.catalog_fingerprint = fingerprint
     session._offline_rows = [list(row) for row in records]
     session._offline_calls = 0
     return session
@@ -107,21 +106,24 @@ def offline_flow_session(records, *, project_id=PROJECT,
 @pytest.fixture(autouse=True)
 def _offline_flow_catalog(monkeypatch):
     """Patch the concrete FlowReferenceRpcSession.catalog implementation for
-    the duration of each test (restored afterwards). Only the concrete class
-    is patched — capabilities bind capture to this class function, so this
-    seam is the single offline path and weakens no production check."""
+    the duration of each test (restored afterwards), emulating the real
+    read lifecycle: before the read the fingerprint is None; the read itself
+    establishes the qualified baseline fingerprint and returns records.
+    Only the concrete class is patched — capabilities bind capture to this
+    class function, so this seam is the single offline path and weakens no
+    production check."""
     def offline_catalog(self, *, contract_version=contract.CONTRACT_VERSION):
         self._offline_calls += 1
+        self.catalog_fingerprint = contract.QUALIFIED_BASELINE_FINGERPRINT
         return [list(row) for row in self._offline_rows]
     monkeypatch.setattr(FlowReferenceRpcSession, 'catalog', offline_catalog)
     yield
 
 
-def catalog_capability(records, *, fingerprint=contract.QUALIFIED_BASELINE_FINGERPRINT,
-                       project_id=PROJECT):
+def catalog_capability(records, *, project_id=PROJECT):
     """Mint a production capability for an offline exact-type Flow session."""
     return qualify_flow_catalog_source(
-        offline_flow_session(records, project_id=project_id, fingerprint=fingerprint))
+        offline_flow_session(records, project_id=project_id))
 
 
 @pytest.fixture
@@ -1021,6 +1023,96 @@ def test_runtime_module_has_no_test_seam():
     assert 'FlowReferenceRpcSession.catalog(self.session)' in source
 
 
+# RUNTIME-HARDEN-001 R5 proof 1 + 2 + 12: a fresh exact-type session with a
+# None fingerprint mints the capability, and minting performs ZERO catalog
+# reads. A fresh session has no _offline_rows, so any attempted read inside
+# minting would crash this test loudly instead of passing silently.
+def test_fresh_session_mints_capability_with_zero_reads(runtime_env):
+    fresh = FlowReferenceRpcSession(profile_path=Path('fresh-unused'),
+                                    project_id=PROJECT)
+    assert type(fresh) is FlowReferenceRpcSession
+    assert fresh.catalog_fingerprint is None  # exactly the production state
+    capability = qualify_flow_catalog_source(fresh)  # no read; no exception
+    assert fresh.catalog_fingerprint is None  # mint performed zero reads
+    assert not hasattr(fresh, '_offline_calls')  # the class impl never ran
+    # Proof 12: the mint-time check contains no fingerprint precondition.
+    import inspect
+    from film_pipeline.flow_r2v_runtime import QualifiedFlowCatalogCapability
+    assert 'catalog_fingerprint' not in inspect.getsource(
+        QualifiedFlowCatalogCapability.__post_init__)
+
+
+# R5 proofs 3 + 4 + 5: a fresh freeze performs EXACTLY ONE catalog read; that
+# same read takes the fingerprint from None to qualified; and the exact
+# records it returned become the frozen snapshot.
+def test_fresh_session_lifecycle_single_read(runtime_env):
+    env = runtime_env
+    fresh = offline_flow_session(catalog_records(OTHER, SECOND_OUTPUT_ID))
+    capability = qualify_flow_catalog_source(fresh)
+    assert fresh.catalog_fingerprint is None  # before: unqualified
+    frozen = env.runtime.freeze(
+        ordinary_r2v_shot(env.asset.asset_id, shot_id='FLOW_R2V_R5_FRESH_001'),
+        flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=capability,
+        started_at='2026-10-02T03:00:00+00:00')
+    assert fresh._offline_calls == 1  # exactly one authoritative read
+    snap = frozen.job.pre_dispatch_snapshot
+    assert fresh.catalog_fingerprint == contract.QUALIFIED_BASELINE_FINGERPRINT
+    assert snap['catalog_fingerprint'] == contract.QUALIFIED_BASELINE_FINGERPRINT
+    assert snap['catalog_ids'] == sorted({OTHER.lower(), SECOND_OUTPUT_ID.lower()})
+    basis = {'catalog_fingerprint': snap['catalog_fingerprint'],
+             'catalog_ids': snap['catalog_ids'], 'project_id': snap['project_id']}
+    assert snap['snapshot_sha256'] == sha256(basis)
+    # The snapshot fingerprint is the one the capture read established, and
+    # the fingerprint of the capability's session is the same single fact.
+    assert snap['catalog_fingerprint'] == fresh.catalog_fingerprint
+
+
+# R5 proof 6: a read that returns qualified-shape records but fails to
+# establish the qualified fingerprint fails closed at capture; nothing
+# persists.
+def test_capture_without_established_baseline_fails_closed(runtime_env, monkeypatch):
+    env = runtime_env
+
+    def drifting_catalog(self, *, contract_version=contract.CONTRACT_VERSION):
+        self._offline_calls += 1
+        self.catalog_fingerprint = None  # the read established no baseline
+        return [list(row) for row in self._offline_rows]
+
+    monkeypatch.setattr(FlowReferenceRpcSession, 'catalog', drifting_catalog)
+    fresh = offline_flow_session(catalog_records(OTHER))
+    capability = qualify_flow_catalog_source(fresh)
+    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_BASELINE_DRIFT'):
+        env.runtime.freeze(
+            ordinary_r2v_shot(env.asset.asset_id, shot_id='FLOW_R2V_R5_DRIFT_002'),
+            flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
+            reference_filename=REFERENCE_FILENAME_2, catalog_source=capability,
+            started_at='2026-10-02T03:01:00+00:00')
+    with sqlite3.connect(env.store.path) as connection:
+        jobs = connection.execute('SELECT COUNT(*) FROM provider_jobs').fetchone()[0]
+    assert jobs == 1  # only the environment's valid frozen job
+
+
+# R5 proof 7: project scope drift after minting fails closed — both at the
+# freeze entry gate and at capture itself.
+def test_project_drift_during_capture_fails_closed(runtime_env):
+    env = runtime_env
+    fresh = offline_flow_session(catalog_records(OTHER))
+    capability = qualify_flow_catalog_source(fresh)
+    fresh.project_id = OTHER  # scope drifts after the capability was minted
+    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_PROJECT_MISMATCH'):
+        capability.capture()
+    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_PROJECT_MISMATCH'):
+        env.runtime.freeze(
+            ordinary_r2v_shot(env.asset.asset_id, shot_id='FLOW_R2V_R5_DRIFT_003'),
+            flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
+            reference_filename=REFERENCE_FILENAME_2, catalog_source=capability,
+            started_at='2026-10-02T03:02:00+00:00')
+    with sqlite3.connect(env.store.path) as connection:
+        jobs = connection.execute('SELECT COUNT(*) FROM provider_jobs').fetchone()[0]
+    assert jobs == 1
+
+
 # R2 proof 2: the runtime asks the source exactly once, itself.
 def test_runtime_captures_source_exactly_once(runtime_env):
     env = runtime_env
@@ -1098,9 +1190,6 @@ def test_unqualified_catalog_source_fails_closed(runtime_env):
                 reference_media_id=REMOTE, reference_filename=REFERENCE_FILENAME_2,
                 catalog_source=source, started_at=f'2026-10-02T00:03:0{n:02d}+00:00')
 
-    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_UNQUALIFIED'):
-        qualify_flow_catalog_source(
-            offline_flow_session(catalog_records(OTHER), fingerprint='deadbeef'))
     attempt(2, catalog_capability(catalog_records(OTHER, project=OTHER)))
     attempt(3, catalog_capability([OUTPUT_ID]))  # malformed row shape
     attempt(4, object())  # not a catalog source at all
