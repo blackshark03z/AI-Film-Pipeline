@@ -482,3 +482,57 @@ regressions 211 passed; full suite **485 passed** (482 floor + 3 new);
 compileall clean; `git diff --check` clean; committed-delta security scan
 (262 lines): 0 hits. Provider access/mutation: **0**. Delivery HEAD: this
 commit. State: COMPLETED_CANDIDATE.
+
+## RUNTIME-HARDEN-001 REVIEW ROUND 5 — fresh session / single authoritative read (2026-10-02)
+
+Techlead reproduction confirmed on 2adba9b (scratch, untracked): a fresh
+exact-type FlowReferenceRpcSession (catalog_fingerprint None, exactly the
+post-construction production state) could NOT mint a capability — minting
+demanded a pre-established qualified fingerprint, forcing a live caller into
+two catalog reads (read #1 to mint, read #2 inside freeze) and masking the
+bug behind the offline seam that manually pre-qualified the session.
+
+### Closure: two states never conflated
+
+- SESSION AUTHORITY (mint time, zero reads): `__post_init__` requires only
+  `type(session) is FlowReferenceRpcSession` and a valid project UUID, and
+  snaps the minted project scope. It contains no fingerprint precondition
+  (proven by source inspection). All round-4 protections are intact.
+- OBSERVATION QUALIFICATION (capture time, exactly one read): `capture()`
+  invokes the concrete `FlowReferenceRpcSession.catalog` implementation once,
+  then requires the fingerprint established BY THAT VERY READ to equal the
+  qualified baseline and the session's project scope to still equal the
+  minted one; it returns the immutable `(records, fingerprint)` pair, and
+  `freeze` derives the snapshot from that pair alone. No preliminary call, no
+  cached caller rows, no caller-controlled flag.
+
+Offline seam corrected: `offline_flow_session()` now builds a fresh exact-type
+session whose fingerprint is None (nothing pre-qualified); the per-test class
+patch emulates the real read lifecycle — before read: fingerprint None; the
+read itself establishes the qualified fingerprint and returns records.
+
+Adversarial proofs (new tests): fresh session mints with zero reads (any read
+inside minting would crash on missing fixture state — proof 1, 2, 12);
+fresh freeze performs exactly ONE read, fingerprint None→qualified within that
+same read, snapshot equals the full normalized observation and its stored
+fingerprint equals the session's (proof 3, 4, 5); a read that establishes no
+baseline fails closed with nothing persisted (proof 6); project drift after
+minting fails at capture AND at the freeze gate (proof 7); subclass/wrapper/
+duck rejection and instance-shadowing binding retained (proof 8, 9); restart
+performs zero new reads and reuses the historical snapshot (proof 10);
+preexisting captured output remains unownable (proof 11).
+
+Self-review: a fresh real session reaches freeze with no prior caller read
+(1); exactly one read occurs from fresh session to frozen ProviderJob (2);
+the snapshot derives from the same read that qualified the fingerprint — one
+call produces both facts atomically (3); an older fingerprint cannot authorize
+newer records because capture checks the fingerprint of the single read that
+returned these records, and the real implementation re-validates on every
+call (4); restart never re-reads (5); the seam no longer pre-qualifies any
+state production would not have (6).
+
+Verify: focused 56/56; boundary/live_runtime/dispatch/Slice-0011 historical
+regressions 211 passed; full suite **489 passed** (485 floor + 4 new);
+compileall clean; `git diff --check` clean; committed-delta security scan
+(301 lines): 0 hits. Provider access/mutation: **0**. Delivery HEAD: this
+commit. State: COMPLETED_CANDIDATE.
