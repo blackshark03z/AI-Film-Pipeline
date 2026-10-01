@@ -84,6 +84,25 @@ class FixtureAcquisitionTransport:
         return destination
 
 
+class CatalogSource:
+    """Synthetic qualified catalog-source double.
+
+    Simulates the authoritative provider read through the existing Flow
+    session/catalog abstraction (``catalog()`` + ``catalog_fingerprint``).
+    The runtime — never the caller — decides when the read happens and what
+    rows the observation contains.
+    """
+
+    def __init__(self, records, *, fingerprint=contract.QUALIFIED_BASELINE_FINGERPRINT):
+        self.records = [list(row) for row in records]
+        self.catalog_fingerprint = fingerprint
+        self.calls = 0
+
+    def catalog(self):
+        self.calls += 1
+        return [list(row) for row in self.records]
+
+
 @pytest.fixture
 def runtime_env(tmp_path):
     """Fully offline runtime environment: attested reference + frozen job."""
@@ -98,12 +117,13 @@ def runtime_env(tmp_path):
     store = SQLiteStore(upload_store.db_path)
     runtime = FlowR2VShotRuntime(store, project_id=PROJECT, account_id=ACCOUNT)
     shot = ordinary_r2v_shot(asset.asset_id)
+    catalog_source = CatalogSource(catalog_records(OTHER))
     frozen = runtime.freeze(shot, flow_capabilities(), reference_asset=asset,
         reference_media_id=REMOTE, reference_filename=REFERENCE_FILENAME_2,
-        baseline_catalog_records=catalog_records(OTHER), started_at='2026-10-01T00:00:00+00:00')
+        catalog_source=catalog_source, started_at='2026-10-01T00:00:00+00:00')
     return SimpleNamespace(asset=asset, attestation=attestation,
         attestation_dir=attestation_dir, runtime=runtime, store=store, shot=shot,
-        frozen=frozen, baseline=[OTHER], tmp_path=tmp_path)
+        frozen=frozen, catalog_source=catalog_source, tmp_path=tmp_path)
 
 
 def reserve(env):
@@ -206,7 +226,8 @@ def test_freeze_rejects_reference_hash_mismatch(tmp_path, runtime_env):
     with pytest.raises(ValueError):
         runtime_env.runtime.freeze(shot, flow_capabilities(),
             reference_asset=runtime_env.asset, reference_media_id=REMOTE,
-            baseline_catalog_records=catalog_records(OTHER), started_at='2026-10-01T00:00:01+00:00')
+            catalog_source=runtime_env.catalog_source,
+            started_at='2026-10-01T00:00:01+00:00')
     with sqlite3.connect(runtime_env.store.path) as connection:
         jobs = connection.execute('SELECT COUNT(*) FROM provider_jobs').fetchone()[0]
     assert jobs == 1  # only the valid frozen job exists
@@ -219,7 +240,7 @@ def test_restart_with_changed_spec_fails_closed(runtime_env):
     with pytest.raises(OwnerAmbiguityGate, match='RESTART'):
         env.runtime.freeze(changed, flow_capabilities(),
             reference_asset=env.asset, reference_media_id=REMOTE,
-            reference_filename=REFERENCE_FILENAME_2, baseline_catalog_records=catalog_records(OTHER),
+            reference_filename=REFERENCE_FILENAME_2, catalog_source=env.catalog_source,
             started_at='2026-10-01T00:00:02+00:00')
 
 
@@ -227,7 +248,7 @@ def test_restart_with_identical_inputs_resumes_same_job(runtime_env):
     env = runtime_env
     again = env.runtime.freeze(env.shot, flow_capabilities(),
         reference_asset=env.asset, reference_media_id=REMOTE,
-        reference_filename=REFERENCE_FILENAME_2, baseline_catalog_records=catalog_records(OTHER),
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=env.catalog_source,
         started_at='2099-01-01T00:00:00+00:00')
     assert again.job.provider_job_id == env.frozen.job.provider_job_id
     assert again.job.correlation_evidence['prompt'] == \
@@ -242,7 +263,7 @@ def test_freeze_rejects_non_flow_provider(runtime_env):
     with pytest.raises(OwnerAmbiguityGate, match='PROVIDER_UNQUALIFIED'):
         env.runtime.freeze(unclaimed, flow_capabilities('provider_full'),
             reference_asset=env.asset, reference_media_id=REMOTE,
-            baseline_catalog_records=catalog_records(OTHER), started_at='2026-10-01T00:00:03+00:00')
+            catalog_source=env.catalog_source, started_at='2026-10-01T00:00:03+00:00')
     with sqlite3.connect(env.store.path) as connection:
         jobs = connection.execute('SELECT COUNT(*) FROM provider_jobs').fetchone()[0]
     assert jobs == 1  # nothing was persisted for the rejected provider
@@ -391,7 +412,7 @@ def test_output_of_another_job_cannot_be_rebound(runtime_env):
                                     shot_id='FLOW_R2V_RUNTIME_ORDINARY_002')
     second_frozen = env.runtime.freeze(second_shot, flow_capabilities(),
         reference_asset=env.asset, reference_media_id=REMOTE,
-        reference_filename=REFERENCE_FILENAME_2, baseline_catalog_records=catalog_records(OTHER),
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=env.catalog_source,
         started_at='2026-10-01T00:10:00+00:00')
     env.runtime.reserve(second_frozen, attestation=env.attestation,
                         evidence_dir=env.attestation_dir)
@@ -499,7 +520,7 @@ def test_restart_after_reservation_stays_reconcile_only(runtime_env):
     restarted = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
     again = restarted.freeze(env.shot, flow_capabilities(),
         reference_asset=env.asset, reference_media_id=REMOTE,
-        reference_filename=REFERENCE_FILENAME_2, baseline_catalog_records=catalog_records(OTHER),
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=env.catalog_source,
         started_at='2099-01-01T00:00:00+00:00')
     assert again.job.provider_job_id == env.frozen.job.provider_job_id
     with pytest.raises(OwnerAmbiguityGate, match='RECONCILE_ONLY'):
@@ -522,7 +543,7 @@ def test_restart_after_binding_continues_acquisition(tmp_path, runtime_env):
     restarted = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
     asset = restarted.acquire(restarted.freeze(env.shot, flow_capabilities(),
         reference_asset=env.asset, reference_media_id=REMOTE,
-        reference_filename=REFERENCE_FILENAME_2, baseline_catalog_records=catalog_records(OTHER),
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=env.catalog_source,
         started_at='2099-01-01T00:00:00+00:00'),
         transport=FixtureAcquisitionTransport(data),
         destination_dir=tmp_path / 'assets', media_payload=payload)
@@ -546,7 +567,7 @@ def test_restart_after_acquisition_is_idempotent(tmp_path, runtime_env):
     restarted = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
     refrozen = restarted.freeze(env.shot, flow_capabilities(),
         reference_asset=env.asset, reference_media_id=REMOTE,
-        reference_filename=REFERENCE_FILENAME_2, baseline_catalog_records=catalog_records(OTHER),
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=env.catalog_source,
         started_at='2099-01-01T00:00:00+00:00')
     second_transport = FixtureAcquisitionTransport(data)
     same = restarted.acquire(refrozen, transport=second_transport,
@@ -752,7 +773,7 @@ def test_store_freeze_transaction_is_atomic(tmp_path, runtime_env):
         with pytest.raises(RuntimeError, match='simulated crash'):
             env.runtime.freeze(shot, flow_capabilities(), reference_asset=env.asset,
                 reference_media_id=REMOTE, reference_filename=REFERENCE_FILENAME_2,
-                baseline_catalog_records=catalog_records(OTHER),
+                catalog_source=env.catalog_source,
                 started_at='2026-10-01T02:00:00+00:00')
     with sqlite3.connect(store.path) as connection:
         partial = {table: connection.execute(
@@ -768,7 +789,7 @@ def test_store_freeze_transaction_is_atomic(tmp_path, runtime_env):
     refrozen = env.runtime.freeze(shot, flow_capabilities(),
         reference_asset=env.asset, reference_media_id=REMOTE,
         reference_filename=REFERENCE_FILENAME_2,
-        baseline_catalog_records=catalog_records(OTHER),
+        catalog_source=env.catalog_source,
         started_at='2026-10-01T02:00:00+00:00')
     with sqlite3.connect(store.path) as connection:
         attempts = connection.execute(
@@ -818,7 +839,7 @@ def test_restart_idempotent_acquisition_ignores_lying_transport(tmp_path, runtim
     refrozen = restarted.freeze(env.shot, flow_capabilities(),
         reference_asset=env.asset, reference_media_id=REMOTE,
         reference_filename=REFERENCE_FILENAME_2,
-        baseline_catalog_records=catalog_records(OTHER),
+        catalog_source=env.catalog_source,
         started_at='2099-01-01T00:00:00+00:00')
     liar = FixtureAcquisitionTransport(unrelated)
     same = restarted.acquire(refrozen, transport=liar,
@@ -827,6 +848,158 @@ def test_restart_idempotent_acquisition_ignores_lying_transport(tmp_path, runtim
     assert (same.asset_id, same.sha256, same.uri_or_path) == \
            (asset.asset_id, asset.sha256, asset.uri_or_path)
     assert Path(same.uri_or_path).read_bytes() == data
+
+
+THIRD_ID = '7c9e6679-7425-40de-944b-e07fc1f90ae7'
+
+
+# RUNTIME-HARDEN-001 R2 proof 1 + 9: the runtime API has no raw-record path —
+# the exact Techlead attack (forcing an empty/incomplete subset as authority)
+# is no longer expressible.
+def test_freeze_has_no_raw_record_path(runtime_env):
+    env = runtime_env
+    base = dict(reference_asset=env.asset, reference_media_id=REMOTE,
+                reference_filename=REFERENCE_FILENAME_2,
+                catalog_source=CatalogSource(catalog_records(OTHER)),
+                started_at='2026-10-02T00:00:00+00:00')
+    with pytest.raises(TypeError):
+        env.runtime.freeze(env.shot, flow_capabilities(),
+                           baseline_catalog_records=[], **base)
+    with pytest.raises(TypeError):
+        env.runtime.freeze(env.shot, flow_capabilities(),
+                           baseline_catalog_ids=[OTHER], **base)
+    import inspect
+    params = set(inspect.signature(env.runtime.freeze).parameters)
+    assert 'catalog_source' in params
+    assert not any('record' in name or 'baseline' in name or name.endswith('_ids')
+                   for name in params)
+
+
+# R2 proof 2: the runtime asks the source exactly once, itself.
+def test_runtime_captures_source_exactly_once(runtime_env):
+    env = runtime_env
+    source = CatalogSource(catalog_records(OTHER, SECOND_OUTPUT_ID))
+    assert source.calls == 0
+    frozen = env.runtime.freeze(
+        ordinary_r2v_shot(env.asset.asset_id, shot_id='FLOW_R2V_CAPTURE_002'),
+        flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=source,
+        started_at='2026-10-02T00:01:00+00:00')
+    assert source.calls == 1
+    # A restart resume re-freezes without consulting the source again.
+    restarted = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
+    resumed = restarted.freeze(env.shot.model_copy(update={
+        'shot_id': 'FLOW_R2V_CAPTURE_002'}), flow_capabilities(),
+        reference_asset=env.asset, reference_media_id=REMOTE,
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=source,
+        started_at='2099-01-01T00:00:00+00:00')
+    assert source.calls == 1
+    assert resumed.job.provider_job_id == frozen.job.provider_job_id
+
+
+# R2 proof 3 + 4: the frozen snapshot is exactly the source observation,
+# normalized; no caller hook exists to omit a row from that same source.
+def test_snapshot_contains_exactly_source_observation(runtime_env):
+    env = runtime_env
+    ids = [OTHER, SECOND_OUTPUT_ID, THIRD_ID]
+    source = CatalogSource(catalog_records(*ids))
+    frozen = env.runtime.freeze(
+        ordinary_r2v_shot(env.asset.asset_id, shot_id='FLOW_R2V_CAPTURE_003'),
+        flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=source,
+        started_at='2026-10-02T00:02:00+00:00')
+    snap = frozen.job.pre_dispatch_snapshot
+    assert snap['catalog_ids'] == sorted({value.lower() for value in ids})
+    basis = {'catalog_fingerprint': snap['catalog_fingerprint'],
+             'catalog_ids': snap['catalog_ids'], 'project_id': snap['project_id']}
+    assert snap['snapshot_sha256'] == sha256(basis)
+    # The same source cannot yield a B-less snapshot: only the runtime reads
+    # it, and no filtering parameter exists (proof 1 inspects the signature).
+
+
+# R2 proof 5: rows appended/replaced after capture cannot change the frozen
+# snapshot or its identity.
+def test_post_capture_mutation_cannot_change_frozen_snapshot(runtime_env):
+    env = runtime_env
+    source = env.catalog_source
+    snap = env.frozen.job.pre_dispatch_snapshot
+    frozen_ids, frozen_hash = snap['catalog_ids'], snap['snapshot_sha256']
+    source.records.append([SECOND_OUTPUT_ID, PROJECT, 'IMAGE', 'CAE', None, None, None])
+    source.records[0][0] = THIRD_ID  # replace in place
+    basis = {'catalog_fingerprint': snap['catalog_fingerprint'],
+             'catalog_ids': snap['catalog_ids'], 'project_id': snap['project_id']}
+    assert snap['catalog_ids'] == frozen_ids
+    assert snap['snapshot_sha256'] == frozen_hash == sha256(basis)
+    # The frozen snapshot still verifies and authorizes normally.
+    reserve(env)
+    assert env.store.read_provider_job(
+        env.frozen.job.provider_job_id).dispatch_count == 1
+
+
+# R2 proof 6: wrong fingerprint/project/shape sources fail closed, nothing
+# persisted. Each attempt uses a fresh shot so the runtime-owned capture path
+# (not a restart resume) is the code under test.
+def test_unqualified_catalog_source_fails_closed(runtime_env):
+    env = runtime_env
+
+    def attempt(n, source):
+        with pytest.raises(OwnerAmbiguityGate):
+            env.runtime.freeze(
+                ordinary_r2v_shot(env.asset.asset_id, shot_id=f'FLOW_R2V_BADSRC_{n:03d}'),
+                flow_capabilities(), reference_asset=env.asset,
+                reference_media_id=REMOTE, reference_filename=REFERENCE_FILENAME_2,
+                catalog_source=source, started_at=f'2026-10-02T00:03:0{n:02d}+00:00')
+
+    attempt(1, CatalogSource(catalog_records(OTHER), fingerprint='deadbeef'))
+    attempt(2, CatalogSource(catalog_records(OTHER, project=OTHER)))
+    attempt(3, CatalogSource([OUTPUT_ID]))  # malformed row shape
+    attempt(4, object())  # not a catalog source at all
+    with sqlite3.connect(env.store.path) as connection:
+        jobs = connection.execute('SELECT COUNT(*) FROM provider_jobs').fetchone()[0]
+    assert jobs == 1  # only the environment's valid frozen job
+
+
+# R2 proof 7: restart reuses the exact frozen snapshot and never re-captures.
+def test_restart_reuses_frozen_snapshot_without_recapture(runtime_env):
+    env = runtime_env
+    original = env.frozen.job.pre_dispatch_snapshot
+    fresh_source = CatalogSource(catalog_records(SECOND_OUTPUT_ID, THIRD_ID))
+    restarted = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
+    resumed = restarted.freeze(env.shot, flow_capabilities(),
+        reference_asset=env.asset, reference_media_id=REMOTE,
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=fresh_source,
+        started_at='2099-01-01T00:00:00+00:00')
+    assert fresh_source.calls == 0  # historical truth is not re-captured
+    assert resumed.job.pre_dispatch_snapshot == original
+    assert resumed.job.provider_job_id == env.frozen.job.provider_job_id
+
+
+# R2 proof 8 + 9: the Techlead case — the true source contains OTHER, the
+# caller attempts to force an empty subset, and no path can freeze it; the
+# captured preexisting row can never be owned.
+def test_techlead_empty_subset_omission_case(runtime_env):
+    env = runtime_env
+    # The environment's source observation contains OTHER; the frozen snapshot
+    # therefore contains OTHER (captured by the runtime, not asserted).
+    snap = env.frozen.job.pre_dispatch_snapshot
+    assert OTHER.lower() in snap['catalog_ids']
+    # The caller cannot force the empty subset the old API accepted.
+    with pytest.raises(TypeError):
+        env.runtime.freeze(env.shot, flow_capabilities(),
+            reference_asset=env.asset, reference_media_id=REMOTE,
+            reference_filename=REFERENCE_FILENAME_2,
+            baseline_catalog_records=[], catalog_source=env.catalog_source,
+            started_at='2026-10-02T00:04:00+00:00')
+    # With the true capture as the frozen baseline, the omitted row can no
+    # longer be owned: presenting it fresh fails as preexisting.
+    reserve(env)
+    release_request(env)
+    marker = film_marker(env.frozen.job.provider_job_id)
+    row = make_veo31_video_record(OTHER, PROJECT, REMOTE, REFERENCE_FILENAME_2,
+        marker, model=contract.MODEL_VEO_3_1_LITE)
+    with pytest.raises(contract.ContractError, match='PREEXISTING'):
+        env.runtime.attribute_backend_output(env.frozen, [row])
+    assert env.store.read_output_bindings(env.frozen.job.provider_job_id) == []
 
 
 # 22: the generic runtime has no Slice-0011 semantic dependency.

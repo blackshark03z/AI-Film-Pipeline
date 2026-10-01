@@ -154,14 +154,14 @@ def compact_r2v_prompt(plan: PromptPlan, provider_job_id: str, *, model: str) ->
 
 def qualified_catalog_snapshot(records, *, project_id: str,
         fingerprint: str = contract.QUALIFIED_BASELINE_FINGERPRINT) -> dict:
-    """Smallest qualified catalog-snapshot boundary.
+    """Validate, normalize and identity-hash one catalog observation.
 
-    provider catalog records → existing Flow catalog row validation →
-    qualified fingerprint and project gate → normalized exact IDs →
-    deterministic immutable snapshot identity hash. A bare list of IDs is
-    never accepted as provider snapshot truth anywhere in the runtime: the
-    identity hash changes whenever the snapshot content changes, so an
-    omitted or altered row can never preserve the same snapshot identity.
+    This is the pure composition applied to whatever the runtime captured
+    through the qualified provider-read boundary: existing Flow catalog row
+    validation → qualified fingerprint and project gate → normalized exact
+    IDs → deterministic immutable snapshot identity hash. It is not an
+    authority entry point: ordinary callers reach it only through
+    ``freeze``'s runtime-owned capture, never with their own record lists.
     """
     if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
         raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
@@ -266,17 +266,24 @@ class FlowR2VShotRuntime:
 
     def freeze(self, shot: ShotSpec, capabilities: ProviderCapabilities, *,
                reference_asset, reference_media_id: str, reference_filename: str = '',
-               baseline_catalog_records: list | tuple = (),
-               started_at: str | None = None) -> FrozenR2VShot:
+               catalog_source, started_at: str | None = None) -> FrozenR2VShot:
         """Compile, route and freeze one ordinary R2V shot into a ProviderJob
         whose exact submission prompt is durable before any authority exists.
-        A restart with identical inputs returns the same frozen job. The
-        pre-dispatch baseline is derived only from qualified provider catalog
-        records — a bare caller-supplied ID list is never snapshot truth —
-        and the whole Film path plus ProviderJob freeze commits atomically."""
+        A restart with identical inputs returns the same frozen job.
+
+        The pre-dispatch baseline is runtime-captured: the runtime itself asks
+        the qualified provider catalog source — an existing Flow
+        session/catalog object exposing ``catalog()`` and
+        ``catalog_fingerprint`` — exactly once for the authoritative
+        pre-dispatch observation, and derives the snapshot from that
+        observation alone. Callers choose WHICH qualified source is used; no
+        API exists for them to choose WHICH rows become snapshot truth, and a
+        restart reuses the frozen snapshot without re-capture. The whole Film
+        path plus ProviderJob freeze commits atomically."""
         contract._uuid(reference_media_id, 'REFERENCE_ID_INVALID')
-        snapshot = qualified_catalog_snapshot(baseline_catalog_records,
-                                              project_id=self.project_id)
+        if (not callable(getattr(catalog_source, 'catalog', None))
+                or not isinstance(getattr(catalog_source, 'catalog_fingerprint', None), str)):
+            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
         # Fresh immutable reference readback; the plan binds these exact bytes.
         stored_reference = self.store.read_reference_asset(reference_asset.asset_id)
         reference_binding = {'asset_id': stored_reference.asset_id,
@@ -297,6 +304,11 @@ class FlowR2VShotRuntime:
         prior = self._existing_job_for_shot(shot.shot_id)
         if prior is not None:
             return self._resume_frozen(prior, shot, plan, decision, reference_binding)
+        # The one authoritative pre-dispatch catalog observation, captured by
+        # the runtime; a restart never reaches this line again.
+        records = catalog_source.catalog()
+        snapshot = qualified_catalog_snapshot(records, project_id=self.project_id,
+                                              fingerprint=catalog_source.catalog_fingerprint)
         preview = make_provider_job(attempt, project_binding_id=self.project_binding_id,
                                     pre_dispatch_snapshot=snapshot)
         compiled = compact_r2v_prompt(plan, preview.provider_job_id, model=self.model)
@@ -313,7 +325,11 @@ class FlowR2VShotRuntime:
         return self._frozen(job, stored_reference)
 
     def _resume_frozen(self, prior, shot, plan, decision, reference_binding):
-        """Restart path: identical inputs must resume the identical frozen job."""
+        """Restart path: identical inputs must resume the identical frozen job.
+
+        The frozen pre-dispatch snapshot IS the historical truth: it is
+        verified here and never re-captured from a fresh observation."""
+        self._require_baseline_snapshot(prior)
         old_shot, old_plan, old_route, _ = self.store.read_path(
             prior.generation_attempt_id)
         if (old_shot, old_plan, old_route) != (shot, plan, decision):
