@@ -325,3 +325,49 @@ Full suite: **474 passed in 80.42s** (468 floor + 6 hardening proofs).
 `compileall -q src tools` clean; `git diff --check` clean; committed-delta
 security scan (846 diff lines): 0 hits. Provider access/mutation: **0**.
 Delivery HEAD: `260b3d8`. State: COMPLETED_CANDIDATE (hardened).
+
+## RUNTIME-HARDEN-001 REVIEW ROUND 2 — baseline capture provenance (2026-10-02)
+
+Techlead reproduction confirmed on 3ca6a09 (scratch, untracked):
+`freeze(baseline_catalog_records=[])` froze an empty-but-valid subset while the
+true catalog contained OTHER, and the omitted preexisting output was owned
+(`OMITTED_PREEXISTING_ROW_ACCEPTED = True`). The round-1 snapshot hash proved
+content integrity, not source provenance/completeness.
+
+### Closure: runtime-owned baseline capture
+
+`freeze()` no longer accepts any record collection. Its only new input is
+`catalog_source` — an existing Flow session/catalog object exposing
+``catalog()`` + ``catalog_fingerprint`` (the same abstraction the historical
+slice reads). The runtime itself asks the source exactly once for the
+authoritative pre-dispatch observation, derives the snapshot through
+`qualified_catalog_snapshot` (existing row validation → fingerprint/project
+gate → normalized IDs → identity hash), and only then freezes the job. Callers
+choose WHICH qualified source; no API exists to choose WHICH rows become
+snapshot truth. Restart resumes before any capture and eagerly re-verifies the
+frozen snapshot identity — historical truth is never re-captured.
+
+Adversarial proofs (tests/test_flow_r2v_runtime.py): raw record/ID parameters
+raise TypeError and the freeze signature contains no records/baseline/IDs
+parameter (1); the runtime performs exactly one capture and a restart zero
+(2, 7); the frozen snapshot equals the full normalized observation A,B,C (3);
+no caller hook can omit a row from that same source (4); post-capture
+append/replace cannot change the frozen snapshot or its identity (5); wrong
+fingerprint/project/shape/non-source fail closed with nothing persisted (6);
+the Techlead empty-subset case is unexpressible and the captured preexisting
+row fails attribution as PREEXISTING (8, 9).
+
+Self-review answers: the pure snapshot function is not an authority entry
+point (only freeze creates ProviderJobs, and it takes no records); a
+caller-chosen LYING source remains equivalent to a compromised provider read —
+the spec-sanctioned residual non-claim, since the runtime performs the read
+itself and the snapshot is exactly what the qualified source returned; restart
+never refreshes the baseline (calls==0 proven); no silent `[]` baseline
+fallback exists anywhere in the runtime (grep-proven; the remaining `or []`
+are benign creative-rendering defaults).
+
+Verify: focused 48/48; boundary/live_runtime/dispatch/Slice-0011 historical
+regressions 211 passed; full suite **481 passed** (474 floor + 7 new);
+compileall clean; `git diff --check` clean; committed-delta security scan
+(390 lines): 0 hits. Provider access/mutation: **0**. Delivery HEAD: this
+commit. State: COMPLETED_CANDIDATE.
