@@ -109,7 +109,8 @@ class SQLiteStore:
         if stored is None or stored[0] != payload:
             raise ValueError(f"immutable {table} identity collision: {key}")
 
-    def save_path(self, shot: ShotSpec, plan: PromptPlan, route: RoutingDecision, attempt: GenerationAttempt) -> None:
+    def _validated_path(self, shot: ShotSpec, plan: PromptPlan, route: RoutingDecision,
+                        attempt: GenerationAttempt) -> tuple[str, str]:
         shot_hash, plan_hash = sha256(shot), sha256(plan)
         if (attempt.shot_spec_hash != shot_hash or attempt.prompt_plan_hash != plan_hash
                 or attempt.routing_decision_id != route.routing_decision_id
@@ -119,13 +120,23 @@ class SQLiteStore:
             raise ValueError("path lineage mismatch")
         for name, item in (("shot_spec", shot), ("prompt_plan", plan), ("routing_decision", route), ("generation_attempt", attempt)):
             validate_contract(name, item.payload())
+        return shot_hash, plan_hash
+
+    def _insert_path(self, connection: sqlite3.Connection, shot: ShotSpec,
+                     plan: PromptPlan, route: RoutingDecision,
+                     attempt: GenerationAttempt) -> None:
+        """Persist the immutable Film path on a caller-owned transaction."""
+        shot_hash, plan_hash = self._validated_path(shot, plan, route, attempt)
+        self._insert_immutable(connection, "shot_specs", shot_hash, canonical_json(shot.payload()))
+        self._insert_immutable(connection, "prompt_plans", plan_hash, canonical_json(plan.payload()), shot_hash)
+        self._insert_immutable(connection, "routing_decisions", route.routing_decision_id, canonical_json(route.payload()), plan_hash)
+        self._insert_immutable(connection, "generation_attempts", attempt.generation_attempt_id, canonical_json(attempt.payload()), shot_hash, plan_hash, route.routing_decision_id)
+
+    def save_path(self, shot: ShotSpec, plan: PromptPlan, route: RoutingDecision, attempt: GenerationAttempt) -> None:
         connection = self._connect()
         try:
             with connection:
-                self._insert_immutable(connection, "shot_specs", shot_hash, canonical_json(shot.payload()))
-                self._insert_immutable(connection, "prompt_plans", plan_hash, canonical_json(plan.payload()), shot_hash)
-                self._insert_immutable(connection, "routing_decisions", route.routing_decision_id, canonical_json(route.payload()), plan_hash)
-                self._insert_immutable(connection, "generation_attempts", attempt.generation_attempt_id, canonical_json(attempt.payload()), shot_hash, plan_hash, route.routing_decision_id)
+                self._insert_path(connection, shot, plan, route, attempt)
         finally:
             connection.close()
 
@@ -163,57 +174,79 @@ class SQLiteStore:
 
     # Runtime records are deliberately mutable: remote provider state changes as
     # it is reconciled.  Creative/planning records above remain immutable.
-    def save_provider_job(self, job) -> None:
+    def _insert_provider_job(self, connection: sqlite3.Connection, job) -> None:
+        """Persist one ProviderJob on a caller-owned transaction."""
         from .live_runtime import ProviderJob
 
         if not isinstance(job, ProviderJob):
             raise TypeError("job must be ProviderJob")
+        attempt = connection.execute(
+            "SELECT payload FROM generation_attempts WHERE id = ?",
+            (job.generation_attempt_id,),
+        ).fetchone()
+        if attempt is None or json.loads(attempt[0]).get("provider_id") != job.provider_id:
+            raise ValueError("provider job attempt lineage mismatch")
+        existing = connection.execute(
+            "SELECT generation_attempt_id, provider_id, dispatch_count, payload FROM provider_jobs WHERE id = ?",
+            (job.provider_job_id,),
+        ).fetchone()
+        if existing is not None:
+            old = json.loads(existing[3])
+            if old.get('dispatch_protocol', 'legacy-v1') == 'legacy-v1' and existing[2] == 1:
+                raise RuntimeError('LEGACY_HISTORY_READ_ONLY')
+            if existing[:2] != (job.generation_attempt_id, job.provider_id):
+                raise ValueError("provider job identity collision")
+            if existing[2] > job.dispatch_count:
+                raise ValueError("provider job dispatch count cannot regress")
+            if existing[2] < job.dispatch_count:
+                raise ValueError('ATOMIC_RESERVATION_REQUIRED')
+            for field in ('project_binding_id', 'pre_dispatch_snapshot', 'dispatch_protocol'):
+                if old.get(field, 'legacy-v1' if field == 'dispatch_protocol' else None) != getattr(job, field):
+                    raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
+            for key in ('prompt', 'prompt_plan_hash', 'submission_prompt_hash',
+                        'correlation_marker', 'reference_binding', 'rpc_request_hash',
+                        'provider_prompt_compiler', 'supersedes_attempt', 'supersedes_job',
+                        'successor_authority_id', 'owner_brief_sha256', 'historical_snapshot_sha256',
+                        'native_ui_intent'):
+                if old['correlation_evidence'].get(key) != job.correlation_evidence.get(key):
+                    raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
+            if old.get('external_job_id') and old['external_job_id'] != job.external_job_id:
+                raise ValueError('EXTERNAL_IDENTITY_CHANGED')
+            if old.get('submission_state') == 'SUBMITTED' and job.submission_state != 'SUBMITTED':
+                raise ValueError('DISPATCH_EVIDENCE_CANNOT_REGRESS')
+        elif job.dispatch_count:
+            raise ValueError('ATOMIC_RESERVATION_REQUIRED')
+        connection.execute(
+            "INSERT INTO provider_jobs (id, generation_attempt_id, provider_id, dispatch_count, payload) "
+            "VALUES (?, ?, ?, ?, ?) "
+            "ON CONFLICT(id) DO UPDATE SET dispatch_count=excluded.dispatch_count, payload=excluded.payload",
+            (job.provider_job_id, job.generation_attempt_id, job.provider_id,
+             job.dispatch_count, canonical_json(job.model_dump(mode="json"))),
+        )
+
+    def save_provider_job(self, job) -> None:
         connection = self._connect()
         try:
             with connection:
-                attempt = connection.execute(
-                    "SELECT payload FROM generation_attempts WHERE id = ?",
-                    (job.generation_attempt_id,),
-                ).fetchone()
-                if attempt is None or json.loads(attempt[0]).get("provider_id") != job.provider_id:
-                    raise ValueError("provider job attempt lineage mismatch")
-                existing = connection.execute(
-                    "SELECT generation_attempt_id, provider_id, dispatch_count, payload FROM provider_jobs WHERE id = ?",
-                    (job.provider_job_id,),
-                ).fetchone()
-                if existing is not None:
-                    old = json.loads(existing[3])
-                    if old.get('dispatch_protocol', 'legacy-v1') == 'legacy-v1' and existing[2] == 1:
-                        raise RuntimeError('LEGACY_HISTORY_READ_ONLY')
-                    if existing[:2] != (job.generation_attempt_id, job.provider_id):
-                        raise ValueError("provider job identity collision")
-                    if existing[2] > job.dispatch_count:
-                        raise ValueError("provider job dispatch count cannot regress")
-                    if existing[2] < job.dispatch_count:
-                        raise ValueError('ATOMIC_RESERVATION_REQUIRED')
-                    for field in ('project_binding_id', 'pre_dispatch_snapshot', 'dispatch_protocol'):
-                        if old.get(field, 'legacy-v1' if field == 'dispatch_protocol' else None) != getattr(job, field):
-                            raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
-                    for key in ('prompt', 'prompt_plan_hash', 'submission_prompt_hash',
-                                'correlation_marker', 'reference_binding', 'rpc_request_hash',
-                                'provider_prompt_compiler', 'supersedes_attempt', 'supersedes_job',
-                                'successor_authority_id', 'owner_brief_sha256', 'historical_snapshot_sha256',
-                                'native_ui_intent'):
-                        if old['correlation_evidence'].get(key) != job.correlation_evidence.get(key):
-                            raise ValueError('FROZEN_PROVIDER_INTENT_CHANGED')
-                    if old.get('external_job_id') and old['external_job_id'] != job.external_job_id:
-                        raise ValueError('EXTERNAL_IDENTITY_CHANGED')
-                    if old.get('submission_state') == 'SUBMITTED' and job.submission_state != 'SUBMITTED':
-                        raise ValueError('DISPATCH_EVIDENCE_CANNOT_REGRESS')
-                elif job.dispatch_count:
-                    raise ValueError('ATOMIC_RESERVATION_REQUIRED')
-                connection.execute(
-                    "INSERT INTO provider_jobs (id, generation_attempt_id, provider_id, dispatch_count, payload) "
-                    "VALUES (?, ?, ?, ?, ?) "
-                    "ON CONFLICT(id) DO UPDATE SET dispatch_count=excluded.dispatch_count, payload=excluded.payload",
-                    (job.provider_job_id, job.generation_attempt_id, job.provider_id,
-                     job.dispatch_count, canonical_json(job.model_dump(mode="json"))),
-                )
+                self._insert_provider_job(connection, job)
+        finally:
+            connection.close()
+
+    def save_frozen_path_and_job(self, shot: ShotSpec, plan: PromptPlan,
+                                 route: RoutingDecision, attempt: GenerationAttempt,
+                                 job) -> None:
+        """One atomic transaction for the Film path plus the frozen ProviderJob.
+
+        Closes the freeze crash window: a crash before commit leaves neither a
+        partial path nor a partial job; after commit the shot carries its
+        complete frozen intent. Reuses the same insert/verification internals
+        as the separate saves — no second authority system.
+        """
+        connection = self._connect()
+        try:
+            with connection:
+                self._insert_path(connection, shot, plan, route, attempt)
+                self._insert_provider_job(connection, job)
         finally:
             connection.close()
 

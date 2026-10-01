@@ -35,7 +35,7 @@ from .flow_r2v_boundary import FlowR2VBoundary, MutationIntent
 from .live_runtime import Asset, LiveRuntimeExecutor, make_provider_job
 from .providers import flow_rpc_contract as contract
 from .providers.flow_canonical_ui import OneGenerateGuard
-from .providers.flow_media import BoundMedia
+from .providers.flow_media import bind_media_bytes, parse_media_resource
 from .providers.flow_reference_upload import OwnerAmbiguityGate
 from .providers.flow_r2v_prompt import FlowR2VPrompt, film_marker
 from .store import SQLiteStore
@@ -152,6 +152,29 @@ def compact_r2v_prompt(plan: PromptPlan, provider_job_id: str, *, model: str) ->
                          version=COMPACT_VERSION, model=model)
 
 
+def qualified_catalog_snapshot(records, *, project_id: str,
+        fingerprint: str = contract.QUALIFIED_BASELINE_FINGERPRINT) -> dict:
+    """Smallest qualified catalog-snapshot boundary.
+
+    provider catalog records → existing Flow catalog row validation →
+    qualified fingerprint and project gate → normalized exact IDs →
+    deterministic immutable snapshot identity hash. A bare list of IDs is
+    never accepted as provider snapshot truth anywhere in the runtime: the
+    identity hash changes whenever the snapshot content changes, so an
+    omitted or altered row can never preserve the same snapshot identity.
+    """
+    if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+        raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
+    try:
+        validated = contract._validate_catalog_rows(records, project_id)
+    except contract.ContractError as error:
+        raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_RECORDS_UNQUALIFIED') from error
+    basis = {'catalog_fingerprint': fingerprint,
+             'catalog_ids': sorted({row[0].lower() for row in validated}),
+             'project_id': project_id}
+    return {**basis, 'snapshot_sha256': sha256(basis)}
+
+
 @dataclass(frozen=True)
 class FrozenR2VShot:
     """The frozen provider intent for one ordinary shot.
@@ -198,8 +221,10 @@ class FlowR2VShotRuntime:
         """The frozen pre-dispatch baseline is mandatory at every authority point.
 
         No silent empty-baseline fallback exists: a job whose snapshot lacks
-        the qualified fingerprint, the runtime's project or a list of UUIDs
-        can never reserve or attribute through this runtime.
+        the qualified fingerprint, the runtime's project, a list of UUIDs or
+        the deterministic snapshot identity hash can never reserve or
+        attribute through this runtime. Content changes cannot preserve the
+        snapshot identity, so tampered snapshots fail closed.
         """
         snapshot = job.pre_dispatch_snapshot
         if snapshot.get('catalog_fingerprint') != contract.QUALIFIED_BASELINE_FINGERPRINT:
@@ -214,6 +239,10 @@ class FlowR2VShotRuntime:
                 contract._uuid(value, 'OUTPUT_BASELINE_INVALID')
         except contract.ContractError as error:
             raise OwnerAmbiguityGate('FLOW_R2V_BASELINE_SNAPSHOT_INVALID') from error
+        basis = {'catalog_fingerprint': snapshot['catalog_fingerprint'],
+                 'catalog_ids': ids, 'project_id': snapshot['project_id']}
+        if snapshot.get('snapshot_sha256') != sha256(basis):
+            raise OwnerAmbiguityGate('FLOW_R2V_BASELINE_SNAPSHOT_IDENTITY_DRIFT')
         return ids
 
     # --- Freeze -------------------------------------------------------------
@@ -237,18 +266,17 @@ class FlowR2VShotRuntime:
 
     def freeze(self, shot: ShotSpec, capabilities: ProviderCapabilities, *,
                reference_asset, reference_media_id: str, reference_filename: str = '',
-               baseline_catalog_ids: list[str] | tuple = (),
-               baseline_fingerprint: str = contract.QUALIFIED_BASELINE_FINGERPRINT,
+               baseline_catalog_records: list | tuple = (),
                started_at: str | None = None) -> FrozenR2VShot:
         """Compile, route and freeze one ordinary R2V shot into a ProviderJob
         whose exact submission prompt is durable before any authority exists.
-        A restart with identical inputs returns the same frozen job."""
+        A restart with identical inputs returns the same frozen job. The
+        pre-dispatch baseline is derived only from qualified provider catalog
+        records — a bare caller-supplied ID list is never snapshot truth —
+        and the whole Film path plus ProviderJob freeze commits atomically."""
         contract._uuid(reference_media_id, 'REFERENCE_ID_INVALID')
-        if baseline_fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
-            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
-        baseline = sorted({value.lower() for value in baseline_catalog_ids})
-        for value in baseline:
-            contract._uuid(value, 'OUTPUT_BASELINE_INVALID')
+        snapshot = qualified_catalog_snapshot(baseline_catalog_records,
+                                              project_id=self.project_id)
         # Fresh immutable reference readback; the plan binds these exact bytes.
         stored_reference = self.store.read_reference_asset(reference_asset.asset_id)
         reference_binding = {'asset_id': stored_reference.asset_id,
@@ -269,8 +297,6 @@ class FlowR2VShotRuntime:
         prior = self._existing_job_for_shot(shot.shot_id)
         if prior is not None:
             return self._resume_frozen(prior, shot, plan, decision, reference_binding)
-        snapshot = {'catalog_ids': baseline, 'catalog_fingerprint': baseline_fingerprint,
-                    'project_id': self.project_id}
         preview = make_provider_job(attempt, project_binding_id=self.project_binding_id,
                                     pre_dispatch_snapshot=snapshot)
         compiled = compact_r2v_prompt(plan, preview.provider_job_id, model=self.model)
@@ -281,8 +307,7 @@ class FlowR2VShotRuntime:
             'correlation_marker': compiled.marker,
             'provider_prompt_compiler': compiled.version,
             'reference_binding': reference_binding}})
-        self.store.save_path(shot, plan, decision, attempt)
-        self.store.save_provider_job(job)
+        self.store.save_frozen_path_and_job(shot, plan, decision, attempt, job)
         if job.provider_job_id != preview.provider_job_id:
             raise ValueError('provider job identity changed during freeze')
         return self._frozen(job, stored_reference)
@@ -401,13 +426,13 @@ class FlowR2VShotRuntime:
     # --- Exact acquisition ------------------------------------------------------
 
     def acquire(self, frozen: FrozenR2VShot, *, transport, destination_dir,
-                media: BoundMedia) -> Asset:
-        """Reconcile from the exact binding, then acquire exact bytes.
+                media_payload) -> Asset:
+        """Reconcile from the exact binding, then acquire exact provider media.
 
-        The boundary's media binding is a precondition: the owned output,
-        project and kind must match, and the persisted Asset bytes must equal
-        the bound bytes. Acquisition itself reuses the existing receipt,
-        staging and atomic-promotion machinery untouched.
+        The qualified flow_media contract is runtime-owned here: the provider
+        media payload is parsed against the durably owned output id and
+        project, and bound to the actual staged bytes before any receipt or
+        Asset can exist. Caller-created evidence cannot enter this path.
         """
         job_id = frozen.job.provider_job_id
         executor = LiveRuntimeExecutor(self.store, transport)
@@ -418,15 +443,29 @@ class FlowR2VShotRuntime:
         if len(bindings) != 1:
             raise OwnerAmbiguityGate('FLOW_R2V_OUTPUT_NOT_UNIQUE')
         output_id = bindings[0]['output_id']
-        if (not isinstance(media, BoundMedia)
-                or media.evidence['media_id'] != output_id
-                or media.evidence['project_id'] != self.project_id
-                or media.evidence['kind'] != 'video'):
-            raise OwnerAmbiguityGate('FLOW_R2V_MEDIA_EVIDENCE_MISMATCH')
-        assets = asyncio.run(executor.download_assets(job_id, Path(destination_dir)))
+        try:
+            resource = parse_media_resource(media_payload, media_id=output_id,
+                                            project_id=self.project_id, kind='video')
+        except contract.ContractError as error:
+            raise OwnerAmbiguityGate('FLOW_R2V_MEDIA_PAYLOAD_UNQUALIFIED') from error
+        verified = _VerifiedAcquisition(transport, resource)
+        # The download executor runs the runtime-owned wrapper: the qualified
+        # flow_media contract binds the parsed resource to the staged bytes
+        # before any receipt or Asset can exist.
+        downloader = LiveRuntimeExecutor(self.store, verified)
+        assets = asyncio.run(downloader.download_assets(job_id, Path(destination_dir)))
         if len(assets) != 1 or assets[0].provider_asset_id != output_id:
             raise OwnerAmbiguityGate('FLOW_R2V_ACQUIRED_ASSET_MISMATCH')
-        if assets[0].sha256 != media.evidence['sha256']:
+        if verified.media is None:
+            # Idempotent restart path: the completed receipt already covered
+            # this output, so the wrapper never fetched. The runtime still
+            # binds the parsed resource to the persisted bytes itself.
+            persisted = Path(assets[0].uri_or_path).read_bytes()
+            verified.media = bind_media_bytes(resource, data=persisted,
+                response_url=resource.url, status=200,
+                headers={'content-type': resource.mime_type,
+                         'content-length': str(resource.byte_size)})
+        if verified.media.evidence['sha256'] != assets[0].sha256:
             raise OwnerAmbiguityGate('FLOW_R2V_ACQUIRED_BYTES_DRIFT')
         return assets[0]
 
@@ -455,6 +494,30 @@ class FlowR2VShotRuntime:
         return {'exact_lineage': True,
                 'technical_pass': all(row.verdict == 'pass' for row in evidence_rows),
                 'metadata': metadata}
+
+
+class _VerifiedAcquisition:
+    """Transport wrapper that enforces the qualified flow_media contract on
+    the exact staged bytes before any receipt or Asset can exist.
+
+    The wrapper is runtime-owned: caller-created evidence never enters the
+    acquisition path, and the parsed provider resource is bound to the actual
+    downloaded bytes with ``bind_media_bytes`` before persistence can happen.
+    """
+
+    def __init__(self, transport, resource):
+        self._transport = transport
+        self._resource = resource
+        self.media = None
+
+    async def fetch(self, job, output_id, destination):
+        result = await self._transport.fetch(job, output_id, destination)
+        data = Path(result).read_bytes()
+        self.media = bind_media_bytes(self._resource, data=data,
+            response_url=self._resource.url, status=200,
+            headers={'content-type': self._resource.mime_type,
+                     'content-length': str(self._resource.byte_size)})
+        return result
 
 
 def compile_plan(shot: ShotSpec, capabilities: ProviderCapabilities,
