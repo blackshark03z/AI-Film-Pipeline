@@ -207,3 +207,45 @@ module imports no Slice-0011 module directly or transitively.
 - Post-repair: **35/35 focused pass**; 144 pass across boundary, live runtime,
   dispatch recovery, contract, canonical binding and Slice-0011 reconciliation
   regression suites (historical custody untouched).
+
+## C5 DELIVERY (proven 2026-10-01)
+
+- Full regression: **468 passed in 77.65s** (433 accepted-base floor + 35 new
+  focused runtime proofs; zero failures, zero tests weakened — tracked delta
+  is 3 added files, 0 deletions).
+- `python -m compileall -q src tools`: clean.
+- `git diff --check`: clean.
+- Tracked-delta security scan (1d84831..HEAD, 1383 diff lines): 0 hits for
+  cookies/auth tokens/credentials/API keys/signed-URL values/Chrome profiles/
+  caches/captcha material; no long-token or signed-URL strings.
+- Provider access count: **0**. Provider mutation count: **0**. No network
+  egress at any point (isolated offline environment; FFmpeg/Pillow/pytest all
+  local; the only interpreter reuse is read-only from the source `.venv`).
+- Historical custody: source repo unchanged (HEAD d8d4b0a, zero tracked
+  modifications, identical untracked set to session start); all test state in
+  per-test temp directories; no historical Slice-0011 evidence, dispatch
+  counts, receipts, attestations, bindings or acquisition records touched.
+- Delivery HEAD: this commit (checkpoint/c5-delivery).
+- Terminal state claimed: **COMPLETED_CANDIDATE** (offline qualification only;
+  every live-provider claim remains non-claimed).
+
+### Non-claims / remaining UNKNOWN
+
+- No live Flow behavior was exercised or verified; the qualified UI profile,
+  catalog fingerprint and wire shapes are inherited frozen constants.
+- The compact adapter is wire-mechanically qualified; per-shot creative
+  semantic qualification remains the shot owner's responsibility.
+- F2 crash window (freeze interrupted between save_path and save_provider_job)
+  leaves a shot fail-closed-stuck pending manual cleanup; accepted, documented.
+- QC handoff eligibility here = exact lineage + technical gates; human
+  SelectedTake review remains out of scope (untouched).
+
+### Recommended separately authorized next/live work
+
+1. Owner-authorized live canary: one ordinary synthetic R2V shot through the
+   runtime against Flow with live attestation acquisition (upload remains the
+   only live provider write, as qualified).
+2. Creative-qualification pass defining per-shot compact-prompt reduction
+   authority for the first real production shot.
+3. Operational runbook for the F2 stuck-window (manual store inspection and
+   cleanup procedure) before any live use.
