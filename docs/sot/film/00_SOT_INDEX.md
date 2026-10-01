@@ -97,6 +97,8 @@ Master
 11. Model IDs, pricing and provider quirks live in runtime config, never Film IR.
 12. A capability may be unavailable; the system degrades explicitly instead of pretending support.
 13. Private/provider-facing execution contracts are treated as volatile and versioned. A previously proven adapter is historical evidence, not a permanent protocol guarantee. When provider behavior becomes ambiguous or diverges from the last qualified contract, stop mutations, preserve evidence, and re-observe/reconstruct the provider's current successful operating path before changing Film Core or blindly retrying.
+14. Provider mutation admission and provider observation/reconciliation are qualified separately. A UI click, outbound request, HTTP 200, or DOM/gallery state is never acceptance proof by itself. After a possible external effect, output ownership must come from durable backend evidence; if that evidence cannot establish the effect uniquely, the state remains unknown and mutation must not be retried blindly.
+15. Reference-conditioned generation requires immutable provider-reference attestation before dispatch: canonical Film asset/hash → provider scope → provider media identity → independently bound readback bytes/content. Historical IDs, filenames, gallery position, or prior claimed mappings are not sufficient reference proof.
 
 ## Package map
 

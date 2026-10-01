@@ -32,6 +32,12 @@ Local Stable Diffusion/ComfyUI is unavailable. The architecture supports future 
 ### DR-010 — Volatile private provider contracts require reverse-qualification on ambiguity
 Undocumented/browser-backed provider contracts are versioned observations, not permanent APIs. A historically proven Flow/Dola/Elyum path may drift at the request, response, catalog, model, reference or session layer without a stable migration notice. When a provider path becomes ambiguous, fail closed: preserve the consumed attempt, reconcile read-only where safe, then reconstruct the **current successful provider operating path** from live evidence before changing the adapter. Do not fix Film Core around stale provider quirks and do not use blind retries to discover a changed contract. Re-qualification requires a bounded canary and a new observed contract/fingerprint before production routing resumes.
 
+### DR-011 — Mutation admission is separate from output truth
+For browser-backed providers, the transport that can admit a mutation and the transport that can observe/reconcile provider state may differ. A provider-native UI action may therefore be an acceptable replaceable mutation boundary while durable backend catalog/media evidence remains the canonical source of acceptance and output ownership. A click, observed outbound request, HTTP success, visible progress state or gallery tile is never enough to authorize retry or assign an output. If the backend effect is not uniquely attributable, preserve the consumed dispatch and fail closed.
+
+### DR-012 — Provider reference identity requires immutable attestation
+A canonical Film reference asset may condition generation only after its provider media identity is independently bound and content-verified within the intended provider/account/project scope. Historical receipts, filenames and prior mappings are evidence to investigate, not sufficient proof. Reference mismatch or unresolved binding blocks mutation; do not silently substitute or re-upload to escape ambiguity.
+
 ## SUPERSEDED
 
 ### Old heavy infrastructure V1

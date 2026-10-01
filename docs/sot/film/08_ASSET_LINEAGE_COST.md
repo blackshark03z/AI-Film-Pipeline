@@ -46,6 +46,19 @@ rights_metadata
 
 Local immutable bytes should receive SHA-256.
 
+For provider references used to condition generation, deterministic lineage must include a **reference attestation** before dispatch:
+
+```text
+canonical asset_id + canonical local SHA-256
+→ provider account/project scope
+→ provider media_id
+→ response/resource binding for the requested media_id
+→ provider readback SHA-256 + content comparison
+→ immutable attestation/evidence hash
+```
+
+A provider media ID is not trusted merely because it appeared in a historical receipt, shares a filename, sits near another catalog row, or produced a visually plausible output. If exact identity/resource binding or content verification fails, generation is blocked and the existing external resource must not be silently replaced or blindly re-uploaded.
+
 ## 3. GenerationAttempt
 
 Stores:

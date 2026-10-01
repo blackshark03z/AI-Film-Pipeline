@@ -93,6 +93,34 @@ If a previously qualified path becomes ambiguous (for example: HTTP success with
 
 Historical Story Auto / AutoVideoPipeline paths are reusable evidence and implementation references, but are never proof that a private Flow/Dola/Elyum contract remains current.
 
+## Flow/Veo current qualified transport split (2026-10-01 evidence)
+
+Current controlled investigations support a **behavior-specific transport split**, scoped to the observed account/project/session and subject to re-qualification:
+
+- `Zzl0ze` catalog reads and `as29s` media reads are qualified as read-only observation/reconciliation paths and have worked through headless/cookie-backed sessions.
+- `maseQ` reference upload has worked from an in-page browser context, but uploaded media still requires independent identity/content attestation before use.
+- Expensive video-generation submit (`MZZa6b`) is **not currently qualified as a direct/private RPC mutation path**. Controlled external HTTP replay and synthetic in-page fetch attempts were rejected while provider-native UI submission succeeded. The exact internal cause remains unknown; reCAPTCHA/risk scoring, gesture provenance, and account/session scoring are hypotheses, not architectural truth.
+- Therefore the current qualified Flow/Veo V1 generation boundary is **provider-native UI mutation + backend reconciliation**. The UI is a bounded mutation trigger only; click success, outbound request observation, HTTP 200, DOM state, and gallery cards are not acceptance/output truth.
+- A generation output is owned only from durable backend evidence such as a fresh baseline delta plus unique Film marker, exact provider reference lineage, qualified completion state and unique provider media identity. If that evidence is missing or non-unique, external effect remains unresolved and no generation retry is allowed.
+- UI labels and wire model identifiers are distinct observations. A controlled run observed UI `Omni 1.1 Flash` dispatching wire model `abra_r2v_8s`; this must not be generalized beyond its observed scope. Record both when available and never infer one from the other.
+- `as29s` may surface duplicate identical URL slots for one exact media resource. Identical normalized duplicates may be deduplicated only after the response is independently bound to the requested media ID/project; differing resources remain ambiguous.
+- Two continuity mechanisms are currently evidenced behind the adapter: reuse the same verified reference media for identity/look continuity, and use a verified extracted last frame as a new reference for tighter frame continuity. These are provider capabilities, not Film-Core semantics, and must remain versioned/qualified.
+
+### Reference attestation rule
+
+Before a provider reference can condition a generation, persist and verify an immutable chain:
+
+```text
+canonical Film asset_id + local SHA-256
+→ provider account/project scope
+→ provider media_id
+→ response/resource binding for that exact media_id
+→ readback bytes SHA-256 + content verification
+→ immutable attestation/evidence hash
+```
+
+A filename, historical receipt, gallery position, adjacent catalog row, or previously claimed provider ID is never sufficient. A mismatch or unbound readback blocks mutation and enters ambiguity handling; do not repair by blind re-upload.
+
 ## Current stack policy
 
 ### Gemini API
