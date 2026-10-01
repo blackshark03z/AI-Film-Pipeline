@@ -180,20 +180,22 @@ def qualified_catalog_snapshot(records, *, project_id: str,
 class QualifiedFlowCatalogCapability:
     """Immutable authority for the runtime's pre-dispatch Flow catalog read.
 
-    Minted only for a concrete qualified Flow session boundary: the wrapped
-    object must be the existing ``FlowReferenceRpcSession`` and its
-    ``catalog_fingerprint`` must be the qualified baseline established by the
-    existing contract validation (``validate_catalog_baseline`` inside the
-    session's own ``catalog()``). Ordinary duck-typed objects, five-line
-    fakes, wrappers and mocks cannot ride the freeze path: there is no
-    constructor argument, flag or protocol that confers authority — only a
-    real-or-subclassed Flow session whose baseline is already qualified.
+    Minted only for the concrete existing Flow session implementation: the
+    wrapped object must be exactly ``FlowReferenceRpcSession`` (no subclass,
+    wrapper or duck-typed look-alike), its ``catalog_fingerprint`` must be the
+    qualified baseline established by the existing contract validation
+    (``validate_catalog_baseline`` inside the session's own ``catalog()``),
+    and its ``project_id`` must be a valid UUID. ``capture`` binds to the
+    concrete class implementation of ``catalog()``, so neither subclass
+    overrides nor instance-attribute shadowing can replace catalog semantics;
+    only the real implementation (with its full re-validation) can produce a
+    captured observation.
     """
 
     session: FlowReferenceRpcSession
 
     def __post_init__(self):
-        if not isinstance(self.session, FlowReferenceRpcSession):
+        if type(self.session) is not FlowReferenceRpcSession:
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
         if getattr(self.session, 'catalog_fingerprint', None) != \
                 contract.QUALIFIED_BASELINE_FINGERPRINT:
@@ -211,9 +213,10 @@ class QualifiedFlowCatalogCapability:
 
     def capture(self) -> list:
         """The authoritative observation: the session's own catalog read,
-        which re-validates the baseline through the existing contract on
-        every call. The runtime — never the caller — invokes this."""
-        return self.session.catalog()
+        bound to the concrete class implementation (instance attribute
+        shadowing and subclass overrides cannot substitute it). The runtime —
+        never the caller — invokes this."""
+        return FlowReferenceRpcSession.catalog(self.session)
 
 
 def qualify_flow_catalog_source(session) -> QualifiedFlowCatalogCapability:

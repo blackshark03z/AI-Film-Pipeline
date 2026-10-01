@@ -88,37 +88,44 @@ class FixtureAcquisitionTransport:
         return destination
 
 
-class CatalogSource(FlowReferenceRpcSession):
-    """Test-only offline adapter for the qualified catalog-read boundary.
+def offline_flow_session(records, *, project_id=PROJECT,
+                         fingerprint=contract.QUALIFIED_BASELINE_FINGERPRINT):
+    """Test-only seam: an EXACT FlowReferenceRpcSession instance constructed
+    without opening a browser. No subclass and no production change — the
+    object is the concrete class; its catalog_fingerprint holds the
+    established qualified baseline exactly as a live qualified read would
+    leave it. The concrete class catalog() method is patched per-test by the
+    autouse fixture below; production qualification checks stay untouched."""
+    session = FlowReferenceRpcSession(profile_path=Path('offline-unused'),
+                                      project_id=project_id)
+    session.catalog_fingerprint = fingerprint
+    session._offline_rows = [list(row) for row in records]
+    session._offline_calls = 0
+    return session
 
-    It IS a FlowReferenceRpcSession (the concrete provider/session type the
-    production factory requires) with no browser: ``catalog()`` returns the
-    configured observation and counts reads. Qualification still runs through
-    the production factory — the adapter carries an established qualified
-    fingerprint exactly as a live session would after validate_catalog_baseline.
-    """
 
-    def __init__(self, records, *, project_id=PROJECT,
-                 fingerprint=contract.QUALIFIED_BASELINE_FINGERPRINT):
-        self.project_id = project_id
-        self.catalog_fingerprint = fingerprint
-        self.records = [list(row) for row in records]
-        self.calls = 0
-
-    def catalog(self, *, contract_version=contract.CONTRACT_VERSION):
-        self.calls += 1
-        return [list(row) for row in self.records]
+@pytest.fixture(autouse=True)
+def _offline_flow_catalog(monkeypatch):
+    """Patch the concrete FlowReferenceRpcSession.catalog implementation for
+    the duration of each test (restored afterwards). Only the concrete class
+    is patched — capabilities bind capture to this class function, so this
+    seam is the single offline path and weakens no production check."""
+    def offline_catalog(self, *, contract_version=contract.CONTRACT_VERSION):
+        self._offline_calls += 1
+        return [list(row) for row in self._offline_rows]
+    monkeypatch.setattr(FlowReferenceRpcSession, 'catalog', offline_catalog)
+    yield
 
 
 def catalog_capability(records, *, fingerprint=contract.QUALIFIED_BASELINE_FINGERPRINT,
                        project_id=PROJECT):
-    """Mint a production capability for an offline test-only Flow session."""
+    """Mint a production capability for an offline exact-type Flow session."""
     return qualify_flow_catalog_source(
-        CatalogSource(records, project_id=project_id, fingerprint=fingerprint))
+        offline_flow_session(records, project_id=project_id, fingerprint=fingerprint))
 
 
 @pytest.fixture
-def runtime_env(tmp_path):
+def runtime_env(tmp_path, _offline_flow_catalog):
     """Fully offline runtime environment: attested reference + frozen job."""
     asset, upload_store, session, transport, _key = setup(tmp_path)
     transport.ensure_verified(asset)  # offline upload double; no live upload
@@ -131,7 +138,7 @@ def runtime_env(tmp_path):
     store = SQLiteStore(upload_store.db_path)
     runtime = FlowR2VShotRuntime(store, project_id=PROJECT, account_id=ACCOUNT)
     shot = ordinary_r2v_shot(asset.asset_id)
-    session_double = CatalogSource(catalog_records(OTHER))
+    session_double = offline_flow_session(catalog_records(OTHER))
     catalog_source = qualify_flow_catalog_source(session_double)
     frozen = runtime.freeze(shot, flow_capabilities(), reference_asset=asset,
         reference_media_id=REMOTE, reference_filename=REFERENCE_FILENAME_2,
@@ -951,18 +958,81 @@ def test_fake_subset_source_rejected(runtime_env):
     assert frozen.job.pre_dispatch_snapshot['catalog_ids'] == [OTHER.lower()]
 
 
+# RUNTIME-HARDEN-001 R4: the exact Techlead inheritance forgery — a subclass
+# overriding catalog() — is rejected by BOTH minting entry points.
+def test_subclass_cannot_mint_capability(runtime_env):
+    env = runtime_env
+
+    class FakeQualifiedSubclass(FlowReferenceRpcSession):
+        def __init__(self):
+            self.project_id = PROJECT
+            self.catalog_fingerprint = contract.QUALIFIED_BASELINE_FINGERPRINT
+
+        def catalog(self, **kwargs):
+            return []
+
+    forged = FakeQualifiedSubclass()
+    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_UNQUALIFIED'):
+        qualify_flow_catalog_source(forged)
+    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_UNQUALIFIED'):
+        QualifiedFlowCatalogCapability(FakeQualifiedSubclass())
+    with sqlite3.connect(env.store.path) as connection:
+        jobs = connection.execute('SELECT COUNT(*) FROM provider_jobs').fetchone()[0]
+    assert jobs == 1  # nothing persisted for the forged subclass
+
+
+# R4: even on an EXACT-type session, instance-attribute shadowing cannot
+# replace catalog semantics: capture binds to the concrete class function.
+# The shadowed liar returns []; the class implementation returns the real
+# observation — the frozen snapshot proves which one the runtime consumed.
+def test_instance_shadowing_cannot_replace_catalog_semantics(runtime_env):
+    env = runtime_env
+    shadowed = offline_flow_session(catalog_records(OTHER))
+    shadow_calls = []
+
+    def liar(**kwargs):
+        shadow_calls.append(1)
+        return []
+
+    shadowed.catalog = liar  # instance attribute, not the class function
+    capability = qualify_flow_catalog_source(shadowed)  # exact type + qualified state
+    assert type(shadowed) is FlowReferenceRpcSession
+    frozen = env.runtime.freeze(
+        env.shot.model_copy(update={'shot_id': 'FLOW_R2V_R4_SHADOW_001'}),
+        flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=capability,
+        started_at='2026-10-02T02:00:00+00:00')
+    # The concrete class implementation produced the snapshot; the shadowed
+    # instance attribute was never consulted.
+    assert frozen.job.pre_dispatch_snapshot['catalog_ids'] == [OTHER.lower()]
+    assert shadowed._offline_calls == 1
+    assert shadow_calls == []
+
+
+# R4 proof 9: no test-only authority bypass exists in production code — the
+# runtime module contains no offline/test seam markers, and the qualification
+# binds to the exact concrete boundary required.
+def test_runtime_module_has_no_test_seam():
+    source = (ROOT / 'src' / 'film_pipeline' / 'flow_r2v_runtime.py').read_text(
+        encoding='utf-8')
+    assert not re.search(r'_offline|test-only|monkeypatch|TEST_ONLY|offline_rows',
+                         source)
+    assert 'type(self.session) is not FlowReferenceRpcSession' in source
+    assert 'FlowReferenceRpcSession.catalog(self.session)' in source
+
+
 # R2 proof 2: the runtime asks the source exactly once, itself.
 def test_runtime_captures_source_exactly_once(runtime_env):
     env = runtime_env
-    session_double = CatalogSource(catalog_records(OTHER, SECOND_OUTPUT_ID))
+    session_double = offline_flow_session(catalog_records(OTHER, SECOND_OUTPUT_ID))
     source = qualify_flow_catalog_source(session_double)
-    assert session_double.calls == 0
+    assert session_double._offline_calls == 0
     frozen = env.runtime.freeze(
         ordinary_r2v_shot(env.asset.asset_id, shot_id='FLOW_R2V_CAPTURE_002'),
         flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
         reference_filename=REFERENCE_FILENAME_2, catalog_source=source,
         started_at='2026-10-02T00:01:00+00:00')
-    assert session_double.calls == 1
+    assert session_double._offline_calls == 1
     # A restart resume re-freezes without consulting the source again.
     restarted = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
     resumed = restarted.freeze(env.shot.model_copy(update={
@@ -970,7 +1040,7 @@ def test_runtime_captures_source_exactly_once(runtime_env):
         reference_asset=env.asset, reference_media_id=REMOTE,
         reference_filename=REFERENCE_FILENAME_2, catalog_source=source,
         started_at='2099-01-01T00:00:00+00:00')
-    assert session_double.calls == 1
+    assert session_double._offline_calls == 1
     assert resumed.job.provider_job_id == frozen.job.provider_job_id
 
 
@@ -1000,8 +1070,8 @@ def test_post_capture_mutation_cannot_change_frozen_snapshot(runtime_env):
     env = runtime_env
     snap = env.frozen.job.pre_dispatch_snapshot
     frozen_ids, frozen_hash = snap['catalog_ids'], snap['snapshot_sha256']
-    env.session.records.append([SECOND_OUTPUT_ID, PROJECT, 'IMAGE', 'CAE', None, None, None])
-    env.session.records[0][0] = THIRD_ID  # replace in place
+    env.session._offline_rows.append([SECOND_OUTPUT_ID, PROJECT, 'IMAGE', 'CAE', None, None, None])
+    env.session._offline_rows[0][0] = THIRD_ID  # replace in place
     basis = {'catalog_fingerprint': snap['catalog_fingerprint'],
              'catalog_ids': snap['catalog_ids'], 'project_id': snap['project_id']}
     assert snap['catalog_ids'] == frozen_ids
@@ -1030,7 +1100,7 @@ def test_unqualified_catalog_source_fails_closed(runtime_env):
 
     with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_UNQUALIFIED'):
         qualify_flow_catalog_source(
-            CatalogSource(catalog_records(OTHER), fingerprint='deadbeef'))
+            offline_flow_session(catalog_records(OTHER), fingerprint='deadbeef'))
     attempt(2, catalog_capability(catalog_records(OTHER, project=OTHER)))
     attempt(3, catalog_capability([OUTPUT_ID]))  # malformed row shape
     attempt(4, object())  # not a catalog source at all
@@ -1043,14 +1113,14 @@ def test_unqualified_catalog_source_fails_closed(runtime_env):
 def test_restart_reuses_frozen_snapshot_without_recapture(runtime_env):
     env = runtime_env
     original = env.frozen.job.pre_dispatch_snapshot
-    fresh_double = CatalogSource(catalog_records(SECOND_OUTPUT_ID, THIRD_ID))
+    fresh_double = offline_flow_session(catalog_records(SECOND_OUTPUT_ID, THIRD_ID))
     fresh_source = qualify_flow_catalog_source(fresh_double)
     restarted = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
     resumed = restarted.freeze(env.shot, flow_capabilities(),
         reference_asset=env.asset, reference_media_id=REMOTE,
         reference_filename=REFERENCE_FILENAME_2, catalog_source=fresh_source,
         started_at='2099-01-01T00:00:00+00:00')
-    assert fresh_double.calls == 0  # historical truth is not re-captured
+    assert fresh_double._offline_calls == 0  # historical truth is not re-captured
     assert resumed.job.pre_dispatch_snapshot == original
     assert resumed.job.provider_job_id == env.frozen.job.provider_job_id
 
