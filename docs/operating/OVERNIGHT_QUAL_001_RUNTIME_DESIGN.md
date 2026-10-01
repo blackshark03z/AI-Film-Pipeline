@@ -249,3 +249,79 @@ module imports no Slice-0011 module directly or transitively.
    authority for the first real production shot.
 3. Operational runbook for the F2 stuck-window (manual store inspection and
    cleanup procedure) before any live use.
+
+## RUNTIME-HARDEN-001 (proven 2026-10-01, delivery 260b3d8)
+
+Three production-readiness gaps closed on top of the C5 delivery. No redesign;
+no live provider; no merge/push.
+
+### Gap 1 — bound-media provenance (closed)
+
+Techlead reproduction confirmed offline first (scratch reproduction, untracked):
+a caller-forged, self-consistent `BoundMedia` (evidence sha256/byte_size matching
+the bytes a lying adapter delivers) drove Asset persistence with zero provider
+verification (`FORGED2_ACCEPTED = True`). Closure: `acquire()` no longer accepts
+any caller evidence object. It now takes the provider media payload and runs the
+qualified `flow_media` contract itself: `parse_media_resource` against the
+durably owned output id/project, then a runtime-owned `_VerifiedAcquisition`
+transport wrapper binds the parsed resource to the exact staged bytes via
+`bind_media_bytes` BEFORE any receipt or Asset can exist; the idempotent
+restart path re-binds the persisted bytes the same way. Wrong
+version/size/path/host/id/kind, incomplete evidence and data/evidence splits
+are structurally impossible for runtime-derived evidence, and no caller-forged
+evidence has an acceptor. Adversarial reproduction test:
+`test_forged_bound_media_cannot_reach_asset_persistence` (TypeError on caller
+evidence + ContractError for lying bytes + zero persistence + honest path
+green). Self-review caught and fixed a real wiring bug: the wrapper was
+initially created but not handed to the download executor — the failing tests
+forced the correct runtime-owned wiring.
+
+Non-claim: a fully compromised adapter that serves different same-size valid
+bytes from the exact qualified resource URL remains indistinguishable offline —
+the qualified as29s contract carries no provider-side byte hash. Detecting
+content substitution at that level requires a provider hash, i.e. separate
+live qualification.
+
+### Gap 2 — baseline snapshot provenance (closed)
+
+`freeze()` no longer accepts `baseline_catalog_ids`. New smallest boundary
+`qualified_catalog_snapshot(records, project_id)`: provider catalog records →
+existing `flow_rpc_contract` row validation → qualified fingerprint + project
+gate → normalized exact lower-case IDs → deterministic immutable
+`snapshot_sha256` identity stored in `pre_dispatch_snapshot`. Attribution
+re-derives the baseline only through `_require_baseline_snapshot`, which now
+also recomputes and enforces the snapshot identity. Adversarial proofs:
+`test_qualified_snapshot_identity_is_content_bound` (deterministic; omitting a
+row or altering content always changes the identity; malformed rows rejected)
+and `test_tampered_baseline_snapshot_cannot_attribute` (raw-rewritten snapshot
+omitting a preexisting row fails reservation AND attribution; no binding).
+
+Non-claim: a forger writing a complete raw row set from scratch (fresh lie)
+is indistinguishable from runtime-created state offline; integrity here is
+tamper-evidence over runtime-created snapshots plus the absence of any raw-ID
+ingestion path.
+
+### Gap 3 — freeze crash window (closed, F2 retired)
+
+`SQLiteStore` refactor: `save_path`/`save_provider_job` now delegate to
+connection-scoped internals (`_insert_path`, `_insert_provider_job`) with
+identical checks; new `save_frozen_path_and_job` commits the Film path plus the
+frozen ProviderJob in ONE atomic transaction (same internals, no second
+authority). Runtime `freeze` uses it. Required property proven:
+`test_store_freeze_transaction_is_atomic` (simulated crash between the two
+inserts → zero partial path rows, zero partial job; restart freezes cleanly
+and reserves), `test_freeze_commit_produces_complete_path_and_one_job`
+(after-commit completeness). The C3/F2 fail-closed-stuck window no longer
+exists.
+
+### Self-review round
+
+Hostile pass over the three repaired boundaries: wrapper only exposes `fetch`
+(`set_evidence_sink` absence preserved); failed acquisitions leave discardable
+staging only (existing machinery); idempotent restart re-binds persisted bytes
+(`test_restart_idempotent_acquisition_ignores_lying_transport`); store refactor
+regression-verified against all historical Slice-0011 suites (221 passed).
+Full suite: **474 passed in 80.42s** (468 floor + 6 hardening proofs).
+`compileall -q src tools` clean; `git diff --check` clean; committed-delta
+security scan (846 diff lines): 0 hits. Provider access/mutation: **0**.
+Delivery HEAD: `260b3d8`. State: COMPLETED_CANDIDATE (hardened).
