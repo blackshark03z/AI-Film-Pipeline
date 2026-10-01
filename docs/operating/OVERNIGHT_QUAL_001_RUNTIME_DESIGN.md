@@ -371,3 +371,56 @@ regressions 211 passed; full suite **481 passed** (474 floor + 7 new);
 compileall clean; `git diff --check` clean; committed-delta security scan
 (390 lines): 0 hits. Provider access/mutation: **0**. Delivery HEAD: this
 commit. State: COMPLETED_CANDIDATE.
+
+## RUNTIME-HARDEN-001 REVIEW ROUND 3 — qualified catalog source authority (2026-10-02)
+
+Techlead reproduction confirmed on ed52708 (scratch, untracked): a five-line
+duck-typed `FakeSubsetSource` (catalog() → [], fingerprint attr = qualified
+constant) froze an empty baseline as authority (`FAKE_SUBSET_SOURCE_ACCEPTED
+= True`). Round 2 had moved authority from caller records to a caller-chosen
+object; the object itself was still only duck-typed.
+
+### Closure: non-forgeable-through-duck-typing capability boundary
+
+New immutable `QualifiedFlowCatalogCapability` (frozen dataclass) minted only
+by `qualify_flow_catalog_source(session)`. The capability's `__post_init__`
+re-runs the same qualification on every construction — there is no flag,
+protocol, or alternate constructor: the wrapped object must be the concrete
+existing `FlowReferenceRpcSession` (the same provider/session stack the
+historical slice reads; no second catalog stack), its `catalog_fingerprint`
+must equal the qualified baseline established by the existing
+`validate_catalog_baseline` inside the session's own `catalog()`, and its
+`project_id` must be a valid UUID. `freeze` accepts only this capability type,
+requires its project to match the runtime scope, and performs the one
+authoritative read itself via `capability.capture()` → `session.catalog()`
+(which re-validates the baseline through the existing contract on every read);
+the snapshot is then derived exactly as before. Offline tests use a test-only
+`CatalogSource(FlowReferenceRpcSession)` adapter living entirely in the test
+module and minted through the same production factory — no test seam exists in
+production code.
+
+Adversarial proof: `test_fake_subset_source_rejected` — the exact Techlead
+`FakeSubsetSource` raises `FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED` before any
+ProviderJob persists; a wrapper around a real capability is rejected; a
+capability minted for a foreign project raises `CATALOG_SOURCE_PROJECT_MISMATCH`;
+the real qualified path freezes the full captured observation. Minting fails
+closed for sessions without an established qualified fingerprint. Retained
+proofs: exactly-one capture per fresh freeze, zero reads on restart, snapshot
+identity unchanged, preexisting captured output unownable, no empty fallback.
+
+Self-review: a five-line fake no longer works (type-gated); duck typing was
+not merely moved behind a class (the class validates the concrete session
+type plus an established qualified fingerprint, i.e. observed provider-read
+state, not shape); records cannot bypass the Flow parser/session boundary
+(capture → session.catalog() → contract parsers → snapshot re-validation);
+no test seam in production; restart never re-reads. Residual non-claim,
+unchanged in kind from rounds 1–2: a deliberate code-level forgery — a
+subclass of the real session faking both its fingerprint attribute and its
+catalog() return — remains indistinguishable offline; that is code tampering,
+outside the ordinary-duck-typing trust boundary this round closes.
+
+Verify: focused 49/49; boundary/live_runtime/dispatch/Slice-0011 historical
+regressions 211 passed; full suite **482 passed** (481 floor + 1 new);
+compileall clean; `git diff --check` clean; committed-delta security scan
+(367 lines): 0 hits. Provider access/mutation: **0**. Delivery HEAD: this
+commit. State: COMPLETED_CANDIDATE.
