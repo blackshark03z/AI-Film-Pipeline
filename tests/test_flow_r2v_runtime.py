@@ -571,6 +571,69 @@ def test_qc_rejects_tampered_asset_bytes(tmp_path, runtime_env):
     path.write_bytes(original)
 
 
+# C3/F1 adversarial reproduction: a hand-frozen foreign job without the frozen
+# baseline snapshot must fail closed at reservation AND attribution.
+def test_hostile_job_without_baseline_snapshot_fails_closed(runtime_env):
+    from film_pipeline.core import canonical_json
+    env = runtime_env
+    job = env.frozen.job
+    hostile_id = 'job_' + 'e' * 64
+    hostile = job.model_copy(update={'provider_job_id': hostile_id,
+                                     'pre_dispatch_snapshot': {}})
+    with sqlite3.connect(env.store.path) as connection:
+        connection.execute('INSERT INTO provider_jobs VALUES (?,?,?,?,?)',
+            (hostile.provider_job_id, job.generation_attempt_id, job.provider_id, 0,
+             canonical_json(hostile.model_dump(mode='json'))))
+    handle = SimpleNamespace(job=SimpleNamespace(provider_job_id=hostile_id),
+                             intent=env.frozen.intent)
+    with pytest.raises(OwnerAmbiguityGate, match='BASELINE|CATALOG'):
+        env.runtime.reserve(handle, attestation=env.attestation,
+                            evidence_dir=env.attestation_dir)
+    assert env.store.read_provider_job(hostile_id).dispatch_count == 0
+    # Even a hostile job that obtained a reservation elsewhere cannot attribute
+    # without the frozen pre-dispatch baseline.
+    env.runtime.boundary.reserve_mutation(handle.job.provider_job_id,
+        intent=env.frozen.intent, asset=env.asset, attestation=env.attestation,
+        evidence_dir=env.attestation_dir)
+    marker = film_marker(hostile_id)
+    row = make_veo31_video_record(OUTPUT_ID, PROJECT, REMOTE, REFERENCE_FILENAME_2,
+        marker, model=contract.MODEL_VEO_3_1_LITE)
+    with pytest.raises(OwnerAmbiguityGate, match='BASELINE|CATALOG'):
+        env.runtime.attribute_backend_output(handle, [row])
+    assert env.store.read_output_bindings(hostile_id) == []
+
+
+# C3/F1 companion: a valid frozen baseline cannot be silently substituted.
+def test_baseline_project_drift_blocked(runtime_env):
+    env = runtime_env
+    foreign = FlowR2VShotRuntime(env.store, project_id=OTHER, account_id=ACCOUNT)
+    with pytest.raises(OwnerAmbiguityGate, match='SCOPE_MISMATCH|PROJECT'):
+        foreign.reserve(env.frozen, attestation=env.attestation,
+                        evidence_dir=env.attestation_dir)
+
+
+# C3/F3 adversarial reproduction: unqualified model fails at construction.
+def test_runtime_rejects_unqualified_model_at_construction(runtime_env):
+    with pytest.raises(OwnerAmbiguityGate):
+        FlowR2VShotRuntime(runtime_env.store, project_id=PROJECT,
+                           account_id=ACCOUNT, model='abra_r2v_8s')
+
+
+# C3/F4 adversarial reproduction: restart classification is a runtime concern
+# and never reports submit authority after reservation.
+def test_recovery_classification_is_runtime_exposed(runtime_env):
+    env = runtime_env
+    fresh = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
+    before = fresh.recovery(env.frozen)
+    assert before.classification == 'NOT_RESERVED'
+    assert before.may_submit is False
+    reserve(env)
+    after = fresh.recovery(env.frozen)
+    assert after.classification == 'INCONCLUSIVE'
+    assert after.may_submit is False
+    assert after.action == 'RECONCILE_ONLY'
+
+
 # 22: the generic runtime has no Slice-0011 semantic dependency.
 def test_runtime_module_has_no_slice_coupling():
     source = (ROOT / 'src' / 'film_pipeline' / 'flow_r2v_runtime.py').read_text(

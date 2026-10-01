@@ -168,21 +168,13 @@ class FrozenR2VShot:
     reference_asset: object
 
 
-def _require_reference_binding(job, intent: MutationIntent) -> dict:
-    """The frozen reference binding must match the intent reference exactly."""
-    binding = job.correlation_evidence.get('reference_binding')
-    if not isinstance(binding, dict) or binding.get('media_id') != intent.reference_media_id:
-        raise OwnerAmbiguityGate('FLOW_R2V_REFERENCE_BINDING_MISMATCH')
-    if not isinstance(binding.get('asset_id'), str) or not binding.get('asset_id'):
-        raise OwnerAmbiguityGate('FLOW_R2V_REFERENCE_BINDING_MISMATCH')
-    return binding
-
-
 class FlowR2VShotRuntime:
     """Composition point for one reference-conditioned Flow R2V shot."""
 
     def __init__(self, store: SQLiteStore, *, project_id: str, account_id: str,
                  model: str = contract.MODEL_VEO_3_1_LITE):
+        if model not in contract.QUALIFIED_VEO_3_1_MODELS:
+            raise OwnerAmbiguityGate('MUTATION_INTENT_MODEL_UNQUALIFIED')
         self.store = store
         self.project_id = project_id
         self.account_id = account_id
@@ -192,6 +184,37 @@ class FlowR2VShotRuntime:
         # Deterministic provider-project binding identity, derived only from
         # the provider project id; identical to the historical derivation.
         self.project_binding_id = sha256(project_id)
+
+    def _require_reference_binding(self, job, intent: MutationIntent) -> dict:
+        """The frozen reference binding must match the intent reference exactly."""
+        binding = job.correlation_evidence.get('reference_binding')
+        if not isinstance(binding, dict) or binding.get('media_id') != intent.reference_media_id:
+            raise OwnerAmbiguityGate('FLOW_R2V_REFERENCE_BINDING_MISMATCH')
+        if not isinstance(binding.get('asset_id'), str) or not binding.get('asset_id'):
+            raise OwnerAmbiguityGate('FLOW_R2V_REFERENCE_BINDING_MISMATCH')
+        return binding
+
+    def _require_baseline_snapshot(self, job) -> list[str]:
+        """The frozen pre-dispatch baseline is mandatory at every authority point.
+
+        No silent empty-baseline fallback exists: a job whose snapshot lacks
+        the qualified fingerprint, the runtime's project or a list of UUIDs
+        can never reserve or attribute through this runtime.
+        """
+        snapshot = job.pre_dispatch_snapshot
+        if snapshot.get('catalog_fingerprint') != contract.QUALIFIED_BASELINE_FINGERPRINT:
+            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
+        if snapshot.get('project_id') != self.project_id:
+            raise OwnerAmbiguityGate('FLOW_R2V_BASELINE_PROJECT_MISMATCH')
+        ids = snapshot.get('catalog_ids')
+        if not isinstance(ids, list) or any(not isinstance(value, str) for value in ids):
+            raise OwnerAmbiguityGate('FLOW_R2V_BASELINE_SNAPSHOT_INVALID')
+        try:
+            for value in ids:
+                contract._uuid(value, 'OUTPUT_BASELINE_INVALID')
+        except contract.ContractError as error:
+            raise OwnerAmbiguityGate('FLOW_R2V_BASELINE_SNAPSHOT_INVALID') from error
+        return ids
 
     # --- Freeze -------------------------------------------------------------
 
@@ -285,7 +308,7 @@ class FlowR2VShotRuntime:
         intent = MutationIntent(project_id=self.project_id, account_id=self.account_id,
                                 reference_media_id=binding.get('media_id')
                                 if isinstance(binding, dict) else None, model=self.model)
-        _require_reference_binding(job, intent)
+        self._require_reference_binding(job, intent)
         shot, plan, route, attempt = self.store.read_path(job.generation_attempt_id)
         return FrozenR2VShot(shot=shot, plan=plan, attempt=attempt, job=job,
                              intent=intent, reference_asset=stored_reference)
@@ -293,9 +316,14 @@ class FlowR2VShotRuntime:
     # --- One mutation opportunity -------------------------------------------
 
     def reserve(self, frozen: FrozenR2VShot, *, attestation: dict, evidence_dir) -> object:
-        """Verify the attested reference, then consume the one mutation budget."""
+        """Verify the attested reference, then consume the one mutation budget.
+
+        The frozen pre-dispatch baseline is re-validated before the budget is
+        spent: a job without a qualified snapshot can never reserve.
+        """
         job = self.store.read_provider_job(frozen.job.provider_job_id)
-        binding = _require_reference_binding(job, frozen.intent)
+        binding = self._require_reference_binding(job, frozen.intent)
+        self._require_baseline_snapshot(job)
         reference = self.store.read_reference_asset(binding['asset_id'])
         return self.boundary.reserve_mutation(job.provider_job_id, intent=frozen.intent,
                                               asset=reference, attestation=attestation,
@@ -356,10 +384,10 @@ class FlowR2VShotRuntime:
         """
         job_id = frozen.job.provider_job_id
         job = self.store.read_provider_job(job_id)
-        binding = _require_reference_binding(job, frozen.intent)
-        baseline = list(job.pre_dispatch_snapshot.get('catalog_ids') or [])
+        binding = self._require_reference_binding(job, frozen.intent)
+        baseline = self._require_baseline_snapshot(job)
         row = self.boundary.attribute_output(records, intent=frozen.intent,
-            provider_job_id=job_id, baseline_ids=baseline,
+            provider_job_id=job_id, baseline_ids=list(baseline),
             reference_filename=binding.get('provider_filename', ''))
         if row is None:
             return None
@@ -401,6 +429,18 @@ class FlowR2VShotRuntime:
         if assets[0].sha256 != media.evidence['sha256']:
             raise OwnerAmbiguityGate('FLOW_R2V_ACQUIRED_BYTES_DRIFT')
         return assets[0]
+
+    # --- Restart classification -------------------------------------------------
+
+    def recovery(self, frozen: FrozenR2VShot):
+        """Durable restart classification for one frozen job.
+
+        Delegates to the existing recovery policy with correctly derived
+        binding/acquisition state. ``may_submit`` can never be true once the
+        dispatch budget is consumed; callers never re-implement this.
+        """
+        executor = LiveRuntimeExecutor(self.store, None)  # transport never consulted
+        return executor.recovery_decision(frozen.job.provider_job_id)
 
     # --- QC handoff eligibility ---------------------------------------------------
 

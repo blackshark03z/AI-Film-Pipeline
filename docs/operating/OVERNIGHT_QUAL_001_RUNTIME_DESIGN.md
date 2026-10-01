@@ -180,3 +180,30 @@ the per-shot one-dispatch budget is enforced inside `reserve_dispatch`
 globally, so a freeze-time race cannot create a second mutation; runtime
 module imports no Slice-0011 module directly or transitively.
 
+
+## C4 REPAIRED (proven 2026-10-01)
+
+- F1: adversarial reproduction first (`test_hostile_job_without_baseline_snapshot_fails_closed`
+  — raw hostile row; pre-repair it reserved and attributed successfully,
+  post-repair both fail closed before budget spend). Repair:
+  `FlowR2VShotRuntime._require_baseline_snapshot` (qualified fingerprint,
+  project match, UUID list) now mandatory in `reserve` AND
+  `attribute_backend_output`; no empty-baseline fallback exists anywhere in
+  the runtime.
+- F3: reproduction `test_runtime_rejects_unqualified_model_at_construction`;
+  repair: model qualified in `__init__`.
+- F4: reproduction `test_recovery_classification_is_runtime_exposed`;
+  repair: `FlowR2VShotRuntime.recovery(frozen)` delegates to
+  `LiveRuntimeExecutor.recovery_decision` (transport never consulted);
+  NOT_RESERVED -> INCONCLUSIVE/RECONCILE_ONLY lifecycle proven.
+- F5: **withdrawn with evidence** — every public path to `_frozen`'s intent
+  construction is preceded by `_resume_frozen`'s exact binding-equality gate
+  (restart) or by freeze-time UUID validation (fresh freeze); a corrupted
+  stored binding can only reach the earlier `FLOW_R2V_RESTART_INTENT_DIFFERS`
+  or `FLOW_R2V_REFERENCE_BINDING_MISMATCH` gates. No repair required; code
+  left untouched.
+- F2: retained as an accepted fail-closed crash window (see C3); no unsafe
+  state is reachable (no job -> no reservation -> no mutation).
+- Post-repair: **35/35 focused pass**; 144 pass across boundary, live runtime,
+  dispatch recovery, contract, canonical binding and Slice-0011 reconciliation
+  regression suites (historical custody untouched).
