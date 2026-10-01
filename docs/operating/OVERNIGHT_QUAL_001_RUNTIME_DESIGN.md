@@ -424,3 +424,61 @@ regressions 211 passed; full suite **482 passed** (481 floor + 1 new);
 compileall clean; `git diff --check` clean; committed-delta security scan
 (367 lines): 0 hits. Provider access/mutation: **0**. Delivery HEAD: this
 commit. State: COMPLETED_CANDIDATE.
+
+## RUNTIME-HARDEN-001 REVIEW ROUND 4 — exact Flow session authority (2026-10-02)
+
+Techlead reproduction confirmed on 115319f (scratch, untracked): a
+caller-created `FakeQualifiedSubclass(FlowReferenceRpcSession)` overriding
+`catalog()` minted a production capability through BOTH the factory and the
+constructor (`SUBCLASS_FORGE_ACCEPTED = True`) and captured `[]` — the
+isinstance check admitted inheritance forgery.
+
+### Closure: concrete-type and concrete-implementation binding
+
+- `QualifiedFlowCatalogCapability.__post_init__` now requires
+  `type(session) is FlowReferenceRpcSession` — subclasses cannot mint, via
+  factory or direct construction.
+- `capture()` binds to the concrete class implementation:
+  `FlowReferenceRpcSession.catalog(self.session)` — instance-attribute
+  shadowing cannot substitute catalog semantics; only the real
+  implementation, with its full re-validation, can produce a captured
+  observation (offline, a shadowed exact-type session fails at the real
+  implementation; in tests the per-test class patch is the sandbox).
+- The qualified-fingerprint and project-UUID checks are unchanged.
+
+### Test seam (test module only; no production hole)
+
+`offline_flow_session()` constructs an EXACT `FlowReferenceRpcSession`
+instance without opening a browser (dummy profile path; nothing is ever
+opened) and sets the established qualified fingerprint exactly as a live
+qualified read would leave it. An autouse per-test fixture patches the
+concrete class `catalog` method and restores it afterwards. Production
+qualification is untouched — proven by
+`test_runtime_module_has_no_test_seam` (no offline/test markers in the
+runtime module; the exact required checks are present verbatim).
+
+### Adversarial proofs
+
+`test_subclass_cannot_mint_capability` (the exact Techlead subclass rejected
+by `qualify_flow_catalog_source` AND direct `QualifiedFlowCatalogCapability`,
+nothing persisted); `test_instance_shadowing_cannot_replace_catalog_semantics`
+(a lying instance attribute is never consulted — capture consumed the class
+implementation and froze the true observation); retained: duck object and
+wrapper rejection, exactly-one capture per fresh freeze, zero reads on
+restart, exact snapshot content, preexisting output unownable, no empty
+fallback.
+
+Self-review: subclass + override — blocked (type-is); direct construction
+around the subclass — blocked (same `__post_init__`); production checks not
+weakened for tests (strictly strengthened: `type is` + implementation
+binding); non-exact implementations cannot mint; the offline seam lives
+entirely in the test module and is restored per test. Residual (documented,
+same kind as previous rounds): patching the concrete class function itself in
+a caller's own process is code tampering, outside the ordinary-duck-typing
+and inheritance trust boundaries this round closes.
+
+Verify: focused 52/52; boundary/live_runtime/dispatch/Slice-0011 historical
+regressions 211 passed; full suite **485 passed** (482 floor + 3 new);
+compileall clean; `git diff --check` clean; committed-delta security scan
+(262 lines): 0 hits. Provider access/mutation: **0**. Delivery HEAD: this
+commit. State: COMPLETED_CANDIDATE.
