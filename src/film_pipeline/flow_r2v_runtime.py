@@ -36,6 +36,7 @@ from .live_runtime import Asset, LiveRuntimeExecutor, make_provider_job
 from .providers import flow_rpc_contract as contract
 from .providers.flow_canonical_ui import OneGenerateGuard
 from .providers.flow_media import bind_media_bytes, parse_media_resource
+from .providers.flow_reference_rpc import FlowReferenceRpcSession
 from .providers.flow_reference_upload import OwnerAmbiguityGate
 from .providers.flow_r2v_prompt import FlowR2VPrompt, film_marker
 from .store import SQLiteStore
@@ -176,6 +177,57 @@ def qualified_catalog_snapshot(records, *, project_id: str,
 
 
 @dataclass(frozen=True)
+class QualifiedFlowCatalogCapability:
+    """Immutable authority for the runtime's pre-dispatch Flow catalog read.
+
+    Minted only for a concrete qualified Flow session boundary: the wrapped
+    object must be the existing ``FlowReferenceRpcSession`` and its
+    ``catalog_fingerprint`` must be the qualified baseline established by the
+    existing contract validation (``validate_catalog_baseline`` inside the
+    session's own ``catalog()``). Ordinary duck-typed objects, five-line
+    fakes, wrappers and mocks cannot ride the freeze path: there is no
+    constructor argument, flag or protocol that confers authority — only a
+    real-or-subclassed Flow session whose baseline is already qualified.
+    """
+
+    session: FlowReferenceRpcSession
+
+    def __post_init__(self):
+        if not isinstance(self.session, FlowReferenceRpcSession):
+            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
+        if getattr(self.session, 'catalog_fingerprint', None) != \
+                contract.QUALIFIED_BASELINE_FINGERPRINT:
+            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
+        if not contract.UUID_RE.fullmatch(getattr(self.session, 'project_id', '') or ''):
+            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
+
+    @property
+    def project_id(self) -> str:
+        return self.session.project_id
+
+    @property
+    def fingerprint(self) -> str:
+        return self.session.catalog_fingerprint
+
+    def capture(self) -> list:
+        """The authoritative observation: the session's own catalog read,
+        which re-validates the baseline through the existing contract on
+        every call. The runtime — never the caller — invokes this."""
+        return self.session.catalog()
+
+
+def qualify_flow_catalog_source(session) -> QualifiedFlowCatalogCapability:
+    """The authorized factory for catalog-read capabilities.
+
+    Accepts a concrete qualified Flow session (existing FlowReferenceRpcSession
+    whose catalog_fingerprint was established by validate_catalog_baseline).
+    There is no other way to obtain a capability: duck-typed look-alikes,
+    wrappers and unqualified sessions fail closed here.
+    """
+    return QualifiedFlowCatalogCapability(session)
+
+
+@dataclass(frozen=True)
 class FrozenR2VShot:
     """The frozen provider intent for one ordinary shot.
 
@@ -271,19 +323,22 @@ class FlowR2VShotRuntime:
         whose exact submission prompt is durable before any authority exists.
         A restart with identical inputs returns the same frozen job.
 
-        The pre-dispatch baseline is runtime-captured: the runtime itself asks
-        the qualified provider catalog source — an existing Flow
-        session/catalog object exposing ``catalog()`` and
-        ``catalog_fingerprint`` — exactly once for the authoritative
-        pre-dispatch observation, and derives the snapshot from that
-        observation alone. Callers choose WHICH qualified source is used; no
-        API exists for them to choose WHICH rows become snapshot truth, and a
-        restart reuses the frozen snapshot without re-capture. The whole Film
-        path plus ProviderJob freeze commits atomically."""
+        The pre-dispatch baseline is runtime-captured through the qualified
+        provider-read boundary: ``catalog_source`` must be a
+        ``QualifiedFlowCatalogCapability`` minted by
+        ``qualify_flow_catalog_source`` for a concrete qualified Flow session.
+        The runtime itself asks that capability exactly once for the
+        authoritative pre-dispatch observation and derives the snapshot from
+        that observation alone. Callers choose WHICH qualified session is
+        used; they cannot manufacture an object that merely looks like a
+        catalog source, and a restart reuses the frozen snapshot without
+        re-capture. The whole Film path plus ProviderJob freeze commits
+        atomically."""
         contract._uuid(reference_media_id, 'REFERENCE_ID_INVALID')
-        if (not callable(getattr(catalog_source, 'catalog', None))
-                or not isinstance(getattr(catalog_source, 'catalog_fingerprint', None), str)):
+        if not isinstance(catalog_source, QualifiedFlowCatalogCapability):
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_UNQUALIFIED')
+        if catalog_source.project_id != self.project_id:
+            raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_PROJECT_MISMATCH')
         # Fresh immutable reference readback; the plan binds these exact bytes.
         stored_reference = self.store.read_reference_asset(reference_asset.asset_id)
         reference_binding = {'asset_id': stored_reference.asset_id,
@@ -305,10 +360,11 @@ class FlowR2VShotRuntime:
         if prior is not None:
             return self._resume_frozen(prior, shot, plan, decision, reference_binding)
         # The one authoritative pre-dispatch catalog observation, captured by
-        # the runtime; a restart never reaches this line again.
-        records = catalog_source.catalog()
+        # the runtime through the qualified capability; a restart never
+        # reaches this line again.
+        records = catalog_source.capture()
         snapshot = qualified_catalog_snapshot(records, project_id=self.project_id,
-                                              fingerprint=catalog_source.catalog_fingerprint)
+                                              fingerprint=catalog_source.fingerprint)
         preview = make_provider_job(attempt, project_binding_id=self.project_binding_id,
                                     pre_dispatch_snapshot=snapshot)
         compiled = compact_r2v_prompt(plan, preview.provider_job_id, model=self.model)

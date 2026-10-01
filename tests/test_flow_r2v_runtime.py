@@ -18,10 +18,14 @@ from film_pipeline.dispatch_evidence import recovery_decision
 from film_pipeline.flow_r2v_runtime import (
     COMPACT_VERSION,
     FlowR2VShotRuntime,
+    QualifiedFlowCatalogCapability,
     compact_r2v_prompt,
+    qualified_catalog_snapshot,
+    qualify_flow_catalog_source,
 )
 from film_pipeline.live_runtime import LiveRuntimeExecutor
 from film_pipeline.providers import flow_rpc_contract as contract
+from film_pipeline.providers.flow_reference_rpc import FlowReferenceRpcSession
 from film_pipeline.providers.flow_reference_upload import OwnerAmbiguityGate
 from film_pipeline.providers.flow_r2v_prompt import film_marker
 from film_pipeline.store import SQLiteStore
@@ -84,23 +88,33 @@ class FixtureAcquisitionTransport:
         return destination
 
 
-class CatalogSource:
-    """Synthetic qualified catalog-source double.
+class CatalogSource(FlowReferenceRpcSession):
+    """Test-only offline adapter for the qualified catalog-read boundary.
 
-    Simulates the authoritative provider read through the existing Flow
-    session/catalog abstraction (``catalog()`` + ``catalog_fingerprint``).
-    The runtime — never the caller — decides when the read happens and what
-    rows the observation contains.
+    It IS a FlowReferenceRpcSession (the concrete provider/session type the
+    production factory requires) with no browser: ``catalog()`` returns the
+    configured observation and counts reads. Qualification still runs through
+    the production factory — the adapter carries an established qualified
+    fingerprint exactly as a live session would after validate_catalog_baseline.
     """
 
-    def __init__(self, records, *, fingerprint=contract.QUALIFIED_BASELINE_FINGERPRINT):
-        self.records = [list(row) for row in records]
+    def __init__(self, records, *, project_id=PROJECT,
+                 fingerprint=contract.QUALIFIED_BASELINE_FINGERPRINT):
+        self.project_id = project_id
         self.catalog_fingerprint = fingerprint
+        self.records = [list(row) for row in records]
         self.calls = 0
 
-    def catalog(self):
+    def catalog(self, *, contract_version=contract.CONTRACT_VERSION):
         self.calls += 1
         return [list(row) for row in self.records]
+
+
+def catalog_capability(records, *, fingerprint=contract.QUALIFIED_BASELINE_FINGERPRINT,
+                       project_id=PROJECT):
+    """Mint a production capability for an offline test-only Flow session."""
+    return qualify_flow_catalog_source(
+        CatalogSource(records, project_id=project_id, fingerprint=fingerprint))
 
 
 @pytest.fixture
@@ -117,13 +131,15 @@ def runtime_env(tmp_path):
     store = SQLiteStore(upload_store.db_path)
     runtime = FlowR2VShotRuntime(store, project_id=PROJECT, account_id=ACCOUNT)
     shot = ordinary_r2v_shot(asset.asset_id)
-    catalog_source = CatalogSource(catalog_records(OTHER))
+    session_double = CatalogSource(catalog_records(OTHER))
+    catalog_source = qualify_flow_catalog_source(session_double)
     frozen = runtime.freeze(shot, flow_capabilities(), reference_asset=asset,
         reference_media_id=REMOTE, reference_filename=REFERENCE_FILENAME_2,
         catalog_source=catalog_source, started_at='2026-10-01T00:00:00+00:00')
     return SimpleNamespace(asset=asset, attestation=attestation,
         attestation_dir=attestation_dir, runtime=runtime, store=store, shot=shot,
-        frozen=frozen, catalog_source=catalog_source, tmp_path=tmp_path)
+        frozen=frozen, catalog_source=catalog_source, session=session_double,
+        tmp_path=tmp_path)
 
 
 def reserve(env):
@@ -860,7 +876,7 @@ def test_freeze_has_no_raw_record_path(runtime_env):
     env = runtime_env
     base = dict(reference_asset=env.asset, reference_media_id=REMOTE,
                 reference_filename=REFERENCE_FILENAME_2,
-                catalog_source=CatalogSource(catalog_records(OTHER)),
+                catalog_source=catalog_capability(catalog_records(OTHER)),
                 started_at='2026-10-02T00:00:00+00:00')
     with pytest.raises(TypeError):
         env.runtime.freeze(env.shot, flow_capabilities(),
@@ -875,17 +891,78 @@ def test_freeze_has_no_raw_record_path(runtime_env):
                    for name in params)
 
 
+# RUNTIME-HARDEN-001 R3: the exact Techlead forgery — a five-line duck-typed
+# object that merely looks like a catalog source — is rejected before any
+# ProviderJob can exist.
+def test_fake_subset_source_rejected(runtime_env):
+    from film_pipeline.core import ProviderCapabilities
+    env = runtime_env
+
+    class FakeSubsetSource:
+        catalog_fingerprint = contract.QUALIFIED_BASELINE_FINGERPRINT
+
+        def catalog(self):
+            return []
+
+    shot = ordinary_r2v_shot(env.asset.asset_id, shot_id='FLOW_R2V_R3_FAKE_001')
+    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_UNQUALIFIED'):
+        env.runtime.freeze(shot, flow_capabilities(), reference_asset=env.asset,
+            reference_media_id=REMOTE, reference_filename=REFERENCE_FILENAME_2,
+            catalog_source=FakeSubsetSource(),
+            started_at='2026-10-02T01:01:00+00:00')
+    with sqlite3.connect(env.store.path) as connection:
+        jobs = connection.execute('SELECT COUNT(*) FROM provider_jobs').fetchone()[0]
+    assert jobs == 1  # nothing persisted for the forged source
+    # Even a capability look-alike wrapper around a real capability is rejected.
+    class Wrapper:
+        def __init__(self, capability):
+            self._capability = capability
+
+        def capture(self):
+            return self._capability.capture()
+
+        @property
+        def fingerprint(self):
+            return self._capability.fingerprint
+
+        @property
+        def project_id(self):
+            return self._capability.project_id
+
+    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_UNQUALIFIED'):
+        env.runtime.freeze(env.shot.model_copy(update={'shot_id': 'FLOW_R2V_R3_FAKE_002'}),
+            flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
+            reference_filename=REFERENCE_FILENAME_2,
+            catalog_source=Wrapper(env.catalog_source),
+            started_at='2026-10-02T01:02:00+00:00')
+    # A capability minted for another project cannot freeze this runtime's shot.
+    foreign = catalog_capability(catalog_records(OTHER), project_id=OTHER)
+    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_PROJECT_MISMATCH'):
+        env.runtime.freeze(env.shot.model_copy(update={'shot_id': 'FLOW_R2V_R3_FAKE_003'}),
+            flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
+            reference_filename=REFERENCE_FILENAME_2, catalog_source=foreign,
+            started_at='2026-10-02T01:03:00+00:00')
+    # The real qualified path is the only accepted shape.
+    real = catalog_capability(catalog_records(OTHER))
+    frozen = env.runtime.freeze(env.shot.model_copy(update={'shot_id': 'FLOW_R2V_R3_REAL_004'}),
+        flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
+        reference_filename=REFERENCE_FILENAME_2, catalog_source=real,
+        started_at='2026-10-02T01:04:00+00:00')
+    assert frozen.job.pre_dispatch_snapshot['catalog_ids'] == [OTHER.lower()]
+
+
 # R2 proof 2: the runtime asks the source exactly once, itself.
 def test_runtime_captures_source_exactly_once(runtime_env):
     env = runtime_env
-    source = CatalogSource(catalog_records(OTHER, SECOND_OUTPUT_ID))
-    assert source.calls == 0
+    session_double = CatalogSource(catalog_records(OTHER, SECOND_OUTPUT_ID))
+    source = qualify_flow_catalog_source(session_double)
+    assert session_double.calls == 0
     frozen = env.runtime.freeze(
         ordinary_r2v_shot(env.asset.asset_id, shot_id='FLOW_R2V_CAPTURE_002'),
         flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
         reference_filename=REFERENCE_FILENAME_2, catalog_source=source,
         started_at='2026-10-02T00:01:00+00:00')
-    assert source.calls == 1
+    assert session_double.calls == 1
     # A restart resume re-freezes without consulting the source again.
     restarted = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
     resumed = restarted.freeze(env.shot.model_copy(update={
@@ -893,7 +970,7 @@ def test_runtime_captures_source_exactly_once(runtime_env):
         reference_asset=env.asset, reference_media_id=REMOTE,
         reference_filename=REFERENCE_FILENAME_2, catalog_source=source,
         started_at='2099-01-01T00:00:00+00:00')
-    assert source.calls == 1
+    assert session_double.calls == 1
     assert resumed.job.provider_job_id == frozen.job.provider_job_id
 
 
@@ -902,7 +979,7 @@ def test_runtime_captures_source_exactly_once(runtime_env):
 def test_snapshot_contains_exactly_source_observation(runtime_env):
     env = runtime_env
     ids = [OTHER, SECOND_OUTPUT_ID, THIRD_ID]
-    source = CatalogSource(catalog_records(*ids))
+    source = catalog_capability(catalog_records(*ids))
     frozen = env.runtime.freeze(
         ordinary_r2v_shot(env.asset.asset_id, shot_id='FLOW_R2V_CAPTURE_003'),
         flow_capabilities(), reference_asset=env.asset, reference_media_id=REMOTE,
@@ -921,11 +998,10 @@ def test_snapshot_contains_exactly_source_observation(runtime_env):
 # snapshot or its identity.
 def test_post_capture_mutation_cannot_change_frozen_snapshot(runtime_env):
     env = runtime_env
-    source = env.catalog_source
     snap = env.frozen.job.pre_dispatch_snapshot
     frozen_ids, frozen_hash = snap['catalog_ids'], snap['snapshot_sha256']
-    source.records.append([SECOND_OUTPUT_ID, PROJECT, 'IMAGE', 'CAE', None, None, None])
-    source.records[0][0] = THIRD_ID  # replace in place
+    env.session.records.append([SECOND_OUTPUT_ID, PROJECT, 'IMAGE', 'CAE', None, None, None])
+    env.session.records[0][0] = THIRD_ID  # replace in place
     basis = {'catalog_fingerprint': snap['catalog_fingerprint'],
              'catalog_ids': snap['catalog_ids'], 'project_id': snap['project_id']}
     assert snap['catalog_ids'] == frozen_ids
@@ -937,7 +1013,9 @@ def test_post_capture_mutation_cannot_change_frozen_snapshot(runtime_env):
 
 
 # R2 proof 6: wrong fingerprint/project/shape sources fail closed, nothing
-# persisted. Each attempt uses a fresh shot so the runtime-owned capture path
+# persisted. Unqualified fingerprints fail at capability minting; wrong
+# project rows and malformed rows fail at freeze-time contract validation.
+# Each freeze attempt uses a fresh shot so the runtime-owned capture path
 # (not a restart resume) is the code under test.
 def test_unqualified_catalog_source_fails_closed(runtime_env):
     env = runtime_env
@@ -950,9 +1028,11 @@ def test_unqualified_catalog_source_fails_closed(runtime_env):
                 reference_media_id=REMOTE, reference_filename=REFERENCE_FILENAME_2,
                 catalog_source=source, started_at=f'2026-10-02T00:03:0{n:02d}+00:00')
 
-    attempt(1, CatalogSource(catalog_records(OTHER), fingerprint='deadbeef'))
-    attempt(2, CatalogSource(catalog_records(OTHER, project=OTHER)))
-    attempt(3, CatalogSource([OUTPUT_ID]))  # malformed row shape
+    with pytest.raises(OwnerAmbiguityGate, match='CATALOG_SOURCE_UNQUALIFIED'):
+        qualify_flow_catalog_source(
+            CatalogSource(catalog_records(OTHER), fingerprint='deadbeef'))
+    attempt(2, catalog_capability(catalog_records(OTHER, project=OTHER)))
+    attempt(3, catalog_capability([OUTPUT_ID]))  # malformed row shape
     attempt(4, object())  # not a catalog source at all
     with sqlite3.connect(env.store.path) as connection:
         jobs = connection.execute('SELECT COUNT(*) FROM provider_jobs').fetchone()[0]
@@ -963,13 +1043,14 @@ def test_unqualified_catalog_source_fails_closed(runtime_env):
 def test_restart_reuses_frozen_snapshot_without_recapture(runtime_env):
     env = runtime_env
     original = env.frozen.job.pre_dispatch_snapshot
-    fresh_source = CatalogSource(catalog_records(SECOND_OUTPUT_ID, THIRD_ID))
+    fresh_double = CatalogSource(catalog_records(SECOND_OUTPUT_ID, THIRD_ID))
+    fresh_source = qualify_flow_catalog_source(fresh_double)
     restarted = FlowR2VShotRuntime(env.store, project_id=PROJECT, account_id=ACCOUNT)
     resumed = restarted.freeze(env.shot, flow_capabilities(),
         reference_asset=env.asset, reference_media_id=REMOTE,
         reference_filename=REFERENCE_FILENAME_2, catalog_source=fresh_source,
         started_at='2099-01-01T00:00:00+00:00')
-    assert fresh_source.calls == 0  # historical truth is not re-captured
+    assert fresh_double.calls == 0  # historical truth is not re-captured
     assert resumed.job.pre_dispatch_snapshot == original
     assert resumed.job.provider_job_id == env.frozen.job.provider_job_id
 
