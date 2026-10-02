@@ -677,7 +677,7 @@ def main():
     parser.add_argument("command",
                         choices=["plan", "scene", "continuity",
                                  "continuity-reconcile", "status"])
-    parser.add_argument("--plan", default=str(ROOT / "fixtures/scene_plan_003.json"))
+    parser.add_argument("--plan", default=str(ROOT / "fixtures/scene003/scene_plan_003.json"))
     parser.add_argument("--shot")
     parser.add_argument("--from-shot")
     args = parser.parse_args()
