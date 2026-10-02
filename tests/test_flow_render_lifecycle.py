@@ -248,3 +248,18 @@ def test_catalog_drift_is_unobservable(runtime_env, monkeypatch):
                 if f['kind'] == 'OBSERVATION_FAILURE']
     assert failures == ['FLOW_R2V_CATALOG_BASELINE_DRIFT']
     assert render_facts(env) == []
+
+
+# 11: structural guard — the productized seam references no direct/private
+#     mutation path. The only Generate-mutation authority is the native-UI
+#     browser request; direct MZZa6b construction stays outside the seam.
+def test_production_seam_never_references_direct_mutation_path():
+    import inspect
+
+    from film_pipeline import flow_r2v_boundary, flow_r2v_runtime
+    for module in (flow_r2v_boundary, flow_r2v_runtime):
+        source = inspect.getsource(module)
+        assert 'submit_once' not in source, module.__name__
+        assert 'MZZa6b' not in source, module.__name__
+        assert 'RPC_VIDEO' not in source, module.__name__
+        assert 'build_video' not in source, module.__name__
