@@ -163,3 +163,41 @@ acquisition path
 ```
 
 Re-qualification must start from read-only evidence where possible, use bounded live mutation, preserve consumed authority, and never infer success from UI appearance alone.
+
+## Hardening addendum — 2026-10-02 (FLOW-PRODUCTION-HARDEN-MULTISHOT-002)
+
+Evidence-backed additions to this qualification. No historical statement above is modified.
+
+### A1 — Current-build re-qualification PASSED (scope unchanged)
+
+One bounded native-UI generation on the observed current build (bundle revision `boq-labs-ai-sandbox.AiSandboxAngularFrontend.vi.pV88nTU3z_Q.2018.O` era; qualified DOM/settings contract read back identical) completed with unique marker-echo attribution on the first reconciliation poll, exact acquisition, full EOF decode and QC exact-lineage eligibility — same account/profile/project/reference/model/mode scope. The route remains `CURRENT_FLOW_BUILD_REQUALIFIED`.
+
+### A2 — as29s pending payloads may be NON-NULL on the current build
+
+Live observation: while a render is still in progress, `as29s` may return a payload that does NOT conform to the qualified media-resource contract (shape drift), not the historical null signature. Therefore: an as29s response that fails the media contract is **pending evidence**, never failure and never redispatch authority; only a payload that parses and binds for the exact owned identity is completion.
+
+### A3 — Render lifecycle policy (refines P3)
+
+Between binding and completion the durable states are:
+
+```text
+OUTPUT_BOUND_UNOBSERVED → RECONCILE_RENDER_STATE
+RENDER_PENDING          → RECONCILE_ONLY
+RENDER_STATE_UNRESOLVED → RECONCILE_ONLY
+RENDER_COMPLETED        → ACQUIRE_ONLY
+ADMITTED_RENDER_DROPPED → REPAIR_DECISION_REQUIRED
+```
+
+A bound identity is not proof that downloadable media exists. One qualified catalog disappearance is `RENDER_STATE_UNRESOLVED` (eventual consistency / read lag); terminal `ADMITTED_RENDER_DROPPED` requires the disappearance to persist across the bounded reconciliation policy (consecutive qualified observations) or explicit provider terminal evidence. Before terminality: `may_submit = false` and repair-regeneration authority does not exist.
+
+### A4 — Reference adoption (read-only) is a qualified attestation path
+
+Provider project media that already exists (uploaded outside this system) may be adopted as a canonical Film reference through an attested readback: exact media id + project scope + resource binding + byte-identical readback + immutable receipt/attestation chain. Adoption performs zero provider mutation (catalog must be unchanged across it) and is the required path when no upload receipt exists; it never silently substitutes a different resource.
+
+### A5 — Flow Tool runs are catalog-reconcilable (capability, not a production path)
+
+One bounded run of an existing private Flow Tool ("Director's Shot Lab", agent-generated React mini-app using the internal `flow-sdk`) with a preclaimed Film marker inside the tool prompt produced a backend generation that reconciled through the same identity path: exactly one fresh catalog id, unique marker echo, project binding, as29s resolution and exact acquisition. The tool host issued different RPC identifiers (not `MZZa6b`); no claim is made about which wire surface a tool uses. Classification: `FLOW_TOOL_GENERATION_RECONCILABLE` as a **capability observation**; the production mutation path remains the provider-native UI, and any `flow_tool` adapter remains future work requiring its own qualification.
+
+### A6 — Multi-shot vertical proven within the qualified scope
+
+Two distinct ShotSpecs of one coherent scene executed end-to-end through the productized runtime (unique jobs, per-shot at-most-once Generate, marker-echo attribution, hardened render lifecycle, exact acquisition, full decode, QC, provisional SelectedTakes, EditManifest and AutoEdit producer package), both conditioned by the same adopted verified reference. This is the strongest currently proven continuity mechanism (same-reference identity/look continuity); no other continuity control is claimed.
