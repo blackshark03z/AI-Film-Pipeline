@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "HARDEN_002_SCENE_SHOT_B",
+  "scene_id": "HARDEN_002_CLOUD_SUMMIT",
+  "dramatic_purpose": "Continue on the same swordsman in medium close-up as he calmly turns toward the horizon.",
+  "duration_target_s": 8,
+  "shot_type": "performance",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "sole subject from chest up",
+      "behavior_state": "one slow calm head turn toward the horizon"
+    }
+  ],
+  "camera": {
+    "framing": "MCU",
+    "height": "eye_level",
+    "lens_intent": "portrait",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "chest-up, matching Shot A end state",
+    "action_beats": [
+      "one slow inhale",
+      "head turns toward frame-left horizon"
+    ],
+    "end": "gaze settled on the horizon"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left, unchanged from Shot A",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {
+      "match_cut_from": "HARDEN_002_SCENE_SHOT_A end state"
+    },
+    "end_state": {
+      "pose": "head turned toward the horizon"
+    },
+    "critical_invariants": [
+      "same robes and sword",
+      "same summit background",
+      "dawn light from frame-left",
+      "no face identity drift"
+    ]
+  }
+}
