@@ -68,3 +68,90 @@ Phase 4 pre-conditions assessment: creation affordance clearly available
 (OBSERVED_IN_UI), account is clean Pro, session valid, no payment/legal/
 recovery gate observed → **Phase 4 canary authorized** with budget
 `MAX_CUSTOM_TOOL_CREATE_OR_SAVE = 1`, optional `MAX_FRESH_VIDEO_GENERATE = 1`.
+
+## C4 — Minimal Tool canary result (2026-10-02T07:45–08:00Z)
+
+Budgets (package authority, consumed exactly once, never retried):
+
+```text
+MAX_CUSTOM_TOOL_CREATE_OR_SAVE = 1  → consumed (1/1)
+MAX_FRESH_VIDEO_GENERATE       = 1  → NOT USED (OWNER_AMBIGUITY_GATE active)
+```
+
+Sequence:
+
+1. Qualified read-only baseline captured pre-mutation (9 catalog records,
+   fingerprint qualified).
+2. Builder opened at `/project/<id>/create-tool` (chat agent; on-page notice:
+   "Hiện không tốn tín dụng khi tạo công cụ" — creating tools currently costs
+   no credits). Tool description submitted once ("AI Film Shot Tool …").
+3. The builder agent generated and persisted a tool object and assigned a
+   provider identity: URL `/project/<id>/tool/083a64f8-6f43-4a48-bd1b-3f1cc81e6b12?mode=EDIT`.
+4. ONE save ("Xong") clicked once → `create_or_save_used = 1`.
+5. My-tools verification at that moment could not uniquely resolve a saved
+   tool link (card carries no href) → **OWNER_AMBIGUITY_GATE recorded**;
+   all further provider mutation stopped immediately (generate not released).
+6. READ-ONLY post-gate verification resolved the external effect: exactly one
+   tool exists, named **"Director's Shot Lab"**, ID
+   `083a64f8-6f43-4a48-bd1b-3f1cc81e6b12`, in My tools of the qualified
+   project; UI shows Production Mode with ASPECT 16:9 / LENGTH 08.00 SEC /
+   SHOT ID #001 and a "READY FOR INPUT" canvas. No duplicates. The gate
+   stands: the remaining optional Generate was not reinterpreted as retry
+   authority.
+
+### Tool code/runtime — PROVEN_BY_CODE (read-only Code view dump)
+
+The saved tool's "Mã" (Code) tab exposes its full generated source:
+a single-file **React TypeScript** mini-app (`App.tsx`) whose generation call is:
+
+```javascript
+import { Flow } from 'flow-sdk';
+const result = await Flow.generate.video({
+    prompt: prompt,
+    modelDisplayName: 'Omni 1.1 Flash',
+    aspectRatio: '16:9',
+    durationSeconds: 8,
+    resolution: '720p'
+});
+// result: { base64: <string>, mimeType: <string> }
+```
+
+Facts established by the code (all `PROVEN_BY_CODE` unless noted):
+
+- Tools are agent-generated, **user-editable React TSX mini-apps** running
+  inside Flow's tool host (Preview/Code toggle; builder agent sidebar with
+  undo/restore; editor disclaimer: running the tool can consume credits).
+- A first-party **`flow-sdk` module exists inside the tool runtime** exposing
+  at least `Flow.generate.video` with prompt / modelDisplayName /
+  aspectRatio / durationSeconds / resolution parameters.
+- The SDK result used by this tool is **raw bytes (`base64`, `mimeType`) with
+  NO provider job id, NO media id, NO project-persistence call and NO
+  reference/ingredients parameter** — the generated tool plays the bytes as a
+  blob URL. Persistence to project media, if any, is host-side and invisible
+  to the tool code (UNKNOWN).
+- The model is selected by display name string (`'Omni 1.1 Flash'`), not by
+  the qualified wire model identifier.
+
+### Updated capability matrix (remaining rows)
+
+| # | Question | Classification after C4 |
+| :-- | :-- | :-- |
+| 2 | Code/runtime | **PROVEN_BY_CODE**: React TSX mini-app, agent-generated, editable; no external code export |
+| 3 | Native image/video generation | **PROVEN_BY_CODE** (`Flow.generate.video`); live execution unproven (gated) |
+| 4 | Model/mode/duration/aspect/count | **PROVEN_BY_CODE** at call level: modelDisplayName/aspectRatio/durationSeconds/resolution accepted; no reference slot in this generated call |
+| 5 | Consume project media/references | **UNKNOWN** (not exposed by this generated tool; SDK surface may have more) |
+| 6 | Batch variations | **INFERRED**: client-side sequential single calls only; no native batch parameter observed |
+| 7 | Auto-persist to project | **UNKNOWN** (no persistence call in tool code; host behavior unverifiable without a live run) |
+| 8 | Stable job/media identifiers | **NO at tool level (PROVEN_BY_CODE)**: result carries bytes only, no ids |
+| 9 | SDK surface | **PROVEN_BY_CODE that an internal `flow-sdk` exists**; it is NOT publicly documented and its status as a supported API is UNKNOWN — generated code invoking an internal function is not an API contract |
+| 10 | Structured ShotSpec pass-in | **NO structured channel observed**: free-text prompt only; structured data would be serialized into text |
+| 11 | Zzl0ze/as29s reconciliation | **UNKNOWN** (requires a live Tool-run generation with a marker in the prompt; gated — not run) |
+
+### Canary hygiene
+
+- Zero cookie/token capture; wire observation recorded lengths/rpcids only;
+  no request bodies persisted. All raw evidence untracked under
+  `scratch/flow_tool_canary/`.
+- The created tool (Director's Shot Lab, private) remains in the project as
+  the canary artifact; it was NOT deleted (deletion would be a further
+  mutation under an active gate) and NOT published/shared.
