@@ -2,11 +2,13 @@
 
 The productized Flow R2V seam (boundary + runtime + render lifecycle +
 reference adoption) is generic: no Slice-0011 module, authority ID, or
-historical state may be required to run an ordinary shot through it. The
-offline vertical already proves executability; these guards pin the
-structural side so a future import cannot silently reintroduce the coupling.
+historical state may be required to run an ordinary shot through it.
+Structural guards pin the source level; a fresh-interpreter import proves
+the generic modules load with zero slice modules present.
 """
 import ast
+import subprocess
+import sys
 from pathlib import Path
 
 import film_pipeline.flow_r2v_boundary as boundary
@@ -45,27 +47,24 @@ def test_production_seam_sources_carry_no_slice_authority_literals():
             assert literal not in source, (name, literal)
 
 
-def test_offline_vertical_needs_only_generic_components():
-    """The generic modules are importable and constructible without any
-    slice/history store present in the process."""
-    import sys
-
-    for name in [m for m in sys.modules if m.startswith("film_pipeline.slice0011")]:
-        del sys.modules[name]
-    import importlib
-
-    for module in (boundary, runtime, binding):
-        importlib.reload(module)
-    assert FlowR2VShotRuntime_is_constructible()
-
-
-def FlowR2VShotRuntime_is_constructible() -> bool:
-    from film_pipeline.flow_r2v_runtime import FlowR2VShotRuntime
-
-    runtime_obj = FlowR2VShotRuntime(
-        __import__("film_pipeline.store", fromlist=["SQLiteStore"]).SQLiteStore(
-            Path(__file__).parent / "does-not-exist-yet.sqlite"),
-        project_id="11111111-2222-3333-4444-555555555555",
-        account_id="any-runtime-account")
-    assert runtime_obj.RENDER_DROP_PERSISTENCE_THRESHOLD >= 2
-    return True
+def test_generic_runtime_constructs_without_any_slice_module_in_process():
+    """Fresh interpreter: import the generic seam, construct the runtime with
+    a runtime store, and assert no slice0011 module was pulled in."""
+    code = (
+        "import sys;"
+        f"sys.path.insert(0, r'{ROOT / 'src'}');"
+        "from film_pipeline.flow_r2v_runtime import FlowR2VShotRuntime;"
+        "from film_pipeline.store import SQLiteStore;"
+        "runtime = FlowR2VShotRuntime("
+        "SQLiteStore(r'" + str(ROOT / "scratch" / "genericity_probe.sqlite") + "'),"
+        "project_id='11111111-2222-3333-4444-555555555555',"
+        "account_id='genericity-probe');"
+        "assert runtime.RENDER_DROP_PERSISTENCE_THRESHOLD >= 2;"
+        "leaked = [m for m in sys.modules if 'slice0011' in m];"
+        "assert not leaked, leaked;"
+        "print('GENERIC_SEAM_CLEAN')"
+    )
+    completed = subprocess.run([sys.executable, "-c", code], cwd=ROOT,
+                               capture_output=True, text=True, timeout=120)
+    assert completed.returncode == 0, completed.stderr[-600:]
+    assert "GENERIC_SEAM_CLEAN" in completed.stdout
