@@ -20,7 +20,9 @@ RANK = {
     'GENERATE_REQUEST_OBSERVED': 5, 'PROVIDER_RESPONSE_OBSERVED': 6,
     'R2V_RESPONSE_DIAGNOSTICS': 0,
     'PROVIDER_ACCEPTANCE_OBSERVED': 7, 'REMOTE_IDENTITY_OBSERVED': 8,
-    'IDENTITY_BOUND': 9, 'DOWNLOAD_STARTED': 10,
+    'IDENTITY_BOUND': 9, 'RENDER_PENDING_OBSERVED': 9,
+    'RENDER_COMPLETED_OBSERVED': 10, 'ADMITTED_RENDER_DROPPED': 10,
+    'DOWNLOAD_STARTED': 10,
     'DOWNLOAD_VALIDATED': 11, 'ASSET_PERSISTED': 12,
 }
 FIELDS = {
@@ -39,6 +41,9 @@ FIELDS = {
     'PROVIDER_ACCEPTANCE_OBSERVED': {'request_hash', 'provider_reference', 'contract'},
     'REMOTE_IDENTITY_OBSERVED': {'output_id', 'method'},
     'IDENTITY_BOUND': {'output_id', 'binding_hash'},
+    'RENDER_PENDING_OBSERVED': {'output_id', 'basis'},
+    'RENDER_COMPLETED_OBSERVED': {'output_id', 'basis'},
+    'ADMITTED_RENDER_DROPPED': {'output_id', 'basis'},
     'DOWNLOAD_STARTED': {'output_id', 'intent_hash'},
     'DOWNLOAD_VALIDATED': {'output_id', 'sha256', 'receipt_hash'},
     'ASSET_PERSISTED': {'output_id', 'asset_id'},
@@ -146,6 +151,16 @@ def recovery_decision(job, facts, *, bound=False, acquired=False):
     if acquired:
         return RecoveryDecision('ACQUIRED', 'RECOVER_ASSET', strength=strength)
     if bound:
+        # Render lifecycle states refine the post-binding window. A drop never
+        # re-arms mutation: it routes to an Owner repair decision. A pending
+        # render is pending evidence, never failure or retry authority.
+        if 'ADMITTED_RENDER_DROPPED' in kinds:
+            return RecoveryDecision('ADMITTED_RENDER_DROPPED', 'REPAIR_DECISION_REQUIRED',
+                                    strength=strength)
+        if 'RENDER_COMPLETED_OBSERVED' in kinds:
+            return RecoveryDecision('RENDER_COMPLETED', 'ACQUIRE_ONLY', strength=strength)
+        if 'RENDER_PENDING_OBSERVED' in kinds:
+            return RecoveryDecision('RENDER_PENDING', 'RECONCILE_ONLY', strength=strength)
         return RecoveryDecision('OUTPUT_BOUND', 'ACQUIRE_ONLY', strength=strength)
     if 'REMOTE_IDENTITY_OBSERVED' in kinds:
         return RecoveryDecision('OUTPUT_OBSERVED', 'BIND_EXACT_IDENTITY', strength=strength)

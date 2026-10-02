@@ -257,6 +257,15 @@ class FlowReferenceRpcSession:
         except Exception:
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_READ_UNAVAILABLE") from None
 
+    def media_payload(self, media_id: str):
+        """One read-only as29s payload observation for an exact media id.
+
+        ``None`` means the qualified RPC frame carried a null payload — the
+        observed pending/not-yet-resolved signature. A non-None payload is
+        returned uninterpreted; only the flow_media contract decides whether
+        it is a usable media resource. No bytes are downloaded here."""
+        return self.rpc(contract.RPC_MEDIA, contract.build_media(media_id))
+
     def media(self, media_id: str, kind: str) -> bytes | None:
         return self.bound_media(media_id, kind).data
 

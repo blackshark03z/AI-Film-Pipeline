@@ -35,8 +35,8 @@ from .flow_r2v_boundary import FlowR2VBoundary, MutationIntent
 from .live_runtime import Asset, LiveRuntimeExecutor, make_provider_job
 from .providers import flow_rpc_contract as contract
 from .providers.flow_canonical_ui import OneGenerateGuard
-from .providers.flow_media import bind_media_bytes, parse_media_resource
-from .providers.flow_reference_rpc import FlowReferenceRpcSession
+from .providers.flow_media import MediaResource, bind_media_bytes, parse_media_resource
+from .providers.flow_reference_rpc import FlowReferenceRpcDrift, FlowReferenceRpcSession
 from .providers.flow_reference_upload import OwnerAmbiguityGate
 from .providers.flow_r2v_prompt import FlowR2VPrompt, film_marker
 from .store import SQLiteStore
@@ -249,6 +249,25 @@ def qualify_flow_catalog_source(session) -> QualifiedFlowCatalogCapability:
     wrappers and unqualified sessions fail closed here.
     """
     return QualifiedFlowCatalogCapability(session)
+
+
+@dataclass(frozen=True)
+class RenderState:
+    """One read-only render-lifecycle observation for one owned output.
+
+    ``payload``/``resource`` are transport data for the completed case (they
+    enable exact acquisition without a second as29s read) and are never
+    persisted as identity; durable truth lives in the dispatch journal.
+    """
+
+    state: str
+    output_id: str
+    resource: MediaResource | None
+    payload: object
+
+
+# Journal diagnostics are bounded structural tokens, never raw transport text.
+_DIAGNOSTIC_RE = re.compile(r'[A-Za-z0-9_:.-]{1,300}')
 
 
 @dataclass(frozen=True)
@@ -566,6 +585,90 @@ class FlowR2VShotRuntime:
         if verified.media.evidence['sha256'] != assets[0].sha256:
             raise OwnerAmbiguityGate('FLOW_R2V_ACQUIRED_BYTES_DRIFT')
         return assets[0]
+
+    # --- Render lifecycle observation (read-only, post-ownership) -------------
+
+    def observe_render_state(self, frozen: FrozenR2VShot, *, session) -> RenderState:
+        """One read-only render-state reconciliation for the owned output.
+
+        Reachable only after durable output ownership (exactly one bound
+        output). The read transport must be an exact fresh
+        ``FlowReferenceRpcSession`` for the runtime's project; catalog/media
+        reads bind to the concrete class implementations so wrappers and
+        shadowing cannot replace the qualified read semantics.
+
+        Classification per qualified observation:
+
+        - as29s media resource parses for the bound id/project →
+          ``RENDER_COMPLETED``;
+        - as29s null payload (the observed pending signature) with the owned
+          row still present in a qualified fresh catalog read →
+          ``RENDER_PENDING`` — pending evidence, never failure, never retry
+          authority;
+        - null payload with the owned row absent from that qualified read →
+          ``ADMITTED_RENDER_DROPPED`` — terminal render failure routed to an
+          Owner RepairDecision, never to redispatch;
+        - any unqualified read (RPC drift, non-conforming non-null payload,
+          catalog baseline drift) → ``RENDER_UNOBSERVABLE`` and a durable
+          ``OBSERVATION_FAILURE``; the previous state stands.
+
+        Re-observation is idempotent: identical observations dedupe in the
+        immutable journal; state transitions append.
+        """
+        job_id = frozen.job.provider_job_id
+        job = self.store.read_provider_job(job_id)
+        bindings = self.store.read_output_bindings(job_id)
+        if len(bindings) != 1:
+            raise OwnerAmbiguityGate('FLOW_R2V_OUTPUT_NOT_UNIQUE')
+        output_id = bindings[0]['output_id']
+        if type(session) is not FlowReferenceRpcSession:
+            raise OwnerAmbiguityGate('FLOW_R2V_RENDER_SOURCE_UNQUALIFIED')
+        if session.project_id != self.project_id:
+            raise OwnerAmbiguityGate('FLOW_R2V_RENDER_SOURCE_PROJECT_MISMATCH')
+
+        def unobservable(diagnostic: str) -> RenderState:
+            if not _DIAGNOSTIC_RE.fullmatch(diagnostic):
+                diagnostic = 'RENDER_READ_UNAVAILABLE'
+            self.store.record_dispatch_fact(job_id, 'OBSERVATION_FAILURE',
+                                            {'diagnostic': diagnostic})
+            return RenderState(state='RENDER_UNOBSERVABLE', output_id=output_id,
+                               resource=None, payload=None)
+
+        try:
+            payload = FlowReferenceRpcSession.media_payload(session, output_id)
+        except FlowReferenceRpcDrift as error:
+            return unobservable(str(error))
+        if payload is not None:
+            try:
+                resource = parse_media_resource(payload, media_id=output_id,
+                                                project_id=self.project_id, kind='video')
+            except contract.ContractError:
+                return unobservable('FLOW_R2V_MEDIA_PAYLOAD_UNQUALIFIED')
+            self.store.record_dispatch_fact(job_id, 'RENDER_COMPLETED_OBSERVED',
+                {'output_id': output_id, 'basis': 'as29s_media_resolved'})
+            return RenderState(state='RENDER_COMPLETED', output_id=output_id,
+                               resource=resource, payload=payload)
+        # Media not resolved yet: the qualified fresh catalog read decides
+        # between still-pending and admitted-then-dropped.
+        try:
+            records = FlowReferenceRpcSession.catalog(session)
+            fingerprint = getattr(session, 'catalog_fingerprint', None)
+            if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+                raise FlowReferenceRpcDrift('FLOW_R2V_CATALOG_BASELINE_DRIFT')
+            if session.project_id != self.project_id:
+                raise FlowReferenceRpcDrift('FLOW_R2V_RENDER_SOURCE_PROJECT_MISMATCH')
+        except FlowReferenceRpcDrift as error:
+            return unobservable(str(error))
+        row_present = any(row[0].lower() == output_id.lower() for row in records)
+        if row_present:
+            self.store.record_dispatch_fact(job_id, 'RENDER_PENDING_OBSERVED',
+                {'output_id': output_id, 'basis': 'as29s_null_media_row_present'})
+            return RenderState(state='RENDER_PENDING', output_id=output_id,
+                               resource=None, payload=None)
+        self.store.record_dispatch_fact(job_id, 'ADMITTED_RENDER_DROPPED',
+            {'output_id': output_id, 'basis': 'as29s_null_media_row_absent'})
+        return RenderState(state='ADMITTED_RENDER_DROPPED', output_id=output_id,
+                           resource=None, payload=None)
 
     # --- Restart classification -------------------------------------------------
 
