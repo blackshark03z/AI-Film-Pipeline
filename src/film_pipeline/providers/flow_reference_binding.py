@@ -184,7 +184,8 @@ def adopt_existing_reference(store, session, *, account_id: str, media_id: str,
     media = session.bound_media(media_id, 'image')
     directory = Path(reference_dir)
     directory.mkdir(parents=True, exist_ok=True)
-    local_path = directory / (media.evidence['sha256'] + '.png')
+    suffix = '.png' if media.evidence['mime_type'] == 'image/png' else '.jpg'
+    local_path = directory / (media.evidence['sha256'] + suffix)
     if local_path.exists():
         if local_path.read_bytes() != media.data:
             raise OwnerAmbiguityGate('REFERENCE_ADOPTION_BYTES_CONFLICT')

@@ -557,19 +557,28 @@ class SQLiteStore:
         if not isinstance(asset, Asset) or asset.origin != "reference" or asset.asset_type != "image":
             raise ValueError("image reference Asset required")
         if (asset.source_attempt_id is not None or asset.provider_job_id is not None
-                or asset.provider_asset_id is not None or asset.mime_type != "image/png"):
-            raise ValueError("reference Asset must have local PNG provenance only")
+                or asset.provider_asset_id is not None
+                or asset.mime_type not in ("image/png", "image/jpeg")):
+            raise ValueError("reference Asset must have local PNG/JPEG provenance only")
         path = Path(asset.uri_or_path)
         if not path.is_absolute() or not path.is_file():
             raise ValueError("reference Asset local file missing")
-        with path.open("rb") as stream:
-            header = stream.read(24)
-        if (len(header) != 24 or header[:8] != b"\x89PNG\r\n\x1a\n"
-                or header[12:16] != b"IHDR"):
-            raise ValueError("reference Asset is not PNG")
-        width, height = struct.unpack(">II", header[16:24])
-        if (not width or not height or (asset.width, asset.height) != (width, height)
-                or asset.file_size != path.stat().st_size or file_sha256(path) != asset.sha256
+        if asset.mime_type == "image/png":
+            with path.open("rb") as stream:
+                header = stream.read(24)
+            if (len(header) != 24 or header[:8] != b"\x89PNG\r\n\x1a\n"
+                    or header[12:16] != b"IHDR"):
+                raise ValueError("reference Asset is not PNG")
+            width, height = struct.unpack(">II", header[16:24])
+            if (not width or not height or (asset.width, asset.height) != (width, height)):
+                raise ValueError("reference Asset PNG metadata mismatch")
+        else:
+            from PIL import Image
+            with Image.open(path) as image:
+                if (Image.MIME.get(image.format) != "image/jpeg"
+                        or (asset.width, asset.height) != image.size):
+                    raise ValueError("reference Asset JPEG metadata mismatch")
+        if (asset.file_size != path.stat().st_size or file_sha256(path) != asset.sha256
                 or not asset.rights_metadata.get("source_kind")):
             raise ValueError("reference Asset bytes or provenance mismatch")
         validate_contract("asset", asset.model_dump(mode="json",
