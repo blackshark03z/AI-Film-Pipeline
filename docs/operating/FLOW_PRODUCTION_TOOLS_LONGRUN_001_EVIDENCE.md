@@ -4,7 +4,9 @@
 **Worktree:** `D:\AI FILM MAKER\AI-Film-Pipeline`
 **Branch:** `zcode/flow-production-tools-longrun-001`
 **Base (package freeze):** `510cc892386c1b7a8b3f66ab7a6396e9522b8c90`
-**Delivery HEAD:** `45c004d` (this document lands in the final delivery commit)
+**Delivery:** the branch tip of `zcode/flow-production-tools-longrun-001` at
+delivery time — the commit carrying this record (verify with `git log -1`).
+The full checkpoint chain from base `510cc89` is in §2.
 **SoT HEAD:** `e758f83` (ancestor, unchanged) · **Evidence HEAD:** `29018d3` (ancestor, unchanged)
 
 ---
