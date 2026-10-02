@@ -118,6 +118,21 @@ class SceneState:
         self.path.write_text(encoded, encoding="utf-8")
 
 
+def plan_hash(plan: dict) -> str:
+    from hashlib import sha256 as _sha256
+
+    import json as _json
+
+    return _sha256(_json.dumps(_canonical_plan(plan), sort_keys=True,
+                               separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def _canonical_plan(plan: dict):
+    return {"scene_id": plan["scene_id"],
+            "shots": [{"shot_id": s["shot_id"], "fixture": s["fixture"],
+                       "continuity": s["continuity"]} for s in plan["shots"]]}
+
+
 def execute_scene(plan: dict, state_dir: Path,
                   run_shot: Callable[[dict, Path, dict], dict]) -> dict:
     """Execute a validated scene plan in deterministic order.
@@ -128,9 +143,22 @@ def execute_scene(plan: dict, state_dir: Path,
     terminal gate are never re-executed; an EXECUTING shot (crashed mid-run)
     is re-entered once so its own resume logic applies (the per-shot runtime
     resumes read-only for consumed authority and never re-releases).
+
+    The plan identity is pinned in the durable scene state at first
+    execution: a plan whose shots/order/continuity change after any consumed
+    mutation is refused (restart may resume the frozen plan, never swap it).
     """
     plan = validate_scene_plan(plan)
     state = SceneState(state_dir)
+    identity = plan_hash(plan)
+    pinned = state._state.get("plan_sha256")
+    if pinned is None:
+        state._state["plan_sha256"] = identity
+        state.save()
+    elif pinned != identity:
+        raise ValueError(
+            "scene plan changed after first execution; frozen plan identity "
+            "mismatch — resume the frozen plan or start a new scene")
     results = []
     for shot in plan["shots"]:
         shot_id = shot["shot_id"]

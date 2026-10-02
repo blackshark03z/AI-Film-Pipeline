@@ -5,6 +5,7 @@ or filesystem side effects beyond the durable scene state. The scene layer
 must accept N >= 1, execute in deterministic plan order, never re-execute a
 terminal shot, and never declare scene completion with an unproven shot.
 """
+import asyncio
 import json
 import sys
 from pathlib import Path
@@ -13,6 +14,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
+from film_pipeline.live_runtime import LiveRuntimeExecutor
+from film_pipeline.store import SQLiteStore
 from scene_runner import SceneState, execute_scene, load_plan, validate_scene_plan
 
 
@@ -90,12 +93,19 @@ def test_scene_completion_requires_every_shot_proven(tmp_path):
 
 def test_restart_mid_scene_resumes_from_durable_truth(tmp_path):
     calls = []
-    execute_scene(plan(2), tmp_path, fake_run_shot({}, calls))
+    full = plan(3)
+
+    def crashing_run_shot(shot, state_dir, state):
+        if shot["shot_id"] == "SHOT_3":
+            # Model process loss: EXECUTING was durably recorded, no result.
+            raise RuntimeError("process lost mid-shot")
+        return fake_run_shot({}, calls)(shot, state_dir, state)
+
+    with pytest.raises(RuntimeError):
+        execute_scene(full, tmp_path, crashing_run_shot)
     assert calls == ["SHOT_1", "SHOT_2"]
-    # Crash marker: shot 3 EXECUTING without a durable result file.
-    state = SceneState(tmp_path)
-    state.record("SHOT_3", "EXECUTING")
-    result = execute_scene(plan(3), tmp_path, fake_run_shot({}, calls))
+    assert SceneState(tmp_path).status("SHOT_3") == "EXECUTING"
+    result = execute_scene(full, tmp_path, fake_run_shot({}, calls))
     # The EXECUTING shot is re-entered exactly once (its own resume logic);
     # proven shots are not re-executed.
     assert calls == ["SHOT_1", "SHOT_2", "SHOT_3"]
@@ -116,3 +126,74 @@ def test_load_plan_reads_and_validates(tmp_path):
     path.write_text(json.dumps({"scene_id": "X"}), encoding="utf-8")
     with pytest.raises(ValueError):
         load_plan(path)
+
+
+def test_plan_change_after_execution_is_refused(tmp_path):
+    calls = []
+    execute_scene(plan(2), tmp_path, fake_run_shot({}, calls))
+    changed = plan(2)
+    changed["shots"][1]["fixture"] = "fixtures/OTHER.json"
+    with pytest.raises(ValueError, match="plan changed"):
+        execute_scene(changed, tmp_path, fake_run_shot({}, calls))
+
+
+def test_shot_order_change_after_execution_is_refused(tmp_path):
+    calls = []
+    execute_scene(plan(3), tmp_path, fake_run_shot({}, calls))
+    reordered = plan(3)
+    reordered["shots"][1], reordered["shots"][2] =         reordered["shots"][2], reordered["shots"][1]
+    with pytest.raises(ValueError, match="plan changed"):
+        execute_scene(reordered, tmp_path, fake_run_shot({}, calls))
+
+
+def test_rough_cut_receipt_detects_tampered_bytes(tmp_path):
+    from film_pipeline.editorial_runner import real_rough_cut
+    from test_live_runtime import FakeTransport, make_executor
+    import asyncio
+
+    # Minimal proven chain: one shot acquired, QC-passed take persisted.
+    class EightSecondTransport(FakeTransport):
+        async def fetch(self, job, output_id, destination):
+            import subprocess as _sp
+
+            completed = _sp.run(["ffmpeg", "-y", "-f", "lavfi", "-i",
+                                 "color=c=black:s=16x16:d=8", "-an",
+                                 str(destination)], capture_output=True,
+                                text=True, check=False)
+            if completed.returncode:
+                raise RuntimeError("ffmpeg fixture failed")
+            return destination
+
+    executor, store, attempt, job = make_executor(tmp_path, FakeTransport())
+    asyncio.run(executor.submit_once(job.provider_job_id))
+    executor2 = LiveRuntimeExecutor(store, EightSecondTransport())
+    asyncio.run(executor2.reconcile(job.provider_job_id))
+    store.bind_output(job.provider_job_id, "remote-output-1")
+    destination = tmp_path / "videos"
+    assets = asyncio.run(executor2.download_assets(job.provider_job_id, destination))
+    from film_pipeline.live_runtime import Asset as AssetModel
+    from film_pipeline.qc import (QCStore, derive_disposition, derive_report,
+                                  evidence, human_decision, technical_evidence)
+    from film_pipeline.core import load_shot
+    spec = load_shot(Path(__file__).resolve().parents[1] / "fixtures/flow_canary.json")
+    asset = assets[0]
+    rows, _meta = technical_evidence(spec, asset)
+    human = human_decision(asset=asset, reviewer_id="test", action="APPROVE",
+                           visual_pass=True, continuity_pass=True,
+                           editorial_pass=True)
+    rows = list(rows) + [evidence(asset=asset, evaluator_type="human",
+        evaluator_version="t-v1", gate=g, criterion="c", observation="o",
+        verdict="pass") for g in ("visual", "continuity", "editorial")]
+    record = derive_report(asset, rows, human)
+    disposition = derive_disposition(spec.shot_id, asset, record, human)
+    qc_store = QCStore(SQLiteStore(store.path))
+    qc_store.initialize()
+    _record, persisted_take = qc_store.save(asset, rows, human)
+    out = real_rough_cut(store.path, project_id="rough_test",
+                         selected_take_ids=[persisted_take.selected_take_id],
+                         output_dir=tmp_path / "cut")
+    rough_path = Path(out["output_path"])
+    before = rough_path.read_bytes()
+    rough_path.write_bytes(before[:-1] + bytes([before[-1] ^ 0xFF]))
+    import hashlib
+    assert hashlib.sha256(rough_path.read_bytes()).hexdigest() != out["output_sha256"]
