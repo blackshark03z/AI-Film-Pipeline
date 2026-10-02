@@ -243,6 +243,9 @@ def continuity_upload(shot_id: str, from_shot: str) -> dict:
         return [e for e in ledger["bindings"] if e["for_shot"] == shot_id][0]
     if len(ledger["bindings"]) >= MAX_CONTINUITY_UPLOADS:
         raise OwnerAmbiguityGate("CONTINUITY_UPLOAD_BUDGET_EXHAUSTED")
+    from mutation_authority import MutationAuthority
+    MutationAuthority(SCENE_DIR, "FLOW-SCENE-SCALE-003").check_mutation_allowed(
+        "continuity_upload")
     store = SQLiteStore(STORE_PATH)
     store.initialize()
     # Source: the acquired, exactly-hashed Shot-N Asset from the scene store.
@@ -324,12 +327,17 @@ def continuity_upload(shot_id: str, from_shot: str) -> dict:
 
 def run_scene_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
     """Execute ONE planned shot through the proven per-shot runtime."""
+    from mutation_authority import MutationAuthority
+
     tag = shot["shot_id"]
     shot_dir = Path(state_dir) / f"shot_{tag}"
     shot_dir.mkdir(parents=True, exist_ok=True)
     result_path = shot_dir / "result.json"
     if result_path.exists():
         return json.loads(result_path.read_text(encoding="utf-8"))
+    # The Owner ambiguity latch gates EVERY mutation path of this scope.
+    authority = MutationAuthority(SCENE_DIR, "FLOW-SCENE-SCALE-003")
+    authority.check_mutation_allowed("primary_generate")
     store = SQLiteStore(STORE_PATH)
     store.initialize()
     ledger_data = ledger()
@@ -542,6 +550,7 @@ def run_scene_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
         report["diagnostic"] = str(exc)
         if report.get("observed_generate_requests"):
             report["gate"] = "OWNER_AMBIGUITY_GATE"
+            authority.latch("GENERATE_AMBIGUITY", str(exc))
             try:
                 store.record_dispatch_fact(frozen.job.provider_job_id,
                     "AMBIGUOUS_EVIDENCE", {"diagnostic": "scene_owner_gate"})
