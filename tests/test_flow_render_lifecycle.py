@@ -263,3 +263,78 @@ def test_production_seam_never_references_direct_mutation_path():
         assert 'MZZa6b' not in source, module.__name__
         assert 'RPC_VIDEO' not in source, module.__name__
         assert 'build_video' not in source, module.__name__
+
+
+# 12: fresh-process restart while RENDER_PENDING keeps reconcile-only and
+#     never re-arms the consumed dispatch budget.
+def test_restart_during_render_pending_stays_reconcile_only(runtime_env, monkeypatch):
+    import sqlite3
+
+    from film_pipeline.flow_r2v_runtime import FlowR2VShotRuntime
+    env = runtime_env
+    owned_job(env)
+    env.session._offline_rows = [[OUTPUT_ID, env.runtime.project_id, 'IMAGE',
+                                  'CAE', None, None, None]]
+    patch_media_read(monkeypatch, None)
+    assert env.runtime.observe_render_state(env.frozen, session=env.session).state == \
+        'RENDER_PENDING'
+    # Simulate a fresh process: a brand-new runtime over the same durable store.
+    restarted = FlowR2VShotRuntime(env.store, project_id=env.runtime.project_id,
+                                   account_id=env.runtime.account_id)
+    decision = restarted.recovery(env.frozen)
+    assert (decision.classification, decision.action) == ('RENDER_PENDING', 'RECONCILE_ONLY')
+    assert decision.may_submit is False
+    with pytest.raises(OwnerAmbiguityGate, match='ALREADY_CONSUMED'):
+        restarted.reserve(env.frozen, attestation=env.attestation,
+                          evidence_dir=env.attestation_dir)
+
+
+# 13: fresh-process restart after a durable drop routes to a repair decision
+#     and can never re-enter the mutation path.
+def test_restart_after_drop_routes_to_repair(runtime_env, monkeypatch):
+    from film_pipeline.flow_r2v_runtime import FlowR2VShotRuntime
+    env = runtime_env
+    owned_job(env)
+    env.session._offline_rows = []
+    patch_media_read(monkeypatch, None)
+    assert env.runtime.observe_render_state(env.frozen, session=env.session).state == \
+        'ADMITTED_RENDER_DROPPED'
+    restarted = FlowR2VShotRuntime(env.store, project_id=env.runtime.project_id,
+                                   account_id=env.runtime.account_id)
+    decision = restarted.recovery(env.frozen)
+    assert (decision.classification, decision.action) == (
+        'ADMITTED_RENDER_DROPPED', 'REPAIR_DECISION_REQUIRED')
+    assert decision.may_submit is False
+    with pytest.raises(OwnerAmbiguityGate, match='ALREADY_CONSUMED'):
+        reserve(env)
+
+
+# 14: the dispatch journal is tamper-proof at the database level — a render
+#     fact cannot be modified or deleted in place.
+def test_render_fact_tamper_breaks_journal_integrity(runtime_env, monkeypatch):
+    import sqlite3
+
+    env = runtime_env
+    owned_job(env)
+    env.session._offline_rows = [[OUTPUT_ID, env.runtime.project_id, 'IMAGE',
+                                  'CAE', None, None, None]]
+    patch_media_read(monkeypatch, None)
+    env.runtime.observe_render_state(env.frozen, session=env.session)
+    job_id = env.frozen.job.provider_job_id
+    with sqlite3.connect(env.store.path) as connection:
+        row = connection.execute(
+            "SELECT payload FROM dispatch_journal WHERE job_id=? AND kind=?",
+            (job_id, 'RENDER_PENDING_OBSERVED')).fetchone()
+        assert row is not None
+        tampered = row[0].replace('as29s_null_media_row_present', 'tampered_basis')
+        with pytest.raises(sqlite3.IntegrityError):
+            connection.execute(
+                "UPDATE dispatch_journal SET payload=? WHERE job_id=? AND kind=?",
+                (tampered, job_id, 'RENDER_PENDING_OBSERVED'))
+        with pytest.raises(sqlite3.IntegrityError):
+            connection.execute(
+                "DELETE FROM dispatch_journal WHERE job_id=? AND kind=?",
+                (job_id, 'RENDER_PENDING_OBSERVED'))
+    # The untouched journal still reads back exactly.
+    kinds = [f['kind'] for f in env.store.read_dispatch_facts(job_id)]
+    assert 'RENDER_PENDING_OBSERVED' in kinds
