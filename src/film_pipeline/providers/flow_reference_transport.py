@@ -166,8 +166,17 @@ class FlowReferenceTransport:
         return self.store.complete(progress, media_id, comparison['provider_media_sha256'],
                                    verification_hash=digest)
 
-    def reconcile_only(self, asset, *, expected_media_id=None):
-        """No upload path exists here. Missing catalog rows never grant upload."""
+    def reconcile_only(self, asset, *, expected_media_id=None,
+                       preexisting_ids=None):
+        """No upload path exists here. Missing catalog rows never grant upload.
+
+        ``preexisting_ids`` (optional): provider media ids durably proven to
+        exist BEFORE the upload — e.g. the frozen pre-dispatch catalog
+        baseline. A row whose readback is unresolved but whose identity is
+        proven pre-existing cannot be the uploaded media, so it does not
+        block the unique-match confirmation. Any unresolved row NOT covered
+        by that durable evidence still blocks (default strict behavior when
+        ``preexisting_ids`` is None)."""
         source = self._source(asset)
         key = _key('flow_veo', self.session.project_id, self.account_id, asset)
         progress = self.store.read_progress(key)
@@ -219,11 +228,15 @@ class FlowReferenceTransport:
                 'unresolved_count': len(unresolved)})
             if len(matches) > 1:
                 raise OwnerAmbiguityGate('multiple strong reference media matches')
+            unresolved_blocking = [u for u in unresolved
+                                   if preexisting_ids is None
+                                   or u.lower() not in {p.lower() for p in preexisting_ids}]
             signature = sha256({'catalog_ids': evidence['catalog_ids'],
                 'matches': matches, 'unresolved': unresolved,
                 'candidate_hashes': [c.get('comparison', {}).get('provider_media_sha256')
                                      for c in candidates]})
-            if len(matches) == 1 and not unresolved and (stable == signature or self.probes == 1):
+            if len(matches) == 1 and not unresolved_blocking and \
+                    (stable == signature or self.probes == 1):
                 if expected_media_id is not None and matches[0] != expected_media_id:
                     raise OwnerAmbiguityGate('unique reference match disagrees with Owner evidence')
                 self.store.record_identified(key, matches[0], method='catalog_strong_match',

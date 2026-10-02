@@ -188,18 +188,23 @@ def reference_binding_for(shot: dict) -> dict:
     if kind == "last_frame":
         ledger_path = SCENE_DIR / "continuity_ledger.json"
         entries = json.loads(ledger_path.read_text(encoding="utf-8"))["bindings"]
-        matches = [e for e in entries if e["for_shot"] == shot["shot_id"]]
+        binding_for = shot["continuity"].get("binding_for", shot["shot_id"])
+        matches = [e for e in entries if e["for_shot"] == binding_for]
         if len(matches) != 1:
             raise OwnerAmbiguityGate(
                 f"CONTINUITY_BINDING_MISSING for {shot['shot_id']}")
         entry = matches[0]
+        # The runtime consumes the ADOPTED attestation (the scene-store
+        # readback binding of the uploaded media); the upload attestation
+        # remains in the dedicated continuity store as upload provenance.
         return {"media_id": entry["provider_media_id"],
                 "asset_id": entry["adopted_asset_id"],
-                "attestation_id": entry["attestation_id"],
+                "attestation_id": entry["adopted_attestation_id"],
                 "mechanism": "last_frame",
                 "from_shot": shot["continuity"]["from_shot"],
                 "source_frame_sha256": entry["frame_sha256"],
-                "upload_store": entry["upload_store"]}
+                "upload_store": entry["upload_store"],
+                "upload_attestation_id": entry["attestation_id"]}
     raise OwnerAmbiguityGate("CONTINUITY_KIND_UNQUALIFIED")
 
 
@@ -272,11 +277,16 @@ def continuity_upload(shot_id: str, from_shot: str) -> dict:
     upload_store.save_reference_asset(frame_asset)
     ledger["uploads"] = ledger.get("uploads", [])
     write_durable(SCENE_DIR / f"continuity_frame_{shot_id}.json", frame)
+    write_durable(upload_store_path.parent / "frame_asset.json",
+                  frame_asset.model_dump(mode="json"))
     binding = None
     try:
         with open_read_session() as session:
+            from film_pipeline.providers.flow_reference_upload import (
+                ReferenceUploadStore)
             transport = FlowReferenceTransport(
-                upload_store, session, account_id=ACCOUNT_ID,
+                ReferenceUploadStore(upload_store_path), session,
+                account_id=ACCOUNT_ID,
                 evidence_dir=upload_store_path.parent / "continuity_evidence",
                 interval_s=0, probes=2)
             receipt = transport.ensure_verified(frame_asset)
@@ -391,8 +401,14 @@ def run_scene_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
                     if "accounts.google" in page.url:
                         raise OwnerAuthRequired("OWNER_AUTH_REQUIRED: sign-in lost")
                     ui_session = SimpleNamespace(page=page, project_id=PROJECT_ID)
-                    ui = prepare_inputs(ui_session, records,
-                                        media_id=binding["media_id"], prompt=prompt)
+                    try:
+                        ui = prepare_inputs(ui_session, records,
+                                            media_id=binding["media_id"],
+                                            prompt=prompt)
+                    except Exception:
+                        page.screenshot(path=str(
+                            shot_dir / "ui_prepare_failure.png"))
+                        raise
                     report["ui_preflight"] = ui
                     response_holder = {}
 
@@ -556,10 +572,111 @@ def _attestation_path(binding: dict) -> Path:
     return _attestation_dir(binding) / (binding["attestation_id"] + ".json")
 
 
+def continuity_reconcile(shot_id: str) -> dict:
+    """Read-only continuation for an armed-but-unresolved continuity upload.
+
+    The upload external effect may exist (REQUEST_ARMED + HTTP 200 observed).
+    The sanctioned recovery is bounded read-only catalog reconciliation:
+    probe every qualified image row, require a UNIQUE strong content match
+    across two stable probes, then verify by exact readback. Never a
+    re-upload. If the bounded probes cannot uniquely resolve the identity,
+    the OWNER_AMBIGUITY_GATE stands and mutations stop."""
+    ledger_path = SCENE_DIR / "continuity_ledger.json"
+    ledger = json.loads(ledger_path.read_text(encoding="utf-8"))         if ledger_path.exists() else {"bindings": [], "uploads": []}
+    from film_pipeline.providers.flow_reference_upload import (
+        ReferenceUploadStore, _key)
+    from film_pipeline.live_runtime import Asset
+    frame_result = json.loads((SCENE_DIR / f"continuity_frame_{shot_id}.json")
+                              .read_text(encoding="utf-8"))
+    frame_asset = Asset.model_validate(json.loads(
+        (SCENE_DIR / "frame_asset.json").read_text(encoding="utf-8")))
+    # Locate the armed reservation store for this frame asset (the failed
+    # upload may predate the ledger entry; the dedicated store binds it).
+    candidates = sorted(SCENE_DIR.glob("continuity_upload_*.sqlite"))
+    upload_store_path = None
+    for candidate in candidates:
+        reservations = ReferenceUploadStore(candidate).events(
+            _key('flow_veo', PROJECT_ID, ACCOUNT_ID, frame_asset))
+        if reservations:
+            upload_store_path = candidate
+            break
+    if upload_store_path is None:
+        raise SystemExit("no armed continuity reservation for this frame asset")
+    upload_store = SQLiteStore(upload_store_path)
+    store = SQLiteStore(STORE_PATH)
+    store.initialize()
+    # Rows durably proven to pre-exist the upload (the frozen pre-dispatch
+    # baseline of the scene's first shot) cannot be the uploaded media, so a
+    # permanently unreadable baseline row must not block unique matching.
+    shot1 = json.loads((SCENE_DIR / "shot_SCENE003_SHOT_1" / "frozen_intent.json")
+                       .read_text(encoding="utf-8"))
+    preexisting_ids = set(shot1["pre_dispatch_snapshot"]["catalog_ids"])
+    attempts = 0
+    resolved = None
+    window = time.monotonic() + 420
+    while time.monotonic() < window and resolved is None:
+        attempts += 1
+        try:
+            with open_read_session() as session:
+                transport = FlowReferenceTransport(
+                    ReferenceUploadStore(upload_store_path), session,
+                    account_id=ACCOUNT_ID,
+                    evidence_dir=upload_store_path.parent / "continuity_evidence",
+                    interval_s=5, probes=2)
+                resolved = transport.reconcile_only(frame_asset,
+                                                    preexisting_ids=preexisting_ids)
+        except OwnerAmbiguityGate as exc:
+            message = str(exc)
+            print(json.dumps({"stage": "continuity_reconcile_pending",
+                              "attempt": attempts, "diagnostic": message}),
+                  flush=True)
+            if "multiple strong" in message:
+                raise
+            time.sleep(30.0)
+        except FlowReferenceRpcDrift as exc:
+            print(json.dumps({"stage": "continuity_reconcile_read_drift",
+                              "attempt": attempts, "diagnostic": str(exc)}),
+                  flush=True)
+            time.sleep(30.0)
+    if resolved is None:
+        raise OwnerAmbiguityGate(
+            "OWNER_AMBIGUITY_GATE: continuity upload identity unresolved "
+            "after bounded read-only reconciliation; no re-upload")
+    uploaded_media_id = resolved["media_id"]
+    with open_read_session() as session:
+        attestation = attest_existing_reference(
+            upload_store, frame_asset, session, account_id=ACCOUNT_ID,
+            media_id=uploaded_media_id,
+            evidence_dir=upload_store_path.parent / "continuity_evidence")
+        adopted_asset, adopted_attestation = adopt_existing_reference(
+            store, session, account_id=ACCOUNT_ID, media_id=uploaded_media_id,
+            reference_dir=SCENE_DIR / "continuity_reference")
+    binding = {"for_shot": shot_id,
+               "frame_sha256": frame_result["sha256"],
+               "frame_asset_id": frame_asset.asset_id,
+               "upload_store": str(upload_store_path),
+               "upload_receipt_id": resolved["id"],
+               "provider_media_id": uploaded_media_id,
+               "provider_media_sha256": resolved["provider_media_sha256"],
+               "attestation_id": attestation["attestation_id"],
+               "adopted_asset_id": adopted_asset.asset_id,
+               "adopted_attestation_id": adopted_attestation["attestation_id"],
+               "reconciled": True, "at": now()}
+    ledger["bindings"].append(binding)
+    ledger["uploads"].append({"for_shot": shot_id,
+                              "media_id": uploaded_media_id, "at": binding["at"]})
+    (SCENE_DIR / "continuity_ledger.json").write_text(
+        json.dumps(ledger, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(json.dumps({"stage": "continuity_reconciled",
+                      "provider_media_id": uploaded_media_id}), flush=True)
+    return binding
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("command",
-                        choices=["plan", "scene", "continuity", "status"])
+                        choices=["plan", "scene", "continuity",
+                                 "continuity-reconcile", "status"])
     parser.add_argument("--plan", default=str(ROOT / "fixtures/scene_plan_003.json"))
     parser.add_argument("--shot")
     parser.add_argument("--from-shot")
@@ -575,10 +692,14 @@ def main():
             raise SystemExit("continuity requires --shot and --from-shot")
         print(json.dumps(continuity_upload(args.shot, args.from_shot),
                          ensure_ascii=False))
+    elif args.command == "continuity-reconcile":
+        if not args.shot:
+            raise SystemExit("continuity-reconcile requires --shot")
+        print(json.dumps(continuity_reconcile(args.shot), ensure_ascii=False))
     elif args.command == "scene":
         result = scene_runner.execute_scene(plan, SCENE_DIR, run_scene_shot)
         print(json.dumps({k: result[k] for k in ("scene_id", "proven", "total",
-                                                 "scene_complete")}, flush=True))
+                                                 "scene_complete")}), flush=True)
 
 
 if __name__ == "__main__":

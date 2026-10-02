@@ -18,12 +18,15 @@
       }
     },
     {
-      "shot_id": "SCENE003_SHOT_3",
-      "fixture": "fixtures/scene003/scene003_shot_3.json",
+      "shot_id": "SCENE003_SHOT_3C",
+      "fixture": "fixtures/scene003/scene003_shot_3c.json",
       "continuity": {
         "kind": "last_frame",
-        "from_shot": "SCENE003_SHOT_2"
-      }
+        "from_shot": "SCENE003_SHOT_2",
+        "binding_for": "SCENE003_SHOT_3"
+      },
+      "supersedes": "SCENE003_SHOT_3B",
+      "supersedes_provider_job_id": "job_4650908e14b3309c1f0e6b59c3d9a9d104013127cd666286311b5598949d6fcf"
     },
     {
       "shot_id": "SCENE003_SHOT_4",
@@ -49,5 +52,7 @@
         "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
       }
     }
-  ]
+  ],
+  "plan_version": 3,
+  "plan_note": "v2: slot 3 re-planned onto successor SCENE003_SHOT_3B after the original reservation verifiably never released (successor_shot_3b.json); creative spec and acceptance unchanged"
 }

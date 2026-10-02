@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SCENE003_SHOT_3B",
+  "scene_id": "SCENE003_CLOUD_SUMMIT",
+  "dramatic_purpose": "Paused on the ridge, the swordsman slowly draws his blade into the dawn light.",
+  "duration_target_s": 8,
+  "shot_type": "action",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure from waist up, mid-draw",
+      "behavior_state": "slow controlled draw; eyes on the blade"
+    }
+  ],
+  "camera": {
+    "framing": "MS",
+    "height": "eye_level",
+    "lens_intent": "normal",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "hand resting on the hilt",
+    "action_beats": [
+      "hand closes on the hilt",
+      "blade slides free catching dawn light"
+    ],
+    "end": "blade half-drawn, light along the edge"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "same robes",
+      "blade geometry consistent",
+      "dawn light from frame-left"
+    ]
+  }
+}

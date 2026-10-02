@@ -494,3 +494,31 @@ def test_session_bootstrap_failure_stops_before_rpc_and_preserves_safe_auth_gate
     assert session.rpc_call_counts == {}
     browser.close.assert_called_once()
     driver.stop.assert_called_once()
+
+
+def test_reconcile_unique_match_with_baseline_covered_dead_row(tmp_path):
+    """A permanently unreadable row that is durably proven pre-existing
+    (frozen baseline) cannot be the uploaded media; it must not block the
+    unique strong match. An unresolved row WITHOUT that durable evidence
+    still blocks (strict default)."""
+    asset, store, session, transport, key = setup(tmp_path)
+    dead_row = "99999999-8888-7777-6666-555555555555"
+    session.remote = {REMOTE: png(), OTHER: png(color=(9, 9, 9), pattern=False),
+                      dead_row: None}
+    store.reserve_local('flow_veo', PROJECT, ACCOUNT, asset)
+    store.arm_local(key, '0' * 64)
+    store.record_event(key, 'FAILED_AMBIGUOUS', {'diagnostic': 'upload_response_unresolved'})
+    resolved = transport.reconcile_only(asset, preexisting_ids={dead_row})
+    assert resolved['media_id'] == REMOTE
+
+
+def test_reconcile_unknown_dead_row_still_blocks(tmp_path):
+    asset, store, session, transport, key = setup(tmp_path)
+    dead_row = "99999999-8888-7777-6666-555555555555"
+    session.remote = {REMOTE: png(), OTHER: png(color=(9, 9, 9), pattern=False),
+                      dead_row: None}
+    store.reserve_local('flow_veo', PROJECT, ACCOUNT, asset)
+    store.arm_local(key, '0' * 64)
+    store.record_event(key, 'FAILED_AMBIGUOUS', {'diagnostic': 'upload_response_unresolved'})
+    with pytest.raises(OwnerAmbiguityGate, match='unresolved; no re-upload'):
+        transport.reconcile_only(asset)

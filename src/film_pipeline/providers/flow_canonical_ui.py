@@ -99,7 +99,15 @@ def prepare_inputs(session, records, *, media_id, prompt, profile=DEFAULT_NATIVE
         if option.count() != 1:
             raise OwnerAmbiguityGate('UI_REFERENCE_OPTION_NOT_UNIQUE')
         option.click()
-        page.locator('button.detail-add-to-prompt-btn').click()
+        # UI-flow drift (observed 2026-10-02): newly uploaded media may attach
+        # as a chip directly from the picker (quick-add path) without opening
+        # the detail view. Wait for either outcome; the detail-add click runs
+        # only when the detail view is actually offered. The chip identity
+        # verification below is unchanged and remains mandatory.
+        page.locator('button.chip-container img.chip-image, '
+                     'button.detail-add-to-prompt-btn').first.wait_for(timeout=15000)
+        if page.locator('button.detail-add-to-prompt-btn').count():
+            page.locator('button.detail-add-to-prompt-btn').click()
         page.locator('button.chip-container img.chip-image').wait_for(timeout=10000)
         verify_chip(page, media_id)
     verify_settings(page)
