@@ -270,6 +270,44 @@ class RenderState:
 _DIAGNOSTIC_RE = re.compile(r'[A-Za-z0-9_:.-]{1,300}')
 
 
+# --- as29s payload recognition (deterministic, schema-specific) -------------
+
+# Only provider shapes with direct durable evidence are recognized. Anything
+# else is UNKNOWN: never pending, never failure — it cannot advance any
+# render state, streak, or window, and must not be inferred as terminal.
+AS29S_PAYLOAD_KNOWN_PENDING = 'KNOWN_PENDING'
+AS29S_PAYLOAD_COMPLETED = 'COMPLETED'
+AS29S_PAYLOAD_UNKNOWN = 'UNKNOWN'
+
+
+def classify_as29s_payload(payload, *, media_id: str, project_id: str) -> str:
+    """Recognize one as29s payload against the evidenced provider shapes.
+
+    Recognized shapes (exhaustive):
+
+    - ``None`` — the JSON-null pending form: the historically observed
+      pending signature and still evidenced on the current build;
+    - the qualified completed media-resource shape for the exact media
+      id/project (the flow_media contract is the schema check).
+
+    Every other payload — arbitrary objects, malformed structures,
+    superficially similar lists with drifted slots, unknown fields or types —
+    is ``UNKNOWN``. An unknown payload must be surfaced as
+    ``RENDER_UNOBSERVABLE`` (durable observation failure), never treated as
+    pending eventual-consistency evidence and never inferred as a terminal
+    failure. A future provider pending shape may only enter the recognized
+    set with its own captured, constrained structural evidence.
+    """
+    if payload is None:
+        return AS29S_PAYLOAD_KNOWN_PENDING
+    try:
+        parse_media_resource(payload, media_id=media_id, project_id=project_id,
+                             kind='video')
+    except contract.ContractError:
+        return AS29S_PAYLOAD_UNKNOWN
+    return AS29S_PAYLOAD_COMPLETED
+
+
 @dataclass(frozen=True)
 class FrozenR2VShot:
     """The frozen provider intent for one ordinary shot.
@@ -598,8 +636,18 @@ class FlowR2VShotRuntime:
     # terminality the state is RENDER_STATE_UNRESOLVED: may_submit stays false
     # and repair-regeneration authority does not exist.
     RENDER_DROP_PERSISTENCE_THRESHOLD = 3
+    # Terminality additionally requires the disappearance to persist for at
+    # least this many seconds — measured durably from the journal timestamp of
+    # the FIRST disappearance of the current streak to the current qualified
+    # observation. Renders historically complete within ~30–120 s and provider
+    # eventual-consistency windows are expected to be far shorter, so a
+    # disappearance that is both repeatedly observed and at least this old is
+    # durable absence, not a rapid polling burst. Production default; tests
+    # pass explicit observation times instead of sleeping.
+    RENDER_DROP_MIN_ELAPSED_SECONDS = 900
 
-    def observe_render_state(self, frozen: FrozenR2VShot, *, session) -> RenderState:
+    def observe_render_state(self, frozen: FrozenR2VShot, *, session,
+                             observed_at: str | None = None) -> RenderState:
         """One read-only render-state reconciliation for the owned output.
 
         Reachable only after durable output ownership (exactly one bound
@@ -608,28 +656,35 @@ class FlowR2VShotRuntime:
         reads bind to the concrete class implementations so wrappers and
         shadowing cannot replace the qualified read semantics.
 
+        The as29s payload is recognized by ``classify_as29s_payload`` — only
+        the evidenced null pending form and the qualified completed media
+        shape are recognized; anything else is UNKNOWN →
+
         Classification per qualified observation:
 
-        - as29s media resource parses for the bound id/project →
-          ``RENDER_COMPLETED``;
-        - as29s null payload (the observed pending signature) with the owned
-          row still present in a qualified fresh catalog read →
-          ``RENDER_PENDING`` — pending evidence, never failure, never retry
-          authority;
-        - null payload with the owned row absent from that qualified read →
+        - recognized completed media shape → ``RENDER_COMPLETED`` (and a
+          previously recorded drop never downgrades it — resolved media is
+          stronger evidence than a policy-derived absence);
+        - recognized null pending form with the owned row still present in a
+          qualified fresh catalog read → ``RENDER_PENDING`` — pending
+          evidence, never failure, never retry authority;
+        - recognized null pending form with the owned row absent →
           ``RENDER_STATE_UNRESOLVED`` (a single disappearance may be eventual
           consistency or read lag) — until the disappearance persists across
           ``RENDER_DROP_PERSISTENCE_THRESHOLD`` consecutive qualified
-          observations, which records the terminal ``ADMITTED_RENDER_DROPPED``
-          routed to an Owner RepairDecision, never to redispatch;
-        - any unqualified read (RPC drift, non-conforming non-null payload,
-          catalog baseline drift) → ``RENDER_UNOBSERVABLE`` and a durable
-          ``OBSERVATION_FAILURE``; the previous state stands.
+          observations AND at least ``RENDER_DROP_MIN_ELAPSED_SECONDS``
+          measured durably from the journal timestamp of the streak's first
+          disappearance; only then is the terminal ``ADMITTED_RENDER_DROPPED``
+          recorded, routed to an Owner RepairDecision, never to redispatch;
+        - an UNKNOWN payload or any unqualified read (RPC drift, catalog
+          baseline drift) → ``RENDER_UNOBSERVABLE`` plus a durable
+          ``OBSERVATION_FAILURE``; it advances neither the streak counter nor
+          the persistence window, and the previous state stands.
 
-        Re-observation is idempotent for fixed-basis states (identical
-        observations dedupe in the immutable journal); disappearance
-        observations accumulate by design — each qualified read is one more
-        persistence datapoint toward the bounded terminal policy.
+        ``observed_at`` pins the observation time (ISO-8601 UTC); production
+        callers leave it unset (wall clock). Re-observation is idempotent for
+        fixed-basis states; disappearance observations accumulate by design —
+        each qualified read is one more persistence datapoint.
         """
         job_id = frozen.job.provider_job_id
         job = self.store.read_provider_job(job_id)
@@ -641,12 +696,16 @@ class FlowR2VShotRuntime:
             raise OwnerAmbiguityGate('FLOW_R2V_RENDER_SOURCE_UNQUALIFIED')
         if session.project_id != self.project_id:
             raise OwnerAmbiguityGate('FLOW_R2V_RENDER_SOURCE_PROJECT_MISMATCH')
+        if observed_at is not None:
+            # Validate before anything can be journaled with a bad timestamp.
+            self._observation_time(observed_at)
 
         def unobservable(diagnostic: str) -> RenderState:
             if not _DIAGNOSTIC_RE.fullmatch(diagnostic):
                 diagnostic = 'RENDER_READ_UNAVAILABLE'
             self.store.record_dispatch_fact(job_id, 'OBSERVATION_FAILURE',
-                                            {'diagnostic': diagnostic})
+                                            {'diagnostic': diagnostic},
+                                            at=observed_at)
             return RenderState(state='RENDER_UNOBSERVABLE', output_id=output_id,
                                resource=None, payload=None)
 
@@ -654,17 +713,19 @@ class FlowR2VShotRuntime:
             payload = FlowReferenceRpcSession.media_payload(session, output_id)
         except FlowReferenceRpcDrift as error:
             return unobservable(str(error))
-        if payload is not None:
-            try:
-                resource = parse_media_resource(payload, media_id=output_id,
-                                                project_id=self.project_id, kind='video')
-            except contract.ContractError:
-                return unobservable('FLOW_R2V_MEDIA_PAYLOAD_UNQUALIFIED')
+        classification = classify_as29s_payload(payload, media_id=output_id,
+                                                project_id=self.project_id)
+        if classification == AS29S_PAYLOAD_UNKNOWN:
+            return unobservable('FLOW_R2V_MEDIA_PAYLOAD_UNQUALIFIED')
+        if classification == AS29S_PAYLOAD_COMPLETED:
+            resource = parse_media_resource(payload, media_id=output_id,
+                                            project_id=self.project_id, kind='video')
             self.store.record_dispatch_fact(job_id, 'RENDER_COMPLETED_OBSERVED',
-                {'output_id': output_id, 'basis': 'as29s_media_resolved'})
+                {'output_id': output_id, 'basis': 'as29s_media_resolved'},
+                at=observed_at)
             return RenderState(state='RENDER_COMPLETED', output_id=output_id,
                                resource=resource, payload=payload)
-        # Media not resolved yet: the qualified fresh catalog read decides
+        # Recognized pending form: the qualified fresh catalog read decides
         # between still-pending, unresolved, and (only after the bounded
         # persistence policy) admitted-then-dropped.
         try:
@@ -679,49 +740,85 @@ class FlowR2VShotRuntime:
         row_present = any(row[0].lower() == output_id.lower() for row in records)
         if row_present:
             self.store.record_dispatch_fact(job_id, 'RENDER_PENDING_OBSERVED',
-                {'output_id': output_id, 'basis': 'as29s_null_media_row_present'})
+                {'output_id': output_id, 'basis': 'as29s_null_media_row_present'},
+                at=observed_at)
             return RenderState(state='RENDER_PENDING', output_id=output_id,
                                resource=None, payload=None)
-        if any(f['kind'] == 'ADMITTED_RENDER_DROPPED' and f['data'].get('output_id') == output_id
-               for f in self.store.read_dispatch_facts(job_id)):
+        facts = self.store.read_dispatch_facts(job_id)
+        if any(f['kind'] == 'ADMITTED_RENDER_DROPPED'
+               and f['data'].get('output_id') == output_id for f in facts):
             # Terminality is already durably established; further misses add
             # no datapoints and never un-drop the output.
             return RenderState(state='ADMITTED_RENDER_DROPPED', output_id=output_id,
                                resource=None, payload=None)
-        disappearances = self._trailing_disappearance_count(job_id, output_id)
-        attempt = disappearances + 1
-        if attempt >= self.RENDER_DROP_PERSISTENCE_THRESHOLD:
+        if any(f['kind'] == 'RENDER_COMPLETED_OBSERVED'
+               and f['data'].get('output_id') == output_id for f in facts):
+            # Resolved media was observed for this exact output: completion is
+            # never downgraded into a drop by a later catalog disappearance.
+            return RenderState(state='RENDER_COMPLETED', output_id=output_id,
+                               resource=None, payload=None)
+        streak_count, streak_first_at = self._trailing_disappearance_streak(
+            job_id, output_id)
+        candidate_count = streak_count + 1
+        now = self._observation_time(observed_at)
+        window_start = streak_first_at or now
+        elapsed_s = (now - window_start).total_seconds()
+        if (candidate_count >= self.RENDER_DROP_PERSISTENCE_THRESHOLD
+                and elapsed_s >= self.RENDER_DROP_MIN_ELAPSED_SECONDS):
             self.store.record_dispatch_fact(job_id, 'ADMITTED_RENDER_DROPPED',
                 {'output_id': output_id,
-                 'basis': 'persistent_disappearance_across_bounded_policy'})
+                 'basis': 'persistent_disappearance_across_bounded_policy'},
+                at=observed_at)
             return RenderState(state='ADMITTED_RENDER_DROPPED', output_id=output_id,
                                resource=None, payload=None)
         self.store.record_dispatch_fact(job_id, 'RENDER_STATE_UNRESOLVED',
             {'output_id': output_id,
-             'basis': f'as29s_null_media_row_absent_attempt_{attempt}'})
+             'basis': f'as29s_null_media_row_absent_attempt_{candidate_count}'},
+            at=observed_at)
         return RenderState(state='RENDER_STATE_UNRESOLVED', output_id=output_id,
                            resource=None, payload=None)
 
-    def _trailing_disappearance_count(self, job_id: str, output_id: str) -> int:
-        """Consecutive disappearance observations after the last state change.
+    @staticmethod
+    def _observation_time(observed_at: str | None):
+        from datetime import datetime
 
-        A state change is any recorded pending/completed/drop observation for
-        this output; every RENDER_STATE_UNRESOLVED fact after it is one more
-        qualified disappearance observation. Identity drift or journal
-        failure raises through read_dispatch_facts.
+        if observed_at is None:
+            from .live_runtime import utc_now
+
+            observed_at = utc_now()
+        try:
+            parsed = datetime.fromisoformat(observed_at)
+        except (TypeError, ValueError) as error:
+            raise OwnerAmbiguityGate('RENDER_OBSERVATION_TIME_INVALID') from error
+        if parsed.tzinfo is None:
+            raise OwnerAmbiguityGate('RENDER_OBSERVATION_TIME_INVALID')
+        return parsed
+
+    def _trailing_disappearance_streak(self, job_id: str, output_id: str):
+        """Trailing run of qualified disappearance observations.
+
+        Returns ``(count, first_observation_datetime_or_None)`` for the
+        consecutive ``RENDER_STATE_UNRESOLVED`` facts after the last state
+        change (any pending/completed/drop observation breaks the streak, so
+        a row return resets persistence and a later disappearance starts a
+        new interval). Unqualified observations (``OBSERVATION_FAILURE``) and
+        unrelated facts neither advance the streak nor break it; their
+        timestamps are never used for the persistence window. Journal
+        integrity and timestamp validity raise fail-closed.
         """
-        facts = self.store.read_dispatch_facts(job_id)
         count = 0
-        for fact in reversed(facts):
+        first_at = None
+        for fact in reversed(self.store.read_dispatch_facts(job_id)):
             kind = fact['kind']
             if kind == 'RENDER_STATE_UNRESOLVED':
                 if fact['data'].get('output_id') == output_id:
                     count += 1
+                    first_at = fact['at']
                 continue
             if kind in {'RENDER_PENDING_OBSERVED', 'RENDER_COMPLETED_OBSERVED',
                         'ADMITTED_RENDER_DROPPED'}:
                 break
-        return count
+        return count, (self._observation_time(first_at) if first_at else None)
 
     # --- Restart classification -------------------------------------------------
 

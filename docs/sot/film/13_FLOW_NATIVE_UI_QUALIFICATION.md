@@ -201,3 +201,40 @@ One bounded run of an existing private Flow Tool ("Director's Shot Lab", agent-g
 ### A6 — Multi-shot vertical proven within the qualified scope
 
 Two distinct ShotSpecs of one coherent scene executed end-to-end through the productized runtime (unique jobs, per-shot at-most-once Generate, marker-echo attribution, hardened render lifecycle, exact acquisition, full decode, QC, provisional SelectedTakes, EditManifest and AutoEdit producer package), both conditioned by the same adopted verified reference. This is the strongest currently proven continuity mechanism (same-reference identity/look continuity); no other continuity control is claimed.
+
+### A7 — PROVE HARDENING DELTA clarifications (2026-10-02, Tech Lead review round)
+
+Clarifications to A2 and A3; no earlier statement is rewritten.
+
+**A2 clarification — known pending shape ≠ arbitrary unparseable payload.** The
+as29s payload recognizer is deterministic and schema-specific. Recognized
+shapes are exactly: (1) the JSON-null pending form, and (2) the qualified
+completed media-resource shape for the exact owned id/project. A non-null
+unparseable payload observed on the current build was recorded once live but
+was never structurally captured, so it is NOT a recognized pending shape: an
+unknown payload is `RENDER_UNOBSERVABLE` with a durable observation failure —
+never pending eventual-consistency evidence, never a terminal failure, and it
+advances neither any render streak nor any persistence window. Read-only
+polling may continue across unknown payloads; only a recognized shape can
+change the durable render state. Future shapes enter the recognized set only
+with captured, constrained structural evidence.
+
+**A3 clarification — terminal render drop = qualified persistent disappearance
++ observation threshold + minimum elapsed window + no contradictory evidence.**
+`ADMITTED_RENDER_DROPPED` requires ALL of: the output previously uniquely and
+durably bound; all streak observations qualified; the owned row absent across
+at least `RENDER_DROP_PERSISTENCE_THRESHOLD = 3` consecutive qualified
+observations; the disappearance persisting at least
+`RENDER_DROP_MIN_ELAPSED_SECONDS = 900` (15 minutes — renders historically
+complete within ~30–120 s and provider consistency windows far shorter, so a
+disappearance both repeatedly observed and ≥15 min old is durable absence,
+not a rapid-polling burst); no qualified row return during the streak; no
+completion evidence; and the terminal observation itself qualified. The
+elapsed window is measured durably from the journal timestamp of the streak's
+first disappearance to the current qualified observation — never from process
+memory — so restarts cannot shorten it, and an out-of-order or pre-streak
+clock can only fail the window (never satisfy it). A row return resets the
+streak and starts a new persistence interval. Completion evidence is never
+downgraded into a drop; resolved media outranks a policy-derived absence.
+Before terminality: `RENDER_STATE_UNRESOLVED → RECONCILE_ONLY`, `may_submit =
+false`, no repair-regeneration authority.

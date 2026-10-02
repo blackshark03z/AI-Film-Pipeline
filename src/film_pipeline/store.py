@@ -338,7 +338,7 @@ class SQLiteStore:
             raise RuntimeError('DISPATCH_NOT_RESERVED')
         return job
 
-    def record_dispatch_fact(self, job_id, kind, data):
+    def record_dispatch_fact(self, job_id, kind, data, *, at: str | None = None):
         from .dispatch_evidence import append_fact
         job = self._writable_job(job_id)
         if kind == 'PROMPT_VERIFIED' and data.get('prompt_sha256') != job.correlation_evidence.get('submission_prompt_hash'):
@@ -355,7 +355,7 @@ class SQLiteStore:
         connection = self._connect()
         try:
             connection.execute('BEGIN IMMEDIATE')
-            append_fact(connection, job_id, kind, data)
+            append_fact(connection, job_id, kind, data, at=at)
             connection.commit()
         except Exception:
             connection.rollback()

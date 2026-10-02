@@ -589,17 +589,30 @@ def frozen_job_handle(store: SQLiteStore, job_id: str):
 
 
 def _poll_media_resolution(session, output_id: str, report: dict):
-    """Bounded as29s resolution loop for the owned output."""
+    """Bounded as29s resolution loop for the owned output.
+
+    Only a payload the deterministic recognizer classifies as the qualified
+    completed media shape resolves the loop; recognized-pending and UNKNOWN
+    payloads keep the read-only poll going and are never pending-equivalent
+    for unknown shapes."""
+    from film_pipeline.flow_r2v_runtime import (
+        AS29S_PAYLOAD_COMPLETED,
+        classify_as29s_payload,
+    )
     window_end = time.monotonic() + 600
     attempts = 0
     while time.monotonic() < window_end:
         attempts += 1
         payload = session.media_payload(output_id)
-        if payload is not None:
+        classification = classify_as29s_payload(payload, media_id=output_id,
+                                                project_id=PROJECT_ID)
+        if classification == AS29S_PAYLOAD_COMPLETED:
             report["media_resolution_attempts"] = attempts
             return payload
-        print(json.dumps({"stage": "media_resolution_pending", "attempts": attempts}),
-              flush=True)
+        report.setdefault("media_resolution_observations", []).append(
+            {"attempt": attempts, "classification": classification})
+        print(json.dumps({"stage": "media_resolution_pending", "attempts": attempts,
+                          "classification": classification}), flush=True)
         time.sleep(20.0)
     raise OwnerAmbiguityGate("MEDIA_RESOLUTION_WINDOW_EXPIRED")
 

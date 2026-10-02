@@ -96,8 +96,16 @@ def validate_fact(kind, data):
     return data
 
 
-def append_fact(connection, job_id, kind, data):
-    """Caller owns the transaction, including reservation/binding when needed."""
+def append_fact(connection, job_id, kind, data, *, at: str | None = None):
+    """Caller owns the transaction, including reservation/binding when needed.
+
+    ``at`` pins the observation time (ISO-8601 UTC). Production callers leave
+    it unset (wall clock); deterministic tests and time-based render policy
+    pass explicit observation times. The digest binds the timestamp either
+    way, so the journal remains tamper-evident.
+    """
+    from .live_runtime import utc_now
+
     validate_fact(kind, data)
     encoded = canonical_json(data)
     if kind != 'RENDER_STATE_UNRESOLVED':
@@ -113,8 +121,7 @@ def append_fact(connection, job_id, kind, data):
     previous = connection.execute('SELECT sequence,digest FROM dispatch_journal WHERE job_id=? ORDER BY sequence DESC LIMIT 1',
                                   (job_id,)).fetchone()
     seq, prior = (previous[0] + 1, previous[1]) if previous else (1, '0' * 64)
-    from .live_runtime import utc_now
-    at = utc_now()
+    at = at or utc_now()
     digest = sha256({'job': job_id, 'sequence': seq, 'kind': kind, 'payload': data, 'at': at, 'previous': prior})
     connection.execute('INSERT INTO dispatch_journal VALUES (?,?,?,?,?,?,?,?)',
                        (job_id, seq, kind, data.get('output_id', ''), encoded, at, prior, digest))
@@ -160,15 +167,18 @@ def recovery_decision(job, facts, *, bound=False, acquired=False):
         # Render lifecycle states refine the post-binding window. A durable
         # bound identity is NOT proof that downloadable final media exists, so
         # an unobserved render state must be reconciled before acquisition.
-        # A terminal drop routes to an Owner repair decision. A pending or
-        # unresolved render is pending evidence, never failure or retry
-        # authority; repair-regeneration authority exists only after the
-        # terminal drop fact is durably recorded.
+        # Resolved media (completion evidence) is stronger than a policy-
+        # derived absence: a recorded completion is never downgraded into a
+        # drop by later catalog disappearance. A terminal drop routes to an
+        # Owner repair decision. A pending or unresolved render is pending
+        # evidence, never failure or retry authority; repair-regeneration
+        # authority exists only after the terminal drop fact is durably
+        # recorded under the temporal persistence policy.
+        if 'RENDER_COMPLETED_OBSERVED' in kinds:
+            return RecoveryDecision('RENDER_COMPLETED', 'ACQUIRE_ONLY', strength=strength)
         if 'ADMITTED_RENDER_DROPPED' in kinds:
             return RecoveryDecision('ADMITTED_RENDER_DROPPED', 'REPAIR_DECISION_REQUIRED',
                                     strength=strength)
-        if 'RENDER_COMPLETED_OBSERVED' in kinds:
-            return RecoveryDecision('RENDER_COMPLETED', 'ACQUIRE_ONLY', strength=strength)
         if 'RENDER_PENDING_OBSERVED' in kinds:
             return RecoveryDecision('RENDER_PENDING', 'RECONCILE_ONLY', strength=strength)
         if 'RENDER_STATE_UNRESOLVED' in kinds:

@@ -159,26 +159,29 @@ def verify_full_decode(path: Path) -> dict:
 def poll_media(session, output_id: str, report: dict):
     """Bounded read-only as29s resolution loop for the owned output.
 
-    The observed current build may surface NON-NULL as29s payloads while a
-    render is still in progress (shape drift vs the historical null-pending
-    signature). A payload that does not parse as the qualified media resource
-    is pending evidence — never a failure and never redispatch authority."""
+    Classification uses the deterministic recognizer: only the evidenced null
+    pending form and the qualified completed media shape are recognized. A
+    non-null unparseable payload is UNKNOWN — read-only polling continues
+    (drift is never failure and never redispatch authority) but it is NOT
+    treated as pending eventual-consistency evidence."""
+    from film_pipeline.flow_r2v_runtime import (
+        AS29S_PAYLOAD_COMPLETED,
+        classify_as29s_payload,
+    )
     window_end = time.monotonic() + 900
     attempts = 0
     while time.monotonic() < window_end:
         attempts += 1
         payload = session.media_payload(output_id)
-        if payload is not None:
-            try:
-                parse_media_resource(payload, media_id=output_id,
-                                     project_id=PROJECT_ID, kind="video")
-                report["media_resolution_attempts"] = attempts
-                return payload
-            except contract.ContractError as exc:
-                report.setdefault("media_shape_pending_observations", []).append(
-                    {"attempt": attempts, "shape": str(exc)[:80]})
-        print(json.dumps({"stage": "media_resolution_pending", "attempts": attempts}),
-              flush=True)
+        classification = classify_as29s_payload(payload, media_id=output_id,
+                                                project_id=PROJECT_ID)
+        if classification == AS29S_PAYLOAD_COMPLETED:
+            report["media_resolution_attempts"] = attempts
+            return payload
+        report.setdefault("media_resolution_observations", []).append(
+            {"attempt": attempts, "classification": classification})
+        print(json.dumps({"stage": "media_resolution_pending", "attempts": attempts,
+                          "classification": classification}), flush=True)
         time.sleep(20.0)
     raise OwnerAmbiguityGate("MEDIA_RESOLUTION_WINDOW_EXPIRED")
 
