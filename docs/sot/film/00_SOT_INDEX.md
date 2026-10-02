@@ -1,7 +1,7 @@
 # AI Film Pipeline V1 — Source of Truth Index
 
 **Status:** FROZEN FOR IMPLEMENTATION  
-**Version:** 1.0.0  
+**Version:** 1.0.1
 **Scope:** lean/local-first AI filmmaking pipeline for one developer/operator.
 
 ## Authority
@@ -30,7 +30,7 @@ The package intentionally removes or defers assumptions that do not match the cu
 
 ### Available now
 - Gemini API: automated planning / extraction / ShotSpec assistance / prompt expansion / QC assistance.
-- Google Flow / Veo: current primary video execution path.
+- Google Flow / Veo: current primary video execution path. The currently qualified mutation route is real headful Chrome driving the provider-native Flow UI within an explicitly qualified account/profile/project/build scope, followed by backend reconciliation and exact media acquisition.
 - Seedance through Elyum and Dola: alternate video execution paths.
 - Existing `AutoVideoPipeline`: reference/reuse source for Flow session, cookie preflight, batching, download and FFmpeg-related mechanics.
 - ChatGPT Plus / Codex: development, architecture, code review and difficult manual reasoning. It is **not** assumed to be a runtime API.
@@ -99,6 +99,10 @@ Master
 13. Private/provider-facing execution contracts are treated as volatile and versioned. A previously proven adapter is historical evidence, not a permanent protocol guarantee. When provider behavior becomes ambiguous or diverges from the last qualified contract, stop mutations, preserve evidence, and re-observe/reconstruct the provider's current successful operating path before changing Film Core or blindly retrying.
 14. Provider mutation admission and provider observation/reconciliation are qualified separately. A UI click, outbound request, HTTP 200, or DOM/gallery state is never acceptance proof by itself. After a possible external effect, output ownership must come from durable backend evidence; if that evidence cannot establish the effect uniquely, the state remains unknown and mutation must not be retried blindly.
 15. Reference-conditioned generation requires immutable provider-reference attestation before dispatch: canonical Film asset/hash → provider scope → provider media identity → independently bound readback bytes/content. Historical IDs, filenames, gallery position, or prior claimed mappings are not sufficient reference proof.
+16. A provider-native browser automation path may be production-qualified when the exact provider scope is proven and the provider frontend generates its own live session/security/request state. A manual human click is not a Film-Core invariant.
+17. Provider mutation admission, render completion and media acquisition are separate lifecycle states. An admitted request is not a completed Asset; optimistic mutation responses and temporary media misses must not be treated as completion or automatic retry authority.
+18. Provider cookies, auth/session material, CAPTCHA/security tokens and signed CDN URLs are runtime secrets/ephemera, never durable Film truth. Committed evidence stores only sanitized fingerprints, hashes, non-secret identities and bounded structural observations.
+19. Flow qualification is scope-bound. A route proven on one account/profile/project/frontend-build/model/mode is not automatically qualified on another scope or after provider drift.
 
 ## Package map
 
@@ -114,6 +118,7 @@ Master
 - `10_VERTICAL_SLICE_BENCHMARK.md`
 - `11_IMPLEMENTATION_PLAN.md`
 - `12_DECISION_LOG.md`
+- `13_FLOW_NATIVE_UI_QUALIFICATION.md`
 - `schemas/`
 - `fixtures/`
 - `config/runtime.example.yaml`

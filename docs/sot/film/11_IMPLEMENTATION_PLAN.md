@@ -84,6 +84,26 @@ Reuse vocabulary/patterns, not full applications:
 - Jellyfish: task/link lifecycle concepts;
 - STAGE: continuity/start-end strategy concept.
 
+## Current Flow/Veo production target
+
+Productize the qualified provider-native UI route before inventing a new mutation transport:
+
+```text
+ShotSpec / PromptPlan
+→ durable attempt + unique Film marker
+→ exact reference attestation
+→ headful Chrome provider-native Flow UI preparation
+→ one Generate release
+→ bounded Zzl0ze reconciliation
+→ unique media ownership
+→ bounded render completion / as29s resolution
+→ exact acquisition
+→ SHA-256 + metadata + full technical decode
+→ Asset / QC / RepairDecision
+```
+
+The adapter must explicitly model admission vs render completion, preserve at-most-once mutation authority, and fail closed on ambiguity. Direct/private Flow mutation RPC replay is not a production target. Provider security/session artifacts remain runtime-local secrets.
+
 ## Phase A — 2–3 day skeleton
 
 Deliver:

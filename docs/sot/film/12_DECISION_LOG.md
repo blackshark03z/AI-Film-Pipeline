@@ -38,6 +38,15 @@ For browser-backed providers, the transport that can admit a mutation and the tr
 ### DR-012 — Provider reference identity requires immutable attestation
 A canonical Film reference asset may condition generation only after its provider media identity is independently bound and content-verified within the intended provider/account/project scope. Historical receipts, filenames and prior mappings are evidence to investigate, not sufficient proof. Reference mismatch or unresolved binding blocks mutation; do not silently substitute or re-upload to escape ambiguity.
 
+### DR-013 — Provider-native UI automation can be a qualified production mutation boundary
+A real headful browser driving the provider-native Flow UI may be used as the production mutation transport when the exact account/profile/project/build/model/mode scope is empirically qualified. The provider frontend must construct its own live session/security/request state; the system must not substitute a private direct mutation replay. In the 2026-10-02 clean-scope qualification, two distinct automated native-UI Flow generations completed with unique durable attribution and valid acquired media, so a manual human click is not a Film-Core requirement.
+
+### DR-014 — Admission, rendering and acquisition are separate provider states
+An admitted generation can still fail during rendering. A mutation HTTP response, candidate identity, optimistic provider state or UI progress does not imply a completed Asset. Runtime state must distinguish admission, render pending/completed/dropped and acquisition. Retry authority is never inferred from a render/media miss; RepairDecision and ambiguity rules still apply.
+
+### DR-015 — Flow qualification is scope-bound; security and prompt hypotheses do not become architecture truth
+Current successful Flow requests expose provider-generated browser/session/security context and a current Veo 3.1 request fingerprint, but these observations do not prove a single universal admission discriminator. reCAPTCHA presence, trusted-event telemetry, account risk/entitlement hypotheses and prompt-deduplication hypotheses remain diagnostic evidence unless separately isolated. No raw cookie/auth/CAPTCHA/signed-URL material belongs in committed SoT/evidence, and no current Flow qualification transfers automatically to another account/project/build/model/mode.
+
 ## SUPERSEDED
 
 ### Old heavy infrastructure V1

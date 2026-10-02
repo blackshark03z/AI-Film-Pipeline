@@ -93,18 +93,76 @@ If a previously qualified path becomes ambiguous (for example: HTTP success with
 
 Historical Story Auto / AutoVideoPipeline paths are reusable evidence and implementation references, but are never proof that a private Flow/Dola/Elyum contract remains current.
 
-## Flow/Veo current qualified transport split (2026-10-01 evidence)
+## Flow/Veo current qualified transport split (2026-10-02 evidence)
 
-Current controlled investigations support a **behavior-specific transport split**, scoped to the observed account/project/session and subject to re-qualification:
+The current Flow/Veo V1 production candidate is now **qualified within one explicit clean scope** as a provider-native UI automation route plus durable backend reconciliation. This qualification is recorded in `13_FLOW_NATIVE_UI_QUALIFICATION.md` and derives from evidence commit `29018d3340b85ade788b3aec2963496036cddbe9`.
 
-- `Zzl0ze` catalog reads and `as29s` media reads are qualified as read-only observation/reconciliation paths and have worked through headless/cookie-backed sessions.
-- `maseQ` reference upload has worked from an in-page browser context, but uploaded media still requires independent identity/content attestation before use.
-- Expensive video-generation submit (`MZZa6b`) is **not currently qualified as a direct/private RPC mutation path**. Controlled external HTTP replay and synthetic in-page fetch attempts were rejected while provider-native UI submission succeeded. The exact internal cause remains unknown; reCAPTCHA/risk scoring, gesture provenance, and account/session scoring are hypotheses, not architectural truth.
-- Therefore the current qualified Flow/Veo V1 generation boundary is **provider-native UI mutation + backend reconciliation**. The UI is a bounded mutation trigger only; click success, outbound request observation, HTTP 200, DOM state, and gallery cards are not acceptance/output truth.
-- A generation output is owned only from durable backend evidence such as a fresh baseline delta plus unique Film marker, exact provider reference lineage, qualified completion state and unique provider media identity. If that evidence is missing or non-unique, external effect remains unresolved and no generation retry is allowed.
-- UI labels and wire model identifiers are distinct observations. A controlled run observed UI `Omni 1.1 Flash` dispatching wire model `abra_r2v_8s`; this must not be generalized beyond its observed scope. Record both when available and never infer one from the other.
-- `as29s` may surface duplicate identical URL slots for one exact media resource. Identical normalized duplicates may be deduplicated only after the response is independently bound to the requested media ID/project; differing resources remain ambiguous.
-- Two continuity mechanisms are currently evidenced behind the adapter: reuse the same verified reference media for identity/look continuity, and use a verified extracted last frame as a new reference for tighter frame continuity. These are provider capabilities, not Film-Core semantics, and must remain versioned/qualified.
+### Qualified mutation path
+
+- Real Google Chrome, headful, using an isolated authenticated profile.
+- Provider-native Flow UI controls the current frontend/session/security/request construction.
+- Current proven mode: reference-conditioned Video → Ingredients with observed wire model `veo_3_1_r2v_lite`, 16:9, x1.
+- The adapter releases Generate at most once per durable attempt/job.
+- Two distinct fresh automated UI generations completed, were uniquely attributed, acquired and full-decoded successfully in the qualified scope.
+- Therefore manual human clicking is **not** a required invariant for this qualified route.
+
+### Qualified observation / reconciliation path
+
+- `Zzl0ze` remains a qualified read-only catalog/reconciliation surface.
+- `as29s` remains a qualified read-only media-resolution surface after the exact media identity is independently bound.
+- `maseQ` reference upload remains an observed in-page capability, but uploaded media still requires independent identity/content attestation before use.
+- A unique Film marker echoed in a fresh backend catalog delta, combined with exact project/reference binding and unique provider media identity, is acceptable ownership evidence.
+- UI/gallery order, newest-card selection and filename coincidence remain forbidden.
+- `as29s` may surface duplicate identical URL slots for one exact media resource; identical normalized duplicates may be deduplicated only after independent media/project binding.
+
+### Admission is not render completion
+
+Current evidence proves a distinct lifecycle:
+
+```text
+provider-native UI dispatch
+→ admission/candidate identity
+→ render pending
+→ render completed
+→ media resolution
+→ acquisition/QC
+```
+
+One bounded release was admitted and received a unique provider candidate but did not finish rendering. Therefore:
+
+- HTTP 200, optimistic `CAE`, request observation or visible render progress are not completion truth;
+- `as29s` may be temporarily unavailable/NOT_FOUND while a render is still pending;
+- an admitted render that later disappears/fails is classified separately from an admission failure;
+- a temporary media miss never authorizes blind redispatch.
+
+### Current observed request fingerprint
+
+Successful current Veo 3.1 native UI executions exposed a request shape with plain prompt AST in slot 0, reference media binding in slot 1 and the current wire model identifier in slot 2. The older inline reference-entity prompt shape is not the current qualified Veo 3.1 R2V fingerprint.
+
+This request layout is **volatile provider-contract evidence**, not Film-Core truth. Keep exact slots/model IDs/version fingerprints in the adapter/runtime qualification layer.
+
+### Security/session observations are not frozen causal claims
+
+Successful native UI executions contained provider-generated browser/session/security context, including fresh reCAPTCHA Enterprise material, and automated native UI telemetry observed trusted browser events. These facts are diagnostically relevant but the experiment did not isolate them as the sole/root admission discriminator.
+
+Therefore:
+
+- do not hard-code or persist reCAPTCHA/security tokens;
+- do not treat `isTrusted` as an architectural admission requirement;
+- do not convert the native UI route into direct/private `MZZa6b` replay;
+- do not claim historical null responses were caused solely by reCAPTCHA, request AST, account risk, entitlement or any other single factor without separate causal evidence.
+
+### Prompt/render-drop non-claim
+
+A near-duplicate prompt preceded one admitted-but-dropped render, while a later distinct prompt completed. This is **not sufficient evidence** to freeze a provider prompt-deduplication rule. Treat prompt deduplication as a hypothesis only until independently reproduced.
+
+### Scope boundary
+
+The current route is qualified only for the observed account/profile/project/frontend-build/model/mode state. It does not automatically qualify older accounts/projects, other Flow builds, other Veo models/modes, other aspect/output configurations, or future provider versions.
+
+Any material scope or contract change triggers bounded re-qualification before production mutation resumes.
+
+- Two continuity mechanisms remain evidenced behind the adapter: reuse the same verified reference media for identity/look continuity, and use a verified extracted last frame as a new reference for tighter frame continuity. These are provider capabilities, not Film-Core semantics, and remain versioned/qualified.
 
 ### Reference attestation rule
 

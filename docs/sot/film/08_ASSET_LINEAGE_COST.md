@@ -59,6 +59,42 @@ canonical asset_id + canonical local SHA-256
 
 A provider media ID is not trusted merely because it appeared in a historical receipt, shares a filename, sits near another catalog row, or produced a visually plausible output. If exact identity/resource binding or content verification fails, generation is blocked and the existing external resource must not be silently replaced or blindly re-uploaded.
 
+## 2.1 Provider mutation/render/acquisition lineage
+
+For browser-backed video providers, persist the provider lifecycle as separate facts rather than one boolean success flag:
+
+```text
+attempt preclaim + unique correlation marker
+→ mutation released exactly once
+→ admission evidence / provider candidate identity
+→ durable backend ownership binding
+→ render state
+→ final provider media identity
+→ acquisition
+→ local SHA-256 / metadata / decode validation
+→ Asset
+```
+
+Current Flow evidence proves that a job may be admitted yet fail before render completion. Recommended durable fields include:
+
+```text
+correlation_marker
+provider_scope_fingerprint
+observed_contract_fingerprint
+provider_admission_state
+provider_candidate_id
+provider_render_state
+provider_media_id
+reference_attestation_id
+reconciliation_started_at / ended_at
+acquisition_state
+```
+
+A fresh backend delta plus unique marker/project/reference/media binding may establish output ownership in a qualified provider scope. A signed download URL is ephemeral transport data and is never canonical identity.
+
+Do not persist provider cookies, auth/session material, CAPTCHA/security tokens or signed CDN URLs as lineage evidence.
+
+
 ## 3. GenerationAttempt
 
 Stores:
@@ -69,6 +105,9 @@ Stores:
 - provider/transport;
 - start/end timestamps;
 - result state;
+- provider admission state;
+- provider render state;
+- correlation/contract-scope evidence;
 - output asset IDs;
 - error classification;
 - QC report;
