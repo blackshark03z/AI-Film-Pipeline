@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SCENE003_SHOT_6",
+  "scene_id": "SCENE003_CLOUD_SUMMIT",
+  "dramatic_purpose": "Resolution: the swordsman settles into stance as dawn clouds part behind.",
+  "duration_target_s": 8,
+  "shot_type": "hero",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "full figure in stance, frame center-left",
+      "behavior_state": "blades settles low; stance roots; wind rises"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "figure in mid-stance, blade low",
+    "action_beats": [
+      "stance settles",
+      "clouds part slowly behind the summit"
+    ],
+    "end": "rooted stance, horizon opening"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "same robes, blade drawn",
+      "summit and cloud-sea stable",
+      "dawn light from frame-left"
+    ]
+  }
+}

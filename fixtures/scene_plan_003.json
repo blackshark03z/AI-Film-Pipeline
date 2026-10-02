@@ -1,0 +1,53 @@
+{
+  "scene_id": "SCENE003_CLOUD_SUMMIT",
+  "shots": [
+    {
+      "shot_id": "SCENE003_SHOT_1",
+      "fixture": "fixtures/scene003/scene003_shot_1.json",
+      "continuity": {
+        "kind": "reference",
+        "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+      }
+    },
+    {
+      "shot_id": "SCENE003_SHOT_2",
+      "fixture": "fixtures/scene003/scene003_shot_2.json",
+      "continuity": {
+        "kind": "reference",
+        "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+      }
+    },
+    {
+      "shot_id": "SCENE003_SHOT_3",
+      "fixture": "fixtures/scene003/scene003_shot_3.json",
+      "continuity": {
+        "kind": "last_frame",
+        "from_shot": "SCENE003_SHOT_2"
+      }
+    },
+    {
+      "shot_id": "SCENE003_SHOT_4",
+      "fixture": "fixtures/scene003/scene003_shot_4.json",
+      "continuity": {
+        "kind": "reference",
+        "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+      }
+    },
+    {
+      "shot_id": "SCENE003_SHOT_5",
+      "fixture": "fixtures/scene003/scene003_shot_5.json",
+      "continuity": {
+        "kind": "reference",
+        "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+      }
+    },
+    {
+      "shot_id": "SCENE003_SHOT_6",
+      "fixture": "fixtures/scene003/scene003_shot_6.json",
+      "continuity": {
+        "kind": "reference",
+        "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+      }
+    }
+  ]
+}

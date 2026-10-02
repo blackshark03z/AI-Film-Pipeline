@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SCENE003_SHOT_5",
+  "scene_id": "SCENE003_CLOUD_SUMMIT",
+  "dramatic_purpose": "Cut-in detail: the bare hand tightening on the wrapped hilt.",
+  "duration_target_s": 8,
+  "shot_type": "insert",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "hands and hilt only",
+      "behavior_state": "fingers tighten one notch; still otherwise"
+    }
+  ],
+  "camera": {
+    "framing": "ECU",
+    "height": "eye_level",
+    "lens_intent": "telephoto",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "hand loose on the hilt",
+    "action_beats": [
+      "knuckles whiten slightly",
+      "hilt wrap flexes"
+    ],
+    "end": "firm two-hand grip settled"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "hilt wrap and blade consistent",
+      "no extra hands or jewelry",
+      "dawn light from frame-left"
+    ]
+  }
+}

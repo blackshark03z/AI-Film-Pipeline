@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SCENE003_SHOT_4",
+  "scene_id": "SCENE003_CLOUD_SUMMIT",
+  "dramatic_purpose": "Close on the swordsman's face: a calm breath before the cut.",
+  "duration_target_s": 8,
+  "shot_type": "performance",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "face and shoulders, front three-quarter",
+      "behavior_state": "one slow breath; steady gaze toward frame-left"
+    }
+  ],
+  "camera": {
+    "framing": "MCU",
+    "height": "eye_level",
+    "lens_intent": "portrait",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "chest-up framing, gaze lowered",
+    "action_beats": [
+      "a slow inhale",
+      "eyes settle toward the horizon"
+    ],
+    "end": "gaze lifted toward frame-left horizon"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "no face identity drift",
+      "same hair and headband",
+      "dawn light from frame-left"
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SCENE003_SHOT_1",
+  "scene_id": "SCENE003_CLOUD_SUMMIT",
+  "dramatic_purpose": "Establish the lone swordsman's summit above an endless dawn cloud-sea.",
+  "duration_target_s": 8,
+  "shot_type": "establishing",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "tiny lone figure at frame center",
+      "behavior_state": "still; cloak stirs lightly"
+    }
+  ],
+  "camera": {
+    "framing": "EWS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "figure centered, back three-quarter to camera",
+    "action_beats": [
+      "mist drifts past the summit",
+      "cloak stirs in light wind"
+    ],
+    "end": "composition unchanged"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "white robes and sword unchanged",
+      "summit and cloud-sea stable",
+      "dawn light from frame-left"
+    ]
+  }
+}

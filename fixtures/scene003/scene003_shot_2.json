@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SCENE003_SHOT_2",
+  "scene_id": "SCENE003_CLOUD_SUMMIT",
+  "dramatic_purpose": "The swordsman walks the ridge toward frame-left, entering the scene's geography.",
+  "duration_target_s": 8,
+  "shot_type": "action",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "walking figure crossing frame",
+      "behavior_state": "steady deliberate pace; cloak swaying"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "figure enters frame-right, walking left",
+    "action_beats": [
+      "three slow steps along the ridge",
+      "cloak sways with each step"
+    ],
+    "end": "figure pauses mid-ridge"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "same robes and sword",
+      "ridge geography stable",
+      "dawn light from frame-left"
+    ]
+  }
+}
