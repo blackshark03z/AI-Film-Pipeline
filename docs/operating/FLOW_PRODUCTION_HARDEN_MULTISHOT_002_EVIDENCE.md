@@ -111,3 +111,80 @@ The Flow path is now: qualified on the current build, productized behind a gener
 ## 12. Next recommended large work package
 
 **FLOW-SCENE-SCALE-003**: generalize the proven two-shot vertical into N-shot scene execution (scene list → per-shot lifecycle → per-cut continuity packets → single EditManifest/AutoEdit handoff), with a bounded continuity-mechanism qualification slice (last-frame reference upload) only if the Owner grants an upload budget. No push, no merge performed.
+
+---
+
+# TECH LEAD PROVE HARDENING DELTA
+
+Status: **COMPLETED_CANDIDATE** (offline delta; Tech Lead retains final PROVE acceptance — no PROVEN claimed here).
+
+## Scope & custody
+
+- Starting SHA: `1cc54de497ab4bc2601b3f759dd4afbd8cf868f0` (prior delivery tip, branch `zcode/flow-production-harden-multishot-002`).
+- Delta delivery SHA: the branch tip carrying this section (delta root commit `85f2f55`; SoT manifest refresh `f807836`).
+- Live provider mutations in this delta: **0**. Native requal Generate: 1/1 (historical package count, unchanged). Flow Tool Generate: 1/1 (unchanged). Multi-shot Generates: 2/2 (unchanged). Uploads: 0 (unchanged). Direct/private MZZa6b: 0 (unchanged).
+- Changed files: `src/film_pipeline/flow_r2v_runtime.py`, `src/film_pipeline/dispatch_evidence.py`, `src/film_pipeline/store.py`, `tests/test_flow_render_lifecycle.py`, `tools/run_current_build_requal_002.py`, `tools/run_multishot_vertical_002.py`, `docs/sot/film/13_FLOW_NATIVE_UI_QUALIFICATION.md` (addendum A7 only), `docs/sot/film/MANIFEST.sha256.json` (hash refresh).
+
+## FIX 1 — exact pending-shape semantics
+
+New deterministic, schema-specific recognizer `classify_as29s_payload(payload, *, media_id, project_id)`:
+
+- Recognized shapes (exhaustive): (1) JSON `null` — the historically observed and still-evidenced pending form; (2) the qualified completed media-resource shape for the exact owned id/project (the flow_media contract is the schema check).
+- Everything else — arbitrary objects, non-list types, wrong lengths, the live-observed class of right-length/right-id-slot lists with drifted inner slots, extra/unknown slots — is `UNKNOWN` → `RENDER_UNOBSERVABLE` + durable `OBSERVATION_FAILURE`, advancing neither any render state, nor the disappearance streak, nor the persistence window, and never inferring terminal failure.
+- The non-null unparseable payload observed once live was never structurally captured, so it is deliberately NOT a recognized pending shape; a future shape enters the recognized set only with captured, constrained structural evidence (SoT A7).
+- Runtime integration: `observe_render_state` classifies before any state decision; `UNKNOWN` cannot append `RENDER_COMPLETED` or `ADMITTED_RENDER_DROPPED` (tested). Runner poll loops (`run_multishot_vertical_002.poll_media`, `run_current_build_requal_002._poll_media_resolution`) now branch on the recognizer: only a `COMPLETED` classification resolves the loop; `KNOWN_PENDING`/`UNKNOWN` keep read-only polling.
+
+## FIX 2 — exact render-drop temporal policy
+
+`ADMITTED_RENDER_DROPPED` requires ALL of: durable unique binding (precondition); all streak observations qualified; owned row absent across ≥ `RENDER_DROP_PERSISTENCE_THRESHOLD = 3` consecutive qualified disappearance observations; disappearance persisting ≥ `RENDER_DROP_MIN_ELAPSED_SECONDS = 900` (15 minutes — chosen because proven renders complete within ~30–120 s and provider consistency windows are expected far shorter; a disappearance both repeatedly observed and ≥15 min old is durable absence, not a polling burst); no qualified row return during the streak; no completion evidence; and the terminal observation itself qualified.
+
+- Elapsed time is measured **durably**: journal timestamp of the streak's FIRST disappearance → the current qualified observation. `append_fact`/`record_dispatch_fact` gained an explicit, digest-bound `at` parameter; `observe_render_state` gained `observed_at` (production: wall clock; tests: pinned times, zero sleeps). Process memory is never the time source, so a restart cannot shorten the window; a pre-streak/out-of-order clock can only fail the window, never satisfy it; malformed/naive timestamps fail closed (`RENDER_OBSERVATION_TIME_INVALID`) before anything is journaled.
+- Row return records `RENDER_PENDING_OBSERVED`, which breaks the streak and starts a new persistence interval on the next disappearance. Unqualified/unknown observations are skipped by the streak walk (no advance, no reset). `RENDER_COMPLETED` evidence is terminal-protective: `observe_render_state` short-circuits to `RENDER_COMPLETED` and `recovery_decision` now ranks completion ABOVE a recorded drop (resolved media outranks a policy-derived absence — reversing the prior conservative drop-wins order per Tech Lead direction).
+- Before threshold+window: `RENDER_STATE_UNRESOLVED → RECONCILE_ONLY`, `may_submit=false`, no repair authority.
+
+## FIX 3 — exact test arithmetic (audited, not guessed)
+
+Method: per-file `pytest --collect-only` counts at the baseline SHA via a temporary git worktree, diffed against the delivery SHA.
+
+| Inventory point | Collected tests |
+| :-- | :-- |
+| Baseline `cdde450` (prior package start) | **511** |
+| Prior delivery `1cc54de` | **529** |
+| This delta final | **545** |
+
+Original-package delta `511 → 529 = +18`, broken down exactly:
+
+- `tests/test_flow_render_lifecycle.py`: 14 → 17 (**+3 net**) — the file was created in the prior package with 14 tests; the first round of this package added 3 net tests. The earlier evidence line "17 lifecycle" wrongly counted the whole file.
+- `tests/test_film_core_slice.py`: 14 → 16 (**+2**) — it parametrizes over `fixtures/*.json`; the two new multishot fixtures each added one case. This was missing from the earlier breakdown entirely.
+- `tests/test_reference_adoption.py`: 0 → 5 (**+5**, new file).
+- `tests/test_recovery_matrix_002.py`: 0 → 5 (**+5**, new file).
+- `tests/test_production_seam_genericity.py`: 0 → 3 (**+3**, new file).
+- Sum: 3 + 2 + 5 + 5 + 3 = **18** = 529 − 511. No tests were removed; `test_dispatch_recovery`'s F7 expected-classification string was updated in place (count unchanged). The earlier "+18" total was correct; its component breakdown was wrong in the two ways above. Historical records stand unmodified; this section is the labeled correction.
+
+This delta: `529 → 545 = +16`, all in `tests/test_flow_render_lifecycle.py` (17 → 33): 20 new test functions covering FIX 1/FIX 2, minus 4 prior functions removed by merge/rewrite (single-disappearance merged into the two-disappearance test; persistent-disappearance split into inside-window and threshold+window tests; row-return split into reset and new-interval tests; drop-is-terminal replaced by the two completion-precedence tests). 20 − 4 = +16. No other test file changed.
+
+## Adversarial review findings (found and fixed within the delta)
+
+1. The first temporal test draft used an out-of-order observation timeline (an unknown payload at t+100000 s followed by a qualified observation at t+900 s) — a physically impossible ordering that would have exercised the policy on contradictory journal time. Rewritten with an ordered timeline; the implementation additionally degrades conservatively on any out-of-order/pre-streak clock (elapsed can only fail the window).
+2. Identical `OBSERVATION_FAILURE` diagnostics dedupe in the immutable journal — an initial test wrongly expected one failure row per unknown read; corrected to assert the idempotent single row (the state semantics were already correct).
+3. Malformed/naive `observed_at` could have been journaled before validation on some paths; validation now happens at method entry, before anything is written.
+4. `git add -A` briefly staged four untracked historical investigation tools unrelated to this delta; caught during pre-commit review and unstaged.
+
+Reviewed clean: no unknown-payload-as-pending path, no drift-as-consistency path, no rapid-poll terminality, no restart window shortening, no completion downgrade, no submit/repair authority before terminality, no test-order or import/reload pollution (the genericity proof runs in a fresh subinterpreter).
+
+## Verification results
+
+| Check | Result |
+| :-- | :-- |
+| Focused render-lifecycle suite | 33 passed |
+| Recovery matrix | 5 passed |
+| Reference adoption | 5 passed |
+| Genericity (fresh subinterpreter) | 3 passed |
+| Slice-0011 regression (4 modules, explicit) | 63 passed |
+| Complete network-free regression | **545 passed, 0 failed** |
+| Test collection audit | 545 collected (per-file deltas above) |
+| Compile/syntax validation | clean |
+| `git diff --check` | clean |
+| SoT manifest | 30/30 verified over post-A7 blobs (regenerated) |
+| Tracked secret/PII scan on delta | clean |
+| Protected-file review | only SoT 13 addendum A7 + manifest hash refresh |
