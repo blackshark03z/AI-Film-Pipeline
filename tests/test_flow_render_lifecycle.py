@@ -104,21 +104,66 @@ def test_render_pending_is_not_failure_and_not_retry_authority(runtime_env, monk
     assert fresh.action == 'RECONCILE_ONLY' and fresh.may_submit is False
 
 
-# 3: null media with the owned row absent from the qualified read is a drop
-#    routed to an Owner repair decision, never to redispatch.
-def test_admitted_render_dropped_routes_to_repair(runtime_env, monkeypatch):
+# 3: null media with the owned row absent is RENDER_STATE_UNRESOLVED for a
+#    single qualified disappearance — no drop, no repair authority; terminal
+#    drop requires persistence across the bounded policy.
+def test_single_disappearance_is_unresolved_not_dropped(runtime_env, monkeypatch):
     env = runtime_env
     output_id = owned_job(env)
     env.session._offline_rows = []
     patch_media_read(monkeypatch, None)
     state = env.runtime.observe_render_state(env.frozen, session=env.session)
-    assert state.state == 'ADMITTED_RENDER_DROPPED'
+    assert state.state == 'RENDER_STATE_UNRESOLVED'
+    recovered = decision(env)
+    assert (recovered.classification, recovered.action) == (
+        'RENDER_STATE_UNRESOLVED', 'RECONCILE_ONLY')
+    assert recovered.may_submit is False
+    with pytest.raises(OwnerAmbiguityGate, match='ALREADY_CONSUMED'):
+        reserve(env)
+
+
+# 3b: the second consecutive disappearance is still unresolved; the third
+#     records the terminal drop routed to an Owner repair decision.
+def test_persistent_disappearance_across_bounded_policy_drops(runtime_env, monkeypatch):
+    env = runtime_env
+    output_id = owned_job(env)
+    env.session._offline_rows = []
+    patch_media_read(monkeypatch, None)
+    threshold = env.runtime.RENDER_DROP_PERSISTENCE_THRESHOLD
+    for attempt in range(1, threshold):
+        state = env.runtime.observe_render_state(env.frozen, session=env.session)
+        assert state.state == 'RENDER_STATE_UNRESOLVED'
+        assert decision(env).classification == 'RENDER_STATE_UNRESOLVED'
+    final = env.runtime.observe_render_state(env.frozen, session=env.session)
+    assert final.state == 'ADMITTED_RENDER_DROPPED'
     recovered = decision(env)
     assert (recovered.classification, recovered.action) == (
         'ADMITTED_RENDER_DROPPED', 'REPAIR_DECISION_REQUIRED')
     assert recovered.may_submit is False
     with pytest.raises(OwnerAmbiguityGate, match='ALREADY_CONSUMED'):
         reserve(env)
+
+
+# 3c: a row return after disappearances resets the persistence streak and
+#     upgrades the state to plain RENDER_PENDING.
+def test_disappearance_then_row_returns_resets_streak(runtime_env, monkeypatch):
+    env = runtime_env
+    output_id = owned_job(env)
+    env.session._offline_rows = []
+    patch_media_read(monkeypatch, None)
+    for _ in range(env.runtime.RENDER_DROP_PERSISTENCE_THRESHOLD - 1):
+        assert env.runtime.observe_render_state(
+            env.frozen, session=env.session).state == 'RENDER_STATE_UNRESOLVED'
+    env.session._offline_rows = [[output_id, env.runtime.project_id, 'IMAGE',
+                                  'CAE', None, None, None]]
+    state = env.runtime.observe_render_state(env.frozen, session=env.session)
+    assert state.state == 'RENDER_PENDING'
+    recovered = decision(env)
+    assert (recovered.classification, recovered.action) == ('RENDER_PENDING', 'RECONCILE_ONLY')
+    # The streak is broken: one fresh disappearance is unresolved again.
+    env.session._offline_rows = []
+    assert env.runtime.observe_render_state(
+        env.frozen, session=env.session).state == 'RENDER_STATE_UNRESOLVED'
 
 
 # 4: a non-null as29s payload that fails the qualified media contract is
@@ -135,7 +180,8 @@ def test_unqualified_media_payload_is_unobservable(runtime_env, monkeypatch):
     assert [f['data']['diagnostic'] for f in failures] == ['FLOW_R2V_MEDIA_PAYLOAD_UNQUALIFIED']
     assert render_facts(env) == []
     recovered = decision(env)
-    assert (recovered.classification, recovered.action) == ('OUTPUT_BOUND', 'ACQUIRE_ONLY')
+    assert (recovered.classification, recovered.action) == (
+        'OUTPUT_BOUND_UNOBSERVED', 'RECONCILE_RENDER_STATE')
 
 
 # 5: RPC drift is RENDER_UNOBSERVABLE and never invents a drop.
@@ -213,11 +259,16 @@ def test_reobservation_idempotent_and_transition_appends(runtime_env, monkeypatc
 
 # 9: a durable drop stays terminal in recovery even if a later observation
 #    claims completion — a flapping catalog is drift, not redispatch authority.
+#    Conflicting completion/drop evidence resolves conservatively to the drop.
 def test_drop_is_terminal_in_recovery(runtime_env, monkeypatch):
     env = runtime_env
     output_id = owned_job(env)
     env.session._offline_rows = []
     patch_media_read(monkeypatch, None)
+    for _ in range(env.runtime.RENDER_DROP_PERSISTENCE_THRESHOLD):
+        assert env.runtime.observe_render_state(
+            env.frozen, session=env.session).state in {'RENDER_STATE_UNRESOLVED',
+                                                       'ADMITTED_RENDER_DROPPED'}
     assert env.runtime.observe_render_state(env.frozen, session=env.session).state == \
         'ADMITTED_RENDER_DROPPED'
     payload, _data = video_row(output_id)
@@ -265,6 +316,26 @@ def test_production_seam_never_references_direct_mutation_path():
         assert 'build_video' not in source, module.__name__
 
 
+# 12b: fresh-process restart after RENDER_COMPLETED keeps acquisition as the
+#      only next action and never re-arms mutation.
+def test_restart_after_render_completed_keeps_acquire_only(runtime_env, monkeypatch):
+    from film_pipeline.flow_r2v_runtime import FlowR2VShotRuntime
+    env = runtime_env
+    output_id = owned_job(env)
+    payload, _data = video_row(output_id)
+    monkeypatch.setattr(FlowReferenceRpcSession, 'media_payload',
+                        lambda self, media_id: payload)
+    assert env.runtime.observe_render_state(env.frozen, session=env.session).state == \
+        'RENDER_COMPLETED'
+    restarted = FlowR2VShotRuntime(env.store, project_id=env.runtime.project_id,
+                                   account_id=env.runtime.account_id)
+    decision = restarted.recovery(env.frozen)
+    assert (decision.classification, decision.action) == ('RENDER_COMPLETED', 'ACQUIRE_ONLY')
+    assert decision.may_submit is False
+    with pytest.raises(OwnerAmbiguityGate, match='ALREADY_CONSUMED'):
+        reserve(env)
+
+
 # 12: fresh-process restart while RENDER_PENDING keeps reconcile-only and
 #     never re-arms the consumed dispatch budget.
 def test_restart_during_render_pending_stays_reconcile_only(runtime_env, monkeypatch):
@@ -297,6 +368,8 @@ def test_restart_after_drop_routes_to_repair(runtime_env, monkeypatch):
     owned_job(env)
     env.session._offline_rows = []
     patch_media_read(monkeypatch, None)
+    for _ in range(env.runtime.RENDER_DROP_PERSISTENCE_THRESHOLD):
+        env.runtime.observe_render_state(env.frozen, session=env.session)
     assert env.runtime.observe_render_state(env.frozen, session=env.session).state == \
         'ADMITTED_RENDER_DROPPED'
     restarted = FlowR2VShotRuntime(env.store, project_id=env.runtime.project_id,

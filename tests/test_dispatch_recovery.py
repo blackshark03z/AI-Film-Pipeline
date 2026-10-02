@@ -98,7 +98,7 @@ def test_crash_windows_preserve_immediate_facts_and_never_resubmit(tmp_path, poi
     assert facts[0]['kind'] == 'RESERVED'
     decision = restarted.recovery_decision(job.provider_job_id)
     assert not decision.may_submit
-    expected = {'F5': 'DISPATCH_CONFIRMED', 'F6': 'OUTPUT_OBSERVED', 'F7': 'OUTPUT_BOUND'}.get(point, 'INCONCLUSIVE')
+    expected = {'F5': 'DISPATCH_CONFIRMED', 'F6': 'OUTPUT_OBSERVED', 'F7': 'OUTPUT_BOUND_UNOBSERVED'}.get(point, 'INCONCLUSIVE')
     assert decision.classification == expected
     with pytest.raises(RuntimeError, match='budget already consumed'):
         asyncio.run(restarted.submit_once(job.provider_job_id))

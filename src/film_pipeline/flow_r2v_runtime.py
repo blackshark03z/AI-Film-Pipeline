@@ -588,6 +588,17 @@ class FlowR2VShotRuntime:
 
     # --- Render lifecycle observation (read-only, post-ownership) -------------
 
+    # Bounded render-terminal policy: one qualified catalog disappearance may
+    # be eventual consistency, a provider transition, or read lag. A terminal
+    # drop is established only when the disappearance persists across this
+    # many consecutive qualified read-only reconciliation observations (policy
+    # option 2), or when explicit provider terminal-failure evidence exists
+    # (option 1 — none is observable on the current qualified surfaces, so no
+    # code path fabricates one). Between the first disappearance and
+    # terminality the state is RENDER_STATE_UNRESOLVED: may_submit stays false
+    # and repair-regeneration authority does not exist.
+    RENDER_DROP_PERSISTENCE_THRESHOLD = 3
+
     def observe_render_state(self, frozen: FrozenR2VShot, *, session) -> RenderState:
         """One read-only render-state reconciliation for the owned output.
 
@@ -606,14 +617,19 @@ class FlowR2VShotRuntime:
           ``RENDER_PENDING`` — pending evidence, never failure, never retry
           authority;
         - null payload with the owned row absent from that qualified read →
-          ``ADMITTED_RENDER_DROPPED`` — terminal render failure routed to an
-          Owner RepairDecision, never to redispatch;
+          ``RENDER_STATE_UNRESOLVED`` (a single disappearance may be eventual
+          consistency or read lag) — until the disappearance persists across
+          ``RENDER_DROP_PERSISTENCE_THRESHOLD`` consecutive qualified
+          observations, which records the terminal ``ADMITTED_RENDER_DROPPED``
+          routed to an Owner RepairDecision, never to redispatch;
         - any unqualified read (RPC drift, non-conforming non-null payload,
           catalog baseline drift) → ``RENDER_UNOBSERVABLE`` and a durable
           ``OBSERVATION_FAILURE``; the previous state stands.
 
-        Re-observation is idempotent: identical observations dedupe in the
-        immutable journal; state transitions append.
+        Re-observation is idempotent for fixed-basis states (identical
+        observations dedupe in the immutable journal); disappearance
+        observations accumulate by design — each qualified read is one more
+        persistence datapoint toward the bounded terminal policy.
         """
         job_id = frozen.job.provider_job_id
         job = self.store.read_provider_job(job_id)
@@ -649,7 +665,8 @@ class FlowR2VShotRuntime:
             return RenderState(state='RENDER_COMPLETED', output_id=output_id,
                                resource=resource, payload=payload)
         # Media not resolved yet: the qualified fresh catalog read decides
-        # between still-pending and admitted-then-dropped.
+        # between still-pending, unresolved, and (only after the bounded
+        # persistence policy) admitted-then-dropped.
         try:
             records = FlowReferenceRpcSession.catalog(session)
             fingerprint = getattr(session, 'catalog_fingerprint', None)
@@ -665,10 +682,46 @@ class FlowR2VShotRuntime:
                 {'output_id': output_id, 'basis': 'as29s_null_media_row_present'})
             return RenderState(state='RENDER_PENDING', output_id=output_id,
                                resource=None, payload=None)
-        self.store.record_dispatch_fact(job_id, 'ADMITTED_RENDER_DROPPED',
-            {'output_id': output_id, 'basis': 'as29s_null_media_row_absent'})
-        return RenderState(state='ADMITTED_RENDER_DROPPED', output_id=output_id,
+        if any(f['kind'] == 'ADMITTED_RENDER_DROPPED' and f['data'].get('output_id') == output_id
+               for f in self.store.read_dispatch_facts(job_id)):
+            # Terminality is already durably established; further misses add
+            # no datapoints and never un-drop the output.
+            return RenderState(state='ADMITTED_RENDER_DROPPED', output_id=output_id,
+                               resource=None, payload=None)
+        disappearances = self._trailing_disappearance_count(job_id, output_id)
+        attempt = disappearances + 1
+        if attempt >= self.RENDER_DROP_PERSISTENCE_THRESHOLD:
+            self.store.record_dispatch_fact(job_id, 'ADMITTED_RENDER_DROPPED',
+                {'output_id': output_id,
+                 'basis': 'persistent_disappearance_across_bounded_policy'})
+            return RenderState(state='ADMITTED_RENDER_DROPPED', output_id=output_id,
+                               resource=None, payload=None)
+        self.store.record_dispatch_fact(job_id, 'RENDER_STATE_UNRESOLVED',
+            {'output_id': output_id,
+             'basis': f'as29s_null_media_row_absent_attempt_{attempt}'})
+        return RenderState(state='RENDER_STATE_UNRESOLVED', output_id=output_id,
                            resource=None, payload=None)
+
+    def _trailing_disappearance_count(self, job_id: str, output_id: str) -> int:
+        """Consecutive disappearance observations after the last state change.
+
+        A state change is any recorded pending/completed/drop observation for
+        this output; every RENDER_STATE_UNRESOLVED fact after it is one more
+        qualified disappearance observation. Identity drift or journal
+        failure raises through read_dispatch_facts.
+        """
+        facts = self.store.read_dispatch_facts(job_id)
+        count = 0
+        for fact in reversed(facts):
+            kind = fact['kind']
+            if kind == 'RENDER_STATE_UNRESOLVED':
+                if fact['data'].get('output_id') == output_id:
+                    count += 1
+                continue
+            if kind in {'RENDER_PENDING_OBSERVED', 'RENDER_COMPLETED_OBSERVED',
+                        'ADMITTED_RENDER_DROPPED'}:
+                break
+        return count
 
     # --- Restart classification -------------------------------------------------
 

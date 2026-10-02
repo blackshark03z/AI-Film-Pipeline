@@ -71,8 +71,11 @@ class SQLiteStore:
                     job_id TEXT NOT NULL REFERENCES provider_jobs(id), sequence INTEGER NOT NULL,
                     kind TEXT NOT NULL, subject TEXT NOT NULL, payload TEXT NOT NULL,
                     at TEXT NOT NULL, previous TEXT NOT NULL, digest TEXT NOT NULL,
-                    PRIMARY KEY(job_id,sequence), UNIQUE(job_id,kind,subject)
+                    PRIMARY KEY(job_id,sequence)
                 );
+                CREATE UNIQUE INDEX IF NOT EXISTS dispatch_journal_fact_identity
+                    ON dispatch_journal(job_id, kind, subject)
+                    WHERE kind != 'RENDER_STATE_UNRESOLVED';
                 CREATE TABLE IF NOT EXISTS output_bindings (
                     provider_id TEXT NOT NULL, project_binding_id TEXT NOT NULL, output_id TEXT NOT NULL,
                     job_id TEXT NOT NULL REFERENCES provider_jobs(id), payload TEXT NOT NULL,

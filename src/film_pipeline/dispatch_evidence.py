@@ -21,6 +21,7 @@ RANK = {
     'R2V_RESPONSE_DIAGNOSTICS': 0,
     'PROVIDER_ACCEPTANCE_OBSERVED': 7, 'REMOTE_IDENTITY_OBSERVED': 8,
     'IDENTITY_BOUND': 9, 'RENDER_PENDING_OBSERVED': 9,
+    'RENDER_STATE_UNRESOLVED': 9,
     'RENDER_COMPLETED_OBSERVED': 10, 'ADMITTED_RENDER_DROPPED': 10,
     'DOWNLOAD_STARTED': 10,
     'DOWNLOAD_VALIDATED': 11, 'ASSET_PERSISTED': 12,
@@ -42,6 +43,7 @@ FIELDS = {
     'REMOTE_IDENTITY_OBSERVED': {'output_id', 'method'},
     'IDENTITY_BOUND': {'output_id', 'binding_hash'},
     'RENDER_PENDING_OBSERVED': {'output_id', 'basis'},
+    'RENDER_STATE_UNRESOLVED': {'output_id', 'basis'},
     'RENDER_COMPLETED_OBSERVED': {'output_id', 'basis'},
     'ADMITTED_RENDER_DROPPED': {'output_id', 'basis'},
     'DOWNLOAD_STARTED': {'output_id', 'intent_hash'},
@@ -97,13 +99,17 @@ def validate_fact(kind, data):
 def append_fact(connection, job_id, kind, data):
     """Caller owns the transaction, including reservation/binding when needed."""
     validate_fact(kind, data)
-    existing = connection.execute('SELECT payload FROM dispatch_journal WHERE job_id=? AND kind=? AND subject=?',
-                                  (job_id, kind, data.get('output_id', ''))).fetchone()
     encoded = canonical_json(data)
-    if existing:
-        if existing[0] != encoded:
-            raise ValueError('CONFLICTING_DISPATCH_FACT')
-        return
+    if kind != 'RENDER_STATE_UNRESOLVED':
+        # Render-state-unresolved facts are append-only persistence datapoints:
+        # every qualified disappearance observation is one distinct datapoint
+        # toward the bounded terminal policy, so they never dedupe or conflict.
+        existing = connection.execute('SELECT payload FROM dispatch_journal WHERE job_id=? AND kind=? AND subject=?',
+                                      (job_id, kind, data.get('output_id', ''))).fetchone()
+        if existing:
+            if existing[0] != encoded:
+                raise ValueError('CONFLICTING_DISPATCH_FACT')
+            return
     previous = connection.execute('SELECT sequence,digest FROM dispatch_journal WHERE job_id=? ORDER BY sequence DESC LIMIT 1',
                                   (job_id,)).fetchone()
     seq, prior = (previous[0] + 1, previous[1]) if previous else (1, '0' * 64)
@@ -151,9 +157,13 @@ def recovery_decision(job, facts, *, bound=False, acquired=False):
     if acquired:
         return RecoveryDecision('ACQUIRED', 'RECOVER_ASSET', strength=strength)
     if bound:
-        # Render lifecycle states refine the post-binding window. A drop never
-        # re-arms mutation: it routes to an Owner repair decision. A pending
-        # render is pending evidence, never failure or retry authority.
+        # Render lifecycle states refine the post-binding window. A durable
+        # bound identity is NOT proof that downloadable final media exists, so
+        # an unobserved render state must be reconciled before acquisition.
+        # A terminal drop routes to an Owner repair decision. A pending or
+        # unresolved render is pending evidence, never failure or retry
+        # authority; repair-regeneration authority exists only after the
+        # terminal drop fact is durably recorded.
         if 'ADMITTED_RENDER_DROPPED' in kinds:
             return RecoveryDecision('ADMITTED_RENDER_DROPPED', 'REPAIR_DECISION_REQUIRED',
                                     strength=strength)
@@ -161,7 +171,11 @@ def recovery_decision(job, facts, *, bound=False, acquired=False):
             return RecoveryDecision('RENDER_COMPLETED', 'ACQUIRE_ONLY', strength=strength)
         if 'RENDER_PENDING_OBSERVED' in kinds:
             return RecoveryDecision('RENDER_PENDING', 'RECONCILE_ONLY', strength=strength)
-        return RecoveryDecision('OUTPUT_BOUND', 'ACQUIRE_ONLY', strength=strength)
+        if 'RENDER_STATE_UNRESOLVED' in kinds:
+            return RecoveryDecision('RENDER_STATE_UNRESOLVED', 'RECONCILE_ONLY',
+                                    strength=strength)
+        return RecoveryDecision('OUTPUT_BOUND_UNOBSERVED', 'RECONCILE_RENDER_STATE',
+                                strength=strength)
     if 'REMOTE_IDENTITY_OBSERVED' in kinds:
         return RecoveryDecision('OUTPUT_OBSERVED', 'BIND_EXACT_IDENTITY', strength=strength)
     if 'PROVIDER_ACCEPTANCE_OBSERVED' in kinds:
