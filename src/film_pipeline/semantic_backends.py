@@ -96,7 +96,7 @@ class SemanticEvaluatorBackend:
                  ) -> list[ProvenancedObservation]:
         raise NotImplementedError("backend must implement evaluate")
 
-    def provenance_for(self, request: SemanticQCRequest,
+    def provenance_for(self, request_fingerprint: str,
                        rubric_fingerprint: str) -> dict:
         return {
             "backend_type": self.identity.backend_type,
@@ -104,10 +104,8 @@ class SemanticEvaluatorBackend:
             "backend_version": self.identity.backend_version,
             "reviewer_identity": self.identity.reviewer_identity,
             "harness_identity": self.identity.harness_identity,
-            "request_fingerprint": sha256(canonical_json(
-                request.model_dump(mode="json"))),
-            "input_source_fingerprints": [f.get("sha256", "")
-                                          for f in request.frames],
+            "request_fingerprint": request_fingerprint,
+
             "rubric_fingerprint": rubric_fingerprint,
             "created_at": utc_now(),
         }
@@ -182,19 +180,23 @@ def import_worker_result(packet: WorkerReviewPacket,
     if result.observations and len(result.observations) > \
             len(expected_dimensions) * 2:
         raise ValueError("duplicate final observations")
-    fingerprints = {packet.request_fingerprint}
-    provenance = backend.provenance_for(_reconstructed_request(packet),
+    provenance = backend.provenance_for(packet.request_fingerprint,
                                         rubric_fingerprint)
-    observations = []
     seen = set()
     for entry in result.observations:
         dimension = entry.get("dimension")
-        verdict = entry.get("verdict")
         if dimension not in expected_dimensions:
             raise ValueError(f"unexpected/missing dimension {dimension}")
         if dimension in seen:
             raise ValueError("duplicate dimension observation")
         seen.add(dimension)
+    missing = set(expected_dimensions) - seen
+    if missing:
+        raise ValueError(f"missing required dimensions: {sorted(missing)}")
+    observations = []
+    for entry in result.observations:
+        dimension = entry.get("dimension")
+        verdict = entry.get("verdict")
         if verdict not in ("PASS", "FAIL", "INCONCLUSIVE"):
             raise ValueError("unqualified verdict")
         observations.append(ProvenancedObservation(
@@ -212,16 +214,9 @@ def import_worker_result(packet: WorkerReviewPacket,
             confidence=entry.get("confidence"),
             evidence=[str(o)[:400] for o in entry.get("observations", [])],
             lineage={"packet_id": packet.packet_id,
-                     "packet_digest": packet.packet_digest},
+                     "packet_digest": packet.digest()},
             limitations=["worker review is observational; zero provider "
                          "mutation authority"]))
-    missing = set(expected_dimensions) - seen
-    if missing:
-        raise ValueError(f"missing required dimensions: {sorted(missing)}")
     return observations
 
 
-def _reconstructed_request(packet: WorkerReviewPacket) -> SemanticQCRequest:
-    return SemanticQCRequest(
-        request_id=packet.packet_id, dimensions=[],
-        requirements={}, frames=[], provenance={})
