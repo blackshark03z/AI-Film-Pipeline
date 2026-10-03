@@ -39,11 +39,13 @@ from film_pipeline.providers.flow_reference_transport import FlowReferenceTransp
 from film_pipeline.providers.flow_reference_upload import (
     OwnerAmbiguityGate, ReferenceUploadStore, _key)
 from film_pipeline.providers.flow_upload_classifier import (
-    pending_fingerprint_matches, QualifiedUploadPending)
+    LIVE_PENDING_SKELETON_FINGERPRINT, pending_fingerprint_matches,
+    QualifiedUploadPending)
 from mutation_authority import MutationAuthority
 
 RUN_DIR = ROOT / "projects/flow_upload_reconciliation_008"
-SCOPE_ID = "FLOW-UPLOAD-RECONCILIATION-CONTRACT-008"
+import os
+SCOPE_ID = "FLOW-UPLOAD-RECONCILIATION-CONTRACT-008" +     os.environ.get("UPLOAD_008_SCOPE_SUFFIX", "")
 PROJECT_ID = "93a579b4-834e-435b-8304-5f6682937935"
 ACCOUNT_ID = "clean-pro-qualified"
 PROFILE = "D:/AI FILM MAKER/Flow-Claude-Clean-Profile"
@@ -70,7 +72,8 @@ def write_durable(path: Path, data) -> None:
 
 
 def authority() -> MutationAuthority:
-    return MutationAuthority(RUN_DIR, SCOPE_ID)
+    scope_dir = RUN_DIR / ("scope" + os.environ.get("UPLOAD_008_SCOPE_SUFFIX", ""))
+    return MutationAuthority(scope_dir, SCOPE_ID)
 
 
 def ledger() -> dict:

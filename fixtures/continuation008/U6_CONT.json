@@ -1,0 +1,59 @@
+{
+ "schema_version": "1.0.0",
+ "spec_version": 1,
+ "shot_id": "U6_CONT",
+ "scene_id": "U6_CONTINUATION_PROOF",
+ "dramatic_purpose": "Continuation proof only; minimal frozen test shot conditioned on the canary 2 reference.",
+ "duration_target_s": 8,
+ "shot_type": "action",
+ "characters": [
+  {
+   "character_id": "swordsman_white_robes",
+   "identity_version": "swordsman_white_robes_v1",
+   "look_state_id": "white_robes_cloud_summit_dawn_v1",
+   "role_in_shot": "figure standing on the plateau",
+   "behavior_state": "stands still, cloak settling"
+  }
+ ],
+ "camera": {
+  "framing": "WS",
+  "height": "eye_level",
+  "lens_intent": "wide",
+  "movement": {
+   "type": "locked"
+  }
+ },
+ "environment": {
+  "time_of_day": "late day",
+  "weather": "clearing",
+  "atmosphere": "quiet plateau in clear light"
+ },
+ "blocking": {
+  "start": "standing on the plateau",
+  "action_beats": [
+   "cloak settles",
+   "he looks to the horizon"
+  ],
+  "end": "still, facing the horizon",
+  "prop_interactions": []
+ },
+ "performance": {
+  "observable_beats": [
+   "one breath"
+  ],
+  "forbidden": []
+ },
+ "lighting": {},
+ "continuity": {
+  "screen_direction": "faces frame-left",
+  "eyeline": "down the road ahead",
+  "start_state": {},
+  "end_state": {},
+  "critical_invariants": [
+   "plateau road geography stable",
+   "wardrobe unchanged",
+   "late-day light consistent",
+   "exit frame-left"
+  ]
+ }
+}
