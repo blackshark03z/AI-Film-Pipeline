@@ -228,14 +228,22 @@ class ScaleRunState:
                                         ensure_ascii=False), encoding="utf-8")
 
 
+def _loudly_archived(shot_dir: Path) -> bool:
+    """True when the slot's prior result was loudly archived (re-entry)."""
+    return (Path(shot_dir) / "reentry_note.json").exists() and any(
+        Path(shot_dir).glob("result_attempt*.json"))
+
+
 def verify_scene_order_integrity(scene_dir: Path, scene: dict) -> None:
     """Contiguity + identity checks over a scene's durable shot results.
 
     Refuses: a shot result for slot k while any earlier slot in the frozen
-    order has no result (out-of-order / missing); a result whose content
-    belongs to a different shot (wrong-slot result); a PROVEN shot status
-    whose result file is gone (missing result); a result for slot k while
-    an earlier slot is PROVEN-without-result (history rewrite).
+    order has no result and no loud archive (out-of-order / missing); a
+    result whose content belongs to a different shot (wrong-slot result); a
+    PROVEN shot status with neither a result nor a loud archive (missing
+    result); a result for slot k while an earlier slot is missing without
+    archive (history rewrite). A loudly archived prior result (reentry note
+    + result_attemptN.json) is a sanctioned re-entry state, not a gap.
     """
     scene_state_path = Path(scene_dir) / "scene_state.json"
     statuses = {}
@@ -245,13 +253,15 @@ def verify_scene_order_integrity(scene_dir: Path, scene: dict) -> None:
     seen_missing = False
     for shot in scene["shots"]:
         shot_id = shot["shot_id"]
-        result_path = Path(scene_dir) / f"shot_{shot_id}" / "result.json"
+        shot_dir = Path(scene_dir) / f"shot_{shot_id}"
+        result_path = shot_dir / "result.json"
         if not result_path.exists():
-            if statuses.get(shot_id, {}).get("status") == "PROVEN":
-                raise ValueError(
-                    f"shot {shot_id} carries a durable PROVEN status but its "
-                    f"result file is missing: stale/missing result")
-            seen_missing = True
+            if not _loudly_archived(shot_dir):
+                if statuses.get(shot_id, {}).get("status") == "PROVEN":
+                    raise ValueError(
+                        f"shot {shot_id} carries a durable PROVEN status but "
+                        f"its result file is missing: stale/missing result")
+                seen_missing = True
             continue
         result = json.loads(result_path.read_text(encoding="utf-8"))
         if result.get("shot_id") != shot_id:

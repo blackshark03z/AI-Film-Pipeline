@@ -420,3 +420,26 @@ def test_adopted_loader_dispatch_run_layout(tmp_path):
         {"sequences": {"OLD": {"status": "UNRESOLVED"}}}), encoding="utf-8")
     with pytest.raises(ValueError, match="not PROVEN"):
         adopted_loader_dispatch(seq_dir)
+
+
+def test_loudly_archived_slot_allows_contiguous_results(tmp_path):
+    scene = {"scene_id": "SC_X", "shots": [
+        {"shot_id": f"S{i}", "fixture": "f", "continuity": {"kind": "x"}}
+        for i in (1, 2, 3)]}
+    scene_dir = tmp_path / "scene_dir"
+    for sid in ("S1", "S2", "S3"):
+        (scene_dir / f"shot_{sid}").mkdir(parents=True)
+    (scene_dir / "shot_S1" / "result.json").write_text(json.dumps(
+        {"shot_id": "S1", "gate": "SHOT_PROVEN"}), encoding="utf-8")
+    # S2's prior result was loudly archived: re-entry state, not a gap.
+    (scene_dir / "shot_S2" / "result_attempt1.json").write_text(json.dumps(
+        {"shot_id": "S2", "gate": "OWNER_GATE"}), encoding="utf-8")
+    (scene_dir / "shot_S2" / "reentry_note.json").write_text(json.dumps(
+        {"archived_result": "result_attempt1.json"}), encoding="utf-8")
+    (scene_dir / "shot_S3" / "result.json").write_text(json.dumps(
+        {"shot_id": "S3", "gate": "SHOT_PROVEN"}), encoding="utf-8")
+    verify_scene_order_integrity(scene_dir, scene)  # no refusal
+    # Without the loud archive the same gap is refused.
+    (scene_dir / "shot_S2" / "reentry_note.json").unlink()
+    with pytest.raises(ValueError, match="out-of-order scene state"):
+        verify_scene_order_integrity(scene_dir, scene)
