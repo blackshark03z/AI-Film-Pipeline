@@ -114,6 +114,23 @@ def write_durable(path: Path, data) -> None:
     path.write_text(encoded, encoding="utf-8")
 
 
+def archive_result_loudly(shot_dir: Path, reason: str) -> str | None:
+    """Loud re-entry (Scene-003 precedent): an existing failed result is
+    archived, never overwritten or erased, with a durable reason note."""
+    result_path = Path(shot_dir) / "result.json"
+    if not result_path.exists():
+        return None
+    count = 1
+    while (Path(shot_dir) / f"result_attempt{count}.json").exists():
+        count += 1
+    archived = Path(shot_dir) / f"result_attempt{count}.json"
+    result_path.rename(archived)
+    write_durable(Path(shot_dir) / "reentry_note.json", {
+        "archived_result": archived.name, "reason": reason[:300],
+        "at": now()})
+    return archived.name
+
+
 def authority() -> MutationAuthority:
     return MutationAuthority(RUN_DIR, SCOPE_ID)
 
@@ -389,6 +406,7 @@ def run_live_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
     report = {"shot_id": tag, "gate": "OWNER_GATE_LOCAL_FAILURE",
               "generate_clicks": 0, "observed_generate_requests": 0,
               "continuity": shot["continuity"],
+              "budget_kind": shot.get("budget_kind", "primary"),
               "editorial_target_duration":
                   shot.get("editorial_target_duration")}
     frozen = None
@@ -427,22 +445,59 @@ def run_live_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
                 "correlation_marker":
                     frozen.job.correlation_evidence["correlation_marker"],
                 "continuity": binding,
+                "budget_kind": shot.get("budget_kind", "primary"),
                 "editorial_target_duration":
                     shot.get("editorial_target_duration"),
                 "pre_dispatch_snapshot": frozen.job.pre_dispatch_snapshot})
-            already_consumed = bool(
-                store.read_provider_job(job_id).dispatch_count)
+            job_now = store.read_provider_job(job_id)
+            facts = store.read_dispatch_facts(job_id)
+            kinds = {f["kind"] for f in facts}
+            release_stage = bool(kinds & {
+                "PROMPT_VERIFIED", "CLICK_ARMED",
+                "GENERATE_REQUEST_OBSERVED", "PROVIDER_RESPONSE_OBSERVED",
+                "REMOTE_IDENTITY_OBSERVED", "IDENTITY_BOUND"})
+            already_consumed = bool(job_now.dispatch_count) and release_stage
+            if "MUTATION_INTENT_BOUND" in kinds and not release_stage:
+                # Dead reservation: the one-submit authority was consumed at
+                # reservation (store semantics), but no release-stage fact
+                # exists — the UI boundary was never reached, so no external
+                # effect is possible and none may be manufactured. The job
+                # may_submit=false forever; the slot can only complete
+                # through a durable RepairDecision and a NEW ProviderJob.
+                write_durable(shot_dir / "dead_reservation.json", {
+                    "shot_id": tag, "provider_job_id": job_id,
+                    "classification":
+                        "AUTHORITY_CONSUMED_PRE_RELEASE_NO_EFFECT",
+                    "dispatch_count": job_now.dispatch_count,
+                    "fact_kinds": sorted(kinds),
+                    "recovery":
+                        "RECONCILE_ONLY_THEN_REPAIR_DECISION_REQUIRED",
+                    "note": "authority consumed at reservation; release "
+                            "boundary never reached; read-only catalog "
+                            "reconciliation confirms no output; repair "
+                            "slot required",
+                    "at": now()})
+                archived = archive_result_loudly(
+                    shot_dir, "dead reservation re-entry recording")
+                report["archived_prior_result"] = archived
+                report["gate"] = "SLOT_DEAD_RESERVATION_REPAIR_REQUIRED"
+                report["diagnostic"] = (
+                    "authority consumed pre-release with no external "
+                    "effect; fresh ProviderJob via repair decision required")
+                write_durable(result_path, report)
+                print(json.dumps({"shot_id": tag,
+                                  "gate": report["gate"],
+                                  "output": None}), flush=True)
+                return report
             if not already_consumed:
-                auth.check_mutation_allowed("primary_generate")
-                primary = not tag.startswith("REPAIR_")
-                budget_key = "primary_consumed" if primary \
-                    else "repair_consumed"
-                cap = MAX_PRIMARY_GENERATES if primary \
-                    else MAX_REPAIR_GENERATES
+                auth.check_mutation_allowed(budget_key_of(shot))
+                budget_key = budget_key_of(shot)
+                cap = MAX_PRIMARY_GENERATES if budget_key == \
+                    "primary_consumed" else MAX_REPAIR_GENERATES
                 if len(ledger_data[budget_key]) >= cap:
                     raise OwnerAmbiguityGate(
-                        ("PRIMARY" if primary else "REPAIR") +
-                        "_BUDGET_EXHAUSTED")
+                        ("PRIMARY" if budget_key == "primary_consumed"
+                         else "REPAIR") + "_BUDGET_EXHAUSTED")
                 runtime.reserve(frozen, attestation=attestation,
                                 evidence_dir=BASE_ATTESTATION_DIR
                                 if binding["mechanism"] == "same_reference"
@@ -530,13 +585,13 @@ def run_live_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
                         report["gate"] = "OWNER_GATE_REQUEST_NEVER_RELEASED"
                         raise OwnerAmbiguityGate(
                             "EXACT_NATIVE_REQUEST_NOT_OBSERVED")
-                    ledger_data[budget_key_of(tag)].append({
+                    ledger_data[budget_key_of(shot)].append({
                         "shot_id": tag, "provider_job_id": job_id,
                         "released_at": utc_now(),
                         "note": "Generate authority consumed; never retry "
                                 "authority."})
                     save_ledger(ledger_data)
-                    auth.consume(budget_key_of(tag))
+                    auth.consume(budget_key_of(shot))
                     report["gate"] = "OWNER_AMBIGUITY_GATE"
                     end = time.monotonic() + 30
                     while "status" not in response_holder and \
@@ -644,9 +699,10 @@ def run_live_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
     return report
 
 
-def budget_key_of(shot_id: str) -> str:
-    return "repair_consumed" if shot_id.startswith("REPAIR_") \
-        else "primary_consumed"
+def budget_key_of(shot: dict) -> str:
+    kind = shot.get("budget_kind") or (
+        "repair" if shot["shot_id"].startswith("REPAIR_") else "primary")
+    return "repair_consumed" if kind == "repair" else "primary_consumed"
 
 
 def run_live_sequence(entry, state_dir: Path) -> dict:
@@ -680,11 +736,54 @@ def scale_plan() -> dict:
                  "scenes": plan_c["scenes"]}]}
 
 
+def run_repair_command() -> dict:
+    """Execute bounded repair slots through the same per-shot chain.
+
+    Each repairs.json entry carries a durable RepairDecision (validated
+    against the frozen schema) created BEFORE execution, a NEW repair shot
+    id (fresh ProviderJob — never a same-job retry), and its budget kind.
+    """
+    from film_pipeline.core import validate_contract
+    REPAIR_SCOPE = RUN_DIR / "repair_scope"
+    manifest = json.loads((RUN_DIR / "repairs.json").read_text(
+        encoding="utf-8"))
+    results = []
+    for entry in manifest["repairs"]:
+        shot_id = entry["repair_shot_id"]
+        decision = json.loads((RUN_DIR / entry["decision"]).read_text(
+            encoding="utf-8"))
+        validate_contract("repair_decision", decision)
+        repair_state = REPAIR_SCOPE / f"repair_{shot_id}"
+        result_path = repair_state / f"shot_{shot_id}" / "result.json"
+        if result_path.exists():
+            existing = json.loads(result_path.read_text(encoding="utf-8"))
+            results.append({"repair_shot_id": shot_id,
+                            "gate": existing.get("gate"),
+                            "already_durable": True})
+            continue
+        shot_entry = {"shot_id": shot_id, "fixture": entry["fixture"],
+                      "continuity": entry["continuity"],
+                      "budget_kind": "repair",
+                      "editorial_target_duration":
+                          entry.get("editorial_target_duration")}
+        scene_result = scene_runner.execute_scene(
+            {"scene_id": f"repair_{shot_id}", "shots": [shot_entry]},
+            repair_state, run_live_shot)
+        gate = json.loads(result_path.read_text(encoding="utf-8")).get("gate")
+        results.append({"repair_shot_id": shot_id, "gate": gate,
+                        "scene_complete":
+                            scene_result.get("scene_complete")})
+    return {"repairs": results}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("command",
-                        choices=["run", "status", "preflight"])
+                        choices=["run", "status", "preflight", "repair"])
     args = parser.parse_args()
+    if args.command == "repair":
+        print(json.dumps(run_repair_command(), flush=True))
+        return
     if args.command == "status":
         state_path = RUN_DIR / "scale_run_state.json"
         if state_path.exists():
