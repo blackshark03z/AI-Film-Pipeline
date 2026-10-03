@@ -85,7 +85,8 @@ Canary B's newly bound reference (`asset_0ca577d0…` → media `65e73642…`);
 minimal ShotSpec frozen BEFORE the generate
 (`fixtures/requal009/V5_CONT.json`); NEW ProviderJob + NEW marker; fresh
 baseline; **ONE native-UI Generate: 1 click, 1 observed request**; output
-`bab25d49-60b7-4338-b511-2f237876fcc7`; asset sha `89a…` (result.json);
+`bab25d49-60b7-4338-b511-2f237876fcc7`; asset sha
+`3dd1cdfa8cac5e01…` (result.json);
 render lifecycle + acquisition + decode + technical QC passed;
 `may_submit=false` after release (store semantics). Zero retries.
 
