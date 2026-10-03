@@ -40,6 +40,8 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Callable
 
+from film_pipeline.providers.flow_reference_upload import OwnerAmbiguityGate
+
 SCALE_STATE_VERSION = "scale-run-state-v1"
 TERMINAL_GATES = ("SHOT_PROVEN", "R3_SHOT3_REPROOF_PROVEN")
 
@@ -433,6 +435,49 @@ def _collect_shot_results(sequence_dir: Path, sequence: dict) -> list:
                 results.append(json.loads(
                     result_path.read_text(encoding="utf-8")))
     return results
+
+
+def assert_budget_available(used: int, cap: int, kind: str) -> None:
+    """Fail-closed budget gate shared by every mutation path."""
+    if used >= cap:
+        raise OwnerAmbiguityGate(kind + "_BUDGET_EXHAUSTED")
+
+
+def mutation_accounting(ledger: dict, *, max_primary: int, max_repair: int,
+                        max_uploads: int, hard_ceiling: int) -> dict:
+    """Scale mutation accounting against the frozen budgets.
+
+    Budget semantics (frozen package):
+    - the GENERATE hard ceiling bounds GENERATE AUTHORIZATIONS: primary
+      releases + repair releases + dead reservations (a reservation
+      consumes the one-submit authority at reservation, per store
+      semantics — even when the release boundary is never reached);
+    - continuity uploads are a separate budget, deduplicated by media id
+      (a reconciled upload appends once; reporting crashes may duplicate
+      ledger lines);
+    - dead reservations are reported separately: authority consumed with
+      zero provider effect (release boundary never reached).
+    """
+    primary = len(ledger.get("primary_consumed", []))
+    repair = len(ledger.get("repair_consumed", []))
+    dead = len(ledger.get("dead_reservations", []))
+    upload_media = {u.get("media_id") for u in ledger.get("uploads", [])
+                    if u.get("media_id")}
+    uploads = len(upload_media)
+    generates_authorized = primary + repair + dead
+    return {
+        "primary_releases": primary, "max_primary": max_primary,
+        "primary_budget_ok": primary <= max_primary,
+        "repair_releases": repair, "max_repair": max_repair,
+        "repair_budget_ok": repair <= max_repair,
+        "continuity_uploads": uploads, "max_uploads": max_uploads,
+        "uploads_budget_ok": uploads <= max_uploads,
+        "dead_reservations": dead,
+        "generates_authorized": generates_authorized,
+        "hard_ceiling": hard_ceiling,
+        "hard_ceiling_ok": generates_authorized <= hard_ceiling,
+        "total_authority_events": generates_authorized + uploads,
+    }
 
 
 def load_scale_plan(path: Path) -> dict:

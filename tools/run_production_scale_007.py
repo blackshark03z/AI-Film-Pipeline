@@ -508,12 +508,13 @@ def run_live_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
             if not already_consumed:
                 auth.check_mutation_allowed(budget_key_of(shot))
                 budget_key = budget_key_of(shot)
-                cap = MAX_PRIMARY_GENERATES if budget_key == \
-                    "primary_consumed" else MAX_REPAIR_GENERATES
-                if len(ledger_data[budget_key]) >= cap:
-                    raise OwnerAmbiguityGate(
-                        ("PRIMARY" if budget_key == "primary_consumed"
-                         else "REPAIR") + "_BUDGET_EXHAUSTED")
+                import scale_run as _scale
+                _scale.assert_budget_available(
+                    len(ledger_data[budget_key]),
+                    MAX_PRIMARY_GENERATES if budget_key == "primary_consumed"
+                    else MAX_REPAIR_GENERATES,
+                    ("PRIMARY" if budget_key == "primary_consumed"
+                     else "REPAIR"))
                 runtime.reserve(frozen, attestation=attestation,
                                 evidence_dir=BASE_ATTESTATION_DIR
                                 if binding["mechanism"] == "same_reference"
