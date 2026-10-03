@@ -8,6 +8,7 @@ Scene layer: scene_runner; sequence layer: sequence_runner.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 import time
@@ -172,10 +173,14 @@ def run_sequence_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
                 "pre_dispatch_snapshot": frozen.job.pre_dispatch_snapshot})
             already_consumed = bool(store.read_provider_job(job_id).dispatch_count)
             if not already_consumed:
-                auth.check_mutation_allowed("primary_generate")
-                used = len(ledger_data["primary_consumed"])
-                if used >= MAX_PRIMARY_GENERATES:
-                    raise OwnerAmbiguityGate("PRIMARY_BUDGET_EXHAUSTED")
+                repair_mode = bool(shot.get("repair_of"))
+                budget_kind = "repair_generate" if repair_mode else "primary_generate"
+                budget_key = "repair_consumed" if repair_mode else "primary_consumed"
+                cap = MAX_REPAIR_GENERATES if repair_mode else MAX_PRIMARY_GENERATES
+                auth.check_mutation_allowed(budget_kind)
+                used = len(ledger_data[budget_key])
+                if used >= cap:
+                    raise OwnerAmbiguityGate(budget_kind.upper() + "_BUDGET_EXHAUSTED")
                 runtime.reserve(frozen, attestation=attestation,
                                 evidence_dir=attestation_dir)
             records = session.catalog(
@@ -253,9 +258,10 @@ def run_sequence_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
                     if guard.sent != 1:
                         report["gate"] = "OWNER_GATE_REQUEST_NEVER_RELEASED"
                         raise OwnerAmbiguityGate("EXACT_NATIVE_REQUEST_NOT_OBSERVED")
-                    ledger_data["primary_consumed"].append({
+                    ledger_data[budget_key].append({
                         "shot_id": tag, "provider_job_id": job_id,
                         "released_at": utc_now(),
+                        "repair_of": shot.get("repair_of"),
                         "note": "Generate authority consumed; never retry authority."})
                     save_ledger(ledger_data)
                     report["gate"] = "OWNER_AMBIGUITY_GATE"
@@ -360,15 +366,55 @@ def run_sequence_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
     return report
 
 
+def repair(shot_id: str, fixture: str, decision_path: str) -> dict:
+    """ONE evidence-backed repair generation in its own durable scope.
+
+    The primary sequence state is pinned and untouched: the repair runs in a
+    dedicated repair scope (its own plan pin + authority view of the same
+    package latch), backed by the durable RepairDecision."""
+    decision = json.loads(Path(decision_path).read_text(encoding="utf-8"))
+    repair_dir = SEQ_DIR / "repair_scope"
+    repair_dir.mkdir(parents=True, exist_ok=True)
+    write_durable(repair_dir / "repair_decision.json", decision)
+    auth = authority()
+    auth.check_mutation_allowed("repair_generate")
+    ledger_data = ledger()
+    if len(ledger_data["repair_consumed"]) >= MAX_REPAIR_GENERATES:
+        raise OwnerAmbiguityGate("REPAIR_BUDGET_EXHAUSTED")
+    shot = {"shot_id": shot_id, "fixture": fixture,
+            "repair_of": decision["source_shot_id"],
+            "continuity": {"kind": "reference",
+                           "media_id": BASE_REFERENCE["media_id"]}}
+    result = run_sequence_shot(shot, repair_dir, {})
+    if result.get("gate") == "SHOT_PROVEN":
+        ledger_data["repair_consumed"].append({
+            "shot_id": shot_id, "provider_job_id": result["provider_job_id"],
+            "repair_decision": decision_path, "released_at": now(),
+            "note": "new intentional repair generation; never a retry"})
+        save_ledger(ledger_data)
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["sequence", "status"])
+    parser.add_argument("command", choices=["sequence", "status", "repair"])
+    parser.add_argument("--shot")
+    parser.add_argument("--fixture")
+    parser.add_argument("--decision")
     args = parser.parse_args()
-    plan = sequence_runner.load_sequence_plan(PLAN_PATH)
     if args.command == "status":
         print(json.dumps(json.loads((SEQ_DIR / "sequence_state.json").read_text(
             encoding="utf-8")), indent=2, ensure_ascii=False))
         return
+    if args.command == "repair":
+        if not (args.shot and args.fixture and args.decision):
+            raise SystemExit("repair requires --shot --fixture --decision")
+        result = repair(args.shot, args.fixture, args.decision)
+        print(json.dumps({"shot_id": result.get("shot_id"),
+                          "gate": result.get("gate"),
+                          "output": result.get("output_identity")}), flush=True)
+        return
+    plan = sequence_runner.load_sequence_plan(PLAN_PATH)
     result = sequence_runner.execute_sequence(
         plan, SEQ_DIR, lambda scene, scene_dir: scene_runner.execute_scene(
             {"scene_id": scene["scene_id"], "shots": scene["shots"]},

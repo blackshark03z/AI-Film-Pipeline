@@ -84,15 +84,19 @@
           }
         },
         {
-          "shot_id": "SEQ4_B5",
-          "fixture": "fixtures/sequence004/SEQ4_B5.json",
+          "shot_id": "SEQ4_B5R",
+          "fixture": "fixtures/sequence004/SEQ4_B5R.json",
           "continuity": {
             "kind": "reference",
             "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
-          }
+          },
+          "repair_of": "SEQ4_B5",
+          "repair_decision": "projects/flow_multiscene_004/repair_decision_SEQ4_B5R.json"
         }
       ]
     }
   ],
-  "frozen_note": "Frozen before the first live mutation: 2 scenes, 10 shot slots, same-reference continuity throughout (last-frame mechanism already PROVEN in Scene-003; no upload budget needed for this sequence)."
+  "frozen_note": "Frozen before the first live mutation: 2 scenes, 10 shot slots, same-reference continuity throughout (last-frame mechanism already PROVEN in Scene-003; no upload budget needed for this sequence).",
+  "plan_version": 2,
+  "plan_note": "v2: slot B5 re-planned onto repair successor SEQ4_B5R backed by the durable RepairDecision (evidence-driven WORLD_MISMATCH); creative acceptance for the slot unchanged in substance"
 }

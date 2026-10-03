@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0", "spec_version": 1,
+  "shot_id": "SEQ4_B5R",
+  "scene_id": "SCENE_B_VALLEY_PASS",
+  "dramatic_purpose": "Resolution: past the wind gap between the ridges, he strides on into the bright valley.",
+  "duration_target_s": 8,
+  "shot_type": "hero",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "full figure striding frame-left",
+      "behavior_state": "stride lengthens; the valley opens ahead"
+    }
+  ],
+  "camera": {"framing": "WS", "height": "eye_level", "lens_intent": "wide", "movement": {"type": "locked"}},
+  "environment": {"time_of_day": "morning", "weather": "windy clearing",
+                  "atmosphere": "high valley pass below the summits, bright thin light"},
+  "blocking": {
+    "start": "braced where the ridges narrow",
+    "action_beats": ["a last gust passes", "he strides out of the wind"],
+    "end": "striding into the open valley"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward the valley ahead frame-left",
+    "start_state": {"position": "at the narrow gap between ridges"},
+    "end_state": {"pose": "striding into the open valley"},
+    "critical_invariants": [
+      "same robes and sword",
+      "valley pass stable",
+      "morning light consistent",
+      "no man-made objects in the landscape"
+    ]
+  }
+}
