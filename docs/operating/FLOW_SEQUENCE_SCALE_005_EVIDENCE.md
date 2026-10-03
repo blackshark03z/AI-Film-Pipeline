@@ -4,7 +4,7 @@
 **Branch:** `zcode/flow-sequence-scale-005`
 **Original Package-004 SHA:** `603c4b50fabf8e53de1df5b71ed909d1f3a653dc`
 **Package-005 base SHA:** `9e2093fb88b2b4b860af1cc0e7c9e8819f49eacc` (Q0 custody-closure commit)
-**Delivery:** the branch tip carrying this record (parent = `ed20f3d` Q4/Q5 commit chain tip; verify `git log -1`).
+**Delivery:** `a167506f80ca265f2b4781139a62ab920ee04081` — the exact commit carrying this evidence record (parent `ed20f3d`).
 
 ## 1. Active wall time
 
@@ -114,3 +114,89 @@ The system now runs REAL multi-sequence production: a proven historical sequence
 ## 11. Recommended next LARGE package
 
 **FLOW-SEMANTIC-QUALIFY-006** (Owner prerequisite: provision a Gemini key at `api_keys/gemini_key.txt` or `GEMINI_API_KEY` env): qualify semantic QC per the frozen criteria against the Scene-003/004/005 corpus, integrate behind the QC seam with caching, then run Owner-approved take selection and a semantic-review-driven V2 iteration on the master rough cut.
+
+
+---
+
+# PROOF CUSTODY CLOSURE (S0, FLOW-SEMANTIC-QUALIFY-006)
+
+## S0A — Exact delivery SHA
+
+Package-005 delivery: `a167506f80ca265f2b4781139a62ab920ee04081` (verified `git rev-parse HEAD` == commit carrying this record before any Package-006 work). Ancestry: `603c4b5…` (Package-004) and `9e2093f…` (Q0 base) are ancestors.
+
+## S0B — Final verification battery at the delivery SHA
+
+- Full network-free regression: **606 passed, 0 failed**.
+- Collected test count: 606.
+- Compile/syntax: clean. `git diff --check`: clean.
+- SoT manifest: 30/30 (refreshed post-A8).
+- Protected-file review: SoT 13 appends (A7/A8) + manifest hashes only.
+- Secret/PII/API-key scan on Package-005 delta: clean.
+- Slice-0011 regression: included in the full run, green.
+- Scene-003/R1 regression: test_flow_render_lifecycle.py (33), test_mutation_authority_latch.py (12), test_reference_reconcilable_transport.py (46) — green.
+- Package-004 regression: test_sequence_orchestrator.py (13), test_scene_orchestrator.py (18), test_production_run.py (9) — green.
+
+## S0C — Explicit 45-scenario recovery mapping
+
+| # | Scenario | Acceptance | Proof (exact test/function) | Result |
+| :-- | :-- | :-- | :-- | :-- |
+| 1 | run before first sequence | adopted verified, live deferred | test_production_run.py::test_execution_adopts_and_runs_live | PASS |
+| 2 | restart after first shot | per-shot result durable | test_scene_orchestrator.py::test_completed_shots_never_reexecute_after_restart | PASS |
+| 3 | restart mid-scene | EXECUTING re-enters exactly once | test_scene_orchestrator.py::test_restart_mid_scene_resumes_from_durable_truth | PASS |
+| 4 | restart between scenes | per-scene state dirs isolate pins | test_sequence_orchestrator.py::test_crash_mid_scene2_between_scenes | PASS |
+| 5 | all media acquired, pre-QC | packaging read-only + idempotent | build_sequence_004 re-run; QCStore INSERT OR IGNORE | PASS |
+| 6 | after QC | takes persist immutable | QCStore shot-collision guard | PASS |
+| 7 | after repair decision | decision durable pre-mutation | repair_decision_SEQ4_B5R.json read before reserve | PASS |
+| 8 | after selected takes | canonical manifest rebuilds from persisted takes | build_master_005 persisted-take reuse | PASS |
+| 9 | before sequence manifest | manifest id = content hash | make_edit_manifest identity basis | PASS |
+| 10 | after sequence manifest | overwrite refusal | write_referenced_package 'existing package differs' | PASS |
+| 11 | before AutoEdit | rough-cut receipt reuse | real_rough_cut rough_cut_renders check | PASS |
+| 12 | after AutoEdit receipt | fresh lineage readback | real_rough_cut 'fresh lineage mismatch' | PASS |
+| 13 | sequence order changed | run/sequence plan pin | test_production_run.py::test_run_plan_identity_pinned | PASS |
+| 14 | scene order changed | scene plan pin | test_sequence_orchestrator.py::test_scene_order_change_refused | PASS |
+| 15 | shot order changed | scene plan pin | test_sequence_orchestrator.py::test_shot_order_change_after_execution_is_refused | PASS |
+| 16 | sequence plan content drift | hash pin | test_sequence_orchestrator.py::test_plan_change_after_execution_is_refused | PASS |
+| 17 | incomplete prior sequence | adoption refuses non-PROVEN | test_production_run.py::test_adopted_snapshot_fails_on_unproven_or_missing | PASS |
+| 18 | adopted state missing | explicit ValueError | same test, missing branch | PASS |
+| 19 | duplicate adopted shots | refusal | test_production_run.py::test_adopted_duplicate_shot_refused | PASS |
+| 20 | adopted sequence hash drift | per-shot gate/hash recheck | adopted_sequence_snapshot per-result gate check | PASS |
+| 21 | stale take in canonical manifest | stale-slot scan | R1 stale-3C scan + Package-004 stale-B5 scan (NONE) | PASS |
+| 22 | wrong take selected | QCStore shot-collision guard | qc.py 'different SelectedTake' | PASS |
+| 23 | missing selected asset | fail-closed verify | validate_source / verify_media 'referenced media missing' | PASS |
+| 24 | manifest source missing | fail-closed at package write | hit live in Q11, fixed locators | PASS |
+| 25 | AutoEdit package tamper | checksums.json verify | validate_producer_package | PASS |
+| 26 | rough-cut receipt tamper | fresh lineage mismatch raises | real_rough_cut readback | PASS |
+| 27 | rough-cut bytes changed | sha vs recorded | rough-cut tamper test + independent sha re-verification | PASS |
+| 28 | output-byte tamper | same sha re-verification | post-build sha checks | PASS |
+| 29 | Owner approval falsely inferred | OWNER_APPROVED never set | Owner Review Packet model (PROVISIONAL only) | PASS |
+| 30 | pending render across restart | RENDER_PENDING -> RECONCILE_ONLY | test_flow_render_lifecycle.py::test_render_pending_is_not_failure… | PASS |
+| 31 | unresolved/unknown render payload | UNKNOWN -> UNOBSERVABLE, no streak advance | test_unknown_schema_does_not_advance_drop_counter_or_window | PASS |
+| 32 | persistent disappearance | threshold + 900 s temporal policy | test_threshold_plus_minimum_elapsed_window_terminal_drop | PASS |
+| 33 | completion beats stale drop | completion precedence | test_completion_before_threshold_prevents_drop | PASS |
+| 34 | acquisition partial | staging discarded, refetched | test_recovery_matrix_002.py::test_staging_without_receipt… | PASS |
+| 35 | media mismatch | bind_media_bytes fail-closed | test_flow_r2v_boundary.py media binding tests | PASS |
+| 36 | owner latch (mutation gate) | one-way durable latch | test_mutation_authority_latch.py (12 tests) | PASS |
+| 37 | latch survives restart | durable JSON state | test_latch_survives_restart | PASS |
+| 38 | read-only resolution keeps latch | knowledge != authority | test_readonly_resolution_identified_effect_keeps_latch | PASS |
+| 39 | unused budget after latch refused | choke point | test_unused_generate_budget_cannot_be_consumed_after_latch | PASS |
+| 40 | successor cannot bypass latch | same choke point | test_successor_and_repair_paths_cannot_bypass_latch | PASS |
+| 41 | new scope fresh authority | new scope OPEN | test_new_owner_authorized_scope_starts_fresh | PASS |
+| 42 | read-only usable after latch | knowledge recording allowed | test_readonly_operations_usable_after_latch | PASS |
+| 43 | semantic FAIL cannot Generate | no auto-regeneration path | repair only via durable decision + repair(); semantic_qc has no mutation surface | PASS |
+| 44 | VLM PASS != technical pass override | technical gate independent | test_observation_never_carries_authority_fields | PASS |
+| 45 | credential absent -> gate, package continues | EXTERNAL_CREDENTIAL_GATE recorded, build unblocked | Package-005 Q1 (parent evidence §4) | PASS |
+
+## S0D — Full new-sequence identity ledger (SEQ005, all 8 slots inline)
+
+| Shot | ProviderJob | Provider media | Asset SHA256 | Bytes | Release | Attribution | Render | Acquisition | may_submit |
+| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
+| SEQ5_C1 | `job_45e5d29a35b5358b…` | `e4bd163f-07b3-46ba-b96b-2bf5ecb06026` | `86a811477e637380…` | 7,515,842 | ONE Generate, at-most-once | marker echo, poll 1 | completion recognized | exact acquire + EOF PASS | false |
+| SEQ5_C2 | `job_c861cdd1b7395f9b…` | `5efcb0d6-366e-49ae-beef-394169aed3f5` | `93d81043e56ca805…` | 2,638,700 | ONE Generate, at-most-once | marker echo, poll 1 | completion recognized | exact acquire + EOF PASS | false |
+| SEQ5_C3 | `job_536168f72bbf1063…` | `c8bb218b-4272-4a25-801b-a988edbd8fce` | `24ec3a3a2528e605…` | 1,491,416 | ONE Generate, at-most-once | marker echo, poll 1 | completion recognized | exact acquire + EOF PASS | false |
+| SEQ5_C4 | `job_b44414ce4042eacc…` | `bdbcc343-00f3-4f89-84df-c6076d6fd322` | `d156dd8ee3fae4b3…` | 13,026,920 | ONE Generate, at-most-once | marker echo, poll 1 | completion recognized | exact acquire + EOF PASS | false |
+| SEQ5_D1 | `job_61b02a1c0b41cd28…` | `eddf17b5-5fd0-4c7b-a91f-6ef3f6d8099a` | `3d42840371d82bc9…` | 6,928,095 | ONE Generate, at-most-once | marker echo, poll 1 | completion recognized | exact acquire + EOF PASS | false |
+| SEQ5_D2 | `job_bf3b511290a498a6…` | `b5d57862-ceb6-4b30-9e67-abaa9b2fa70c` | `8e17e35e258a7a1a…` | 4,539,204 | ONE Generate, at-most-once | marker echo, poll 1 | completion recognized | exact acquire + EOF PASS | false |
+| SEQ5_D3 | `job_dda46d685b37fe35…` | `0de6b723-90b0-43e3-91c6-c82481cef7b2` | `83bf4774783be0f6…` | 2,549,538 | ONE Generate, at-most-once | marker echo, poll 1 | completion recognized | exact acquire + EOF PASS | false |
+| SEQ5_D4 | `job_c948cfd353d7828e…` | `e18464f5-ec66-4451-85a9-908b8dfd234c` | `70b31768c7f4a2f0…` | 6,699,637 | ONE Generate, at-most-once | marker echo, poll 1 | completion recognized | exact acquire + EOF PASS | false |
+
+All eight: `may_submit = false` permanently after release (recovery `ACQUIRED`, dispatch_count = 1). No shorthand; each row derives from its durable result.json.
