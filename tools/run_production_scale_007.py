@@ -325,7 +325,10 @@ def continuity_upload(scene_dir: Path, shot_id: str, from_shot: str) -> dict:
 
 
 def reference_binding_for(shot: dict, scene_dir: Path) -> dict:
-    """Resolve the frozen continuity binding for one planned shot."""
+    """Resolve the frozen continuity binding for one planned shot.
+
+    Last-frame bindings lazily trigger their ONE budgeted upload on first
+    need (idempotent via the scene continuity ledger; never a re-upload)."""
     kind = shot["continuity"]["kind"]
     if kind == "reference":
         return {"media_id": BASE_REFERENCE["media_id"],
@@ -333,19 +336,29 @@ def reference_binding_for(shot: dict, scene_dir: Path) -> dict:
                 "attestation_id": BASE_REFERENCE["attestation_id"],
                 "mechanism": "same_reference"}
     if kind == "last_frame":
-        entries = json.loads(_continuity_ledger_path(scene_dir)
-                             .read_text(encoding="utf-8"))["bindings"]
+        ledger_path = _continuity_ledger_path(scene_dir)
+        entries = json.loads(ledger_path.read_text(encoding="utf-8"))[
+            "bindings"] if ledger_path.exists() else []
         binding_for = shot["continuity"].get("binding_for", shot["shot_id"])
+        from_shot = shot["continuity"]["from_shot"]
         matches = [e for e in entries if e["for_shot"] == binding_for]
-        if len(matches) != 1:
+        if len(matches) > 1:
             raise OwnerAmbiguityGate(
-                f"CONTINUITY_BINDING_MISSING for {shot['shot_id']}")
+                f"CONTINUITY_BINDING_AMBIGUOUS for {shot['shot_id']}")
+        if not matches:
+            continuity_upload(scene_dir, shot_id, from_shot)
+            entries = json.loads(ledger_path.read_text(encoding="utf-8"))[
+                "bindings"]
+            matches = [e for e in entries if e["for_shot"] == binding_for]
+            if len(matches) != 1:
+                raise OwnerAmbiguityGate(
+                    f"CONTINUITY_BINDING_MISSING for {shot['shot_id']}")
         entry = matches[0]
         return {"media_id": entry["provider_media_id"],
                 "asset_id": entry["adopted_asset_id"],
                 "attestation_id": entry["adopted_attestation_id"],
                 "mechanism": "last_frame",
-                "from_shot": shot["continuity"]["from_shot"],
+                "from_shot": from_shot,
                 "source_frame_sha256": entry["frame_sha256"],
                 "upload_store": entry["upload_store"],
                 "upload_attestation_id": entry["attestation_id"]}
