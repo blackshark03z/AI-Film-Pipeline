@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ4_B1",
+  "scene_id": "SCENE_B_VALLEY_PASS",
+  "dramatic_purpose": "New space: establish the high valley pass below the summit.",
+  "duration_target_s": 8,
+  "shot_type": "establishing",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "small figure entering frame-right on the pass",
+      "behavior_state": "figure descends onto the pass"
+    }
+  ],
+  "camera": {
+    "framing": "EWS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "morning",
+    "weather": "clear",
+    "atmosphere": "high valley pass below the summits, bright thin light"
+  },
+  "blocking": {
+    "start": "figure enters frame-right",
+    "action_beats": [
+      "long slope revealed below",
+      "figure moves frame-left"
+    ],
+    "end": "figure mid-pass"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "valley pass geography stable",
+      "wardrobe unchanged",
+      "morning light consistent"
+    ]
+  }
+}

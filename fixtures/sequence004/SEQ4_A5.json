@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ4_A5",
+  "scene_id": "SCENE_A_DAWN_STANCE",
+  "dramatic_purpose": "Button: he steps out of frame, leaving the empty summit.",
+  "duration_target_s": 8,
+  "shot_type": "cutaway",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure exiting frame-left",
+      "behavior_state": "two steps carry him past frame-left edge"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "figure at frame center",
+    "action_beats": [
+      "steady steps frame-left",
+      "cloak trails past the edge"
+    ],
+    "end": "figure exits frame-left; summit empty"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "empty-summit geography stable",
+      "no new elements enter",
+      "dawn light from frame-left"
+    ]
+  }
+}

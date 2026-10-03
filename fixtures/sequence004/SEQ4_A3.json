@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ4_A3",
+  "scene_id": "SCENE_A_DAWN_STANCE",
+  "dramatic_purpose": "Descending the ridge, he pauses to grip the hilt with resolve.",
+  "duration_target_s": 8,
+  "shot_type": "action",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure from waist up on the ridge path",
+      "behavior_state": "hand closes on the hilt; eyes narrow"
+    }
+  ],
+  "camera": {
+    "framing": "MS",
+    "height": "eye_level",
+    "lens_intent": "normal",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "walking the ridge path",
+    "action_beats": [
+      "a firm step stops",
+      "hand closes on the hilt"
+    ],
+    "end": "paused, hand on hilt"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "same robes",
+      "hilt wrap consistent",
+      "dawn light from frame-left"
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ4_B3",
+  "scene_id": "SCENE_B_VALLEY_PASS",
+  "dramatic_purpose": "Escalation: wind funnels through the pass; he braces against it.",
+  "duration_target_s": 8,
+  "shot_type": "action",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "full figure bracing against wind",
+      "behavior_state": "cloak whips; he plants his footing"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "morning",
+    "weather": "clear",
+    "atmosphere": "high valley pass below the summits, bright thin light"
+  },
+  "blocking": {
+    "start": "walking freely",
+    "action_beats": [
+      "a gust sweeps the pass",
+      "he plants his stance against it"
+    ],
+    "end": "braced stance against the wind"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "robes and sword unchanged",
+      "wind direction from the valley",
+      "morning light consistent"
+    ]
+  }
+}

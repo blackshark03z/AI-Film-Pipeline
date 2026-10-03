@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ4_B2",
+  "scene_id": "SCENE_B_VALLEY_PASS",
+  "dramatic_purpose": "Re-entry: closer on the swordsman making the pass in steady strides.",
+  "duration_target_s": 8,
+  "shot_type": "action",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure from waist up, walking",
+      "behavior_state": "three unhurried strides"
+    }
+  ],
+  "camera": {
+    "framing": "MS",
+    "height": "eye_level",
+    "lens_intent": "normal",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "morning",
+    "weather": "clear",
+    "atmosphere": "high valley pass below the summits, bright thin light"
+  },
+  "blocking": {
+    "start": "entering the pass frame-right",
+    "action_beats": [
+      "strides settle into rhythm",
+      "cloak sways across the frame"
+    ],
+    "end": "striding mid-pass"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "same robes and sword",
+      "pass geography stable",
+      "morning light consistent"
+    ]
+  }
+}

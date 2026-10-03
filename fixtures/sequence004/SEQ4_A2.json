@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ4_A2",
+  "scene_id": "SCENE_A_DAWN_STANCE",
+  "dramatic_purpose": "The swordsman turns from the vista and steps toward the descent path.",
+  "duration_target_s": 8,
+  "shot_type": "action",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure turning and stepping frame-left",
+      "behavior_state": "one measured step; cloak sways"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "dawn",
+    "weather": "clear",
+    "atmosphere": "cold summit above cloud-sea"
+  },
+  "blocking": {
+    "start": "standing at the summit center",
+    "action_beats": [
+      "a turn toward frame-left",
+      "two slow steps down-ridge"
+    ],
+    "end": "mid-step onto the descent path"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "toward frame-left horizon",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "same robes and sword",
+      "ridge geography stable",
+      "dawn light from frame-left"
+    ]
+  }
+}
