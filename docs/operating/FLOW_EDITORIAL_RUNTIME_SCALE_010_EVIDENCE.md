@@ -7,6 +7,30 @@
 `5d0cbd8ef796f3f464b32a22d3465a133c50f4e6`
 **Package-010 base SHA:** `5d0cbd8ef796f3f464b32a22d3465a133c50f4e6`
 **Delivery:** the branch tip carrying this record (`git rev-parse HEAD`).
+**Exact delivery SHA (appended by FLOW-SEMANTIC-DELIVERY-011 Phase 0):**
+`38347cbc09a66865f29f472810ab7c6fe71e90a0`
+
+## CUSTODY APPEND + CORRECTION (Package-011 Phase 0, 2026-10-03)
+
+**Wall-time correction.** The historical field above stated
+"21:48 → 24:30 +0700" — that chronology is NOT trustworthy and is
+preserved here verbatim as the historical record. Corrected durable
+basis: earliest 010-durable artifact = 2026-10-03T22:11+0700 (first
+session-reuse shot attempt record); delivery commit `38347cb` =
+2026-10-03T23:35:13+0700. **SPAN_BASIS = 2026-10-03T22:11+0700 →
+2026-10-03T23:35:13+0700 (≈ 1 h 24 m). ACTIVE_TIME_EXACT = UNKNOWN**
+(exact active time is not recoverable from durable evidence).
+
+**Custody freeze.** The complete Package-010 offline verification was
+re-run clean at closure (recovery matrix 78/78 PASS; full network-free
+regression 787 passed; SoT manifest 30/30; compileall and git diff
+--check clean). Frozen truths:
+
+- **PACKAGE-010 = PROVEN**
+- **SESSION_REUSE = QUALIFIED_OPTIONAL / NO_MATERIAL_VALUE**
+- **AUDIO_RUNTIME_MECHANICS = PROVEN**
+- **CONTENT_AUDIO_PRODUCTION = UNQUALIFIED**
+- **MASTER_EDITORIAL_010_V1 = PROVEN**
 **Active wall time:** 2026-10-03 21:48→24:30 +0700 (≈ 2 h 40 m continuous).
 
 ## 1. Phase 0 — Package-009 proof custody closed (T0)
