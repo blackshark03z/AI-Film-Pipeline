@@ -89,8 +89,20 @@ class GeminiSemanticQCEvaluator(SemanticQCEvaluator):
         try:
             with urllib.request.urlopen(request_obj, timeout=120) as response:
                 result = json.load(response)
-        except urllib.error.URLError:
-            raise RuntimeError("SEMANTIC_API_UNAVAILABLE") from None
+        except urllib.error.HTTPError as exc:
+            body_text = ""
+            try:
+                body_text = exc.read(65536).decode("utf-8", "replace")
+            except Exception:
+                body_text = ""
+            retry_after = exc.headers.get("Retry-After") if \
+                exc.headers else None
+            from .semantic_errors import classify_http_failure
+            raise classify_http_failure(exc.code, body_text,
+                                        retry_after) from None
+        except urllib.error.URLError as exc:
+            from .semantic_errors import classify_transport_exception
+            raise classify_transport_exception(exc) from None
         observations = self._parse(result, request, fingerprint)
         validate_semantic_batch(request, observations)
         return observations
