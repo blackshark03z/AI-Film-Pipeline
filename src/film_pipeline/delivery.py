@@ -111,6 +111,7 @@ def undeclared_files(manifest: DeliveryManifest, root: Path,
                      directory: Path) -> list[str]:
     """Files inside a delivered directory that the manifest does not declare."""
     declared = {e.path for e in manifest.entries}
-    return [str(p.relative_to(root))
+    return [p.relative_to(root).as_posix()
             for p in sorted(directory.rglob("*"))
-            if p.is_file() and str(p.relative_to(root)) not in declared]
+            if p.is_file() and p.relative_to(root).as_posix()
+            not in declared]
