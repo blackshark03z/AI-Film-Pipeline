@@ -29,7 +29,7 @@ def backend():
     return SemanticEvaluatorBackend(identity())
 
 
-def packet(packet_id="PKT-Q014-001", rubric=None):
+def packet(packet_id="CTRL-Q014-001", rubric=None):
     return WorkerReviewPacket(
         packet_id=packet_id, request_fingerprint=FP,
         shot_spec_json={"shot_id": "X", "dramatic_purpose": "p"},
@@ -60,7 +60,7 @@ def test_01_immutable_packet_digest_binds_content(tmp_path):
 def test_02_result_for_wrong_packet_refused():
     pkt = packet()
     res = result(pkt)
-    other = packet(packet_id="PKT-Q014-002")
+    other = packet(packet_id="CTRL-Q014-002")
     with pytest.raises(ValueError, match="another request"):
         import_worker_result(other, res, list(RUBRIC), backend(),
                              sha256(canonical_json(RUBRIC)))
@@ -125,7 +125,7 @@ def test_08_expected_label_hidden_in_packet_refused():
 
 
 def test_09_label_words_in_alias_free_id():
-    pkt = packet(packet_id="PKT-Q014-007")
+    pkt = packet(packet_id="CTRL-Q014-007")
     assert "positive" not in pkt.packet_id.lower()
     assert "negative" not in pkt.packet_id.lower()
 

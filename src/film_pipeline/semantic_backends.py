@@ -118,7 +118,7 @@ class WorkerReviewPacket(ContractModel):
     labels, acceptance thresholds, prior verdicts, or any semantic label
     in its identifier (blind aliases like CTRL-Q014-001 are used).
     """
-    packet_id: str = Field(pattern=r"^PKT-Q014-[0-9]{3}$")
+    packet_id: str = Field(pattern=r"^CTRL-Q014-[0-9]{3}$")
     request_fingerprint: str = Field(pattern=r"^[a-f0-9]{64}$")
     shot_spec_json: dict
     selected_take_lineage: dict
@@ -153,7 +153,7 @@ class WorkerReviewPacket(ContractModel):
 
 class WorkerReviewResult(ContractModel):
     """The worker's sealed answer for one packet, before import."""
-    packet_id: str = Field(pattern=r"^PKT-Q014-[0-9]{3}$")
+    packet_id: str = Field(pattern=r"^CTRL-Q014-[0-9]{3}$")
     packet_digest: str = Field(pattern=r"^[a-f0-9]{64}$")
     backend: BackendIdentity
     reviewed_at: str
