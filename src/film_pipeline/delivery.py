@@ -24,7 +24,8 @@ ROLES = {"master", "narration_master", "caption_srt", "caption_vtt",
          "poster", "technical_qc", "semantic_qc", "owner_review",
          "provenance", "checksums", "narration_receipt",
          "narration_requirement", "caption_requirement", "semantic_receipt",
-         "diagnostic_comparison"}
+         "diagnostic_comparison",
+         "backend_contract"}
 
 
 class DeliveryEntry(ContractModel):
@@ -55,9 +56,13 @@ class DeliveryManifest(ContractModel):
 
     @model_validator(mode="after")
     def validate_identity(self):
-        roles = [e.role for e in self.entries]
-        if len(roles) != len(set(roles)):
-            raise ValueError("duplicate delivery roles")
+        paths = [e.path for e in self.entries]
+        if len(paths) != len(set(paths)):
+            raise ValueError("duplicate delivery paths")
+        single = [e.role for e in self.entries
+                  if e.role in ("master", "poster", "checksums")]
+        if len(single) != len(set(single)):
+            raise ValueError("duplicate single-instance delivery roles")
         if self.delivery_id is None:
             return self
         basis = {k: v for k, v in self.model_dump(mode="json").items()

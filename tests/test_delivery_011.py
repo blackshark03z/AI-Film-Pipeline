@@ -12,9 +12,10 @@ def entry(tmp_path, name="a.mp4", role="master", data=b"payload"):
     path = tmp_path / name
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(data)
+    media = "application/json" if name.endswith(".json") else "video/mp4"
     return DeliveryEntry(role=role, path=name,
                          sha256=hashlib.sha256(data).hexdigest(),
-                         bytes=len(data), media_type="video/mp4",
+                         bytes=len(data), media_type=media,
                          source_lineage="canonical master")
 
 
@@ -83,13 +84,22 @@ def test_unknown_role_refused():
                       source_lineage="x")
 
 
-def test_duplicate_roles_refused(tmp_path):
+def test_duplicate_paths_refused(tmp_path):
     e1 = entry(tmp_path, name="a.mp4", data=b"1")
-    e2 = entry(tmp_path, name="b.mp4", data=b"2")
-    with pytest.raises(ValueError, match="duplicate delivery roles"):
+    with pytest.raises(ValueError, match="duplicate delivery paths"):
         DeliveryManifest(film_id="f",
-                         entries=[e1, e2.model_copy(update={"role": "master"})],
+                         entries=[e1, e1], delivery_id=None) and None
+        DeliveryManifest(film_id="f", entries=[e1, e1],
                          delivery_id="delivery_" + "0" * 64)
+
+
+def test_multi_receipt_semantic_roles_allowed(tmp_path):
+    e1 = entry(tmp_path, name="a.mp4", data=b"1")
+    e2 = entry(tmp_path, name="r1.json", role="semantic_qc", data=b"2")
+    e3 = entry(tmp_path, name="r2.json", role="semantic_qc", data=b"3")
+    m = DeliveryManifest(film_id="f", entries=[e1, e2, e3],
+                         delivery_id=None)
+    assert len(m.entries) == 3
 
 
 def test_media_type_extension_binding(tmp_path):
