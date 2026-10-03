@@ -54,7 +54,7 @@ def main() -> None:
         "observational_only": True,
         "authority_note": ("this ledger grants NOTHING: statuses are read "
                            "back from durable gates; mutation authority "
-                           "lives exclusively in MutationAuthority state"),
+                           "lives exclusively in the durable authority state"),
         "runs": RUNS,
         "canonical_lineage": {
             "run": "FLOW-UPLOAD-CONTRACT-REQUAL-009",
