@@ -6,6 +6,46 @@
 **Package-012 custody-correction SHA:** `c96c7b1bb2255358b56aec3a6e06de4da2022da8`
 **Package-013 base SHA:** `c96c7b1bb2255358b56aec3a6e06de4da2022da8`
 **Delivery:** the branch tip carrying this record (`git rev-parse HEAD`).
+**Exact delivery SHA (appended by FLOW-WORKER-SEMANTIC-BACKEND-014
+Phase 0):** `588a0537bbb03b329b4df50cfeecd6e01e060638`
+**Delivery commit containing the completed evidence:** the record was
+committed at `588a053` and the final tip at delivery time was
+`c941d86` (both on this branch; canonical identity = `588a053`).
+
+## CUSTODY APPEND + CORRECTION (Package-014 Phase 0, 2026-10-04)
+
+**0B — Wall-time correction.** The historical field "session
+2026-10-04 02:10→04:20 +0700" contains a future-looking endpoint and is
+preserved verbatim as history. Corrected basis (CLOCK_SOURCE = git
+commit timestamps): EARLIEST_DURABLE_EVENT = commit `68bfa77`
+2026-10-04T01:57:01+0700; LATEST_DURABLE_EVENT = commit `c941d86`
+2026-10-04T02:12:05+0700; SPAN_BASIS = 2026-10-04T01:57:01+0700 →
+2026-10-04T02:12:05+0700 (≈ 15 m of commit-recorded span; earlier
+uncommitted work is not durably timestamped). ACTIVE_TIME_EXACT =
+UNKNOWN.
+
+**0C — Gemini 2.5 void-attempt accounting**
+(`gemini25_call_custody_013.json`):
+- VALID_DURABLE_EVALUATIONS = 17 (run1-final rows with fingerprints);
+- EXTERNAL_CALLS_WITHOUT_DURABLE_RECEIPT = UNKNOWN, bounded 1..17 (the
+  first harness-crash attempt covered the corpus prefix through
+  action_positive — 7 controls — before any state persistence; at
+  minimum action_positive reached the provider and its result was lost);
+- REEXECUTED_CONTROLS = all 17 were re-executed in the durable pass;
+  per-control second-call status = UNKNOWN;
+- **The unsupported zero-retry claim is REMOVED**: what remains provable
+  is "no duplicate evaluations WITH durable results; zero retries of
+  OBSERVED verdicts";
+- **GEMINI_2_5_FLASH = NOT_QUALIFIED_IN_PACKAGE_013** (the authorized
+  attempt did not satisfy frozen acceptance) — preserved;
+- Owner decision this cycle: **NO_FURTHER_GEMINI_QUALIFICATION**
+  (product decision, not a scientific claim).
+
+**0D — Custody freeze.** Package-013 offline battery re-run clean
+(814 passed; SoT 30/30; matrix 106/106; determinism 3-build). Frozen:
+**PACKAGE_013_TECHNICAL_DELIVERY = PROVEN** preserving SEMANTIC_QC_READY
+= false, CONTENT_AUDIO_PRODUCTION_UNQUALIFIED,
+TIMED_CAPTION_AUTHORITY_UNAVAILABLE, OWNER_TAKE_REVIEW_COMPLETE = false.
 **Corrected Package-012 wall-time basis:** SPAN_BASIS 2026-10-04T00:45:32
 +0700 (`ed2e38e`) → 2026-10-04T01:15:43+0700 (`f8f011c`, ≈30 m);
 ACTIVE_TIME_EXACT = UNKNOWN; historical "00:40→02:10" preserved in the
