@@ -3,7 +3,7 @@
   "spec_version": 1,
   "shot_id": "SEQ7_E1",
   "scene_id": "SCENE_E_RIDGE_APPROACH",
-  "dramatic_purpose": "Departure orientation: the stream rest is over; the road climbs toward a long ridge and he takes it.",
+  "dramatic_purpose": "Departure: the rest is over; the road climbs toward the long ridge.",
   "duration_target_s": 8,
   "shot_type": "establishing",
   "characters": [
@@ -11,8 +11,8 @@
       "character_id": "swordsman_white_robes",
       "identity_version": "swordsman_white_robes_v1",
       "look_state_id": "white_robes_cloud_summit_dawn_v1",
-      "role_in_shot": "small figure leaving the stream bank onto the ridge road",
-      "behavior_state": "figure walks away from the water, frame-left along the road"
+      "role_in_shot": "small figure leaving the stream bank",
+      "behavior_state": "walks away from the water, frame-left along the road"
     }
   ],
   "camera": {
@@ -29,13 +29,13 @@
     "atmosphere": "long green ridge road in climbing light"
   },
   "blocking": {
-    "start": "figure at the stream bank, frame-right",
+    "start": "at the stream bank, frame-right",
     "action_beats": [
       "the stream drops behind",
       "the ridge road opens ahead",
-      "figure moves steadily frame-left"
+      "he moves steadily frame-left"
     ],
-    "end": "figure small on the ridge road",
+    "end": "small on the ridge road",
     "prop_interactions": []
   },
   "performance": {

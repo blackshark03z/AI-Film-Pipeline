@@ -3,7 +3,7 @@
   "spec_version": 1,
   "shot_id": "SEQ7_F2",
   "scene_id": "SCENE_F_STORM_GATE",
-  "dramatic_purpose": "Escalation: inside the gate the wind funnels; he crosses with his shoulder lowered, robes cracking.",
+  "dramatic_purpose": "Escalation: inside the gate the wind funnels hard.",
   "duration_target_s": 8,
   "shot_type": "action",
   "characters": [
@@ -11,8 +11,8 @@
       "character_id": "swordsman_white_robes",
       "identity_version": "swordsman_white_robes_v1",
       "look_state_id": "white_robes_cloud_summit_dawn_v1",
-      "role_in_shot": "figure from the waist up, forcing the passage",
-      "behavior_state": "shoulder lowered into the wind; one hard step at a time"
+      "role_in_shot": "figure from the waist up",
+      "behavior_state": "shoulder lowered into the wind"
     }
   ],
   "camera": {
@@ -26,25 +26,24 @@
   "environment": {
     "time_of_day": "midday",
     "weather": "storm front",
-    "atmosphere": "wind-flattened grass and racing cloud shadow at a narrow rock gate"
+    "atmosphere": "wind-flattened grass at a narrow rock gate"
   },
   "blocking": {
     "start": "at the mouth of the gate",
     "action_beats": [
       "a hard gust hits",
       "he drives a step through it",
-      "robes crack flat against him"
+      "robes crack against him"
     ],
-    "end": "through the worst of the funnel",
+    "end": "through the worst gust",
     "prop_interactions": []
   },
   "performance": {
     "observable_beats": [
-      "effort shows in the posture, not the face"
+      "effort shows in posture"
     ],
     "forbidden": [
-      "no shouting",
-      "no new wounds"
+      "no shouting"
     ]
   },
   "lighting": {},
@@ -56,7 +55,7 @@
     "critical_invariants": [
       "rock gate walls consistent with SEQ7_F1 last frame",
       "wardrobe unchanged",
-      "wind direction constant (against him)"
+      "wind direction constant against him"
     ]
   }
 }

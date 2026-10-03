@@ -3,7 +3,7 @@
   "spec_version": 1,
   "shot_id": "SEQ7_F4",
   "scene_id": "SCENE_F_STORM_GATE",
-  "dramatic_purpose": "Button insert: a hand clamps the sword hilt; a pebble skitters past — hold, then move.",
+  "dramatic_purpose": "Button: a hand clamps the sword hilt; a pebble skips past.",
   "duration_target_s": 8,
   "shot_type": "insert",
   "characters": [
@@ -12,7 +12,7 @@
       "identity_version": "swordsman_white_robes_v1",
       "look_state_id": "white_robes_cloud_summit_dawn_v1",
       "role_in_shot": "hand on the sword hilt",
-      "behavior_state": "the hand closes on the hilt; a pebble skips past the feet"
+      "behavior_state": "the hand closes on the hilt as a pebble skips past"
     }
   ],
   "camera": {
@@ -26,7 +26,7 @@
   "environment": {
     "time_of_day": "midday",
     "weather": "storm front",
-    "atmosphere": "wind-flattened grass and racing cloud shadow at a narrow rock gate"
+    "atmosphere": "wind-flattened grass at a narrow rock gate"
   },
   "blocking": {
     "start": "hand near the hilt",

@@ -3,7 +3,7 @@
   "spec_version": 1,
   "shot_id": "SEQ7_G1",
   "scene_id": "SCENE_G_HIGH_PLATEAU",
-  "dramatic_purpose": "Re-entry: beyond the gate the land opens — a high plateau under long, low light; the storm is behind him.",
+  "dramatic_purpose": "Re-entry: beyond the gate the land opens to a high plateau.",
   "duration_target_s": 8,
   "shot_type": "establishing",
   "characters": [
@@ -11,8 +11,8 @@
       "character_id": "swordsman_white_robes",
       "identity_version": "swordsman_white_robes_v1",
       "look_state_id": "white_robes_cloud_summit_dawn_v1",
-      "role_in_shot": "small figure stepping out of the gate onto the plateau",
-      "behavior_state": "figure walks out of the rock gate and stops at the open ground"
+      "role_in_shot": "small figure stepping out of the gate",
+      "behavior_state": "walks out of the rock gate and stops at the open ground"
     }
   ],
   "camera": {
@@ -26,16 +26,16 @@
   "environment": {
     "time_of_day": "late day",
     "weather": "clearing",
-    "atmosphere": "open high plateau under long, low light"
+    "atmosphere": "open high plateau under long low light"
   },
   "blocking": {
-    "start": "figure at the gate mouth",
+    "start": "at the gate mouth",
     "action_beats": [
       "the gate falls behind",
       "the plateau opens wide",
-      "the light goes long and low"
+      "the light goes long"
     ],
-    "end": "figure standing on open plateau",
+    "end": "standing on open plateau",
     "prop_interactions": []
   },
   "performance": {

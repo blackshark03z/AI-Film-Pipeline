@@ -12,7 +12,7 @@
       "identity_version": "swordsman_white_robes_v1",
       "look_state_id": "white_robes_cloud_summit_dawn_v1",
       "role_in_shot": "face, front three-quarter",
-      "behavior_state": "one long exhale; the shoulders drop; the faintest ease"
+      "behavior_state": "one long exhale; the shoulders drop; a small ease"
     }
   ],
   "camera": {
@@ -26,7 +26,7 @@
   "environment": {
     "time_of_day": "late day",
     "weather": "clearing",
-    "atmosphere": "open high plateau under long, low light"
+    "atmosphere": "open high plateau under long low light"
   },
   "blocking": {
     "start": "face still from the effort",

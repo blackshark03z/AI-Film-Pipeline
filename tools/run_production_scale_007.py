@@ -431,9 +431,10 @@ def run_live_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
                         ("PRIMARY" if primary else "REPAIR") +
                         "_BUDGET_EXHAUSTED")
                 runtime.reserve(frozen, attestation=attestation,
-                                evidence_dir=BASE_ATTESTATION_DIR.parent
+                                evidence_dir=BASE_ATTESTATION_DIR
                                 if binding["mechanism"] == "same_reference"
-                                else scene_dir / "continuity_reference")
+                                else scene_dir / "continuity_reference" /
+                                "attestation")
             records = session.catalog(
                 contract_version=contract.CONTRACT_VERSION_2026_10_01)
             if not already_consumed and sorted(

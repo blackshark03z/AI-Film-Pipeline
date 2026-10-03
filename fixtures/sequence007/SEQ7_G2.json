@@ -3,7 +3,7 @@
   "spec_version": 1,
   "shot_id": "SEQ7_G2",
   "scene_id": "SCENE_G_HIGH_PLATEAU",
-  "dramatic_purpose": "Decisive action: one clean draw, a single arc through the air, and the blade returns home — the day's answer.",
+  "dramatic_purpose": "Decisive action: one clean draw, one arc, the blade home.",
   "duration_target_s": 8,
   "shot_type": "hero",
   "characters": [
@@ -12,7 +12,7 @@
       "identity_version": "swordsman_white_robes_v1",
       "look_state_id": "white_robes_cloud_summit_dawn_v1",
       "role_in_shot": "figure from the knees up, drawing",
-      "behavior_state": "draws the sword in one arc and resheathes without hurry"
+      "behavior_state": "draws the sword in one arc and resheathes"
     }
   ],
   "camera": {
@@ -26,7 +26,7 @@
   "environment": {
     "time_of_day": "late day",
     "weather": "clearing",
-    "atmosphere": "open high plateau under long, low light"
+    "atmosphere": "open high plateau under long low light"
   },
   "blocking": {
     "start": "standing square, hands quiet",
@@ -41,11 +41,8 @@
     ]
   },
   "performance": {
-    "observable_beats": [
-      "the arc is unhurried and exact"
-    ],
+    "observable_beats": [],
     "forbidden": [
-      "no flourish",
       "no second draw"
     ]
   },

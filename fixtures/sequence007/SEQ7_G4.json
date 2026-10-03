@@ -3,7 +3,7 @@
   "spec_version": 1,
   "shot_id": "SEQ7_G4",
   "scene_id": "SCENE_G_HIGH_PLATEAU",
-  "dramatic_purpose": "Resolution and exit: he walks on along the plateau as the light goes long, and the frame keeps the road, not the man.",
+  "dramatic_purpose": "Resolution: he walks on into the long light; the road holds.",
   "duration_target_s": 8,
   "shot_type": "action",
   "characters": [
@@ -26,7 +26,7 @@
   "environment": {
     "time_of_day": "late day",
     "weather": "clearing",
-    "atmosphere": "open high plateau under long, low light"
+    "atmosphere": "open high plateau under long low light"
   },
   "blocking": {
     "start": "figure mid-frame, walking",

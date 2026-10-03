@@ -25,6 +25,13 @@ where the frozen design predicts meaningful benefit:
 - SEQ7_G2 conditioned on SEQ7_G1's last frame (decisive action follows the
   geography re-entry exactly).
 All other shots use the same-reference mechanism (budget conservation).
+
+REVISION v2 (pre-execution, zero mutations consumed): the v1 freeze
+(1bd32e6) never reached a Generate — 10/12 fixtures were refused at the
+compact-prompt gate (FLOW_R2V_COMPACT_PROMPT_LIMIT, 500 chars / 75 words)
+BEFORE any provider effect. This v2 applies the required explicit creative
+reduction: same shots, same narrative function, same frozen editorial
+targets, tighter prose. No threshold was changed; no post-mutation drift.
 """
 import json
 from hashlib import sha256
@@ -42,15 +49,14 @@ G = "SCENE_G_HIGH_PLATEAU"
 ENV_E = {"time_of_day": "morning", "weather": "clear",
          "atmosphere": "long green ridge road in climbing light"}
 ENV_F = {"time_of_day": "midday", "weather": "storm front",
-         "atmosphere": "wind-flattened grass and racing cloud shadow at a "
-                      "narrow rock gate"}
+         "atmosphere": "wind-flattened grass at a narrow rock gate"}
 ENV_G = {"time_of_day": "late day", "weather": "clearing",
-         "atmosphere": "open high plateau under long, low light"}
+         "atmosphere": "open high plateau under long low light"}
 
 
 def spec(shot_id, scene_id, purpose, shot_type, framing, lens, role, behavior,
-         beats, start, end, invariants, env, movement=None, eyeline=None,
-         props=None, performance=None, lighting=None):
+         beats, start, end, invariants, env, props=None, performance=None,
+         forbidden=None, lighting=None):
     return {
         "schema_version": "1.0.0", "spec_version": 1,
         "shot_id": shot_id, "scene_id": scene_id,
@@ -63,15 +69,15 @@ def spec(shot_id, scene_id, purpose, shot_type, framing, lens, role, behavior,
             "role_in_shot": role, "behavior_state": behavior}],
         "camera": {"framing": framing, "height": "eye_level",
                    "lens_intent": lens,
-                   "movement": movement or {"type": "locked"}},
+                   "movement": {"type": "locked"}},
         "environment": env,
         "blocking": {"start": start, "action_beats": beats, "end": end,
                      "prop_interactions": props or []},
-        "performance": performance or {"observable_beats": [],
-                                       "forbidden": []},
+        "performance": {"observable_beats": performance or [],
+                        "forbidden": forbidden or []},
         "lighting": lighting or {},
         "continuity": {"screen_direction": "faces frame-left",
-                       "eyeline": eyeline or "down the road ahead",
+                       "eyeline": "down the road ahead",
                        "start_state": {}, "end_state": {},
                        "critical_invariants": invariants},
     }
@@ -81,15 +87,13 @@ SPECS = {
     # ---- SCENE E — DEPARTURE ------------------------------------------------
     "SEQ7_E1": spec(
         "SEQ7_E1", E,
-        "Departure orientation: the stream rest is over; the road climbs "
-        "toward a long ridge and he takes it.", "establishing",
-        "EWS", "wide", "small figure leaving the stream bank onto the "
-        "ridge road",
-        "figure walks away from the water, frame-left along the road",
+        "Departure: the rest is over; the road climbs toward the long ridge.",
+        "establishing", "EWS", "wide",
+        "small figure leaving the stream bank",
+        "walks away from the water, frame-left along the road",
         ["the stream drops behind", "the ridge road opens ahead",
-         "figure moves steadily frame-left"],
-        "figure at the stream bank, frame-right",
-        "figure small on the ridge road",
+         "he moves steadily frame-left"],
+        "at the stream bank, frame-right", "small on the ridge road",
         ["ridge road geography stable", "wardrobe unchanged",
          "morning light consistent", "stream bank left behind frame-right"],
         ENV_E),
@@ -105,77 +109,69 @@ SPECS = {
          "morning light consistent"], ENV_E),
     "SEQ7_E3": spec(
         "SEQ7_E3", E,
-        "Interaction: he pauses at a leaning waymarker stone and resets the "
-        "strap across his chest — a traveler's small ritual.", "insert",
-        "MCU", "normal", "hands and chest at the waymarker stone",
-        "one hand steadies the stone; the other pulls the strap tight",
+        "Interaction: a small traveler's ritual at a leaning waymarker.",
+        "insert", "MCU", "normal", "hands and chest at the stone",
+        "steadies the stone; pulls the chest strap tight",
         ["fingers find the strap", "the buckle draws tight",
          "a beat of stillness"],
         "standing at the waymarker", "strap set; hand leaving the stone",
-        ["waymarker stone unchanged once seen", "strap and buckle simple "
-         "leather", "morning light consistent"],
-        ENV_E, props=["waymarker stone", "chest strap"]),
+        ["waymarker stone unchanged once seen",
+         "strap and buckle simple leather", "morning light consistent"],
+        ENV_E, props=["chest strap"]),
     "SEQ7_E4": spec(
         "SEQ7_E4", E,
-        "Transition beat: he crests a rise and the path narrows toward a "
-        "dark line of rock — the gate is visible far ahead.", "transition",
-        "WS", "wide", "figure cresting the rise from below",
-        "two more steps up, then a pause to look",
-        ["the rise crests", "the narrow rock gate shows on the skyline",
+        "Transition: he crests a rise; the rock gate shows far ahead.",
+        "transition", "WS", "wide", "figure cresting the rise from below",
+        "two steps up, then a pause to look",
+        ["the rise crests", "a dark narrow gate line shows on the skyline",
          "he stops and looks"],
-        "figure below the rise line", "figure still, looking down the road",
+        "figure below the rise line", "still, looking down the road",
         ["rise geometry stable", "rock gate visible as a dark narrow line",
          "morning light consistent"], ENV_E),
 
     # ---- SCENE F — OBSTACLE -------------------------------------------------
     "SEQ7_F1": spec(
         "SEQ7_F1", F,
-        "Obstacle established: the storm front arrives — wind flattens the "
-        "grass and cloud shadow races across the approach to the rock gate.",
+        "Obstacle: the storm front meets him at the narrow rock gate.",
         "establishing", "WS", "wide",
-        "figure leaning into wind on the approach",
-        "grass bends in waves; the figure pushes on toward the gate",
-        ["a gust flattens the grass", "cloud shadow sweeps the ground",
-         "the figure leans and keeps moving"],
-        "figure mid-approach, frame-right",
-        "figure close to the rock gate, leaning",
+        "figure leaning into wind",
+        "he pushes on toward the gate through the gusts",
+        ["a gust flattens the grass", "cloud shadow sweeps past",
+         "he leans and keeps moving"],
+        "mid-approach, frame-right", "close to the rock gate, leaning",
         ["rock gate geography stable", "wardrobe unchanged, wind-blown only",
-         "wind direction constant (against him)"],
+         "wind direction constant against him"],
         ENV_F,
         lighting={"key_direction": "flat storm light",
                   "contrast": "low, moving cloud shadow",
                   "notes": "racing shadow is the obstacle clock"}),
     "SEQ7_F2": spec(
         "SEQ7_F2", F,
-        "Escalation: inside the gate the wind funnels; he crosses with "
-        "his shoulder lowered, robes cracking.", "action",
-        "MS", "normal", "figure from the waist up, forcing the passage",
-        "shoulder lowered into the wind; one hard step at a time",
+        "Escalation: inside the gate the wind funnels hard.",
+        "action", "MS", "normal", "figure from the waist up",
+        "shoulder lowered into the wind",
         ["a hard gust hits", "he drives a step through it",
-         "robes crack flat against him"],
-        "at the mouth of the gate", "through the worst of the funnel",
+         "robes crack against him"],
+        "at the mouth of the gate", "through the worst gust",
         ["rock gate walls consistent with SEQ7_F1 last frame",
-         "wardrobe unchanged", "wind direction constant (against him)"],
+         "wardrobe unchanged", "wind direction constant against him"],
         ENV_F,
-        performance={"observable_beats": ["effort shows in the posture, "
-                                          "not the face"],
-                     "forbidden": ["no shouting", "no new wounds"]}),
+        performance=["effort shows in posture"],
+        forbidden=["no shouting"]),
     "SEQ7_F3": spec(
         "SEQ7_F3", F,
-        "Performance: against the rock wall he sets his jaw and squints "
-        "into the wind — the cost, held.", "performance",
-        "MCU", "portrait", "face and shoulders, three-quarter",
-        "jaw sets; eyes narrow against the wind; one breath",
+        "Performance: against the rock wall he sets his jaw; the cost, held.",
+        "performance", "MCU", "portrait", "face and shoulders, three-quarter",
+        "jaw sets; eyes narrow against the wind",
         ["the jaw sets", "eyes narrow", "a slow breath through it"],
         "pressed near the rock wall", "still, holding against the wind",
         ["no face identity drift", "same hair and headband",
          "wind-blown hair only"], ENV_F),
     "SEQ7_F4": spec(
         "SEQ7_F4", F,
-        "Button insert: a hand clamps the sword hilt; a pebble skitters "
-        "past — hold, then move.", "insert",
-        "ECU", "normal", "hand on the sword hilt",
-        "the hand closes on the hilt; a pebble skips past the feet",
+        "Button: a hand clamps the sword hilt; a pebble skips past.",
+        "insert", "ECU", "normal", "hand on the sword hilt",
+        "the hand closes on the hilt as a pebble skips past",
         ["fingers tighten on the wrap", "a pebble skips through frame",
          "the grip holds"],
         "hand near the hilt", "hand committed to the hilt",
@@ -185,23 +181,21 @@ SPECS = {
     # ---- SCENE G — RESOLUTION ----------------------------------------------
     "SEQ7_G1": spec(
         "SEQ7_G1", G,
-        "Re-entry: beyond the gate the land opens — a high plateau under "
-        "long, low light; the storm is behind him.", "establishing",
-        "EWS", "wide", "small figure stepping out of the gate onto the "
-        "plateau",
-        "figure walks out of the rock gate and stops at the open ground",
+        "Re-entry: beyond the gate the land opens to a high plateau.",
+        "establishing", "EWS", "wide",
+        "small figure stepping out of the gate",
+        "walks out of the rock gate and stops at the open ground",
         ["the gate falls behind", "the plateau opens wide",
-         "the light goes long and low"],
-        "figure at the gate mouth", "figure standing on open plateau",
+         "the light goes long"],
+        "at the gate mouth", "standing on open plateau",
         ["plateau geography stable", "rock gate behind, frame-right",
          "late-day light consistent", "storm visually behind"],
         ENV_G),
     "SEQ7_G2": spec(
         "SEQ7_G2", G,
-        "Decisive action: one clean draw, a single arc through the air, and "
-        "the blade returns home — the day's answer.", "hero",
-        "MS", "normal", "figure from the knees up, drawing",
-        "draws the sword in one arc and resheathes without hurry",
+        "Decisive action: one clean draw, one arc, the blade home.",
+        "hero", "MS", "normal", "figure from the knees up, drawing",
+        "draws the sword in one arc and resheathes",
         ["the draw begins", "one clean arc through the air",
          "the blade seats home"],
         "standing square, hands quiet", "sword sheathed; hands settling",
@@ -209,23 +203,21 @@ SPECS = {
          "one continuous draw-and-resheath, no cuts inside the action",
          "wardrobe unchanged"], ENV_G,
         props=["sword"],
-        performance={"observable_beats": ["the arc is unhurried and exact"],
-                     "forbidden": ["no flourish", "no second draw"]}),
+        forbidden=["no second draw"]),
     "SEQ7_G3": spec(
         "SEQ7_G3", G,
         "Close beat: the exhale after the arc; shoulders settle; the day "
         "lets go.", "performance",
         "CU", "portrait", "face, front three-quarter",
-        "one long exhale; the shoulders drop; the faintest ease",
+        "one long exhale; the shoulders drop; a small ease",
         ["the exhale", "shoulders settle", "a small ease at the eyes"],
         "face still from the effort", "face at rest, eyes forward",
         ["no face identity drift", "same hair and headband",
          "late-day light consistent"], ENV_G),
     "SEQ7_G4": spec(
         "SEQ7_G4", G,
-        "Resolution and exit: he walks on along the plateau as the light "
-        "goes long, and the frame keeps the road, not the man.", "action",
-        "WS", "wide", "figure walking away down the plateau road",
+        "Resolution: he walks on into the long light; the road holds.",
+        "action", "WS", "wide", "figure walking away down the plateau road",
         "an even walk into the long light, smaller and smaller",
         ["the walk resumes", "the figure shrinks into the light",
          "the road holds the frame"],
@@ -282,13 +274,15 @@ def main() -> None:
                                "shots": shots})
     plan["frozen_note"] = (
         "Frozen before the first live mutation (FLOW-PRODUCTION-SCALE-007 "
-        "L2): 3 scenes x 4 shots = 12 required slots; same-reference "
-        "continuity everywhere except two pre-committed within-scene "
-        "last-frame slots (SEQ7_F2 from SEQ7_F1; SEQ7_G2 from SEQ7_G1); "
-        "MAX_PRIMARY_GENERATES=12, MAX_REPAIR_GENERATES=3, "
-        "MAX_CONTINUITY_UPLOADS=2; editorial_target_duration frozen before "
-        "seeing any output. Prompt wording avoids concrete-noun metaphors "
-        "(Scene-004 funnel lesson).")
+        "L2, revision v2): v1 (1bd32e6) never reached a Generate — 10/12 "
+        "fixtures were refused at the compact-prompt gate pre-mutation; v2 "
+        "applies the required explicit creative reduction with zero "
+        "mutations consumed and no threshold change. 3 scenes x 4 shots = "
+        "12 required slots; same-reference continuity everywhere except two "
+        "pre-committed within-scene last-frame slots (SEQ7_F2 from SEQ7_F1; "
+        "SEQ7_G2 from SEQ7_G1); MAX_PRIMARY_GENERATES=12, "
+        "MAX_REPAIR_GENERATES=3, MAX_CONTINUITY_UPLOADS=2; "
+        "editorial_target_duration frozen before seeing any output.")
     (OUT / "sequence_plan_007.json").write_text(
         json.dumps(plan, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8")
@@ -300,7 +294,8 @@ def main() -> None:
             sum(EDITIORIAL_TARGETS[s] for s in shot_ids), 3)
     print(json.dumps({"fixtures": len(SPECS),
                       "scene_targets_s": scene_targets,
-                      "sequence_target_s": round(sum(EDITIORIAL_TARGETS.values()), 3),
+                      "sequence_target_s": round(
+                          sum(EDITIORIAL_TARGETS.values()), 3),
                       "plan_sha256": sha256(canonical).hexdigest()}))
 
 

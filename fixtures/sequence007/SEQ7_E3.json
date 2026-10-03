@@ -3,7 +3,7 @@
   "spec_version": 1,
   "shot_id": "SEQ7_E3",
   "scene_id": "SCENE_E_RIDGE_APPROACH",
-  "dramatic_purpose": "Interaction: he pauses at a leaning waymarker stone and resets the strap across his chest — a traveler's small ritual.",
+  "dramatic_purpose": "Interaction: a small traveler's ritual at a leaning waymarker.",
   "duration_target_s": 8,
   "shot_type": "insert",
   "characters": [
@@ -11,8 +11,8 @@
       "character_id": "swordsman_white_robes",
       "identity_version": "swordsman_white_robes_v1",
       "look_state_id": "white_robes_cloud_summit_dawn_v1",
-      "role_in_shot": "hands and chest at the waymarker stone",
-      "behavior_state": "one hand steadies the stone; the other pulls the strap tight"
+      "role_in_shot": "hands and chest at the stone",
+      "behavior_state": "steadies the stone; pulls the chest strap tight"
     }
   ],
   "camera": {
@@ -37,7 +37,6 @@
     ],
     "end": "strap set; hand leaving the stone",
     "prop_interactions": [
-      "waymarker stone",
       "chest strap"
     ]
   },

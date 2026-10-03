@@ -140,5 +140,5 @@
       ]
     }
   ],
-  "frozen_note": "Frozen before the first live mutation (FLOW-PRODUCTION-SCALE-007 L2): 3 scenes x 4 shots = 12 required slots; same-reference continuity everywhere except two pre-committed within-scene last-frame slots (SEQ7_F2 from SEQ7_F1; SEQ7_G2 from SEQ7_G1); MAX_PRIMARY_GENERATES=12, MAX_REPAIR_GENERATES=3, MAX_CONTINUITY_UPLOADS=2; editorial_target_duration frozen before seeing any output. Prompt wording avoids concrete-noun metaphors (Scene-004 funnel lesson)."
+  "frozen_note": "Frozen before the first live mutation (FLOW-PRODUCTION-SCALE-007 L2, revision v2): v1 (1bd32e6) never reached a Generate — 10/12 fixtures were refused at the compact-prompt gate pre-mutation; v2 applies the required explicit creative reduction with zero mutations consumed and no threshold change. 3 scenes x 4 shots = 12 required slots; same-reference continuity everywhere except two pre-committed within-scene last-frame slots (SEQ7_F2 from SEQ7_F1; SEQ7_G2 from SEQ7_G1); MAX_PRIMARY_GENERATES=12, MAX_REPAIR_GENERATES=3, MAX_CONTINUITY_UPLOADS=2; editorial_target_duration frozen before seeing any output."
 }
