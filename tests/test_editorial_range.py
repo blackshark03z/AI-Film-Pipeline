@@ -104,7 +104,7 @@ def test_out_of_bounds_out(clip_a):
 def test_zero_duration_refused(clip_a):
     with pytest.raises(ValueError, match="Input should be greater than 0"):
         rng(clip_a, 0.4, 0.4)
-    with pytest.raises(ValueError, match="must be greater than source_in_s"):
+    with pytest.raises(ValueError, match="Input should be greater than 0"):
         rng(clip_a, 0.5, 0.4)
 
 
