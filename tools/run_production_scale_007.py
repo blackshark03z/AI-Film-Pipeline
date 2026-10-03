@@ -363,7 +363,7 @@ def reference_binding_for(shot: dict, scene_dir: Path) -> dict:
             raise OwnerAmbiguityGate(
                 f"CONTINUITY_BINDING_AMBIGUOUS for {shot['shot_id']}")
         if not matches:
-            continuity_upload(scene_dir, shot_id, from_shot)
+            continuity_upload(scene_dir, shot["shot_id"], from_shot)
             entries = json.loads(ledger_path.read_text(encoding="utf-8"))[
                 "bindings"]
             matches = [e for e in entries if e["for_shot"] == binding_for]
@@ -439,7 +439,7 @@ def run_live_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
             job_id = frozen.job.provider_job_id
             prompt = frozen.job.correlation_evidence["prompt"]
             report["provider_job_id"] = job_id
-            write_durable(shot_dir / "frozen_intent.json", {
+            fi_payload = {
                 "shot_id": tag, "provider_job_id": job_id,
                 "prompt_sha256": sha256(prompt),
                 "correlation_marker":
@@ -448,7 +448,16 @@ def run_live_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
                 "budget_kind": shot.get("budget_kind", "primary"),
                 "editorial_target_duration":
                     shot.get("editorial_target_duration"),
-                "pre_dispatch_snapshot": frozen.job.pre_dispatch_snapshot})
+                "pre_dispatch_snapshot": frozen.job.pre_dispatch_snapshot}
+            fi_path = shot_dir / "frozen_intent.json"
+            if fi_path.exists():
+                existing_fi = json.loads(fi_path.read_text(encoding="utf-8"))
+                if existing_fi.get("provider_job_id") != job_id:
+                    raise OwnerAmbiguityGate(
+                        "EVIDENCE_CONFLICT: frozen_intent.json")
+                report["frozen_intent_reused"] = True
+            else:
+                write_durable(fi_path, fi_payload)
             job_now = store.read_provider_job(job_id)
             facts = store.read_dispatch_facts(job_id)
             kinds = {f["kind"] for f in facts}
@@ -477,6 +486,11 @@ def run_live_shot(shot: dict, state_dir: Path, scene_state: dict) -> dict:
                             "reconciliation confirms no output; repair "
                             "slot required",
                     "at": now()})
+                ledger_data.setdefault("dead_reservations", []).append({
+                    "shot_id": tag, "provider_job_id": job_id,
+                    "at": now(),
+                    "note": "authority consumed at reservation; no release"})
+                save_ledger(ledger_data)
                 archived = archive_result_loudly(
                     shot_dir, "dead reservation re-entry recording")
                 report["archived_prior_result"] = archived
@@ -763,7 +777,7 @@ def run_repair_command() -> dict:
             continue
         shot_entry = {"shot_id": shot_id, "fixture": entry["fixture"],
                       "continuity": entry["continuity"],
-                      "budget_kind": "repair",
+                      "budget_kind": entry.get("budget_kind", "repair"),
                       "editorial_target_duration":
                           entry.get("editorial_target_duration")}
         scene_result = scene_runner.execute_scene(
