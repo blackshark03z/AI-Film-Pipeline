@@ -201,6 +201,7 @@ class ReferenceUploadStore:
             'LOCAL_RESERVED': {'binding'},
             'REQUEST_ARMED': {'body_sha256'},
             'HTTP_RESPONSE_OBSERVED': {'status', 'response_bytes_len'},
+            'UPLOAD_RESPONSE_CLASSIFIED': {'classification', 'skeleton_hash'},
             'REMOTE_RESOURCE_IDENTIFIED': {'media_id', 'method', 'evidence_hash'},
             'REMOTE_RESOURCE_VERIFIED': {'media_id', 'provider_media_sha256', 'verification_hash'},
             'RECONCILE_PROBED': {'evidence_hash', 'candidate_count', 'match_count', 'unresolved_count'},
@@ -208,6 +209,10 @@ class ReferenceUploadStore:
         }
         if stage not in fields or set(data) != fields[stage]:
             raise ValueError('invalid reference event')
+        if stage == 'UPLOAD_RESPONSE_CLASSIFIED':
+            from .flow_upload_classifier import CLASSIFICATIONS
+            if data['classification'] not in CLASSIFICATIONS:
+                raise ValueError('invalid upload response classification')
         for key, value in data.items():
             if key == 'binding':
                 if (not isinstance(value, dict) or set(value) != {'id', 'provider_id',
@@ -309,6 +314,10 @@ class ReferenceUploadStore:
             result['media_id'] = identified
         elif any(e['stage'] == 'FAILED_AMBIGUOUS' for e in events):
             effective = 'FAILED_AMBIGUOUS'
+        elif any(e['stage'] == 'UPLOAD_RESPONSE_CLASSIFIED' and
+                 e['data']['classification'] == 'QUALIFIED_PENDING'
+                 for e in events):
+            effective = 'QUALIFIED_PENDING_RECONCILIATION'
         elif row:
             effective = 'REQUEST_ARMED' if any(e['stage'] == 'REQUEST_ARMED' for e in events) else 'LEGACY_RESERVED_UNCERTAIN'
         else:

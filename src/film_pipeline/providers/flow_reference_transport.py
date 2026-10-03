@@ -16,6 +16,10 @@ from PIL import Image, ImageChops, ImageStat
 from ..core import canonical_json, sha256
 from . import flow_rpc_contract as contract
 from .flow_reference_upload import OwnerAmbiguityGate, ReferenceUploadStore, _key
+from .flow_upload_classifier import (
+    QualifiedUploadPending,
+    UploadResponseClassified,
+)
 
 COMPARISON_VERSION = 'reference-rgb-dhash256-v2-flow-cdn-20260930'
 
@@ -128,6 +132,20 @@ class FlowReferenceTransport:
                 on_identified=lambda media_id: self.store.record_identified(key, media_id,
                     method='upload_response', evidence_hash=sha256({'media_id': media_id,
                         'request_id': progress['request_id'], 'source_sha256': asset.sha256})))
+        except UploadResponseClassified as classified:
+            digest = self._evidence({'kind': 'upload_response_skeleton',
+                'classification': classified.classification, 'reason': classified.reason,
+                'skeleton': classified.skeleton, 'request_id': progress['request_id'],
+                'source_sha256': asset.sha256})
+            self.store.record_event(key, 'UPLOAD_RESPONSE_CLASSIFIED',
+                {'classification': classified.classification,
+                 'skeleton_hash': classified.fingerprint})
+            if isinstance(classified, QualifiedUploadPending):
+                raise
+            self.store.record_event(key, 'FAILED_AMBIGUOUS',
+                                    {'diagnostic': 'upload_response_unresolved'})
+            raise OwnerAmbiguityGate(
+                'upload armed; response unresolved; no re-upload') from None
         except Exception:
             current = self.store.read_progress(key)
             if current and current['effective_state'] != 'LOCAL_RESERVED':

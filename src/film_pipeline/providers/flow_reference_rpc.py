@@ -18,6 +18,13 @@ from urllib.parse import urlencode, urlsplit
 
 from . import flow_rpc_contract as contract
 from .flow_reference_upload import OwnerAmbiguityGate
+from .flow_upload_classifier import (
+    classify_parse_failure,
+    classify_unobservable,
+    classify_upload_response,
+    QualifiedUploadPending,
+    UploadResponseAmbiguous,
+)
 
 
 ORIGIN = "https://flow.google.com"
@@ -304,7 +311,27 @@ class FlowReferenceRpcSession:
         body = contract.build_upload(self.project_id, source_bytes,
                                      self.captcha('IMAGE_GENERATION'), request_id)
         before_post(hashlib.sha256(body.encode('utf-8')).hexdigest())
-        payload = self.rpc(contract.RPC_UPLOAD, body, on_http_response=on_http_response)
+        status_observed: list[int] = []
+
+        def observe(status: int, length: int) -> None:
+            status_observed.append(status)
+            on_http_response(status, length)
+
+        try:
+            payload = self.rpc(contract.RPC_UPLOAD, body, on_http_response=observe)
+        except FlowReferenceRpcDrift:
+            if not status_observed:
+                raise classify_unobservable() from None
+            if status_observed[0] != 200:
+                raise classify_upload_response(
+                    status_observed[0], None, project_id=self.project_id,
+                    request_id=request_id) from None
+            raise classify_parse_failure() from None
+        result = classify_upload_response(
+            status_observed[0] if status_observed else None, payload,
+            project_id=self.project_id, request_id=request_id)
+        if isinstance(result, (QualifiedUploadPending, UploadResponseAmbiguous)):
+            raise result
         if (not isinstance(payload, list) or not payload
                 or not isinstance(payload[0], list) or not payload[0]
                 or not isinstance(payload[0][0], str)
