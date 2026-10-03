@@ -81,3 +81,31 @@ latch and all mutation-authority semantics untouched.
   code base; the rerun tool added no production code).
 - `git diff --check`: clean. SoT manifest: 30/30.
 - Secret/PII/API-key scan: clean (key path + size only in evidence).
+
+## 8. Custody freeze (Package-007 Phase 0, appended 2026-10-03)
+
+Exact FULL 40-character delivery SHA of the branch tip carrying this record:
+
+```text
+78832fee6f42a924108954d9c3c0d91e91eec478
+```
+
+Classification unchanged: **BLOCKED_EXTERNAL_GATE**.
+
+Durable truth frozen as:
+
+```text
+semantic credential:            VALID
+semantic qualification:         INCONCLUSIVE
+blocking class:                 SEMANTIC_API_AVAILABILITY_GATE
+exact underlying external cause: UNKNOWN
+```
+
+Explicitly NOT frozen (no controlled evidence proves any one of them):
+`RATE_LIMIT_PROVEN`, `QUOTA_PROVEN`, `ACCOUNT_GATE_PROVEN`.
+
+Ancestry verified at freeze time:
+`7ca82d26db785433587ccb7c0a1d80e6d6d2dbc9` is an ancestor of
+`78832fee6f42a924108954d9c3c0d91e91eec478` (`git merge-base --is-ancestor`
+exit 0); the accepted Package-006 production lineage behind `7ca82d2` is
+intact and untouched by this append.
