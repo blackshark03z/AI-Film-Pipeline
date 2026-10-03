@@ -32,6 +32,17 @@ DIMENSION_QUESTIONS = {
 }
 
 
+def normalize_model_id(model: str) -> str:
+    """ONE canonical model-id normalization path (Package-012 R1).
+
+    Discovery lists carry a ``models/`` prefix while the generateContent
+    URL expects the bare id. Accept both spellings and always produce the
+    bare id, so a doubled ``models/models/`` route can never recur."""
+    if not isinstance(model, str) or not model.strip():
+        raise ValueError("MODEL_ID_INVALID")
+    return model.strip().split("/", 1)[-1]
+
+
 def read_key(key_file: Path) -> str:
     """Read the Owner-approved key at runtime. Never print or persist."""
     text = Path(key_file).read_text(encoding="utf-8-sig")
@@ -65,7 +76,7 @@ class GeminiSemanticQCEvaluator(SemanticQCEvaluator):
 
     def __init__(self, key_file: Path, model: str):
         self.key_file = Path(key_file)
-        self.model = model
+        self.model = normalize_model_id(model)
 
     def evaluate(self, request: SemanticQCRequest) -> list[SemanticQCObservation]:
         self.verify_source_lineage(request)
