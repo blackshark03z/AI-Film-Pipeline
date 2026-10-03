@@ -224,3 +224,92 @@ trim-aware masters verified by independent frame-level conformance.
 Recommended next package: **FLOW-EDITORIAL-SCALE-008** — Owner take
 review + semantic QC rerun (when the API gate clears) + audio path
 qualification + per-shot session-reuse hardening.
+
+## 13. CUSTODY CORRECTION — FLOW-UPLOAD-RECONCILIATION-CONTRACT-008 Phase 0
+
+Appended 2026-10-03 by Package-008 Phase 0 (U0). History above is preserved
+verbatim; this section corrects the PROTOCOL status only.
+
+### 13.1 Exact custody
+
+- **Package-007 delivery SHA (full 40 chars):**
+  `30657c2f768ecca745e81ad418609753d8e7aa71` (branch
+  `zcode/flow-production-scale-007` tip at correction time).
+- Ancestry re-verified: `git merge-base --is-ancestor
+  671f685400639ed58ccdd5990cc8e1591028fb0b HEAD` → true.
+- **Wall time:** durable span = first Package-007 commit `671f685`
+  2026-10-03T06:19:56Z → delivery commit `30657c2` 2026-10-03T08:45:24Z
+  = **2 h 25 m 28 s wall-span**; exact ACTIVE time (excluding idle) is
+  **UNKNOWN** — not exactly recoverable from durable logs.
+
+### 13.2 Frozen protocol finding
+
+Package-007 technical/editorial outputs remain historical evidence, but
+**live provider mutations after the first upload external-effect ambiguity
+are not clean authorized proof under the then-frozen Owner rule**
+(FLOW-SCENE-SCALE-003-R1 invariant: any OWNER_AMBIGUITY_GATE in an
+execution scope latches mutation authority permanently). The runner
+wired the latch to generate ambiguities only
+(`tools/run_production_scale_007.py:694` — `if
+report.get("observed_generate_requests")`), so the upload-side
+OwnerAmbiguityGate was recorded per-slot ("OWNER_GATE: …") **without a
+scope latch**. That is the code-level root cause of the breach. This
+record does not reinterpret history; it freezes the breach.
+
+### 13.3 Exact chronological mutation ledger (all times UTC, durable sources:
+`generate_ledger.json`, `mutation_authority.json` events,
+`continuity_upload_1.sqlite` hash-chained journals, per-slot result/attempt
+files, per-file mtimes)
+
+| # | Time | Event | Provider effect |
+| --: | :-- | :-- | :-- |
+| 1 | 07:03:23.157851 | Scope created; authority OPEN | none |
+| 2 | 07:03:40.512232 | SEQ7_E1 generate released → SHOT_PROVEN (result 07:04:30Z) | PRE-GATE |
+| 3 | 07:04:52.242546 | SEQ7_E3 released → SHOT_PROVEN (07:05:36Z) | PRE-GATE |
+| 4 | 07:05:53.621860 | SEQ7_E4 released → SHOT_PROVEN (07:06:43Z) | PRE-GATE |
+| 5 | 07:07:00.783344 | SEQ7_F1 released → SHOT_PROVEN (07:07:46Z) | PRE-GATE |
+| 6 | 07:08:03.990477 | SEQ7_F3 released → SHOT_PROVEN (07:08:49Z) | PRE-GATE |
+| 7 | 07:09:06.688197 | SEQ7_F4 released → SHOT_PROVEN (07:10:12Z) | PRE-GATE |
+| 8 | 07:10:29.074290 | SEQ7_G1 released → SHOT_PROVEN (07:11:14Z) | PRE-GATE |
+| 9 | 07:11:33.911120 | SEQ7_G4 released → SHOT_PROVEN (07:12:20Z) | PRE-GATE |
+| 10 | 07:22:19.465430 | Loud re-entry record (E2/F2/G2/G3 archived; pre-release local failures only) | none |
+| 11 | 07:39:19.466289 | SEQ7_E2 dead reservation (`AUTHORITY_CONSUMED_PRE_RELEASE_NO_EFFECT`, browser never opened) | none |
+| 12 | 07:39:23.619344 | F2 continuity upload `refup_fb013d43…` LOCAL_RESERVED; 07:39:23.934995 REQUEST_ARMED (body `59be120c…`) | **GATE-POINT mutation begins** |
+| 13 | 07:39:32.102354 | F2 maseQ POST response observed: HTTP 200, 651 bytes | — |
+| 14 | **07:39:32.111961** | **F2 FAILED_AMBIGUOUS (`upload_response_unresolved`) — FIRST HISTORICAL GATE POINT** | ambiguity raised; scope NOT latched (breach) |
+| 15 | 07:39:35.987442 | G2 continuity upload `refup_0167f669…` LOCAL_RESERVED; 07:39:36.241919 REQUEST_ARMED (body `b4d9c7f2…`) | **first POST-GATE provider mutation (maseQ POST)** |
+| 16 | 07:39:44.388075 / .397196 | G2 HTTP 200, 651 bytes → FAILED_AMBIGUOUS | second ambiguity; still not latched |
+| 17 | 07:39:46.375665 | SEQ7_G3 dead reservation (pre-release, no effect) | none |
+| 18 | 07:45:26–07:45:39 | F2 read-only reconcile: 2 stable probes (7 candidates, 1 match, 1 preexisting-unresolved) → IDENTIFIED `8f2f5277-…` → VERIFIED (readback `fecf669e…`) | read-only |
+| 19 | 07:45:44.242213 | F2 binding appended; upload budget 1/2 consumed | bookkeeping |
+| 20 | 07:46:36.196023 | F2 exact-duplicate ledger line (reconcile re-run report bug; deduped in place `e7349ed`; third BUDGET_CONSUMED event — accounting bug fixed `389a8be`) | bookkeeping bug |
+| 21 | 07:46:52–07:47:04 | G2 read-only reconcile: 2 stable probes → IDENTIFIED `75dbd0bc-…` → VERIFIED (readback `c1f13c50…`); 07:47:08.878894 binding appended; budget 2/2 | read-only |
+| 22 | 07:47:55.320742 | SEQ7_G2 generate released → SHOT_PROVEN | POST-GATE |
+| 23 | 07:54:28.085451 | SEQ7_F2 generate released → SHOT_PROVEN | POST-GATE |
+| 24 | 07:59:49.325004 | SEQ7_E2R repair released → SHOT_PROVEN | POST-GATE |
+| 25 | 08:00:52.367298 | SEQ7_G3B repair released → SHOT_PROVEN | POST-GATE |
+| 26 | 08:00:52 → 08:45:24 | editorial/master/conformance/telemetry/docs — zero provider mutations | none |
+
+### 13.4 Slot classification (chronology-proven, not assumed)
+
+- **PRE_GATE_CLEAN (8):** SEQ7_E1, SEQ7_E3, SEQ7_E4, SEQ7_F1, SEQ7_F3,
+  SEQ7_F4, SEQ7_G1, SEQ7_G4 — every provider effect completed
+  ≤ 07:12:20Z, strictly before the gate point.
+- **NO_PROVIDER_EFFECT (2):** SEQ7_E2 (dead reservation 07:39:19Z),
+  SEQ7_G3 (dead reservation 07:39:46Z — post-gate wall-clock timing,
+  zero provider effect).
+- **POST_GATE_INVALID_FOR_CLEAN_PROOF (4):** SEQ7_F2 (continuity upload =
+  gate-point mutation; generate 07:54:28Z), SEQ7_G2 (upload POST
+  07:39:36Z + generate 07:47:55Z), SEQ7_E2R (07:59:49Z), SEQ7_G3B
+  (08:00:52Z).
+- **HISTORICAL_ONLY:** the two dead-reservation jobs and superseded
+  attempt records (not canonical slots).
+
+The earlier expectation that F3, F4, G1, G4 would be post-gate is
+**refuted by the durable chronology**: their releases and results all
+precede the gate point; they are PRE_GATE_CLEAN and must NOT be
+regenerated. The F2 upload POST itself is the gate-point event: its
+external effect (`8f2f5277-aae8-44b5-a5b7-c197d1d7c115`) was later proven
+by read-only reconciliation with exact readback and may be re-attested
+read-only and reused, but no mutation that consumed it post-gate (the
+F2/G2/E2R/G3B generates) is clean proof.
