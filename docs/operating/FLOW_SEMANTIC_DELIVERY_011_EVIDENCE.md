@@ -6,6 +6,41 @@
 **Package-010 custody-correction SHA:** `eaf7ef2dc45f39790a62c4b4c6a4ca6f4a5ff85a`
 **Package-011 base SHA:** `eaf7ef2dc45f39790a62c4b4c6a4ca6f4a5ff85a`
 **Delivery:** the branch tip carrying this record (`git rev-parse HEAD`).
+**Exact delivery SHA (appended by FLOW-OWNER-REVIEW-SEMANTIC-RELEASE-012
+Phase 0):** `4dba81e567b348f5baf0f418f7e1fd12640e9981`
+
+## CUSTODY APPEND + CORRECTION (Package-012 Phase 0, 2026-10-04)
+
+**0B — Wall-time correction.** The historical field above stated
+"durable commit span 2026-10-03T17:11Z (ef5d892) → 2026-10-04T18:1xZ
+(delivery)" — that conversion is WRONG and is preserved verbatim as
+history. Corrected durable basis (CLOCK_SOURCE = git commit timestamps,
+system clock UTC):
+- EARLIEST_DURABLE_EVENT: commit `ef5d892` 2026-10-03T23:55:40+0700
+  (2026-10-03T16:55:40Z);
+- LATEST_DURABLE_EVENT: commit `4dba81e` 2026-10-04T00:25:19+0700
+  (2026-10-03T17:25:19Z);
+- SPAN_BASIS = 2026-10-03T23:55:40+0700 → 2026-10-04T00:25:19+0700
+  (≈ 30 m). ACTIVE_TIME_EXACT = UNKNOWN.
+
+**0C — Semantic call accounting** (`semantic_call_accounting_011.json`),
+resolving "34 attempts" vs "zero retries":
+- HTTP_CALL_ATTEMPTS = 41 (1 discovery + 4 probes + 19 harness-defect
+  POSTs (doubled models/ URL: 2 probes + 17 run1-attempt) + 17 valid
+  evaluations);
+- VALID_SEMANTIC_EVALUATIONS = 17 (one per non-lineage control);
+- RETRIES = 0 (the harness-defect POSTs received HTTP 404 at an invalid
+  endpoint — no semantic evaluation occurred to retry; each control has
+  exactly one valid evaluation row). The durable counter
+  `eval_calls_used = 34` counted POST ATTEMPTS, not valid evaluations —
+  the accounting corrects that semantics without rewriting history.
+
+**0 — Custody freeze.** Full Package-011 offline battery re-run clean
+(809 passed; SoT 30/30; compileall/diff-check clean; recovery matrix
+83/83). Frozen: **PACKAGE-011_TECHNICAL_DELIVERY = PROVEN** while
+preserving SEMANTIC_QC_NOT_QUALIFIED (GEMINI_3_5_FLASH_LITE),
+CONTENT_AUDIO_PRODUCTION_UNQUALIFIED, TIMED_CAPTION_AUTHORITY_UNAVAILABLE,
+OWNER_REVIEW_REQUIRED.
 **Corrected Package-010 wall-time basis:** SPAN_BASIS
 2026-10-03T22:11+0700 → 2026-10-03T23:35:13+0700 (≈1 h 24 m);
 ACTIVE_TIME_EXACT = UNKNOWN (recorded in the 010 custody append; the
