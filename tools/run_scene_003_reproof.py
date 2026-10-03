@@ -69,7 +69,7 @@ ACCOUNT_ID = "clean-pro-qualified"
 MODEL = contract.MODEL_VEO_3_1_LITE
 MAX_FRESH_VIDEO_GENERATE = 1
 CONTINUITY_MEDIA_ID = "0c16d60b-b027-48da-adb8-c1cb9a4ecf64"
-SHOT_ID = "SCENE003_SHOT_3R"
+SHOT_ID = "SCENE003_SHOT_3U"
 OBSERVATION_WINDOW_S = 2400
 POLL_INTERVAL_S = 60
 RELEASE_WAIT_S = 45
@@ -189,7 +189,7 @@ def stage_reattest() -> dict:
 
 def stage_generate() -> dict:
     """R3 — the ONE fresh authorized Generate for Shot-3R."""
-    out = REPROOF_DIR / "shot_3R_result.json"
+    out = REPROOF_DIR / f"shot_{SHOT_ID}_result.json"
     if out.exists():
         return json.loads(out.read_text(encoding="utf-8"))
     reattest = stage_reattest()
@@ -216,7 +216,7 @@ def stage_generate() -> dict:
         # ---- freeze + reserve (headless reads) ----
         with open_read_session() as session:
             capability = qualify_flow_catalog_source(session)
-            spec = load_shot(ROOT / "fixtures/scene003/scene003_shot_3r.json")
+            spec = load_shot(ROOT / "fixtures/scene003/scene003_shot_3u.json")
             spec = spec.model_copy(update={
                 "references": References(other_asset_ids=[binding["asset_id"]])})
             frozen = runtime.freeze(spec, flow_capabilities(),
@@ -227,14 +227,14 @@ def stage_generate() -> dict:
             job_id = frozen.job.provider_job_id
             prompt = frozen.job.correlation_evidence["prompt"]
             report["provider_job_id"] = job_id
-            write_durable(REPROOF_DIR / "frozen_intent.json", {
+            write_durable(REPROOF_DIR / f"frozen_intent_{SHOT_ID}.json", {
                 "shot_id": SHOT_ID, "provider_job_id": job_id,
                 "generation_attempt_id": frozen.attempt.generation_attempt_id,
                 "prompt": prompt, "prompt_sha256": sha256(prompt),
                 "correlation_marker": frozen.job.correlation_evidence["correlation_marker"],
                 "continuity": binding,
                 "pre_dispatch_snapshot": frozen.job.pre_dispatch_snapshot})
-            write_durable(REPROOF_DIR / "preclaim.json", {
+            write_durable(REPROOF_DIR / f"preclaim_{SHOT_ID}.json", {
                 "shot_id": SHOT_ID, "provider_job_id": job_id,
                 "budget": "MAX_FRESH_VIDEO_GENERATE=1", "uploads": 0})
             already_consumed = bool(store.read_provider_job(job_id).dispatch_count)
@@ -440,10 +440,11 @@ def _continuity_adopted_attestation_id() -> str:
 
 
 def _continuity_attestation_dir() -> Path:
-    return SCENE_ATT_DIR
+    return (ROOT / "projects/flow_scene_scale_003/continuity_reference/attestation")
 
 
-SCENE_ATT_DIR = (ROOT / "projects/flow_scene_scale_003/continuity_reference/attestation")
+def _continuity_attestation_path(attestation_id: str) -> Path:
+    return _continuity_attestation_dir() / (attestation_id + ".json")
 
 
 def open_read_session():

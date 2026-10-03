@@ -455,9 +455,11 @@ def test_ui_profile_is_parameterizable():
     locator.count.return_value = 1
     locator.wait_for.return_value = None
     locator.all_inner_texts.return_value = ['videocam\nVideo', 'crop_16_9\n16:9', 'x1']
-    locator.inner_text.side_effect = ['Video · 720p 8 seconds crop_16_9 x1', 'Veo 3.1 - Fast']
+    locator.inner_text.side_effect = ['Video · 720p 8 seconds crop_16_9 x1',
+                                      'Omni 1.1 Flash', 'Veo 3.1 - Fast',
+                                      'Veo 3.1 - Fast']
     verify_settings(page, profile)
-    assert locator.inner_text.call_count == 2
+    assert locator.inner_text.call_count == 4
     page.locator.side_effect = None
 
 
@@ -474,6 +476,9 @@ def test_default_profile_settings_mismatch_still_blocks():
 # ['Video', '·', '720p', '·', '8', 'giây', 'crop_16_9', 'x1'] must remain the
 # accepted default representation, byte-for-byte.
 def test_default_profile_preserves_qualified_live_settings():
+    """v2 (2026-10-03): the overlay now exposes 720p and 8 giây as separate
+    checked toggles (live-probed on the current build); the summary readback
+    and the qualified model label are unchanged."""
     assert NativeUiProfile().settings_tokens == \
         ('Video', '·', '720p', '·', '8', 'giây', 'crop_16_9', 'x1')
     page = Mock()
@@ -482,9 +487,11 @@ def test_default_profile_preserves_qualified_live_settings():
     locator.wait_for.return_value = None
     locator.all_inner_texts.return_value = ['videocam\nVideo', 'chrome_extension\nThành phần',
                                             'crop_16_9\n16:9', 'x1']
-    locator.inner_text.side_effect = ['Video · 720p · 8 giây crop_16_9 x1', 'Veo 3.1 - Lite']
-    verify_settings(page)  # The exact pre-productization readback is accepted.
-    assert locator.inner_text.call_count == 2
+    locator.inner_text.side_effect = ['Video · 720p · 8 giây crop_16_9 x1',
+                                      'Omni 1.1 Flash', 'Veo 3.1 - Lite',
+                                      'Veo 3.1 - Lite']
+    verify_settings(page)  # Qualified v2 readback incl. model selection.
+    assert locator.inner_text.call_count == 4
 
 
 # Review round 2, Finding 2: intent model and profile wire model are one model.
