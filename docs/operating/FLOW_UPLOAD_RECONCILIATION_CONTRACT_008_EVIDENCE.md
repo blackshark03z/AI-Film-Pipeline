@@ -9,6 +9,20 @@
 (branch created immediately after the custody correction)
 **Delivery:** the branch tip carrying this record (resolve with
 `git rev-parse HEAD`; commit chain below).
+**Package-008 exact delivery SHA (appended by
+FLOW-UPLOAD-CONTRACT-REQUAL-009 Phase 0, 2026-10-03):**
+`a7edff2a1a70a349c50def1f2933ca719ef41d3d`
+
+> **CUSTODY APPEND (Package-009 Phase 0)** — no historical classification
+> above is modified by this note. Package-008 live continuation/salvage
+> outputs are frozen as **TECHNICALLY_DEMONSTRATED but
+> INVALID_AS_CLEAN_AUTHORIZED_PROOF**: Canary 1 became TRUE_AMBIGUOUS, the
+> then-frozen package authority ended there, and the later Canary 2 / U6 /
+> U9 mutations (executed under new Owner-authorized sub-scopes of the same
+> package) cannot establish clean prospective proof. Package-009
+> re-qualifies prospectively under ONE mutation authority domain with the
+> classifier frozen before any live work.
+
 **Active wall time:** continuous build session 2026-10-03
 16:31→20:25 +0700 (09:31→13:25Z), ≈ 3 h 54 m; first custody commit
 `ca2a190` 16:52:05 +0700, final battery 20:2x +0700. (Idle gaps are not
