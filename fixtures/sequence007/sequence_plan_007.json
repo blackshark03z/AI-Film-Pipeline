@@ -1,0 +1,144 @@
+{
+  "sequence_id": "SEQ007_DAYLIGHT_ROAD",
+  "scenes": [
+    {
+      "scene_id": "SCENE_E_RIDGE_APPROACH",
+      "narrative_purpose": "Departure: the rest is over; the road climbs toward the ridge.",
+      "shots": [
+        {
+          "shot_id": "SEQ7_E1",
+          "fixture": "fixtures/sequence007/SEQ7_E1.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 6.0,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        },
+        {
+          "shot_id": "SEQ7_E2",
+          "fixture": "fixtures/sequence007/SEQ7_E2.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 4.0,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        },
+        {
+          "shot_id": "SEQ7_E3",
+          "fixture": "fixtures/sequence007/SEQ7_E3.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 3.2,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        },
+        {
+          "shot_id": "SEQ7_E4",
+          "fixture": "fixtures/sequence007/SEQ7_E4.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 2.4,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        }
+      ]
+    },
+    {
+      "scene_id": "SCENE_F_STORM_GATE",
+      "narrative_purpose": "Obstacle: the storm front meets him at the narrow rock gate.",
+      "shots": [
+        {
+          "shot_id": "SEQ7_F1",
+          "fixture": "fixtures/sequence007/SEQ7_F1.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 4.8,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        },
+        {
+          "shot_id": "SEQ7_F2",
+          "fixture": "fixtures/sequence007/SEQ7_F2.json",
+          "continuity": {
+            "kind": "last_frame",
+            "from_shot": "SEQ7_F1"
+          },
+          "editorial_target_duration": 5.6,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        },
+        {
+          "shot_id": "SEQ7_F3",
+          "fixture": "fixtures/sequence007/SEQ7_F3.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 3.2,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        },
+        {
+          "shot_id": "SEQ7_F4",
+          "fixture": "fixtures/sequence007/SEQ7_F4.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 2.0,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        }
+      ]
+    },
+    {
+      "scene_id": "SCENE_G_HIGH_PLATEAU",
+      "narrative_purpose": "Resolution: beyond the gate, one clean answer, then the road again into the long light.",
+      "shots": [
+        {
+          "shot_id": "SEQ7_G1",
+          "fixture": "fixtures/sequence007/SEQ7_G1.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 5.6,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        },
+        {
+          "shot_id": "SEQ7_G2",
+          "fixture": "fixtures/sequence007/SEQ7_G2.json",
+          "continuity": {
+            "kind": "last_frame",
+            "from_shot": "SEQ7_G1"
+          },
+          "editorial_target_duration": 4.0,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        },
+        {
+          "shot_id": "SEQ7_G3",
+          "fixture": "fixtures/sequence007/SEQ7_G3.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 3.2,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        },
+        {
+          "shot_id": "SEQ7_G4",
+          "fixture": "fixtures/sequence007/SEQ7_G4.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          },
+          "editorial_target_duration": 6.4,
+          "editorial_duration_note": "frozen before any generation; NOT the provider duration; never tuned after seeing clips to hide defects"
+        }
+      ]
+    }
+  ],
+  "frozen_note": "Frozen before the first live mutation (FLOW-PRODUCTION-SCALE-007 L2): 3 scenes x 4 shots = 12 required slots; same-reference continuity everywhere except two pre-committed within-scene last-frame slots (SEQ7_F2 from SEQ7_F1; SEQ7_G2 from SEQ7_G1); MAX_PRIMARY_GENERATES=12, MAX_REPAIR_GENERATES=3, MAX_CONTINUITY_UPLOADS=2; editorial_target_duration frozen before seeing any output. Prompt wording avoids concrete-noun metaphors (Scene-004 funnel lesson)."
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ7_F1",
+  "scene_id": "SCENE_F_STORM_GATE",
+  "dramatic_purpose": "Obstacle established: the storm front arrives — wind flattens the grass and cloud shadow races across the approach to the rock gate.",
+  "duration_target_s": 8,
+  "shot_type": "establishing",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure leaning into wind on the approach",
+      "behavior_state": "grass bends in waves; the figure pushes on toward the gate"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "midday",
+    "weather": "storm front",
+    "atmosphere": "wind-flattened grass and racing cloud shadow at a narrow rock gate"
+  },
+  "blocking": {
+    "start": "figure mid-approach, frame-right",
+    "action_beats": [
+      "a gust flattens the grass",
+      "cloud shadow sweeps the ground",
+      "the figure leans and keeps moving"
+    ],
+    "end": "figure close to the rock gate, leaning",
+    "prop_interactions": []
+  },
+  "performance": {
+    "observable_beats": [],
+    "forbidden": []
+  },
+  "lighting": {
+    "key_direction": "flat storm light",
+    "contrast": "low, moving cloud shadow",
+    "notes": "racing shadow is the obstacle clock"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the road ahead",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "rock gate geography stable",
+      "wardrobe unchanged, wind-blown only",
+      "wind direction constant (against him)"
+    ]
+  }
+}

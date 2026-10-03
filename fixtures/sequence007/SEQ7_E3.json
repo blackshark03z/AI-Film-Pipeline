@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ7_E3",
+  "scene_id": "SCENE_E_RIDGE_APPROACH",
+  "dramatic_purpose": "Interaction: he pauses at a leaning waymarker stone and resets the strap across his chest — a traveler's small ritual.",
+  "duration_target_s": 8,
+  "shot_type": "insert",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "hands and chest at the waymarker stone",
+      "behavior_state": "one hand steadies the stone; the other pulls the strap tight"
+    }
+  ],
+  "camera": {
+    "framing": "MCU",
+    "height": "eye_level",
+    "lens_intent": "normal",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "morning",
+    "weather": "clear",
+    "atmosphere": "long green ridge road in climbing light"
+  },
+  "blocking": {
+    "start": "standing at the waymarker",
+    "action_beats": [
+      "fingers find the strap",
+      "the buckle draws tight",
+      "a beat of stillness"
+    ],
+    "end": "strap set; hand leaving the stone",
+    "prop_interactions": [
+      "waymarker stone",
+      "chest strap"
+    ]
+  },
+  "performance": {
+    "observable_beats": [],
+    "forbidden": []
+  },
+  "lighting": {},
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the road ahead",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "waymarker stone unchanged once seen",
+      "strap and buckle simple leather",
+      "morning light consistent"
+    ]
+  }
+}

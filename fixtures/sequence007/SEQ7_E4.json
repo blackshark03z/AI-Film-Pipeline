@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ7_E4",
+  "scene_id": "SCENE_E_RIDGE_APPROACH",
+  "dramatic_purpose": "Transition beat: he crests a rise and the path narrows toward a dark line of rock — the gate is visible far ahead.",
+  "duration_target_s": 8,
+  "shot_type": "transition",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure cresting the rise from below",
+      "behavior_state": "two more steps up, then a pause to look"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "morning",
+    "weather": "clear",
+    "atmosphere": "long green ridge road in climbing light"
+  },
+  "blocking": {
+    "start": "figure below the rise line",
+    "action_beats": [
+      "the rise crests",
+      "the narrow rock gate shows on the skyline",
+      "he stops and looks"
+    ],
+    "end": "figure still, looking down the road",
+    "prop_interactions": []
+  },
+  "performance": {
+    "observable_beats": [],
+    "forbidden": []
+  },
+  "lighting": {},
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the road ahead",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "rise geometry stable",
+      "rock gate visible as a dark narrow line",
+      "morning light consistent"
+    ]
+  }
+}
