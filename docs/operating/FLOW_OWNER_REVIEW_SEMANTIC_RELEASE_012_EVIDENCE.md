@@ -6,6 +6,35 @@
 **Package-011 custody-correction SHA:** `3af6c069e4a1f7b0d271f9645bdd0b371f2987e6`
 **Package-012 base SHA:** `3af6c069e4a1f7b0d271f9645bdd0b371f2987e6`
 **Delivery:** the branch tip carrying this record (`git rev-parse HEAD`).
+**Exact delivery SHA (appended by FLOW-GEMINI25-FINAL-QUAL-013 Phase 0):**
+`f8f011caaef718e01bdf50d7b4043323c2121978`
+
+## CUSTODY APPEND + CORRECTION (Package-013 Phase 0, 2026-10-04)
+
+**0B — Wall-time correction.** The historical field "session
+2026-10-04 00:40→02:10 +0700" is NOT durable-verified and is preserved
+verbatim as history. Corrected basis (CLOCK_SOURCE = git commit
+timestamps, system clock UTC): EARLIEST_DURABLE_EVENT = commit `ed2e38e`
+2026-10-04T00:45:32+0700; LATEST_DURABLE_EVENT = commit `f8f011c`
+2026-10-04T01:15:43+0700; SPAN_BASIS = 2026-10-04T00:45:32+0700 →
+2026-10-04T01:15:43+0700 (≈ 30 m). ACTIVE_TIME_EXACT = UNKNOWN.
+
+**0C — Model-comparison contradiction resolved.** The v1 comparison
+prose claimed "scene_transition_negative (3.1: PASS, 3.5: FAIL — 3.1
+correct here)". The immutable raw run1 receipts show the OPPOSITE:
+3.5 observed FAIL (correct vs the frozen NEGATIVE expectation), 3.1
+observed PASS (incorrect). `semantic_model_comparison_012.json`
+REGENERATED as v2 from the raw per-control receipts (18 rows, each with
+frozen expected verdict + both observed verdicts + source receipt ids);
+no prose may contradict the raw rows. Classification unchanged:
+BOTH_NOT_QUALIFIED.
+
+**0 — Custody freeze.** Package-012 offline battery re-run clean
+(814 passed; SoT 30/30; recovery matrix 97/97; determinism 3-build).
+Frozen: **PACKAGE-012_TECHNICAL_DELIVERY = PROVEN** preserving
+GEMINI_3_5_FLASH_LITE = NOT_QUALIFIED, GEMINI_3_1_FLASH_LITE =
+NOT_QUALIFIED, CONTENT_AUDIO_PRODUCTION_UNQUALIFIED,
+TIMED_CAPTION_AUTHORITY_UNAVAILABLE, OWNER_REVIEW_REQUIRED.
 **Corrected Package-011 wall-time basis:** SPAN_BASIS
 2026-10-03T23:55:40+0700 (`ef5d892`) → 2026-10-04T00:25:19+0700
 (`4dba81e`, ≈30 m); ACTIVE_TIME_EXACT = UNKNOWN (recorded in the 011
