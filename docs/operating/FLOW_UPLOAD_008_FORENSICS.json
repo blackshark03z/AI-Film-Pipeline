@@ -1,0 +1,104 @@
+{
+  "version": "upload-forensics-008-v1",
+  "generated_at": "2026-10-03T10:05:00Z",
+  "scope": "FLOW-UPLOAD-RECONCILIATION-CONTRACT-008 Phase 1 (U1)",
+  "sanitization": "structural evidence only: statuses, byte lengths, sha256 fingerprints, UUID correlation ids, catalog counts. No cookies, no auth headers, no CAPTCHA tokens, no signed URLs, no raw response bytes.",
+  "endpoint": {
+    "rpc_id": "maseQ",
+    "transport": "flow batchexecute (private observed wire contract flow-batchexecute/2026-09-20.1)",
+    "request_builder": "flow_rpc_contract.build_upload: context(project,captcha IMAGE_GENERATION) + base64(png) + 'image/png' + filename 'story-auto-reference.png' + upload-client/upload-session uuid5 correlation ids",
+    "request_id_derivation": "uuid5(NAMESPACE_URL, refup_<sha256 binding key>)"
+  },
+  "historical_uploads": [
+    {
+      "label": "slice0011_reference_qualification",
+      "date": "2026-09-30",
+      "store": "projects/character_continuity/reference_qualification_20260930/runtime.sqlite",
+      "reservation": "refup_2773df1c9a68e852ad4ccad...",
+      "project": "93a579b4-834e-435b-8304-5f6682937935",
+      "account_alias": "project_scoped_unverified_account",
+      "request_body_sha256": "3f0bf242a4d876f8296bebbe37b17cf1bf10b68eeaddfced0bc7aedb60f44c5a",
+      "response": {"status": 200, "bytes": 647, "observed_at": "2026-09-30T05:17:23.357227+00:00"},
+      "initial_parser_result": "FAILED_AMBIGUOUS (upload_response_unresolved) at 2026-09-30T05:17:23.376984+00:00",
+      "catalog_reconcile": {"probes": 2, "candidates": 2, "matches": 1, "unresolved": 0, "first_probe": "2026-09-30T06:51:40.634410+00:00"},
+      "catalog_visibility_delay_bound": "<= 94 min (probe start bound; exact appearance unobserved)",
+      "final_provider_identity": {"media_id": "347f9951-5bbc-4910-b6fd-3a17c74e29d2", "provider_media_sha256": "93fa8edf3093a62f6053b5ae95352d7355d803329b00cb55f336c559216d8c89"},
+      "readback": "strong_match exact-identity verification (conservative_rgb_and_detail)",
+      "outcome": "EFFECT_PROVEN_UNIQUE via read-only reconcile"
+    },
+    {
+      "label": "scene_003_c4_continuity",
+      "date": "2026-10-02",
+      "store": "projects/flow_scene_scale_003/continuity_upload_1.sqlite",
+      "reservation": "refup_73a4bacf9169da2b2b1a2dc8a0c15d006248a...",
+      "project": "93a579b4-834e-435b-8304-5f6682937935",
+      "account_alias": "clean-pro-qualified",
+      "request_body_sha256": "8fab5cfc7aafd5cf64e6a36f9fb80f0b3c171481d997d888c67104d21d576b66",
+      "response": {"status": 200, "bytes": 651, "observed_at": "2026-10-02T15:45:04.304509+00:00"},
+      "initial_parser_result": "FAILED_AMBIGUOUS (upload_response_unresolved) at 2026-10-02T15:45:04.322422+00:00",
+      "catalog_reconcile": {"probes": "20 over ~20 min (read-only command rounds)", "candidates": 5, "matches": 1, "unresolved": 1},
+      "catalog_visibility_delay_bound": "<= 5.4 min (media absent-at-POST, present at first probe 15:50:27)",
+      "final_provider_identity": {"media_id": "0c16d60b-b027-48da-adb8-c1cb9a4ecf64", "provider_media_sha256": "ed16cfec39da1aaaac54089325618bf32154cfe95f9aceb496f6ef20f5758987"},
+      "readback": "strong_match exact-identity verification",
+      "outcome": "EFFECT_PROVEN_UNIQUE via read-only reconcile"
+    },
+    {
+      "label": "package_007_F2_continuity",
+      "date": "2026-10-03",
+      "store": "projects/flow_production_scale_007/sequence_SEQ007_DAYLIGHT_ROAD/scene_SCENE_F_STORM_GATE/continuity_upload_1.sqlite",
+      "reservation": "refup_fb013d43ba551aea9b6623daaf6b3b14f29fae5b290fe3d01dcb32a1b56de06a",
+      "project": "93a579b4-834e-435b-8304-5f6682937935",
+      "account_alias": "clean-pro-qualified",
+      "request_body_sha256": "59be120c9276365eff7b5b5cad0101c1e38a0bf1c2d944431f90d0691ccd9be4",
+      "response": {"status": 200, "bytes": 651, "observed_at": "2026-10-03T07:39:32.102354+00:00"},
+      "initial_parser_result": "FAILED_AMBIGUOUS (upload_response_unresolved) at 2026-10-03T07:39:32.111961+00:00 — FIRST HISTORICAL GATE POINT",
+      "catalog_reconcile": {"probes": 2, "candidates": 7, "matches": 1, "unresolved": 1, "first_probe": "2026-10-03T07:45:26.894576+00:00"},
+      "catalog_visibility_delay_bound": "<= 5.9 min",
+      "final_provider_identity": {"media_id": "8f2f5277-aae8-44b5-a5b7-c197d1d7c115", "provider_media_sha256": "fecf669e9b81436c80cd6502036d10b401f3964534e8d3fe9dea0800355f8313"},
+      "readback": "strong_match exact-identity verification",
+      "outcome": "EFFECT_PROVEN_UNIQUE via read-only reconcile; slot classification POST_GATE (gate-point mutation)"
+    },
+    {
+      "label": "package_007_G2_continuity",
+      "date": "2026-10-03",
+      "store": "projects/flow_production_scale_007/sequence_SEQ007_DAYLIGHT_ROAD/scene_SCENE_G_HIGH_PLATEAU/continuity_upload_1.sqlite",
+      "reservation": "refup_0167f6698af3c0b198c945afe5157848d7e1d435832edecc26e335d9629e100a",
+      "project": "93a579b4-834e-435b-8304-5f6682937935",
+      "account_alias": "clean-pro-qualified",
+      "request_body_sha256": "b4d9c7f28e51050024e0eed90228077fd7b684a7e9e152d9062cc370c51cb26e",
+      "response": {"status": 200, "bytes": 651, "observed_at": "2026-10-03T07:39:44.388075+00:00"},
+      "initial_parser_result": "FAILED_AMBIGUOUS (upload_response_unresolved) at 2026-10-03T07:39:44.397196+00:00 — POST-GATE mutation (armed 4.1 s after the first gate point)",
+      "catalog_reconcile": {"probes": 2, "candidates": 7, "matches": 1, "unresolved": 1, "first_probe": "2026-10-03T07:46:52.247597+00:00"},
+      "catalog_visibility_delay_bound": "<= 7.3 min",
+      "final_provider_identity": {"media_id": "75dbd0bc-8416-40a0-9c2a-19700fdcf665", "provider_media_sha256": "c1f13c5068b524fd9ae3c261dec0c501cdb67951b78e23a342f7e581b856bc99"},
+      "readback": "strong_match exact-identity verification",
+      "outcome": "EFFECT_PROVEN_UNIQUE via read-only reconcile; slot classification POST_GATE"
+    },
+    {
+      "label": "story_auto_control_20261001 (external control system, different project/account)",
+      "date": "2026-10-01",
+      "evidence": "D:/Story Auto/evidence/flow-real-product-journey-20261001-control (STORY_AUTO_R2V_LIVE_CONTROL_20261001.md)",
+      "project": "a94d36d0-5f95-420d-97b4-dc7cf0c87453",
+      "account_alias": "flow-product-20260922 (hoangbsea@gmail.com, Pro)",
+      "response_class": "DIFFERENT: direct identity envelope — payload[0][0] WAS the server-assigned media UUID",
+      "final_provider_identity": {"media_id": "69ac3d31-de9f-4e54-a70c-d712904b1139"},
+      "readback": "as29s image readback verified by Story Auto",
+      "outcome": "upload parsed directly; proves the maseQ response envelope is NOT fixed and is session/state dependent"
+    }
+  ],
+  "matrix_conclusions": [
+    "AI-Film maseQ uploads are 4/4 one stable response class: HTTP 200 + 647-651 bytes + strict-parse-qualified or shape-unqualified (no media UUID in the primary slot) + FAILED_AMBIGUOUS at classification time; 4/4 later resolved to EXACTLY ONE catalog media with exact content readback.",
+    "The 647 vs 651 byte spread proves the class carries variable content; byte length alone is NOT a qualifying fingerprint.",
+    "The response envelope is not universal: the 2026-10-01 Story Auto control on a different project/account received a direct-UUID envelope. Universal Google Flow upload semantics are NOT claimed.",
+    "Failure point is durable-journal-indistinguishable between 'frames unparseable' and 'UUID shape unqualified'; the live canary captures a sanitized skeleton at classification time to separate them.",
+    "Catalog visibility delay after POST is bounded under ~7.4 min in all observations; reconciliation windows must exceed that bound before exhaustion."
+  ],
+  "requalification_triggers": [
+    "endpoint/RPC id drift (maseQ)",
+    "request envelope drift (build_upload shape)",
+    "response envelope drift (status/content-type/frame structure/skeleton fingerprint)",
+    "catalog schema drift (Zzl0ze baseline fingerprint 78ca7a1c...)",
+    "reconciliation identity semantics drift",
+    "readback semantics drift (as29s / comparison class)"
+  ]
+}
