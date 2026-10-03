@@ -142,6 +142,13 @@ def validate_scale_plan(plan: dict) -> dict:
                             f"{continuity.get('media_id')!r} outside sequence "
                             f"{sequence['sequence_id']} media scope "
                             f"(cross-project media identity)")
+                    target = shot.get("editorial_target_duration")
+                    if target is not None and (
+                            not isinstance(target, (int, float)) or
+                            isinstance(target, bool) or target <= 0):
+                        raise ValueError(
+                            f"shot {shot['shot_id']} "
+                            f"editorial_target_duration invalid")
         else:
             raise ValueError(
                 f"sequence {sequence['sequence_id']} mode unqualified: {mode}")
@@ -150,7 +157,8 @@ def validate_scale_plan(plan: dict) -> dict:
 
 
 def scale_plan_hash(plan: dict) -> str:
-    """Whole-run plan identity: every sequence, scene, shot, continuity."""
+    """Whole-run plan identity: every sequence, scene, shot, continuity,
+    and frozen editorial target (drift on any frozen field is refused)."""
     canonical = {
         "run_id": plan["run_id"],
         "project_id": plan["project_id"],
@@ -160,7 +168,9 @@ def scale_plan_hash(plan: dict) -> str:
                  {"scene_id": sc["scene_id"],
                   "shots": [{"shot_id": sh["shot_id"],
                              "fixture": sh.get("fixture"),
-                             "continuity": sh["continuity"]}
+                             "continuity": sh["continuity"],
+                             "editorial_target_duration":
+                                 sh.get("editorial_target_duration")}
                             for sh in sc["shots"]]}
                  for sc in s.get("scenes", [])]}
             for s in plan["sequences"]],

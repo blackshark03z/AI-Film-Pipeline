@@ -369,3 +369,54 @@ def test_scale_state_belongs_to_run(tmp_path):
     ScaleRunState(tmp_path, "RUN_A")
     with pytest.raises(ValueError, match="another run"):
         ScaleRunState(tmp_path, "RUN_B")
+
+
+def test_editorial_target_duration_validated(tmp_path):
+    ref = make_historical(tmp_path)
+    plan = scale_plan(ref)
+    plan["sequences"][1]["scenes"][0]["shots"][0][
+        "editorial_target_duration"] = -1.0
+    with pytest.raises(ValueError, match="editorial_target_duration invalid"):
+        validate_scale_plan(plan)
+    ok = scale_plan(ref)
+    ok["sequences"][1]["scenes"][0]["shots"][0][
+        "editorial_target_duration"] = 3.2
+    validate_scale_plan(ok)
+
+
+def test_editorial_target_drift_refused(tmp_path):
+    ref = make_historical(tmp_path)
+    plan = scale_plan(ref)
+    plan["sequences"][1]["scenes"][0]["shots"][0][
+        "editorial_target_duration"] = 4.8
+    execute_scale_run(plan, tmp_path / "run", make_live_driver(plan, []),
+                      _real_adopted_loader(), _flat_runner())
+    drifted = scale_plan(ref)
+    drifted["sequences"][1]["scenes"][0]["shots"][0][
+        "editorial_target_duration"] = 6.4  # post-hoc retiming refused
+    with pytest.raises(ValueError, match="plan identity mismatch"):
+        execute_scale_run(drifted, tmp_path / "run",
+                          make_live_driver(drifted, []),
+                          _real_adopted_loader(), _flat_runner())
+
+
+def test_adopted_loader_dispatch_run_layout(tmp_path):
+    from run_production_scale_007 import adopted_loader_dispatch
+    run_dir = tmp_path / "oldrun"
+    seq_dir = run_dir / "sequence_OLD"
+    (seq_dir / "scene_SC_X" / "shot_X1").mkdir(parents=True)
+    (seq_dir / "scene_SC_X" / "shot_X1" / "result.json").write_text(
+        json.dumps({"shot_id": "X1", "gate": "SHOT_PROVEN",
+                    "output_identity": "m1",
+                    "asset": {"sha256": "h1"}}), encoding="utf-8")
+    (seq_dir / "run_result.json").write_text(json.dumps(
+        {"sequence_id": "OLD", "complete": True}), encoding="utf-8")
+    (run_dir / "production_run_state.json").write_text(json.dumps(
+        {"sequences": {"OLD": {"status": "PROVEN"}}}), encoding="utf-8")
+    snap = adopted_loader_dispatch(seq_dir)
+    assert snap["sequence_id"] == "OLD" and len(snap["shots"]) == 1
+    # Unproven parent run state refuses adoption.
+    (run_dir / "production_run_state.json").write_text(json.dumps(
+        {"sequences": {"OLD": {"status": "UNRESOLVED"}}}), encoding="utf-8")
+    with pytest.raises(ValueError, match="not PROVEN"):
+        adopted_loader_dispatch(seq_dir)
