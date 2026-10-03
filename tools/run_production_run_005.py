@@ -392,12 +392,28 @@ def main():
                 "mode": "adopted", "state_ref": str(HIST_STATE)},
                {"sequence_id": "SEQ005_VALLEY_STREAM",
                 "mode": "live", "plan_ref": str(PLAN_B)}]}
-    result = production_run.execute_production_run(
-        run, RUN_DIR, lambda entry, state_dir: scene_runner.execute_scene(
-            {"scene_id": s["scene_id"], "shots": s["shots"]},
-            state_dir, run_live_shot)
-        if (s := json.loads(Path(entry["plan_ref"]).read_text(encoding="utf-8")))
-        else None)
+    def run_live_sequence(entry, state_dir):
+        """Execute every scene of a live sequence plan via the scene chain.
+
+        Each scene gets its own state subdirectory: the scene layer pins one
+        scene-plan identity per state dir, and a multi-scene sequence runs
+        distinct scene plans.
+        """
+        plan = json.loads(Path(entry["plan_ref"]).read_text(encoding="utf-8"))
+        scene_results = []
+        for scene in plan["scenes"]:
+            scene_state = Path(state_dir) / f"scene_{scene['scene_id']}"
+            scene_result = scene_runner.execute_scene(
+                {"scene_id": scene["scene_id"], "shots": scene["shots"]},
+                scene_state, run_live_shot)
+            scene_results.append(scene_result)
+        return {"sequence_id": entry["sequence_id"],
+                "complete": all(r.get("scene_complete") for r in scene_results),
+                "scenes": [{"scene_id": r.get("scene_id"),
+                            "scene_complete": r.get("scene_complete")}
+                           for r in scene_results]}
+
+    result = production_run.execute_production_run(run, RUN_DIR, run_live_sequence)
     print(json.dumps({k: result[k] for k in ("run_id", "sequences_proven",
                                              "sequences_total",
                                              "run_complete")}), flush=True)
