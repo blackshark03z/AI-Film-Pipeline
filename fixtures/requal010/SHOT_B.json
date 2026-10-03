@@ -1,0 +1,58 @@
+{
+ "schema_version": "1.0.0",
+ "spec_version": 1,
+ "shot_id": "SHOT_B",
+ "scene_id": "SESSION_REUSE_PROOF",
+ "dramatic_purpose": "Session-reuse qualification shot SHOT_B; minimal frozen test.",
+ "duration_target_s": 8,
+ "shot_type": "performance",
+ "characters": [
+  {
+   "character_id": "swordsman_white_robes",
+   "identity_version": "swordsman_white_robes_v1",
+   "look_state_id": "white_robes_cloud_summit_dawn_v1",
+   "role_in_shot": "figure standing by the water",
+   "behavior_state": "walks slowly along the water"
+  }
+ ],
+ "camera": {
+  "framing": "MCU",
+  "height": "eye_level",
+  "lens_intent": "portrait",
+  "movement": {
+   "type": "locked"
+  }
+ },
+ "environment": {
+  "time_of_day": "midday",
+  "weather": "storm front",
+  "atmosphere": "quiet water in clear light"
+ },
+ "blocking": {
+  "start": "standing by the water",
+  "action_beats": [
+   "two steps",
+   "cloak settles"
+  ],
+  "end": "still, facing downstream",
+  "prop_interactions": []
+ },
+ "performance": {
+  "observable_beats": [
+   "one breath"
+  ],
+  "forbidden": []
+ },
+ "lighting": {},
+ "continuity": {
+  "screen_direction": "faces frame-left",
+  "eyeline": "down the road ahead",
+  "start_state": {},
+  "end_state": {},
+  "critical_invariants": [
+   "no face identity drift",
+   "same hair and headband",
+   "wind-blown hair only"
+  ]
+ }
+}
