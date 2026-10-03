@@ -139,13 +139,21 @@ class FrozenFixtureEvaluator(SemanticQCEvaluator):
 
 def validate_semantic_batch(request: SemanticQCRequest,
                             observations: list[SemanticQCObservation]) -> None:
-    """Contract check for any evaluator output against its request."""
+    """Contract check for any evaluator output against its request.
+
+    Lineage: every observation's evidence_refs must hash-match the exact
+    frames pinned in the request — a result bound to different media is
+    rejected (wrong-source semantics)."""
     if len(observations) != len(request.dimensions):
         raise ValueError("semantic batch cardinality mismatch")
     got = [o.dimension for o in observations]
     if sorted(got) != sorted(request.dimensions):
         raise ValueError("semantic batch dimensions mismatch")
+    pinned = {f.get("sha256") for f in request.frames}
     for observation in observations:
         if observation.request_id != request.request_id:
             raise ValueError("semantic observation request_id mismatch")
+        refs = {e.get("sha256") for e in observation.evidence_refs}
+        if not refs or refs != pinned:
+            raise ValueError("semantic observation source lineage mismatch")
         observation_fingerprint(observation)  # fingerprint must recompute
