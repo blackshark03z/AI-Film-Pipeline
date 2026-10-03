@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ5_D2",
+  "scene_id": "SCENE_D_STREAM_REST",
+  "dramatic_purpose": "He kneels to drink; the sword lies across his knees.",
+  "duration_target_s": 8,
+  "shot_type": "action",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure kneeling at the water",
+      "behavior_state": "kneels; scoops water; drinks once"
+    }
+  ],
+  "camera": {
+    "framing": "MS",
+    "height": "eye_level",
+    "lens_intent": "normal",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "late morning",
+    "weather": "clear",
+    "atmosphere": "quiet stream bank in dappled green light"
+  },
+  "blocking": {
+    "start": "standing at the edge",
+    "action_beats": [
+      "kneels onto one knee",
+      "one slow drink"
+    ],
+    "end": "kneeling, drinking"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the valley path",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "same robes",
+      "stream flow direction stable",
+      "late-morning light consistent"
+    ]
+  }
+}

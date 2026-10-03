@@ -1,0 +1,82 @@
+{
+  "sequence_id": "SEQ005_VALLEY_STREAM",
+  "scenes": [
+    {
+      "scene_id": "SCENE_C_VALLEY_FLOOR",
+      "narrative_purpose": "Scene C - arrival: the swordsman reaches the valley floor.",
+      "shots": [
+        {
+          "shot_id": "SEQ5_C1",
+          "fixture": "fixtures/sequence005/SEQ5_C1.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          }
+        },
+        {
+          "shot_id": "SEQ5_C2",
+          "fixture": "fixtures/sequence005/SEQ5_C2.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          }
+        },
+        {
+          "shot_id": "SEQ5_C3",
+          "fixture": "fixtures/sequence005/SEQ5_C3.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          }
+        },
+        {
+          "shot_id": "SEQ5_C4",
+          "fixture": "fixtures/sequence005/SEQ5_C4.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "SCENE_D_STREAM_REST",
+      "narrative_purpose": "Scene D - rest and onward: a stream bank pause, then the road again.",
+      "shots": [
+        {
+          "shot_id": "SEQ5_D1",
+          "fixture": "fixtures/sequence005/SEQ5_D1.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          }
+        },
+        {
+          "shot_id": "SEQ5_D2",
+          "fixture": "fixtures/sequence005/SEQ5_D2.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          }
+        },
+        {
+          "shot_id": "SEQ5_D3",
+          "fixture": "fixtures/sequence005/SEQ5_D3.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          }
+        },
+        {
+          "shot_id": "SEQ5_D4",
+          "fixture": "fixtures/sequence005/SEQ5_D4.json",
+          "continuity": {
+            "kind": "reference",
+            "media_id": "7b725f7b-4da5-4455-a6f2-135c4ba22397"
+          }
+        }
+      ]
+    }
+  ],
+  "frozen_note": "Frozen before the first live mutation: 2 scenes, 8 shot slots, same-reference continuity; CONTINUITY_UPLOADS budget unused (mechanism PROVEN in Scene-003; no new upload required). Prompt wording avoids concrete-noun metaphors (Scene-004 funnel lesson)."
+}

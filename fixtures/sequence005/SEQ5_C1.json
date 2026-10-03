@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ5_C1",
+  "scene_id": "SCENE_C_VALLEY_FLOOR",
+  "dramatic_purpose": "New space: the valley floor opens green below the pass.",
+  "duration_target_s": 8,
+  "shot_type": "establishing",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "small figure entering across the meadow",
+      "behavior_state": "figure walks frame-left across the meadow"
+    }
+  ],
+  "camera": {
+    "framing": "EWS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "morning",
+    "weather": "clear",
+    "atmosphere": "green valley floor in thin bright light"
+  },
+  "blocking": {
+    "start": "figure enters frame-right",
+    "action_beats": [
+      "long grass parts along the path",
+      "figure moves steadily frame-left"
+    ],
+    "end": "figure mid-meadow"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the valley path",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "valley floor geography stable",
+      "wardrobe unchanged",
+      "morning light consistent"
+    ]
+  }
+}

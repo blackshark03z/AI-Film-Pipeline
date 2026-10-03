@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ5_C2",
+  "scene_id": "SCENE_C_VALLEY_FLOOR",
+  "dramatic_purpose": "Closer: the descent done, he walks lighter on flat ground.",
+  "duration_target_s": 8,
+  "shot_type": "action",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure from waist up, walking",
+      "behavior_state": "relaxed stride; sword settled at the side"
+    }
+  ],
+  "camera": {
+    "framing": "MS",
+    "height": "eye_level",
+    "lens_intent": "normal",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "morning",
+    "weather": "clear",
+    "atmosphere": "green valley floor in thin bright light"
+  },
+  "blocking": {
+    "start": "walking into frame-right",
+    "action_beats": [
+      "stride loosens",
+      "eyes take in the valley"
+    ],
+    "end": "walking steadily frame-left"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the valley path",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "same robes and sword",
+      "meadow path stable",
+      "morning light consistent"
+    ]
+  }
+}

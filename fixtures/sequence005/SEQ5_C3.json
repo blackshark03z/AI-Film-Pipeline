@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ5_C3",
+  "scene_id": "SCENE_C_VALLEY_FLOOR",
+  "dramatic_purpose": "He pauses where the meadow breaks toward the trees.",
+  "duration_target_s": 8,
+  "shot_type": "performance",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "face and shoulders, front three-quarter",
+      "behavior_state": "one slow look back up the valley; then forward"
+    }
+  ],
+  "camera": {
+    "framing": "MCU",
+    "height": "eye_level",
+    "lens_intent": "portrait",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "morning",
+    "weather": "clear",
+    "atmosphere": "green valley floor in thin bright light"
+  },
+  "blocking": {
+    "start": "standing still, facing camera",
+    "action_beats": [
+      "a glance back up-ridge",
+      "a breath; he turns forward"
+    ],
+    "end": "facing down-valley"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the valley path",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "no face identity drift",
+      "same hair and headband",
+      "morning light consistent"
+    ]
+  }
+}

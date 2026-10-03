@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ5_D3",
+  "scene_id": "SCENE_D_STREAM_REST",
+  "dramatic_purpose": "Detail: the sword planted upright in the bank earth beside him.",
+  "duration_target_s": 8,
+  "shot_type": "insert",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "sword hilt and planted blade only",
+      "behavior_state": "the planted blade stands still; a droplet slides down"
+    }
+  ],
+  "camera": {
+    "framing": "ECU",
+    "height": "eye_level",
+    "lens_intent": "telephoto",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "late morning",
+    "weather": "clear",
+    "atmosphere": "quiet stream bank in dappled green light"
+  },
+  "blocking": {
+    "start": "blade planted upright",
+    "action_beats": [
+      "blade stands planted",
+      "one droplet slides down the steel"
+    ],
+    "end": "blade still planted"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the valley path",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "hilt wrap and blade consistent",
+      "no hands in frame",
+      "late-morning light consistent"
+    ]
+  }
+}

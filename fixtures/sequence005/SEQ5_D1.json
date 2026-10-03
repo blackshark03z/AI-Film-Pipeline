@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ5_D1",
+  "scene_id": "SCENE_D_STREAM_REST",
+  "dramatic_purpose": "New space: a quiet stream bank under dappled light.",
+  "duration_target_s": 8,
+  "shot_type": "establishing",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "figure arriving at the stream bank",
+      "behavior_state": "figure stops at the water's edge"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "late morning",
+    "weather": "clear",
+    "atmosphere": "quiet stream bank in dappled green light"
+  },
+  "blocking": {
+    "start": "figure enters frame-right",
+    "action_beats": [
+      "water glints past the bank",
+      "figure stands still at the edge"
+    ],
+    "end": "standing at the water's edge"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the valley path",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "stream bank geography stable",
+      "wardrobe unchanged",
+      "late-morning light consistent"
+    ]
+  }
+}

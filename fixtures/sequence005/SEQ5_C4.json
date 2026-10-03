@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ5_C4",
+  "scene_id": "SCENE_C_VALLEY_FLOOR",
+  "dramatic_purpose": "Wide button: the figure becomes small between the meadow and the treeline.",
+  "duration_target_s": 8,
+  "shot_type": "cutaway",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "small figure walking toward the treeline",
+      "behavior_state": "steady steps toward the trees"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "morning",
+    "weather": "clear",
+    "atmosphere": "green valley floor in thin bright light"
+  },
+  "blocking": {
+    "start": "figure mid-meadow",
+    "action_beats": [
+      "figure shrinks toward the treeline",
+      "grass sways in a light breeze"
+    ],
+    "end": "figure near the treeline edge"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the valley path",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "treeline geography stable",
+      "no new elements",
+      "morning light consistent"
+    ]
+  }
+}

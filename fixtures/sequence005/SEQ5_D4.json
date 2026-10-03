@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "spec_version": 1,
+  "shot_id": "SEQ5_D4",
+  "scene_id": "SCENE_D_STREAM_REST",
+  "dramatic_purpose": "Resolution: he rises, takes up the sword, and walks on along the stream.",
+  "duration_target_s": 8,
+  "shot_type": "hero",
+  "characters": [
+    {
+      "character_id": "swordsman_white_robes",
+      "identity_version": "swordsman_white_robes_v1",
+      "look_state_id": "white_robes_cloud_summit_dawn_v1",
+      "role_in_shot": "full figure rising and walking frame-left",
+      "behavior_state": "rises; takes the sword; strides on"
+    }
+  ],
+  "camera": {
+    "framing": "WS",
+    "height": "eye_level",
+    "lens_intent": "wide",
+    "movement": {
+      "type": "locked"
+    }
+  },
+  "environment": {
+    "time_of_day": "late morning",
+    "weather": "clear",
+    "atmosphere": "quiet stream bank in dappled green light"
+  },
+  "blocking": {
+    "start": "kneeling by the stream",
+    "action_beats": [
+      "rises in one motion",
+      "walks on along the bank"
+    ],
+    "end": "walking away frame-left along the bank"
+  },
+  "continuity": {
+    "screen_direction": "faces frame-left",
+    "eyeline": "down the valley path",
+    "start_state": {},
+    "end_state": {},
+    "critical_invariants": [
+      "same robes and sword",
+      "stream bank stable",
+      "late-morning light consistent"
+    ]
+  }
+}
