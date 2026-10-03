@@ -253,8 +253,10 @@ def test_before_generate_exact_state_enforced():
                     model="veo", settings={"aspect": 2, "duration_s": 8,
                                            "output_count": 1})
     assert ok(page, stage="before_generate")["checks_passed"]
+    # exact reference IDENTITY is proven separately by verify_chip;
+    # the shell enforces the chip COUNT at the mutation boundary.
     with pytest.raises(SessionStateUnqualified, match="exact_reference"):
-        ok(FakePage(prompt="8s shot. [MARKER-X]", refs=[STALE_REFERENCE],
+        ok(FakePage(prompt="8s shot. [MARKER-X]", refs=["chip_x", "chip_y"],
                     model="veo", settings={"aspect": 2, "duration_s": 8,
                                            "output_count": 1}),
            stage="before_generate")
