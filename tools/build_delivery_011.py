@@ -186,7 +186,8 @@ def build() -> dict:
     # deterministic zip (fixed timestamps, sorted order)
     zip_path = D11 / "DELIVERY_011.zip"
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as archive:
-        for path in sorted(BUNDLE.rglob("*")):
+        for path in sorted(BUNDLE.rglob("*"),
+                           key=lambda p: p.relative_to(BUNDLE).as_posix()):
             if path.is_file():
                 arc = path.relative_to(BUNDLE)
                 info = zipfile.ZipInfo(str(arc),
