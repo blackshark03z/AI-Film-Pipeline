@@ -170,6 +170,32 @@ class FlowReferenceRpcSession:
                 raise OwnerAuthRequired('OWNER_AUTH_REQUIRED: standard Google Flow sign-in') from None
             raise FlowReferenceRpcDrift("FLOW_REFERENCE_RPC_SESSION_NOT_READY") from None
 
+    @classmethod
+    def attach(cls, *, page, project_id: str) -> "FlowReferenceRpcSession":
+        """Bind an ALREADY-OPEN browser page (session-reuse shell) as the
+        RPC session. Same profile, same authenticated context; no second
+        browser launch. Readiness is verified fail-closed via metadata()."""
+        session = cls.__new__(cls)
+        if not contract.UUID_RE.fullmatch(project_id):
+            raise ValueError("Flow project ID invalid")
+        session.cookie_path = None
+        session.profile_path = None
+        session.project_id = project_id
+        session.native_ui = True
+        session.project_url = f"{ORIGIN}/project/{project_id}"
+        session._driver = None
+        session._browser = None
+        session.page = page
+        session.catalog_fingerprint = None
+        session.rpc_call_counts = {}
+        if project_id not in (page.url or ""):
+            page.goto(session.project_url, timeout=45000)
+        page.wait_for_function(
+            "() => !!globalThis.WIZ_global_data?.SNlM0e && "
+            "!!globalThis.grecaptcha?.enterprise?.execute", timeout=15000)
+        session.metadata()
+        return session
+
     def __exit__(self, *_):
         browser, driver = self._browser, self._driver
         self._browser = self._driver = self.page = None

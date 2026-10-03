@@ -231,6 +231,9 @@ class OneGenerateGuard:
             self.store.record_dispatch_fact(self.job.provider_job_id, 'GENERATE_REQUEST_OBSERVED', metadata)
             self.sent += 1
             route.continue_()
-        except Exception:
+        except Exception as exc:
+            # Diagnostic only: the refusal semantics are unchanged (the
+            # request is still aborted; the caller still fails closed).
             self.error = 'NATIVE_GENERATE_BLOCKED_REQUIRES_OWNER'
+            self.error_detail = f"{type(exc).__name__}: {exc}"[:200]
             route.abort()

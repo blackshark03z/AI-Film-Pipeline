@@ -36,22 +36,24 @@ base.RUN_DIR = RUN_DIR
 base.SCOPE_ID = SCOPE_ID
 
 from film_pipeline.core import References, load_shot, sha256
+from film_pipeline.providers.flow_r2v_prompt import MARKER_RE
 from film_pipeline.flow_r2v_runtime import (
     FlowR2VShotRuntime, qualify_flow_catalog_source)
 from film_pipeline.live_runtime import utc_now
 from film_pipeline.providers import flow_rpc_contract as contract
 from film_pipeline.providers.flow_canonical_ui import prepare_inputs, verify_chip
 from film_pipeline.providers.flow_media import parse_media_resource
-from film_pipeline.providers.flow_reference_rpc import FlowReferenceRpcDrift
+from film_pipeline.providers.flow_reference_rpc import (
+    FlowReferenceRpcDrift, FlowReferenceRpcSession)
 from film_pipeline.providers.flow_reference_upload import OwnerAmbiguityGate
 from film_pipeline.providers.flow_session_shell import (
     ProviderBrowserShell, SessionStateRequirements, SessionStateUnqualified)
 from mutation_authority import MutationAuthority
 
 FIXTURES = {
-    "SHOT_A": "fixtures/requal009/V5_CONT.json",
-    "SHOT_B": "fixtures/sequence007/SEQ7_E1.json",
-    "SHOT_C": "fixtures/sequence007/SEQ7_E3.json",
+    "SHOT_A": "fixtures/requal010/SHOT_A.json",
+    "SHOT_B": "fixtures/requal010/SHOT_B.json",
+    "SHOT_C": "fixtures/requal010/SHOT_C.json",
 }
 
 
@@ -95,7 +97,11 @@ def run_reuse_shot(tag: str, shell: ProviderBrowserShell, store,
     spec = load_shot(ROOT / FIXTURES[tag])
     spec = spec.model_copy(update={
         "references": References(other_asset_ids=[binding["asset_id"]])})
-    with base.open_read_session() as session:
+    # Session reuse: the RPC layer rides the SAME live shell page (one
+    # authenticated browser); no second browser is launched.
+    session = FlowReferenceRpcSession.attach(page=shell.page,
+                                             project_id=base.PROJECT_ID)
+    if True:
         capability = qualify_flow_catalog_source(session)
         fingerprint = session.catalog_fingerprint
         frozen = runtime.freeze(spec, base.flow_capabilities(),
@@ -142,92 +148,101 @@ def run_reuse_shot(tag: str, shell: ProviderBrowserShell, store,
             raise OwnerAmbiguityGate("BASELINE_CHANGED_BEFORE_UI_PREPARATION")
     timings["freeze_and_reserve_s"] = round(time.monotonic() - t0, 3)
     if already_consumed:
+        # At-most-once: the release already happened; this re-entry
+        # is observation + acquisition ONLY. No second click, ever.
         report["resume_read_only"] = True
+    else:
 
-    t1 = time.monotonic()
-    shell.reset_for_shot(fresh_requirements(
-        "before_prepare", prompt, marker, fingerprint))
-    timings["shell_reset_s"] = round(time.monotonic() - t1, 3)
+        t1 = time.monotonic()
+        shell.reset_for_shot(fresh_requirements(
+            "before_prepare", prompt, marker, fingerprint))
+        timings["shell_reset_s"] = round(time.monotonic() - t1, 3)
 
-    t2 = time.monotonic()
-    ui_session = SimpleNamespace(page=shell.page, project_id=base.PROJECT_ID)
-    try:
-        ui = prepare_inputs(ui_session, records,
-                            media_id=binding["media_id"], prompt=prompt)
-    except Exception:
-        shell.page.screenshot(path=str(shot_dir / "ui_prepare_failure.png"))
-        raise
-    report["ui_preflight"] = ui
-    timings["prepare_inputs_s"] = round(time.monotonic() - t2, 3)
-
-    before_gen = fresh_requirements(
-        "before_generate", prompt, marker, fingerprint)
-    shell.before_generate_check(before_gen)
-
-    response_holder = {}
-
-    def on_response(response):
-        if "MZZa6b" not in response.url or "status" in response_holder:
-            return
+        t2 = time.monotonic()
+        ui_session = SimpleNamespace(page=shell.page, project_id=base.PROJECT_ID)
         try:
-            body = response.text()
+            ui = prepare_inputs(ui_session, records,
+                                media_id=binding["media_id"], prompt=prompt)
         except Exception:
-            body = ""
-        response_holder["status"] = response.status
-        response_holder["byte_length"] = len(body.encode("utf-8"))
-        try:
-            response_holder["diagnostics"] = contract.submission_diagnostics(
-                body)
-        except Exception:
-            response_holder["diagnostics"] = {
-                "classification": "UNPARSEABLE", "advisory_only": True}
+            shell.page.screenshot(path=str(shot_dir / "ui_prepare_failure.png"))
+            raise
+        report["ui_preflight"] = ui
+        timings["prepare_inputs_s"] = round(time.monotonic() - t2, 3)
 
-    shell.page.on("response", on_response)
-    guard = runtime.arm_native_guard(frozen)
-    shell.page.context.route(base.MUTATION_ROUTE, guard.route)
-    verify_chip(shell.page, binding["media_id"])
-    editor = shell.page.locator('div.ProseMirror[contenteditable="true"]')
-    if editor.count() != 1 or editor.inner_text() != prompt:
-        raise OwnerAmbiguityGate("PROMPT_CHANGED_AT_MUTATION_BOUNDARY")
-    store.record_dispatch_fact(job_id, "PROMPT_VERIFIED",
-                               {"prompt_sha256": sha256(prompt)})
-    store.record_dispatch_fact(job_id, "CLICK_ARMED", {})
-    guard.armed = True
-    report["generate_clicks"] = 1
-    t3 = time.monotonic()
-    shell.page.locator("button.generate-icon-button").click(timeout=15000)
-    end = time.monotonic() + base.RELEASE_WAIT_S
-    while guard.sent != 1 and guard.error is None and \
-            time.monotonic() < end:
-        shell.page.wait_for_timeout(250)
-    timings["release_to_guard_s"] = round(time.monotonic() - t3, 3)
-    report["observed_generate_requests"] = guard.seen
-    if guard.error is not None:
-        raise OwnerAmbiguityGate(guard.error)
-    if guard.sent != 1:
-        raise OwnerAmbiguityGate("EXACT_NATIVE_REQUEST_NOT_OBSERVED")
-    ledger_data["primary_consumed"].append({
-        "shot_id": tag, "provider_job_id": job_id,
-        "released_at": utc_now(),
-        "note": "Generate authority consumed; never retry authority."})
-    base.save_ledger(ledger_data)
-    auth.consume("primary_generate")
-    release_end = time.monotonic() + 30
-    while "status" not in response_holder and time.monotonic() < release_end:
-        shell.page.wait_for_timeout(250)
-    report["provider_response"] = response_holder
-    shell.page.screenshot(path=str(shot_dir / "post_release.png"))
-    if report.get("provider_response", {}).get("status"):
-        runtime.observe_provider_response(
-            frozen, status=report["provider_response"]["status"])
-        counts = (report["provider_response"].get("diagnostics")
-                  or {}).get("type_counts") or {}
-        if any(count for key, count in counts.items() if key != "null"):
-            runtime.observe_provider_acceptance(
-                frozen, provider_reference="MZZa6b_wire_ack")
+        before_gen = fresh_requirements(
+            "before_generate", prompt, marker, fingerprint)
+        shell.before_generate_check(before_gen)
+
+        response_holder = {}
+
+        def on_response(response):
+            if "MZZa6b" not in response.url or "status" in response_holder:
+                return
+            try:
+                body = response.text()
+            except Exception:
+                body = ""
+            response_holder["status"] = response.status
+            response_holder["byte_length"] = len(body.encode("utf-8"))
+            try:
+                response_holder["diagnostics"] = contract.submission_diagnostics(
+                    body)
+            except Exception:
+                response_holder["diagnostics"] = {
+                    "classification": "UNPARSEABLE", "advisory_only": True}
+
+        shell.page.on("response", on_response)
+        guard = runtime.arm_native_guard(frozen)
+        # Adversarial fix: route handlers ACCUMULATE on a shared context;
+        # a stale guard must never observe the next shot's request.
+        shell.page.context.unroute(base.MUTATION_ROUTE)
+        shell.page.context.route(base.MUTATION_ROUTE, guard.route)
+        verify_chip(shell.page, binding["media_id"])
+        editor = shell.page.locator('div.ProseMirror[contenteditable="true"]')
+        if editor.count() != 1 or editor.inner_text() != prompt:
+            raise OwnerAmbiguityGate("PROMPT_CHANGED_AT_MUTATION_BOUNDARY")
+        store.record_dispatch_fact(job_id, "PROMPT_VERIFIED",
+                                   {"prompt_sha256": sha256(prompt)})
+        store.record_dispatch_fact(job_id, "CLICK_ARMED", {})
+        guard.armed = True
+        report["generate_clicks"] = 1
+        t3 = time.monotonic()
+        shell.page.locator("button.generate-icon-button").click(timeout=15000)
+        end = time.monotonic() + base.RELEASE_WAIT_S
+        while guard.sent != 1 and guard.error is None and \
+                time.monotonic() < end:
+            shell.page.wait_for_timeout(250)
+        timings["release_to_guard_s"] = round(time.monotonic() - t3, 3)
+        report["observed_generate_requests"] = guard.seen
+        if guard.error is not None:
+            raise OwnerAmbiguityGate(
+                guard.error + " :: " + getattr(guard, "error_detail", ""))
+        if guard.sent != 1:
+            raise OwnerAmbiguityGate("EXACT_NATIVE_REQUEST_NOT_OBSERVED")
+        ledger_data["primary_consumed"].append({
+            "shot_id": tag, "provider_job_id": job_id,
+            "released_at": utc_now(),
+            "note": "Generate authority consumed; never retry authority."})
+        base.save_ledger(ledger_data)
+        auth.consume("primary_generate")
+        release_end = time.monotonic() + 30
+        while "status" not in response_holder and time.monotonic() < release_end:
+            shell.page.wait_for_timeout(250)
+        report["provider_response"] = response_holder
+        shell.page.screenshot(path=str(shot_dir / "post_release.png"))
+        if report.get("provider_response", {}).get("status"):
+            runtime.observe_provider_response(
+                frozen, status=report["provider_response"]["status"])
+            counts = (report["provider_response"].get("diagnostics")
+                      or {}).get("type_counts") or {}
+            if any(count for key, count in counts.items() if key != "null"):
+                runtime.observe_provider_acceptance(
+                    frozen, provider_reference="MZZa6b_wire_ack")
 
     t4 = time.monotonic()
-    with base.open_read_session() as session:
+    if True:
+        session = FlowReferenceRpcSession.attach(page=shell.page,
+                                                 project_id=base.PROJECT_ID)
         window_end = time.monotonic() + base.OBSERVATION_WINDOW_S
         next_poll = time.monotonic() + 10.0
         output_id, records2 = None, None
@@ -260,7 +275,7 @@ def run_reuse_shot(tag: str, shell: ProviderBrowserShell, store,
         if len(marker_rows) != 1:
             raise OwnerAmbiguityGate("BACKEND_MARKER_ROW_NOT_UNIQUE")
         if prompt not in [s for s in contract._strings(marker_rows[0])
-                          if contract.MARKER_RE.findall(s) == [marker]]:
+                          if MARKER_RE.findall(s) == [marker]]:
             raise OwnerAmbiguityGate("BACKEND_EXACT_PROMPT_MISMATCH")
         render = runtime.observe_render_state(frozen, session=session)
         report["render_state_observed"] = render.state
@@ -268,31 +283,14 @@ def run_reuse_shot(tag: str, shell: ProviderBrowserShell, store,
             else base.poll_media(session, output_id, report)
         media = session.bound_media(output_id, "video")
     timings["attribute_render_s"] = round(time.monotonic() - t4, 3)
-
-    t5 = time.monotonic()
-    asset = runtime.acquire(
-        frozen, transport=base.PreFetchedTransport(media.data, output_id),
-        destination_dir=shot_dir / "videos", media_payload=payload)
-    timings["acquire_s"] = round(time.monotonic() - t5, 3)
-    report["asset"] = asset.model_dump(mode="json")
-    report["decode"] = base.verify_full_decode(Path(asset.uri_or_path))
-    report["qc_eligibility"] = runtime.qc_eligibility(frozen, asset)
-    executor = base.LiveRuntimeExecutor(
-        __import__("film_pipeline.store", fromlist=["SQLiteStore"])
-        .SQLiteStore(base.STORE_PATH), None)
-    recovery = executor.recovery_decision(job_id)
-    report["restart_proofs"] = {
-        "dispatch_count": store.read_provider_job(job_id).dispatch_count,
-        "recovery_classification": recovery.classification,
-        "may_submit": recovery.may_submit}
-    report["gate"] = "SHOT_PROVEN"
     report["timings_s"] = timings
     report["total_s"] = round(time.monotonic() - t0, 3)
-    base.write_durable(result_path, report)
-    print(json.dumps({"shot_id": tag, "gate": report["gate"],
-                      "output": report.get("output_identity"),
-                      "timings": timings}), flush=True)
-    return report
+    # Acquisition is DEFERRED until the shell (and its Playwright event
+    # loop) closes: LiveRuntimeExecutor.reconcile uses asyncio.run, which
+    # cannot nest inside the shell's running loop.
+    return report, {"frozen": frozen, "output_id": output_id,
+                    "media_data": media.data, "payload": payload,
+                    "shot_dir": shot_dir, "job_id": job_id}
 
 
 def main() -> None:
@@ -310,15 +308,17 @@ def main() -> None:
         raise OwnerAmbiguityGate("package authority latched")
     auth.check_mutation_allowed("session_reuse_generate")
     data = json.loads(gen_ledger.read_text(encoding="utf-8"))
+    released = {e["shot_id"] for e in data["primary_consumed"]}
     pending = [t for t in FIXTURES
-               if not (RUN_DIR / f"scene_SESSION_REUSE/shot_{t}/result.json")
+               if t not in released
+               and not (RUN_DIR / f"scene_SESSION_REUSE/shot_{t}/result.json")
                .exists()]
-    if len(data["primary_consumed"]) + len(pending) > MAX_GENERATES:
+    if len(released & set(FIXTURES)) + len(pending) > MAX_GENERATES:
         raise OwnerAmbiguityGate("session-reuse budget exhausted (3 max)")
 
     store = SQLiteStore(base.STORE_PATH)
     store.initialize()
-    all_timings = {}
+    all_timings, stashed = {}, []
     with ProviderBrowserShell(
             profile=base.PROFILE,
             project_url=f"https://flow.google.com/project/{base.PROJECT_ID}"
@@ -327,8 +327,10 @@ def main() -> None:
             timings = {}
             report = {}
             try:
-                report = run_reuse_shot(tag, shell, store, timings)
+                report, ctx = run_reuse_shot(tag, shell, store, timings)
             except OwnerAmbiguityGate as exc:
+                import traceback
+                traceback.print_exc()
                 diag = str(exc)
                 report_local = {"shot_id": tag, "gate": "OWNER_GATE_LOCAL",
                                 "diagnostic": diag}
@@ -342,6 +344,36 @@ def main() -> None:
                 print(json.dumps(report_local), flush=True)
                 raise SystemExit(4)
             all_timings[tag] = report.get("timings_s", timings)
+            stashed.append((tag, report, ctx))
+    # Shell closed: the Playwright loop is gone; acquisition is safe now.
+    for tag, report, ctx in stashed:
+        t5 = time.monotonic()
+        runtime = FlowR2VShotRuntime(store, project_id=base.PROJECT_ID,
+                                     account_id=base.ACCOUNT_ID,
+                                     model=base.MODEL)
+        asset = runtime.acquire(
+            ctx["frozen"],
+            transport=base.PreFetchedTransport(ctx["media_data"],
+                                               ctx["output_id"]),
+            destination_dir=ctx["shot_dir"] / "videos",
+            media_payload=ctx["payload"])
+        report["timings_s"]["acquire_s"] = round(time.monotonic() - t5, 3)
+        report["asset"] = asset.model_dump(mode="json")
+        report["decode"] = base.verify_full_decode(Path(asset.uri_or_path))
+        report["qc_eligibility"] = runtime.qc_eligibility(
+            ctx["frozen"], asset)
+        executor = base.LiveRuntimeExecutor(store, None)
+        recovery = executor.recovery_decision(ctx["job_id"])
+        report["restart_proofs"] = {
+            "dispatch_count": store.read_provider_job(
+                ctx["job_id"]).dispatch_count,
+            "recovery_classification": recovery.classification,
+            "may_submit": recovery.may_submit}
+        report["gate"] = "SHOT_PROVEN"
+        base.write_durable(ctx["shot_dir"] / "result.json", report)
+        print(json.dumps({"shot_id": tag, "gate": report["gate"],
+                          "output": report.get("output_identity"),
+                          "timings": report["timings_s"]}), flush=True)
     base.write_durable(RUN_DIR / "session_reuse_timings.json",
                        {"shots": all_timings,
                         "shell": "ONE ProviderBrowserShell for A/B/C"})

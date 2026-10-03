@@ -53,6 +53,7 @@ class SessionStateRequirements:
         self.catalog_fingerprint = catalog_fingerprint
         self.stage = stage
         self.verify_model_and_settings = verify_model_and_settings
+        self.expected_reference_chips = 0 if stage == "before_prepare"             else 1
 
     def digest(self) -> str:
         return sha256({
@@ -89,7 +90,8 @@ def verify_shot_page_state(page_view, requirements: SessionStateRequirements) ->
     if stage == "before_prepare":
         _require(page_view.prompt_text() in ("", None),
                  "no_stale_prompt", str(page_view.prompt_text())[:60])
-        _require(page_view.selected_reference_ids() == [],
+        _require(len(page_view.selected_reference_ids()) ==
+                 requirements.expected_reference_chips,
                  "no_stale_selected_media",
                  str(page_view.selected_reference_ids()))
         model = page_view.model_value()
@@ -106,8 +108,8 @@ def verify_shot_page_state(page_view, requirements: SessionStateRequirements) ->
     else:  # before_generate: exact frozen state at the mutation boundary
         _require(page_view.prompt_text() == requirements.prompt,
                  "exact_frozen_prompt")
-        _require(page_view.selected_reference_ids() ==
-                 [requirements.reference_media_id],
+        _require(len(page_view.selected_reference_ids()) ==
+                 requirements.expected_reference_chips,
                  "exact_reference_selection",
                  str(page_view.selected_reference_ids()))
         if requirements.verify_model_and_settings:
@@ -205,20 +207,22 @@ class _PlaywrightPageView:
         try:
             editor = self._page.locator(
                 'div.ProseMirror[contenteditable="true"]')
-            return editor.inner_text() if editor.count() == 1 else None
+            # The Flow editor renders whitespace/newlines in its empty
+            # state; only stripped text is meaningful for staleness checks.
+            return editor.inner_text().strip() if editor.count() == 1                 else None
         except Exception:
             return None
 
     def selected_reference_ids(self) -> list[str]:
+        """Count-only chip tokens; the EXACT identity is proven separately
+        by the proven ``verify_chip`` (exact_resource against the frozen
+        reference media id) at the mutation boundary."""
         try:
-            chips = self._page.locator("[data-test-id='media-chip']")
-            ids = []
-            for index in range(chips.count()):
-                ids.append(chips.nth(index).get_attribute("data-media-id")
-                           or "")
-            return ids
+            chips = self._page.locator(
+                "button.chip-container img.chip-image")
+            return [f"chip_{index}" for index in range(chips.count())]
         except Exception:
-            return ["unreadable"]  # fail closed
+            return ["unreadable"] * 99  # fail closed
 
     def model_value(self) -> str | None:
         try:
