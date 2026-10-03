@@ -1,0 +1,57 @@
+{
+ "schema_version": "1.0.0",
+ "spec_version": 1,
+ "shot_id": "SEQ7_G3BR",
+ "scene_id": "SCENE_G_HIGH_PLATEAU",
+ "dramatic_purpose": "Close beat: the exhale after the arc; shoulders settle; the day lets go.",
+ "duration_target_s": 8,
+ "shot_type": "performance",
+ "characters": [
+  {
+   "character_id": "swordsman_white_robes",
+   "identity_version": "swordsman_white_robes_v1",
+   "look_state_id": "white_robes_cloud_summit_dawn_v1",
+   "role_in_shot": "face, front three-quarter",
+   "behavior_state": "one long exhale; the shoulders drop; the faintest ease"
+  }
+ ],
+ "camera": {
+  "framing": "CU",
+  "height": "eye_level",
+  "lens_intent": "portrait",
+  "movement": {
+   "type": "locked"
+  }
+ },
+ "environment": {
+  "time_of_day": "late day",
+  "weather": "clearing",
+  "atmosphere": "open high plateau under long, low light"
+ },
+ "blocking": {
+  "start": "face still from the effort",
+  "action_beats": [
+   "the exhale",
+   "shoulders settle",
+   "a small ease at the eyes"
+  ],
+  "end": "face at rest, eyes forward",
+  "prop_interactions": []
+ },
+ "performance": {
+  "observable_beats": [],
+  "forbidden": []
+ },
+ "lighting": {},
+ "continuity": {
+  "screen_direction": "faces frame-left",
+  "eyeline": "down the road ahead",
+  "start_state": {},
+  "end_state": {},
+  "critical_invariants": [
+   "no face identity drift",
+   "same hair and headband",
+   "late-day light consistent"
+  ]
+ }
+}
