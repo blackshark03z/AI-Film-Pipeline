@@ -134,6 +134,18 @@ def fail(report: dict, code: str, reason: str, exit_code: int) -> None:
     raise SystemExit(exit_code)
 
 
+def self_record_upload_custody(data, canary: str, slot: str, key: str) -> None:
+    """The one POST authority is released at the arm boundary regardless of
+    classification: budget custody is recorded BEFORE any exit path
+    (U14 adversarial fix for the canary1 ledger-gap class)."""
+    data = ledger()
+    if not [e for e in data["uploads_used"] if e.get("canary") == canary]:
+        data["uploads_used"].append({
+            "canary": canary, "slot": slot, "at": utc_now(),
+            "reservation_id": key, "released_before_classification": True})
+        save_ledger(data)
+
+
 def write_report(report: dict) -> None:
     write_durable(RUN_DIR / f"{report['canary']}_report.json", report)
     slim = {k: v for k, v in report.items() if k != "skeleton"}
@@ -269,6 +281,9 @@ def run_canary(canary: str) -> dict:
                     receipt = transport.ensure_verified(frame_asset)
                     report["response_class"] = "QUALIFIED_COMPLETED"
                 except QualifiedUploadPending as pending:
+                    self_record_upload_custody(data=None, canary=canary,
+                                               slot=slot, key=key)
+                    raise
                     report["response_class"] = "QUALIFIED_PENDING"
                     report["skeleton_fingerprint"] = pending.fingerprint
                     if canary == "canary2":
@@ -296,6 +311,7 @@ def run_canary(canary: str) -> dict:
                         "at": utc_now()})
                     save_ledger(data)
                 except OwnerAmbiguityGate as exc:
+                    self_record_upload_custody(None, canary, slot, key)
                     auth.latch("UPLOAD_RESPONSE_AMBIGUOUS", str(exc))
                     fail(report, "CANARY_FAIL_TRUE_AMBIGUITY", str(exc), 3)
 
