@@ -17,9 +17,16 @@ from .flow_reference_upload import OwnerAmbiguityGate
 
 @dataclass(frozen=True)
 class NativeUiProfile:
-    """Locale-dependent native-UI literals for one qualified settings envelope."""
+    """Locale-dependent native-UI literals for one qualified settings envelope.
 
-    # The previously-qualified live settings readback, byte-for-byte:
+    v2 (2026-10-03, observed on the current build): the settings overlay now
+    exposes resolution ('720p') and duration ('8 giây') as separate checked
+    toggles, and the persisted model selection may differ per session — the
+    qualified model is SELECTED deterministically before verification
+    (ensure_qualified_model). The qualified wire model is unchanged.
+    """
+
+    # The qualified live settings summary readback, byte-for-byte:
     # ['Video', '·', '720p', '·', '8', 'giây', 'crop_16_9', 'x1'].
     settings_tokens: tuple[str, ...] = ('Video', '·', '720p', '·', '8', 'giây', 'crop_16_9', 'x1')
     model_group_aria: str = 'Chọn nhóm mô hình'
@@ -27,7 +34,7 @@ class NativeUiProfile:
         'videocam\nVideo', 'chrome_extension\nThành phần', 'crop_16_9\n16:9', 'x1'})
     model_label: str = 'Veo 3.1 - Lite'
     wire_model: str = 'veo_3_1_r2v_lite'
-    contract_tag: str = 'native-ui-r2v-canonical-20261001-v1'
+    contract_tag: str = 'native-ui-r2v-canonical-20261003-v2'
 
 
 DEFAULT_NATIVE_UI = NativeUiProfile()
@@ -70,6 +77,33 @@ def verify_chip(page, media_id):
         raise OwnerAmbiguityGate('UI_REFERENCE_CHIP_IDENTITY_MISMATCH')
 
 
+def ensure_qualified_model(page, profile=DEFAULT_NATIVE_UI):
+    """Select the qualified model inside the settings overlay when needed.
+
+    The model group shows the currently persisted selection; a session may
+    have a different model persisted (e.g. after a Flow Tools run). This is
+    deterministic native-UI preparation: open the group, click the exact
+    qualified model item, verify the group readback. Fail closed when the
+    qualified model is not offered.
+    """
+    group = page.locator('.cdk-overlay-pane button[aria-label="'
+                         + profile.model_group_aria + '"]')
+    if profile.model_label in group.inner_text():
+        return "already_selected"
+    group.click()
+    item = page.locator('.cdk-overlay-pane .mat-mdc-menu-item',
+                        has_text=profile.model_label)
+    if item.count() != 1:
+        raise OwnerAmbiguityGate('UI_QUALIFIED_MODEL_NOT_OFFERED')
+    item.click()
+    refreshed = page.locator('.cdk-overlay-pane button[aria-label="'
+                             + profile.model_group_aria + '"]')
+    refreshed.wait_for(timeout=15000)
+    if profile.model_label not in refreshed.inner_text():
+        raise OwnerAmbiguityGate('UI_MODEL_SELECTION_READBACK_MISMATCH')
+    return "selected"
+
+
 def verify_settings(page, profile=DEFAULT_NATIVE_UI):
     summary = page.locator('button.settings-trigger-button')
     if summary.count() != 1 or summary.inner_text().split() != list(profile.settings_tokens):
@@ -77,8 +111,18 @@ def verify_settings(page, profile=DEFAULT_NATIVE_UI):
     summary.click()
     try:
         page.locator('.cdk-overlay-pane button[aria-label="' + profile.model_group_aria + '"]').wait_for(timeout=10000)
-        selected = page.locator('.cdk-overlay-pane mat-button-toggle.mat-button-toggle-checked').all_inner_texts()
-        if {s.strip() for s in selected} != set(profile.checked_toggles):
+        ensure_qualified_model(page, profile)
+        # The toggle row can re-render asynchronously right after a model
+        # selection; read with bounded stability before failing closed.
+        expected = set(profile.checked_toggles)
+        selected = None
+        for _ in range(5):
+            selected = page.locator('.cdk-overlay-pane '
+                'mat-button-toggle.mat-button-toggle-checked').all_inner_texts()
+            if {s.strip() for s in selected} == expected:
+                break
+            page.wait_for_timeout(1000)
+        if selected is None or {s.strip() for s in selected} != expected:
             raise OwnerAmbiguityGate('UI_MODE_OR_COUNT_MISMATCH')
         models = page.locator('.cdk-overlay-pane button[aria-label="' + profile.model_group_aria + '"]')
         if models.count() != 1 or profile.model_label not in models.inner_text():
