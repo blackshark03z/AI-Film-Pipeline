@@ -840,6 +840,13 @@ def continuity_reconcile_command(scene_id: str, shot_id: str) -> dict:
     ledger_path = _continuity_ledger_path(scene_dir)
     ledger_data = json.loads(ledger_path.read_text(encoding="utf-8")) \
         if ledger_path.exists() else {"bindings": [], "uploads": []}
+    existing = [b for b in ledger_data["bindings"]
+                if b["for_shot"] == shot_id]
+    if existing:
+        # Idempotent: the binding already completed (a prior reconcile run
+        # may have appended it before its own reporting failed).
+        return {"stage": "continuity_already_reconciled", "shot": shot_id,
+                "provider_media_id": existing[0]["provider_media_id"]}
     resolved = None
     attempts = 0
     window = _time.monotonic() + 420
@@ -923,11 +930,11 @@ def main():
         if not args.scene or not args.shot:
             raise SystemExit("continuity-reconcile requires --scene --shot")
         print(json.dumps(continuity_reconcile_command(args.scene,
-                                                      args.shot),
-                         flush=True))
+                                                      args.shot)),
+              flush=True)
         return
     if args.command == "repair":
-        print(json.dumps(run_repair_command(), flush=True))
+        print(json.dumps(run_repair_command()), flush=True)
         return
     if args.command == "status":
         state_path = RUN_DIR / "scale_run_state.json"
