@@ -107,3 +107,77 @@ Reviewed clean: no VLM-prose-as-truth path, no semantic-to-authority leakage, no
 ## 11. Production-readiness delta & next package
 
 The pipeline now executes REAL multi-scene sequences (2 scenes / 10 shots / 80 s) with evidence-driven bounded repair and rough-cut iteration — the full loop from frozen plan to reviewed final cut with zero blind retries and zero unresolved ambiguity. Recommended next: **FLOW-SEQUENCE-SCALE-005** — provision a VLM key (Owner) → qualify semantic QC per SoT A-procedure → multi-scene sequences with dialogue/audio dimensions and Owner-in-the-loop take approval.
+
+---
+
+# PROOF CUSTODY CLOSURE (Q0, FLOW-SEQUENCE-SCALE-005)
+
+## Exact delivery SHA
+
+Package-004 delivery: `603c4b50fabf8e53de1df5b71ed909d1f3a653dc` — the commit
+carrying this evidence record (`docs: final evidence record —
+COMPLETED_CANDIDATE`). Ancestry verified: `a9d3599…` (R1) and `266dec6…`
+(custody correction) are ancestors.
+
+## Final verification battery at the delivery SHA
+
+- Full network-free regression: **597 passed, 0 failed** (~118 s).
+- Collected test count: 597.
+- `git diff --check`: clean. Compile/syntax: clean.
+- SoT manifest: regenerated 30/30 (13_FLOW_NATIVE_UI_QUALIFICATION.md entry
+  was stale vs its post-A8 content; refreshed in this closure).
+- Protected-file review: SoT appends only (A7/A8) + manifest hashes.
+- Secret/PII scan on Package-004 delta: clean.
+
+## B5 RepairDecision judgment source (clarification)
+
+The WORLD_MISMATCH finding on SEQ4_B5 was derived from:
+1. **PROVISIONAL_AUTONOMOUS_VISUAL_REVIEW** by the build worker (not a
+   qualified semantic VLM — semantic QC is SEMANTIC_QC_UNQUALIFIED);
+2. the **deterministic cut/frame packet**
+   `cut09_SEQ4_B4_TO_SEQ4_B5.png` + extracted frames
+   (`scratch/b5_frames/f01–f03.png`, hash-pinned);
+3. the **frozen world requirement** in `SEQ4_B5.json`
+   ("high valley pass", "no man-made objects" added in the delta).
+
+It was NOT derived from a qualified semantic VLM. No historical execution
+changed; this clarification only names the evidence source.
+
+## Recovery acceptance mapping (35 frozen scenarios → concrete proofs)
+
+| # | Scenario | Acceptance statement | Proof |
+| :-- | :-- | :-- | :-- |
+| 1 | restart before first scene | proven scenes never re-execute; EXECUTING re-enters once | `test_sequence_orchestrator.py::test_execution_order_and_completion` + `::test_crash_mid_scene1_reenters_once` (scene-level analog) |
+| 2 | midway through scene 1 | crash mid-scene re-enters exactly once, proven shots skipped | `test_sequence_orchestrator.py::test_crash_mid_scene1_reenters_once` (sequence) + `test_scene_orchestrator.py::test_restart_mid_scene_resumes_from_durable_truth` |
+| 3 | between scenes | proven scene 1 skipped, scene 2 re-entered | `test_sequence_orchestrator.py::test_crash_mid_scene2_between_scenes` |
+| 4 | midway through scene 2 | same mechanism as #3 | `test_sequence_orchestrator.py::test_crash_mid_scene2_between_scenes` |
+| 5 | after all media, before QC | packaging is read-only + idempotent | `build_sequence_004.py` re-run w/o mutation; `real_rough_cut` receipt reuse |
+| 6 | after QC | QCStore persists takes; re-derivation deterministic | `QCStore.save` INSERT OR IGNORE; take ids reproduced in reproof builder |
+| 7 | after repair decision | decision durable on disk before mutation | `repair_decision_SEQ4_B5R.json` + `repair()` reads it pre-reserve |
+| 8 | after selected takes | canonical manifest rebuilt from persisted takes | `build_sequence_004.py` re-runs on persisted takes |
+| 9 | before sequence manifest | manifest id derived from clips (deterministic) | `make_edit_manifest` identity basis |
+| 10 | after sequence manifest | package write refuses differing overwrite | `write_referenced_package` "existing package differs" |
+| 11 | before AutoEdit | rough-cut receipt reuse | `real_rough_cut` `rough_cut_renders` check |
+| 12 | after AutoEdit receipt | fresh lineage readback | `real_rough_cut` "rough-cut fresh lineage mismatch" |
+| 13-18 | order/plan changed (scene/shot/sequence) | plan identity pinned, refused | `test_sequence_orchestrator.py::test_plan_identity_pinned_across_restart` / `::test_scene_order_change_refused` / `::test_shot_order...` (scene analogs) |
+| 19-20 | wrong/stale take in canonical manifest | stale-B5 scan: absent from v2 package | stale-scan in this package (NONE) + stale-3C scan (R1) |
+| 21 | missing selected asset | `validate_source` + `verify_media` fail closed | `real_rough_cut`/`write_referenced_package` "referenced media missing" |
+| 22 | asset hash tamper | receipt bytes mismatch fail-closed | `test_recovery_matrix_002.py::test_receipt_bytes_mismatch_fails_closed` |
+| 23 | manifest tamper | EditManifest identity recheck | `test_editorial_slice.py` manifest identity tests |
+| 24 | AutoEdit package tamper | checksums.json verification | `validate_producer_package` in `autoedit_export.py` |
+| 25 | rough-cut bytes missing | fresh lineage mismatch raises | `real_rough_cut` readback checks |
+| 26 | rough-cut bytes changed | recorded sha vs file | `test_sequence...::test_rough_cut_receipt_detects_tampered_bytes` (scene-003 suite) + this package's independent sha re-verification |
+| 27 | semantic QC provider unavailable | SEMANTIC_QC_UNQUALIFIED; production continues | `test_semantic_qc.py::test_semantic_qc_status_is_unqualified` + SEMANTIC_QC_UNQUALIFIED marking |
+| 28 | semantic QC malformed response | fail-closed ValueError | `test_semantic_qc.py::test_request_validation_is_strict` + `gemini_advisory` GEMINI_ADVISORY_MALFORMED |
+| 29 | semantic source mismatch | hash-pinned frames required | `SemanticQCRequest` validation tests |
+| 30 | VLM PASS vs technical FAIL | technical QC remains the decidable gate; semantic advisory never overrides | semantic_qc.py module docstring + no authority fields test `::test_observation_never_carries_authority_fields` |
+| 31 | VLM FAIL on wrong source | request lineage enforced | `::test_batch_contract_mismatches_fail` |
+| 32 | repeated-evaluation instability | determinism required of qualified evaluator | `::test_evaluator_determinism` (fixture evaluator; live evaluator unqualified) |
+| 33 | semantic FAIL without RepairDecision | no auto-regeneration path exists | repair only via `repair()` + durable decision file (runner code) |
+| 34 | repair budget exhausted | REPAIR_BUDGET_EXHAUSTED gate | `run_sequence_004.py::repair` cap check |
+| 35 | owner latch bypass attempts | one-way latch, all mutation choke points gated | `test_mutation_authority_latch.py` (12 tests) |
+
+## B5 note
+
+The artifact and its repair remain as described in §5/§8 of the main record;
+this closure changes no execution history.
