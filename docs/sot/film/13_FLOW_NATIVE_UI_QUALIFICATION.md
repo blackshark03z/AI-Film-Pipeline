@@ -238,3 +238,13 @@ streak and starts a new persistence interval. Completion evidence is never
 downgraded into a drop; resolved media outranks a policy-derived absence.
 Before terminality: `RENDER_STATE_UNRESOLVED → RECONCILE_ONLY`, `may_submit =
 false`, no repair-regeneration authority.
+
+### A8 — Owner-gate mutation latch + re-proof corrections (2026-10-03, FLOW-SCENE-SCALE-003-R1)
+
+Corrections and additions; no earlier statement is rewritten. Historical truth preserved: the original FLOW-SCENE-SCALE-003 run executed Shot 3C after an upload ambiguity (FAILED_AMBIGUOUS) that should have latched mutation authority — that run's Shot 3C is retained as history but is not clean authorized-mutation proof.
+
+1. **Owner ambiguity resolution and mutation authority are separate concepts.** An execution scope now carries a durable one-way latch: `OWNER_AMBIGUITY_GATE → mutation_authority = LATCHED_CLOSED` for the remainder of that scope. `external_effect_knowledge` (UNKNOWN / RESOLVED_NO_EFFECT / RESOLVED_EFFECT_IDENTIFIED) may be resolved by read-only reconciliation, but knowledge resolution NEVER re-opens the latch.
+2. **Fresh mutation authority requires a NEW Owner-authorized execution scope.** The re-proof scope FLOW-SCENE-SCALE-003-R1 granted exactly one fresh Generate (consumed) and zero uploads.
+3. **LAST_FRAME_CONTINUITY is PROVEN only from the clean re-proof chain**: acquired Shot-2 asset → deterministic final frame (sha 5e0dc357…) → historical upload receipt (provider media 0c16d60b…, fresh readback sha ed16cfec… re-verified) → fresh authorized Shot-3R ProviderJob (marker-echo attribution, output 288910c3…, asset 495ab74b…) with zero new uploads.
+4. **The canonical Scene-003 lineage uses the new Shot-3 asset** (takes 1,2,3U,4,5,6; old Shot 3C absent from the canonical manifest/package — stale-shot scan enforced).
+5. **UI overlay contract v2 (observed 2026-10-03):** the persisted model selection may differ per session and the checked-toggle set is MODEL-DEPENDENT (selecting the qualified Veo 3.1 - Lite restores the original 4-toggle shape; resolution/duration toggles appear only for Omni). The adapter now deterministically SELECTS the qualified model inside the overlay before verification; contract tag `native-ui-r2v-canonical-20261003-v2`.
