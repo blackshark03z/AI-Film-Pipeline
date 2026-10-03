@@ -70,8 +70,11 @@ def make_poster() -> dict:
         (R10 / "master_package_010/master_summary.json")
         .read_text(encoding="utf-8"))["slots"]}
     slot = slots[POSTER_SLOT]
+    # Adversarial fix: user-facing delivery metadata carries REPO-RELATIVE
+    # paths, never absolute local filesystem paths.
+    rel_asset_path = Path(slot["asset_path"]).relative_to(ROOT).as_posix()
     return {"role": "poster", "slot": POSTER_SLOT,
-            "asset_path": slot["asset_path"],
+            "asset_path": rel_asset_path,
             "asset_sha256": slot["asset_sha256"],
             "source_timestamp_s": POSTER_TIME_S,
             "extraction_method": "ffmpeg -ss <t> -frames:v 1 (deterministic)",
