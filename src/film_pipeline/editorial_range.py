@@ -59,6 +59,11 @@ class EditorialRange(ContractModel):
     source_in_s: float = Field(ge=0)
     source_out_s: float = Field(gt=0)
     selected_duration_s: float = Field(gt=0)
+    # Non-destructive editorial handles (Package-010 T9): extra source
+    # margin OUTSIDE the selected range, within asset bounds. Zero handles
+    # are identity-neutral, so every pre-existing range keeps its id.
+    handle_in_s: float = 0.0
+    handle_out_s: float = 0.0
     probe_basis: ProbeBasis
     provenance: Literal["PROVISIONAL_AUTONOMOUS_EDITORIAL_RANGE"]
     note: str | None = None
@@ -81,8 +86,18 @@ class EditorialRange(ContractModel):
                 DURATION_DRIFT_TOLERANCE_S:
             raise ValueError(
                 "selected_duration_s must equal source_out_s - source_in_s")
+        for value in (self.handle_in_s, self.handle_out_s):
+            if not math.isfinite(value) or value < 0:
+                raise ValueError("editorial handles must be finite and >= 0")
+        if self.handle_in_s > self.source_in_s + DURATION_DRIFT_TOLERANCE_S:
+            raise ValueError("handle_in_s must not precede source_in_s")
+        if self.handle_out_s > self.probe_basis.duration_s - \
+                self.source_out_s + DURATION_DRIFT_TOLERANCE_S:
+            raise ValueError("handle_out_s exceeds the probed asset duration")
         canonical = {k: v for k, v in self.model_dump(mode="json").items()
-                     if k != "editorial_range_id"}
+                     if k != "editorial_range_id"
+                     and not (k in ("handle_in_s", "handle_out_s")
+                              and v == 0.0)}
         if self.editorial_range_id != "er_" + sha256(canonical):
             raise ValueError("EditorialRange identity mismatch")
         return self
@@ -92,6 +107,8 @@ def make_editorial_range(*, selected_take_id: str, shot_id: str,
                          asset_id: str, asset_sha256: str,
                          source_in_s: float, source_out_s: float,
                          probe: ProbeBasis,
+                         handle_in_s: float = 0.0,
+                         handle_out_s: float = 0.0,
                          note: str | None = None) -> EditorialRange:
     """Mint the deterministic range (identity derived from full payload)."""
     payload = {"version": EDITORIAL_RANGE_VERSION,
@@ -103,6 +120,10 @@ def make_editorial_range(*, selected_take_id: str, shot_id: str,
                    float(source_out_s) - float(source_in_s), 9),
                "probe_basis": probe.model_dump(mode="json"),
                "provenance": PROVISIONAL, "note": note}
+    if handle_in_s:
+        payload["handle_in_s"] = float(handle_in_s)
+    if handle_out_s:
+        payload["handle_out_s"] = float(handle_out_s)
     return EditorialRange(
         editorial_range_id="er_" + sha256(
             {k: v for k, v in payload.items()}),
