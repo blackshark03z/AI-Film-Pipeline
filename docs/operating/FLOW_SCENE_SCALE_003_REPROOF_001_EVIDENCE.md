@@ -92,9 +92,20 @@ Fresh Generate authorized: 1 → consumed 1/1 (Shot 3U, job_38d4368c…, output 
 Uploads authorized: 0 → consumed 0
 Retries: 0
 Direct/private MZZa6b: 0
-Dead reservations during this package: 2 (3R, 3S — both verifiably never
-released; superseded loudly; never re-released)
+Dead reservations during this package: 3 (3R, 3S, 3T — all with journal
+kinds RESERVED + MUTATION_INTENT_BOUND only, guard requests = 0, all
+verifiably never released; superseded loudly; never re-released)
+
+Provider releases from those reservations: 0
 ```
+
+CORRECTION (P0, FLOW-MULTISCENE-SEMANTIC-REPAIR-004): the original statement
+said "2 (3R, 3S)" — it missed Shot 3T's dead reservation
+(`job_d08575b1…`, journal verified: RESERVED + MUTATION_INTENT_BOUND only,
+guard requests 0, never released; superseded via `successor_shot_3u.json`).
+The detailed ledger in §6 was already correct (it lists all three); only
+this accounting summary was wrong. Bookkeeping correction only — no
+historical fact rewritten.
 
 Historical prior-package counts (6 primary + 1 upload) remain HISTORY ONLY.
 
