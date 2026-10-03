@@ -23,7 +23,8 @@ MEDIA_TYPES = {
 ROLES = {"master", "narration_master", "caption_srt", "caption_vtt",
          "poster", "technical_qc", "semantic_qc", "owner_review",
          "provenance", "checksums", "narration_receipt",
-         "narration_requirement", "caption_requirement", "semantic_receipt"}
+         "narration_requirement", "caption_requirement", "semantic_receipt",
+         "diagnostic_comparison"}
 
 
 class DeliveryEntry(ContractModel):
