@@ -296,6 +296,8 @@ def continuity_upload(scene_dir: Path, shot_id: str, from_shot: str) -> dict:
     upload_store.save_reference_asset(frame_asset)
     ledger_data["uploads"] = ledger_data.get("uploads", [])
     write_durable(Path(scene_dir) / f"continuity_frame_{shot_id}.json", frame)
+    write_durable(upload_store_path.parent / "frame_asset.json",
+                  frame_asset.model_dump(mode="json"))
     receipt = None
     with open_read_session() as session:
         from film_pipeline.providers.flow_reference_upload import (
@@ -790,11 +792,140 @@ def run_repair_command() -> dict:
     return {"repairs": results}
 
 
+def continuity_reconcile_command(scene_id: str, shot_id: str) -> dict:
+    """Read-only continuation for an armed-but-unresolved continuity upload
+    (Scene-003 C4 precedent): probe the catalog for a UNIQUE strong content
+    match across two stable probes, verify by exact readback, attest, adopt
+    and complete the scene ledger binding. NEVER a re-upload."""
+    import time as _time
+    from film_pipeline.live_runtime import Asset
+    from film_pipeline.providers.flow_reference_upload import (
+        ReferenceUploadStore, _key)
+    scene_dir = RUN_DIR / "sequence_SEQ007_DAYLIGHT_ROAD" / \
+        f"scene_{scene_id}"
+    frame = json.loads((scene_dir / f"continuity_frame_{shot_id}.json")
+                       .read_text(encoding="utf-8"))
+    # Reconstruct the deterministic frame Asset (identity is content-derived).
+    plan = json.loads(PLAN_C.read_text(encoding="utf-8"))
+    from_shot = next(s["continuity"]["from_shot"]
+                     for sc in plan["scenes"] for s in sc["shots"]
+                     if s["shot_id"] == shot_id)
+    frame_asset = Asset(
+        asset_id="asset_" + sha256({"origin": "reference",
+            "kind": "last_frame", "from_shot": from_shot,
+            "for_shot": shot_id, "sha256": frame["sha256"]}),
+        origin="reference", asset_type="image",
+        uri_or_path=frame["path"], sha256=frame["sha256"],
+        mime_type="image/png", width=frame["width"], height=frame["height"],
+        file_size=frame["file_size"])
+    candidates = sorted(scene_dir.glob("continuity_upload_*.sqlite"))
+    upload_store_path = None
+    for candidate in candidates:
+        reservations = ReferenceUploadStore(candidate).events(
+            _key('flow_veo', PROJECT_ID, ACCOUNT_ID, frame_asset))
+        if reservations:
+            upload_store_path = candidate
+            break
+    if upload_store_path is None:
+        raise OwnerAmbiguityGate(
+            "no armed continuity reservation for this frame asset")
+    upload_store = SQLiteStore(upload_store_path)
+    store = SQLiteStore(STORE_PATH)
+    store.initialize()
+    first_shot = json.loads(
+        (scene_dir / f"shot_{from_shot}" / "frozen_intent.json")
+        .read_text(encoding="utf-8"))
+    preexisting_ids = set(
+        first_shot["pre_dispatch_snapshot"]["catalog_ids"])
+    ledger_path = _continuity_ledger_path(scene_dir)
+    ledger_data = json.loads(ledger_path.read_text(encoding="utf-8")) \
+        if ledger_path.exists() else {"bindings": [], "uploads": []}
+    resolved = None
+    attempts = 0
+    window = _time.monotonic() + 420
+    while _time.monotonic() < window and resolved is None:
+        attempts += 1
+        try:
+            with open_read_session() as session:
+                transport = FlowReferenceTransport(
+                    ReferenceUploadStore(upload_store_path), session,
+                    account_id=ACCOUNT_ID,
+                    evidence_dir=upload_store_path.parent /
+                    "continuity_evidence",
+                    interval_s=5, probes=2)
+                resolved = transport.reconcile_only(
+                    frame_asset, preexisting_ids=preexisting_ids)
+        except OwnerAmbiguityGate as exc:
+            message = str(exc)
+            print(json.dumps({"stage": "continuity_reconcile_pending",
+                              "shot": shot_id, "attempt": attempts,
+                              "diagnostic": message}), flush=True)
+            if "multiple strong" in message:
+                raise
+            _time.sleep(30.0)
+        except FlowReferenceRpcDrift as exc:
+            print(json.dumps({"stage": "continuity_reconcile_read_drift",
+                              "shot": shot_id, "attempt": attempts,
+                              "diagnostic": str(exc)}), flush=True)
+            _time.sleep(30.0)
+    if resolved is None:
+        raise OwnerAmbiguityGate(
+            "continuity upload identity unresolved after bounded read-only "
+            "reconciliation; no re-upload")
+    uploaded_media_id = resolved["media_id"]
+    with open_read_session() as session:
+        attestation = attest_existing_reference(
+            upload_store, frame_asset, session, account_id=ACCOUNT_ID,
+            media_id=uploaded_media_id,
+            evidence_dir=upload_store_path.parent / "continuity_evidence")
+        adopted_asset, adopted_attestation = adopt_existing_reference(
+            store, session, account_id=ACCOUNT_ID,
+            media_id=uploaded_media_id,
+            reference_dir=scene_dir / "continuity_reference")
+    binding = {"for_shot": shot_id, "from_shot": from_shot,
+               "frame_sha256": frame["sha256"],
+               "frame_asset_id": frame_asset.asset_id,
+               "upload_store": str(upload_store_path),
+               "upload_receipt_id": resolved["id"],
+               "provider_media_id": uploaded_media_id,
+               "provider_media_sha256": resolved["provider_media_sha256"],
+               "attestation_id": attestation["attestation_id"],
+               "adopted_asset_id": adopted_asset.asset_id,
+               "adopted_attestation_id":
+                   adopted_attestation["attestation_id"],
+               "reconciled": True, "at": now()}
+    ledger_data["bindings"].append(binding)
+    ledger_data["uploads"].append({"for_shot": shot_id,
+                                   "media_id": uploaded_media_id,
+                                   "at": binding["at"]})
+    ledger_path.write_text(json.dumps(ledger_data, indent=2,
+                                      ensure_ascii=False), encoding="utf-8")
+    ledger_run = ledger()
+    ledger_run["uploads"].append({"for_shot": shot_id,
+                                  "media_id": uploaded_media_id,
+                                  "scene": scene_id, "reconciled": True,
+                                  "at": binding["at"]})
+    save_ledger(ledger_run)
+    authority().consume("continuity_upload")
+    return {"stage": "continuity_reconciled", "shot": shot_id,
+            "provider_media_id": uploaded_media_id}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("command",
-                        choices=["run", "status", "preflight", "repair"])
+                        choices=["run", "status", "preflight", "repair",
+                                 "continuity-reconcile"])
+    parser.add_argument("--scene")
+    parser.add_argument("--shot")
     args = parser.parse_args()
+    if args.command == "continuity-reconcile":
+        if not args.scene or not args.shot:
+            raise SystemExit("continuity-reconcile requires --scene --shot")
+        print(json.dumps(continuity_reconcile_command(args.scene,
+                                                      args.shot),
+                         flush=True))
+        return
     if args.command == "repair":
         print(json.dumps(run_repair_command(), flush=True))
         return
