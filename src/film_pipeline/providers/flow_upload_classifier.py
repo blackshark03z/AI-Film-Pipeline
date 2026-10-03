@@ -37,10 +37,18 @@ UNOBSERVABLE = "UNOBSERVABLE"
 CLASSIFICATIONS = (QUALIFIED_COMPLETED, QUALIFIED_PENDING, TRUE_AMBIGUOUS,
                    TRANSPORT_NO_EFFECT_PROVEN, UNOBSERVABLE)
 
-# The pre-registered qualified-pending envelope: status 200, one strict
-# maseQ payload, JSON list, zero UUID strings anywhere in the payload.
-HISTORICAL_PENDING_RESPONSE_CLASS = "maseQ-200-list-nouuid"
-RESPONSE_CLASS_VERSION = "upload-response-class-2026-10-03.1"
+# The pre-registered qualified-pending envelope, CORRECTED at U4 (Canary 1):
+# the initially derived "no UUID anywhere" predicate mis-predicted the real
+# maseQ response class and fail-closed (latched) on live observation. The
+# live response skeleton — HTTP 200, two sibling records, UUID-bearing
+# primary slots, no adoptable identity — is now frozen as the ONLY
+# qualified-pending class, by exact structural fingerprint. Values never
+# enter the skeleton, so the fingerprint is stable across uploads of the
+# same class. Any structural drift stays fail-closed TRUE_AMBIGUOUS.
+HISTORICAL_PENDING_RESPONSE_CLASS = "maseQ-200-live-skeleton"
+LIVE_PENDING_SKELETON_FINGERPRINT = (
+    "ae90da3e8da5f4330d774bce43dc8c6e995f948d3f904149cf5857152373b9a1")
+RESPONSE_CLASS_VERSION = "upload-response-class-2026-10-03.2"
 
 
 class UploadResponseClassified(RuntimeError):
@@ -129,6 +137,13 @@ def classify_upload_response(status, payload, *, project_id: str,
     if not isinstance(payload, list) or not payload:
         return UploadResponseAmbiguous(
             TRUE_AMBIGUOUS, "payload_shape_unqualified", skeleton, fingerprint)
+    # The ONLY qualified-pending class: exact structural match to the live
+    # frozen fingerprint (U4). Nothing else — not a parse failure, not a
+    # degenerate shape, not "HTTP 200" — may become qualified pending.
+    if status == 200 and fingerprint == LIVE_PENDING_SKELETON_FINGERPRINT:
+        return QualifiedUploadPending(
+            QUALIFIED_PENDING, HISTORICAL_PENDING_RESPONSE_CLASS,
+            skeleton, fingerprint)
     primary = payload[0][0] if isinstance(payload[0], list) and payload[0] \
         else None
     metadata_ids = {str(project_id).lower(), str(request_id).lower(),
@@ -156,17 +171,9 @@ def classify_upload_response(status, payload, *, project_id: str,
         return UploadResponseAmbiguous(
             TRUE_AMBIGUOUS, "unrecognized_identity_inside_payload",
             skeleton, fingerprint)
-    # Pre-registered qualified-pending envelope: observed HTTP 200 + strict
-    # parse + a structured primary record (payload[0] is a list) that claims
-    # no media identity anywhere. Degenerate payloads (empty payload, bare
-    # string rows) stay fail-closed ambiguous.
-    if status != 200 or not isinstance(payload[0], list):
-        return UploadResponseAmbiguous(
-            TRUE_AMBIGUOUS, "pending_envelope_not_observed", skeleton,
-            fingerprint)
-    return QualifiedUploadPending(
-        QUALIFIED_PENDING, HISTORICAL_PENDING_RESPONSE_CLASS,
-        skeleton, fingerprint)
+    return UploadResponseAmbiguous(
+        TRUE_AMBIGUOUS, "no_qualified_pending_class_matched", skeleton,
+        fingerprint)
 
 
 def classify_parse_failure() -> UploadResponseClassified:

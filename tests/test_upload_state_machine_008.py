@@ -22,6 +22,8 @@ from film_pipeline.providers.flow_upload_classifier import (
     QUALIFIED_PENDING, TRUE_AMBIGUOUS, UNOBSERVABLE,
     classify_upload_response, pending_fingerprint_matches,
     QualifiedUploadPending, UploadResponseAmbiguous)
+from tests.test_upload_classifier_008 import (
+    FROZEN_FINGERPRINT, LIVE_PENDING_SKELETON, build_payload)
 from mutation_authority import (
     AUTHORITY_LATCHED_CLOSED, AUTHORITY_OPEN,
     AUTHORITY_SUSPENDED_UPLOAD_PENDING, MutationAuthority)
@@ -53,7 +55,8 @@ def make_asset(tmp_path, color=(20, 80, 140)):
 
 
 PENDING_RESULT = classify_upload_response(
-    200, [[None, None, 'x' * 400]], project_id=PROJECT, request_id=PROJECT)
+    200, build_payload(LIVE_PENDING_SKELETON), project_id=PROJECT,
+    request_id=PROJECT)
 
 
 class PendingSession:
@@ -378,12 +381,14 @@ def test_readonly_resolution_after_ambiguity_cannot_reopen(tmp_path):
 
 # 18 — response-shape drift ----------------------------------------------------
 def test_pending_fingerprint_drift_is_detectable():
-    frozen = classify_upload_response(200, [[None, None, 'x']],
+    frozen = classify_upload_response(200, build_payload(LIVE_PENDING_SKELETON),
                                       project_id=PROJECT, request_id=PROJECT)
-    drifted = classify_upload_response(200, [[None, None, 'x'], [None]],
+    drifted_payload = build_payload(LIVE_PENDING_SKELETON)
+    drifted_payload[0].append('drift')
+    drifted = classify_upload_response(200, drifted_payload,
                                        project_id=PROJECT, request_id=PROJECT)
     assert frozen.classification == QUALIFIED_PENDING
-    assert drifted.classification == QUALIFIED_PENDING
+    assert drifted.classification == TRUE_AMBIGUOUS  # drift never pending
     assert not pending_fingerprint_matches(frozen.fingerprint, drifted.fingerprint)
     assert pending_fingerprint_matches(frozen.fingerprint, frozen.fingerprint)
     assert not pending_fingerprint_matches('short', frozen.fingerprint)

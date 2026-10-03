@@ -281,42 +281,20 @@ def test_upload_primary_slot_allows_project_client_and_correlation_metadata(payl
 
 
 @pytest.mark.parametrize('payload', [
-    [], [REMOTE],
+    [], [[]], [[None]], [['not-a-uuid']], [REMOTE],
     [[PROJECT]], [[PROJECT.upper()]],
     [[contract._new_uuid(PROJECT, 'upload-client')]],
     [[REMOTE, None], [OTHER, None]],
 ])
 def test_upload_invalid_or_conflicting_primary_identity_never_persists(payload):
+    # Package-008 U4 correction: the ONLY qualified-pending class is the
+    # exact live-frozen skeleton fingerprint; every degenerate, identity-free
+    # or conflicting shape stays fail-closed ambiguous (never persists).
     session = FlowReferenceRpcSession(cookie_path=Path('unused'), project_id=PROJECT)
     session.captcha = Mock(return_value='test_captcha')
     session.rpc = Mock(return_value=payload)
     identified = Mock()
     with pytest.raises(OwnerAmbiguityGate):
-        session.upload_reference(png(), PROJECT, before_post=lambda _: None,
-            on_http_response=lambda *args: None, on_identified=identified)
-    identified.assert_not_called()
-
-
-@pytest.mark.parametrize('payload_json', [
-    '[[]]', '[[null]]', '[["not-a-uuid"]]',
-])
-def test_degenerate_identity_free_record_classifies_qualified_pending(payload_json):
-    # Package-008 U2 frozen contract: a structured record claiming no media
-    # identity inside a parsed maseQ response is the pre-registered qualified
-    # PENDING class — never a persisted identity, never a re-upload grant.
-    # Safety comes from the read-only reconciliation phase, not the shape.
-    from film_pipeline.providers.flow_upload_classifier import QualifiedUploadPending
-    session = FlowReferenceRpcSession(cookie_path=Path('unused'), project_id=PROJECT)
-    session.captcha = Mock(return_value='test_captcha')
-    session.metadata = Mock(return_value={'source': '/project/' + PROJECT,
-        'bl': 'x', 'sid': 'x', 'hl': 'en', 'at': 'x'})
-    response = Mock(status=200)
-    response.text.return_value = ")]}'\n\n9\n" + json.dumps(
-        [["wrb.fr", "maseQ", payload_json, None, "generic"]]) + '\n'
-    session.page = Mock()
-    session.page.context.request.post.return_value = response
-    identified = Mock()
-    with pytest.raises(QualifiedUploadPending):
         session.upload_reference(png(), PROJECT, before_post=lambda _: None,
             on_http_response=lambda *args: None, on_identified=identified)
     identified.assert_not_called()

@@ -1,6 +1,7 @@
-"""Package-008 U2: upload response classifier — offline proof, fail-closed."""
+"""Package-008 U2/U4: upload response classifier — offline proof, fail-closed."""
 import hashlib
 import io
+import json
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -37,14 +38,97 @@ def test_direct_identity_envelope_is_qualified_completed():
     assert not isinstance(result, UploadResponseAmbiguous)
 
 
-def test_identity_free_structured_record_is_qualified_pending():
-    payload = [[None, None, 'x' * 500], [None]]
+LIVE_PENDING_SKELETON = {'list': [
+    {'list': ['uuid', 'uuid', 'uuid', 'str', 'null',
+              {'list': [{'list': ['int', 'int']}, 'null', 'null', 'null',
+                        'null', 'null',
+                        {'list': ['null', 'null', 'null', 'null', 'int']},
+                        'null', 'null', 'int', 'null', 'null', 'null', 'int']},
+              {'list': ['null', {'list': ['null', 'null', 'null', 'null',
+                                          'int', 'null', 'str']},
+                         {'list': ['int', 'int']}]}]},
+    {'list': ['uuid', 'null', 'null',
+              {'list': ['str', {'list': ['int', 'int']}, 'null', 'null',
+                        'uuid']},
+              'uuid']}]}
+FROZEN_FINGERPRINT = 'ae90da3e8da5f4330d774bce43dc8c6e995f948d3f904149cf5857152373b9a1'
+
+
+_UUID_COUNTER = {'n': 0}
+
+
+def build_payload(skeleton):
+    import uuid as uuid_module
+    if skeleton == 'uuid':
+        _UUID_COUNTER['n'] += 1
+        return str(uuid_module.UUID(int=_UUID_COUNTER['n']))
+    if skeleton == 'str':
+        return 'story-auto-reference.png'
+    if skeleton == 'int':
+        return 1
+    if skeleton == 'float':
+        return 0.5
+    if skeleton == 'bool':
+        return True
+    if skeleton == 'null':
+        return None
+    if isinstance(skeleton, dict) and 'list' in skeleton:
+        return [build_payload(item) for item in skeleton['list']]
+    if isinstance(skeleton, dict) and 'dict' in skeleton:
+        return {key: build_payload(value)
+                for key, value in skeleton['dict'].items()}
+    raise ValueError('bad skeleton')
+
+
+def test_live_frozen_class_is_qualified_pending():
+    from film_pipeline.providers.flow_upload_classifier import (
+        LIVE_PENDING_SKELETON_FINGERPRINT)
+    assert LIVE_PENDING_SKELETON_FINGERPRINT == FROZEN_FINGERPRINT
+    payload = build_payload(LIVE_PENDING_SKELETON)
     result = classify_upload_response(200, payload, project_id=PROJECT,
                                       request_id=REQUEST)
     assert result.classification == QUALIFIED_PENDING
-    assert result.reason == HISTORICAL_PENDING_RESPONSE_CLASS
+    assert result.reason == 'maseQ-200-live-skeleton'
+    assert result.fingerprint == FROZEN_FINGERPRINT
     assert isinstance(result, QualifiedUploadPending)
     assert not isinstance(result, OwnerAmbiguityGate)
+
+
+def test_live_class_value_variation_keeps_same_fingerprint():
+    import uuid as uuid_module
+    payload = build_payload(LIVE_PENDING_SKELETON)
+    payload[0][3] = 'a-completely-different-filename.png'
+    payload[0][0] = str(uuid_module.UUID(int=99))
+    result = classify_upload_response(200, payload, project_id=PROJECT,
+                                      request_id=REQUEST)
+    assert result.classification == QUALIFIED_PENDING
+    assert result.fingerprint == FROZEN_FINGERPRINT
+
+
+def test_live_class_structural_drift_fails_closed():
+    payload = build_payload(LIVE_PENDING_SKELETON)
+    payload[0].append('extra-field')
+    result = classify_upload_response(200, payload, project_id=PROJECT,
+                                      request_id=REQUEST)
+    assert result.classification == TRUE_AMBIGUOUS
+    assert isinstance(result, OwnerAmbiguityGate)
+
+
+def test_live_class_requires_status_200():
+    payload = build_payload(LIVE_PENDING_SKELETON)
+    result = classify_upload_response(500, payload, project_id=PROJECT,
+                                      request_id=REQUEST)
+    assert result.classification == TRUE_AMBIGUOUS
+
+
+def test_identity_free_structured_record_is_no_longer_pending():
+    """U4 correction: the guessed 'no UUID anywhere' envelope mis-predicted
+    the live class (Canary 1 fail-closed); it is no longer a pending class."""
+    payload = [[None, None, 'x' * 500], [None]]
+    result = classify_upload_response(200, payload, project_id=PROJECT,
+                                      request_id=REQUEST)
+    assert result.classification == TRUE_AMBIGUOUS
+    assert isinstance(result, OwnerAmbiguityGate)
 
 
 @pytest.mark.parametrize('status,payload', [
@@ -143,14 +227,15 @@ def _batchexecute(payload_json: str) -> str:
 
 
 def test_real_session_pending_response_shape_reaches_transport(tmp_path):
-    """End-to-end through the real _rpc_body path: HTTP 200 + identity-free
-    structured payload → QualifiedUploadPending with durable skeleton."""
+    """End-to-end through the real _rpc_body path: HTTP 200 + the live
+    frozen pending skeleton → QualifiedUploadPending."""
     session = FlowReferenceRpcSession(cookie_path=Path('unused'), project_id=PROJECT)
     session.captcha = Mock(return_value='test_captcha')
     session.metadata = Mock(return_value={'source': '/project/' + PROJECT,
         'bl': 'x', 'sid': 'x', 'hl': 'en', 'at': 'x'})
     response = Mock(status=200)
-    response.text.return_value = _batchexecute('[[null,null,"story-auto-reference.png"]]')
+    response.text.return_value = _batchexecute(json.dumps(
+        build_payload(LIVE_PENDING_SKELETON)))
     session.page = Mock()
     session.page.context.request.post.return_value = response
     observed = []
@@ -160,6 +245,7 @@ def test_real_session_pending_response_shape_reaches_transport(tmp_path):
             on_http_response=lambda status, length: observed.append((status, length)),
             on_identified=lambda identity: pytest.fail('never identified'))
     assert pending.value.classification == QUALIFIED_PENDING
+    assert pending.value.fingerprint == FROZEN_FINGERPRINT
     assert observed[1] == (200, len(response.text.return_value.encode('utf-8')))
 
 

@@ -56,8 +56,8 @@ TERMINAL_RECONCILE_GATES = ("multiple strong", "content mismatch",
                             "contract drift", "disagrees with Owner evidence")
 
 SOURCES = {
-    "canary1": {"slot": "SEQ7_E1", "scene": "SCENE_E_RIDGE_APPROACH"},
-    "canary2": {"slot": "SEQ7_G4", "scene": "SCENE_G_HIGH_PLATEAU"},
+    "canary1": {"slot": "SEQ7_E1", "scene": "scene_SCENE_E_RIDGE_APPROACH"},
+    "canary2": {"slot": "SEQ7_G4", "scene": "scene_SCENE_G_HIGH_PLATEAU"},
 }
 
 
@@ -109,7 +109,8 @@ def extract_last_frame(asset_path: Path, destination: Path) -> dict:
             "source_asset": str(asset_path)}
 
 
-def load_source_asset(slot: str, canary: str) -> Asset:
+def load_source_asset(slot: str, canary: str) -> dict:
+    """Frozen Package-007 proven asset record (path + sha), verified."""
     scene = SOURCES[canary]["scene"]
     result = json.loads((SEQ_DIR / scene / f"shot_{slot}" /
                          "result.json").read_text(encoding="utf-8"))
@@ -119,12 +120,7 @@ def load_source_asset(slot: str, canary: str) -> Asset:
     video = Path(asset["uri_or_path"])
     if hashlib.sha256(video.read_bytes()).hexdigest() != asset["sha256"]:
         raise OwnerAmbiguityGate("canary source bytes changed since Package-007")
-    return Asset(asset_id=asset["asset_id"], asset_type="video",
-                 origin="generated", uri_or_path=str(video),
-                 sha256=asset["sha256"], mime_type=asset["mime_type"],
-                 duration_s=asset["duration_s"], width=asset["width"],
-                 height=asset["height"], file_size=asset["file_size"],
-                 rights_metadata=asset.get("rights_metadata", {}))
+    return asset
 
 
 def fail(report: dict, code: str, reason: str, exit_code: int) -> None:
@@ -202,7 +198,7 @@ def run_canary(canary: str) -> dict:
         if hashlib.sha256(frame_path.read_bytes()).hexdigest() != frame["sha256"]:
             raise OwnerAmbiguityGate("canary frame bytes changed since freeze")
     else:
-        frame = extract_last_frame(Path(source.uri_or_path), frame_path)
+        frame = extract_last_frame(Path(source["uri_or_path"]), frame_path)
 
     from film_pipeline.store import SQLiteStore
     runtime = SQLiteStore(canary_dir / "runtime.sqlite")
@@ -215,7 +211,7 @@ def run_canary(canary: str) -> dict:
                         file_size=frame["file_size"],
                         rights_metadata={"source_kind": "last_frame_of_acquired_asset",
                                          "from_shot": slot, "for_shot": canary,
-                                         "source_asset_sha256": source.sha256})
+                                         "source_asset_sha256": source["sha256"]})
     runtime.save_reference_asset(frame_asset)
     write_durable(canary_dir / "frame_asset.json",
                   frame_asset.model_dump(mode="json"))
@@ -224,7 +220,7 @@ def run_canary(canary: str) -> dict:
     key = _key("flow_veo", PROJECT_ID, ACCOUNT_ID, frame_asset)
     report["phase"] = "upload"
     report["frame_sha256"] = frame["sha256"]
-    report["source_asset_sha256"] = source.sha256
+    report["source_asset_sha256"] = source["sha256"]
     report["reservation_id"] = key
     report["upload_store"] = str(canary_upload_store(canary))
 
@@ -232,7 +228,7 @@ def run_canary(canary: str) -> dict:
     write_durable(canary_dir / "frozen_intent.json", {
         "canary": canary, "slot": slot, "project_id": PROJECT_ID,
         "account_id": ACCOUNT_ID, "frame_sha256": frame["sha256"],
-        "source_asset_sha256": source.sha256, "reservation_id": key,
+        "source_asset_sha256": source["sha256"], "reservation_id": key,
         "expected_response_class": "maseQ-200-list-nouuid",
         "frozen_at": utc_now()})
 
