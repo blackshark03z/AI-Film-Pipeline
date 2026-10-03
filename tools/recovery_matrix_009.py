@@ -306,6 +306,10 @@ ROWS = [
      "pytest", [SCALE + "test_out_of_order_scene_result_refused"]),
     (71, "Editorial", "duration tolerance", "evidence", 71),
     (72, "Editorial", "boundary mismatch fails", "evidence", 72),
+    (73, "Editorial", "output tamper detected fail-closed (master bytes "
+     "changed after receipt/hash)", "pytest",
+     [S + "test_scenario73_output_tamper.py::"
+          "test_tampered_output_bytes_are_detected_and_fail_closed"]),
     (74, "Security", "raw upload body never persisted (skeleton value-free)",
      "pytest", [C1 + "test_skeleton_is_value_free_and_deterministic",
                 REF + "test_actual_http_callback_is_durable_before_parser_failure_and_no_secrets"]),
@@ -344,6 +348,8 @@ def secret_scan() -> list[str]:
         ["git", "diff", "--name-only", "a7edff2a1a70a349c50def1f2933ca719ef41d3d..HEAD"],
         cwd=str(ROOT), capture_output=True, text=True).stdout.split()
     for f in changed:
+        if "recovery_matrix_009" in f:
+            continue  # the scanner's own marker literals, not cargo
         try:
             blob = Path(f).read_bytes()
         except OSError:
@@ -361,7 +367,7 @@ E37 = ("single authority domain: one mutation_authority.json carries "
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    report = {"version": "recovery-matrix-009-v1", "rows": []}
+    report = {"version": "recovery-matrix-009-v1.1", "rows": []}
     nodes = sorted({n for row in ROWS if row[3] == "pytest" for n in row[4]})
     junit = OUT / "junit_recovery_009.xml"
     completed = subprocess.run(

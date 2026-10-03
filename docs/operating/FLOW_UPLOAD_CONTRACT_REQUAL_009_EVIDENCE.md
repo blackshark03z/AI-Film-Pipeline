@@ -8,6 +8,9 @@
 **Package-009 base SHA:** `56ff7f01bf99da893f5aad56a8dd128d7450f731`
 **Delivery:** the branch tip carrying this record (`git rev-parse HEAD`;
 commit chain below).
+**Exact delivery SHA (appended by FLOW-EDITORIAL-RUNTIME-SCALE-010
+Phase 0, 2026-10-03):**
+`b67021e3f4fb24d528909741ca3fb003cc428407`
 **Active wall time:** 2026-10-03 20:44→23:15 +0700 (13:44→16:15Z),
 ≈ 2 h 31 m continuous single session; custody commit `56ff7f0` 20:52 +0700.
 
@@ -223,3 +226,29 @@ clears + audio path qualification + per-shot session-reuse hardening.
 
 **COMPLETED_CANDIDATE** — not self-declared PROVEN; Tech Lead retains
 final acceptance.
+
+---
+
+## TECH LEAD CUSTODY CLOSURE ADDENDUM (Package-010 Phase 0, 2026-10-03)
+
+Appended by FLOW-EDITORIAL-RUNTIME-SCALE-010 Phase 0. Historical claims
+above are unchanged.
+
+1. **Exact delivery SHA:** `b67021e3f4fb24d528909741ca3fb003cc428407`
+   (pinned at the top of this record; "branch tip" is not canonical).
+2. **Recovery scenario 73 (output tamper)** — previously reported as
+   undefined — is now explicitly mapped to
+   `tests/test_scenario73_output_tamper.py::test_tampered_output_bytes_are_detected_and_fail_closed`
+   (proven against the durable `rough_cut._verify_record_output` guard:
+   changed bytes after receipt/hash → detected → fail-closed ValueError →
+   no stale PROVEN state). Final Package-009 matrix: **78/78 PASS**
+   (`recovery_matrix_009.json`, version 1.1).
+3. **V8 authority-store fragmentation equivalence** — deterministic
+   verifier `authority_equivalence_009.json`
+   (`tools/verify_authority_equivalence_009.py`) proves for EACH of the
+   four V8 releases (F2C, G2C, E2C, G3C), from durable timestamped
+   artifacts: ROOT_AUTHORITY_WAS_OPEN + NO_PRIOR_LATCH + BUDGET_AVAILABLE
+   + SAME_SCOPE_AND_INTENT ⇒ ROOT_WOULD_HAVE_AUTHORIZED_THE_RELEASE.
+   Classification: **AUTHORITY_STORE_FRAGMENTATION = IMPLEMENTATION_DEFECT
+   BUT NO_ACTUAL_AUTHORITY_ESCALATION_OR_BYPASS.** No regeneration was
+   required; Package-009 acceptance stands.
