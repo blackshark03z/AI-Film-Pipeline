@@ -31,6 +31,10 @@ if tools_path not in sys.path:
     sys.path.insert(0, tools_path)
 
 REPROOF_DIR = ROOT / "projects/flow_upload_contract_requal_009/reproof"
+# V12 adversarial fix: the authority state file MUST be the shared package
+# root file (one mutation authority domain); a sub-directory instance would
+# silently start fresh and could evade a canary latch.
+AUTHORITY_DIR = ROOT / "projects/flow_upload_contract_requal_009"
 REPROOF_SCOPE = "FLOW-UPLOAD-CONTRACT-REQUAL-009"
 MAX_REPROOF_GENERATES = 4
 
@@ -96,7 +100,7 @@ def main() -> None:
             "max_repair": 0, "max_uploads": 0, "primary_consumed": [],
             "repair_consumed": [], "uploads": []}, indent=1), encoding="utf-8")
 
-    auth = MutationAuthority(REPROOF_DIR, REPROOF_SCOPE)
+    auth = MutationAuthority(AUTHORITY_DIR, REPROOF_SCOPE)
     if auth.authority == "LATCHED_CLOSED":
         raise OwnerAmbiguityGate("package authority latched")
     auth.check_mutation_allowed("reproof_generate")
