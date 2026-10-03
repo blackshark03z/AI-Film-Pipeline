@@ -32,7 +32,7 @@ cause UNKNOWN. Zero Gemini calls in this package.
 | L5_EDITORIAL_RANGE_PROVEN_OFFLINE | `4c02208` — `src/film_pipeline/editorial_range.py` + 15 tests |
 | L6_30_SHOT_TIMING_PLAN_READY | ranges/ (30 EditorialRanges; historical full-clip; live = frozen targets in usable windows) |
 | L7_QC_COMPLETE | per-slot technical QC + decode in `build_master_scale_007.py`; 12/12 pass, semantic = OWNER_REVIEW_RECOMMENDED |
-| L8_REPAIR_LOOP_CLOSED | E2R + G3B proven under durable RepairDecisions (`rd_5d16ca…`, `rd_0cb587…` ids in files); budget 2/3 |
+| L8_REPAIR_LOOP_CLOSED | E2R + G3B proven under durable RepairDecisions (`rd_5d16ca…`, `rd_ee2a46…` — full ids in decision files); budget 2/3 |
 | L9_EDITORIAL_PLAN_READY | `editorial_plan_007.json` — transitions CUT/HARD_SCENE_BREAK/MATCH_CUT; pacing metrics; anomalies: none |
 | L10_TRIMMED_MASTER_V1_PROVEN | MASTER_SCALE_V1 rendered trim-aware (see §6) |
 | L11_MASTER_CONFORMANCE_PROVEN | `audit_master_scale_007.py` → CONFORMANT, 29/29 boundaries |
@@ -107,7 +107,7 @@ provider/account/project switching; zero direct MZZa6b; zero Gemini calls.
 
 | Upload | Source | Frame SHA (prefix) | Provider media | Resolution |
 | :-- | :-- | :-- | :-- | :-- |
-| F2←F1 | SEQ7_F1 asset → last frame | `f4…` (ledger) | `8f2f5277-aae8-44b5-a5b7-c197d1d7c115` | armed → `reconcile_only` (2 stable probes + exact readback) → attested → adopted |
+| F2←F1 | SEQ7_F1 asset → last frame | `a3672ac2…` | `8f2f5277-aae8-44b5-a5b7-c197d1d7c115` | armed → `reconcile_only` (2 stable probes + exact readback) → attested → adopted |
 | G2←G1 | SEQ7_G1 asset → last frame | (ledger) | `75dbd0bc-8416-40a0-9c2a-19700fdcf665` | same read-only path |
 
 Both uploads hit the armed-but-unresolved window (transient response
