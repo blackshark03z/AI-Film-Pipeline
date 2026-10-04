@@ -10,8 +10,10 @@ acceptance)
 **Package-015 base SHA:** `b477249b2b42dd2eb05bc04bde04e42dbc8b8c0b`
 (ancestry re-verified from
 `81a4419e8164d7883f32735ad2ea90a8003b665e`)
-**Delivery:** the branch tip carrying this record
-(`git rev-parse HEAD`). **Wall-time basis:** CLOCK_SOURCE = git
+**Delivery:** PACKAGE_015_EXACT_DELIVERY_SHA =
+`6477ea11a7bfef7515f543875a10d00ce412b7e5` (custody correction note in
+section 19 supersedes the historical "branch tip carrying this record"
+wording). **Wall-time basis:** CLOCK_SOURCE = git
 commits; ACTIVE_TIME_EXACT = UNKNOWN.
 **External spend:** 0 external AI calls, 0 Flow Generates, 0 Flow
 uploads, 0 TTS. Zero visual mutation of the canonical lineage.
@@ -371,3 +373,20 @@ canonical visual lineage is byte-unchanged; zero external AI spend.
 
 **COMPLETED_CANDIDATE** — not self-declared PROVEN; Tech Lead retains
 final acceptance.
+
+## 19. Custody correction (Package-016 Phase 0) — append-only
+
+- **PACKAGE_015_EXACT_DELIVERY_SHA =
+  `6477ea11a7bfef7515f543875a10d00ce412b7e5`** — the exact 40-character
+  commit containing the completed Package-015 evidence record. The
+  historical wording "Delivery: the branch tip carrying this record
+  (git rev-parse HEAD)" is superseded by this pin and preserved here
+  verbatim (append-only; no history rewritten).
+- **PACKAGE_015_ORIGINAL_DELIVERY_SHA =
+  `6477ea11a7bfef7515f543875a10d00ce412b7e5`** — identical to the
+  exact delivery SHA: Package-015 required no post-delivery
+  correction before custody closure.
+- **PACKAGE_015_CUSTODY_CLOSURE_SHA** — the commit carrying this
+  correction note (the Package-016 base commit). Its exact value is
+  recorded in
+  `docs/operating/FLOW_OWNER_DECISION_GATE_016_EVIDENCE.md`.
