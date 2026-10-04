@@ -202,3 +202,17 @@ OWNER_AMBIGUITY_GATE mappings. **A18 ✓**
 `OWNER_ACTION_CAUSALITY_COMPARE_018.mp4` first, then the intent cards,
 and fills `owner_action_decisions_018.template.json`; nothing becomes
 canonical during Package-018 and nothing was auto-promoted.
+
+## 14. Exact custody closure (Package-019 Phase 1, append-only)
+
+- **PACKAGE_018_START_SHA = `895ca4cb7d8344f2bedcb0740e695ebfc9a4c259`** (Package-017 final tip).
+- **PACKAGE_018_DELIVERY_SUBJECT_SHA = `b127560fc7232797f1a62814f7f05be451b76cdd`** — the exact immutable commit containing the completed Package-018 work + evidence record (this document's sections 1-13).
+- Full provider custody, sourced mechanically from candidate_custody_018.json + generate_ledger.json + per-shot frozen_intent/result receipts (no manual reconstruction):
+
+| Candidate | Provider job ID | Output identity | Asset SHA256 | Prompt SHA256 |
+|---|---|---|---|---|
+| F2C-P018-A | `job_d5685b54be449043892e48003431e8254a6553906f2ee35a0cac0c3a5a259010` | `796040db-4af1-4d38-9da0-28260aabd4c6` | `5ef2eaded3c0f092adbcfcc1026e63f00548093f65495a2fb9ae39943c2f7396` | `6ee45b2eb6003076d6bd9a3205b64196a00fb207665085968c336a89996b0eb6` |
+| F2C-P018-B | `job_73e809b2278e8b32394807f60e7167741ba1979e0755e7e6d6e4fc2ec105a28e` | `2cf20dcc-d640-456e-8a65-3b9b9b68f312` | `4ab6cd409bc846ec146d57dce5cf3ac919c338402078c48310162892656f527e` | `c9f84fba56504c34867a355e189b126b16a3a15f167c86fe88da9384530e716f` |
+| G3C-P018-C | `job_47a26ce54098cfb6c6c22cd09d60b2e955d90714fd2c7e2bb4fe8ee5aeb827e3` | `d4b427d7-2697-4e36-a05d-a1bbc0f8e3b3` | `0536388b91be9fa05b9e373f0e2ab3fec5cf6c8df0e5cc9ebd63e349db359b2d` | `3e716ebd77657c5b40a5653b2fc38390e9b876368df03f562a79bc04f0988ddf` |
+
+- **Pre-mutation local failures preserved (reproved from receipts):** two earlier Package-018 launches failed LOCALLY before any mutation — the ledger remained 0/3 through both (generate_ledger.json primary_consumed empty at those points); evidence: scene_SCENE_F_STORM_GATE/shot_SEQ7_F2C_P018_A/result_attempt1.json (gate OWNER_GATE_LOCAL_FAILURE, generate_clicks 0) + reentry_note.json (stale-result short-circuit note). The successful execution consumed exactly 3/3 submissions, 0 retries, 0 uploads.
