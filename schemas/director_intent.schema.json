@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DirectorIntent v1 (QUALITY-V2-003)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "director_intent_id",
+    "shot_id",
+    "dramatic_purpose",
+    "viewer_must_understand",
+    "primary_action_objective",
+    "required_visual_change",
+    "required_end_read",
+    "forbidden_interpretations",
+    "authority_sources",
+    "director_model_receipt",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "director-intent-v1"
+    },
+    "director_intent_id": {
+      "type": "string",
+      "pattern": "^DI-[a-f0-9]{16}$"
+    },
+    "shot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dramatic_purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "viewer_must_understand": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "primary_action_objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_visual_change": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_end_read": {
+      "type": "string",
+      "minLength": 1
+    },
+    "forbidden_interpretations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "authority_sources": {
+      "type": "object",
+      "minProperties": 6
+    },
+    "director_model_receipt": {
+      "type": "object"
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

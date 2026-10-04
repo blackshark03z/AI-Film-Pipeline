@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CameraCoveragePlan v1 (QUALITY-V2-003)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "camera_plan_id",
+    "shot_id",
+    "camera_position_intent",
+    "framing",
+    "axis",
+    "screen_direction",
+    "subject_start_region",
+    "subject_end_region",
+    "required_action_visibility",
+    "required_crossing_visibility",
+    "camera_motion",
+    "authority_sources",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "camera-coverage-plan-v1"
+    },
+    "camera_plan_id": {
+      "type": "string",
+      "pattern": "^CC-[a-f0-9]{16}$"
+    },
+    "shot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "camera_position_intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "framing": {
+      "type": "string",
+      "minLength": 1
+    },
+    "axis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "screen_direction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_start_region": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_end_region": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_action_visibility": {
+      "type": "boolean"
+    },
+    "required_crossing_visibility": {
+      "type": "boolean"
+    },
+    "occlusion_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "camera_motion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "forbidden_camera_behavior": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "authority_sources": {
+      "type": "object",
+      "minProperties": 2
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BlockingSpec v1 (QUALITY-V2-003)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "blocking_spec_id",
+    "shot_id",
+    "start_zone",
+    "target_zone",
+    "end_zone",
+    "screen_direction",
+    "travel_path",
+    "start_body_orientation",
+    "end_body_orientation",
+    "required_spatial_state_change",
+    "must_exit_start_zone",
+    "must_reach_target_zone",
+    "visibility_requirements",
+    "continuity_bindings",
+    "authority_sources",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "blocking-spec-v1"
+    },
+    "blocking_spec_id": {
+      "type": "string",
+      "pattern": "^BS-[a-f0-9]{16}$"
+    },
+    "shot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "start_zone": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_zone": {
+      "type": "string",
+      "minLength": 1
+    },
+    "end_zone": {
+      "type": "string",
+      "minLength": 1
+    },
+    "screen_direction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "travel_path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path_type",
+        "ordered_waypoints",
+        "required_crossing"
+      ],
+      "properties": {
+        "path_type": {
+          "enum": [
+            "DIRECT_TRAVERSAL",
+            "STAGED_TRAVERSAL",
+            "STATIC_HELD",
+            "AUTHORIZED_LOOP"
+          ]
+        },
+        "ordered_waypoints": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "zone"
+            ],
+            "properties": {
+              "zone": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string"
+              },
+              "is_crossing": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "required_crossing": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "start_body_orientation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "end_body_orientation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_spatial_state_change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_zone",
+        "to_zone"
+      ],
+      "properties": {
+        "from_zone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to_zone": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "allowed_interactions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_interactions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_zones": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_reversal": {
+      "type": "boolean"
+    },
+    "must_exit_start_zone": {
+      "type": "boolean"
+    },
+    "must_reach_target_zone": {
+      "type": "boolean"
+    },
+    "visibility_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "continuity_bindings": {
+      "type": "object"
+    },
+    "authority_sources": {
+      "type": "object",
+      "minProperties": 5
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
