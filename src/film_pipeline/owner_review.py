@@ -432,6 +432,7 @@ def import_decision_set(decision_path: Path, requests:
     if missing:
         raise ValueError(f"decision file is missing review requests: "
                          f"{missing}")
+    ledger.save()  # imported decisions become durable immediately
     return {"imported": [d.decision_id for d in imported],
             "resolved_state": ledger.resolved_state(),
             "provider_mutation_authority":
