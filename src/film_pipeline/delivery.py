@@ -25,7 +25,9 @@ ROLES = {"master", "narration_master", "caption_srt", "caption_vtt",
          "provenance", "checksums", "narration_receipt",
          "narration_requirement", "caption_requirement", "semantic_receipt",
          "diagnostic_comparison",
-         "backend_contract"}
+         "backend_contract",
+         "review_reel", "narration_handoff", "content_input_bundle",
+         "semantic_waiver_status", "release_gate_report"}
 
 
 class DeliveryEntry(ContractModel):
