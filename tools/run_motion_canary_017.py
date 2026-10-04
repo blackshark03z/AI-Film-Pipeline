@@ -174,14 +174,22 @@ def main() -> None:
                           "gate": report.get("gate"),
                           "output": report.get("output_identity")}),
               flush=True)
-        if report.get("gate") != "SHOT_PROVEN":
-            print(json.dumps({"step": "slot_stopped",
-                              "candidate": slot["candidate"],
-                              "gate": report.get("gate"),
-                              "diagnostic":
-                                  str(report.get("diagnostic"))[:300]}),
-                  flush=True)
-            raise SystemExit(4)
+        if report.get("gate") == "SHOT_PROVEN":
+            continue
+        if report.get("gate") == "PROVIDER_RENDER_FAILED_NOT_CHARGED":
+            # a clean, unambiguous provider-side failure (no output, no
+            # charge, attribution proven) — the candidate is terminal;
+            # remaining candidates continue within the same 4 budget
+            print(json.dumps({"step": "candidate_failed_continuing",
+                              "candidate": slot["candidate"]}), flush=True)
+            continue
+        print(json.dumps({"step": "slot_stopped",
+                          "candidate": slot["candidate"],
+                          "gate": report.get("gate"),
+                          "diagnostic":
+                              str(report.get("diagnostic"))[:300]}),
+              flush=True)
+        raise SystemExit(4)
 
 
 if __name__ == "__main__":
