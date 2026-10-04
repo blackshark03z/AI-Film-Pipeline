@@ -472,6 +472,108 @@
           ]
         }
       }
+    },
+    "performance_spec": {
+      "$ref": "#/$defs/performance_spec"
+    }
+  },
+  "$defs": {
+    "performance_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "performance-spec-v1"
+        },
+        "primary_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action_intent": {
+          "type": "string"
+        },
+        "anticipation": {
+          "type": "string"
+        },
+        "locomotion": {
+          "type": "string"
+        },
+        "weight_transfer": {
+          "type": "string"
+        },
+        "foot_plant": {
+          "type": "string"
+        },
+        "hip_torso_rotation": {
+          "type": "string"
+        },
+        "arm_countermotion": {
+          "type": "string"
+        },
+        "contact_event": {
+          "type": "string"
+        },
+        "reaction": {
+          "type": "string"
+        },
+        "recovery": {
+          "type": "string"
+        },
+        "secondary_motion": {
+          "type": "string"
+        },
+        "motion_energy": {
+          "enum": [
+            "low",
+            "moderate",
+            "high",
+            null
+          ]
+        },
+        "motion_risk_class": {
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "EXTREME",
+            null
+          ]
+        },
+        "beats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "approx_start_s": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 8
+              }
+            },
+            "required": [
+              "label",
+              "description"
+            ]
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "primary_action"
+      ]
     }
   }
 }

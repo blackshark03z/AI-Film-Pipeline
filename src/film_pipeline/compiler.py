@@ -38,7 +38,12 @@ def compile_prompt(
     blocks = dict(zip(BLOCK_ORDER, (
         {"shot_type": shot.shot_type, "dramatic_purpose": shot.dramatic_purpose, "duration_target_s": shot.duration_target_s},
         {"characters": [_data(character) for character in shot.characters], "references": _data(shot.references)},
-        {"action_beats": shot.blocking.action_beats, "performance": _data(shot.performance)},
+        # performance_spec is carried only when present so legacy plans
+        # compile byte-identically (no canonical-block drift).
+        ({"action_beats": shot.blocking.action_beats, "performance": _data(shot.performance)}
+         if shot.performance_spec is None else
+         {"action_beats": shot.blocking.action_beats, "performance": _data(shot.performance),
+          "performance_spec": _data(shot.performance_spec)}),
         {"environment": _data(shot.environment)},
         {"camera": _data(shot.camera)},
         {"blocking": _data(shot.blocking), "start_state": shot.continuity.start_state, "end_state": shot.continuity.end_state},

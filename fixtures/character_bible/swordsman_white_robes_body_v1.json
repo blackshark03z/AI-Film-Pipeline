@@ -1,0 +1,19 @@
+{
+ "schema_version": "body-proportion-authority-v1",
+ "character_id": "swordsman_white_robes",
+ "identity_version": "swordsman_white_robes_v1",
+ "look_state_id": "white_robes_cloud_summit_dawn_v1",
+ "extends": "existing character identity authority (base reference image + per-shot invariants); NOT a competing Character Bible",
+ "stature": "UNKNOWN",
+ "body_build": "UNKNOWN",
+ "body_proportion": "UNKNOWN",
+ "limb_proportion": "UNKNOWN",
+ "torso_leg_relationship": "UNKNOWN",
+ "shoulder_width": "UNKNOWN",
+ "waist_silhouette": "UNKNOWN",
+ "posture": "upright, composed (from canonical reference and adopted shots)",
+ "gait_profile": "UNKNOWN",
+ "body_proportion_exact_authority": "UNKNOWN",
+ "avoid_short_compact_silhouette": true,
+ "authority_basis": "the only visual identity authority is the chest-up base reference (asset_2ab16c9f..., 1280x720 portrait: head/face/shoulders/upper torso); no full-body reference exists anywhere in project truth, so exact proportion values would be fabricated. The directional constraint is the Owner's observed desired silhouette (body proportions can appear too short/compact), recorded as direction rather than measurement."
+}

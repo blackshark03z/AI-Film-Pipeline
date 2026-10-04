@@ -399,7 +399,9 @@ class FlowR2VShotRuntime:
 
     def freeze(self, shot: ShotSpec, capabilities: ProviderCapabilities, *,
                reference_asset, reference_media_id: str, reference_filename: str = '',
-               catalog_source, started_at: str | None = None) -> FrozenR2VShot:
+               catalog_source, started_at: str | None = None,
+               prompt_compiler=compact_r2v_prompt,
+               compiler_kwargs: dict | None = None) -> FrozenR2VShot:
         """Compile, route and freeze one ordinary R2V shot into a ProviderJob
         whose exact submission prompt is durable before any authority exists.
         A restart with identical inputs returns the same frozen job.
@@ -450,7 +452,8 @@ class FlowR2VShotRuntime:
                                               fingerprint=fingerprint)
         preview = make_provider_job(attempt, project_binding_id=self.project_binding_id,
                                     pre_dispatch_snapshot=snapshot)
-        compiled = compact_r2v_prompt(plan, preview.provider_job_id, model=self.model)
+        compiled = prompt_compiler(plan, preview.provider_job_id, model=self.model,
+                                   **(compiler_kwargs or {}))
         prompt = compiled.text
         job = preview.model_copy(update={'correlation_evidence': {
             'prompt': prompt, 'prompt_plan_hash': sha256(plan),
@@ -463,7 +466,9 @@ class FlowR2VShotRuntime:
             raise ValueError('provider job identity changed during freeze')
         return self._frozen(job, stored_reference)
 
-    def _resume_frozen(self, prior, shot, plan, decision, reference_binding):
+    def _resume_frozen(self, prior, shot, plan, decision, reference_binding,
+                       prompt_compiler=compact_r2v_prompt,
+                       compiler_kwargs: dict | None = None):
         """Restart path: identical inputs must resume the identical frozen job.
 
         The frozen pre-dispatch snapshot IS the historical truth: it is
@@ -476,8 +481,9 @@ class FlowR2VShotRuntime:
         if (prior.project_binding_id != self.project_binding_id
                 or prior.correlation_evidence.get('reference_binding') != reference_binding):
             raise OwnerAmbiguityGate('FLOW_R2V_RESTART_INTENT_DIFFERS')
-        if prior.correlation_evidence.get('prompt') != compact_r2v_prompt(
-                old_plan, prior.provider_job_id, model=self.model).text:
+        if prior.correlation_evidence.get('prompt') != prompt_compiler(
+                old_plan, prior.provider_job_id, model=self.model,
+                **(compiler_kwargs or {})).text:
             raise OwnerAmbiguityGate('FLOW_R2V_RESTART_PROMPT_DIFFERS')
         return self._frozen(prior, self.store.read_reference_asset(
             reference_binding['asset_id']))

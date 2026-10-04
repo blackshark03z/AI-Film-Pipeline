@@ -107,6 +107,34 @@ class Editorial(ContractModel):
     pickup_priority: Literal["low", "normal", "high"] | None = None
 
 
+class PerformanceBeat(ContractModel):
+    label: str = Field(min_length=1, max_length=40)
+    description: str = Field(min_length=1)
+    approx_start_s: float | None = Field(default=None, ge=0, le=8)
+
+
+class PerformanceSpec(ContractModel):
+    """Structured performance direction (Package-017): HOW the body moves
+    (biomechanics), distinct from WHAT the shot shows. Only primary_action
+    is required; quiet shots need nothing more."""
+    schema_version: Literal["performance-spec-v1"] = "performance-spec-v1"
+    primary_action: str = Field(min_length=1)
+    action_intent: str = ""
+    anticipation: str = ""
+    locomotion: str = ""
+    weight_transfer: str = ""
+    foot_plant: str = ""
+    hip_torso_rotation: str = ""
+    arm_countermotion: str = ""
+    contact_event: str = ""
+    reaction: str = ""
+    recovery: str = ""
+    secondary_motion: str = ""
+    motion_energy: Literal["low", "moderate", "high"] | None = None
+    motion_risk_class: Literal["LOW", "MEDIUM", "HIGH", "EXTREME"] | None = None
+    beats: list[PerformanceBeat] = []
+
+
 class ShotSpec(ContractModel):
     schema_version: Literal["1.0.0"]
     spec_version: int = Field(ge=1)
@@ -126,6 +154,7 @@ class ShotSpec(ContractModel):
     references: References | None = None
     constraints: Constraints | None = None
     editorial: Editorial | None = None
+    performance_spec: PerformanceSpec | None = None
 
 
 class ProviderCapabilities(ContractModel):
@@ -194,7 +223,15 @@ class GenerationAttempt(ContractModel):
 
 
 def canonical_json(value: Any) -> str:
-    if isinstance(value, ContractModel):
+    if isinstance(value, ShotSpec):
+        dump = value.model_dump(mode="json")
+        if dump.get("performance_spec") is None:
+            # Legacy identity stability (Package-017): shots without a
+            # performance spec hash exactly as before the field existed;
+            # shots WITH one hash with it included (versioned semantics).
+            dump.pop("performance_spec", None)
+        value = dump
+    elif isinstance(value, ContractModel):
         # Normalize schema defaults before hashing: omitted and explicit defaults
         # describe the same model, while payload() retains original field presence.
         value = value.model_dump(mode="json")
