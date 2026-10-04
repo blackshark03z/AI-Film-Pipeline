@@ -134,6 +134,17 @@ class PerformanceSpec(ContractModel):
     motion_risk_class: Literal["LOW", "MEDIUM", "HIGH", "EXTREME"] | None = None
     beats: list[PerformanceBeat] = []
 
+    def filled_biomechanics(self) -> dict[str, str]:
+        """The non-empty biomechanics fields, in frozen order."""
+        order = ("anticipation", "locomotion", "weight_transfer",
+                 "foot_plant", "hip_torso_rotation", "arm_countermotion",
+                 "contact_event", "reaction", "recovery",
+                 "secondary_motion")
+        return {k: getattr(self, k) for k in order if getattr(self, k)}
+
+    def digest(self) -> str:
+        return sha256(canonical_json(self.model_dump(mode="json")))
+
 
 class ShotSpec(ContractModel):
     schema_version: Literal["1.0.0"]

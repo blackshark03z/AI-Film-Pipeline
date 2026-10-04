@@ -20,53 +20,16 @@ from typing import Literal
 
 from pydantic import Field, model_validator
 
-from .core import ContractModel, canonical_json, sha256
+from .core import (ContractModel, PerformanceBeat, PerformanceSpec,
+                   canonical_json, sha256)
 
 PERFORMANCE_SPEC_VERSION = "performance-spec-v1"
 BODY_AUTHORITY_VERSION = "body-proportion-authority-v1"
 
-
-class PerformanceBeat(ContractModel):
-    """One ordered performance beat (e.g. anticipation, plant, contact)."""
-    label: str = Field(min_length=1, max_length=40)
-    description: str = Field(min_length=1)
-    approx_start_s: float | None = Field(default=None, ge=0, le=8)
-
-
-class PerformanceSpec(ContractModel):
-    """Structured performance direction for one shot.
-
-    Only `primary_action` is required — quiet shots need nothing more.
-    Fields describe HOW the body moves (biomechanics), not WHAT the shot
-    shows (that stays in blocking/performance beats)."""
-    schema_version: Literal["performance-spec-v1"] = PERFORMANCE_SPEC_VERSION
-    primary_action: str = Field(min_length=1)
-    action_intent: str = ""
-    anticipation: str = ""
-    locomotion: str = ""
-    weight_transfer: str = ""
-    foot_plant: str = ""
-    hip_torso_rotation: str = ""
-    arm_countermotion: str = ""
-    contact_event: str = ""
-    reaction: str = ""
-    recovery: str = ""
-    secondary_motion: str = ""
-    motion_energy: Literal["low", "moderate", "high"] | None = None
-    motion_risk_class: Literal["LOW", "MEDIUM", "HIGH", "EXTREME"] | None = \
-        None
-    beats: list[PerformanceBeat] = []
-
-    def digest(self) -> str:
-        return sha256(canonical_json(self.model_dump(mode="json")))
-
-    def filled_biomechanics(self) -> dict[str, str]:
-        """The non-empty biomechanics fields, in frozen order."""
-        order = ("anticipation", "locomotion", "weight_transfer",
-                 "foot_plant", "hip_torso_rotation", "arm_countermotion",
-                 "contact_event", "reaction", "recovery",
-                 "secondary_motion")
-        return {k: getattr(self, k) for k in order if getattr(self, k)}
+# The canonical PerformanceSpec/PerformanceBeat models live in core
+# (they are part of the ShotSpec contract surface); this module carries
+# the BodyProportionAuthority and the advisory logic that operates on
+# the specs.
 
 
 class BodyProportionAuthority(ContractModel):
