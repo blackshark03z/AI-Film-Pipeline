@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QualityReviewReceipt v1 (QUALITY-V2-001)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "review_id",
+    "candidate_id",
+    "baseline_asset_sha256",
+    "target_defect_debt_ids",
+    "target_dimensions",
+    "findings",
+    "review_source",
+    "limitations",
+    "no_aggregate_score"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "quality-review-receipt-v1"
+    },
+    "review_id": {
+      "type": "string",
+      "pattern": "^qrr_[a-f0-9]{64}$"
+    },
+    "candidate_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "baseline_asset_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "target_defect_debt_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^QD-[0-9]{3}$"
+      }
+    },
+    "target_dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/dimension"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dimension", "verdict", "severity", "evidence"],
+        "properties": {
+          "dimension": {
+            "$ref": "#/definitions/dimension"
+          },
+          "verdict": {
+            "enum": [
+              "IMPROVED",
+              "UNCHANGED",
+              "REGRESSED",
+              "INCONCLUSIVE",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "severity": {
+            "enum": ["NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
+          },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "affected_time_range_s": {
+            "type": ["array", "null"],
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "review_source": {
+      "enum": ["OWNER", "ADVISORY_WORKER", "ADVISORY_AUTOMATED_QC"]
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "no_aggregate_score": {
+      "const": true,
+      "description": "this contract refuses to collapse the ten dimensions into a single quality score; one improvement can never silently compensate another regression"
+    }
+  },
+  "definitions": {
+    "dimension": {
+      "enum": [
+        "NARRATIVE_LOGIC",
+        "ACTION_CAUSALITY",
+        "SHOT_DESIGN",
+        "IDENTITY",
+        "BODY_PROPORTION",
+        "PERFORMANCE",
+        "BLOCKING",
+        "CAMERA",
+        "TEMPORAL_MOTION",
+        "EDITORIAL_FIT"
+      ]
+    }
+  }
+}

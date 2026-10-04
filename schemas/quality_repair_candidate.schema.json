@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QualityRepairCandidate v1 (QUALITY-V2-001)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "source_canonical_take",
+    "affected_shot",
+    "repair_reason",
+    "quality_debt_ids",
+    "generation_semantic_identity",
+    "asset_sha256",
+    "owner_decision_state",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "quality-repair-candidate-v1"
+    },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^QRC-[a-f0-9]{16}$"
+    },
+    "source_canonical_take": {
+      "type": "string",
+      "minLength": 1,
+      "description": "selected_take_id of the canonical SelectedTake this candidate would replace"
+    },
+    "affected_shot": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repair_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "quality_debt_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^QD-[0-9]{3}$"
+      }
+    },
+    "generation_semantic_identity": {
+      "type": "string",
+      "minLength": 1,
+      "description": "exact provider output identity / semantic identity of the generated candidate asset"
+    },
+    "asset_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "technical_qc_receipt": {
+      "type": "object"
+    },
+    "identity_receipt": {
+      "type": "object"
+    },
+    "quality_review_receipt": {
+      "type": "object"
+    },
+    "editorial_compatibility_receipt": {
+      "type": "object"
+    },
+    "owner_decision_state": {
+      "enum": [
+        "PROPOSED",
+        "TECHNICALLY_VALID",
+        "QUALITY_REVIEW_READY",
+        "OWNER_SELECTED",
+        "OWNER_REJECTED",
+        "DEFERRED",
+        "SUPERSEDED"
+      ]
+    },
+    "owner_decision_id": {
+      "type": "string",
+      "description": "required non-empty for OWNER_SELECTED / OWNER_REJECTED / DEFERRED"
+    },
+    "superseded_by": {
+      "type": "string",
+      "description": "required non-empty for SUPERSEDED"
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

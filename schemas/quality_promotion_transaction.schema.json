@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QualityPromotionTransaction v1 (QUALITY-V2-001)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "transaction_id",
+    "candidate_id",
+    "candidate_asset_sha256",
+    "affected_shot_id",
+    "affected_clip_order",
+    "predecessor",
+    "successor_manifest_id",
+    "state",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "quality-promotion-transaction-v1"
+    },
+    "transaction_id": {
+      "type": "string",
+      "pattern": "^QPT-[a-f0-9]{16}$"
+    },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^QRC-[a-f0-9]{16}$"
+    },
+    "candidate_asset_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "affected_shot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "affected_clip_order": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_take_id",
+        "shot_id",
+        "asset_sha256",
+        "edit_manifest_id",
+        "master_sha256"
+      ],
+      "properties": {
+        "selected_take_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shot_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asset_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "edit_manifest_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "master_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "successor_manifest_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "promotion_scope": {
+      "type": "object",
+      "description": "the affected editorial scope to rebuild (only where possible); the remainder of the master is untouched"
+    },
+    "state": {
+      "enum": ["PROPOSED", "COMMITTED", "FAILED", "ROLLED_BACK"]
+    },
+    "promotion_receipt": {
+      "type": "object"
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
