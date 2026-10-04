@@ -308,3 +308,17 @@ def test_15_master_scope_request_contract():
 def test_16_decision_states_are_frozen():
     assert OWNER_DECISION_STATES == ("ACCEPT", "REJECT", "NEEDS_REPAIR",
                                      "DEFER")
+
+
+def test_17_duplicate_item_in_decision_file_refused(tmp_path: Path):
+    requests = [make_request(rid="OWNER-REV-015-001")]
+    template = build_decision_template(requests,
+                                       tmp_path / "template.json",
+                                       "7" * 64)
+    dup = json.loads(json.dumps(template))
+    dup["items"].append({**template["items"][0], "decision": "ACCEPT"})
+    (tmp_path / "dup.json").write_text(json.dumps(dup), encoding="utf-8")
+    with pytest.raises(ValueError, match="duplicate decision item"):
+        import_decision_set(tmp_path / "dup.json", requests,
+                           OwnerDecisionLedger(tmp_path / "l.json",
+                                               requests), "7" * 64)

@@ -474,3 +474,48 @@ def test_simulation_never_touches_canonical_state(tmp_path: Path):
          "projects/flow_worker_semantic_backend_014/delivery_014/qc/"
          "release_readiness.json").read_text(encoding="utf-8"))
     assert readiness_014["OWNER_TAKE_REVIEW_COMPLETE"] is False
+
+
+def test_all_gates_satisfied_synthetic_fixture(tmp_path: Path):
+    """Synthetic complete inputs -> the compiler reaches READY in
+    dry-run; canonical production state is untouched (fixtures only)."""
+    receipt = make_receipt(tmp_path)
+    narration = verify_narration_receipt(
+        receipt, project="swordsman_film", story_authority=STORY,
+        base_dir=tmp_path)
+    source = make_caption(tmp_path, SRT.encode("utf-8"))
+    captions = verify_caption_source(
+        source, project="swordsman_film", story_authority=STORY,
+        master_duration_s=194.541667, base_dir=tmp_path)
+    waiver = SemanticQCWaiverDecision(
+        project="swordsman_film", master_sha256=MASTER_SHA,
+        reason="synthetic fixture", known_limitations=["synthetic"],
+        waived_at="2026-10-04T00:00:00+00:00", decision_source="OWNER")
+    compiler = FinalContentReleaseCompiler(
+        project="swordsman_film",
+        master_receipt={"output_sha256": MASTER_SHA,
+                        "version": "master-editorial-010-v1",
+                        "full_decode": True},
+        manifest_truth={}, bundle=ContentReleaseInputBundle(
+            project="swordsman_film", master_sha256=MASTER_SHA,
+            canonical_lineage_version="master-editorial-010-v1"),
+        owner_decision_state={"OWNER-REV-015-001": "ACCEPT"},
+        narration_verification=narration,
+        caption_verification=captions,
+        semantic_waiver=waiver)
+    report = compiler.gate_report()
+    assert report["release_state"] == "FINAL_CONTENT_RELEASE_READY"
+    assert report["blocked_gates"] == []
+    with pytest.raises(NotImplementedError):
+        compiler.compile_release()
+
+
+def test_one_missing_gate_reported_exactly(tmp_path: Path):
+    waiver = SemanticQCWaiverDecision(
+        project="swordsman_film", master_sha256=MASTER_SHA,
+        reason="x", known_limitations=["y"],
+        waived_at="2026-10-04T00:00:00+00:00", decision_source="OWNER")
+    report = compiler_fixture(None, waiver=waiver).gate_report()
+    assert report["blocked_gates"] == ["OWNER_TAKE_REVIEW",
+                                       "PRODUCTION_NARRATION",
+                                       "TIMED_CAPTIONS"]

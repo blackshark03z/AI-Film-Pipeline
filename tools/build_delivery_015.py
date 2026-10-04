@@ -362,6 +362,7 @@ def main() -> None:
     secret_hits = sorted(set(
         token for token in ("AIza", "set-cookie", "flow-content",
                             "BEGIN PRIVATE KEY", "Bearer ",
+                            "sig=", "storage.googleapis.com",
                             "expected_class", "expected_verdict",
                             "pass_target", "must_reject_lineage")
         if token in bundle_blob))
