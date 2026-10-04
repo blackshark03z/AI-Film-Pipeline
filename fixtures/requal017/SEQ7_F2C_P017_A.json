@@ -1,0 +1,58 @@
+{
+ "schema_version": "1.0.0",
+ "spec_version": 1,
+ "scene_id": "SCENE_F_STORM_GATE",
+ "duration_target_s": 8,
+ "shot_type": "action",
+ "characters": [
+  {
+   "character_id": "swordsman_white_robes",
+   "identity_version": "swordsman_white_robes_v1",
+   "look_state_id": "white_robes_cloud_summit_dawn_v1",
+   "behavior_state": "shoulder lowered into the wind"
+  }
+ ],
+ "camera": {
+  "framing": "MS",
+  "height": "eye_level",
+  "lens_intent": "normal",
+  "movement": {
+   "type": "locked"
+  }
+ },
+ "environment": {
+  "time_of_day": "midday",
+  "weather": "storm front",
+  "atmosphere": "narrow rock gate"
+ },
+ "blocking": {
+  "start": "gate mouth",
+  "action_beats": [
+   "a hard gust hits"
+  ],
+  "end": "through the worst gust",
+  "prop_interactions": []
+ },
+ "performance": {
+  "observable_beats": [],
+  "forbidden": []
+ },
+ "lighting": {},
+ "continuity": {
+  "screen_direction": "faces frame-left",
+  "eyeline": "down the road ahead",
+  "start_state": {},
+  "end_state": {},
+  "critical_invariants": [
+   "rock gate walls consistent with SEQ7_F1 last frame",
+   "wardrobe unchanged",
+   "wind direction constant against him"
+  ]
+ },
+ "shot_id": "SEQ7_F2C_P017_A",
+ "dramatic_purpose": "inside the gate the wind funnels hard",
+ "performance_spec": {
+  "schema_version": "performance-spec-v1",
+  "primary_action": "drives a step through a hard gust"
+ }
+}
