@@ -87,7 +87,8 @@ class PerformanceRuntime(base.FlowR2VShotRuntime):
             kwargs["prompt_compiler"] = compile_causal_r2v_prompt
             kwargs["compiler_kwargs"] = {
                 "performance_spec": shot.performance_spec,
-                "body_authority": BODY_BY_SHOT[shot.shot_id]}
+                "body_authority": BODY_BY_SHOT[shot.shot_id],
+                "action_intent": shot.action_intent}
         return super().freeze(shot, *args, **kwargs)
 
     def _resume_frozen(self, prior, shot, plan, decision, reference_binding,
@@ -96,7 +97,8 @@ class PerformanceRuntime(base.FlowR2VShotRuntime):
             kwargs["prompt_compiler"] = compile_causal_r2v_prompt
             kwargs["compiler_kwargs"] = {
                 "performance_spec": shot.performance_spec,
-                "body_authority": BODY_BY_SHOT[shot.shot_id]}
+                "body_authority": BODY_BY_SHOT[shot.shot_id],
+                "action_intent": shot.action_intent}
         return super()._resume_frozen(prior, shot, plan, decision,
                                       reference_binding, *args, **kwargs)
 
