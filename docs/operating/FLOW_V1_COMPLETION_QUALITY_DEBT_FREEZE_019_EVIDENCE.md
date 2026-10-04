@@ -189,3 +189,14 @@ not a finished film.
 **COMPLETED_CANDIDATE** — not self-declared PROVEN; Tech Lead retains
 final acceptance. PACKAGE_019_FINAL_HEAD_SHA is returned in the final
 worker report.
+
+## 17. Revision custody closure (PUSH-V1-REMOTE-CLOSURE, append-only)
+
+- **PACKAGE_019_CANDIDATE_REVISION_SHA =**
+  **`08b1710d234ff8bfa5c1ec3d816e6968de67aa38`** — the exact commit
+  carrying the completed Package-019 work + this evidence record
+  (sections 1-16). This is the COMPLETED_CANDIDATE revision the Tech
+  Lead reviews. No self-referential SHA field is claimed: the
+  transport-only custody commit that carries this note is a separate,
+  later revision whose SHA is reported by the final push report.
+- No content change is made by this note (append-only custody).
