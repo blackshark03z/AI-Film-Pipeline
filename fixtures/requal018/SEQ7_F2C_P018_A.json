@@ -1,0 +1,90 @@
+{
+ "schema_version": "1.0.0",
+ "spec_version": 1,
+ "scene_id": "SCENE_F_STORM_GATE",
+ "duration_target_s": 8,
+ "shot_type": "action",
+ "characters": [
+  {
+   "character_id": "swordsman_white_robes",
+   "identity_version": "swordsman_white_robes_v1",
+   "look_state_id": "white_robes_cloud_summit_dawn_v1",
+   "behavior_state": "shoulder lowered into the wind"
+  }
+ ],
+ "camera": {
+  "framing": "MS",
+  "height": "eye_level",
+  "lens_intent": "normal",
+  "movement": {
+   "type": "locked"
+  }
+ },
+ "environment": {
+  "time_of_day": "midday",
+  "weather": "storm front",
+  "atmosphere": "narrow rock gate"
+ },
+ "blocking": {
+  "start": "gate mouth",
+  "action_beats": [],
+  "end": "worst gust",
+  "prop_interactions": []
+ },
+ "performance": {
+  "observable_beats": [],
+  "forbidden": []
+ },
+ "lighting": {},
+ "continuity": {
+  "screen_direction": "faces frame-left",
+  "eyeline": "down the road ahead",
+  "start_state": {},
+  "end_state": {},
+  "critical_invariants": [
+   "rock gate walls consistent with SEQ7_F1 last frame",
+   "wardrobe unchanged",
+   "wind direction constant against him"
+  ]
+ },
+ "shot_id": "SEQ7_F2C_P018_A",
+ "dramatic_purpose": "the wind funnels hard",
+ "performance_spec": {
+  "schema_version": "performance-spec-v1",
+  "primary_action": "drives a step through a hard gust",
+  "action_intent": "the body answers the gust",
+  "weight_transfer": "weight rolls over the planted foot",
+  "foot_plant": "front foot plants",
+  "secondary_motion": "robes trail the motion",
+  "motion_energy": "moderate",
+  "beats": [
+   {
+    "label": "load",
+    "description": "shoulder coils against the gust"
+   },
+   {
+    "label": "drive",
+    "description": "the step drives through"
+   },
+   {
+    "label": "plant",
+    "description": "front foot plants"
+   }
+  ]
+ },
+ "action_intent": {
+  "schema_version": "action-intent-v1",
+  "trigger": "a hard gust funnels hard",
+  "perception": "the funneled wind hits him",
+  "character_goal": "the road onward",
+  "motivation": "the storm is the obstacle",
+  "obstacle_or_pressure": "wind constant against him",
+  "chosen_action": "he drives a step through the funnel",
+  "intended_outcome": "he breaks through the worst gust",
+  "resulting_state": "the effort shows and is held",
+  "next_decision": "the cost is held at the wall (F3)",
+  "visual_legibility_requirements": [
+   "the gate contact pushes onward"
+  ]
+ }
+}
