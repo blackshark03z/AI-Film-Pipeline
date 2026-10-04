@@ -146,6 +146,31 @@ class PerformanceSpec(ContractModel):
         return sha256(canonical_json(self.model_dump(mode="json")))
 
 
+class ActionIntent(ContractModel):
+    """Why this character acts NOW and what the action is meant to
+    accomplish (Package-018). Distinct layers: NarrativeBeat = what story
+    beat must occur; ActionIntent = why the character acts and to what
+    end; PerformanceSpec = how the body performs it. Every field must be
+    recoverable from authoritative upstream truth — never invented."""
+    schema_version: Literal["action-intent-v1"] = "action-intent-v1"
+    trigger: str = ""
+    perception: str = ""
+    character_goal: str = ""
+    motivation: str = ""
+    obstacle_or_pressure: str = ""
+    chosen_action: str = ""
+    intended_outcome: str = ""
+    resulting_state: str = ""
+    next_decision: str = ""
+    visual_legibility_requirements: list[str] = []
+    stakes: str = ""
+    urgency: str = ""
+    knowledge_state: str = ""
+
+    def digest(self) -> str:
+        return sha256(canonical_json(self.model_dump(mode="json")))
+
+
 class ShotSpec(ContractModel):
     schema_version: Literal["1.0.0"]
     spec_version: int = Field(ge=1)
@@ -166,6 +191,7 @@ class ShotSpec(ContractModel):
     constraints: Constraints | None = None
     editorial: Editorial | None = None
     performance_spec: PerformanceSpec | None = None
+    action_intent: ActionIntent | None = None
 
 
 class ProviderCapabilities(ContractModel):
@@ -236,11 +262,12 @@ class GenerationAttempt(ContractModel):
 def canonical_json(value: Any) -> str:
     if isinstance(value, ShotSpec):
         dump = value.model_dump(mode="json")
-        if dump.get("performance_spec") is None:
-            # Legacy identity stability (Package-017): shots without a
-            # performance spec hash exactly as before the field existed;
-            # shots WITH one hash with it included (versioned semantics).
-            dump.pop("performance_spec", None)
+        # Legacy identity stability (Packages 017/018): shots without the
+        # extension fields hash exactly as before those fields existed;
+        # shots WITH one hash with it included (versioned semantics).
+        for extension in ("performance_spec", "action_intent"):
+            if dump.get(extension) is None:
+                dump.pop(extension, None)
         value = dump
     elif isinstance(value, ContractModel):
         # Normalize schema defaults before hashing: omitted and explicit defaults

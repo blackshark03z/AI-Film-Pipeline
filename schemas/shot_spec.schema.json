@@ -475,6 +475,9 @@
     },
     "performance_spec": {
       "$ref": "#/$defs/performance_spec"
+    },
+    "action_intent": {
+      "$ref": "#/$defs/action_intent"
     }
   },
   "$defs": {
@@ -574,6 +577,207 @@
         "schema_version",
         "primary_action"
       ]
+    },
+    "action_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "action-intent-v1"
+        },
+        "trigger": {
+          "type": "string"
+        },
+        "perception": {
+          "type": "string"
+        },
+        "character_goal": {
+          "type": "string"
+        },
+        "motivation": {
+          "type": "string"
+        },
+        "obstacle_or_pressure": {
+          "type": "string"
+        },
+        "chosen_action": {
+          "type": "string"
+        },
+        "intended_outcome": {
+          "type": "string"
+        },
+        "resulting_state": {
+          "type": "string"
+        },
+        "next_decision": {
+          "type": "string"
+        },
+        "visual_legibility_requirements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stakes": {
+          "type": "string"
+        },
+        "urgency": {
+          "type": "string"
+        },
+        "knowledge_state": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "defs": {
+    "performance_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "performance-spec-v1"
+        },
+        "primary_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action_intent": {
+          "type": "string"
+        },
+        "anticipation": {
+          "type": "string"
+        },
+        "locomotion": {
+          "type": "string"
+        },
+        "weight_transfer": {
+          "type": "string"
+        },
+        "foot_plant": {
+          "type": "string"
+        },
+        "hip_torso_rotation": {
+          "type": "string"
+        },
+        "arm_countermotion": {
+          "type": "string"
+        },
+        "contact_event": {
+          "type": "string"
+        },
+        "reaction": {
+          "type": "string"
+        },
+        "recovery": {
+          "type": "string"
+        },
+        "secondary_motion": {
+          "type": "string"
+        },
+        "motion_energy": {
+          "enum": [
+            "low",
+            "moderate",
+            "high",
+            null
+          ]
+        },
+        "motion_risk_class": {
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "EXTREME",
+            null
+          ]
+        },
+        "beats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "approx_start_s": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 8
+              }
+            },
+            "required": [
+              "label",
+              "description"
+            ]
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "primary_action"
+      ]
+    },
+    "action_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "action-intent-v1"
+        },
+        "trigger": {
+          "type": "string"
+        },
+        "perception": {
+          "type": "string"
+        },
+        "character_goal": {
+          "type": "string"
+        },
+        "motivation": {
+          "type": "string"
+        },
+        "obstacle_or_pressure": {
+          "type": "string"
+        },
+        "chosen_action": {
+          "type": "string"
+        },
+        "intended_outcome": {
+          "type": "string"
+        },
+        "resulting_state": {
+          "type": "string"
+        },
+        "next_decision": {
+          "type": "string"
+        },
+        "visual_legibility_requirements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stakes": {
+          "type": "string"
+        },
+        "urgency": {
+          "type": "string"
+        },
+        "knowledge_state": {
+          "type": "string"
+        }
+      }
     }
   }
 }
