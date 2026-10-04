@@ -87,3 +87,17 @@ request_fingerprint). Cross-backend cache reuse is forbidden.
 No semantic review result — from any backend, any model, any confidence
 level — grants, restores, or expands provider mutation authority.
 Repair/Owner recommendations are documents, not authority.
+
+## 13. Worker backend verdict correction (Package-015 Phase 0)
+
+The worker semantic backend (worker-semantic-reviewer, 014.1) is
+**NOT_QUALIFIED**: Package-014 Pass 1 did not meet the frozen 006 corpus
+acceptance (positives 2/8, negatives 6/8, ambiguous mismatch). The
+section-6 label "PROVISIONAL_SINGLE_PASS" is a classification that would
+only have applied if Pass 1 had met the frozen acceptance but
+repeatability was unavailable; it was misapplied in Package-014 and is
+superseded by the NOT_QUALIFIED verdict. The worker's 30-shot production
+review, master boundary review and consistency audit remain valid as
+PROVISIONAL_OWNER_ASSIST_REVIEW — observational Owner-assist only, never
+autonomous semantic truth. SEMANTIC_AUTONOMOUS_READY = false. A future
+API backend still qualifies exclusively through sections 4–8.

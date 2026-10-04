@@ -216,3 +216,47 @@ packaging if gates resolve.
 
 **COMPLETED_CANDIDATE** — not self-declared PROVEN; Tech Lead retains
 final acceptance.
+
+## 19. Package-014 custody + truth closure (Package-015 Phase 0)
+
+- **0A — exact delivery SHA:** `PACKAGE_014_ORIGINAL_DELIVERY_SHA =
+  3c9c1f06e48eba947ebd360c677916079331d0f6` (the branch tip carrying
+  sections 1–18 above). Ancestry re-verified from
+  `81a4419e8164d7883f32735ad2ea90a8003b665e`.
+- **0B — worker semantic classification corrected.** Durable truth:
+  **WORKER_SEMANTIC_BACKEND = NOT_QUALIFIED**;
+  **WORKER_SEMANTIC_REVIEW_MODE = PROVISIONAL_OWNER_ASSIST**;
+  **SEMANTIC_AUTONOMOUS_READY = false**. Reason: Pass 1 did NOT meet the
+  frozen 006 corpus acceptance (positives 2/8, negatives 6/8, ambiguous
+  mismatch), so the frozen acceptance was not met. The historical label
+  "PROVISIONAL_SINGLE_PASS" was a misapplied classification — under the
+  replacement contract it would only have been valid if Pass 1 had met
+  the frozen acceptance but repeatability was unavailable. Correction
+  keys appended to `worker_qualification_receipt_014.json` and
+  `temporary_backend_policy_014.json`; historical fields preserved
+  verbatim (no silent rewrite).
+- **0C — reclassification.** The 30-shot production review, master
+  boundary review and consistency audit remain valid as
+  **PROVISIONAL_OWNER_ASSIST_REVIEW** (their existing label — unchanged);
+  they are NOT SEMANTIC_QC_QUALIFIED and NOT SEMANTIC_AUTONOMOUS_TRUTH.
+  Stale-wording inventory (historical wording intentionally preserved in
+  frozen custody + builders, superseded by this correction): the frozen
+  `delivery_014/` bundle copies + `DELIVERY_014.zip`
+  (delivery_manifest.json source_lineage, release_readiness.json,
+  provenance.json, worker_qualification_receipt.json,
+  review/owner_review_packet.json), the 014-era builders
+  (`build_delivery_014.py`, `build_worker_qualification_014.py`), the 014
+  matrix rows 91/109 (they assert the historical recorded state), and
+  section 6 above. The frozen 014 bundle is historical custody; the
+  corrected durable truth governs Package-015+ and is carried by the
+  correction keys, the replacement-contract note, and the Package-015
+  readiness model.
+- **0D — battery:** full Package-014 offline battery re-run clean after
+  the corrections (see the Package-015 evidence record for the exact
+  counts). **PACKAGE_014_TECHNICAL_ARCHITECTURE = PROVEN**:
+  SEMANTIC_BACKEND_NEUTRAL_BOUNDARY = PROVEN ·
+  WORKER_PACKET_IMPORT_BOUNDARY = PROVEN ·
+  SEMANTIC_BACKEND_REPLACEMENT_CONTRACT = PROVEN ·
+  WORKER_SEMANTIC_BACKEND = NOT_QUALIFIED ·
+  WORKER_OWNER_ASSIST_MODE = AVAILABLE ·
+  SEMANTIC_AUTONOMOUS_READY = false.
