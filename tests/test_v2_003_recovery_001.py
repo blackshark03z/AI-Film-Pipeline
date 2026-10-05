@@ -223,6 +223,8 @@ INGEST_TRACKED_ALLOWLIST = {
     " M tools/build_v2_003_previz.py",
     " M src/film_pipeline/quality_repair_v2.py",
     " M tests/test_quality_v2_repair_policy_001.py",
+    " M docs/quality-v2/V2_006_F2_DECOMPOSED_LIVE_HANDOFF.md",
+    " M tests/test_v2_005_decomposition_001.py",
 }
 
 

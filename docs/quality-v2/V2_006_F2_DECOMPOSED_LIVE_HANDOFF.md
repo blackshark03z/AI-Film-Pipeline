@@ -2,8 +2,10 @@
 
 **From:** AI-FILM-QUALITY-V2-005 (F2 shot-decomposition design, frozen)
 **To:** V2-006 (decomposed live experiment, when the Owner authorizes it)
-**Status:** HANDOFF. The frozen two-shot plan is ready; nothing was
-generated in V2-005.
+**Status:** HANDOFF — **V2_006_READY = false** pending the Owner's
+authorization of the reference-strategy amendment (V2-005R preflight:
+`projects/quality_v2_005r_reference_preflight/reference_preflight_v2_005r.json`).
+The frozen two-shot plan itself is unchanged.
 
 ---
 
@@ -34,6 +36,29 @@ neither V2-004 candidate is reusable.
   the cut is a legitimate ellipsis ("He crossed.").
 - D1–D10 ALL_PASS; story meaning preserved verbatim; rock interaction
   forbidden COMPLETELY in both shots.
+
+## 2b. REFERENCE STRATEGY AMENDMENT (V2-005R preflight — REQUIRED)
+
+The preflight classified the frozen F2C reference (media `8f2f5277…`,
+sha `fecf669e…`) as **FULL_FRAME_ENVIRONMENTAL**: it visually encodes
+NEAR-SIDE gate geography (rock at frame-left, subject beside it, far
+side occluded). Consequences, proven mechanically from the exact
+hashed bytes:
+
+- **F2A_REFERENCE_COMPATIBLE = true** (near-side shot, near-side
+  reference).
+- **F2B: REFERENCE_GEOGRAPHY_CONFLICT** — the far-side plan requires
+  the gate BEHIND the subject with BEFORE_GATE forbidden; the
+  full-frame near-side conditioning materially constrains that
+  geography, and prompt text is NOT proven to override it.
+
+**Smallest fix (option 1, no upload):** bind F2B to the
+ALREADY-QUALIFIED identity-only reference — media `7b725f7b-4da5-4455-
+a6f2-135c4ba22397`, asset `asset_2ab16c9f…`, sha `ed75a8b2…` (chest-up
+portrait, clouds only, zero gate geography; adopted provider media with
+full store provenance, qualified since Packages 003+). F2A keeps the
+near-side full-frame reference. **0 uploads; 0 provider switch.** V2-006
+may run ONLY after the Owner authorizes this split-reference strategy.
 
 ## 3. Budget and route (frozen)
 
@@ -72,10 +97,12 @@ the frozen cut), then the questions:
 4. Is the direction of travel coherent?
 5. Does the two-shot version feel more natural than the old F2?
 
-Decision options: SELECT_A_F2A / (F2A+F2B selection is a pair) /
-REJECT_ALL / KEEP_CANONICAL / NEEDS_REPAIR / DEFER — the pair is
-judged as ONE editorial solution; selecting it is future authority
-only (promotion via the adapter package).
+Decision options (ATOMIC PAIR contract, V2-005R):
+**SELECT_F2A_F2B_PAIR / REJECT_ALL / KEEP_CANONICAL / NEEDS_REPAIR /
+DEFER**. The pair is judged as ONE editorial solution — NO option can
+select F2A alone or F2B alone (an editorially orphaned half-shot is
+unusable). Selection is future authority only (promotion via the
+adapter package).
 
 ## 6. Stop conditions
 
