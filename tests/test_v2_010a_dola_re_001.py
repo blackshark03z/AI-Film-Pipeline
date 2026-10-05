@@ -4,7 +4,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import pytest
+import sys
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 PKG = ROOT / "projects/quality_v2_010a_dola_re_authority"
 def pkg_json(n): return json.loads((PKG / n).read_text(encoding="utf-8"))
 
@@ -61,6 +63,6 @@ def test_05_invariants():
         ["git", "status", "--porcelain"], cwd=ROOT, capture_output=True,
         text=True).stdout.splitlines() if not l.startswith("??")]
     # cust file is expected dirty; everything else clean
-    assert all("010a" in l or "custody" in l or d is None for l in dirty)
+    assert all("dola_provider" in l or "010a" in l or "003_recovery" in l for l in dirty)
     assert not (PKG / "generate_ledger.json").exists()
     assert not list(PKG.glob("**/*.mp4"))

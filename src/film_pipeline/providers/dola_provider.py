@@ -221,13 +221,24 @@ class DolaCookieTransport:
         return urlencode(values)
 
     def _headers(self, *, conversation_id: str = "", sse: bool = False) -> dict[str, str]:
+        """Browser-fingerprint headers matching the AVP RE contract."""
         return {
-            "Accept": "text/event-stream" if sse else "application/json",
+            "Accept": "text/event-stream" if sse else "*/*",
+            "Accept-Encoding": "identity",
+            "Accept-Language": "en,ja;q=0.9,en-US;q=0.8,en;q=0.7",
+            "Cache-Control": "no-cache",
             "Content-Type": "application/json; charset=utf-8",
             "Cookie": self._cookie,
             "Origin": ORIGIN,
+            "Pragma": "no-cache",
             "Referer": ORIGIN + ("/chat/" + conversation_id if conversation_id else "/chat/"),
-            "User-Agent": "AIFilmPipeline seedance_dola qualification transport",
+            "Sec-Ch-Ua": '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": '"Windows"',
+            "Sec-Fetch-Dest": "empty",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Site": "same-origin",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
             "agw-js-conv": "str, str" if sse else "str",
         }
 
@@ -260,14 +271,26 @@ class DolaCookieTransport:
                        "recovery_option": {"is_recovery": False, "req_create_time_sec": now_sec,
                                            "append_sse_event_scene": 0},
                        "sse_recv_event_options": {"support_chunk_delta": True},
-                       "message_from": 0, "is_audio": False},
+                       "message_from": 0, "is_audio": False,
+                       "send_message_scene": "", "collect_id": "",
+                       "answer_with_suggest": False, "tts_switch": False,
+                       "click_clear_context": False, "from_suggest": False,
+                       "is_regen": False, "is_replace": False,
+                       "is_from_click_option": False, "disable_sse_cache": False,
+                       "select_text_action": "", "is_select_text": False,
+                       "resend_for_regen": False, "scene_type": 0,
+                       "start_seq": 0, "regen_query_id": [], "edit_query_id": [],
+                       "regen_instruction": "", "no_replace_for_regen": False,
+                       "shared_app_name": "", "shared_app_id": "",
+                       "is_ai_playground": False, "is_old_user": False,
+                       "message_storage_type": 0},
             "chat_ability": {"ability_type": 17,
                 "ability_param": json.dumps({"ratio": aspect_ratio, "model": REQUESTED_MODEL,
                                              "duration": duration}, separators=(",", ":"))},
             "user_context": [],
             "ext": {"fp": self._fp, "use_deep_think": "0", "sub_conv_firstmet_type": "1",
                     "conversation_init_option": '{"need_ack_conversation":true}',
-                    "commerce_credit_config_enable": "0"},
+                    "commerce_credit_config_enable": "0", "collection_id": ""},
         }
 
     def submit(self, prompt: str, aspect_ratio: str, duration: int, on_receipt,
