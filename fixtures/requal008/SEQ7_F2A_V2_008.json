@@ -1,0 +1,101 @@
+{
+ "schema_version": "1.0.0",
+ "spec_version": 1,
+ "scene_id": "SCENE_F_STORM_GATE",
+ "duration_target_s": 8,
+ "shot_type": "action",
+ "characters": [
+  {
+   "character_id": "swordsman_white_robes",
+   "identity_version": "swordsman_white_robes_v1",
+   "look_state_id": "white_robes_cloud_summit_dawn_v1",
+   "behavior_state": null
+  }
+ ],
+ "camera": {
+  "framing": "WS",
+  "height": "eye_level",
+  "lens_intent": "normal",
+  "movement": {
+   "type": "locked"
+  }
+ },
+ "environment": {
+  "weather": "storm",
+  "atmosphere": "rock gate"
+ },
+ "blocking": {
+  "start": "close before the gate opening",
+  "action_beats": [],
+  "end": "at the gate opening",
+  "prop_interactions": []
+ },
+ "performance": {
+  "observable_beats": [],
+  "forbidden": [
+   "cover or stop at rock",
+   "aimless touch",
+   "reversal"
+  ]
+ },
+ "lighting": {},
+ "continuity": {
+  "screen_direction": "faces frame-left",
+  "eyeline": "down the road ahead",
+  "start_state": {},
+  "end_state": {},
+  "critical_invariants": [
+   "rock gate walls consistent with SEQ7_F1 last frame",
+   "wardrobe unchanged",
+   "wind direction constant against him",
+   "he opens already close to the threshold",
+   "weapon passive and undrawn",
+   "the crossing completes only across the cut"
+  ]
+ },
+ "shot_id": "SEQ7_F2A_V2_008",
+ "dramatic_purpose": "the gust rages; he commits at the threshold",
+ "performance_spec": {
+  "schema_version": "performance-spec-v1",
+  "primary_action": "commits immediately and steps to the gate opening",
+  "action_intent": "the body answers at once",
+  "weight_transfer": "weight drops forward",
+  "motion_energy": "moderate",
+  "beats": [
+   {
+    "label": "set",
+    "approx_start_s": 0.0,
+    "description": "gust active, body commits at once"
+   },
+   {
+    "label": "steps",
+    "approx_start_s": 1.0,
+    "description": "one or two deliberate steps"
+   },
+   {
+    "label": "threshold",
+    "approx_start_s": 2.0,
+    "description": "arrives at the opening"
+   }
+  ]
+ },
+ "action_intent": {
+  "schema_version": "action-intent-v1",
+  "trigger": "a gust hits the gate",
+  "perception": "he reads the gust's force",
+  "character_goal": "through the gate",
+  "motivation": "the journey continues past the gate",
+  "obstacle_or_pressure": "the gust drives against him",
+  "chosen_action": "he lowers and advances through the gust",
+  "intended_outcome": "he emerges past the gate",
+  "resulting_state": "he pauses briefly to recover",
+  "next_decision": "the journey resumes (F3)",
+  "visual_legibility_requirements": [
+   "forward passage through the gate stays visible",
+   "the rock is support, never destination"
+  ],
+  "stakes": "the path is blocked until he passes",
+  "urgency": "steady, deliberate",
+  "knowledge_state": "he knows the wind, he chooses passage"
+ }
+}
