@@ -211,9 +211,12 @@ def make_candidate(*, source_canonical_take: str, affected_shot: str,
 
 def _transition(candidate: QualityRepairCandidate, to_state: str,
                 **updates) -> QualityRepairCandidate:
+    # Owner rejection/deferral is available at ANY state (authority
+    # truth); only SELECTION requires the full review chain.
     allowed = {
-        "PROPOSED": {"TECHNICALLY_VALID"},
-        "TECHNICALLY_VALID": {"QUALITY_REVIEW_READY"},
+        "PROPOSED": {"TECHNICALLY_VALID", "OWNER_REJECTED", "DEFERRED"},
+        "TECHNICALLY_VALID": {"QUALITY_REVIEW_READY", "OWNER_REJECTED",
+                              "DEFERRED"},
         "QUALITY_REVIEW_READY": set(OWNER_DECISION_STATES),
         "OWNER_SELECTED": {"SUPERSEDED"},
         "OWNER_REJECTED": set(),
@@ -450,9 +453,17 @@ def apply_owner_decision(candidate: QualityRepairCandidate,
     A candidate with any (soft) regression can only be selected when the
     Owner's note explicitly acknowledges that trade-off.
     """
-    if candidate.owner_decision_state != "QUALITY_REVIEW_READY":
+    if candidate.owner_decision_state not in ("PROPOSED",
+                                              "TECHNICALLY_VALID",
+                                              "QUALITY_REVIEW_READY"):
         raise ValueError(
-            "Owner decision requires a QUALITY_REVIEW_READY candidate")
+            f"owner decision cannot apply to a "
+            f"{candidate.owner_decision_state} candidate")
+    if decision.decision == "ACCEPT" and \
+            candidate.owner_decision_state != "QUALITY_REVIEW_READY":
+        raise ValueError(
+            "Owner SELECTION requires a QUALITY_REVIEW_READY candidate "
+            "(rejection/deferral are available at any earlier state)")
     if decision.owner_identity != "OWNER":
         raise ValueError(
             "only the Owner identity may decide a candidate; impersonation "

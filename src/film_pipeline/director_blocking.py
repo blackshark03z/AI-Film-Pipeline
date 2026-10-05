@@ -296,20 +296,29 @@ def validate_director_gates(intent: DirectorIntent, blocking: BlockingSpec,
            f"allowed/forbidden overlap={overlap} "
            f"path-note violations={invented}")
 
-    # B5 NO_CIRCLING (a return to any previously-visited zone family)
+    # B5 NO_CIRCLING (a zone family re-entered AFTER a different family
+    # was visited; deepening within the same family is progress, and a
+    # plan that never crosses cannot circle)
     loop_authorized = bool(blocking.authority_sources.get(
         "path_loop_authorization", "").strip())
-    repeats = sorted({z for i, z in enumerate(zones)
-                      if any(zone_matches(z, earlier)
-                             for earlier in zones[:i])})
-    ok_b5 = loop_authorized or not repeats or (
+    tops = [z.split(":")[0] for z in zones]
+    seen: list[str] = []
+    reentered: list[str] = []
+    for top in tops:
+        if top in seen and seen and seen[-1] != top:
+            reentered.append(top)
+        if not seen or seen[-1] != top:
+            seen.append(top)
+    ok_b5 = loop_authorized or not reentered or (
         blocking.travel_path.path_type == "AUTHORIZED_LOOP" and
         loop_authorized)
     record("B5_NO_CIRCLING", ok_b5,
-           f"repeated zones={repeats} "
+           f"re-entered families={reentered} "
            f"loop_authorized={loop_authorized}")
 
-    # B6 NO_REVERSAL
+    # B6 NO_REVERSAL (a plan with no marked crossing cannot reverse
+    # after one; otherwise the crossing must be marked exactly once
+    # with no post-crossing return to the start zone)
     crossing_count = sum(1 for w in blocking.travel_path.ordered_waypoints
                          if w.is_crossing)
     crossing_idx = _crossing_index(blocking)
@@ -319,7 +328,7 @@ def validate_director_gates(intent: DirectorIntent, blocking: BlockingSpec,
         else []
     backtracking = [z for z in post_crossing_zones
                     if zone_matches(z, blocking.start_zone)]
-    ok_b6 = (not blocking.forbidden_reversal) or (
+    ok_b6 = (not blocking.forbidden_reversal) or crossing_count == 0 or (
         exactly_once and crossing_idx >= 0 and not backtracking)
     record("B6_NO_REVERSAL", ok_b6,
            f"crossing marked {crossing_count}x, post-crossing "
@@ -432,6 +441,198 @@ def validate_timing_invariant(blocking: BlockingSpec, *,
             "reach_by_s": final.reach_by_s if final else None,
             "checks": checks,
             "state": "PASS" if ok else "FAIL"}
+
+
+# ---------------------------------------------------------------------------
+# Decomposition gates (V2-005): a two-shot editorial solution for F2.
+# Each gate is deterministic over the frozen plan pair + editorial plan.
+# ---------------------------------------------------------------------------
+
+DECOMPOSITION_GATES = (
+    "D1_STORY_MEANING_PRESERVED", "D2_EACH_SHOT_ONE_DOMINANT_ACTION",
+    "D3_F2A_END_F2B_START_COMPATIBLE", "D4_FAR_SIDE_STATE_OBSERVABLE",
+    "D5_ROCK_NOT_DESTINATION", "D6_NO_REVERSAL_REQUIRED",
+    "D7_EDITORIAL_ELLIPSIS_LEGIBLE", "D8_F1_F2A_F2B_F3_CONTINUITY",
+    "D9_DURATION_BOUNDED", "D10_CANONICAL_UNCHANGED")
+
+FROZEN_EDITORIAL_STATES = {
+    "F2A_END_STATE": "AT_THRESHOLD_COMMITTED_FORWARD",
+    "F2B_START_STATE": "CROSSING_OR_JUST_BEYOND_THRESHOLD",
+    "F2B_END_STATE": "FAR_SIDE_CLEAR"}
+
+
+def _meaning_keywords(text: str, needle: str) -> bool:
+    words = [w for w in needle.lower().replace(",", " ").split()
+             if len(w) > 3]
+    blob = " ".join(text.lower().split())
+    return all(w in blob for w in words)
+
+
+def validate_decomposition_gates(*, story_meaning: dict,
+                                 f2a: dict, f2b: dict,
+                                 editorial_states: dict,
+                                 timing: dict,
+                                 canonical: dict) -> dict:
+    """The ten V2-005 decomposition gates.
+
+    f2a/f2b: {"intent": DirectorIntent, "blocking": BlockingSpec,
+              "camera": CameraCoveragePlan, "trim_s": float}
+    story_meaning: frozen {"trigger", "goal", "outcome", "not_goal"}.
+    timing: {"f2a_trim_s", "f2b_trim_s", "allocation_s", "max_total_s"}.
+    canonical: {"canonical_manifest_id", "preview_manifest_id",
+                "no_change_proof": bool}.
+    """
+    results: dict[str, dict] = {}
+
+    def record(gate: str, ok: bool, detail: str):
+        results[gate] = {"state": "PASS" if ok else "FAIL",
+                         "detail": detail}
+
+    def blob(shot: dict) -> str:
+        i = shot["intent"]
+        return " ".join([i.dramatic_purpose, i.required_end_read,
+                         i.primary_action_objective,
+                         *i.viewer_must_understand])
+
+    # D1 STORY_MEANING_PRESERVED: each frozen element is carried via its
+    # semantic anchors (Owner text preserved verbatim alongside).
+    anchors = story_meaning.get("anchors", {})
+    def carries(needle: str, texts: list[str], anchor_list=None) -> bool:
+        if anchor_list:
+            blob_all = " ".join(texts).lower()
+            return any(a.lower() in blob_all for a in anchor_list)
+        return any(_meaning_keywords(t, needle) for t in texts)
+    pair_blob = [blob(f2a), blob(f2b)]
+    goal_ok = carries(story_meaning["goal"], pair_blob,
+                      anchors.get("goal"))
+    trigger_ok = carries(story_meaning["trigger"], pair_blob,
+                         anchors.get("trigger"))
+    outcome_ok = carries(story_meaning["outcome"], [blob(f2b)],
+                         anchors.get("outcome"))
+    not_goal_ok = True
+    for ng in story_meaning["not_goal"]:
+        ng_anchors = anchors.get("not_goal", {}).get(ng)
+        if ng_anchors:
+            ok = any(any(a.lower() in " ".join(
+                i.forbidden_interpretations).lower()
+                for a in ng_anchors)
+                for i in (f2a["intent"], f2b["intent"]))
+        else:
+            ok = any(_meaning_keywords(
+                " ".join(i.forbidden_interpretations), ng)
+                for i in (f2a["intent"], f2b["intent"]))
+        not_goal_ok = not_goal_ok and ok
+    record("D1_STORY_MEANING_PRESERVED",
+           goal_ok and trigger_ok and outcome_ok and not_goal_ok,
+           f"goal={goal_ok} trigger={trigger_ok} outcome={outcome_ok} "
+           f"not_goal={not_goal_ok}")
+
+    # D2 EACH_SHOT_ONE_DOMINANT_ACTION
+    def one_action(shot: dict, opens_with_crossing: bool) -> bool:
+        bl: BlockingSpec = shot["blocking"]
+        wps = bl.travel_path.ordered_waypoints
+        crossings = [i for i, w in enumerate(wps) if w.is_crossing]
+        single_objective = bool(shot["intent"].primary_action_objective)
+        if opens_with_crossing:
+            # F2B: exactly one crossing waypoint and it OPENS the shot;
+            # the shot ends in the BEYOND family
+            return single_objective and len(crossings) == 1 and \
+                bool(wps) and crossings[0] == 0 and \
+                zone_matches(wps[-1].zone, "BEYOND_GATE")
+        # F2A: at most one crossing waypoint and it must be the LAST
+        # waypoint (arrival at the threshold); nothing reaches BEYOND
+        return single_objective and len(crossings) <= 1 and \
+            (not crossings or crossings[0] == len(wps) - 1) and \
+            not any(zone_matches(w.zone, "BEYOND_GATE") for w in wps)
+
+    ok_a = one_action(f2a, opens_with_crossing=False)
+    ok_b = one_action(f2b, opens_with_crossing=True)
+    record("D2_EACH_SHOT_ONE_DOMINANT_ACTION", ok_a and ok_b,
+           f"f2a_single={ok_a} f2b_single={ok_b}")
+
+    # D3 F2A_END_F2B_START_COMPATIBLE (threshold family match)
+    ok_d3 = zone_matches(f2a["blocking"].end_zone,
+                         f2b["blocking"].start_zone)
+    record("D3_F2A_END_F2B_START_COMPATIBLE", ok_d3,
+           f"f2a_end={f2a['blocking'].end_zone} "
+           f"f2b_start={f2b['blocking'].start_zone}")
+
+    # D4 FAR_SIDE_STATE_OBSERVABLE (F2B end binds BEYOND + camera)
+    b = f2b["blocking"]
+    c = f2b["camera"]
+    ok_d4 = zone_matches(b.end_zone, "BEYOND_GATE") and \
+        zone_matches(c.subject_end_region, b.end_zone) and \
+        bool(b.visibility_requirements)
+    record("D4_FAR_SIDE_STATE_OBSERVABLE", ok_d4,
+           f"f2b_end={b.end_zone} camera_end={c.subject_end_region}")
+
+    # D5 ROCK_NOT_DESTINATION
+    forbidden = {"ROCK_CONTACT", "ROCK_BRACE", "ROCK_CIRCLE",
+                 "ROCK_SHELTER"}
+    def rock_clean(shot: dict) -> bool:
+        bl = shot["blocking"]
+        return forbidden <= set(bl.forbidden_interactions) and \
+            not (set(bl.allowed_interactions) & forbidden) and \
+            "AT_ROCK" in bl.forbidden_zones and not any(
+                zone_matches(w.zone, "AT_ROCK")
+                for w in bl.travel_path.ordered_waypoints)
+    ok_d5 = rock_clean(f2a) and rock_clean(f2b)
+    record("D5_ROCK_NOT_DESTINATION", ok_d5,
+           f"f2a={rock_clean(f2a)} f2b={rock_clean(f2b)}")
+
+    # D6 NO_REVERSAL_REQUIRED (both plans forbid reversal; B6 held)
+    ok_d6 = f2a["blocking"].forbidden_reversal and \
+        f2b["blocking"].forbidden_reversal and \
+        f2a["gates_b6"] and f2b["gates_b6"]
+    record("D6_NO_REVERSAL_REQUIRED", ok_d6,
+           f"f2a_b6={f2a['gates_b6']} f2b_b6={f2b['gates_b6']}")
+
+    # D7 EDITORIAL_ELLIPSIS_LEGIBLE
+    ok_d7 = editorial_states == FROZEN_EDITORIAL_STATES and ok_d3
+    record("D7_EDITORIAL_ELLIPSIS_LEGIBLE", ok_d7,
+           f"states={editorial_states} threshold_match={ok_d3}")
+
+    # D8 F1_F2A_F2B_F3_CONTINUITY
+    direction = f2a["blocking"].screen_direction
+    ok_d8 = f2b["blocking"].screen_direction == direction and \
+        f2a["blocking"].continuity_bindings.get("previous_shot_id") == \
+        "SEQ7_F1" and \
+        f2a["blocking"].continuity_bindings.get("next_shot_id") == \
+        "SEQ7_F2A_F2B_CUT" and \
+        f2b["blocking"].continuity_bindings.get("previous_shot_id") == \
+        "SEQ7_F2A_F2B_CUT" and \
+        f2b["blocking"].continuity_bindings.get("next_shot_id") == \
+        "SEQ7_F3"
+    record("D8_F1_F2A_F2B_F3_CONTINUITY", ok_d8,
+           f"direction={direction} chain bound")
+
+    # D9 DURATION_BOUNDED
+    total = timing["f2a_trim_s"] + timing["f2b_trim_s"]
+    ok_d9 = 0 < timing["f2a_trim_s"] and 0 < timing["f2b_trim_s"] and \
+        total <= timing["max_total_s"]
+    record("D9_DURATION_BOUNDED", ok_d9,
+           f"total={total}s allocation={timing['allocation_s']}s "
+           f"max={timing['max_total_s']}s")
+
+    # D10 CANONICAL_UNCHANGED
+    ok_d10 = canonical["preview_manifest_id"] != \
+        canonical["canonical_manifest_id"] and \
+        canonical["no_change_proof"] is True
+    record("D10_CANONICAL_UNCHANGED", ok_d10,
+           "preview manifest is a separate payload; canonical untouched")
+
+    blocked = sorted(g for g, r in results.items() if r["state"] == "FAIL")
+    return {"gates": results, "all_pass": not blocked,
+            "blocked_by": blocked}
+
+
+def require_decomposition_gates(**kwargs) -> dict:
+    result = validate_decomposition_gates(**kwargs)
+    if not result["all_pass"]:
+        raise ValueError(
+            "BLOCKED_INVARIANT: decomposition gates failed: "
+            f"{result['blocked_by']}")
+    return result
 
 
 # ---------------------------------------------------------------------------

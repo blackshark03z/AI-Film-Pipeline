@@ -324,7 +324,7 @@ def test_13_owner_decision_binds_exact_sha_and_states():
     assert selected.owner_decision_id == good.decision_id
     with pytest.raises(ValueError, match="EXACT candidate asset sha256"):
         m.apply_owner_decision(cand, owner_decision(SHA_C))
-    with pytest.raises(ValueError, match="requires a QUALITY_REVIEW_READY"):
+    with pytest.raises(ValueError, match="cannot apply to"):
         m.apply_owner_decision(selected, owner_decision(SHA_B))
     rejected = m.apply_owner_decision(ready_candidate(),
                                       owner_decision(decision="REJECT"))

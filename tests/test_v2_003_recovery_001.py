@@ -221,6 +221,8 @@ INGEST_TRACKED_ALLOWLIST = {
     " M tests/test_director_blocking_v2_003.py",
     " M tests/test_v2_003_recovery_001.py",
     " M tools/build_v2_003_previz.py",
+    " M src/film_pipeline/quality_repair_v2.py",
+    " M tests/test_quality_v2_repair_policy_001.py",
 }
 
 
