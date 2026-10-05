@@ -3,16 +3,18 @@
 **From:** AI-FILM-QUALITY-V2-003 (Director/Blocking authority freeze)
 **To:** V2-004 (F2 blocking live experiment, if the Director authority
 becomes available and the Owner authorizes it)
-**Status:** HANDOFF ONLY. No generation. No provider change.
-
-**CRITICAL PRECONDITION:** the dedicated Director model
-(`gpt-6-sol`, thinking_effort HIGH) was **UNAVAILABLE** in the worker
-runtime at V2-003 time (see `projects/quality_v2_003_director_blocking/
-director_model_binding_v2_003.json`). The F2 DirectorIntent /
-BlockingSpec design, CameraCoveragePlan, previz artifacts and the
-Director critique pass are therefore **BLOCKED_ON_DIRECTOR_MODEL**.
-No worker-authored substitute exists and none may be created without
-explicit Owner authorization (no silent downgrade).
+**Status:** HANDOFF. No generation. No provider change.
+**FROZEN_SUBSTITUTE_INGEST (2026-10-04):** the Owner explicitly
+authorized the Tech-Lead-chat plan as authoritative Director output
+(`DIRECTOR_SUBSTITUTE = GPT-5.6 Sol`, role DIRECTOR_SHOT_DESIGNER;
+receipt recorded in `projects/quality_v2_003_director_blocking/
+director_model_binding_v2_003.json` with an honest execution note — no
+runtime model call was made). The continuity binding was resolved
+MECHANICALLY, the F2 plan is FROZEN (B1–B10 ALL_PASS), the Owner
+timing invariant is embedded, and the previz artifacts exist. Original
+gpt-6-sol unavailability remains recorded upstream in the same
+binding file. History: the dedicated model (`gpt-6-sol`, HIGH) was
+UNAVAILABLE at V2-003 time and nothing was substituted silently then.
 
 ---
 
@@ -63,19 +65,23 @@ substitute or the model becomes available.
   critique-triggered change creates a NEW plan revision (previous
   revision preserved) and reruns all gates.
 
-## 5. Exact deliverable slots (BLOCKED_ON_DIRECTOR_MODEL)
+## 5. Exact deliverable slots — ALL FROZEN (substitute ingest)
 
-| Slot | Status |
-| --- | --- |
-| F2 DirectorIntent v1 | BLOCKED_ON_DIRECTOR_MODEL |
-| F2 BlockingSpec v1 (design completion: screen direction, waypoints, orientations, visibility requirements) | BLOCKED_ON_DIRECTOR_MODEL |
-| F2 CameraCoveragePlan v1 (position, framing, axis, regions; no orbit/reversal/ambiguous axial move) | BLOCKED_ON_DIRECTOR_MODEL |
-| F2 previz (F2_BLOCKING_TOPDOWN_V2_003.png, start/end schematics, previz mp4 — via `tools/build_v2_003_previz.py`) | BLOCKED_ON_DIRECTOR_MODEL |
-| Director critique pass (7 questions) | BLOCKED_ON_DIRECTOR_MODEL |
+| Slot | Status | Where |
+| --- | --- | --- |
+| F2 DirectorIntent v1 | FROZEN | `f2_director_plan_v2_003.json` (`director_intent`) |
+| F2 BlockingSpec v1 | FROZEN — screen direction `faces frame-left` resolved MECHANICALLY (F1=F2=F3, unique) | `f2_director_plan_v2_003.json` (`blocking_spec`) |
+| F2 CameraCoveragePlan v1 (locked WS profile, no orbit/reversal/axis-cross) | FROZEN | `f2_director_plan_v2_003.json` (`camera_coverage_plan`) |
+| F2 previz (4 artifacts, sha-manifested, watermark PLANNING EVIDENCE) | RENDERED | `previz_manifest_v2_003.json` |
+| Director critique (7 questions, advisory, no change triggered) | RECORDED | `f2_director_plan_v2_003.json` (`critique`) |
+| B1–B10 | ALL_PASS | `f2_director_plan_v2_003.json` (`gates_B1_B10`) |
+| Owner timing invariant (full body across threshold by ≤4.8 s; far-side readable inside 0–5.6 s) | EMBEDDED + PASS | waypoint anchors `cross_by_s=4.8`, `reach_by_s=5.6` + `validate_timing_invariant` |
 
-The previz renderer itself is PROVEN on a synthetic fixture
-(`tests/test_director_blocking_v2_003.py::test_25_…`). The moment a
-frozen F2 plan exists, the artifacts render deterministically.
+Semantic identity of the frozen plan: base = canonical SEQ7_F2
+ShotSpec bytes; director layer = DI/BS/CC ids; identity
+`5fa2b3ed75fbbafa…` (full value in the plan JSON). Any change to
+blocking or camera produces a DIFFERENT identity; identical director
+semantics reproduce it deterministically.
 
 ## 6. Max mutation budget (for the future live experiment)
 

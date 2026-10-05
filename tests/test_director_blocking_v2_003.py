@@ -385,24 +385,50 @@ def test_20_compiler_respects_authority():
 
 # --- Director model custody (P1) ---------------------------------------------
 
-def test_21_director_model_unavailable_recorded():
+def test_21_director_model_receipt_chain():
     binding = json.loads((PKG / "director_model_binding_v2_003.json")
                          .read_text(encoding="utf-8"))
     receipt = binding["availability_receipt"]
+    # V2-003 original gate: exact gpt-6-sol HIGH was unavailable
     assert receipt["requested_model"] == "gpt-6-sol"
     assert receipt["requested_thinking_effort"] == "HIGH"
     assert receipt["exact_model_available"] is False
     assert receipt["result"] == "DIRECTOR_MODEL_UNAVAILABLE"
-    assert binding["director_work_state"] == "BLOCKED_ON_DIRECTOR_MODEL"
-    assert binding["binding"]["substitution_policy"].startswith("No silent")
+    # Owner substitute authorization (Tech Lead chat ingest) is recorded
+    # verbatim with an honest execution note
+    auth = binding["substitute_authorization"]
+    assert auth["provider"] == "OpenAI"
+    assert auth["model"] == "GPT-5.6 Sol"
+    assert auth["role"] == "DIRECTOR_SHOT_DESIGNER"
+    assert auth["authorization_source"] == "Owner explicit authorization " \
+        "in Tech Lead chat"
+    assert "no runtime model call was made" in auth["execution_note"]
+    assert auth["redesign_allowed"] is False
+    assert binding["director_work_state"] == "AUTHORIZED_SUBSTITUTE_FROZEN"
 
 
-def test_22_no_f2_director_plan_authored_by_worker():
-    """Without the Director model, no F2 director artifacts may exist:
-    that would be a silent worker substitution of the Director role."""
-    f2_plans = [p for p in PKG.glob("*F2*")
-                if p.suffix in {".json", ".png", ".mp4"}]
-    assert f2_plans == [], f2_plans
+def test_22_f2_artifacts_require_owner_substitute_authorization():
+    """V2-003 refused any worker-authored F2 plan. The Owner has since
+    explicitly authorized the Tech-Lead-chat plan as Director output
+    (DIRECTOR_SUBSTITUTE ingest), so F2 artifacts may exist ONLY under
+    that recorded authorization — never without it."""
+    binding = json.loads((PKG / "director_model_binding_v2_003.json")
+                         .read_text(encoding="utf-8"))
+    auth = binding.get("substitute_authorization") or {}
+    authorized = (auth.get("model") == "GPT-5.6 Sol"
+                  and auth.get("authorization_source", "").startswith(
+                      "Owner explicit authorization"))
+    f2_artifacts = [p.name for p in PKG.glob("*F2*")]
+    if authorized:
+        # the frozen plan + previz must exist and carry the frozen gate
+        # results
+        assert "f2_director_plan_v2_003.json" in f2_artifacts
+        plan = json.loads((PKG / "f2_director_plan_v2_003.json")
+                          .read_text(encoding="utf-8"))
+        assert plan["substitute_authorization"] == auth
+        assert plan["gates_B1_B10"]["all_pass"] is True
+    else:
+        assert f2_artifacts == []
 
 
 def test_23_v2_002_reject_all_custody():

@@ -86,6 +86,22 @@
               },
               "is_crossing": {
                 "type": "boolean"
+              },
+              "cross_by_s": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0,
+                "description": "Owner timing invariant: full body crossed the threshold by this time (s)"
+              },
+              "reach_by_s": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0,
+                "description": "Owner timing invariant: end spatial state readable by this time (s)"
               }
             }
           }

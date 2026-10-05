@@ -131,6 +131,12 @@ class Waypoint(ContractModel):
     zone: str = Field(min_length=1)
     note: str = ""
     is_crossing: bool = False
+    # Owner timing invariant (V2-003 substitute ingest): the crossing
+    # deadline and the end-read deadline inside the canonical usable
+    # window. Optional fields; required by validate_timing_invariant
+    # for traversal plans.
+    cross_by_s: float | None = Field(default=None, ge=0)
+    reach_by_s: float | None = Field(default=None, ge=0)
 
 
 class TravelPath(ContractModel):
@@ -396,6 +402,36 @@ def require_director_gates(intent: DirectorIntent, blocking: BlockingSpec,
             "BLOCKED_INVARIANT: director gates failed: "
             f"{result['blocked_by']}")
     return result
+
+
+def validate_timing_invariant(blocking: BlockingSpec, *,
+                              usable_window_s: float = 5.6,
+                              cross_deadline_s: float = 4.8) -> dict:
+    """Owner timing invariant (V2-003 substitute ingest): the full body
+    must clearly cross the gate threshold by <= cross_deadline_s and the
+    far-side state must already be readable inside the canonical usable
+    window. Deterministic; traversal plans must carry the anchors."""
+    waypoints = blocking.travel_path.ordered_waypoints
+    crossing = [w for w in waypoints if w.is_crossing]
+    final = waypoints[-1] if waypoints else None
+    checks = {}
+    checks["crossing_anchored"] = bool(crossing) and \
+        crossing[0].cross_by_s is not None
+    checks["cross_within_deadline"] = checks["crossing_anchored"] and \
+        crossing[0].cross_by_s <= cross_deadline_s
+    checks["end_read_anchored"] = final is not None and \
+        final.reach_by_s is not None
+    checks["end_read_within_window"] = checks["end_read_anchored"] and \
+        final.reach_by_s <= usable_window_s
+    checks["deadline_inside_window"] = cross_deadline_s < usable_window_s
+    ok = all(checks.values())
+    return {"invariant": "F2_TIMING_INVARIANT_V2_003",
+            "usable_window_s": usable_window_s,
+            "cross_deadline_s": cross_deadline_s,
+            "cross_by_s": crossing[0].cross_by_s if crossing else None,
+            "reach_by_s": final.reach_by_s if final else None,
+            "checks": checks,
+            "state": "PASS" if ok else "FAIL"}
 
 
 # ---------------------------------------------------------------------------

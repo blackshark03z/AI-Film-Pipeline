@@ -159,17 +159,19 @@ def render_schematic(blocking: dict, out: Path, title: str,
 def main() -> int:
     spec_path, out_dir = Path(sys.argv[1]), Path(sys.argv[2])
     title = sys.argv[3] if len(sys.argv) > 3 else "BLOCKING PREVIZ"
+    prefix = sys.argv[4] if len(sys.argv) > 4 else ""
     blocking = json.loads(spec_path.read_text(encoding="utf-8"))
     out_dir.mkdir(parents=True, exist_ok=True)
-    topdown = render_topdown(blocking, out_dir / "BLOCKING_TOPDOWN.png",
+    topdown = render_topdown(blocking,
+                             out_dir / f"{prefix}BLOCKING_TOPDOWN.png",
                              title)
-    start = render_schematic(blocking,
-                             out_dir / "START_FRAME_SCHEMATIC.png", title,
-                             "START")
-    end = render_schematic(blocking,
-                           out_dir / "END_FRAME_SCHEMATIC.png", title,
-                           "END")
-    mp4 = out_dir / "BLOCKING_PREVIZ.mp4"
+    start = render_schematic(
+        blocking, out_dir / f"{prefix}START_FRAME_SCHEMATIC.png", title,
+        "START")
+    end = render_schematic(
+        blocking, out_dir / f"{prefix}END_FRAME_SCHEMATIC.png", title,
+        "END")
+    mp4 = out_dir / f"{prefix}BLOCKING_PREVIZ.mp4"
     try:
         subprocess.run(
             ["ffmpeg", "-y", "-v", "error",

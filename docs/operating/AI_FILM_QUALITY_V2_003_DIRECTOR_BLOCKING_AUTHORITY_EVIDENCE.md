@@ -198,3 +198,61 @@ READY_FOR_LIVE_TEST — the plan itself requires the Director model) ·
 VIDEO_GENERATION = 0 · CANONICAL_MUTATION = 0 ·
 NEXT = V2_004_F2_BLOCKING_EXPERIMENT (after the model gate resolves).
 PACKAGE_003_FINAL_HEAD_SHA is returned in the final worker report.
+
+## 16. V2-003 DIRECTOR SUBSTITUTE INGEST (Owner-authorized amendment)
+
+Owner authorization (Tech Lead chat, 2026-10-04):
+`DIRECTOR_SUBSTITUTE = GPT-5.6 Sol`, role DIRECTOR_SHOT_DESIGNER; the
+Tech-Lead-chat plan is used as authoritative Director output — NOT
+redesigned. Receipt recorded verbatim in
+`director_model_binding_v2_003.json` (`substitute_authorization`) with
+an honest execution note: no runtime model call was made; the authority
+transfer is the Owner's explicit chat authorization. The original
+gpt-6-sol UNAVAILABLE receipt stays recorded in the same file.
+
+- **Continuity binding resolved MECHANICALLY** (no guess):
+  `screen-direction-resolution-v1` — SEQ7_F1 / SEQ7_F2 / SEQ7_F3 all
+  state `faces frame-left` (unique, non-conflicting); corroborated by
+  the F1 last-frame reference binding and the F3 opening profile.
+  Bound into BlockingSpec + CameraCoveragePlan.
+- **F2 plan FROZEN** (`f2_director_plan_v2_003.json`): DirectorIntent
+  `DI-…`, BlockingSpec `BS-…`, CameraCoveragePlan `CC-…` exactly as
+  supplied in chat + the resolved direction. **B1–B10 = ALL_PASS**
+  against the neighbor authority directions.
+- **Owner timing invariant** embedded and PASS: crossing waypoint
+  `cross_by_s = 4.8` (full body across CENTER_GATE_OPENING by ≤4.8 s),
+  final waypoint `reach_by_s = 5.6` (far-side readable inside the
+  canonical 0–5.6 s window); deterministic validator
+  `validate_timing_invariant` (failures proven: 4.9s cross, 5.7s end,
+  missing anchors).
+- **Semantic identity binding**: base = canonical SEQ7_F2 ShotSpec
+  bytes; director layer DI/BS/CC ids; generation identity
+  `5fa2b3ed75fbbafa…` (full 64-hex in the plan JSON);
+  `v1_identity_untouched = true`.
+- **Compiler refusal/conformance**: the V2-003 suite
+  (`test_19`/`test_20` + recovery RC-012/013/014) re-proven —
+  REFUSE_COMPILE on missing authorities, forbidden rock interaction,
+  missing end read.
+- **Previz (deterministic, sha-manifested,
+  `previz_manifest_v2_003.json`)**:
+  `projects/quality_v2_003_director_blocking/F2_BLOCKING_TOPDOWN_V2_003.png`
+  · `F2_START_FRAME_SCHEMATIC.png` · `F2_END_FRAME_SCHEMATIC.png` ·
+  `F2_BLOCKING_PREVIZ_V2_003.mp4` — byte-identical re-render proven
+  (same title, same spec).
+- **Critique pass**: ONE advisory critique recorded (7 frozen
+  questions, answered from gate evidence; `change_triggered = false`,
+  revision stays 1).
+- **Handoff updated**: `V2_004_F2_BLOCKING_EXPERIMENT_HANDOFF.md`
+  slots now FROZEN with paths; budget 2 / route unchanged / 0 uploads
+  / candidate frame A/B / Owner questions unchanged.
+- Guards updated for the new authority state WITHOUT weakening them:
+  F2 artifacts exist ONLY under the recorded Owner substitute
+  authorization (RC-025/026, test_22); previz mp4 is the only mp4
+  allowed in the package (planning evidence, never a render);
+  tracked-file modifications are allowlisted to exactly this ingest's
+  files.
+- Invariants: video generation 0 · Flow submit 0 · upload 0 ·
+  canonical mutation 0 · rock interaction FORBIDDEN COMPLETELY.
+- Verification: **1139 tests passed** (918 V1 + 140 V2-001 + 26 V2-002
+  + 55 V2-003 incl. 10 ingest tests); compileall clean;
+  `git diff --check` clean; SoT manifest 30/30.
