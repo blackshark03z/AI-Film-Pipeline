@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TRAVERSAL_GEOMETRY_SPEC v1 (QUALITY-V2-009)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "traversal_id",
+    "shot_scope",
+    "entry_region",
+    "threshold_region",
+    "exit_region",
+    "barrier_extent",
+    "passage_axis",
+    "travel_direction",
+    "bypass_visibility",
+    "shelter_affordance",
+    "world_connection",
+    "wind_channel",
+    "camera_proof_requirements",
+    "forbidden_geography",
+    "authority_sources",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "traversal-geometry-spec-v1"
+    },
+    "traversal_id": {
+      "type": "string",
+      "pattern": "^TG-[a-f0-9]{16}$"
+    },
+    "shot_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entry_region": {
+      "type": "string",
+      "minLength": 1
+    },
+    "threshold_region": {
+      "type": "string",
+      "minLength": 1
+    },
+    "exit_region": {
+      "type": "string",
+      "minLength": 1
+    },
+    "barrier_extent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "passage_axis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "travel_direction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "bypass_visibility": {
+      "enum": [
+        "NONE_IN_FRAME",
+        "PARTIAL",
+        "OPEN"
+      ]
+    },
+    "shelter_affordance": {
+      "enum": [
+        "NONE",
+        "PARTIAL",
+        "OPEN"
+      ]
+    },
+    "world_connection": {
+      "type": "string",
+      "minLength": 1
+    },
+    "wind_channel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "camera_proof_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "forbidden_geography": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "authority_sources": {
+      "type": "object",
+      "minProperties": 4
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
