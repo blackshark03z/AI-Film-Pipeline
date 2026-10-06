@@ -1,0 +1,154 @@
+{
+ "name": "release_request_m2",
+ "url": "https://www.dola.com/chat/completion?aid=495671&device_id=7688563307494180357&device_platform=web&doubao_device_platform=web&doubao_pc_version=3.39.1fp=REDACTED&language=ja&pc_version=3.39.1&pkg_type=release_version&real_aid=495671&region=VN&samantha_web=1&sys_region=VN&tea_uuid=7693345910118712837&tz_name=Asia%2FTokyo&use-olympus-account=1&version_code=20800&web_id=7693345910118712837&web_platform=browser&web_tab_id=2c6771cf-e4e2-4f2c-a79d-4908ae90b0d5msToken=REDACTEDa_bogus=REDACTED",
+ "query_params": {
+  "aid": "495671",
+  "device_id": "7688563307494180357",
+  "device_platform": "web",
+  "doubao_device_platform": "web",
+  "doubao_pc_version": "3.39.1",
+  "fp": "<REDACTED>",
+  "language": "ja",
+  "pc_version": "3.39.1",
+  "pkg_type": "release_version",
+  "real_aid": "495671",
+  "region": "VN",
+  "samantha_web": "1",
+  "sys_region": "VN",
+  "tea_uuid": "7693345910118712837",
+  "tz_name": "Asia%2FTokyo",
+  "use-olympus-account": "1",
+  "version_code": "20800",
+  "web_id": "7693345910118712837",
+  "web_platform": "browser",
+  "web_tab_id": "2c6771cf-e4e2-4f2c-a79d-4908ae90b0d5",
+  "msToken": "<REDACTED>",
+  "a_bogus": "<REDACTED>"
+ },
+ "body_structure": {
+  "client_meta": {
+   "conversation_id": "38417972940811793",
+   "bot_id": "7339470689562525703",
+   "last_section_id": "38417972940812049",
+   "last_message_index": 11,
+   "local_permissions": [
+    {
+     "permission_name": "ACCESS_COARSE_LOCATION",
+     "status": 3
+    },
+    {
+     "permission_name": "ACCESS_FINE_LOCATION",
+     "status": 3
+    },
+    {
+     "permission_name": "ACCESS_BACKGROUND_LOCATION",
+     "status": 3
+    }
+   ]
+  },
+  "messages": [
+   {
+    "local_message_id": "3b2f0010-c126-11f1-9f94-cd018bf80cfb",
+    "content_block": [
+     {
+      "block_type": 10000,
+      "content": {
+       "text_block": {
+        "text": "Turn the first lighthouse image into a short 5-second cinematic video with gentle waves and sunrise light movement",
+        "icon_url": "",
+        "icon_url_dark": "",
+        "summary": ""
+       },
+       "pc_event_block": ""
+      },
+      "block_id": "ed5be5b0-f814-4e47-9296-0e65be22b102",
+      "parent_id": "",
+      "meta_info": [],
+      "append_fields": []
+     }
+    ],
+    "message_status": 0
+   }
+  ],
+  "option": {
+   "send_message_scene": "",
+   "create_time_ms": 1791250537134,
+   "collect_id": "",
+   "is_audio": false,
+   "answer_with_suggest": false,
+   "agent_mode": 2,
+   "tts_switch": false,
+   "need_deep_think": 0,
+   "click_clear_context": false,
+   "from_suggest": false,
+   "is_regen": false,
+   "is_replace": false,
+   "is_from_click_option": false,
+   "is_from_click_softlink": false,
+   "disable_sse_cache": false,
+   "select_text_action": "",
+   "is_select_text": false,
+   "resend_for_regen": false,
+   "scene_type": 0,
+   "unique_key": "e06607dd-6917-45dd-91f7-5745e482c50d",
+   "start_seq": 0,
+   "need_create_conversation": false,
+   "regen_query_id": [],
+   "edit_query_id": [],
+   "regen_instruction": "",
+   "no_replace_for_regen": false,
+   "message_from": 0,
+   "shared_app_name": "",
+   "shared_app_id": "",
+   "sse_recv_event_options": {
+    "support_chunk_delta": true
+   },
+   "support_lazy_fetch_stream": true,
+   "is_ai_playground": false,
+   "is_old_user": false,
+   "general_task_param": {
+    "runtime_type": 0,
+    "agent_task_param": {},
+    "agent_task_param_change": {
+     "runtime_changed": false,
+     "device_changed": false,
+     "sandbox_auth_type_changed": false
+    },
+    "project_id": "",
+    "need_modify_conversation": false
+   },
+   "recovery_option": {
+    "is_recovery": false,
+    "req_create_time_sec": 1791250537,
+    "append_sse_event_scene": 0
+   },
+   "message_storage_type": 0,
+   "related_deleted_message_ids": {},
+   "connector_info_list": [],
+   "model_config": {
+    "model_item_key": "0",
+    "model_extra_params": {}
+   },
+   "aggregate_params": {
+    "mention_skill_list": "[]",
+    "mention_plugin_list": "[]",
+    "mention_ext": "[{}]",
+    "conversation_mode": "",
+    "mode_id": "",
+    "model_item_key": "0",
+    "agent_mode": "2",
+    "reasoning_effort": "",
+    "provider_id": ""
+   }
+  },
+  "user_context": [],
+  "ext": {
+   "agent_mode": "2",
+   "use_deep_think": "0",
+   "general_task_param": "{\"runtime_type\":0,\"agent_task_param\":{},\"agent_task_param_change\":{\"runtime_changed\":false,\"device_changed\":false,\"sandbox_auth_type_changed\":false},\"project_id\":\"\",\"need_modify_conversation\":false}",
+   "collection_id": "",
+   "is_finish": "1",
+   "commerce_credit_config_enable": "0"
+  }
+ }
+}
