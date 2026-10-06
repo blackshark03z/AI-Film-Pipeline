@@ -263,7 +263,7 @@ async def main() -> int:
             body = post_data.encode("utf-8")
             release_requests.append({
                 "request_id": rid,
-                "url": SIGNED_URL_QUERY_RE.sub(r"\1\2=REDACTED",
+                "url": SIGNED_URL_QUERY_RE.sub(r"\1=REDACTED",
                                                entry.get("url", "")),
                 "query_params": {k: ("<REDACTED>" if k in
                                      ("msToken", "a_bogus", "fp") else v)

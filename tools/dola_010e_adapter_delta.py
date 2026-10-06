@@ -90,9 +90,11 @@ class DolaBrowserAdapter010E(DolaBrowserAdapter010D):
                     pass
 
     async def wait_journal_state(self, state: str, timeout_s: int) -> bool:
+        from dola_010e_dispatch_journal import STATE_ORDER
         deadline = asyncio.get_event_loop().time() + timeout_s
         while asyncio.get_event_loop().time() < deadline:
-            if self._journal.state >= state or \
+            current = self._journal.state
+            if STATE_ORDER[current] >= STATE_ORDER[state] or \
                     (state == "RELEASE_OBSERVED" and
                      self._journal.has(NETWORK_RELEASE_OBSERVED)):
                 return True

@@ -122,7 +122,7 @@ async def fetch_post_bodies_for(capture: NetworkCapture, needle: str,
             body = post_data.encode("utf-8")
             found.append({
                 "request_id": request_id,
-                "url": SIGNED_URL_QUERY_RE.sub(r"\1\2=REDACTED",
+                "url": SIGNED_URL_QUERY_RE.sub(r"\1=REDACTED",
                                                entry.get("url", "")),
                 "body_sha256": hashlib.sha256(body).hexdigest(),
                 "body_len": len(body),
