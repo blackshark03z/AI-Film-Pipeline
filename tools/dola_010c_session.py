@@ -199,13 +199,14 @@ def load_cookie_from_story_auto() -> tuple[str, str] | None:
 class DolaSessionManager:
     """Owns the DOLA_RE_PROFILE browser runtime and its session state."""
 
-    def __init__(self) -> None:
+    def __init__(self, *, profile_dir: Path | None = None) -> None:
         self.state = NO_SESSION
         self._playwright = None
         self._context = None
         self._page = None
         self.session_meta: dict = {}
         self.cookie_source: str = ""
+        self._profile_dir = profile_dir  # None → DOLA_RE_PROFILE default
 
     # -- lifecycle ----------------------------------------------------------
 
@@ -224,7 +225,7 @@ class DolaSessionManager:
         self._playwright = await self._pw_cm.start()
         PROFILE.mkdir(parents=True, exist_ok=True)
         self._context = await self._playwright.chromium.launch_persistent_context(
-            str(PROFILE),
+            str(self._profile_dir or PROFILE),
             headless=headless,
             args=["--disable-blink-features=AutomationControlled",
                   "--no-first-run", "--no-default-browser-check"],
