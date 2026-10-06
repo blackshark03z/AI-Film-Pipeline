@@ -1,0 +1,7 @@
+{
+ "chat_ability": {
+  "ability_type": 17,
+  "ability_param": "{\"model\":\"seedance_v2.0\",\"duration\":10,\"input_box_content\":{\"user_input_content\":\"Generate a 5-second cinematic video, 16:9, locked camera. a swordsman in flowing white robes with a topknot and ribbon walks along a mountain road that visibly funnels toward a continuous rock ridge closing a narrow stone pass — the only walkable gap — with the mountain road funneling into the opening and continuing beyond it, grass on both sides bending in the wind A hard gust channels through the pass against him: his robes press flat against his body on the windward side and stream violently leeward, his hair and headband stream tangent to the wind, and he leans INTO the gust, center of gravity dropping, forcing every forward step against the wind with visible muscular effort. He commits into the choke point and the shot ends just inside the pass opening, committed forward, rock boundary on both lateral sides in the same frames, crossing not yet completed. The road is visible entering the pass. No sword drawn, no sheltering or bracing on the rock, no loitering, no freestanding decorative gate in an open field, no metal gate, no lightning.\",\"reply_message_format\":\"生成された動画：%s\"}}"
+ },
+ "option_note": "subtree of the real 010C F2A release body (video-mode default 10s)"
+}
