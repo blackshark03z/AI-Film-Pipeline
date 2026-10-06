@@ -144,3 +144,81 @@ Return to Tech Lead — do NOT start finishing:
 2. After `SEQ_CONTEXT_LOCK = GRANTED` → **V2-011W** (Dola Unwatermarked Asset Authority
    Qualification). Provider generation in 011W should be zero unless a truly unavoidable
    qualification mutation is separately authorized.
+
+---
+
+# RESUME (same slice, 2026-10-06 ~12:0x–14:5xZ) — F3R half
+
+Starting authority verified read-only (11/11 PASS: HEAD `7e97a74`, F1R sha/verdict, F1R→F2
+CUT_PASS, F2 sha + 134fr@24fps, F3R spec prompt-sha `4066ab6f…`, F1R slot LATCHED+RESOLVED,
+F3R 0/1, secret audit CLEAN).
+
+## Credit gate under the governance correction
+
+- The periodic message-inquiry plan was replaced per the Owner's governance correction: credit
+  inquiries that SEND a provider message are `ACCOUNT_STATE_QUERY_MUTATIONS` (separate ledger,
+  never "read-only"), minimum necessary.
+- Router probe (true read-only): ACCOUNT_A=0, ACCOUNT_C=0 (statements), ACCOUNT_B LOGIN_REQUIRED.
+- Chrome-profile route (Owner-authorized candidates khoikk/khoi43956/khoicaesarxxx/wanglinyy →
+  mapped via `profile.info_cache`, not directory numbers): Owner signed Dola in via
+  "Continue with Google" (Khởi Đặng219).
+- Exactly ONE credit inquiry was sent (`ACCOUNT_STATE_QUERY_MUTATION #1`) — the bot refused
+  (identical to the 010E inquiry: fresh accounts get no credit statement until the first
+  generation). The UI exposes no credit surface (account menu / video panel / settings URLs all
+  scanned). **Conclusion: pre-first-generation credit is NOT observable by any existing
+  mechanism.**
+- Owner explicitly authorized a structural dispatch on the fresh account, accepting the stated
+  risk (recorded in `V2_011D_F3R_CREDIT_GATE.json` verdict SUFFICIENT with basis
+  OWNER_STRUCTURAL_DISPATCH_AUTHORIZATION).
+
+## Session remediation (documented)
+
+- Captured-cookie route (real-Chrome session replayed inside patchright chromium) was
+  invalidated by ByteDance passport fingerprint binding — the V2-010B lesson confirmed at the
+  session layer (`has_sessionid: false` after replay).
+- Remedied by the Owner's NATIVE Google login INSIDE the ACCOUNT_D automation profile
+  (fingerprint-consistent; 32 cookies re-captured to the refreshed DPAPI blob; the runner then
+  authenticated immediately).
+- First dispatch attempt failed PRE-release (`USER_LOGIN_REQUIRED`) — boundary A =
+  SAFE_UNSPENT; no authority consumed; F3R stayed 0/1.
+
+## F3R release and provider refusal
+
+```
+MUTATION_RESERVED → DISPATCH_ARMED (5s chip, fingerprint frozen, capture active)
+→ NETWORK_RELEASE_OBSERVED 14:31Z (account binding immutable; release refined: duration=5, needle present)
+→ receipt not captured in 120s → OWNER_AMBIGUITY_GATE latched (one-way)
+```
+
+Read-only reconciliation (limit-10 poll per the Seedance 2.0 gotcha) resolved the external
+effect: **the provider REFUSED the frozen F3R prompt** —
+
+> 当社のポリシーに違反する可能性がある内容が入力されているため、動画を生成できません。修正してもう一度お試しください。
+
+The release was accepted and **billed 1 credit** (provider ack: 本日の残りは**3**動画クレジット —
+the fresh account's daily grant was 4, so the Owner's structural credit authorization was
+factually sound). **No asset exists.** The failure class is the provider CONTENT-POLICY filter on
+the MCU close-up wording (face/shoulders portrait with wind-whipped hair) — not credit, not
+session, not world.
+
+## Final state
+
+```
+STATUS              = STOPPED_EXPLICIT_PROVIDER_FAILURE (F3R refused after billing)
+MUTATIONS           = 2/2 (F1R consumed+ACCEPTED; F3R consumed — released, billed, refused)
+ACCOUNT_STATE_QUERY_MUTATIONS = 1 (bot refused; recorded separately)
+F1R                 = ACCEPTED (b879f215…, world-matched, 7/7 hard QC)
+F1R→F2              = CUT_PASS
+F2                  = LOCKED, sha re-verified unchanged
+F3R                 = RELEASED_BILLED_REFUSED_NO_ASSET (spec stays frozen)
+FULL_SEQUENCE_CONTEXT = NOT_PROVEN_F3R_PROVIDER_REFUSAL
+SEQ_CONTEXT_LOCK    = DENIED
+outputs/F1R_F2_F3R_SEQUENCE_PROOF.mp4 = NOT CREATED (F3R missing)
+```
+
+`NO retry` post-release is absolute: the ONE F3R mutation is spent. A successor slice (proposed
+**V2-012**) requires NEW Owner authorization: ONE generation with a policy-safe rephrase of the
+FROZEN F3R intent (same MCU/beat/world; reword to avoid the face-close-up + hair-whip trigger
+pattern), dispatched on a READY account — ACCOUNT_D now has **3 provider-visible credits** and a
+native session, making it the natural dispatch target. Then the unchanged resume workflow: hard
+QC → F2→F3R cut QC (IN ±12) → assembly → sequence QC → SEQ_CONTEXT_LOCK → V2-011W.

@@ -103,7 +103,7 @@ PULL_JS = """async ({conversationId}) => {
       uplink_body: {pull_singe_chain_uplink_body: {
         conversation_id: conversationId,
         anchor_index: Number.MAX_SAFE_INTEGER, conversation_type: 3,
-        direction: 1, limit: 20, ext: {}, filter: {index_list: []},
+        direction: 1, limit: 10, ext: {}, filter: {index_list: []},
         evaluate_ab_params: "", evaluate_common_params: ""}},
       sequence_id: crypto.randomUUID(), channel: 2, version: "1"})});
   const data = await resp.json();
