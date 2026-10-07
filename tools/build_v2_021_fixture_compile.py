@@ -110,11 +110,13 @@ def truth_for(shot: dict, character: CharacterBible) -> ShotTruth:
     ]
     causality = ["constant wind moves the cloak fabric and the pale "
                  "grass throughout the shot"]
+    state_label = shot["character_state"].get("The Courier", "")
+    blocking = state_label if len(state_label) > 40 else ""
     return ShotTruth(
         subject=subject_by_size.get(size, subject_by_size["MEDIUM"]),
         wardrobe=character.signature_wardrobe,
         world=WORLD.location,
-        blocking=shot["character_state"].get("The Courier", ""),
+        blocking=blocking,
         camera=camera_by_size.get(size, camera_by_size["MEDIUM"]),
         motion=motion_by_function.get(shot["function"], "steady movement"),
         lighting=WORLD.lighting,

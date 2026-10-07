@@ -59,7 +59,8 @@ def compile_prompt(truth: ShotTruth, *, strategy: ReferenceStrategy,
     parts = [prefix]
     parts.append(f"{truth.world}")
     parts.append(f"{truth.subject}, {truth.wardrobe}.")
-    parts.append(f"{truth.camera} {truth.blocking}")
+    blocking = f" {truth.blocking}" if truth.blocking else ""
+    parts.append(f"{truth.camera}{blocking}")
     if truth.motion:
         parts.append(truth.motion)
     if truth.lighting:
