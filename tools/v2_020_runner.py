@@ -131,14 +131,19 @@ PULL_RAW_JS = """async ({conversationId}) => {
       }
     }
     rows.push({message_id: String(m.message_id),
-               create_time: m.create_time, text: text.slice(0, 400),
+               create_time: m.create_time, text: text.slice(0, 2000),
                content_raw: contentRaw, creations});
   }
   return rows;
 }"""
 
-REFUSAL_MARKERS = ("生成できません", "クレジット", "无法生成", "不能生成",
-                   "unable to generate", "cannot generate")
+# "クレジット" ALONE appears in normal ACK credit statements
+# ("本日の残りは2動画クレジットです") — only insufficient-credit or
+# generation-refused phrasings are refusals (V2-020 live lesson)
+REFUSAL_MARKERS = ("生成できません", "无法生成", "不能生成",
+                   "unable to generate", "cannot generate",
+                   "クレジットが足りません", "クレジットが不足",
+                   "残りは0", "クレジットが0")
 
 
 def utcnow() -> str:
@@ -192,8 +197,8 @@ def frame_metrics(frames_dir: Path) -> dict:
             gray = small.convert("L")
             pixels = list(gray.getdata())
             lumas.append(sum(pixels) / len(pixels))
-            hsv = small.convert("HSV")
-            s_values = list(hsv.getdata())[1::2][:8000]
+            hsv = small.convert("HSV").split()[1]
+            s_values = list(hsv.getdata())
             sats.append(sum(s_values) / len(s_values) / 255.0)
     mads = []
     for i in range(1, len(paths)):
@@ -219,8 +224,9 @@ def frame_metrics(frames_dir: Path) -> dict:
 def extract_frames(asset: Path, frames_dir: Path) -> int:
     frames_dir.mkdir(parents=True, exist_ok=True)
     subprocess.run(
-        ["ffmpeg", "-y", "-v", "error", "-i", str(asset), "-vsync", "0",
-         "-start_number", "0", str(frames_dir / "f_%05d.png")],
+        ["ffmpeg", "-y", "-v", "error", "-i", str(asset),
+         "-fps_mode", "passthrough", "-start_number", "0",
+         str(frames_dir / "f_%05d.png")],
         capture_output=True)
     return len(list(frames_dir.glob("f_*.png")))
 
@@ -384,7 +390,7 @@ async def dispatch_and_acquire(
         await adapter.select_duration(shot_spec.duration_class)
         gate = await adapter.verify_duration_pre_dispatch(
             shot_spec.duration_class)
-        page.screenshot(path=str(screenshots / f"{shot_tag}_01_armed.png"))
+        await page.screenshot(path=str(screenshots / f"{shot_tag}_01_armed.png"))
 
         fingerprint = hashlib.sha256(json.dumps(
             {"prompt_sha256": prompt_sha,

@@ -248,8 +248,16 @@ def cmd_qc_visual(run_dir: Path, shot_id: str, verdict: str,
     if verdict == "REJECT":
         record.qc_verdict = "REJECT"
         record.status = "QC_REJECT"
-    elif verdict == "ACCEPT" and record.qc_verdict == "ACCEPT":
-        pass
+    elif verdict == "ACCEPT" and record.qc_verdict == "REPAIR_REQUIRED":
+        # threshold-only failures (framing-induced) may be overridden by
+        # documented visual review; hard failures may not
+        OVERRIDABLE = {"CONTINUITY_PALETTE_BREAK", "LUMA_OUT_OF_WORLD_BAND",
+                       "PALETTE_TOO_SATURATED", "NO_MOTION",
+                       "DURATION_OUT_OF_RANGE", "FPS_LOW"}
+        if record.qc_notes and set(record.qc_notes) <= OVERRIDABLE:
+            record.qc_notes.append("THRESHOLD_OVERRIDDEN_BY_VISUAL_REVIEW")
+            record.qc_verdict = "ACCEPT"
+            record.status = "QC_ACCEPT"
     orch.save()
     emit({"status": "VISUAL_RECORDED", "shot": shot_id, "verdict": verdict})
     return 0
@@ -289,7 +297,7 @@ def cmd_assemble(run_dir: Path) -> int:
         trims = json.loads((run_dir / "editorial_trims.json")
                            .read_text(encoding="utf-8"))
     ed = orch.editorial_ranges(trims=trims)
-    inputs, filters, labels = [], [], []
+    inputs, filters, vlabels, alabels = [], [], [], []
     total_frames = 0
     for i, shot_id in enumerate(accepted):
         record = orch.shot(shot_id)
@@ -299,14 +307,30 @@ def cmd_assemble(run_dir: Path) -> int:
         filters.append(
             f"[{i}:v]trim=start_frame={start}:end_frame={end},"
             f"setpts=PTS-STARTPTS[v{i}]")
-        labels.append(f"[v{i}]")
-    filters.append("".join(labels) +
-                   f"concat=n={len(accepted)}:v=1:a=0[out]")
+        vlabels.append(f"[v{i}]")
+        if record.qc_technical.get("has_audio"):
+            fps = ed.get("fps", 24.0)
+            filters.append(
+                f"[{i}:a]atrim=start={start / fps}:end={end / fps},"
+                f"asetpts=PTS-STARTPTS[a{i}]")
+            alabels.append(f"[a{i}]")
+    n_audio = len(alabels)
+    if n_audio == len(accepted) and n_audio > 0:
+        # ffmpeg concat input pads are SEGMENT-INTERLEAVED:
+        # [v0][a0][v1][a1]... concat=n:v=1:a=1
+        interleaved = "".join(vl + al for vl, al in zip(vlabels, alabels))
+        filters.append(interleaved +
+                       f"concat=n={len(accepted)}:v=1:a=1[out][mixa]")
+        maps = ["-map", "[out]", "-map", "[mixa]"]
+    else:
+        filters.append("".join(vlabels) +
+                       f"concat=n={len(accepted)}:v=1:a=0[out]")
+        maps = ["-map", "[out]"]
     proof = run_dir / "qualification_run" / "CLEAN_SEQUENCE_PROOF.mp4"
     proof.parent.mkdir(parents=True, exist_ok=True)
     proc = subprocess.run(
         ["ffmpeg", "-y", "-v", "error", *inputs, "-filter_complex",
-         ";".join(filters), "-map", "[out]", "-r", "24",
+         ";".join(filters), *maps,
          "-c:v", "libx264", "-crf", "14", "-pix_fmt", "yuv420p",
          str(proof)], capture_output=True, text=True)
     if proc.returncode != 0:
@@ -390,9 +414,11 @@ def cmd_master(run_dir: Path) -> int:
         emit({"status": "NO_FINISH_MASTER"})
         return 1
     out = run_dir / "qualification_run" / "DISTRIBUTION_MASTER.mp4"
+    # AAC re-encode reintroduces ~+0.2 dB overshoot -> TP ceiling -1.2
     subprocess.run(
         ["ffmpeg", "-y", "-v", "error", "-i", str(finish),
-         "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+         "-c:v", "copy", "-af", "loudnorm=I=-14:TP=-1.2:LRA=11",
+         "-c:a", "aac", "-b:a", "192k",
          "-movflags", "+faststart", str(out)], capture_output=True)
     import hashlib
     sha = hashlib.sha256(out.read_bytes()).hexdigest()

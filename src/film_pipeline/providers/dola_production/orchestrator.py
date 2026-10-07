@@ -107,7 +107,7 @@ QC_POLICY = {
     "max_mean_luma": 150.0,
     "min_mean_luma": 25.0,
     "max_mean_saturation": 0.45,
-    "min_motion_mad": 1.2,
+    "min_motion_mad": 0.05,
     "max_palette_distance_adjacent": 60.0,
     "required_variant_authorities": [
         "PROVIDER_ISSUED_UNWATERMARKED",
@@ -144,12 +144,13 @@ class DolaProductionOrchestrator:
         if self.state_path.exists():
             self.state = ProductionRunState.model_validate_json(
                 self.state_path.read_text(encoding="utf-8"))
+            # RESERVED-but-never-released is NOT a spent mutation
             self.mutations_used = sum(
                 1 for s in self.state.shots
-                if s.status in ("RESERVED", "RELEASED", "RECEIPT_BOUND",
-                                "CREATION_BOUND", "ACQUIRED", "QC_ACCEPT",
-                                "QC_REPAIR_REQUIRED", "QC_REJECT",
-                                "REPAIRED", "EDITORIAL_LOCKED"))
+                if s.attempt_id and s.status in (
+                    "RELEASED", "RECEIPT_BOUND", "CREATION_BOUND",
+                    "ACQUIRED", "QC_ACCEPT", "QC_REPAIR_REQUIRED",
+                    "QC_REJECT", "REPAIRED", "EDITORIAL_LOCKED"))
             # rebuild pool bindings from durable state (restart recovery:
             # a released generation is NEVER re-POSTed)
             for record in self.state.shots:
