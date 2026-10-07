@@ -95,6 +95,11 @@ def truth_for(shot: dict, character: CharacterBible) -> ShotTruth:
         "REVEAL": "She holds an opened folded letter in both gloved "
                   "hands, an aged blank sheet with a dark wax seal, and "
                   "her face turns slowly toward it in profile.",
+        "REVEAL_AFTERMATH": "She holds an opened folded letter in both "
+                            "gloved hands, an aged blank sheet with a "
+                            "dark wax seal, then slowly lifts her gaze "
+                            "from the letter to scan the entirely empty "
+                            "mountain pass, only wind moving the grass.",
         "AFTERMATH": "She stands frozen, head lifting slowly from the "
                      "letter to scan the entirely empty pass.",
         "RESOLVE": "She slips the letter inside her cloak and strides "
@@ -126,6 +131,7 @@ def truth_for(shot: dict, character: CharacterBible) -> ShotTruth:
 
 
 def main() -> int:
+    variant = sys.argv[1] if len(sys.argv) > 1 else "6"
     compiler = NarrativeCompiler()
     compiled = compiler.compile(source_text=PROSE, source_kind="prose",
                                 cast=CAST,
@@ -136,10 +142,28 @@ def main() -> int:
         compiled, cast=CAST, locations=["cold mountain pass"],
         objects=["abandoned pack", "second letter bearing her name"])
 
+    beats = compiled["beats"]
+    if variant == "5":
+        # minimum-set variant: AFTERMATH folds into the REVEAL shot as
+        # one continuous camera action (letter -> lifting gaze to the
+        # empty pass); story information is unchanged
+        merged = []
+        for beat in beats:
+            if beat.function == "AFTERMATH" and merged and                     merged[-1].function == "REVEAL":
+                merged[-1].event_ids.extend(beat.event_ids)
+                merged[-1].summary = (merged[-1].summary +
+                                      "; " + beat.summary)[:220]
+                continue
+            merged.append(beat)
+        beats = merged
+        for beat in beats:
+            if beat.function == "REVEAL" and len(beat.event_ids) == 2:
+                beat.function = "REVEAL"  # grammar key stays; motion
+                # override happens in truth_for via event count
     director = DirectorCompiler(screen_direction="left-to-right",
                                 light_direction=WORLD.lighting)
     shot_graph, intents = director.design(
-        compiled["beats"], world_state=WORLD, cast=CAST)
+        beats, world_state=WORLD, cast=CAST)
 
     strategy = ReferenceStrategy(supports_video_ref=False,
                                  mode="TEXT_ANCHOR_ONLY",
@@ -147,7 +171,10 @@ def main() -> int:
                                           + bible.identity_fingerprint()])
     plans = {}
     for node in shot_graph.nodes:
-        truth = truth_for(node.model_dump(), bible)
+        node_dict = node.model_dump()
+        if variant == "5" and node.function == "REVEAL" and                 len(node.story_node_ids) == 2:
+            node_dict["function"] = "REVEAL_AFTERMATH"
+        truth = truth_for(node_dict, bible)
         plans[node.shot_id] = compile_prompt(
             truth, strategy=strategy).model_dump()
 
@@ -184,8 +211,11 @@ def main() -> int:
         "computed_at": datetime.now(timezone.utc).isoformat(),
         "planned_shots": n_shots,
         "base_mutations": n_shots,
-        "repair_reserve": 2 if n_shots <= 6 else 1,
-        "total_budget": n_shots + (2 if n_shots <= 6 else 1),
+        "repair_reserve": 2 if n_shots >= 6 else 1,
+        "total_budget": n_shots + (2 if n_shots >= 6 else 1),
+        "rationale": "6-shot full grammar carries 2 reserves; the "
+                     "5-shot minimum set halves continuity exposure "
+                     "and runs with 1 reserve",
         "rule": "design-then-spend; no exploratory prompt debugging; "
                 "STOP BEFORE FIRST MUTATION if the known authorized pool "
                 "cannot cover this budget",
@@ -214,7 +244,8 @@ def main() -> int:
         "reference_strategy": strategy.model_dump(),
         "mutation_budget": budget,
     }
-    dst = PKG / "V2_021_FIXTURE_COMPILATION.json"
+    dst = PKG / ("V2_021_FIXTURE_COMPILATION.json" if variant == "6"
+                 else "V2_021_FIXTURE_COMPILATION_5SHOT.json")
     dst.write_text(json.dumps(doc, indent=1, ensure_ascii=False),
                    encoding="utf-8")
     print(json.dumps({

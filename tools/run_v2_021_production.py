@@ -38,10 +38,27 @@ from v2_020_runner import (RunnerEvents, dispatch_and_acquire, emit,
 
 RUN20 = ROOT / "projects/quality_v2_020_autonomous_production"
 PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
-COMP = json.loads((PKG / "V2_021_FIXTURE_COMPILATION.json")
-                  .read_text(encoding="utf-8"))
-POOL_ACCOUNTS = ["ACCOUNT_D", "ACCOUNT_A", "ACCOUNT_C", "ACCOUNT_B"]
+COMPS = {
+    "6": PKG / "V2_021_FIXTURE_COMPILATION.json",
+    "5": PKG / "V2_021_FIXTURE_COMPILATION_5SHOT.json",
+}
+POOL_ACCOUNTS = ["ACCOUNT_D", "ACCOUNT_A", "ACCOUNT_C", "ACCOUNT_B",
+                 "ACCOUNT_E", "ACCOUNT_F"]
+import os as _os
+
+COMP = json.loads((_os.environ.get("V2_021_COMPILATION") or
+                   COMPS["6"]).read_text(encoding="utf-8"))
 BUDGET = COMP["mutation_budget"]
+
+
+def _comp_for(available: int) -> tuple[Path, dict] | None:
+    """Mutation-policy variant selection: full grammar when the pool can
+    carry it; the 5-shot minimum set (1 reserve) when it cannot."""
+    for key in ("6", "5"):
+        comp = json.loads(COMPS[key].read_text(encoding="utf-8"))
+        if available >= comp["mutation_budget"]["total_budget"]:
+            return COMPS[key], comp
+    return None
 
 
 def _state_path(run_dir: Path) -> Path:
@@ -86,17 +103,32 @@ def cmd_gate(run_dir: Path) -> int:
         if result.get("session_state") == "SESSION_VALID" and \
                 result.get("known_credit_state"):
             total_available += result["known_credit_state"]
-    budget = BUDGET["total_budget"]
-    decision = ("DISPATCH_AUTHORIZED"
-                if total_available >= budget
-                else "STOP_BEFORE_FIRST_MUTATION")
-    state["gate"] = {
-        "probed_at": json.dumps(matrix),
-        "total_available_credits": total_available,
-        "computed_budget": budget,
-        "decision": decision,
-        "rule": BUDGET["rule"],
-    }
+    chosen = _comp_for(total_available)
+    if chosen is None:
+        budget = BUDGET["total_budget"]
+        decision = "STOP_BEFORE_FIRST_MUTATION"
+        state["gate"] = {
+            "probed_at": json.dumps(matrix),
+            "total_available_credits": total_available,
+            "computed_budget": budget,
+            "decision": decision,
+            "rule": BUDGET["rule"],
+        }
+    else:
+        comp_path, comp = chosen
+        budget = comp["mutation_budget"]["total_budget"]
+        decision = "DISPATCH_AUTHORIZED"
+        state["compilation_path"] = str(comp_path)
+        state["planned_shots"] = comp["mutation_budget"]["planned_shots"]
+        state["gate"] = {
+            "probed_at": json.dumps(matrix),
+            "total_available_credits": total_available,
+            "computed_budget": budget,
+            "compilation": str(comp_path),
+            "variant_shots": comp["mutation_budget"]["planned_shots"],
+            "decision": decision,
+            "rule": comp["mutation_budget"]["rule"],
+        }
     _save(run_dir, state)
     (run_dir / "V2_021_POOL_GATE.json").write_text(
         json.dumps({"budget": budget, "pool": matrix,
@@ -133,6 +165,7 @@ def _pick_account(run_dir: Path, state: dict) -> str | None:
 
 
 def cmd_auto(run_dir: Path) -> int:
+    global COMP, BUDGET
     state = _load_state(run_dir)
     if state["gate"] is None:
         code = cmd_gate(run_dir)
@@ -141,6 +174,14 @@ def cmd_auto(run_dir: Path) -> int:
             emit({"status": "STOPPED_BEFORE_FIRST_MUTATION",
                   "see": "V2_021_POOL_GATE.json"})
             return 2
+    if state["gate"].get("decision") != "DISPATCH_AUTHORIZED":
+        emit({"status": "STOPPED_BEFORE_FIRST_MUTATION",
+              "gate": state["gate"].get("decision")})
+        return 2
+    if state.get("compilation_path"):
+        COMP = json.loads(Path(state["compilation_path"])
+                          .read_text(encoding="utf-8"))
+        BUDGET = COMP["mutation_budget"]
     engine = ContinuityEngine()
     learning = LearningLoop()
     events = RunnerEvents(run_dir / "provider_events.jsonl")
