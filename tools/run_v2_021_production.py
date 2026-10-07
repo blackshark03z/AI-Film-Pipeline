@@ -187,8 +187,11 @@ def cmd_gate(run_dir: Path) -> int:
 def _pick_account(run_dir: Path, state: dict) -> str | None:
     """Rotate pre-dispatch across SESSION_VALID accounts with credit,
     skipping accounts already bound to a completed shot this run."""
+    completed = {"RELEASED", "RECEIPT_BOUND", "CREATION_BOUND",
+                 "ACQUIRED", "ACQUIRED_AWAITING_VISUAL_QC", "QC_ACCEPT",
+                 "EDITORIAL_LOCKED"}
     used = {s.get("account") for s in state["shots"].values()
-            if s.get("account")}
+            if s.get("account") and s.get("status") in completed}
     candidates = []
     for alias in POOL_ACCOUNTS:
         if alias in used:
@@ -206,9 +209,14 @@ def _pick_account(run_dir: Path, state: dict) -> str | None:
             # stale_credit_overrides.json): the latest visible statement
             # predates a known later consumption on the same account
             credit = min(credit, int(override.get("effective_credit", 0)))
-        # known-credit slots first (highest credit), then fresh slots
-        # whose balance is only revealed by the first dispatch ACK
-        rank = (0, credit or 0) if credit else (1, 0)
+        # known credit>0 first, then fresh (balance revealed by first
+        # ACK), known-zero LAST (a dispatch there would refuse)
+        if credit:
+            rank = (0, credit)
+        elif credit is None:
+            rank = (1, 0)
+        else:
+            rank = (2, 0)
         candidates.append((rank[0], rank[1], alias))
     candidates.sort(reverse=True)
     return candidates[0][2] if candidates else None
@@ -224,7 +232,8 @@ def cmd_auto(run_dir: Path) -> int:
             emit({"status": "STOPPED_BEFORE_FIRST_MUTATION",
                   "see": "V2_021_POOL_GATE.json"})
             return 2
-    if state["gate"].get("decision") != "DISPATCH_AUTHORIZED":
+    if state["gate"].get("decision") not in (
+            "DISPATCH_AUTHORIZED", "DISPATCH_AUTHORIZED_EXPECTED"):
         emit({"status": "STOPPED_BEFORE_FIRST_MUTATION",
               "gate": state["gate"].get("decision")})
         return 2
@@ -290,11 +299,18 @@ def cmd_auto(run_dir: Path) -> int:
                            "creation_ids": info["creation_ids"]})
             _save(run_dir, state)
 
+        identities = {}
+        ident_path = PKG / "slot_identities.json"
+        if ident_path.exists():
+            identities = json.loads(
+                ident_path.read_text(encoding="utf-8"))
+        expected_nick = (identities.get(account) or {}).get("nickname")
         try:
             result = asyncio.run(dispatch_and_acquire(
                 shot_spec=transport_spec, account_alias=account,
                 run_dir=run_dir, shot_tag=sid, on_release=on_release,
-                on_creation=on_creation, events_sink=events))
+                on_creation=on_creation, events_sink=events,
+                expected_nickname=expected_nick))
         except RuntimeError as error:
             message = str(error)
             record["status"] = "FAILED"

@@ -140,6 +140,15 @@ PULL_RAW_JS = """async ({conversationId}) => {
 # "クレジット" ALONE appears in normal ACK credit statements
 # ("本日の残りは2動画クレジットです") — only insufficient-credit or
 # generation-refused phrasings are refusals (V2-020 live lesson)
+CONSENT_DISMISS_JS = """() => {
+  const buttons = Array.from(document.querySelectorAll(
+      'button, [role="button"], a'));
+  const hit = buttons.find(b => /同意する|同意|'
+      + 'Accept all|Accept|Agree|I agree/i.test((b.innerText || '').trim()));
+  if (hit) { hit.click(); return true; }
+  return false;
+}"""
+
 REFUSAL_MARKERS = ("生成できません", "无法生成", "不能生成",
                    "unable to generate", "cannot generate",
                    "クレジットが足りません", "クレジットが不足",
@@ -282,16 +291,45 @@ async def probe_account_readonly(alias: str) -> dict:
     manager = DolaSessionManager(profile_dir=ACCOUNT_PROFILES / alias)
     result = {"account_alias": alias, "probed_at": utcnow()}
     try:
-        page = await manager.launch_browser()
-        await page.goto("https://www.dola.com/chat", timeout=60000,
-                        wait_until="domcontentloaded")
+        page = None
+        for attempt in (1, 2):
+            try:
+                page = await manager.launch_browser()
+                await page.goto("https://www.dola.com/chat",
+                                timeout=60000,
+                                wait_until="domcontentloaded")
+                break
+            except Exception as error:
+                if attempt == 2:
+                    raise
+                await asyncio.sleep(4)
+        try:
+            await page.evaluate(CONSENT_DISMISS_JS)
+        except Exception:
+            pass
         for _ in range(15):
             state = await page.evaluate(LOGIN_CHECK_JS)
             if state.get("composer") and not state.get("logged_out"):
                 break
             await page.wait_for_timeout(2000)
         state = await page.evaluate(LOGIN_CHECK_JS)
-        if not (state.get("composer") and not state.get("logged_out")):
+        try:
+            body = await page.evaluate(
+                "() => (document.body && document.body.innerText) || ''")
+        except Exception:
+            body = ""
+        identity_map = {}
+        ident_path = ROOT / ("projects/quality_v2_021_narrative_compiler/"
+                             "slot_identities.json")
+        if ident_path.exists():
+            identity_map = json.loads(
+                ident_path.read_text(encoding="utf-8"))
+        expected_nick = (identity_map.get(alias) or {}).get("nickname")
+        logged_in = (state.get("composer")
+                     and not state.get("logged_out")) or (
+            expected_nick and expected_nick in body and
+            state.get("composer"))
+        if not logged_in:
             result["session_state"] = "LOGIN_REQUIRED"
             return result
         result["session_state"] = "SESSION_VALID"
@@ -319,7 +357,8 @@ async def probe_account_readonly(alias: str) -> dict:
 async def dispatch_and_acquire(
         *, shot_spec, account_alias: str, run_dir: Path, shot_tag: str,
         on_release, on_creation, events_sink, expected_model: str =
-        "seedance_v2.0", poll_seconds: int = 1500) -> dict:
+        "seedance_v2.0", poll_seconds: int = 1500,
+        expected_nickname: str | None = None) -> dict:
     """The proven live dispatch flow, V2-020-wired. EXACTLY ONE mutation.
 
     Returns {conversation_id, creation_ids, asset_path, asset_sha256,
@@ -350,18 +389,60 @@ async def dispatch_and_acquire(
     screenshots = pkg / "screenshots"
     screenshots.mkdir(parents=True, exist_ok=True)
     try:
-        page = await manager.launch_browser()
-        await page.goto("https://www.dola.com/chat", timeout=60000,
-                        wait_until="domcontentloaded")
-        state = await page.evaluate(LOGIN_CHECK_JS)
+        page = None
+        for launch_attempt in (1, 2):
+            try:
+                page = await manager.launch_browser()
+                await page.goto("https://www.dola.com/chat",
+                                timeout=60000,
+                                wait_until="domcontentloaded")
+                try:
+                    await page.evaluate(CONSENT_DISMISS_JS)
+                except Exception:
+                    pass
+                state = await page.evaluate(LOGIN_CHECK_JS)
+                break
+            except Exception as error:
+                if launch_attempt == 2 or "TargetClosed" not in                         type(error).__name__ and "Target closed" not in                         str(error):
+                    raise
+                emit({"event": "launch_retry", "shot": shot_tag,
+                      "error": type(error).__name__})
+                await asyncio.sleep(5)
+        state = state if page is not None else {}
         waited = 0
-        while waited < 240 and not (state.get("composer")
-                                    and not state.get("logged_out")):
+        body_text = ""
+
+        def login_ok() -> bool:
+            if state.get("composer") and not state.get("logged_out"):
+                return True
+            # nickname authority: banners/promos embed login strings,
+            # so the marker regex alone misfires on logged-in sessions
+            return bool(expected_nickname) and expected_nickname in                 body_text and bool(state.get("composer"))
+
+        while waited < 240 and not login_ok():
             await asyncio.sleep(5)
             waited += 5
+            try:
+                if not state.get("composer"):
+                    await page.evaluate(CONSENT_DISMISS_JS)
+            except Exception:
+                pass
             state = await page.evaluate(LOGIN_CHECK_JS)
-        if not (state.get("composer") and not state.get("logged_out")):
-            raise RuntimeError(f"USER_LOGIN_REQUIRED:{account_alias}")
+            try:
+                body_text = await page.evaluate(
+                    "() => (document.body && document.body.innerText) "
+                    "|| ''")
+            except Exception:
+                pass
+        if not login_ok():
+            raise RuntimeError(
+                f"USER_LOGIN_REQUIRED:{account_alias}"
+                f"|composer={state.get('composer')}"
+                f"|logged_out={state.get('logged_out')}"
+                f"|nick={'expected_nickname' if False else ''}"
+                f"{(expected_nickname or '')[:3]}..in_body="
+                f"{bool(expected_nickname) and expected_nickname in body_text}"
+                f"|body_head={body_text[:120]!r}")
 
         convs = await page.evaluate(RECENT_CONVS_JS)
         baseline: set[str] = set()
