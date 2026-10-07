@@ -45,6 +45,13 @@ PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
 _PKG_PROFILES = PKG / "pool_profiles"
 
 
+def _stale_overrides() -> dict:
+    path = PKG / "stale_credit_overrides.json"
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    return {}
+
+
 def _probe(alias: str) -> dict:
     from dola_010e_session_router import ACCOUNT_PROFILES as _AUTO
     root = _PKG_PROFILES if alias in ("ACCOUNT_E", "ACCOUNT_F")         else _AUTO
@@ -193,6 +200,12 @@ def _pick_account(run_dir: Path, state: dict) -> str | None:
         if result.get("session_state") != "SESSION_VALID":
             continue
         credit = result.get("known_credit_state")
+        override = _stale_overrides().get(alias)
+        if override is not None and credit is not None:
+            # statement-arithmetic correction (documented in
+            # stale_credit_overrides.json): the latest visible statement
+            # predates a known later consumption on the same account
+            credit = min(credit, int(override.get("effective_credit", 0)))
         # known-credit slots first (highest credit), then fresh slots
         # whose balance is only revealed by the first dispatch ACK
         rank = (0, credit or 0) if credit else (1, 0)
