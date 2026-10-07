@@ -93,6 +93,19 @@ class DolaAccountPoolRouter:
                              + state.account_alias)
         self._accounts[state.account_alias] = state
 
+    def ensure_registered(self, alias: str, *,
+                          profile_binding: str | None = None) -> DolaAccountState:
+        """Idempotent registration used when durable state references an
+        account that this router instance has not yet probed."""
+        existing = self._accounts.get(alias)
+        if existing is not None:
+            return existing
+        state = DolaAccountState(
+            account_alias=alias,
+            profile_binding=profile_binding or f"pool/{alias}")
+        self._accounts[alias] = state
+        return state
+
     def account(self, alias: str) -> DolaAccountState:
         return self._accounts[alias]
 

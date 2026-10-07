@@ -29,6 +29,15 @@ from .hardening import (
     safe_close,
     stale_profile_locks,
 )
+from .fixture_v2_020 import FIXTURE, FixtureSpec, ShotSpec
+from .orchestrator import (
+    DolaProductionOrchestrator,
+    OrchestratorInterrupt,
+    ProductionRunState,
+    QC_POLICY,
+    ShotPlan,
+    ShotRecord,
+)
 from .observability import (
     CreationObserved,
     CreditStatementObserved,
@@ -62,6 +71,15 @@ from .variants import (
 
 __all__ = [
     "DolaCapabilityRegistry",
+    "DolaProductionOrchestrator",
+    "OrchestratorInterrupt",
+    "ProductionRunState",
+    "QC_POLICY",
+    "ShotPlan",
+    "ShotRecord",
+    "FIXTURE",
+    "FixtureSpec",
+    "ShotSpec",
     "DolaModelCatalog",
     "DolaModelEntry",
     "GateClass",
