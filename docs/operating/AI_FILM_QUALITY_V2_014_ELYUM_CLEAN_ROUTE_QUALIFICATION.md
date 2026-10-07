@@ -91,3 +91,16 @@ covers the floor:
 Then phases 7–9 (technical QC + watermark verdict + route classification) complete unchanged.
 
 **STOP — return to Tech Lead.** No regeneration, no film rebind: F1R/F2/F3R/proof untouched.
+
+---
+
+## RESUME (same slice) — credit gate failed closed again
+
+Resume custody verified read-only: HEAD `dd749f1`, adapter source unchanged (16/16 tests),
+frozen clientRef **recomputed and matches** (`aifilm-v2014-19633bf0…`), film proof + locked F2
+SHAs unchanged, ledger 0/1, secret audit CLEAN.
+
+Live re-quote (prior 56 NOT assumed): **balance 30 < current quote 56** for the frozen canary
+(mini t2v 4s/480p). Per the resume package: `STOPPED_INSUFFICIENT_CREDIT_PRE_DISPATCH` —
+mutation remains **0/1 UNSPENT**, no dispatch attempt made, frozen clientRef stays valid for the
+next resume.
