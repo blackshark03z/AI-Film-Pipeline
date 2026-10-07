@@ -32,12 +32,28 @@ from film_pipeline.narrative import (
 from film_pipeline.providers.dola_production import (
     DolaAccountPoolRouter, DolaAccountState)
 from mutation_authority import MutationAuthority
+import v2_020_runner as _runner_mod
 from v2_020_runner import (RunnerEvents, dispatch_and_acquire, emit,
                            extract_frames, probe_account_readonly,
                            technical_qc)
 
 RUN20 = ROOT / "projects/quality_v2_020_autonomous_production"
 PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
+
+# profile roots: automation slots live under the 010E runtime; the
+# V2-021 enrolled slots live in this package
+_PKG_PROFILES = PKG / "pool_profiles"
+
+
+def _probe(alias: str) -> dict:
+    from dola_010e_session_router import ACCOUNT_PROFILES as _AUTO
+    root = _PKG_PROFILES if alias in ("ACCOUNT_E", "ACCOUNT_F")         else _AUTO
+    original = _runner_mod.ACCOUNT_PROFILES
+    _runner_mod.ACCOUNT_PROFILES = root
+    try:
+        return asyncio.run(probe_account_readonly(alias))
+    finally:
+        _runner_mod.ACCOUNT_PROFILES = original
 COMPS = {
     "6": PKG / "V2_021_FIXTURE_COMPILATION.json",
     "5": PKG / "V2_021_FIXTURE_COMPILATION_5SHOT.json",
@@ -92,7 +108,7 @@ def cmd_gate(run_dir: Path) -> int:
     total_available = 0
     for alias in POOL_ACCOUNTS:
         try:
-            result = asyncio.run(probe_account_readonly(alias))
+            result = _probe(alias)
         except Exception:
             result = {"account_alias": alias,
                       "session_state": "PROBE_FAILED"}
@@ -103,13 +119,24 @@ def cmd_gate(run_dir: Path) -> int:
         if result.get("session_state") == "SESSION_VALID" and \
                 result.get("known_credit_state"):
             total_available += result["known_credit_state"]
-    chosen = _comp_for(total_available)
+    # fresh-enrolled slots have UNOBSERVABLE credit (the provider states
+    # the balance only inside a generation ACK). They are eligible for a
+    # BOUNDED first dispatch at the observed daily quota (3/account,
+    # observed on two accounts); the gate re-verifies after every ACK.
+    EXPECTED_QUOTA = 3
+    unobservable = [a for a, v in matrix.items()
+                    if v.get("session") == "SESSION_VALID"
+                    and v.get("credit") is None]
+    expected_total = total_available + EXPECTED_QUOTA * len(unobservable)
+    chosen = _comp_for(max(total_available, expected_total))
     if chosen is None:
         budget = BUDGET["total_budget"]
         decision = "STOP_BEFORE_FIRST_MUTATION"
         state["gate"] = {
             "probed_at": json.dumps(matrix),
             "total_available_credits": total_available,
+            "expected_total_with_quota": expected_total,
+            "unobservable_slots": unobservable,
             "computed_budget": budget,
             "decision": decision,
             "rule": BUDGET["rule"],
@@ -117,12 +144,19 @@ def cmd_gate(run_dir: Path) -> int:
     else:
         comp_path, comp = chosen
         budget = comp["mutation_budget"]["total_budget"]
-        decision = "DISPATCH_AUTHORIZED"
+        decision = ("DISPATCH_AUTHORIZED"
+                    if total_available >= budget
+                    else "DISPATCH_AUTHORIZED_EXPECTED")
         state["compilation_path"] = str(comp_path)
         state["planned_shots"] = comp["mutation_budget"]["planned_shots"]
+        # rebuild shot state for the chosen variant (no mutations yet)
+        state["shots"] = {n["shot_id"]: {"status": "PENDING"}
+                          for n in comp["shot_graph"]["nodes"]}
         state["gate"] = {
             "probed_at": json.dumps(matrix),
             "total_available_credits": total_available,
+            "expected_total_with_quota": expected_total,
+            "unobservable_slots": unobservable,
             "computed_budget": budget,
             "compilation": str(comp_path),
             "variant_shots": comp["mutation_budget"]["planned_shots"],
@@ -148,20 +182,23 @@ def _pick_account(run_dir: Path, state: dict) -> str | None:
     skipping accounts already bound to a completed shot this run."""
     used = {s.get("account") for s in state["shots"].values()
             if s.get("account")}
-    best = None
+    candidates = []
     for alias in POOL_ACCOUNTS:
         if alias in used:
             continue
         try:
-            result = asyncio.run(probe_account_readonly(alias))
+            result = _probe(alias)
         except Exception:
             continue
-        if result.get("session_state") == "SESSION_VALID" and \
-                result.get("known_credit_state"):
-            if best is None or (result["known_credit_state"] or 0) > \
-                    best[1]:
-                best = (alias, result["known_credit_state"])
-    return best[0] if best else None
+        if result.get("session_state") != "SESSION_VALID":
+            continue
+        credit = result.get("known_credit_state")
+        # known-credit slots first (highest credit), then fresh slots
+        # whose balance is only revealed by the first dispatch ACK
+        rank = (0, credit or 0) if credit else (1, 0)
+        candidates.append((rank[0], rank[1], alias))
+    candidates.sort(reverse=True)
+    return candidates[0][2] if candidates else None
 
 
 def cmd_auto(run_dir: Path) -> int:
@@ -256,6 +293,35 @@ def cmd_auto(run_dir: Path) -> int:
                        "sha256": result["asset_sha256"],
                        "authority": result["variant_authority"]})
         _save(run_dir, state)
+        # the dispatch ACK states the account's remaining credits —
+        # refresh the known state and re-evaluate the remaining sequence
+        try:
+            refreshed = _probe(account)
+            known = refreshed.get("known_credit_state") or 0
+            record["credit_after"] = known
+        except Exception:
+            known = None
+        remaining_shots = sum(
+            1 for n in COMP["shot_graph"]["nodes"]
+            if state["shots"][n["shot_id"]]["status"] not in (
+                "QC_ACCEPT", "EDITORIAL_LOCKED"))
+        others = 0
+        for other in POOL_ACCOUNTS:
+            if other == account:
+                continue
+            try:
+                probe = _probe(other)
+            except Exception:
+                continue
+            if probe.get("session_state") == "SESSION_VALID":
+                others += probe.get("known_credit_state") or 0
+        if known is not None and known + others < remaining_shots:
+            emit({"status": "STOPPED_POOL_EXHAUSTED_MID_RUN",
+                  "shot": sid, "credit_after": known, "others": others,
+                  "remaining_shots": remaining_shots})
+            state["gate"]["mid_run_stop"] = True
+            _save(run_dir, state)
+            return 2
         learning.record("clean sibling resolution succeeded on free route",
                         domain="variants", evidence=[sid])
         # technical QC + evidence scaffold (contact sheet for review)
