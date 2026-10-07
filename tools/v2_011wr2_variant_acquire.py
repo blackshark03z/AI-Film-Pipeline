@@ -221,10 +221,14 @@ def main() -> int:
 
     try:
         rc = asyncio.run(run())
+    except Exception as e:
+        record["run_error"] = f"{type(e).__name__}: {e}"
+        rc = 1
     finally:
-        manager_close = getattr(manager, "close", None)
-        if manager_close:
-            asyncio.run(manager_close())
+        try:
+            asyncio.run(manager.close())
+        except Exception:
+            pass
     (PKG / "V2_011WR2_LIVE_CAPTURE_INDEX.json").write_text(
         json.dumps(record, indent=1, ensure_ascii=False)[:300000],
         encoding="utf-8")
