@@ -24,14 +24,18 @@ def utcnow() -> str:
 
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
-    comp = json.loads((PKG / "V2_021_FIXTURE_COMPILATION.json")
-                      .read_text(encoding="utf-8"))
     prove = json.loads((PKG / "offline_prove/V2_021_OFFLINE_PROVE.json")
                        .read_text(encoding="utf-8"))
     state_path = PKG / "v2_021_run_state.json"
     state = json.loads(state_path.read_text(encoding="utf-8")) \
         if state_path.exists() else {"shots": {}, "mutations_used": 0,
                                      "gate": None}
+    # fixture metadata follows the EXECUTED compilation variant when the
+    # run state records one (5-shot minimum set vs the 6-shot grammar)
+    comp_path = (Path(state["compilation_path"])
+                 if state.get("compilation_path") else
+                 PKG / "V2_021_FIXTURE_COMPILATION.json")
+    comp = json.loads(comp_path.read_text(encoding="utf-8"))
     gate = state.get("gate") or {}
     executed = any(r.get("status") == "COMPLETED" for r in
                    [state]) or bool(state.get("master"))
@@ -73,6 +77,7 @@ def main() -> int:
         },
         "fixture": {
             "input": comp["input"],
+            "compilation": comp_path.name,
             "beats": len(comp["narrative"]["beats"]),
             "planned_shots": budget["planned_shots"],
             "mutation_budget": budget["total_budget"],
@@ -86,11 +91,30 @@ def main() -> int:
         },
         "execution": {
             "mutations_used": state.get("mutations_used", 0),
+            "effective_budget": state.get("effective_budget"),
+            "delivered_shots": sum(1 for r in state.get("shots", {})
+                                   .values() if r.get("asset")),
             "shots": {sid: {"status": r.get("status"),
                             "verdict": r.get("qc_verdict"),
-                            "authority": r.get("authority")}
+                            "authority": r.get("authority"),
+                            "sha256": r.get("sha256")}
                       for sid, r in state.get("shots", {}).items()},
             "master": state.get("master"),
+        },
+        "continuation": {
+            "note": "live continuation 2026-10-15/16: interrupted-run "
+                    "read-only recovery + fresh dispatch for the two "
+                    "provider-dead shots; every shot carries bind/reconcile "
+                    "evidence (state.recovery, recover_*.json, "
+                    "reconcile_*.json); no shot was re-dispatched after a "
+                    "latched release",
+            "provider_operations_consumed": state.get("mutations_used"),
+            "nominal_budget": budget["total_budget"],
+            "operator_effective_bound": state.get("effective_budget"),
+            "dead_releases_2026_10_07": ["S01", "S02"],
+            "recoveries": {sid: r.get("recovery", {}).get("evidence")
+                           for sid, r in state.get("shots", {}).items()
+                           if r.get("recovery")},
         },
         "offline_prove": {
             "claim": prove["claim"],
@@ -100,7 +124,8 @@ def main() -> int:
             "repair_demo": prove["repair_demo"]["failure_class"],
             "trim_demo": prove["trim_demo"],
         },
-        "autonomous_narrative_to_film": "QUALIFIED_CANDIDATE",
+        "autonomous_narrative_to_film":
+            "EXECUTED_CANDIDATE_AWAITING_OWNER_CREATIVE_ACCEPTANCE",
         "current_locked_film_modified": False,
     }
     (OUT / "V2_021_ACCEPTANCE.json").write_text(
@@ -130,12 +155,19 @@ def main() -> int:
         json.dumps(audit, indent=1, ensure_ascii=False), encoding="utf-8")
     print("secret audit:", audit["verdict"])
 
+    master = state.get("master") or {}
     seal = {
         "version": "v2-021-candidate-seal-v1", "sealed_at": utcnow(),
-        "status": "COMPLETED_CANDIDATE",
-        "headline": "AUTONOMOUS_NARRATIVE_TO_FILM = QUALIFIED_CANDIDATE "
-                    "(compiler stack QUALIFIED offline + live runner "
-                    "ready; live execution per mutation-policy gate)",
+        "status": "EXECUTED_CANDIDATE" if master else "COMPLETED_CANDIDATE",
+        "headline": (
+            "AUTONOMOUS_NARRATIVE_TO_FILM = EXECUTED_CANDIDATE (live film "
+            "delivered: all shots provider-issued unwatermarked, "
+            "DISTRIBUTION_MASTER.mp4 + manifest + recovery lineage; "
+            "Owner creative acceptance pending)") if master else (
+            "AUTONOMOUS_NARRATIVE_TO_FILM = QUALIFIED_CANDIDATE (compiler "
+            "stack QUALIFIED offline + live runner ready; live execution "
+            "per mutation-policy gate)"),
+        "master_sha256": master.get("sha256"),
         "evidence": sorted(p.name for p in OUT.glob("*.json")),
     }
     (OUT / "V2_021_CANDIDATE_SEAL.json").write_text(
