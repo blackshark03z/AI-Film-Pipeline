@@ -39,6 +39,16 @@ from v2_020_runner import (PULL_RAW_JS, RECENT_CONVS_JS, REFUSAL_MARKERS,
 sys.path.insert(0, str(ROOT / "tools"))
 from dola_010c_session import DolaSessionManager as _DSM  # noqa: E402
 
+PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
+_PKG_PROFILES = PKG / "pool_profiles"
+
+
+def _profile_root(alias: str) -> Path:
+    """E/F are V2-021 enrolled slots living in the package pool; the
+    legacy pool (A-D) lives in the 010E runtime root."""
+    return _PKG_PROFILES if alias in ("ACCOUNT_E", "ACCOUNT_F") \
+        else ACCOUNT_PROFILES
+
 
 async def reconcile(run_dir: Path, shot_id: str, account: str,
                     poll_seconds: int = 1800) -> int:
@@ -49,9 +59,15 @@ async def reconcile(run_dir: Path, shot_id: str, account: str,
         return 1
     release_events = [e for e in journal.events
                       if e["kind"] == "NETWORK_RELEASE_OBSERVED"]
-    armed = next(e for e in journal.events if e["kind"] == "DISPATCH_ARMED")
-    attempt_id = armed["generation_attempt_id"]
-    fingerprint = armed["payload"].get("request_fingerprint")
+    armed = next((e for e in journal.events
+                  if e["kind"] == "DISPATCH_ARMED"), None)
+    # journals may be truncated by interrupted runs; the attempt id is
+    # stamped on every journal event, the fingerprint may be absent
+    attempt_id = ((armed or {}).get("generation_attempt_id")
+                  or (journal.events[0].get("generation_attempt_id")
+                      if journal.events else "unknown"))
+    fingerprint = (armed or {}).get("payload", {}).get(
+        "request_fingerprint")
     # model verification from the durable release refinement (recorded by
     # verify_release_body in the capture-based flow) — for the crashed run
     # the model check completes from the reconciled conversation instead
@@ -61,12 +77,22 @@ async def reconcile(run_dir: Path, shot_id: str, account: str,
                                                   "release refinement + "
                                                   "needle conversation"})
 
-    from film_pipeline.providers.dola_production.fixture_v2_020 import \
-        FIXTURE
-    spec = next(s for s in FIXTURE.shots if s.shot_id == shot_id)
+    # V2-021 shots: needle comes from the frozen compilation (the exact
+    # motion-section text used at dispatch); V2-020 fixture shots fall
+    # back to their own fixture
+    comp_path = run_dir / "V2_021_FIXTURE_COMPILATION_5SHOT.json"
+    needle = None
+    if comp_path.exists() and shot_id.startswith("S0"):
+        comp = json.loads(comp_path.read_text(encoding="utf-8"))
+        needle = comp["prompt_plans"][shot_id]["sections"]["motion"][:80]
+    else:
+        from film_pipeline.providers.dola_production.fixture_v2_020 import \
+            FIXTURE
+        spec = next(s for s in FIXTURE.shots if s.shot_id == shot_id)
+        needle = spec.needle
 
     events = RunnerEvents(run_dir / "provider_events.jsonl")
-    manager = DolaSessionManager(profile_dir=ACCOUNT_PROFILES / account)
+    manager = DolaSessionManager(profile_dir=_profile_root(account) / account)
     resolver = DolaAssetVariantResolver()
     try:
         page = await manager.launch_browser()
@@ -96,7 +122,7 @@ async def reconcile(run_dir: Path, shot_id: str, account: str,
                                                {"conversationId": conv})
                 except Exception:
                     continue
-                if not any(spec.needle in (r.get("text") or "")
+                if not any(needle in (r.get("text") or "")
                            for r in rows):
                     continue
                 done = [c for r in rows for c in r.get("creations", [])
