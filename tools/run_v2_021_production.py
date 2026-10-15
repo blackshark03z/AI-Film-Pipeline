@@ -19,8 +19,10 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import os
 import subprocess
 import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,11 +33,24 @@ from film_pipeline.narrative import (
     ContinuityEngine, EditorialIntelligence, LearningLoop, RepairPlanner)
 from film_pipeline.providers.dola_production import (
     DolaAccountPoolRouter, DolaAccountState)
+from dola_010e_dispatch_journal import (
+    ASSET_DOWNLOADED, CREATION_BOUND, DISPATCH_ARMED_EV,
+    NETWORK_RELEASE_OBSERVED, SSE_RECEIPT_CAPTURED, TERMINAL_SUCCESS,
+    DispatchJournal)
 from mutation_authority import MutationAuthority
 import v2_020_runner as _runner_mod
 from v2_020_runner import (RunnerEvents, dispatch_and_acquire, emit,
                            extract_frames, probe_account_readonly,
                            technical_qc)
+
+# a shot whose journal shows any post-arm event has a latched provider
+# mutation: it must be reconciled read-only, never re-dispatched
+LATCHED_JOURNAL_KINDS = (DISPATCH_ARMED_EV, NETWORK_RELEASE_OBSERVED,
+                         SSE_RECEIPT_CAPTURED, CREATION_BOUND,
+                         ASSET_DOWNLOADED, TERMINAL_SUCCESS)
+SKIP_STATUSES = ("QC_ACCEPT", "EDITORIAL_LOCKED", "RELEASED",
+                 "RECEIPT_BOUND", "CREATION_BOUND", "ACQUIRED",
+                 "ACQUIRED_AWAITING_VISUAL_QC")
 
 RUN20 = ROOT / "projects/quality_v2_020_autonomous_production"
 PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
@@ -52,15 +67,29 @@ def _stale_overrides() -> dict:
     return {}
 
 
-def _probe(alias: str) -> dict:
-    from dola_010e_session_router import ACCOUNT_PROFILES as _AUTO
-    root = _PKG_PROFILES if alias in ("ACCOUNT_E", "ACCOUNT_F")         else _AUTO
+@contextmanager
+def _profile_root(alias: str):
+    """Alias -> the profile root that holds its enrolled browser state.
+
+    The V2-021 enrolled slots (ACCOUNT_E/ACCOUNT_F) live in THIS
+    package's pool_profiles; the rest of the pool lives in the 010E
+    runtime root. Every browser touch for an alias — probe OR dispatch —
+    must address the same root, otherwise a dispatch silently opens an
+    empty profile and the provider reports USER_LOGIN_REQUIRED.
+    """
     original = _runner_mod.ACCOUNT_PROFILES
-    _runner_mod.ACCOUNT_PROFILES = root
+    _runner_mod.ACCOUNT_PROFILES = (_PKG_PROFILES
+                                    if alias in ("ACCOUNT_E", "ACCOUNT_F")
+                                    else original)
     try:
-        return asyncio.run(probe_account_readonly(alias))
+        yield
     finally:
         _runner_mod.ACCOUNT_PROFILES = original
+
+
+def _probe(alias: str) -> dict:
+    with _profile_root(alias):
+        return asyncio.run(probe_account_readonly(alias))
 COMPS = {
     "6": PKG / "V2_021_FIXTURE_COMPILATION.json",
     "5": PKG / "V2_021_FIXTURE_COMPILATION_5SHOT.json",
@@ -184,9 +213,23 @@ def cmd_gate(run_dir: Path) -> int:
     return 0 if decision == "DISPATCH_AUTHORIZED" else 2
 
 
-def _pick_account(run_dir: Path, state: dict) -> str | None:
+def _pick_account(run_dir: Path, state: dict,
+                  shot_id: str | None = None) -> str | None:
     """Rotate pre-dispatch across SESSION_VALID accounts with credit,
-    skipping accounts already bound to a completed shot this run."""
+    skipping accounts already bound to a completed shot this run. A
+    per-shot account_plan (operator-authored) is honored when that
+    account still holds a valid session, else rotation resumes."""
+    plan = state.get("account_plan") or {}
+    if shot_id and shot_id in plan:
+        planned = plan[shot_id]
+        try:
+            result = _probe(planned)
+        except Exception:
+            result = {}
+        if result.get("session_state") == "SESSION_VALID":
+            return planned
+        emit({"event": "planned_account_unavailable", "shot": shot_id,
+              "account": planned, "session": result.get("session_state")})
     completed = {"RELEASED", "RECEIPT_BOUND", "CREATION_BOUND",
                  "ACQUIRED", "ACQUIRED_AWAITING_VISUAL_QC", "QC_ACCEPT",
                  "EDITORIAL_LOCKED"}
@@ -202,8 +245,10 @@ def _pick_account(run_dir: Path, state: dict) -> str | None:
             continue
         if result.get("session_state") != "SESSION_VALID":
             continue
-        credit = result.get("known_credit_state")
         override = _stale_overrides().get(alias)
+        if override is not None and override.get("hard_blocked_today"):
+            continue   # provider daily-count cap: excluded for today
+        credit = result.get("known_credit_state")
         if override is not None and credit is not None:
             # statement-arithmetic correction (documented in
             # stale_credit_overrides.json): the latest visible statement
@@ -247,12 +292,23 @@ def cmd_auto(run_dir: Path) -> int:
     for node in COMP["shot_graph"]["nodes"]:
         sid = node["shot_id"]
         record = state["shots"][sid]
-        if record["status"] in ("QC_ACCEPT", "EDITORIAL_LOCKED"):
+        if record["status"] in SKIP_STATUSES:
             continue
-        if state["mutations_used"] >= BUDGET["total_budget"]:
+        journal_path = run_dir / f"dispatch_journal_{sid}.jsonl"
+        if journal_path.exists():
+            journal = DispatchJournal(journal_path, "")
+            if any(journal.has(kind) for kind in LATCHED_JOURNAL_KINDS):
+                emit({"status": "SKIPPED_RELEASE_LATCHED", "shot": sid,
+                      "reason": "journal holds a provider release; use "
+                                "read-only reconciliation, never "
+                                "re-dispatch"})
+                continue
+        effective_budget = state.get(
+            "effective_budget", BUDGET["total_budget"])
+        if state["mutations_used"] >= effective_budget:
             emit({"status": "BUDGET_EXHAUSTED", "shot": sid})
             break
-        account = _pick_account(run_dir, state)
+        account = _pick_account(run_dir, state, shot_id=sid)
         if not account:
             emit({"status": "STOPPED_POOL_INSUFFICIENT", "shot": sid})
             (run_dir / "V2_021_POOL_GATE.json").write_text(
@@ -306,11 +362,12 @@ def cmd_auto(run_dir: Path) -> int:
                 ident_path.read_text(encoding="utf-8"))
         expected_nick = (identities.get(account) or {}).get("nickname")
         try:
-            result = asyncio.run(dispatch_and_acquire(
-                shot_spec=transport_spec, account_alias=account,
-                run_dir=run_dir, shot_tag=sid, on_release=on_release,
-                on_creation=on_creation, events_sink=events,
-                expected_nickname=expected_nick))
+            with _profile_root(account):
+                result = asyncio.run(dispatch_and_acquire(
+                    shot_spec=transport_spec, account_alias=account,
+                    run_dir=run_dir, shot_tag=sid, on_release=on_release,
+                    on_creation=on_creation, events_sink=events,
+                    expected_nickname=expected_nick))
         except RuntimeError as error:
             message = str(error)
             record["status"] = "FAILED"
@@ -321,19 +378,23 @@ def cmd_auto(run_dir: Path) -> int:
         record.update({"status": "ACQUIRED", "asset": result["asset_path"],
                        "sha256": result["asset_sha256"],
                        "authority": result["variant_authority"]})
+        record.pop("error", None)
         _save(run_dir, state)
         # the dispatch ACK states the account's remaining credits —
         # refresh the known state and re-evaluate the remaining sequence
         try:
             refreshed = _probe(account)
-            known = refreshed.get("known_credit_state") or 0
-            record["credit_after"] = known
+            known_credit = refreshed.get("known_credit_state")
         except Exception:
-            known = None
+            known_credit = None
+        record["credit_after"] = known_credit
+        # only shots that still need a dispatch count against the pool;
+        # a SESSION_VALID slot with unobservable balance is counted as 1
+        # (each ACK re-verifies; conservative for the mid-run guard)
         remaining_shots = sum(
             1 for n in COMP["shot_graph"]["nodes"]
-            if state["shots"][n["shot_id"]]["status"] not in (
-                "QC_ACCEPT", "EDITORIAL_LOCKED"))
+            if state["shots"][n["shot_id"]]["status"] in (
+                "PENDING", "FAILED"))
         others = 0
         for other in POOL_ACCOUNTS:
             if other == account:
@@ -343,8 +404,10 @@ def cmd_auto(run_dir: Path) -> int:
             except Exception:
                 continue
             if probe.get("session_state") == "SESSION_VALID":
-                others += probe.get("known_credit_state") or 0
-        if known is not None and known + others < remaining_shots:
+                credit = probe.get("known_credit_state")
+                others += credit if credit is not None else 1
+        known = known_credit if known_credit is not None else 1
+        if known + others < remaining_shots:
             emit({"status": "STOPPED_POOL_EXHAUSTED_MID_RUN",
                   "shot": sid, "credit_after": known, "others": others,
                   "remaining_shots": remaining_shots})
@@ -541,6 +604,18 @@ def cmd_status(run_dir: Path) -> int:
     return 0
 
 
+def _acquire_run_lock(run_dir: Path) -> Path | None:
+    lock = run_dir / "run.lock"
+    try:
+        lock.parent.mkdir(parents=True, exist_ok=True)
+        fd = os.open(str(lock), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        os.write(fd, str(os.getpid()).encode())
+        os.close(fd)
+        return lock
+    except FileExistsError:
+        return None
+
+
 def main() -> int:
     args = sys.argv[1:]
     if len(args) < 2:
@@ -548,6 +623,23 @@ def main() -> int:
         return 2
     run_dir = Path(args[0])
     run_dir.mkdir(parents=True, exist_ok=True)
+    lock = None
+    if args[1] in ("auto", "gate"):
+        lock = _acquire_run_lock(run_dir)
+        if lock is None:
+            emit({"status": "STOPPED_RUN_LOCKED",
+                  "reason": "another runner instance holds run.lock "
+                            "(zombie protection); delete the lock only "
+                            "after verifying no runner process lives"})
+            return 3
+    try:
+        return _dispatch_command(run_dir, args)
+    finally:
+        if lock is not None:
+            lock.unlink(missing_ok=True)
+
+
+def _dispatch_command(run_dir: Path, args: list[str]) -> int:
     command = args[1]
     if command == "gate":
         return cmd_gate(run_dir)
