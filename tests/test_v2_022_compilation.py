@@ -1,4 +1,4 @@
-"""V2-022 mission — compilation + operator-namespace regression coverage.
+﻿"""V2-022 mission â€” compilation + operator-namespace regression coverage.
 
 Locks the 120-second mission contract before any paid mutation:
 
@@ -54,7 +54,7 @@ def test_compilation_is_24_shots_120_seconds(tmp_path):
     assert len(doc["shot_graph"]["nodes"]) == 24
     assert doc["input"]["estimated_scene_seconds"] == "120"
     assert doc["mutation_budget"]["planned_shots"] == 24
-    assert doc["mutation_budget"]["total_budget"] == 26
+    assert doc["mutation_budget"]["total_budget"] == 27
     assert doc["mutation_budget"]["required_credit_floor"] == 24
 
 
@@ -96,7 +96,7 @@ def test_runner_single_variant_namespace(tmp_path, monkeypatch):
     assert chosen is not None
     path, comp = chosen
     assert path.name == "V2_022_LONGFORM_COMPILATION.json"
-    assert comp["mutation_budget"]["total_budget"] == 26
+    assert comp["mutation_budget"]["total_budget"] == 27
     state = tool._load_state(tmp_path)
     assert state["version"] == "v2-022-run-state-v1"
 

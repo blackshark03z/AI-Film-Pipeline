@@ -42,7 +42,7 @@ PROSE = (
     "At the narrow turn he hesitates, wary of the slick mud at the edge. "
     "His breath fogs in the cold air as he stares across the wide "
     "valley below the path. "
-    "He commits to the crossing, stepping carefully onto the wide flat "
+    "He chooses his footing and steps firmly onto the wide flat "
     "stones. "
     "Where the jar cracked, he realizes that a single pale seed has "
     "spilled onto his glove. "
@@ -132,8 +132,8 @@ MOTIONS = [
     "slick dark mud at the edge, hesitant to step.",
     "He stands motionless at the edge and lifts his head slowly, "
     "breath visible, scanning the wide valley beyond the wall.",
-    "He steps deliberately onto the wide flat stones, crossing the "
-    "slick stretch with small careful strides.",
+    "He plants one boot firmly on the wide flat stone and crosses the "
+    "slick stretch with deliberate care.",
     "He holds the cracked jar close above his open glove and gazes at "
     "a single pale seed, his face in profile.",
     "His head tilts back toward the grey sky and he takes one long "
@@ -281,30 +281,30 @@ def main() -> int:
             node.shot_id, state,
             justified_by_event=node.story_node_ids[0])
 
-    # mutation budget — Owner cap 25 extended to 26 on 2026-10-16
-    # (maximum authorization for the two day-1 hard refusals: S03 the
-    # cracked-jar DISCOVER and S08 a REACTION; not a spending target)
+    # mutation budget — Owner cap 25 -> 26 (2026-10-16 day-1 refusals
+    # S03+S08) -> 27 (2026-10-16 day-1 final: S09 DECISION also refused;
+    # S03 repaired+delivered via redesign, establishing the retry path);
+    # each extension is a maximum authorization, never a spending target
     budget = {
-        "version": "v2-022-mutation-budget-v2",
+        "version": "v2-022-mutation-budget-v3",
         "computed_at": datetime.now(timezone.utc).isoformat(),
         "planned_shots": n_shots,
         "base_mutations": n_shots,
         "repair_reserve": 1,
-        "authorized_extension": 1,
-        "total_budget": n_shots + 2,
+        "authorized_extension": 2,
+        "total_budget": n_shots + 3,
         "rationale": "120-second mission, 24 shots x 5s; Owner-authorized "
-                     "cap 25 = 24 planned + 1 repair reserve; extended to "
-                     "26 on 2026-10-16 after two confirmed-unrecoverable "
-                     "provider refusals (S03, S08); maximum authorization, "
-                     "not a spending target; any further refusal or "
-                     "overrun must stop and report",
+                     "cap 25 = 24 + 1 repair reserve; extended to 26 for "
+                     "day-1 refusals S03/S08 and to 27 when S09 (DECISION) "
+                     "also refused; S03 proves redesign+retry works; any "
+                     "further refusal or overrun must stop and report",
         "rule": "design-then-spend; no exploratory prompt debugging; "
                 "STOP BEFORE FIRST MUTATION if the authorized cap cannot "
                 "cover this budget",
         "required_credit_floor": n_shots,
     }
-    if budget["total_budget"] != 26:
-        raise SystemExit("budget drift: Owner authorization is cap 26")
+    if budget["total_budget"] != 27:
+        raise SystemExit("budget drift: Owner authorization is cap 27")
 
     doc = {
         "version": "v2-022-longform-compilation-v1",
