@@ -35,19 +35,18 @@ from film_pipeline.providers.dola_production.variants import (
     _host_allowed, extract_renditions)
 from v2_020_runner import (PULL_RAW_JS, RECENT_CONVS_JS, REFUSAL_MARKERS,
                            RunnerEvents, download_allowlisted, emit, utcnow)
+from v2_021_common import enrolled_profile_root, needle_for
 
 sys.path.insert(0, str(ROOT / "tools"))
 from dola_010c_session import DolaSessionManager as _DSM  # noqa: E402
 
 PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
-_PKG_PROFILES = PKG / "pool_profiles"
 
 
 def _profile_root(alias: str) -> Path:
     """E/F are V2-021 enrolled slots living in the package pool; the
     legacy pool (A-D) lives in the 010E runtime root."""
-    return _PKG_PROFILES if alias in ("ACCOUNT_E", "ACCOUNT_F") \
-        else ACCOUNT_PROFILES
+    return enrolled_profile_root(alias, ACCOUNT_PROFILES)
 
 
 async def reconcile(run_dir: Path, shot_id: str, account: str,
@@ -84,7 +83,7 @@ async def reconcile(run_dir: Path, shot_id: str, account: str,
     needle = None
     if comp_path.exists() and shot_id.startswith("S0"):
         comp = json.loads(comp_path.read_text(encoding="utf-8"))
-        needle = comp["prompt_plans"][shot_id]["sections"]["motion"][:80]
+        needle = needle_for(comp, shot_id)
     else:
         from film_pipeline.providers.dola_production.fixture_v2_020 import \
             FIXTURE

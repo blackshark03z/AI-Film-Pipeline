@@ -45,21 +45,21 @@ from film_pipeline.providers.dola_production.variants import (  # noqa: E402
 from v2_020_runner import (CONSENT_DISMISS_JS, PULL_RAW_JS,  # noqa: E402
                            RECENT_CONVS_JS, REFUSAL_MARKERS,
                            download_allowlisted, emit, utcnow)
+from v2_021_common import enrolled_profile_root  # noqa: E402
+from v2_021_common import needle_for as _needle_for_comp  # noqa: E402
 
 PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
-_PKG_PROFILES = PKG / "pool_profiles"
 COMP = json.loads((PKG / "V2_021_FIXTURE_COMPILATION_5SHOT.json")
                   .read_text(encoding="utf-8"))
 SHOT_IDS = [n["shot_id"] for n in COMP["shot_graph"]["nodes"]]
 
 
 def profile_root(alias: str) -> Path:
-    return _PKG_PROFILES if alias in ("ACCOUNT_E", "ACCOUNT_F") \
-        else ACCOUNT_PROFILES
+    return enrolled_profile_root(alias, ACCOUNT_PROFILES)
 
 
 def needle_for(shot_id: str) -> str:
-    return COMP["prompt_plans"][shot_id]["sections"]["motion"][:80]
+    return _needle_for_comp(COMP, shot_id)
 
 
 async def _open(alias: str):
