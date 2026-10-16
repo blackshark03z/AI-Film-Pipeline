@@ -287,6 +287,16 @@ def _pick_account(run_dir: Path, state: dict,
     return candidates[0][2] if candidates else None
 
 
+def _tranche_viable(known_after: int | None,
+                    others: list[int | None]) -> bool:
+    """Tranche doctrine for the quota-fed mission: continue while ANY
+    account can fund the next shot (known credit >= 1, or an
+    unobservable balance, which the next ACK re-verifies)."""
+    if known_after is None or known_after >= 1:
+        return True
+    return any(c is None or c >= 1 for c in others)
+
+
 def cmd_auto(run_dir: Path) -> int:
     state = _load_state(run_dir)
     if state["gate"] is None:
@@ -402,28 +412,34 @@ def cmd_auto(run_dir: Path) -> int:
         except Exception:
             known_credit = None
         record["credit_after"] = known_credit
-        # only shots that still need a dispatch count against the pool;
-        # a SESSION_VALID slot with unobservable balance is counted as 1
-        # (each ACK re-verifies; conservative for the mid-run guard)
+        # Tranche doctrine (v2-022): the mission is quota-fed across
+        # days, so the run continues while ANY account can fund the NEXT
+        # shot; it stops only when no dispatch is currently possible and
+        # resumes as the daily quota refreshes. A SESSION_VALID slot with
+        # unobservable balance counts as fundable (each ACK re-verifies).
         remaining_shots = sum(
             1 for n in COMP["shot_graph"]["nodes"]
             if state["shots"][n["shot_id"]]["status"] in (
                 "PENDING", "FAILED"))
-        others = 0
+        others = []
+        overrides = _stale_overrides()
         for other in POOL_ACCOUNTS:
             if other == account:
                 continue
+            if (overrides.get(other) or {}).get("hard_blocked_today"):
+                continue   # provider daily-count cap: excluded for today
             try:
                 probe = _probe(other)
             except Exception:
                 continue
             if probe.get("session_state") == "SESSION_VALID":
-                credit = probe.get("known_credit_state")
-                others += credit if credit is not None else 1
+                others.append(probe.get("known_credit_state"))
+        others_total = sum(c if c is not None else 1 for c in others)
         known = known_credit if known_credit is not None else 1
-        if known + others < remaining_shots:
+        if not _tranche_viable(known_credit, others):
             emit({"status": "STOPPED_POOL_EXHAUSTED_MID_RUN",
-                  "shot": sid, "credit_after": known, "others": others,
+                  "shot": sid, "credit_after": known,
+                  "others": others_total,
                   "remaining_shots": remaining_shots})
             state["gate"]["mid_run_stop"] = True
             _save(run_dir, state)

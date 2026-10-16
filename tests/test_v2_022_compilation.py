@@ -99,3 +99,15 @@ def test_runner_single_variant_namespace(tmp_path, monkeypatch):
     assert comp["mutation_budget"]["total_budget"] == 25
     state = tool._load_state(tmp_path)
     assert state["version"] == "v2-022-run-state-v1"
+
+
+def test_tranche_guard_continues_while_any_account_is_fundable():
+    import run_v2_022_production as tool
+    # acting account exhausted but others hold credit or are unobservable
+    assert tool._tranche_viable(0, [3, 0]) is True
+    assert tool._tranche_viable(0, [None]) is True
+    assert tool._tranche_viable(2, []) is True
+    assert tool._tranche_viable(None, [0]) is True
+    # only stop when nothing can fund the next shot
+    assert tool._tranche_viable(0, [0, 0]) is False
+    assert tool._tranche_viable(0, []) is False
