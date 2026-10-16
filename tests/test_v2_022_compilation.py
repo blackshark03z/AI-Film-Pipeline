@@ -54,7 +54,7 @@ def test_compilation_is_24_shots_120_seconds(tmp_path):
     assert len(doc["shot_graph"]["nodes"]) == 24
     assert doc["input"]["estimated_scene_seconds"] == "120"
     assert doc["mutation_budget"]["planned_shots"] == 24
-    assert doc["mutation_budget"]["total_budget"] == 25
+    assert doc["mutation_budget"]["total_budget"] == 26
     assert doc["mutation_budget"]["required_credit_floor"] == 24
 
 
@@ -96,7 +96,7 @@ def test_runner_single_variant_namespace(tmp_path, monkeypatch):
     assert chosen is not None
     path, comp = chosen
     assert path.name == "V2_022_LONGFORM_COMPILATION.json"
-    assert comp["mutation_budget"]["total_budget"] == 25
+    assert comp["mutation_budget"]["total_budget"] == 26
     state = tool._load_state(tmp_path)
     assert state["version"] == "v2-022-run-state-v1"
 
@@ -120,3 +120,42 @@ def test_receipt_miss_streak_rule():
     assert tool._receipt_miss_streak_stop(1) is False
     assert tool._receipt_miss_streak_stop(2) is True
     assert tool._receipt_miss_streak_stop(4) is True
+
+
+def test_repair_tool_archives_and_resets(tmp_path):
+    import repair_v2_022_shot as repair_tool
+    run_dir = tmp_path
+    (run_dir / "slots" / "S03").mkdir(parents=True)
+    (run_dir / "slots" / "S03" / "mutation_authority.json").write_text(
+        '{"status": "CONSUMED"}', encoding="utf-8")
+    (run_dir / "dispatch_journal_S03.jsonl").write_text(
+        '{"kind": "MUTATION_RESERVED"}\n'
+        '{"kind": "NETWORK_RELEASE_OBSERVED"}\n', encoding="utf-8")
+    state = {
+        "version": "v2-022-run-state-v1",
+        "shots": {
+            "S03": {"status": "FAILED", "error": "OWNER_AMBIGUITY_GATE",
+                    "repair_needed": True},
+            "S01": {"status": "QC_ACCEPT", "qc_verdict": "ACCEPT"},
+        },
+    }
+    (run_dir / "v2_022_run_state.json").write_text(
+        json.dumps(state), encoding="utf-8")
+
+    out = repair_tool.repair(run_dir, "S03", "provider refusal repair")
+    assert out["status"] == "PENDING"
+    assert (run_dir / "dispatch_journal_S03.jsonl.prior-1").exists()
+    assert not (run_dir / "dispatch_journal_S03.jsonl").exists()
+    assert (run_dir / "slots" / "S03.prior-1").is_dir()
+    record = json.loads((run_dir / "v2_022_run_state.json")
+                        .read_text(encoding="utf-8"))["shots"]["S03"]
+    assert record["status"] == "PENDING"
+    assert record["repair_needed"] is False
+    assert record["repairs"][0]["previous_status"] == "FAILED"
+
+    # accepted work is never repaired
+    try:
+        repair_tool.repair(run_dir, "S01", "should refuse")
+        raise AssertionError("repair of QC_ACCEPT shot must refuse")
+    except SystemExit:
+        pass

@@ -31,8 +31,8 @@ PROSE = (
     "river valley. "
     "A lone gardener in a deep russet coat walks the path left to right, "
     "carrying a wooden crate of seedling jars. "
-    "Near the first stone terrace he notices that one of the jars has "
-    "cracked open. "
+    "Near the first stone terrace he notices a hairline crack in one of "
+    "the clay jars. "
     "He pauses beside the low wall, uncertain whether the small seedling "
     "can survive the cold. "
     "He decides to carry the cracked jar to the old planting bed by the "
@@ -40,8 +40,8 @@ PROSE = (
     "He climbs along the wet stone steps toward the lower bend of the "
     "path. "
     "At the narrow turn he hesitates, wary of the slick mud at the edge. "
-    "His breath fogs in the cold air as he stares at the long fall below "
-    "the path. "
+    "His breath fogs in the cold air as he stares across the wide "
+    "valley below the path. "
     "He commits to the crossing, stepping carefully onto the wide flat "
     "stones. "
     "Where the jar cracked, he realizes that a single pale seed has "
@@ -120,7 +120,8 @@ MOTIONS = [
     "He keeps a steady walking rhythm along the wet path, both gloved "
     "hands gripping the crate, coat hems moving with the breeze.",
     "He slows to a stop beside the first stone terrace edge and tilts "
-    "the crate toward himself, examining the cracked jar.",
+    "the crate toward himself, frowning at the hairline crack in one "
+    "jar.",
     "He stands still beside the low stone wall, head lowered toward "
     "the cracked jar, shoulders tense, unwilling to move on.",
     "He settles the crate more securely in his arms and resumes "
@@ -130,7 +131,7 @@ MOTIONS = [
     "He pauses at the narrow turn of the path, looking down at the "
     "slick dark mud at the edge, hesitant to step.",
     "He stands motionless at the edge and lifts his head slowly, "
-    "breath visible, scanning the long drop to the river.",
+    "breath visible, scanning the wide valley beyond the wall.",
     "He steps deliberately onto the wide flat stones, crossing the "
     "slick stretch with small careful strides.",
     "He holds the cracked jar close above his open glove and gazes at "
@@ -280,24 +281,30 @@ def main() -> int:
             node.shot_id, state,
             justified_by_event=node.story_node_ids[0])
 
-    # mutation budget — Owner-authorized cap 25 (24 + 1 repair reserve)
+    # mutation budget — Owner cap 25 extended to 26 on 2026-10-16
+    # (maximum authorization for the two day-1 hard refusals: S03 the
+    # cracked-jar DISCOVER and S08 a REACTION; not a spending target)
     budget = {
-        "version": "v2-022-mutation-budget-v1",
+        "version": "v2-022-mutation-budget-v2",
         "computed_at": datetime.now(timezone.utc).isoformat(),
         "planned_shots": n_shots,
         "base_mutations": n_shots,
         "repair_reserve": 1,
-        "total_budget": n_shots + 1,
+        "authorized_extension": 1,
+        "total_budget": n_shots + 2,
         "rationale": "120-second mission, 24 shots x 5s; Owner-authorized "
-                     "cap 25 = 24 planned + 1 repair reserve; the daily "
-                     "pool quota feeds the mission across multiple days",
+                     "cap 25 = 24 planned + 1 repair reserve; extended to "
+                     "26 on 2026-10-16 after two confirmed-unrecoverable "
+                     "provider refusals (S03, S08); maximum authorization, "
+                     "not a spending target; any further refusal or "
+                     "overrun must stop and report",
         "rule": "design-then-spend; no exploratory prompt debugging; "
                 "STOP BEFORE FIRST MUTATION if the authorized cap cannot "
                 "cover this budget",
         "required_credit_floor": n_shots,
     }
-    if budget["total_budget"] != 25:
-        raise SystemExit("budget drift: Owner authorization is cap 25")
+    if budget["total_budget"] != 26:
+        raise SystemExit("budget drift: Owner authorization is cap 26")
 
     doc = {
         "version": "v2-022-longform-compilation-v1",
