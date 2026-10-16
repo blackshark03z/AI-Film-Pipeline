@@ -38,6 +38,7 @@ from dola_010e_dispatch_journal import (
     NETWORK_RELEASE_OBSERVED, SSE_RECEIPT_CAPTURED, TERMINAL_SUCCESS,
     DispatchJournal)
 from mutation_authority import MutationAuthority
+from v2_021_common import enrolled_profile_root, needle_for
 import v2_020_runner as _runner_mod
 from v2_020_runner import (RunnerEvents, dispatch_and_acquire, emit,
                            extract_frames, probe_account_readonly,
@@ -55,10 +56,6 @@ SKIP_STATUSES = ("QC_ACCEPT", "EDITORIAL_LOCKED", "RELEASED",
 RUN20 = ROOT / "projects/quality_v2_020_autonomous_production"
 PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
 
-# profile roots: automation slots live under the 010E runtime; the
-# V2-021 enrolled slots live in this package
-_PKG_PROFILES = PKG / "pool_profiles"
-
 
 def _stale_overrides() -> dict:
     path = PKG / "stale_credit_overrides.json"
@@ -71,16 +68,12 @@ def _stale_overrides() -> dict:
 def _profile_root(alias: str):
     """Alias -> the profile root that holds its enrolled browser state.
 
-    The V2-021 enrolled slots (ACCOUNT_E/ACCOUNT_F) live in THIS
-    package's pool_profiles; the rest of the pool lives in the 010E
-    runtime root. Every browser touch for an alias — probe OR dispatch —
-    must address the same root, otherwise a dispatch silently opens an
-    empty profile and the provider reports USER_LOGIN_REQUIRED.
+    Mapping lives in v2_021_common (single source of truth shared with
+    the reconcile and recover tools); this context manager only routes
+    it into the runner module the dispatch flow reads.
     """
     original = _runner_mod.ACCOUNT_PROFILES
-    _runner_mod.ACCOUNT_PROFILES = (_PKG_PROFILES
-                                    if alias in ("ACCOUNT_E", "ACCOUNT_F")
-                                    else original)
+    _runner_mod.ACCOUNT_PROFILES = enrolled_profile_root(alias, original)
     try:
         yield
     finally:
@@ -98,8 +91,8 @@ POOL_ACCOUNTS = ["ACCOUNT_D", "ACCOUNT_A", "ACCOUNT_C", "ACCOUNT_B",
                  "ACCOUNT_E", "ACCOUNT_F"]
 import os as _os
 
-COMP = json.loads((_os.environ.get("V2_021_COMPILATION") or
-                   COMPS["6"]).read_text(encoding="utf-8"))
+COMP = json.loads(Path(_os.environ.get("V2_021_COMPILATION")
+                       or COMPS["6"]).read_text(encoding="utf-8"))
 BUDGET = COMP["mutation_budget"]
 
 
@@ -111,6 +104,22 @@ def _comp_for(available: int) -> tuple[Path, dict] | None:
         if available >= comp["mutation_budget"]["total_budget"]:
             return COMPS[key], comp
     return None
+
+
+def _activate_comp(state: dict) -> None:
+    """Bind module-level COMP/BUDGET to the run's chosen compilation.
+
+    The state file is the run's authority: a fresh CLI process (auto,
+    manifest) must execute/document the SAME variant the gate selected.
+    Without this the import-time default leaks in — the V2-021 executed
+    run's manifest documented a 6-node shot graph beside its 5-shot
+    execution record.
+    """
+    global COMP, BUDGET
+    path = state.get("compilation_path")
+    if path and Path(path).exists():
+        COMP = json.loads(Path(path).read_text(encoding="utf-8"))
+        BUDGET = COMP["mutation_budget"]
 
 
 def _state_path(run_dir: Path) -> Path:
@@ -185,9 +194,18 @@ def cmd_gate(run_dir: Path) -> int:
                     else "DISPATCH_AUTHORIZED_EXPECTED")
         state["compilation_path"] = str(comp_path)
         state["planned_shots"] = comp["mutation_budget"]["planned_shots"]
-        # rebuild shot state for the chosen variant (no mutations yet)
-        state["shots"] = {n["shot_id"]: {"status": "PENDING"}
-                          for n in comp["shot_graph"]["nodes"]}
+        # (re)build shot state for the chosen variant WITHOUT destroying
+        # progress: a standalone re-gate mid-run must preserve existing
+        # records; records for shots that leave the graph are archived
+        # under retired_shots, never dropped
+        previous = state.get("shots") or {}
+        nodes = [n["shot_id"] for n in comp["shot_graph"]["nodes"]]
+        retired = state.setdefault("retired_shots", {})
+        for sid, record in previous.items():
+            if sid not in nodes:
+                retired.setdefault(sid, record)
+        state["shots"] = {sid: previous.get(sid) or {"status": "PENDING"}
+                          for sid in nodes}
         state["gate"] = {
             "probed_at": json.dumps(matrix),
             "total_available_credits": total_available,
@@ -268,7 +286,6 @@ def _pick_account(run_dir: Path, state: dict,
 
 
 def cmd_auto(run_dir: Path) -> int:
-    global COMP, BUDGET
     state = _load_state(run_dir)
     if state["gate"] is None:
         code = cmd_gate(run_dir)
@@ -282,10 +299,7 @@ def cmd_auto(run_dir: Path) -> int:
         emit({"status": "STOPPED_BEFORE_FIRST_MUTATION",
               "gate": state["gate"].get("decision")})
         return 2
-    if state.get("compilation_path"):
-        COMP = json.loads(Path(state["compilation_path"])
-                          .read_text(encoding="utf-8"))
-        BUDGET = COMP["mutation_budget"]
+    _activate_comp(state)
     engine = ContinuityEngine()
     learning = LearningLoop()
     events = RunnerEvents(run_dir / "provider_events.jsonl")
@@ -319,9 +333,7 @@ def cmd_auto(run_dir: Path) -> int:
         spec = node  # compiled ShotGraphNode
         from film_pipeline.providers.dola_production.fixture_v2_020 import \
             ShotSpec as _Spec  # reuse the transport spec shape
-        # needle: the MOTION section is unique per shot function (two
-        # shots may share a subject line; discovery must not cross-match)
-        needle = plan["sections"]["motion"][:80]
+        needle = needle_for(COMP, sid)
         transport_spec = _Spec(
             shot_id=sid, role=node["function"],
             prompt=plan["compiled_text"],
@@ -572,6 +584,7 @@ def cmd_master(run_dir: Path) -> int:
 
 def cmd_manifest(run_dir: Path) -> int:
     state = _load_state(run_dir)
+    _activate_comp(state)
     import datetime as _dt
     doc = {
         "version": "v2-021-run-manifest-v1",
