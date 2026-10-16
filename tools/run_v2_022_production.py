@@ -239,25 +239,12 @@ def _pick_account(run_dir: Path, state: dict,
     skipping accounts already bound to a completed shot this run. A
     per-shot account_plan (operator-authored) is honored when that
     account still holds a valid session, else rotation resumes."""
-    plan = state.get("account_plan") or {}
-    if shot_id and shot_id in plan:
-        planned = plan[shot_id]
-        try:
-            result = _probe(planned)
-        except Exception:
-            result = {}
-        if result.get("session_state") == "SESSION_VALID":
-            return planned
-        emit({"event": "planned_account_unavailable", "shot": shot_id,
-              "account": planned, "session": result.get("session_state")})
-    completed = {"RELEASED", "RECEIPT_BOUND", "CREATION_BOUND",
-                 "ACQUIRED", "ACQUIRED_AWAITING_VISUAL_QC", "QC_ACCEPT",
-                 "EDITORIAL_LOCKED"}
-    used = {s.get("account") for s in state["shots"].values()
-            if s.get("account") and s.get("status") in completed}
+    planned = (state.get("account_plan") or {}).get(shot_id)
+    overrides = _stale_overrides()
     candidates = []
-    for alias in POOL_ACCOUNTS:
-        if alias in used:
+    for order, alias in enumerate(POOL_ACCOUNTS):
+        override = overrides.get(alias) or {}
+        if override.get("hard_blocked_today"):
             continue
         try:
             result = _probe(alias)
@@ -265,26 +252,24 @@ def _pick_account(run_dir: Path, state: dict,
             continue
         if result.get("session_state") != "SESSION_VALID":
             continue
-        override = _stale_overrides().get(alias)
-        if override is not None and override.get("hard_blocked_today"):
-            continue   # provider daily-count cap: excluded for today
         credit = result.get("known_credit_state")
-        if override is not None and credit is not None:
-            # statement-arithmetic correction (documented in
-            # stale_credit_overrides.json): the latest visible statement
-            # predates a known later consumption on the same account
-            credit = min(credit, int(override.get("effective_credit", 0)))
-        # known credit>0 first, then fresh (balance revealed by first
-        # ACK), known-zero LAST (a dispatch there would refuse)
-        if credit:
-            rank = (0, credit)
-        elif credit is None:
-            rank = (1, 0)
-        else:
-            rank = (2, 0)
-        candidates.append((rank[0], rank[1], alias))
-    candidates.sort(reverse=True)
-    return candidates[0][2] if candidates else None
+        if credit is not None:
+            credit = int(credit)
+            if "effective_credit" in override:
+                # Evidenced consumption can supersede a stale statement.
+                credit = min(credit, int(override["effective_credit"]))
+            if credit <= 0:
+                continue  # never spend cap against a known-zero account
+        candidates.append((
+            0 if credit is not None else 1,  # known-positive before unknown
+            0 if alias == planned else 1,    # plan preference, not bypass
+            -(credit or 0),                  # prefer observed headroom
+            order, alias))
+    if planned and not any(item[-1] == planned for item in candidates):
+        emit({"event": "planned_account_unavailable", "shot": shot_id,
+              "account": planned, "reason": "session/credit/hard-block"})
+    candidates.sort()
+    return candidates[0][-1] if candidates else None
 
 
 def _tranche_viable(known_after: int | None,
