@@ -161,7 +161,7 @@ MOTIONS = [
     "tree's base and pats the earth firm with his palm.",
     "He stands upright beside the young tree, tiny in the vast "
     "terraced hillside, hands empty at his sides.",
-    "He shoulders the empty crate and strides away left to right "
+    "He shoulders the wooden crate and strides away left to right "
     "along the lower path, quicker now, toward the valley, at last.",
 ]
 
