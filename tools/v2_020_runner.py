@@ -370,7 +370,29 @@ async def dispatch_and_acquire(
     assets.mkdir(parents=True, exist_ok=True)
     journal_path = pkg / f"dispatch_journal_{shot_tag}.jsonl"
     if journal_path.exists():
-        journal_path.unlink()
+        prior = DispatchJournal(journal_path, "")
+        if any(e["kind"] != MUTATION_RESERVED for e in prior.events):
+            # engine-side latch guard: a journal past reservation holds
+            # provider-side evidence (armed/released/bound). It must be
+            # reconciled read-only — never overwritten by a re-dispatch.
+            # The caller-side guard mirrors this; fail-closed here too so
+            # a direct engine call can never destroy release lineage.
+            raise RuntimeError(
+                "OWNER_AMBIGUITY_GATE:prior dispatch journal holds events "
+                "beyond MUTATION_RESERVED; read-only reconciliation "
+                "required, re-dispatch refused")
+        # reservation-only leftovers are archived, never deleted: the
+        # destructive unlink lost interrupted-run attempt evidence in
+        # V2-021 and forced manual recovery-lineage reconstruction
+        ordinal = 1
+        while True:
+            archive = journal_path.with_name(
+                f"{journal_path.stem}.prior-{ordinal}"
+                f"{journal_path.suffix}")
+            if not archive.exists():
+                break
+            ordinal += 1
+        journal_path.rename(archive)
 
     prompt_sha = hashlib.sha256(shot_spec.prompt.encode()).hexdigest()
     identity = {"shot_id": shot_spec.shot_id, "prompt_sha256": prompt_sha,
@@ -525,6 +547,15 @@ async def dispatch_and_acquire(
         journal.append("MODEL_VERIFIED", {"released_model": released_model})
 
         if not await adapter.wait_journal_state("RECEIPT_CAPTURED", 120):
+            # the release is already latched (NETWORK_RELEASE_OBSERVED +
+            # MODEL_VERIFIED): the provider mutation is a fact even when
+            # the SSE receipt never arrives. Fire the accounting callback
+            # BEFORE failing so budget consumption matches the latched
+            # release; receipt-miss under-counting was a live V2-021
+            # defect that required manual retroactive correction.
+            on_release({"attempt_id": attempt_id, "conversation_id": None,
+                        "receipt": {}, "request_fingerprint": fingerprint,
+                        "released_model": released_model})
             raise RuntimeError("OWNER_AMBIGUITY_GATE:receipt not captured")
         conversation_id = None
         for event in journal.events:
