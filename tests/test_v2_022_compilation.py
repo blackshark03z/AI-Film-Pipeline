@@ -111,3 +111,12 @@ def test_tranche_guard_continues_while_any_account_is_fundable():
     # only stop when nothing can fund the next shot
     assert tool._tranche_viable(0, [0, 0]) is False
     assert tool._tranche_viable(0, []) is False
+
+
+def test_receipt_miss_streak_rule():
+    import run_v2_022_production as tool
+    # a single miss is tolerated (recoverable read-only); a consecutive
+    # streak stops the run (clean exit) before more cap is burned
+    assert tool._receipt_miss_streak_stop(1) is False
+    assert tool._receipt_miss_streak_stop(2) is True
+    assert tool._receipt_miss_streak_stop(4) is True

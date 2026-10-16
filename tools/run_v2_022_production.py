@@ -297,6 +297,14 @@ def _tranche_viable(known_after: int | None,
     return any(c is None or c >= 1 for c in others)
 
 
+def _receipt_miss_streak_stop(streak: int) -> bool:
+    """A receipt-miss is a latched release whose delivery failed (one is
+    recoverable read-only); a consecutive streak means the session or
+    transport degraded — stop and recover before burning more of the
+    Owner-authorized cap."""
+    return streak >= 2
+
+
 def cmd_auto(run_dir: Path) -> int:
     state = _load_state(run_dir)
     if state["gate"] is None:
@@ -315,6 +323,7 @@ def cmd_auto(run_dir: Path) -> int:
     engine = ContinuityEngine()
     learning = LearningLoop()
     events = RunnerEvents(run_dir / "provider_events.jsonl")
+    miss_streak = 0
     for node in COMP["shot_graph"]["nodes"]:
         sid = node["shot_id"]
         record = state["shots"][sid]
@@ -398,6 +407,25 @@ def cmd_auto(run_dir: Path) -> int:
             record["error"] = message[:200]
             _save(run_dir, state)
             emit({"status": message.split(":")[0], "shot": sid})
+            if message.startswith("OWNER_AMBIGUITY_GATE:receipt"):
+                # consecutive receipt-misses: each one is a latched
+                # release whose delivery failed; one is recoverable
+                # read-only, a streak means the session/transport
+                # degraded — stop and recover before burning more
+                # of the Owner-authorized cap (day-1 live: 4 misses
+                # in a row produced 3 recoveries + 1 refusal repair)
+                miss_streak += 1
+                if _receipt_miss_streak_stop(miss_streak):
+                    emit({"status": "STOPPED_RECEIPT_MISS_STREAK",
+                          "shot": sid, "streak": miss_streak,
+                          "recover": "run read-only recovery "
+                                     "(v2_021_recover.py scan/bind) "
+                                     "before any resume"})
+                    state["gate"]["receipt_miss_streak_stop"] = miss_streak
+                    _save(run_dir, state)
+                    return 2
+            else:
+                miss_streak = 0
             continue
         record.update({"status": "ACQUIRED", "asset": result["asset_path"],
                        "sha256": result["asset_sha256"],
