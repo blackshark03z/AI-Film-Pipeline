@@ -1,4 +1,12 @@
-# CURRENT SLICE — S2 REAL-FILM REVIEW CHOICE (ACTIVE / OWNER CREATIVE ACCEPTANCE PENDING)
+# CURRENT SLICE — S2 FILM CREATIVE ACCEPTANCE (ACTIVE / OWNER_PREFER_SOURCE_AUDIO)
+
+**Owner sound-direction decision — 2026-10-18:** Having watched the film, Owner explicitly chose **`PREFER_SOURCE_AUDIO`** over the silent finish. The **preferred S2 finishing reference** is the already independent-PROVE-complete `D:\AI FILM MAKER\AI-Film-Pipeline-S2-Audio-Review\OWNER_REVIEW\V2_021_AUDIO_VARIANT\S2_SOURCE_AUDIO_REVIEW.mp4`, SHA-256 `a00b076a488a2dd87ef3d735ebcd469a609a97c94f1ecd2ff9a29f22f8c82f82` (25.208333s; 605 picture frames bitwise equivalent after decode to original). This Owner choice **CLOSES the silent-versus-source-audio selection gate** and supersedes the older pending-sound-choice text below. Original silent `DISTRIBUTION_MASTER.mp4` stays preserved and immutable; preference is not permission to overwrite it. The selected alternate still resides as local untracked review media; no release candidate was deployed or published.
+
+**Current acceptance boundary:** `OWNER_PREFER_SOURCE_AUDIO` is **a preference for the source-audio direction**, not explicit `OWNER_ACCEPTED` for the entire S2 picture, story, character continuity, pacing, ending or final sound mix. The sole critical open gate is **`OWNER_CREATIVE_PICTURE_STORY_EDIT_VERDICT_REQUIRED`**, plus explicit release authorization if Owner accepts the film. Tech Lead owns technical QA and any subsequent bounded WP only after a concrete repair is identified. **Do not create another speculative Worker task, remix without reason, activate S3 Film120 or Generate, spend credits, merge/push or change account/profile authority.** S1 remains `PRODUCT_VERIFIED_LOCAL`, Chrome A4 `SKIPPED_BY_OWNER`; the original frozen V1 30–60s/8–12 shot benchmark is separate.
+
+---
+
+## Historical S2 technical-review decision gate (sound direction now selected)
 
 **Tech Lead independent PROVE / LEARN — 2026-10-18:** The **S2 source-audio review variant is TECHNICALLY VERIFIED and ready for Owner creative comparison**; NOT film `OWNER_ACCEPTED` or `RELEASE_READY`. Worker `feature/s2-audio-review-001@7b7d73087608a0817252b3f9c42077ccf1f1cafa` committed **only** `tools/build_s2_source_audio_review.ps1` and `docs/operating/S2_SOURCE_AUDIO_REVIEW_DELIVERY.md`; the generated media is local untracked `OWNER_REVIEW/` in the **S2 worktree**. No Worker changed the primary root/media, no new Generate, paid use, merge or push. Frozen S1 GPM-first remains `PRODUCT_VERIFIED_LOCAL`; S3 remains `PAUSED`.
 

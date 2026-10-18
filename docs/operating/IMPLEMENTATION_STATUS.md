@@ -1,5 +1,17 @@
 # Implementation Status
 
+## S2 Owner creative sound preference — accepted direction, final creative gate open (2026-10-18)
+
+**GOAL / OWNER DECISION:** Owner watched the film and expressly chose **`PREFER_SOURCE_AUDIO`** (instead of the original near-silent finish). Tech Lead records this exact choice as **`OWNER_SOUND_DIRECTION_SELECTED`** for the V2-021 five-shot, 25.208333-second S2 candidate. The chosen reference is **`D:\AI FILM MAKER\AI-Film-Pipeline-S2-Audio-Review\OWNER_REVIEW\V2_021_AUDIO_VARIANT\S2_SOURCE_AUDIO_REVIEW.mp4`**, immutable SHA-256 `a00b076a488a2dd87ef3d735ebcd469a609a97c94f1ecd2ff9a29f22f8c82f82`; preserve original silent master SHA-256 `9085a50bf0babd81257dd8f8e982a2553eff7cd8592dde6de8d84a4be923f27d` untouched. **Preference is not blanket acceptance of final picture/story/continuity/pacing/mix and not publication authorization.** Status: `S2 TECHNICAL_REVIEW_READY / OWNER_SOUND_DIRECTION_SELECTED / OWNER_CREATIVE_ACCEPTANCE_PENDING / RELEASE_NOT_AUTHORIZED`.
+
+**PRODUCT DELTA:** The Owner has resolved the **sound-direction decision**: use the source-audio variant as the basis for any final S2 finishing. No further code/media change or speculative remix is necessary before clarifying acceptance of story, character/world continuity, shot/edit pacing and ending. This five-shot S2 does **not** automatically complete the separate frozen V1 benchmark (30–60s, 8–12 shots).
+
+**EVIDENCE:** Worker `feature/s2-audio-review-001@7b7d73087608a0817252b3f9c42077ccf1f1cafa` provided builder and docs; Tech Lead previously independent-PROVEd 6/6 source/master SHA, 605/605 identical decoded frames, duration 25.208333s, source-aligned 5 audio windows, source-audio peak -16.0 dB, no clipping. This turn, MAR independently rechecked the **same exact two local media hashes**, worker HEAD and policy blob against pinned `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`, and saw only expected untracked `OWNER_REVIEW/` in Worker worktree. **No new Worker or media mutation**, no extra provider Generate/paid action, no merge/push, original Film120 WIP preserved.
+
+**MAIN BLOCKER → NEXT DECISION:** `OWNER_CREATIVE_PICTURE_STORY_EDIT_VERDICT_REQUIRED`: does Owner accept the existing five-shot **picture, narrative, continuity and edit pacing** as a short-film candidate with the chosen source audio, or request specific repairs? If accepted, Tech Lead can prepare a bounded final package/technical release checklist **without silently publishing**; if repairs are requested, write a focused WP only for the actual defect. **Release remains a separate Owner authorization**, S3 Film120 paused. No automatic transition to a new milestone and no Worker loop before this creative judgment.
+
+---
+
 ## S2 audio review variant — independent Tech Lead PROVE / LEARN (2026-10-18)
 
 **GOAL:** S2 five-shot real-film finishing: one non-destructive comparable source-audio variant, with Owner creative selection still outstanding. **Verdict: `F1–F6 TECHNICAL_REVIEW_READY / OWNER_CREATIVE_ACCEPTANCE_PENDING`**, not S2 PRODUCT SHIPPED, not the separate frozen V1 30–60s/8–12-shot benchmark.
