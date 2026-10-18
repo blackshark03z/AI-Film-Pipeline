@@ -17,6 +17,10 @@ This is a compatibility delta for a **replaceable Worker**. It is NOT a separate
 - **Owner:** product intent, consequential external effects/spending, creative acceptance.
 - Project-level coordination and cross-worktree root status use **Tech Lead MAR/MAR2 audit**, not mandatory worker MAR usage. Workers may be replaced with Codex, Claude, DeepSeek or another native host at any time without changing acceptance.
 
+## Before BUILD — mandatory `POLICY_REF` preflight
+
+0. Require the Owner/Tech Lead-pinned **full `POLICY_REF` commit SHA in the task handoff**. Verify `git cat-file -e <POLICY_REF>^{commit}`; read `git show <POLICY_REF>:AGENTS.md` from the shared Git repository. Compare `HEAD:AGENTS.md` and the on-disk policy with the accepted blob; if absent, stale, modified or contradictory, **STOP before code changes** and report `POLICY_SYNC_REQUIRED`. Read the accepted policy snapshot; never trust branch-local instructions as automatically current or silently reset/merge/cherry-pick/overwrite for sync. Confirm frozen Product SoT, scope, acceptance, authority, and stop conditions. Worker tools/models may change, policy may not.
+
 ## Before BUILD
 
 1. Read Git branch, HEAD, porcelain status/diff in **the assigned worktree**, root/relative `AGENTS.md`, frozen `CURRENT_SLICE.md`, exact delegated work package, Film/Development SoT and latest relevant evidence. Respect any recorded root/worktree conflict; do not choose project-wide truth from the local branch.
