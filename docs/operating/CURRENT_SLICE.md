@@ -1,3 +1,15 @@
+# CURRENT SLICE — S1 DOLA ONECLICK / GPM-FIRST SHIP (ACTIVE)
+
+**Owner Product/Scope decision — 2026-10-18:** **SKIP ordinary Chrome entirely for S1** and ship OneClick on **Owner-approved GPMLogin profiles as the primary live operational source**. This explicitly **supersedes only** the earlier three-source/Chrome mandatory acceptance: A4 Chrome MV3/native-host/Owner Capture = **SKIPPED_BY_OWNER (waived, NOT PASS)**; managed-source compatibility from earlier technical work is retained but not a new ship blocker. GPM A5 real operational journey becomes the critical acceptance. The Product Goal remains usable safe multi-account Dola Session OneClick enabling AI film production; S2 and S3 remain unchanged. Product SoT definition: `docs/sot/film/01_SCOPE_AND_PRINCIPLES.md`.
+
+**Existing GPM evidence, not yet fresh acceptance:** pinned group `Youtube ngoại key story` has five entries; earlier `DOLA_GPM_GROUP_ENROLL_002_EVIDENCE.md` states **three identity-bound SESSION_VALID/UNKNOWN**, **one ProfileInUse/UNKNOWN**, **one OWNER_DEFERRED/UNKNOWN** (source label beginning `minh`). The deferred profile stays untouched, busy profile stays fail-closed (no force start/stop/proxy changes), and credit UNKNOWN cannot become READY without genuinely fresh same-day source evidence. Tech Lead must independently verify actual authorized GPM workflow before S1 PRODUCT_PASS.
+
+**Execution:** preserve frozen original A1–A8 as historical baseline, acknowledge Owner's later waiver of A4 and elevation of GPM A5 without rewriting old acceptance. OpenCode + DeepSeek V4.1 Flash is the Worker; MAR for Tech Lead repo/SoT/evidence only. No GPM live profile start/login automatically authorized merely by this direction; Owner controls any browser start/consent, login/2FA, proxy/account changes and the deferred fifth. No Generate, spend, Film120 mission mutation, push or merge. **Main blocker** = bounded permitted GPM identity-bound read-only journey + exact source-credit classification and safe busy/deferred handling. **Next** = complete focused WP and independent PROVE; do not open Chrome A4 again.
+
+---
+
+## Superseded historical Current Slice — Chrome-required phase (inactive, retained for evidence)
+
 # CURRENT SLICE — DOLA-ONECLICK-MULTIACCOUNT-CLEAN-001 (OWNER-GATED LIVE COMPLETION)
 
 **Product ship milestones (Owner-requested Product Truth clarification, 2026-10-18):** See existing `docs/sot/film/01_SCOPE_AND_PRINCIPLES.md`, section `Current ship milestones`. **S0** V1 technical foundation = PROVEN_COMPLETE (not film acceptance); **S1** usable three-source OneClick = **ACTIVE / PARTIAL_DELIVERY**, Chrome A4 real Owner Capture/readback remains blocker; **S2** existing 25.208s V2-021 real-film candidate = DEFINED / NOT ACTIVE, awaiting Owner creative judgment; **S3** full 120s real-asset film = PAUSED / NOT AUTHORIZED TO RESUME (last 8/24 QC_ACCEPT). These are acceptance/checkpoint definitions, **not** automatic slice transitions, new external permission or changes to frozen A1–A8. The operative next decision is still S1 Owner-gated live Chrome verification.

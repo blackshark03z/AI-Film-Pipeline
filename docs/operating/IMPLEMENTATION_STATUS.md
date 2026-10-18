@@ -1,5 +1,17 @@
 # Implementation Status
 
+## Owner S1 source-strategy decision and Product Progress Gate — 2026-10-18
+
+**Owner decision accepted:** Skip ordinary Chrome entirely for **S1 OneClick ship**; operate using **GPMLogin as the primary source**. Original three-source acceptance A4 is `SKIPPED_BY_OWNER`, neither failed nor proven, and is **not** a blocker for this revised ship scope. This is a bounded Product/Current Slice truth delta approved by Owner, not license to rewrite historical frozen A1–A8. Root `CURRENT_SLICE.md` and existing `docs/sot/film/01_SCOPE_AND_PRINCIPLES.md` carry current authority; existing managed support is preserved. S2 owner film-review and S3 paused 120-second film goals unchanged.
+
+**Product Delta:** Decision removes an external Chrome install/Capture dependency; **no new live GPM product proof yet**. Worker A4 handoff remains accurately PARTIAL with zero code edits. **Evidence:** independent A4 offline 11 test PASS, root and OneClick Git snapshots; GPM group evidence on OneClick branch `DOLA_GPM_GROUP_ENROLL_002_EVIDENCE.md`: three Dola identity-bound GPM sessions `SESSION_VALID/UNKNOWN`, one `ProfileInUse/UNKNOWN`, one `OWNER_DEFERRED/UNKNOWN`, five in pinned group. Do not recycle older claims that all four eligible are bound; actual evidence distinguishes three bound and one busy.
+
+**Main Blocker:** independently reproducible safe **GPM-only S1 OneClick** live read-only matrix and exact identity-bound status across permitted GPM aliases, correct current credit freshness/UNKNOWN, repeatable sync, explicit handling of one busy and one deferred. New browser launch/login or GPM mutation is still Owner-controlled and must stop at the right gate, without touching deferred source-label `minh`.
+
+**Next Decision:** Tech Lead to freeze a focused GPM WP in already-clean OneClick worktree for **OpenCode + DeepSeek V4.1 Flash**, relay via Owner (NOT MAR submit), independently PROVE delivered revision and any legitimate live evidence; if permission is needed for start/login, `OWNER_ACTION_REQUIRED` with a single bounded consent request. No speculative refactor or extra Chrome work. The original three-source A1–A8 report and A4 follow-up remain historical proof, not current gate. No Generate, spend, proxy/fingerprint changes, Film120 mutation, reset, merge or push.
+
+---
+
 ## S1/A4 OpenCode delivery — Independent Tech Lead PROVE (2026-10-18)
 
 **Worker handoff:** OpenCode / DeepSeek V4.1 Flash, `feature/dola-session-oneclick-001@8070e5ed936168ed1c4f901bbc3d3963c66fc387`. Worker reported **PARTIAL_DELIVERY / OWNER_ACTION_REQUIRED**, exact start/end HEAD unchanged, no source/doc modifications and no local commit. MAR verified this worktree's clean Git status, HEAD, pinned `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003` policy and both optional-skill blobs. Frozen A1–A8 remain unchanged.
