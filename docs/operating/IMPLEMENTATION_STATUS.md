@@ -1,5 +1,13 @@
 # Implementation Status
 
+## Current S1 relay handoff — Owner-selected Worker (2026-10-18)
+
+**Execution route confirmed:** Tech Lead uses MAR for root/product-state verification and documentation only; **Worker is OpenCode / DeepSeek V4.1 Flash**, invoked by Owner with a prompt relay (not an MAR-managed worker/task). The Owner requested a ready Work Package to continue S1 without scope change. Prepared and committed in OneClick worktree `feature/dola-session-oneclick-001@8070e5ed936168ed1c4f901bbc3d3963c66fc387`: `docs/operating/TASK_DOLA_ONECLICK_A4_OWNER_LIVE_SHIP.md`. The full policy SHA is unchanged: `45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`; frozen A1–A8 remains the only acceptance contract. **Relay prepared, not claimed executed/accepted.**
+
+**Product Delta → Evidence → Main Blocker → Next Decision:** No new product delta from WP drafting. Evidence: prior OneClick implementation `2a42ac5`, independently checked focused tests and read-only `doctor` PASS; last Windows HKCU check found `com.dola.session_bridge` Native Messaging Host absent. Main blocker: Owner installation/Chrome signed-in explicit **Capture** and independent destination identity readback (A4). Next: OpenCode performs bounded **read-only readiness and demonstrated-defect fixes only**, stops at the Owner consent gate, returns sanitized result for independent Tech Lead PROVE; no new Film/Generate/GPM-deferred work. The Owner may select an ordinary Chrome profile and consent later; this relay alone is not consent.
+
+---
+
 ## Current ship milestones — 2026-10-18 Product Truth LEARN
 
 **Canonical definition:** `docs/sot/film/01_SCOPE_AND_PRINCIPLES.md` (existing Product SoT, appended delivery milestones without changing frozen V1 benchmark). **Active execution pointer:** root `docs/operating/CURRENT_SLICE.md`. This is a definition and evidence/status reconciliation, **not approval to reopen Film120, regenerate or spend**.
