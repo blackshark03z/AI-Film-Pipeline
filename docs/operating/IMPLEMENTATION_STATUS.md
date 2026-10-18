@@ -1,5 +1,17 @@
 # Implementation Status
 
+## S2 local finishing critical-path choice — Owner watched film, no creative verdict yet (2026-10-18)
+
+**GOAL:** Continue from completed S1 GPM-first into non-destructive S2 short real-film finishing/review, as Owner requested after watching V2-021 master. **No explicit creative accept/reject verdict was provided; S2 `OWNER_CREATIVE_ACCEPTANCE_PENDING` and `RELEASE_NOT_AUTHORIZED`.** S3 paused. This authorizes local preview/evidence preparation, not paid Generate or Film120 continuation.
+
+**Product Delta / independent technical PROVE:** S1 already local product verified; S2 original master independently exists, `DISTRIBUTION_MASTER.mp4` 25.208333s / 1280×720 / H.264+AAC, SHA-256 `9085a50bf0babd81257dd8f8e982a2553eff7cd8592dde6de8d84a4be923f27d` equal to frozen evidence. `ffmpeg volumedetect` shows **FINISH_MASTER.mov and DISTRIBUTION_MASTER.mp4 mean/max -91.0 dB (near silent)**, while five original provider-issued `assets/S01..S05.mp4` each carry non-silent provider audio (max -15.9/-23.1/-25.2/-30.7/-28.6 dB). The original release checkpoint calls this a **silent-track finish**, so don't claim unintended defect or choose the preferred sound creatively. Owner review package exists locally. No new generation or code mutation.
+
+**Main Blocker:** one **reversible, source-faithful audible S2 review alternative** (picture preserved, audio from existing verified 5 source clips only), then Owner explicitly approves/rejects the final picture/sound/editorial choice. Scope is strictly the V2-021 25.208s five-shot candidate, not completion of the separate frozen 30–60s/8–12-shot V1 benchmark.
+
+**Next Decision:** Tech Lead freezes one audio-review WP for an isolated clean OpenCode / DeepSeek V4.1 Flash worktree (root Film120 dirty files protected). Worker BUILDs only a local `REVIEW_VARIANT` without overwriting original `OWNER_REVIEW`, master or accepted assets; reports exact SHA, durations, no clipping and video stream/frame integrity. Tech Lead independent PROVE follows, then Owner creative judgment. No arbitrary music, second framework, paid provider, Film120 resurrection, merge or push.
+
+---
+
 ## S1 GPM-FIRST — LOCAL PRODUCT VERIFIED / independent PROVE & LEARN (2026-10-18)
 
 **GOAL / scope:** Dola Session OneClick usable through Owner-authorized GPMLogin (G1–G6). **Tech Lead verdict: S1 `PRODUCT_VERIFIED_LOCAL / GPM_FIRST_PASS`**; not `OWNER_ACCEPTED` for film, remote release-ready, nor all-source A1–A8. Ordinary Chrome A4 stays **`SKIPPED_BY_OWNER`**, not technically PASS. Owner-approved GPM launch/reuse and bounded session readback were exercised by OpenCode / DeepSeek V4.1 Flash, exact source branch `feature/dola-session-oneclick-001@958337ec799e2616a1d7fea767b41c5aedeaf3b7` (base `b6a0e5e`; commit only adds `docs/operating/DOLA_ONECLICK_GPM_LIVE_EVIDENCE.md` and updates `docs/operating/DOLA_ONECLICK_GPM_SHIP_DELIVERY.md`; clean worktree, zero product code changes). No integration/merge/push.
