@@ -1,4 +1,16 @@
-# CURRENT SLICE — S2 REAL-FILM FINISHING REVIEW (ACTIVE / OWNER CREATIVE ACCEPTANCE PENDING)
+# CURRENT SLICE — S2 REAL-FILM REVIEW CHOICE (ACTIVE / OWNER CREATIVE ACCEPTANCE PENDING)
+
+**Tech Lead independent PROVE / LEARN — 2026-10-18:** The **S2 source-audio review variant is TECHNICALLY VERIFIED and ready for Owner creative comparison**; NOT film `OWNER_ACCEPTED` or `RELEASE_READY`. Worker `feature/s2-audio-review-001@7b7d73087608a0817252b3f9c42077ccf1f1cafa` committed **only** `tools/build_s2_source_audio_review.ps1` and `docs/operating/S2_SOURCE_AUDIO_REVIEW_DELIVERY.md`; the generated media is local untracked `OWNER_REVIEW/` in the **S2 worktree**. No Worker changed the primary root/media, no new Generate, paid use, merge or push. Frozen S1 GPM-first remains `PRODUCT_VERIFIED_LOCAL`; S3 remains `PAUSED`.
+
+**Exact Owner review pair (do not overwrite either):**
+- **Original silent finish:** `D:\AI FILM MAKER\AI-Film-Pipeline\OWNER_REVIEW\V2_021\DISTRIBUTION_MASTER.mp4` (same sealed master at `projects/quality_v2_021_narrative_compiler/qualification_run`), SHA-256 `9085a50bf0babd81257dd8f8e982a2553eff7cd8592dde6de8d84a4be923f27d`.
+- **Audible source-audio alternate:** `D:\AI FILM MAKER\AI-Film-Pipeline-S2-Audio-Review\OWNER_REVIEW\V2_021_AUDIO_VARIANT\S2_SOURCE_AUDIO_REVIEW.mp4`, SHA-256 `a00b076a488a2dd87ef3d735ebcd469a609a97c94f1ecd2ff9a29f22f8c82f82`.
+
+**Product Delta and acceptance:** Tech Lead independently hash-verified 6/6 originals and variant, independently decoded/compared **605/605 video frames identical**, confirmed **25.208333s**, H.264 picture, audible AAC variant (-36.9 dB mean / -16.0 dB max) versus source silent master (-91 dB), no digital clipping, and validated all five shot audio windows against original provider tracks using matching **242000 samples each** (mean/peak deltas within 0.1 dB). `F1–F6 TECHNICAL_REVIEW_READY`; the Worker reports builder re-run produced same hash, but Tech Lead intentionally **did not rerun the builder** to avoid overwriting preview media. Separate frozen 30–60s/8–12-shot V1 benchmark remains unproven by this 5-shot S2. **Main Blocker:** `OWNER_CREATIVE_SOUND_CHOICE_REQUIRED` (keep original silent finish, prefer source-audio alternate, or request a mix/repair), plus explicit creative acceptance of picture/story/editorial before claiming S2 SHIPPED. **No next Worker WP** until Owner gives a creative verdict or a concrete defect requiring repair.
+
+---
+
+## Historical S2 audio-variant preparation (completed; retained as evidence)
 
 **Owner continuation decision — 2026-10-18:** Owner confirms they have **watched** the existing V2-021 real-assets 5-shot film and asks Tech Lead to **continue**. Treat this as authorization for **non-destructive local S2 finishing/review preparation only**, **NOT** as explicit acceptance of story, edit, sound, film release, paid provider Generate or Film120 resumption. S1 GPM-first remains `PRODUCT_VERIFIED_LOCAL` and closed; ordinary Chrome A4 stays `SKIPPED_BY_OWNER`. S3 stays PAUSED.
 
