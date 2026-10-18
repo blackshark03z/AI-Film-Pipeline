@@ -1,4 +1,18 @@
-# CURRENT SLICE — DOLA-ONECLICK-MULTIACCOUNT-CLEAN-001 (ACTIVE PROJECT EXECUTION FOCUS)
+# CURRENT SLICE — DOLA-ONECLICK-MULTIACCOUNT-CLEAN-001 (OWNER-GATED LIVE COMPLETION)
+
+**Tech Lead LEARN / authoritative current state — 2026-10-18.** The approved product execution focus is unchanged: **ship a usable Dola multi-account Session OneClick across managed browser profiles, ordinary Chrome and Owner-authorized GPM**. The separate AI Film Pipeline V1 implementation is technically complete (Package-019), but film creative/release acceptance is not implied. V2-022 Film-120s is paused/protected; no Generate, mission mutation, budget use, provider account rotation or filmworkprint expansion is part of this slice.
+
+**Exact frozen authority:** A1–A8 at `feature/dola-session-oneclick-001:docs/operating/TASK_DOLA_ONECLICK_MULTI_ACCOUNT_CLEAN_SHIP.md` (handoff baseline `37dacb1`). Worker delivered implementation/report at `2a42ac53c5ce0bfa823486e5dd14d9a1ddcd6f04`; subsequent `159b2d6` on that worktree changed **only pinned policy files**, not product code. Full accepted policy ref: `45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`.
+
+**Present acceptance:** Managed OneClick and source-timestamp credit freshness A1–A3 have bounded independent evidence: Tech Lead inspected credit freshness/classification source and reran 85 focused tests (PASS). Related regression: 58 PASS, 1 subprocess import-path failure; that exact test passed with `PYTHONPATH=<OneClick>/src` (environment discrepancy, not proven code defect). A4 ordinary Chrome **live Owner-click capture + identity-bound readback remains UNPROVEN**; A5 GPM functionality has offline PASS and historical bounded read-only live identity observations, but no fresh GPM re-probe. Worker report's larger 422-pass suite and managed live observations are Worker evidence, not separately repeated real-browser PROVE by Tech Lead. Three-source **Product Goal remains PARTIAL_DELIVERY**, not COMPLETE_VERIFIED.
+
+**Product Progress Gate:** **Product Delta** — previously stale 2026-10-16 credit statements no longer authorize 2026-10-18 READY; display now separates source and observation times and fails closed to UNKNOWN. **Evidence** — exact Worker commit/report, independently inspected code, 85 tests and import-corrected subprocess regression. **Main Blocker** — genuine ordinary-Chrome extension/native-host installation and explicit Owner **Capture** consent, after which independent read-only identity/session readback is required. **Next Decision** — keep this same slice at its Owner gate; do not create another Worker task or resume Film120/hardening merely because tests passed. Eligible GPM re-proof is optional and may not touch Owner-deferred profile.
+
+**Git/authority:** MAR confirmed all **six non-temporary worktrees** use byte-identical `AGENTS.md` and two optional skill files from `POLICY_REF` at HEAD (root + five linked worktrees). Local `main` policy-only commit `3d43243` now contains the same blobs for safe future local worktree bases. No reset, merge, cherry-pick, push, deploy or destructive cleanup. MAR temporary detached scratch worktree was left untouched. Root mission code and untracked Owner assets remain dirty/protected. This is a checked local Git state, **not remote propagation or a claim that every branch's historical Current Slice has been rewritten**.
+
+---
+
+## Historical kickoff snapshot (preserved; superseded where dated)
 
 **Reconciled by Tech Lead using MAR on 2026-10-18; read-only inventory of root + linked worktrees.** This is the root AI-Film-Pipeline project-level Current Slice. It is NOT a claim that the whole film product has shipped or that the root and child branch HEADs have been merged.
 
