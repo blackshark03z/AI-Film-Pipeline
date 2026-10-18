@@ -1,4 +1,16 @@
-# CURRENT SLICE — S2 LOCAL_SHIP_PACKAGE_READY (OWNER_RELEASE_AUTH_REQUIRED)
+# CURRENT SLICE — S2 PUBLIC RELEASE SETUP (OWNER_APPROVED / DESTINATION_PENDING)
+
+**Owner release decision — 2026-10-19:** Asked directly whether to permit **public release of the already creative-locked S2 film**, Owner replied **"Cho phép"**. Tech Lead accepts this as **`OWNER_PUBLIC_RELEASE_APPROVED`** for the **exact V2-021 five-shot, 25.208333s source-audio MP4** whose hash is `a00b076a488a2dd87ef3d735ebcd469a609a97c94f1ecd2ff9a29f22f8c82f82`; it is **not** authorization for other films/edits, Git push/merge, deployment, paid Generate, Film120, account/proxy changes or credential sharing.
+
+**Currently active publication gate:** `DESTINATION_AND_ACCOUNT_REQUIRED / RIGHTS_PREFLIGHT_PENDING`. No publication destination, channel/account, requested title/description/visibility or accessible upload mechanism has yet been identified; **no external upload/publish action has occurred**. Before any external posting, ask Owner which platform/channel should receive this exact film; then verify account authority, source-media/provider distribution rights and platform requirements using the existing manifest/source evidence and connected execution capability. Tech Lead may prepare a bounded **Gemini** Worker WP only after that target is concrete and necessary, with no speculative platform infrastructure. No need to ask Owner again to approve the same film for public release; obtain only still-missing destination/account and any new consequential scope.
+
+**Package truth stays immutable:** `D:\AI FILM MAKER\AI-Film-Pipeline-S2-Audio-Review\OWNER_REVIEW\V2_021_CREATIVE_LOCK_PACKAGE\V2_021_S2_CREATIVE_LOCK_MASTER.mp4`, 7,032,526 bytes, SHA-256 `a00b076a488a2dd87ef3d735ebcd469a609a97c94f1ecd2ff9a29f22f8c82f82`. The pre-decision `MANIFEST.json` retains `release_authorized=false` and `public_distribution=false` as its **historical seal**, not current Owner authority; do not edit it inside the accepted package. Record the dated superseding consent in the existing Product SoT and Implementation Status. **`PUBLICATION_NOT_YET_EXECUTED`**; `LOCAL_SHIP_PACKAGE_READY` remains true, S1 `PRODUCT_VERIFIED_LOCAL`, S3 `PAUSED`.
+
+**Progress Gate:** Goal = publicly ship Owner-accepted film; Product Delta = explicit release consent received; Evidence = Owner's answer + independently verified immutable MP4; Main Blocker = chosen destination/authorized account and rights verification; Next Decision = Owner supplies platform/channel, Tech Lead prepares one bounded release action rather than repeating production. No new Worker assigned yet.
+
+---
+
+## Historical S2 local-delivery acceptance (completed; retained)
 
 **Tech Lead independent acceptance — 2026-10-19:** The Owner-creatively-accepted V2-021 5-shot/25.208333s film with original shot audio is now **`LOCAL_SHIP_PACKAGE_READY`**. The previously active local packaging checkpoint is CLOSED; no further BUILD or repeat packaging is needed. The exact package was produced on `feature/s2-audio-review-001@2dad68f9b3177a0efc5417a91582f4b0e0e9b7ad`; Worker added only `docs/operating/S2_CREATIVE_LOCK_PACKAGE_DELIVERY.md` in Git and left all local media untracked/protected.
 

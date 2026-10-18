@@ -1,5 +1,19 @@
 # Implementation Status
 
+## S2 public release — Owner authorization recorded, endpoint not yet selected (2026-10-19)
+
+**GOAL / Owner action:** Following S2 `OWNER_CREATIVE_ACCEPTED / LOCAL_SHIP_PACKAGE_READY`, Tech Lead asked: **"Bạn có cho phép phát hành công khai phim S2 đã khóa không?"** Owner explicitly replied **"Cho phép"**. Interpret accurately as **`OWNER_PUBLIC_RELEASE_APPROVED` for this exact accepted five-shot/25.208333s source-audio film**, **not** authorization to release any other media, push/merge Git, deploy software, resume Film120, Generate/spend, change accounts or bypass channel permissions. The narrower previously open **general public-release consent** is resolved.
+
+**Exact release input:** Immutable verified local media `D:\AI FILM MAKER\AI-Film-Pipeline-S2-Audio-Review\OWNER_REVIEW\V2_021_CREATIVE_LOCK_PACKAGE\V2_021_S2_CREATIVE_LOCK_MASTER.mp4`, 7,032,526 bytes, SHA-256 `a00b076a488a2dd87ef3d735ebcd469a609a97c94f1ecd2ff9a29f22f8c82f82`. Tech Lead's prior L1–L6 independent PROVE includes full decode, 605 video frames, source lineage, audio and hash. The bundle's already-accepted `MANIFEST.json` still says `release_authorized=false` and `public_distribution=false` because it is a **sealed pre-consent artifact**; do not silently mutate or overwrite it. This dated Owner approval in SoT and status is the later governing release decision. Neither the manifest nor a report is proof of an external upload.
+
+**Product Delta / Evidence:** A genuine Owner decision removes the former general publication-authorization blocker. **No public post exists or public URL has been verified**, so product status is `OWNER_PUBLIC_RELEASE_APPROVED / DESTINATION_PENDING / PUBLICATION_NOT_YET_EXECUTED`; **not `PUBLIC_SHIPPED`**. No code/media changes, paid operations or provider calls are justified to record permission.
+
+**Main Blocker:** `DESTINATION_AND_ACCOUNT_REQUIRED` — no publication platform/channel/account has been selected and verified; metadata/visibility/attribution and source provider-media public distribution rights remain **PREFLIGHT_PENDING**. Need one Owner answer specifying where/to which channel to publish. Do not invent channel access, licenses, upload permissions or platform defaults. An approved public-release *intention* does not imply that any possible upload is safe without specifying its exact account/destination.
+
+**Next Decision:** Obtain platform/channel from Owner; Tech Lead then verifies channel access and release-rights evidence and chooses a bounded action/Worker WP if actually required. For any new Worker dispatch, use **Gemini** as explicitly selected by Owner rather than OpenCode (quota exhausted), preserve pinned `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`, Owner prompt relay, MAR independent PROVE. Do not start an unscoped release Worker or reuse the completed S2 packaging WP. S1 locally verified, S3 paused; protected root dirty `opencode.json` and Film120 WIP must remain intact.
+
+---
+
 ## S2 creative-locked local delivery package — independently VERIFIED (2026-10-19)
 
 **GOAL → PROGRESS:** Owner-approved V2-021 five-shot/25.208333-second picture/story/continuity/edit and source-audio sound now exist as an exact immutable local handoff package. Verdict: **`OWNER_CREATIVE_ACCEPTED / LOCAL_SHIP_PACKAGE_READY / PUBLICATION_NOT_AUTHORIZED`**. This closes S2's bounded **local** delivery checkpoint, not the distinct frozen V1 30–60s/8–12-shot benchmark or external-release gate. S1 GPM-first remains `PRODUCT_VERIFIED_LOCAL`, S3 paused.
