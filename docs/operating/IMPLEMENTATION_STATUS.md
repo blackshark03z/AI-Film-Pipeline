@@ -1,5 +1,21 @@
 # Implementation Status
 
+## S1/A4 OpenCode delivery — Independent Tech Lead PROVE (2026-10-18)
+
+**Worker handoff:** OpenCode / DeepSeek V4.1 Flash, `feature/dola-session-oneclick-001@8070e5ed936168ed1c4f901bbc3d3963c66fc387`. Worker reported **PARTIAL_DELIVERY / OWNER_ACTION_REQUIRED**, exact start/end HEAD unchanged, no source/doc modifications and no local commit. MAR verified this worktree's clean Git status, HEAD, pinned `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003` policy and both optional-skill blobs. Frozen A1–A8 remain unchanged.
+
+**Product Delta:** **NONE from this worker round**. Offline readiness was verified; no live ordinary-Chrome Capture/ephemeral destination readback occurred. Preserve earlier evidenced A3 stale-credit fix; do not promote S1 to PRODUCT_PASS or SHIPPED.
+
+**Independent Evidence:** Tech Lead reran `python -m pytest tests/test_dola_session_oneclick.py -k "native_host or chrome or installer or extension or framing or oversized" -q` in OneClick: **11 passed, 36 deselected**. Read-only Windows HKCU check: `Software\\Google\\Chrome\\NativeMessagingHosts\\com.dola.session_bridge` **NOT_REGISTERED**. Git remained clean. Worker also reported scoped `doctor` PASS and `tools/install_native_host.py --dry-run` with **no extension IDs auto-detected**; those specific two new commands are Worker evidence, corroborated by prior Tech Lead `doctor` and installer source inspection, not claimed rerun this round. No credential/browser/provider mutation by Tech Lead.
+
+**Handoff correction verified from source and CLI `--help`:** The Worker's suggested `"Install Dola Native Host.cmd" <extension-id>` is **incorrect positional syntax**. The script accepts `--extension-id ID` (repeatable), not a bare positional ID. The `.cmd` launcher forwards args unchanged. Load-unpacked extensions may not be auto-detected by the scanner of Chrome's packed `Extensions` folders. Correct **Owner-approved** invocation from the OneClick worktree is `python tools/install_native_host.py --extension-id <ID_SHOWN_IN_CHROME_EXTENSIONS>`, or `"Install Dola Native Host.cmd" --extension-id <ID>` from Command Prompt. A real install compiles the host shim, writes its manifest and registers **HKCU**; **do not silently execute**. The Owner must first load the unpacked Dola-only extension into their chosen ordinary signed-in Chrome profile, capture its ID, then personally approve the per-user host install and click Capture on an authenticated `dola.com` tab. Register a distinct Chrome-source alias with the existing CLI if one is not already registered; never reuse a bound managed/GPM alias.
+
+**Main Blocker:** external **OWNER_ACTION_REQUIRED** for ordinary-Chrome extension/host registration and explicit Capture; then independent read-only DPAPI/alias identity/destination proof (A4). No fresh A5 GPM live permission; fifth GPM account remains `OWNER_DEFERRED`.
+
+**Next Decision:** hold **S1 ACTIVE / PARTIAL_DELIVERY, A4 INCONCLUSIVE**. No repeat Worker/refactor loop and no change to Current Slice or Product/System SoT. Await Owner Capture; after Owner confirmation Tech Lead independently inspects sanitized A4 result and runs focused proof, then updates canonical acceptance. No Film120/Generate, remote push, branch merge, proxy or account changes authorized.
+
+---
+
 ## Current S1 relay handoff — Owner-selected Worker (2026-10-18)
 
 **Execution route confirmed:** Tech Lead uses MAR for root/product-state verification and documentation only; **Worker is OpenCode / DeepSeek V4.1 Flash**, invoked by Owner with a prompt relay (not an MAR-managed worker/task). The Owner requested a ready Work Package to continue S1 without scope change. Prepared and committed in OneClick worktree `feature/dola-session-oneclick-001@8070e5ed936168ed1c4f901bbc3d3963c66fc387`: `docs/operating/TASK_DOLA_ONECLICK_A4_OWNER_LIVE_SHIP.md`. The full policy SHA is unchanged: `45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`; frozen A1–A8 remains the only acceptance contract. **Relay prepared, not claimed executed/accepted.**
