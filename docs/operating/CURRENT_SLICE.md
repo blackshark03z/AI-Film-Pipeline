@@ -1,4 +1,14 @@
-# CURRENT SLICE — S1 DOLA ONECLICK / GPM-FIRST SHIP (ACTIVE)
+# CURRENT SLICE — S1 DOLA ONECLICK / GPM-FIRST (LOCAL PRODUCT_VERIFIED; OWNER NEXT-SLICE GATE)
+
+**Tech Lead independent PROVE / LEARN — 2026-10-18:** **S1 GPM-first critical operator journey PRODUCT_VERIFIED LOCALLY; scoped G1–G6 acceptance closed.** Exact completed Worker revision `feature/dola-session-oneclick-001@958337ec799e2616a1d7fea767b41c5aedeaf3b7` (only GPM live evidence/delivery docs changed after authorization). Tech Lead inspected real persisted git-ignored `session_registry.json`, `session_matrix.json` and `oneclick_events.jsonl` read-only: **4/4 non-deferred GPM aliases** each `SESSION_VALID` with exact bound identity match and mutually distinct hash, 5 targeted live sync events with the first alias twice, all four `credits=UNKNOWN` with absent provider-source timestamps (correct fail-closed), and the fifth remains `OWNER_DEFERRED` with no new sync event. **85 focused tests and 59 protected checkpoint tests independently PASS** (96 Pydantic deprecation warnings, no failures). Exact source and acceptance in root `IMPLEMENTATION_STATUS.md` and `docs/sot/film/01_SCOPE_AND_PRINCIPLES.md`.
+
+**Scope boundaries:** Ordinary Chrome A4 remains **SKIPPED_BY_OWNER / NOT PASS**. S1 passed only as **local GPM-first OneClick operator outcome**; no positive Dola credit balance was demonstrated, no paid provider Generate was authorized, and no code/branch integration to root, push, deploy, S2 film acceptance or S3 Film120 completion is implied. The old scope/history below is retained as superseded evidence, not currently actionable authority.
+
+**Current Product Progress Gate:** S1's former GPM live blocker is **CLOSED** by independent readback. No new project's Active Slice has been authorized; **OWNER_NEXT_SLICE_DECISION_REQUIRED** before switching to S2 review, S3, provider-cost actions, or other work. Tech Lead may propose Owner review of the already-existing V2-021 25.208s real-film candidate **without new generation**, but must not auto-activate it. Preserve root mission WIP and Owner assets. No new Worker task is justified solely by S1 passing.
+
+---
+
+## Historical GPM-first live-run setup (completed; superseded)
 
 **Owner Product/Scope decision — 2026-10-18:** **SKIP ordinary Chrome entirely for S1** and ship OneClick on **Owner-approved GPMLogin profiles as the primary live operational source**. This explicitly **supersedes only** the earlier three-source/Chrome mandatory acceptance: A4 Chrome MV3/native-host/Owner Capture = **SKIPPED_BY_OWNER (waived, NOT PASS)**; managed-source compatibility from earlier technical work is retained but not a new ship blocker. GPM A5 real operational journey becomes the critical acceptance. The Product Goal remains usable safe multi-account Dola Session OneClick enabling AI film production; S2 and S3 remain unchanged. Product SoT definition: `docs/sot/film/01_SCOPE_AND_PRINCIPLES.md`.
 
