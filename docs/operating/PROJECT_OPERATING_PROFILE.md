@@ -160,3 +160,16 @@ If implementation evidence challenges SoT:
 3. return to LEARN;
 4. Tech Lead adjudicates Product/System Truth delta;
 5. create a new slice if required.
+
+## 9. Multi-worktree truth, interchangeable worker and MAR (2026-10-18 integration rule)
+
+These are **operating interpretations of the frozen lifecycle**, not a fourth truth type or a new process.
+
+1. **Whole-project view:** Root `CURRENT_SLICE.md` and `IMPLEMENTATION_STATUS.md` are project-level canonical operating references. A subproject/worktree has its own implementation/attempt evidence, but it is not automatically the entire project's current Goal. Historical copies and completed/paused activities must be explicitly distinguished.
+2. **Role invariant across runtimes:** The Tech Lead owns SHAPE → BOUND → SLICE, independent acceptance PROVE, LEARN and canonical state promotion. Worker owns BUILD/HOW and operational PROVE within an immutable accepted task. Worker can be OpenCode, Codex, Claude, DeepSeek or another agent. Platform-specific kit skills are optional adapters; never require a Worker to run a named model or orchestrator.
+3. **Tech Lead MAR source-of-evidence:** For project continuation, progress assessment, task selection, acceptance and cross-worktree changes, use MAR/MAR2 to read the local **root Git repository plus all relevant linked worktrees**, branch/HEAD/status/diff, SoT, frozen task contracts and newest evidence. The root-plus-worktree inventory is required before using any child branch as project-wide status. Treat snapshot results as observations, not Product Truth.
+4. **Canonical update protocol:** Worker sends an exact revision/candidate and facts. Tech Lead independently verifies frozen acceptance, inspects any truth delta, **updates existing project state and remaining blockers**, and only then creates/revises the next root Current Slice. A worker must never edit Product/System Truth or acceptance to make its own candidate pass. Reconcile contradictory root/worktree states before task dispatch. Preserve historical evidence rather than rewriting prior outcome.
+5. **No concurrent write collision:** A current Worker owns its isolated worktree. Tech Lead edits only its scoped operating documentation in the root with Git-status/path/hash checks and must not alter the Worker's branch or dirty mission files while a run is active. Promote results across branches/worktrees only via explicit reviewed integration, never silently by assuming the latest branch is canonical.
+6. **Kit policy:** Apply `CODEX_NATIVE_WORKFLOW_KIT` manifest version 1.2.2 as role-neutral methodology: approved Goal is exit unit; product-first, reuse-first, risk-specific/ship-boundary proof; finite time/retry/no-progress; technical, product and Owner acceptance separately. Its Codex/BMAD/Ponytail/UI-UX/Superpowers-specific tooling is optional and requires actual host capability and permission. Existing Film/Development SoTs outrank all kit templates.
+
+**MAR is not background monitoring:** it supplies read/audit/documentation on Tech Lead invocation. No daemon, remote push, deploy or new governance framework is implied.

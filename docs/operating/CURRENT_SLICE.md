@@ -1,4 +1,22 @@
-# SLICE-0009 — AutoEdit Compatibility Baseline v0
+# CURRENT SLICE — DOLA-ONECLICK-MULTIACCOUNT-CLEAN-001 (ACTIVE PROJECT EXECUTION FOCUS)
+
+**Reconciled by Tech Lead using MAR on 2026-10-18; read-only inventory of root + linked worktrees.** This is the root AI-Film-Pipeline project-level Current Slice. It is NOT a claim that the whole film product has shipped or that the root and child branch HEADs have been merged.
+
+**Approved project Product Goal:** Deliver a usable, coherent AI-film production pipeline and real film outcomes. **V1 pipeline technical implementation was proven complete** (Package-019); creative quality/final content release remains subject to separate Owner/content gates. The Owner's **current approved execution focus** is to clean/refactor and finish **multi-account Dola Session OneClick management** across managed profiles, ordinary Chrome and GPM, as an enabling production operator journey.
+
+**Active worker slice:** `DOLA-ONECLICK-MULTIACCOUNT-CLEAN-001` on isolated Git worktree `D:\AI FILM MAKER\AI-Film-Pipeline-OneClick`, branch `feature/dola-session-oneclick-001`, frozen handoff base `37dacb1c309c245464218587f9a294463a5a17eb`. The immutable A1–A8 BUILD/PROVE contract is **`docs/operating/TASK_DOLA_ONECLICK_MULTI_ACCOUNT_CLEAN_SHIP.md` in that worktree**. That path does NOT exist as an equivalent canonical root file on this branch. The Worker has already received this task; do not interrupt, silently amend acceptance or treat uncommitted Worker edits as accepted.
+
+**Acceptance still open:** reliable one-click actionable multi-account operator view; genuine independent Chrome MV3/native-host consent and readback (unless live consent already observed); GPM permitted-profile handling with deferred profile untouched; per-alias DPAPI identity/vault isolation; timestamp-correct source credit freshness; focused/integration/protected regressions and exact final report. Worker technical PASS alone does not close these gates.
+
+**Actual dependency and bounded authority:** four previously identity-bound GPM profiles have UNKNOWN credit; the fifth Owner-deferred GPM profile must NOT be resumed or probed. A previous ordinary-Chrome live acceptance was not evidenced. No Generate, paid call, daily quota reset assumption, proxy repair, mission mutation, AutoEdit implementation, merge or push is authorized by this OneClick slice. An older S15 one-shot conditional authorization from a different workstream does not transfer into this slice.
+
+**Parallel / paused work:** V2-022 Film-120s mission remains a **protected paused production workstream**, last recorded 8/24 QC_ACCEPT and 16 pending; 120s slate workprint in OneClick was a partial editorial proof, NOT a completed film. No Film-120s auto-run is activated through OneClick. Other Flow qualification/forensics worktrees retain their own Git/evidence histories and are not automatically active slices. AutoEdit producer compatibility SLICE-0009 is **historically PROVEN**, not the present project execution focus.
+
+**Handoff / role boundary:** Tech Lead owns SHAPE → BOUND → SLICE, independent PROVE → LEARN and root canonical status. Worker (any runtime/model) owns BUILD → operational PROVE. After Worker finishes, Tech Lead uses MAR for exact-commit/evidence/state audit, updates `docs/operating/IMPLEMENTATION_STATUS.md`, then decides whether to close or revise Current Slice. If project-wide direction is reconsidered, consult Owner and frozen SoTs; do not infer from the latest branch.
+
+---
+
+## Historical preserved slice — SLICE-0009 AutoEdit Compatibility Baseline v0 (INACTIVE)
 
 ## Worker model
 

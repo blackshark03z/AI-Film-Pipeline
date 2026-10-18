@@ -1,5 +1,25 @@
 # Implementation Status
 
+## Project-wide reconciliation — MAR audit 2026-10-18
+
+**Canonical pointer:** `docs/operating/CURRENT_SLICE.md` supersedes older Slice-0009 status **below**. This root worktree is `mission/quality-v2-022-120s@c251ffb`, with pre-existing dirty mission/source/evidence files to preserve.
+
+**Product truth:** V1 pipeline technical implementation **PROVEN_COMPLETE** (Package-019: 25 stages, 0 NOT_IMPLEMENTED or BROKEN); Owner creative/final-content release **NOT ACCEPTED**. V2-021 produced five real accepted shots and a 25.208s master, technical checkpoint only, Owner creative review pending. V2-022 film-120s latest evidence: **8/24 QC_ACCEPT**, 16 PENDING; a 120s slate workprint is not a completed film. Slice-0009 AutoEdit producer compatibility is **historically PROVEN**, not active now.
+
+**Approved present execution focus:** Dola Session OneClick account/session manager clean/refactor on the isolated worktree `feature/dola-session-oneclick-001`, handoff baseline HEAD `37dacb1`; Worker BUILD/PROVE **in progress** with uncommitted code at audit. Core managed sessions proven live, Chrome MV3/native-host and GPM connector built; Chrome live end-to-end, credit freshness, identity/vault isolation, GPM state still require verification. Current frozen A1–A8 live only in that worktree's `docs/operating/TASK_DOLA_ONECLICK_MULTI_ACCOUNT_CLEAN_SHIP.md`. Never infer acceptance from code edits. Five GPM registrations; four known bound sessions with unknown credit from last evidence; fifth owner-deferred and must remain untouched.
+
+**MAR-wide Git inventory:** main mission `c251ffb` DIRTY; OneClick `37dacb1` DIRTY; Live-Qual `85e88cc` DIRTY; Overnight `aeab404` DIRTY; Claude-Forensics `29018d3` DIRTY; Flow-Dola-Qual `5d4df90` CLEAN; one MAR temporary detached `56bec9a`. Worktree HEAD/status is an **audit-time snapshot**, not a permanent truth. AutoVideoPipeline/AutoEdit are separate related repositories, neither determines this project's Current Slice.
+
+**Remaining blocker/next decision:** Finish the pre-authorized OneClick Worker run; Tech Lead then uses MAR to read the exact candidate, recheck the multi-account user journey and protected state, independently PROVE acceptance, LEARN product delta and update this root canonical status before opening another Slice. No Film-120s Generate, spending, GPM proxy work, merge, push or retroactive acceptance is authorized by this reconciliation. Keep all dirty files protected.
+
+**Change rationale:** Prior canonical operational docs still reported completed Slice-0009 although a different Owner-approved task was already active. Current Slice now explicitly references the isolated worker contract rather than treating last commit or one worktree as project-wide truth. Kit ZIP `CODEX_NATIVE_WORKFLOW_KIT_v1.2` carries manifest version **1.2.2**, integrity 15/15. Detailed audit receipt: `docs/operating/MAR_PROJECT_RECONCILIATION_2026-10-18.md`.
+
+---
+
+## Historical state snapshot (Slice-0009 era, not current)
+
+
+
 ## Project state
 
 **Lifecycle:** SLICE-0009 producer compatibility baseline PROVEN; prior SLICE-0004 external effect remains INCONCLUSIVE
