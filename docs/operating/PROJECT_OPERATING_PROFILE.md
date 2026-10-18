@@ -173,3 +173,9 @@ These are **operating interpretations of the frozen lifecycle**, not a fourth tr
 6. **Kit policy:** Apply `CODEX_NATIVE_WORKFLOW_KIT` manifest version 1.2.2 as role-neutral methodology: approved Goal is exit unit; product-first, reuse-first, risk-specific/ship-boundary proof; finite time/retry/no-progress; technical, product and Owner acceptance separately. Its Codex/BMAD/Ponytail/UI-UX/Superpowers-specific tooling is optional and requires actual host capability and permission. Existing Film/Development SoTs outrank all kit templates.
 
 **MAR is not background monitoring:** it supplies read/audit/documentation on Tech Lead invocation. No daemon, remote push, deploy or new governance framework is implied.
+
+### Current tool handoff — OpenCode / DeepSeek V4.1 Flash (Owner direction, 2026-10-18)
+
+For the **currently approved S1 Dola OneClick continuation only**, the Owner selects **OpenCode running DeepSeek V4.1 Flash** as the coding Worker. The Tech Lead prepares the bounded Work Package in the relevant Git worktree and hands the Owner a **copy-ready prompt relay** for that OpenCode session. **Do not dispatch an MAR worker task** or change this into an MAR-managed agent. MAR is reserved for Tech Lead's repo-wide inspection, scope-checked file/document writes and independent readback; it is not the Worker executor.
+
+This is an **execution adapter choice**, not a replacement policy, new SoT, changed Goal or compulsory future Worker model. `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003` remains the sole accepted agent policy; the Worker independently runs its Git policy preflight before BUILD. The frozen S1 A1–A8 contract still wins; Chrome cookie capture/login and GPM live launches require explicit Owner action. Tech Lead owns the final Product Progress Gate and acceptance. For a subsequent Worker change, update only the bounded handoff, not the pinned policy.
