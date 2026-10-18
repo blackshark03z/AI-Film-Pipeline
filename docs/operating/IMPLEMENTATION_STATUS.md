@@ -8,7 +8,7 @@
 
 **Main Blocker:** one **reversible, source-faithful audible S2 review alternative** (picture preserved, audio from existing verified 5 source clips only), then Owner explicitly approves/rejects the final picture/sound/editorial choice. Scope is strictly the V2-021 25.208s five-shot candidate, not completion of the separate frozen 30–60s/8–12-shot V1 benchmark.
 
-**Next Decision:** Tech Lead freezes one audio-review WP for an isolated clean OpenCode / DeepSeek V4.1 Flash worktree (root Film120 dirty files protected). Worker BUILDs only a local `REVIEW_VARIANT` without overwriting original `OWNER_REVIEW`, master or accepted assets; reports exact SHA, durations, no clipping and video stream/frame integrity. Tech Lead independent PROVE follows, then Owner creative judgment. No arbitrary music, second framework, paid provider, Film120 resurrection, merge or push.
+**Next Decision (WP prepared / relay PENDING):** Tech Lead froze one source-audio finishing WP in an isolated, CLEAN policy-synced worktree `D:\AI FILM MAKER\AI-Film-Pipeline-S2-Audio-Review`, branch `feature/s2-audio-review-001@08a8687363832c317c17ef7273b935059444462d`, file `docs/operating/TASK_S2_V2_021_SOURCE_AUDIO_REVIEW.md`. Worker **OpenCode / DeepSeek V4.1 Flash** only after Owner's prompt relay (not MAR Worker): BUILD one local `REVIEW_VARIANT` without overwriting original master or existing `OWNER_REVIEW`, verify SHA/duration/clipping/video stream integrity, submit exact delivery evidence. **No Worker execution or alternate master exists from preparing this WP.** Tech Lead independent PROVE follows; Owner's explicit creative verdict still required. No new music, framework, paid provider, Film120, merge or push.
 
 ---
 
