@@ -1,5 +1,20 @@
 # Implementation Status
 
+## Current ship milestones — 2026-10-18 Product Truth LEARN
+
+**Canonical definition:** `docs/sot/film/01_SCOPE_AND_PRINCIPLES.md` (existing Product SoT, appended delivery milestones without changing frozen V1 benchmark). **Active execution pointer:** root `docs/operating/CURRENT_SLICE.md`. This is a definition and evidence/status reconciliation, **not approval to reopen Film120, regenerate or spend**.
+
+| Ship gate | Actual progress / next acceptance |
+| --- | --- |
+| **S0 V1 technical foundation** | **PROVEN_COMPLETE** by Package-019 (21 PROVEN, 3 PROVEN_OFFLINE, 1 AVAILABLE_WITH_CONTENT_INPUT, 0 NOT_IMPLEMENTED/BROKEN). Film creative/final release **NOT ACCEPTED**; do not equate implementation closure with shipped film. |
+| **S1 OneClick three-source operator journey — ACTIVE** | **PARTIAL_DELIVERY / OWNER-GATED**. Worker code delivery `2a42ac5`, independently reviewed credit source-time handling, 85 focused tests PASS; managed live proof in Worker report, Chrome A4 real MV3/native-host Owner consent + destination readback **UNPROVEN**. Optional GPM fresh re-proof is bounded to four eligible profiles; fifth remains OWNER_DEFERRED. **Primary blocker:** Owner-selected ordinary Chrome explicit Capture; Tech Lead then independent readback. |
+| **S2 short narrative-to-real-film candidate — DEFINED, NOT ACTIVE** | V2-021 five real provider-issued shots and 25.208s playable distribution master exist; technical milestone not Owner creative PASS. **Owner candidate review / creative acceptance PENDING**. Does not satisfy the separate frozen 30–60s/8–12 shot benchmark merely by existing. |
+| **S3 full 120s real film — PAUSED** | V2-022 last recorded **8/24 QC_ACCEPT, 16 pending**. Placeholder-slate workprint is not the full rendered film. Requires independent 24-shot asset/lineage/QC, final master, creative acceptance and a new **explicit** Owner decision for continuation/credit use; no automatic authorization. |
+
+**Product Progress Gate:** Product Delta = S1 credit staleness corrected; evidence = exact commit + source review + independent focused tests. Main blocker = S1 Chrome live consent/identity. Next decision = hold S1 gate, no autonomous switch to S2/S3 and no new Worker until evidence/Owner gate. S2 existing-media creative review may be requested independently, without generation. Distinguish TECHNICAL PASS, PRODUCT PASS, OWNER ACCEPTED and RELEASE READY for each milestone.
+
+---
+
 ## Latest Product Progress Gate / cross-worktree reconciliation — 2026-10-18
 
 **Accepted policy authority:** `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`. MAR read this exact commit's `AGENTS.md` from the root Git object store. **Six operating Film worktrees** (root, OneClick, Claude-Forensics, Flow-Dola-Qual, Live-Qual, Overnight) now have the same **three policy blobs** at HEAD, each linked branch changed by a scoped policy-only local commit. The MAR detached temporary scratch was **not touched**. Local default `main` also received a policy-only commit `3d432432eeecfafc1e34435a4d52f84195d969eb`; temporary main worktree was removed cleanly. The true `POLICY_REF` stays fixed; no alternate SoT or policy has been introduced. Neither local `main` nor other branches have been merged, pushed or had historical progress docs force-copied. Any new Worker task must pin `POLICY_REF` and the approved product-state/acceptance revision, then preflight before BUILD.
