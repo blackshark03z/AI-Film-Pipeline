@@ -174,8 +174,14 @@ These are **operating interpretations of the frozen lifecycle**, not a fourth tr
 
 **MAR is not background monitoring:** it supplies read/audit/documentation on Tech Lead invocation. No daemon, remote push, deploy or new governance framework is implied.
 
-### Current tool handoff — OpenCode / DeepSeek V4.1 Flash (Owner direction, 2026-10-18)
+### Historical tool handoff — OpenCode / DeepSeek V4.1 Flash (Owner direction, 2026-10-18; superseded for next WP)
 
 For the **currently approved S1 Dola OneClick continuation only**, the Owner selects **OpenCode running DeepSeek V4.1 Flash** as the coding Worker. The Tech Lead prepares the bounded Work Package in the relevant Git worktree and hands the Owner a **copy-ready prompt relay** for that OpenCode session. **Do not dispatch an MAR worker task** or change this into an MAR-managed agent. MAR is reserved for Tech Lead's repo-wide inspection, scope-checked file/document writes and independent readback; it is not the Worker executor.
 
 This is an **execution adapter choice**, not a replacement policy, new SoT, changed Goal or compulsory future Worker model. `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003` remains the sole accepted agent policy; the Worker independently runs its Git policy preflight before BUILD. The frozen S1 A1–A8 contract still wins; Chrome cookie capture/login and GPM live launches require explicit Owner action. Tech Lead owns the final Product Progress Gate and acceptance. For a subsequent Worker change, update only the bounded handoff, not the pinned policy.
+
+### Current NEXT Worker routing — Gemini (Owner direction, 2026-10-19)
+
+Owner reports the **OpenCode quota is exhausted** and explicitly chooses **Gemini** as the Worker for the **next necessary BUILD task / WP**. The execution host/interface and exact Gemini model variant are **not yet specified**; do not assume Gemini CLI, API, OpenCode-internal runtime, extra account connection or spending authorization. In the next frozen WP and Owner relay, name the selected Gemini surface only after it is available and agreed. The previous OpenCode/DeepSeek Flash handoffs remain historical evidence at their exact Git revisions; **no retrofit to completed Worker reports**.
+
+**Authority unchanged:** Owner controls creative/release decisions and any external cost/account action. Tech Lead uses MAR for repo policy/SoT inspection, scoped documents and independent PROVE, and sends a copy-ready WP relay; **do not use MAR submit/task to run Gemini as coding Worker**. Gemini owns only BUILD/HOW and operational PROVE in a bounded authorized WP. Keep the fixed `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`, frozen Film Product Goal, root Current Slice, owner assets, dirty `opencode.json` and mission WIP unchanged. The completed S2 `LOCAL_SHIP_PACKAGE_READY` milestone alone does not justify creating another Worker task or publicly releasing the film.
