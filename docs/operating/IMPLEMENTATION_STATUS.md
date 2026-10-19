@@ -1,5 +1,15 @@
 # Implementation Status
 
+## S3 S08 — Gemini causal-repair WP frozen and ready for Owner relay (2026-10-19)
+
+**GOAL / Product Delta:** Make a real finished 120s film, 24 QC_ACCEPT shots. Owner explicitly asks Tech Lead to create WP now and send Gemini relay rather than leave plans idle. **No new shot yet: 8/24 QC_ACCEPT, S08 PENDING.** Next code-level Product-enabling step is fixing the documented exception-path mutation latch defect and diagnosing the provider's generic S08 generation failure without ungrounded “moderation” assumptions.
+
+**EVIDENCE:** Tech Lead MAR checked primary `mission/quality-v2-022-120s@274c133c9d7753458cc9fc730e424cdb57701f18`, frozen `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`, Worker `feature/film120-gemini-realshot-001@822b4970b545825b17fdf0d898a9666c36f2b982`, root protected dirty WIP and Worker's `isolated_s08_run/`, `isolated_s08_single_trial_001/` untracked evidence. Direct source comparison: original S07 and failed S08 share much of the same scene/negative constraints, so no evidence that words like `no weapons` explain failure. The old single-run exception branch catches dispatch failure but does not itself latch; Worker manually latched after the run. Exact Worker WP now frozen at `feature/film120-gemini-realshot-001@b4019c44c146e342d06c3efe6508c40ccdf6c3a2`: `docs/operating/TASK_S3_S08_GEMINI_CAUSAL_REPAIR_AND_RELEASE_READY.md`. It batches R0–R6: causal read-only comparison, minimal automatic durable latch repair, focused mocked no-provider tests, ONE evidence-backed S08 next-shot candidate + local dry-run and one final committed delivery.
+
+**Main Blocker → Next action:** Real S08 MP4 still absent; provider responded `動画を生成できません` after one genuine video release, but no policy/moderation error code and no independent billing audit. Last video budget/latch exhausted; **new WP grants NO new provider Generate**, charges, quota chat inquiry or retry. Owner relays ONE frozen prompt to Gemini. Tech Lead independently PROVEs exact code/test/evidence revision and then decides a separately scoped, genuinely justified film-release action. Keep project goal, Film State 8/24, S2 acceptance and all dirty/untracked WIP intact. Owner's durable preference **no repeated quota questions until real pool exhaustion** unchanged.
+
+---
+
 ## S3 S08 genuine video dispatch → provider generation failed; Tech Lead independent PROVE (2026-10-19)
 
 **GOAL → PRODUCT DELTA:** Complete a playable, continuity-reviewed 120s film using 24 real QC_ACCEPT source shots. Worker `feature/film120-gemini-realshot-001@822b4970b545825b17fdf0d898a9666c36f2b982` executed frozen S08 single free-route attempt. **Exactly one provider video request was observed in the isolated S08 dispatch journal; no video asset or new accepted shot. Product Delta 0; 8/24 QC_ACCEPT, 16 PENDING.** No canonical footage/Film State promotion and no S3 Product/Owner acceptance.

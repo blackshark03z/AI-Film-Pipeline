@@ -1,4 +1,14 @@
-# CURRENT SLICE — S3 S08 GENERATION REFUSED AFTER REAL RELEASE (LATCHED / 8-OF-24)
+# CURRENT SLICE — S3 S08 CAUSAL REPAIR & RELEASE-READY CANDIDATE (ACTIVE / NO PROVIDER RELEASE)
+
+**Owner explicitly requested immediate Gemini WP + one relay — 2026-10-19.** Tech Lead froze `docs/operating/TASK_S3_S08_GEMINI_CAUSAL_REPAIR_AND_RELEASE_READY.md` in `D:\AI FILM MAKER\AI-Film-Pipeline-Film120-Gemini` at `feature/film120-gemini-realshot-001@b4019c44c146e342d06c3efe6508c40ccdf6c3a2`. Pinned `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`. One Gemini task R0–R6: evidence-based comparison of failed S08 vs successful S07/S10, correct generic-failure vs moderation classification, **fix post-release exception latch automatically** with focused offline tests, prepare ONE semantically faithful S08 release-ready option and dry-run plan, commit one delivery report. No extra quota discussion, no new testing framework, no new Owner relay for normal internal steps.
+
+**Product Progress / Authority:** S3 remains **8/24 real QC_ACCEPT** and S08 PENDING, no new MP4, no newly approved provider release. Last `ACCOUNT_A` S08 release was already used and latched; provider said could not generate and reportedly consumed 0 video credits, **cause unproven**. **New WP has zero provider/video/account mutation authority** and cannot silently replay; Worker only repairs code and prepares evidence/next-shot candidate for independent Tech Lead PROVE. Original `isolated_s08_run/`, `isolated_s08_single_trial_001/`, accepted assets, S2 package, root dirty source and frozen Film State remain protected. Owner's durable rule **do not repeatedly ask quota until eligible pool actually exhausted** remains active.
+
+**Main Blocker → Next Decision:** Understand/fix S08 provider-generation failure and proven exception-path latch defect. Owner relays WP once to Gemini. Tech Lead independently checks exact Worker diff/tests and one release-ready candidate, then chooses the next specifically authorized real-film action; no more “plan only” without assigned execution.
+
+---
+
+## Previous S08 single-trial PROVE (historical)
 
 **Tech Lead independent PROVE — 2026-10-19:** Gemini `feature/film120-gemini-realshot-001@822b4970b545825b17fdf0d898a9666c36f2b982` completed frozen `TASK_S3_S08_GEMINI_UNKNOWN_QUOTA_SINGLE_TRIAL.md@eb89089`. Worker commit adds `docs/operating/S3_S08_GEMINI_UNKNOWN_QUOTA_TRIAL_DELIVERY.md` and `tools/run_s08_unknown_quota_trial.py` only; isolated `isolated_s08_single_trial_001/` and prior `isolated_s08_run/` remain **UNTRACKED PROTECTED**. Root policy matches pinned `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`. Tech Lead recomputed SHA-256 matches for **8/8 QC_ACCEPT originals (S01–S07, S10)**, counted **16 PENDING and no new S08 MP4**. **Product Delta = 0**, S3 still **8/24**, not a finished real 120s film.
 
