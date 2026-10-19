@@ -1,5 +1,17 @@
 # Implementation Status
 
+## S3 Gemini real-shot salvage gate — Tech Lead independent PROVE (2026-10-19)
+
+**GOAL → PROGRESS:** Real 120-second film of 24 QC_ACCEPT shots; Gemini worker report at `feature/film120-gemini-realshot-001@98b6b91fbfc0a1999d7e505cd7586cbca39eaecd` is **ACCEPTED for read-only R1–R6 gate**, not S3 film completion. **Product Delta: 0 new MP4, 8/24 QC_ACCEPT and 16 PENDING unchanged.** No Generate or cost authorized by this audit.
+
+**EVIDENCE:** Tech Lead MAR verified primary `mission/quality-v2-022-120s@3626768f2dcca0c74428fb4e32b47ba300caa5a3`, pinned policy blob matching worker HEAD, Worker commit changes **only** `docs/operating/S3_FILM120_GEMINI_REALSHOT_GATE_DELIVERY.md`, clean Gemini worktree and protected root dirty WIP. Independently recomputed full SHA-256 of all **8/8 accepted source MP4s** vs `v2_022_run_state.json`; 24 ShotGraph nodes/24 plans; 16 missing MP4s absent from examined mission assets and slots. Historical S08 and S09 archived journals contain `NETWORK_RELEASE_OBSERVED` and `MODEL_VERIFIED`, **not** a confirmed creation ID or a delivered MP4; therefore zero **proven recoverable local pending film footage**, but do not infer no past network release. Worker cross-worktree salvage conclusion was reviewed against available local evidence, not re-enacted as an exhaustive external-provider audit.
+
+**S08 candidate & discrepancy:** Next critical story shot **S08 REACTION 35–40s**, designed continuation after S07; proposed prompt SHA `ddd35568699a822d3ee89db736a4ebbd7f20a7526c8b05f93b80cd490faad4f2` confirmed in frozen compilation. **Account identity is NOT ready:** `run_state.account_plan.S08=ACCOUNT_E` but `run_state.shots.S08.account=ACCOUNT_F`; Gemini proposed F, which is **not authority to override E**. Old credit snapshot showed both E and F at 0, A at 1, but it is stale and **current balance UNKNOWN**. No live credit/session/profile verification was conducted or authorized in this read-only WP.
+
+**Main Blocker → Next Decision:** Owner must explicitly authorize *a specifically bounded S08 Generate attempt* only after resolving eligible identity/account, fresh entitlement/provider mode and credit/cost cap. **`S08_OWNER_GENERATE_AUTH_REQUIRED`**. No further read-only recovery Worker or speculative refactor; no automatic provider call, no account rotation, no repurpose of historic cap/one-free S15 permission, no Film State/media/journal/proxy changes, push or deploy. After distinct Owner consent Tech Lead prepares a new narrow Gemini production WP and independently PROVEs a genuine new QC accepted asset. **S2 public release remains DEFERRED_BY_OWNER.**
+
+---
+
 ## S3 120-second real-film milestone reactivated by Owner — independent critical-path review (2026-10-19)
 
 **GOAL / OWNER DECISION:** Owner explicitly skips the optional **public publication** of the completed locally accepted S2 five-shot film and directs progress to the **next ship milestone, S3**. S2 remains `OWNER_CREATIVE_ACCEPTED / LOCAL_SHIP_PACKAGE_READY / PUBLIC_RELEASE_DEFERRED_BY_OWNER`, not `PUBLIC_SHIPPED` and not failed; retain approved media/manifest. **S3 is now ACTIVE for bounded read-only recovery and real-film production planning**, not automatic authorization of external provider Generate, accounts, spending or S3 creative/release acceptance. Preferred Worker for next authorized WP = **Gemini**, not quota-exhausted OpenCode; POLICY_REF unchanged.
