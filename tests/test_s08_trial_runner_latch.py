@@ -114,7 +114,8 @@ def test_post_release_generic_refusal(test_dirs):
     assert call_count == 1  # dispatch_fn was NOT called again
 
     state2 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
-    assert state2["status"] == "STOPPED_MUTATION_LATCHED"
+    assert state2["status"] == "STOPPED_PROVIDER_GENERATION_FAILED_NO_CREDIT"
+    assert state2 == state1
 
 
 def test_receipt_miss_timeout(test_dirs):
@@ -284,6 +285,9 @@ def test_success_path_latches_one_shot(test_dirs, monkeypatch):
     ))
     assert code2 == 1
     assert call_count == 1
+    state2 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state2["status"] == "REVIEW_READY"
+    assert state2 == state1
 
 
 def test_original_evidence_unmodified():
@@ -308,3 +312,402 @@ def test_original_evidence_unmodified():
 
     auth = json.loads(auth_path.read_text(encoding="utf-8"))
     assert auth["mutation_authority"] == "LATCHED_CLOSED"
+
+
+def test_post_acquisition_frame_extraction_failure_latches_closed(test_dirs, monkeypatch):
+    """(8) Post-acquisition frame extraction failure: Tech Lead reproduced defect.
+    Provider release succeeds and returns valid asset metadata, then extract_frames() raises exception.
+    MUST latch closed, record RESOLVED_EFFECT_IDENTIFIED, and strictly reject retry in same scope.
+    """
+    isolated, review = test_dirs
+    scope = "TEST_SCOPE_POST_ACQ_FRAME_FAIL"
+    call_count = 0
+
+    dummy_mp4 = isolated / "dummy_S08.mp4"
+    dummy_mp4.write_bytes(b"dummy mp4 video bytes")
+
+    async def mock_dispatch(**kwargs):
+        nonlocal call_count
+        call_count += 1
+        kwargs["on_release"]({
+            "attempt_id": "attempt_post_acq_fail",
+            "conversation_id": "conv_post_acq_fail",
+        })
+        return {
+            "asset_path": str(dummy_mp4),
+            "asset_sha256": hashlib.sha256(b"dummy mp4 video bytes").hexdigest(),
+            "size": len(b"dummy mp4 video bytes"),
+            "variant_authority": "TEST_SEEDANCE_2_0",
+        }
+
+    def failing_extract_frames(mp4, out_dir):
+        raise RuntimeError("INDEPENDENT_OFFLINE_POST_ACQUISITION_QC_FAILURE")
+
+    monkeypatch.setattr(trial_mod, "extract_frames", failing_extract_frames)
+
+    code1 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+
+    assert code1 == 2
+    assert call_count == 1
+
+    state1 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state1["status"] == "STOPPED_POST_ACQUISITION_QC_ERROR"
+    assert state1["mutations_used"] == 1
+    assert "INDEPENDENT_OFFLINE_POST_ACQUISITION_QC_FAILURE" in state1["error"]
+
+    auth = MutationAuthority(isolated / "slots" / "S08", scope)
+    assert auth.knowledge == KNOWLEDGE_RESOLVED_EFFECT_IDENTIFIED
+    assert auth.authority == AUTHORITY_LATCHED_CLOSED
+
+    # RETRY PROOF: Second attempt in same scope MUST be rejected immediately without calling dispatch_fn
+    code2 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+    assert code2 == 1
+    assert call_count == 1  # Dispatch count remains exactly 1!
+
+    state2 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state2["status"] == "STOPPED_POST_ACQUISITION_QC_ERROR"
+    assert state2 == state1
+
+
+def test_post_acquisition_technical_qc_failure_latches_closed(test_dirs, monkeypatch):
+    """(9) Post-acquisition technical QC failure: extract_frames succeeds but technical_qc fails.
+    MUST latch closed, record RESOLVED_EFFECT_IDENTIFIED, and reject retry in same scope.
+    """
+    isolated, review = test_dirs
+    scope = "TEST_SCOPE_POST_ACQ_TECH_QC_FAIL"
+    call_count = 0
+
+    dummy_mp4 = isolated / "dummy_S08.mp4"
+    dummy_mp4.write_bytes(b"dummy mp4 video bytes")
+
+    async def mock_dispatch(**kwargs):
+        nonlocal call_count
+        call_count += 1
+        kwargs["on_release"]({
+            "attempt_id": "attempt_tech_qc_fail",
+            "conversation_id": "conv_tech_qc_fail",
+        })
+        return {
+            "asset_path": str(dummy_mp4),
+            "asset_sha256": hashlib.sha256(b"dummy mp4 video bytes").hexdigest(),
+            "size": len(b"dummy mp4 video bytes"),
+            "variant_authority": "TEST_SEEDANCE_2_0",
+        }
+
+    monkeypatch.setattr(trial_mod, "extract_frames", lambda mp4, out: 120)
+
+    def failing_technical_qc(mp4, fdir):
+        raise RuntimeError("FFPROBE_QC_FAILURE: Corrupted video stream")
+
+    monkeypatch.setattr(trial_mod, "technical_qc", failing_technical_qc)
+
+    code1 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+
+    assert code1 == 2
+    assert call_count == 1
+
+    state1 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state1["status"] == "STOPPED_POST_ACQUISITION_QC_ERROR"
+    assert state1["mutations_used"] == 1
+    assert "FFPROBE_QC_FAILURE" in state1["error"]
+
+    auth = MutationAuthority(isolated / "slots" / "S08", scope)
+    assert auth.knowledge == KNOWLEDGE_RESOLVED_EFFECT_IDENTIFIED
+    assert auth.authority == AUTHORITY_LATCHED_CLOSED
+
+    code2 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+    assert code2 == 1
+    assert call_count == 1
+    state2 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state2 == state1
+
+
+def test_post_acquisition_preview_manifest_failure_latches_closed(test_dirs, monkeypatch):
+    """(10) Post-acquisition review/preview/manifest failure: error during review packaging.
+    MUST latch closed, record RESOLVED_EFFECT_IDENTIFIED, and reject retry in same scope.
+    """
+    isolated, review = test_dirs
+    scope = "TEST_SCOPE_POST_ACQ_REVIEW_FAIL"
+    call_count = 0
+
+    dummy_mp4 = isolated / "dummy_S08.mp4"
+    dummy_mp4.write_bytes(b"dummy mp4 video bytes")
+
+    async def mock_dispatch(**kwargs):
+        nonlocal call_count
+        call_count += 1
+        kwargs["on_release"]({
+            "attempt_id": "attempt_review_fail",
+            "conversation_id": "conv_review_fail",
+        })
+        return {
+            "asset_path": str(dummy_mp4),
+            "asset_sha256": hashlib.sha256(b"dummy mp4 video bytes").hexdigest(),
+            "size": len(b"dummy mp4 video bytes"),
+            "variant_authority": "TEST_SEEDANCE_2_0",
+        }
+
+    monkeypatch.setattr(trial_mod, "extract_frames", lambda mp4, out: 120)
+    monkeypatch.setattr(trial_mod, "technical_qc", lambda mp4, fdir: {"decode_ok": True, "fps": 24.0})
+
+    def failing_contact_sheet(fdir, out):
+        raise OSError("Disk full writing contact sheet")
+
+    monkeypatch.setattr(trial_mod, "generate_contact_sheet", failing_contact_sheet)
+
+    code1 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+
+    assert code1 == 2
+    assert call_count == 1
+
+    state1 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state1["status"] == "STOPPED_POST_RELEASE_ERROR"
+    assert state1["mutations_used"] == 1
+
+    auth = MutationAuthority(isolated / "slots" / "S08", scope)
+    assert auth.knowledge == KNOWLEDGE_RESOLVED_EFFECT_IDENTIFIED
+    assert auth.authority == AUTHORITY_LATCHED_CLOSED
+
+    code2 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+    assert code2 == 1
+    assert call_count == 1
+    state2 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state2 == state1
+
+
+def test_post_acquisition_cancellation_latches_closed(test_dirs, monkeypatch):
+    """(11) Post-acquisition cancellation: task cancelled after video is acquired.
+    MUST latch closed, record RESOLVED_EFFECT_IDENTIFIED, and reject retry in same scope.
+    """
+    isolated, review = test_dirs
+    scope = "TEST_SCOPE_POST_ACQ_CANCEL"
+    call_count = 0
+
+    dummy_mp4 = isolated / "dummy_S08.mp4"
+    dummy_mp4.write_bytes(b"dummy mp4 video bytes")
+
+    async def mock_dispatch(**kwargs):
+        nonlocal call_count
+        call_count += 1
+        kwargs["on_release"]({
+            "attempt_id": "attempt_cancel_post_acq",
+            "conversation_id": "conv_cancel_post_acq",
+        })
+        return {
+            "asset_path": str(dummy_mp4),
+            "asset_sha256": hashlib.sha256(b"dummy mp4 video bytes").hexdigest(),
+            "size": len(b"dummy mp4 video bytes"),
+            "variant_authority": "TEST_SEEDANCE_2_0",
+        }
+
+    def cancelled_extract_frames(mp4, out_dir):
+        raise asyncio.CancelledError("Async task cancelled during frame extraction")
+
+    monkeypatch.setattr(trial_mod, "extract_frames", cancelled_extract_frames)
+
+    code1 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+
+    assert code1 == 2
+    assert call_count == 1
+
+    state1 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state1["status"] == "STOPPED_CANCELLED_POST_RELEASE"
+    assert state1["mutations_used"] == 1
+
+    auth = MutationAuthority(isolated / "slots" / "S08", scope)
+    assert auth.knowledge == KNOWLEDGE_RESOLVED_EFFECT_IDENTIFIED
+    assert auth.authority == AUTHORITY_LATCHED_CLOSED
+
+    code2 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+    assert code2 == 1
+    assert call_count == 1
+    state2 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state2 == state1
+
+
+def test_attempted_replay_preserves_state_json_sha256(test_dirs, monkeypatch):
+    """(12) Evidence integrity: rerun on an already latched scope preserves
+    original s08_trial_state.json SHA256 bit-for-bit without overwriting.
+    """
+    isolated, review = test_dirs
+    scope = "TEST_SCOPE_PRESERVE_SHA"
+    call_count = 0
+
+    dummy_mp4 = isolated / "dummy_S08.mp4"
+    dummy_mp4.write_bytes(b"dummy mp4 video bytes")
+
+    async def mock_dispatch(**kwargs):
+        nonlocal call_count
+        call_count += 1
+        kwargs["on_release"]({
+            "attempt_id": "attempt_preserve_sha",
+            "conversation_id": "conv_preserve_sha",
+        })
+        return {
+            "asset_path": str(dummy_mp4),
+            "asset_sha256": hashlib.sha256(b"dummy mp4 video bytes").hexdigest(),
+            "size": len(b"dummy mp4 video bytes"),
+            "variant_authority": "TEST_SEEDANCE_2_0",
+        }
+
+    monkeypatch.setattr(trial_mod, "extract_frames", lambda mp4, out: 120)
+    monkeypatch.setattr(trial_mod, "technical_qc", lambda mp4, fdir: {"decode_ok": True, "fps": 24.0})
+    monkeypatch.setattr(trial_mod, "generate_contact_sheet", lambda fdir, out: None)
+    monkeypatch.setattr(trial_mod, "generate_s01_s08_preview", lambda s08, out: True)
+
+    code1 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+    assert code1 == 0
+    assert call_count == 1
+
+    state_file = isolated / "s08_trial_state.json"
+    sha_before = hashlib.sha256(state_file.read_bytes()).hexdigest()
+
+    # Attempt replay
+    code2 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+    assert code2 == 1
+    assert call_count == 1  # dispatch_fn NOT invoked
+
+    sha_after = hashlib.sha256(state_file.read_bytes()).hexdigest()
+    assert sha_before == sha_after, "s08_trial_state.json must not be modified on rerun"
+
+
+def test_malformed_journal_fails_closed(test_dirs):
+    """(13) Malformed journal fails closed: unparseable/corrupted journal lines
+    must NOT fail open to PRE_RELEASE. Must latch closed with UNKNOWN knowledge.
+    """
+    isolated, review = test_dirs
+    scope = "TEST_SCOPE_MALFORMED_JOURNAL"
+    call_count = 0
+
+    journal_path = isolated / "dispatch_journal_S08.jsonl"
+    journal_path.write_text(
+        '{"kind": "MUTATION_RESERVED"}\n'
+        '{"corrupted_json_line: INVALID_SYNTAX\n',
+        encoding="utf-8"
+    )
+
+    async def mock_dispatch(**kwargs):
+        nonlocal call_count
+        call_count += 1
+        raise RuntimeError("Network drop during POST")
+
+    code1 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+
+    assert code1 == 2
+    assert call_count == 1
+
+    state1 = json.loads((isolated / "s08_trial_state.json").read_text(encoding="utf-8"))
+    assert state1["status"] == "STOPPED_AMBIGUOUS_RELEASE"
+
+    auth = MutationAuthority(isolated / "slots" / "S08", scope)
+    assert auth.knowledge == KNOWLEDGE_UNKNOWN
+    assert auth.authority == AUTHORITY_LATCHED_CLOSED
+
+    code2 = asyncio.run(trial_mod.run_trial(
+        isolated_dir=isolated,
+        review_dir=review,
+        scope_id=scope,
+        dispatch_fn=mock_dispatch,
+    ))
+    assert code2 == 1
+    assert call_count == 1
+
+
+def test_inspect_journal_states(tmp_path):
+    """(14) Direct unit test of inspect_journal_release_state covering all states."""
+    j = tmp_path / "test_journal.jsonl"
+
+    # 1. Non-existent -> PRE_RELEASE
+    assert trial_mod.inspect_journal_release_state(j) == "PRE_RELEASE"
+
+    # 2. Empty file -> UNKNOWN_OR_ARMED
+    j.write_text("", encoding="utf-8")
+    assert trial_mod.inspect_journal_release_state(j) == "UNKNOWN_OR_ARMED"
+
+    # 3. Only MUTATION_RESERVED -> PRE_RELEASE
+    j.write_text(json.dumps({"kind": "MUTATION_RESERVED"}) + "\n", encoding="utf-8")
+    assert trial_mod.inspect_journal_release_state(j) == "PRE_RELEASE"
+
+    # 4. DISPATCH_ARMED -> ARMED
+    j.write_text(
+        json.dumps({"kind": "MUTATION_RESERVED"}) + "\n" +
+        json.dumps({"kind": "DISPATCH_ARMED"}) + "\n",
+        encoding="utf-8"
+    )
+    assert trial_mod.inspect_journal_release_state(j) == "ARMED"
+
+    # 5. NETWORK_RELEASE_OBSERVED -> CONFIRMED_RELEASE
+    j.write_text(
+        json.dumps({"kind": "MUTATION_RESERVED"}) + "\n" +
+        json.dumps({"kind": "DISPATCH_ARMED"}) + "\n" +
+        json.dumps({"kind": "NETWORK_RELEASE_OBSERVED"}) + "\n",
+        encoding="utf-8"
+    )
+    assert trial_mod.inspect_journal_release_state(j) == "CONFIRMED_RELEASE"
+
+    # 6. MODEL_VERIFIED -> CONFIRMED_RELEASE
+    j.write_text(json.dumps({"kind": "MODEL_VERIFIED"}) + "\n", encoding="utf-8")
+    assert trial_mod.inspect_journal_release_state(j) == "CONFIRMED_RELEASE"
+
+    # 7. SSE_RECEIPT_CAPTURED -> CONFIRMED_RELEASE
+    j.write_text(json.dumps({"kind": "SSE_RECEIPT_CAPTURED"}) + "\n", encoding="utf-8")
+    assert trial_mod.inspect_journal_release_state(j) == "CONFIRMED_RELEASE"
+
+    # 8. Malformed / corrupted line -> UNKNOWN_OR_ARMED
+    j.write_text('{"bad_json: 123\n', encoding="utf-8")
+    assert trial_mod.inspect_journal_release_state(j) == "UNKNOWN_OR_ARMED"
