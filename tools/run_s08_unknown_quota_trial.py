@@ -410,4 +410,19 @@ async def run_trial(
 
 
 if __name__ == "__main__":
-    sys.exit(asyncio.run(run_trial()))
+    import argparse
+    parser = argparse.ArgumentParser(description="Run S08 Video Trial")
+    parser.add_argument("--isolated-dir", type=Path, default=None)
+    parser.add_argument("--review-dir", type=Path, default=None)
+    parser.add_argument("--scope-id", type=str, default="QUALITY-V2-022/S08_TRIAL_001")
+    parser.add_argument("--account", type=str, default="ACCOUNT_A")
+    parser.add_argument("--prompt-override", type=str, default=None)
+    args = parser.parse_args()
+
+    sys.exit(asyncio.run(run_trial(
+        isolated_dir=args.isolated_dir,
+        review_dir=args.review_dir,
+        scope_id=args.scope_id,
+        account=args.account,
+        prompt_override=args.prompt_override,
+    )))
