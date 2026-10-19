@@ -22,7 +22,15 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from film_pipeline.providers.dola_production.fixture_v2_020 import ShotSpec
 from dola_010e_dispatch_journal import DispatchJournal
-from mutation_authority import MutationAuthority
+from mutation_authority import (
+    MutationAuthority,
+    AUTHORITY_OPEN,
+    AUTHORITY_LATCHED_CLOSED,
+    KNOWLEDGE_UNKNOWN,
+    KNOWLEDGE_RESOLVED_NO_EFFECT,
+    KNOWLEDGE_RESOLVED_EFFECT_IDENTIFIED,
+)
+from film_pipeline.providers.flow_reference_upload import OwnerAmbiguityGate
 import v2_020_runner as runner
 from v2_020_runner import RunnerEvents, dispatch_and_acquire, technical_qc, extract_frames
 from v2_021_common import needle_for
@@ -43,6 +51,32 @@ def save_json(path: Path, data: dict):
     tmp = path.with_suffix(".tmp")
     tmp.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
     os.replace(tmp, path)
+
+
+def inspect_journal_release_state(journal_path: Path) -> str:
+    """Inspect dispatch journal for release events.
+    Returns:
+        'CONFIRMED_RELEASE': NETWORK_RELEASE_OBSERVED or MODEL_VERIFIED or SSE_RECEIPT_CAPTURED present
+        'ARMED': DISPATCH_ARMED present without release observation
+        'PRE_RELEASE': MUTATION_RESERVED only or no journal file
+    """
+    if not journal_path.exists():
+        return "PRE_RELEASE"
+    try:
+        lines = journal_path.read_text(encoding="utf-8").strip().splitlines()
+        for line in reversed(lines):
+            try:
+                ev = json.loads(line)
+                k = ev.get("kind") or ev.get("event")
+                if k in ("NETWORK_RELEASE_OBSERVED", "MODEL_VERIFIED", "SSE_RECEIPT_CAPTURED"):
+                    return "CONFIRMED_RELEASE"
+                if k == "DISPATCH_ARMED":
+                    return "ARMED"
+            except Exception:
+                continue
+    except Exception:
+        pass
+    return "PRE_RELEASE"
 
 
 def generate_contact_sheet(frames_dir: Path, out_path: Path):
@@ -91,14 +125,25 @@ def generate_s01_s08_preview(s08_path: Path, out_path: Path) -> bool:
     return proc.returncode == 0 and out_path.exists()
 
 
-async def run_trial():
-    ISOLATED_DIR.mkdir(parents=True, exist_ok=True)
-    state_path = ISOLATED_DIR / "s08_trial_state.json"
+async def run_trial(
+    isolated_dir: Path | None = None,
+    review_dir: Path | None = None,
+    scope_id: str = "QUALITY-V2-022/S08_TRIAL_001",
+    account: str = "ACCOUNT_A",
+    dispatch_fn=None,
+    prompt_override: str | None = None,
+):
+    target_dir = isolated_dir or ISOLATED_DIR
+    target_review_dir = review_dir or REVIEW_DIR
+    target_dispatch = dispatch_fn or dispatch_and_acquire
+
+    target_dir.mkdir(parents=True, exist_ok=True)
+    state_path = target_dir / "s08_trial_state.json"
     state = {
         "version": "v2-022-s08-trial-state-v1",
         "shot_id": "S08",
         "started_at": datetime.now(timezone.utc).isoformat(),
-        "account": "ACCOUNT_A",
+        "account": account,
         "status": "INIT",
         "mutations_used": 0,
         "monetary_spend": "$0.00 / 0 VND",
@@ -108,7 +153,7 @@ async def run_trial():
     # 1. Setup compilation & ShotSpec
     comp = json.loads(COMP_PATH.read_text(encoding="utf-8"))
     s08_plan = comp["prompt_plans"]["S08"]
-    s08_prompt = s08_plan["compiled_text"]
+    s08_prompt = prompt_override or s08_plan["compiled_text"]
     s08_needle = needle_for(comp, "S08")
     s08_node = next(n for n in comp["shot_graph"]["nodes"] if n["shot_id"] == "S08")
 
@@ -123,20 +168,36 @@ async def run_trial():
     )
 
     # 2. Setup MutationAuthority
-    slot_dir = ISOLATED_DIR / "slots" / "S08"
+    slot_dir = target_dir / "slots" / "S08"
     slot_dir.mkdir(parents=True, exist_ok=True)
-    auth = MutationAuthority(slot_dir, "QUALITY-V2-022/S08_TRIAL_001")
-    if auth.authority != "OPEN":
+    auth = MutationAuthority(slot_dir, scope_id)
+    if auth.authority != AUTHORITY_OPEN:
         state["status"] = "STOPPED_MUTATION_LATCHED"
+        state["error"] = f"Mutation authority not OPEN (currently {auth.authority})"
+        state["completed_at"] = datetime.now(timezone.utc).isoformat()
         save_json(state_path, state)
-        print("STOPPED: Mutation authority not OPEN.")
+        print(f"STOPPED: Mutation authority not OPEN (current: {auth.authority}).")
+        return 1
+
+    try:
+        auth.check_mutation_allowed("S08")
+    except OwnerAmbiguityGate as gate_err:
+        state["status"] = "STOPPED_MUTATION_LATCHED"
+        state["error"] = str(gate_err)
+        state["completed_at"] = datetime.now(timezone.utc).isoformat()
+        save_json(state_path, state)
+        print(f"STOPPED: Mutation authority check failed: {gate_err}")
         return 1
 
     state["status"] = "RESERVED"
     auth._event("MUTATION_RESERVED", budget_kind="S08")
     save_json(state_path, state)
 
+    released = False
+
     def on_release(info: dict):
+        nonlocal released
+        released = True
         auth.consume("S08")
         state["mutations_used"] += 1
         state["status"] = "RELEASED"
@@ -151,10 +212,9 @@ async def run_trial():
         save_json(state_path, state)
         print(f"[TRIAL] Creation bound: ids={info.get('creation_ids')}")
 
-    events = RunnerEvents(ISOLATED_DIR / "provider_events.jsonl")
+    events = RunnerEvents(target_dir / "provider_events.jsonl")
 
-    # 3. Configure profile mapping for ACCOUNT_A
-    account = "ACCOUNT_A"
+    # 3. Configure profile mapping for account
     runner.ACCOUNT_PROFILES = ACCOUNT_PROFILES_A
 
     print(f"[TRIAL] Starting single S08 video trial on {account}...")
@@ -162,22 +222,83 @@ async def run_trial():
     print(f"[TRIAL] Target prompt SHA: {hashlib.sha256(s08_prompt.encode()).hexdigest()}")
 
     try:
-        result = await dispatch_and_acquire(
+        result = await target_dispatch(
             shot_spec=transport_spec,
             account_alias=account,
-            run_dir=ISOLATED_DIR,
+            run_dir=target_dir,
             shot_tag="S08",
             on_release=on_release,
             on_creation=on_creation,
             events_sink=events,
             expected_nickname=None,
         )
-    except Exception as error:
-        err_msg = str(error)
+    except BaseException as error:
+        err_msg = str(error) or type(error).__name__
         state["error"] = err_msg
         state["completed_at"] = datetime.now(timezone.utc).isoformat()
-        save_json(state_path, state)
-        print(f"[TRIAL] Error during dispatch/acquire: {err_msg}")
+
+        journal_file = target_dir / "dispatch_journal_S08.jsonl"
+        j_state = inspect_journal_release_state(journal_file)
+        is_post_release = released or (j_state == "CONFIRMED_RELEASE")
+        is_ambiguous = (not is_post_release) and (j_state == "ARMED")
+
+        try:
+            if is_post_release:
+                auth.record_knowledge(
+                    KNOWLEDGE_RESOLVED_EFFECT_IDENTIFIED,
+                    detail=f"provider network release observed: {err_msg[:200]}"
+                )
+                if any(m in err_msg for m in ("クレジットは使用されませんでした", "STOPPED_PROVIDER_GENERATION_FAILED_NO_CREDIT")):
+                    gate_kind = "STOPPED_PROVIDER_GENERATION_FAILED_NO_CREDIT"
+                    state["provider_outcome"] = "GENERIC_PROVIDER_GENERATION_FAILURE_ZERO_CREDIT"
+                elif "STOPPED_PROVIDER_POLICY_REFUSAL" in err_msg:
+                    gate_kind = "STOPPED_PROVIDER_POLICY_REFUSAL"
+                    state["provider_outcome"] = "PROVIDER_POLICY_REFUSAL"
+                elif "receipt not captured" in err_msg or "RECEIPT_MISS" in err_msg:
+                    gate_kind = "STOPPED_RECEIPT_MISS"
+                    state["provider_outcome"] = "RECEIPT_MISS"
+                elif isinstance(error, asyncio.CancelledError):
+                    gate_kind = "STOPPED_CANCELLED_POST_RELEASE"
+                    state["provider_outcome"] = "CANCELLED_POST_RELEASE"
+                elif isinstance(error, (asyncio.TimeoutError, TimeoutError)) or "timeout" in err_msg.lower():
+                    gate_kind = "STOPPED_TIMEOUT_POST_RELEASE"
+                    state["provider_outcome"] = "TIMEOUT_POST_RELEASE"
+                else:
+                    gate_kind = "STOPPED_POST_RELEASE_ERROR"
+                    state["provider_outcome"] = "ERROR_POST_RELEASE"
+
+                auth.latch(gate_kind, detail=err_msg[:300])
+                state["status"] = gate_kind
+
+            elif is_ambiguous:
+                auth.record_knowledge(
+                    KNOWLEDGE_UNKNOWN,
+                    detail=f"ambiguous release during dispatch: {err_msg[:200]}"
+                )
+                auth.latch("STOPPED_AMBIGUOUS_RELEASE", detail=err_msg[:300])
+                state["status"] = "STOPPED_AMBIGUOUS_RELEASE"
+                state["provider_outcome"] = "AMBIGUOUS_RELEASE"
+
+            else:
+                auth.record_knowledge(
+                    KNOWLEDGE_RESOLVED_NO_EFFECT,
+                    detail=f"confirmed pre-release failure: {err_msg[:200]}"
+                )
+                state["status"] = "STOPPED_PRE_RELEASE_ERROR"
+                state["provider_outcome"] = "PRE_RELEASE_FAILURE"
+
+            save_json(state_path, state)
+        except Exception as latch_err:
+            print(f"[CRITICAL] Fail-closed: unable to record latch/knowledge: {latch_err}", file=sys.stderr)
+            state["status"] = "FAIL_CLOSED_LATCH_WRITE_ERROR"
+            state["latch_error"] = str(latch_err)
+            try:
+                save_json(state_path, state)
+            except Exception:
+                pass
+            raise RuntimeError(f"FAIL_CLOSED_LATCH_ERROR: {latch_err}") from latch_err
+
+        print(f"[TRIAL] Finished with status: {state['status']}, error: {err_msg}")
         return 2
 
     # 4. Acquisition SUCCESS
@@ -190,7 +311,7 @@ async def run_trial():
 
     # 5. Technical QC & frames
     asset_file = Path(result["asset_path"])
-    frames_dir = ISOLATED_DIR / "frames" / "S08"
+    frames_dir = target_dir / "frames" / "S08"
     frames_extracted = extract_frames(asset_file, frames_dir)
     tech = technical_qc(asset_file, frames_dir)
     tech["frames_extracted"] = frames_extracted
@@ -199,14 +320,14 @@ async def run_trial():
     print(f"[TRIAL] Technical QC: {tech}")
 
     # 6. Copy to OWNER_REVIEW
-    REVIEW_DIR.mkdir(parents=True, exist_ok=True)
-    review_mp4 = REVIEW_DIR / "S08.mp4"
+    target_review_dir.mkdir(parents=True, exist_ok=True)
+    review_mp4 = target_review_dir / "S08.mp4"
     review_mp4.write_bytes(asset_file.read_bytes())
-    sheet_path = REVIEW_DIR / "S08_contact_sheet.png"
+    sheet_path = target_review_dir / "S08_contact_sheet.png"
     generate_contact_sheet(frames_dir, sheet_path)
 
     # 7. S01-S08 Preview
-    preview_mp4 = REVIEW_DIR / "S01_S08_PREVIEW.mp4"
+    preview_mp4 = target_review_dir / "S01_S08_PREVIEW.mp4"
     preview_ok = generate_s01_s08_preview(review_mp4, preview_mp4)
     print(f"[TRIAL] S01-S08 preview generated: {preview_ok}")
 
@@ -223,7 +344,19 @@ async def run_trial():
         "preview_ok": preview_ok,
         "preview_path": str(preview_mp4) if preview_ok else None,
     }
-    save_json(REVIEW_DIR / "MANIFEST.json", manifest)
+    save_json(target_review_dir / "MANIFEST.json", manifest)
+
+    # 9. Durable one-shot scope latch on success
+    try:
+        auth.record_knowledge(
+            KNOWLEDGE_RESOLVED_EFFECT_IDENTIFIED,
+            detail=f"single trial video acquired successfully: {result['asset_sha256']}"
+        )
+        auth.latch("TRIAL_COMPLETED_SUCCESS", "Single authorized trial completed successfully; scope closed against further mutation")
+    except Exception as latch_err:
+        print(f"[CRITICAL] Fail-closed: unable to record latch on success: {latch_err}", file=sys.stderr)
+        raise RuntimeError(f"FAIL_CLOSED_LATCH_ERROR: {latch_err}") from latch_err
+
     state["status"] = "REVIEW_READY"
     state["completed_at"] = datetime.now(timezone.utc).isoformat()
     save_json(state_path, state)
