@@ -1,5 +1,17 @@
 # Implementation Status
 
+## S3 S08 conditional free Generate: Owner-approved scope, broad Gemini WP ready (2026-10-19)
+
+**GOAL → AUTHORITY:** Complete S3 real 120s film. Owner agreed **"Được"** to Tech Lead's **max ONE S08 Generate if and only if fresh free entitlement proves ZERO paid cost** and requests that subsequent Worker handoffs be broader cohesive tasks with fewer Owner relays. This authorizes **one conditional S08 attempt only**, not a prepaid plan, account change, login, cookie/profile capture, bypass of release attestation or retries. Neither free credit nor account readiness has yet been proven; **zero provider requests/spend from this new WP**, **8/24 QC_ACCEPT unchanged**.
+
+**CURRENT SINGLE WP:** Tech Lead froze `docs/operating/TASK_S3_S08_GEMINI_CONDITIONAL_FREE_PRODUCTION.md` in `D:\AI FILM MAKER\AI-Film-Pipeline-Film120-Gemini`, branch `feature/film120-gemini-realshot-001@c7ca9ee363ade90f5f35ea45f1259ab9e896213d`, from prior accepted Gemini revision `98b6b91`. One Owner relay to Gemini; P0–P7 within one Worker run: frozen policy/shot/provenance preflight, non-mutating archived S08 release reconciliation, strict `ACCOUNT_E` vs historic `ACCOUNT_F` identity and fresh no-cost quota verification, trusted nonforgeable release attestation/single-use transport and isolated writer check, **maximum one S08 no-charge Generate only if every gate PASS**, MP4 lineage/technical+continuity QC, optional honest S01–S08 playable review candidate, one delivery report. Worker may STOP early with a single exact blocker; no separate routine relays. No MAR coding Worker, no new framework, no Film State promotion by Worker.
+
+**EVIDENCE / REMAINING BLOCKER:** Prior independent Gemini R1–R6 PASS at `98b6b91` established 8/8 accepted MP4 hash matches, no proven local additional shot, S08 prompt SHA `ddd35568699a822d3ee89db736a4ebbd7f20a7526c8b05f93b80cd490faad4f2`, historic journal `NETWORK_RELEASE_OBSERVED` without confirmed creation/asset, run-state plan `ACCOUNT_E` vs shot record `ACCOUNT_F`, old pool E/F=0 but current credit UNKNOWN. **Main blocker** = non-replayable S08 release plus eligible account/free credit/guard under zero-paid constraint. If not absolutely proven, `OWNER_ACTION_REQUIRED / BLOCKED`, not Generate. Root `mission/quality-v2-022-120s` dirty Film120 WIP, original media, journals, accounts and S2 locked film remain protected.
+
+**NEXT DECISION:** Relay exactly one expanded WP. On Worker completion Tech Lead independently PROVEs candidate and adjudicates Product Delta `8→9` only if a real S08 asset can be safely and legitimately promoted; otherwise stop at factual Owner-only guard. Future WPs should aggregate coherent technical steps but never expand Owner's spending/external-effect authority.
+
+---
+
 ## S3 Gemini real-shot salvage gate — Tech Lead independent PROVE (2026-10-19)
 
 **GOAL → PROGRESS:** Real 120-second film of 24 QC_ACCEPT shots; Gemini worker report at `feature/film120-gemini-realshot-001@98b6b91fbfc0a1999d7e505cd7586cbca39eaecd` is **ACCEPTED for read-only R1–R6 gate**, not S3 film completion. **Product Delta: 0 new MP4, 8/24 QC_ACCEPT and 16 PENDING unchanged.** No Generate or cost authorized by this audit.
