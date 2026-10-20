@@ -606,4 +606,3 @@ def test_xianxia60_shotgraph_x09_position_detector_anti_regression(compilation_d
     assert validate_s09_shotgraph_tactical_position(corrupted_orientation) is False, (
         "Focused detector failed to detect pre-leap orientation corruption in S09!"
     )
-

@@ -1,0 +1,53 @@
+{
+  "character_id": "BLACK_CULTIVATOR",
+  "identity_version": "v1.0.0-lookdev-draft",
+  "visual_identity": {
+    "description": "Antagonist Dạ Vô Nhai (Hắc Y Kiếm Tu): formidable, brooding martial cultivator whose presence exerts crushing spatial gravity, wielding a massive broadsword with devastating kinetic momentum.",
+    "face_geometry": "Angular chiselled jawline with prominent cheekbones, deep-set hooded piercing eyes with intense focused gaze, firm cleft chin, brooding stern expression forged in fierce combat.",
+    "body_proportions": "Broad, muscular athletic frame, approximately 185cm height, wide shoulders, thick forearms, low and grounded center of gravity with powerful rooted leg stance.",
+    "age_range": "27-29 years old",
+    "hair": "Coarse dark raven hair, shoulder-length; crown and temple strands drawn back into a half-ponytail clamped with a hammered obsidian-iron clasp, loose rogue strands whipping across temples in heavy mountain wind.",
+    "skin": "Weathered pale olive skin tone, hardened texture with faint shadow under hollow cheeks, reflecting cold diffused mountain ambient light.",
+    "silhouette": "Broad-shouldered, wedge-shaped and heavily grounded; asymmetrical silhouette reinforced by right-shoulder leather pauldron and heavy trailing dark coat tails.",
+    "unique_traits": [
+      "Piercing, predatory eye contact locked onto opponent weapon hand",
+      "Heavy single-pauldron leather armor contouring right shoulder",
+      "Visible muscle tension in neck and traps during heavy downward swings"
+    ]
+  },
+  "behavioral_identity": {
+    "baseline": [
+      "Initiates combat through relentless forward pressure and spatial encroachment",
+      "Delivers heavy cleaving arcs with devastating momentum and grounded weight-transfer",
+      "Employs dark qi compression barrier (X06) to nullify incoming thrusts and reposition",
+      "Maintains grim combat dignity; accepts defeat silently on one knee (X11) after sword barrier shatters",
+      "Rhythmic, deliberate foot stomps that transfer kinetic force directly from stone pavers into blade swings"
+    ],
+    "forbidden": [
+      "No comedic villain smirks, maniacal laughter, or cartoonish scowls",
+      "No cowardly flinching or frantic scrambling on the ground",
+      "No glowing demonic eyes, horns, or beast transformations",
+      "No flashy wire-fu acrobatics or unnecessary mid-air spinning kicks",
+      "No verbal taunting or breaking disciplined martial focus"
+    ]
+  },
+  "vocal_identity": null,
+  "look_states": [
+    {
+      "look_state_id": "LOOK_BLACK_ROBE_V1",
+      "description": "Charcoal-Black Layered Combat Robes (Huyền Sắc Võ Bào) with armor reinforcement for high-altitude duel.",
+      "wardrobe": "Heavy-duty martial combat attire: inner charcoal twill undertunic, middle matte black linen coat with reinforced hem, outer layered midnight-black heavy wool-silk robe with weathered edges; sculpted matte-black boiled leather pauldron on right shoulder secured by aged bronze rivets and cross-chest harness; dual reinforced black leather vambraces with bronze stud accents; wide leather sash with double iron buckle; heavy iron-shod black combat boots with reinforced shins.",
+      "hair": "Half-tied raven hair bound with dark iron hair-ring, rest falling freely past shoulders and blowing aggressively across collar.",
+      "makeup": "Grounded cinematic realism: weathered matte finish, sharp facial contouring, subtle dark shading around eyes, wind-chapped lips.",
+      "accessories": [
+        "Hammered obsidian-iron hair clasp",
+        "Single-shoulder boiled leather pauldron with dark bronze rivets",
+        "Huyền Minh (Trảm Đoán Kiếm): 105cm heavy double-edged broadsword (14cm wide blade) forged from dark meteoric steel with blood fuller, wrapped in stingray skin hilt with heavy iron counterweight pommel"
+      ],
+      "condition": [
+        "Weathered and travel-tested; matte finish without glossy reflection",
+        "Faint dust abrasion on boots and lower coat hem from aggressive lunges and sudden stops on granite"
+      ]
+    }
+  ]
+}

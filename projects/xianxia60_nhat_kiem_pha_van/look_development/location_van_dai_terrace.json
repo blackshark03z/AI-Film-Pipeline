@@ -1,0 +1,62 @@
+{
+  "location_id": "LOC_VAN_DAI_TERRACE",
+  "location_version": "LOC_V1",
+  "name": "Vân Đài Terrace (Vân Đài Thạch Đỉnh)",
+  "setting_type": "High-Altitude Sacred Mountain Summit Arena",
+  "elevation": "~2,800 meters altitude above sea of clouds",
+  "arena_geometry": {
+    "shape": "Circular open mountain terrace",
+    "diameter_meters": 30.0,
+    "surface_material": "Weathered dark granite flagstones with shallowly etched concentric Daoist Bagua geomantic rings, faint micro-fissures and desaturated dried moss",
+    "perimeter": "Low ancient stone balustrade (0.7m height) with weathered cloud-pattern relief, chipped and eroded by centuries of exposure",
+    "boundary_dropoff": "Sheer vertical cliff walls descending into perpetual mountain cloud sea"
+  },
+  "cardinal_landmarks": {
+    "north": {
+      "role": "Distant Depth Background",
+      "features": "Precipice opening onto boundless undulating sea of white-grey clouds; jagged vertical peak silhouettes piercing through fog layer under cold morning sky"
+    },
+    "south": {
+      "role": "Protected Camera / Observer Zone",
+      "features": "Solid mountain shoulder ledge; strictly designated zone for 100% of camera setups to maintain immutable 180-degree action axis"
+    },
+    "west": {
+      "role": "Stage Left / White Initial Sector",
+      "features": "Weathered ancient stone archway monolith (3.5m height); starting combat position for White Cultivator facing East"
+    },
+    "east": {
+      "role": "Stage Right / Black Initial Sector / Sunrise Vector",
+      "features": "Ancient weathered dragon-cloud pillar (4.0m height); starting combat position for Black Cultivator facing West; horizon source of eventual morning sunlight"
+    },
+    "center": {
+      "role": "Active Combat Circle (8m radius)",
+      "features": "Paver center with concentric circular runic etchings, faint surface scuffs and hairline cracks from previous martial clashes"
+    }
+  },
+  "spatial_continuity_rules": {
+    "camera_axis_restriction": "Camera must remain strictly in South hemisphere (azimuth 150° to 210°). Zero camera crossings to North side.",
+    "screen_direction_phase1_x01_x07": "White Cultivator occupies screen-left (West) facing East; Black Cultivator occupies screen-right (East) facing West.",
+    "spatial_inversion_x08": "Shot X08 Aerial Inversion: White Cultivator executes aerial leap arcing cleanly from West to East across Black Cultivator; landing on East ledge facing West; Black Cultivator pivots in center facing East.",
+    "screen_direction_phase2_x09_x12": "White Cultivator occupies screen-right (East) facing West; Black Cultivator occupies screen-left (West/Center) facing East."
+  },
+  "lighting_and_atmosphere_progression": {
+    "phase_1_x01_x06": {
+      "lighting_character": "Cold diffuse grey-cyan dawn cloudlight, soft wrap-around ambient, subtle blue shadows",
+      "mist_density": "Dense low-drifting mountain fog skimming 20cm above flagstones",
+      "color_temperature_k": 6800,
+      "key_to_fill_ratio": "1.5:1"
+    },
+    "phase_2_x07_x09": {
+      "lighting_character": "Turbulent mist backlit by rising horizon glow; sharp glancing edge light on wet stone and spinning blade edges; bursting amber sparks upon blade-barrier impact",
+      "mist_density": "Dispersed and swirling radially from kinetic shockwaves",
+      "color_temperature_k": 6200,
+      "key_to_fill_ratio": "2.5:1"
+    },
+    "phase_3_x10_x12": {
+      "lighting_character": "Ruptured cloud ceiling; directional warm morning sunlight (5200K) piercing through mist from East-Southeast, illuminating White Cultivator in luminous gold rim-light while Black Cultivator kneels in calm desaturated shadow",
+      "mist_density": "Thinning luminous mist evaporating into golden haze",
+      "color_temperature_k": 5200,
+      "key_to_fill_ratio": "4:1"
+    }
+  }
+}

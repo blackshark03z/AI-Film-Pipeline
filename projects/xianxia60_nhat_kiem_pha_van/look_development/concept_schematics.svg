@@ -1,0 +1,346 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="100%" height="100%" style="background-color: #121417; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="bannerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b71c1c" />
+      <stop offset="100%" stop-color="#e53935" />
+    </linearGradient>
+    <linearGradient id="whiteQiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e1f5fe" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#81d4fa" stop-opacity="0.3" />
+    </linearGradient>
+    <linearGradient id="blackQiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ba68c8" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#4a148c" stop-opacity="0.4" />
+    </linearGradient>
+    <radialGradient id="terraceGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#37474f" />
+      <stop offset="70%" stop-color="#263238" />
+      <stop offset="100%" stop-color="#1a2327" />
+    </radialGradient>
+    <radialGradient id="sunlightGrad" cx="90%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#ffe082" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#121417" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background overlay for lighting progression -->
+  <rect x="0" y="0" width="1600" height="1200" fill="url(#sunlightGrad)" />
+
+  <!-- MANDATORY WARNING BANNER -->
+  <rect x="40" y="25" width="1520" height="55" rx="6" fill="url(#bannerGrad)" />
+  <text x="800" y="60" fill="#ffffff" font-size="20" font-weight="bold" text-anchor="middle" letter-spacing="2">
+    CONCEPT SCHEMATIC — NOT PHOTOREAL IDENTITY REFERENCE (BẢN THIẾT KẾ Ý NIỆM — KHÔNG PHẢI ẢNH NHẬN DIỆN THỰC TẾ)
+  </text>
+
+  <!-- TITLE BLOCK -->
+  <text x="50" y="120" fill="#eceff1" font-size="26" font-weight="bold">NHẤT KIẾM PHÁ VÂN (XIANXIA60) — PRE-PRODUCTION LOOK DEVELOPMENT BIBLE</text>
+  <text x="50" y="145" fill="#90a4ae" font-size="14">Owner Approved Creative Direction | Dual Fighter Choreography | Van Dai High-Mountain Stone Arena | 60.0s / 12 Shots</text>
+
+  <!-- ========================================================================= -->
+  <!-- PANEL A: WHITE CULTIVATOR (LÝ PHÁ VÂN) -->
+  <!-- ========================================================================= -->
+  <rect x="40" y="170" width="480" height="970" rx="10" fill="#1e2329" stroke="#81d4fa" stroke-width="1.5" />
+  
+  <!-- Panel A Header -->
+  <rect x="40" y="170" width="480" height="55" rx="10" fill="#263238" />
+  <text x="60" y="205" fill="#ffffff" font-size="18" font-weight="bold">LÝ PHÁ VÂN (BẠCH Y KIẾM TU)</text>
+  <text x="490" y="205" fill="#81d4fa" font-size="12" font-weight="bold" text-anchor="end">ID: WHITE_CULTIVATOR</text>
+
+  <!-- Spec Summary -->
+  <g transform="translate(60, 245)" fill="#b0bec5" font-size="12">
+    <text x="0" y="0"><tspan fill="#eceff1" font-weight="bold">Age:</tspan> 21-24 yrs  |  <tspan fill="#eceff1" font-weight="bold">Height:</tspan> 178cm  |  <tspan fill="#eceff1" font-weight="bold">Build:</tspan> Slender Athletic</text>
+    <text x="0" y="22"><tspan fill="#eceff1" font-weight="bold">Face:</tspan> Refined sculpted jawline, calm almond eyes, serene focus</text>
+    <text x="0" y="44"><tspan fill="#eceff1" font-weight="bold">Hair:</tspan> Ink-black, high silver crown (ngân quan), dual ribbon tails</text>
+    <text x="0" y="66"><tspan fill="#eceff1" font-weight="bold">Posture:</tspan> Centered gravity, erect spine, aerodynamic agility</text>
+  </g>
+
+  <!-- Front & 3/4 Silhouette Schematic -->
+  <rect x="60" y="335" width="440" height="360" rx="8" fill="#15191e" stroke="#37474f" stroke-width="1" />
+  <text x="80" y="365" fill="#90a4ae" font-size="12" font-weight="bold">SCHEMATIC SILHOUETTE &amp; WARDROBE LAYERING</text>
+  
+  <!-- Stylized Vector Figure: White Cultivator -->
+  <g transform="translate(180, 400)">
+    <!-- Hair Ribbons -->
+    <path d="M-8,15 Q-20,60 -15,140 Q-10,180 -18,220" fill="none" stroke="#37474f" stroke-width="3" />
+    <path d="M8,15 Q20,60 15,140 Q10,180 18,220" fill="none" stroke="#37474f" stroke-width="3" />
+    <!-- Outer Robe Flow -->
+    <path d="M-35,90 Q-65,180 -55,250 L55,250 Q65,180 35,90 Z" fill="#e0e7ed" opacity="0.9" />
+    <!-- Inner Cross Collar -->
+    <path d="M-20,40 L0,70 L20,40 L10,35 L0,50 L-10,35 Z" fill="#81d4fa" opacity="0.7" />
+    <!-- Core Robe Torso -->
+    <path d="M-25,45 L-20,110 L20,110 L25,45 Z" fill="#f8f9fa" />
+    <!-- Sash Belt & Jade Ring -->
+    <rect x="-22" y="105" width="44" height="12" fill="#cfd8dc" rx="2" />
+    <circle cx="0" cy="111" r="5" fill="none" stroke="#80deea" stroke-width="2" />
+    <!-- Lower Robes Pleats -->
+    <path d="M-20,117 L-40,240 L40,240 L20,117 Z" fill="#ffffff" />
+    <line x1="-10" y1="117" x2="-18" y2="240" stroke="#cfd8dc" stroke-width="1.5" />
+    <line x1="0" y1="117" x2="0" y2="240" stroke="#cfd8dc" stroke-width="1.5" />
+    <line x1="10" y1="117" x2="18" y2="240" stroke="#cfd8dc" stroke-width="1.5" />
+    <!-- Boots -->
+    <rect x="-16" y="240" width="12" height="20" fill="#263238" rx="2" />
+    <rect x="4" y="240" width="12" height="20" fill="#263238" rx="2" />
+    <!-- Arms & Bracers -->
+    <path d="M-25,45 L-45,100 L-40,140" fill="none" stroke="#f8f9fa" stroke-width="10" stroke-linecap="round" />
+    <path d="M25,45 L45,100 L40,140" fill="none" stroke="#f8f9fa" stroke-width="10" stroke-linecap="round" />
+    <rect x="-48" y="110" width="12" height="22" fill="#455a64" rx="2" />
+    <rect x="36" y="110" width="12" height="22" fill="#455a64" rx="2" />
+    <!-- Head & Hairpin -->
+    <ellipse cx="0" cy="20" rx="14" ry="18" fill="#ffe0b2" />
+    <path d="M-14,15 Q0,-5 14,15 Q14,0 0,-2 Q-14,0 -14,15 Z" fill="#212121" />
+    <rect x="-6" y="-12" width="12" height="12" fill="#cfd8dc" rx="2" />
+    <line x1="-15" y1="-6" x2="15" y2="-6" stroke="#eceff1" stroke-width="2.5" />
+  </g>
+
+  <!-- Sword Graphic: Thanh Sương -->
+  <g transform="translate(340, 410)">
+    <text x="0" y="0" fill="#81d4fa" font-size="11" font-weight="bold">THANH SƯƠNG KIẾM (92cm)</text>
+    <line x1="0" y1="20" x2="0" y2="230" stroke="#eceff1" stroke-width="3" />
+    <line x1="0" y1="20" x2="0" y2="230" stroke="url(#whiteQiGrad)" stroke-width="8" opacity="0.6" />
+    <rect x="-10" y="50" width="20" height="5" fill="#b0bec5" rx="1" />
+    <rect x="-3" y="25" width="6" height="25" fill="#ffffff" rx="2" />
+    <circle cx="0" cy="22" r="5" fill="#b0bec5" />
+    <text x="15" y="130" fill="#90a4ae" font-size="10">Folded Steel</text>
+    <text x="15" y="145" fill="#90a4ae" font-size="10">Jade Hilt</text>
+    <text x="15" y="160" fill="#90a4ae" font-size="10">Azure Qi Edge</text>
+  </g>
+
+  <!-- Color Swatches Panel A -->
+  <text x="60" y="720" fill="#90a4ae" font-size="12" font-weight="bold">COLOR PALETTE (MÃ MÀU CHUẨN XIANXIA60)</text>
+  <g transform="translate(60, 735)">
+    <rect x="0" y="0" width="95" height="35" fill="#f8f9fa" rx="4" stroke="#cfd8dc" />
+    <text x="47" y="22" fill="#263238" font-size="10" font-weight="bold" text-anchor="middle">#F8F9FA Robe</text>
+
+    <rect x="110" y="0" width="95" height="35" fill="#e0e7ed" rx="4" />
+    <text x="157" y="22" fill="#263238" font-size="10" font-weight="bold" text-anchor="middle">#E0E7ED Inner</text>
+
+    <rect x="220" y="0" width="95" height="35" fill="#81d4fa" rx="4" />
+    <text x="267" y="22" fill="#01579b" font-size="10" font-weight="bold" text-anchor="middle">#81D4FA Qi</text>
+
+    <rect x="330" y="0" width="95" height="35" fill="#cfd8dc" rx="4" />
+    <text x="377" y="22" fill="#263238" font-size="10" font-weight="bold" text-anchor="middle">#CFD8DC Silver</text>
+  </g>
+
+  <!-- Martial Grammar & Negatives -->
+  <rect x="60" y="795" width="440" height="325" rx="8" fill="#15191e" stroke="#37474f" stroke-width="1" />
+  <text x="80" y="825" fill="#81d4fa" font-size="12" font-weight="bold">MARTIAL GRAMMAR &amp; FORBIDDEN DRIFT</text>
+  <g transform="translate(80, 850)" fill="#b0bec5" font-size="11">
+    <text x="0" y="0"><tspan fill="#81c784">[+]</tspan> Defensive poise, linear deflections, effortless balance</text>
+    <text x="0" y="20"><tspan fill="#81c784">[+]</tspan> Smooth gliding footwork, zero bobbing, quiet breath</text>
+    <text x="0" y="40"><tspan fill="#81c784">[+]</tspan> Decisive counter-thrust payoff at X10 (Nhất Kiếm Phá Vân)</text>
+    <line x1="0" y1="55" x2="400" y2="55" stroke="#263238" stroke-width="1" />
+    <text x="0" y="75"><tspan fill="#e57373">[-]</tspan> FORBIDDEN: No screaming, wild roars or theatrical flailing</text>
+    <text x="0" y="95"><tspan fill="#e57373">[-]</tspan> FORBIDDEN: No anime spiky hair or floating magical halo</text>
+    <text x="0" y="115"><tspan fill="#e57373">[-]</tspan> FORBIDDEN: No dirty/torn robes; pristine throughout duel</text>
+    <text x="0" y="135"><tspan fill="#e57373">[-]</tspan> FORBIDDEN: No secondary daggers or flying swords swarm</text>
+    <text x="0" y="160" fill="#ffd54f" font-weight="bold">REFERENCE STATUS: UNBOUND</text>
+    <text x="0" y="180" fill="#ff8a80">[!] OWNER_IMAGE_SOURCE_REQUIRED</text>
+    <text x="0" y="198" fill="#90a4ae">Target Asset ID: CHAR_WHITE_CULTIVATOR_REF_V1</text>
+  </g>
+
+
+  <!-- ========================================================================= -->
+  <!-- PANEL B: BLACK CULTIVATOR (DẠ VÔ NHAI) -->
+  <!-- ========================================================================= -->
+  <rect x="560" y="170" width="480" height="970" rx="10" fill="#1e2329" stroke="#ba68c8" stroke-width="1.5" />
+  
+  <!-- Panel B Header -->
+  <rect x="560" y="170" width="480" height="55" rx="10" fill="#263238" />
+  <text x="580" y="205" fill="#ffffff" font-size="18" font-weight="bold">DẠ VÔ NHAI (HẮC Y KIẾM TU)</text>
+  <text x="1010" y="205" fill="#ba68c8" font-size="12" font-weight="bold" text-anchor="end">ID: BLACK_CULTIVATOR</text>
+
+  <!-- Spec Summary -->
+  <g transform="translate(580, 245)" fill="#b0bec5" font-size="12">
+    <text x="0" y="0"><tspan fill="#eceff1" font-weight="bold">Age:</tspan> 27-29 yrs  |  <tspan fill="#eceff1" font-weight="bold">Height:</tspan> 185cm  |  <tspan fill="#eceff1" font-weight="bold">Build:</tspan> Broad Muscular Frame</text>
+    <text x="0" y="22"><tspan fill="#eceff1" font-weight="bold">Face:</tspan> Angular cheekbones, deep-set hooded piercing eyes, cleft jaw</text>
+    <text x="0" y="44"><tspan fill="#eceff1" font-weight="bold">Hair:</tspan> Coarse raven half-tied, hammered iron clasp, wild temple strands</text>
+    <text x="0" y="66"><tspan fill="#eceff1" font-weight="bold">Posture:</tspan> Forward-leaning combat aggression, heavy low center of mass</text>
+  </g>
+
+  <!-- Front & 3/4 Silhouette Schematic -->
+  <rect x="580" y="335" width="440" height="360" rx="8" fill="#15191e" stroke="#37474f" stroke-width="1" />
+  <text x="600" y="365" fill="#90a4ae" font-size="12" font-weight="bold">SCHEMATIC SILHOUETTE &amp; WARDROBE LAYERING</text>
+  
+  <!-- Stylized Vector Figure: Black Cultivator -->
+  <g transform="translate(700, 400)">
+    <!-- Wild Hair Strands -->
+    <path d="M-12,18 Q-28,45 -22,95" fill="none" stroke="#212121" stroke-width="4" />
+    <path d="M12,18 Q28,45 22,95" fill="none" stroke="#212121" stroke-width="4" />
+    <!-- Outer Robe Flow -->
+    <path d="M-45,85 Q-75,180 -65,250 L65,250 Q75,180 45,85 Z" fill="#1c1d21" opacity="0.95" />
+    <!-- Core Robe Torso -->
+    <path d="M-32,45 L-25,115 L25,115 L32,45 Z" fill="#2b2b2b" />
+    <!-- Single Right Pauldron (Leather) -->
+    <path d="M18,40 Q38,40 45,65 Q35,80 20,70 Z" fill="#3e2723" stroke="#8d6e63" stroke-width="1.5" />
+    <circle cx="32" cy="52" r="2" fill="#ffb74d" />
+    <!-- Cross Belt & Bronze Buckle -->
+    <line x1="-25" y1="45" x2="22" y2="115" stroke="#4e342e" stroke-width="6" />
+    <rect x="-25" y="110" width="50" height="14" fill="#37474f" rx="2" />
+    <rect x="-7" y="108" width="14" height="18" fill="#8d6e63" rx="1" />
+    <!-- Lower Robes & Coat Tails -->
+    <path d="M-24,124 L-45,240 L45,240 L24,124 Z" fill="#1c1d21" />
+    <line x1="-12" y1="124" x2="-22" y2="240" stroke="#263238" stroke-width="2" />
+    <line x1="12" y1="124" x2="22" y2="240" stroke="#263238" stroke-width="2" />
+    <!-- Combat Boots -->
+    <rect x="-20" y="240" width="15" height="20" fill="#121212" rx="2" stroke="#455a64" stroke-width="1" />
+    <rect x="5" y="240" width="15" height="20" fill="#121212" rx="2" stroke="#455a64" stroke-width="1" />
+    <!-- Arms & Bracers -->
+    <path d="M-32,45 L-55,100 L-48,140" fill="none" stroke="#1c1d21" stroke-width="12" stroke-linecap="round" />
+    <path d="M32,45 L55,100 L48,140" fill="none" stroke="#1c1d21" stroke-width="12" stroke-linecap="round" />
+    <rect x="-58" y="108" width="14" height="24" fill="#3e2723" rx="2" />
+    <rect x="44" y="108" width="14" height="24" fill="#3e2723" rx="2" />
+    <!-- Head & Iron Clasp -->
+    <ellipse cx="0" cy="20" rx="15" ry="19" fill="#d7ccc8" />
+    <path d="M-15,14 Q0,-6 15,14 Q15,-2 0,-4 Q-15,-2 -15,14 Z" fill="#1a1a1a" />
+    <rect x="-8" y="-10" width="16" height="10" fill="#455a64" rx="2" />
+  </g>
+
+  <!-- Heavy Sword Graphic: Huyền Minh -->
+  <g transform="translate(870, 410)">
+    <text x="0" y="0" fill="#ba68c8" font-size="11" font-weight="bold">HUYỀN MINH KIẾM (105cm x 14cm)</text>
+    <!-- Heavy Broad Blade -->
+    <polygon points="-8,50 8,50 10,210 0,235 -10,210" fill="#37474f" stroke="#546e7a" stroke-width="1.5" />
+    <line x1="0" y1="60" x2="0" y2="200" stroke="#263238" stroke-width="3" />
+    <!-- Qi Distort Glow -->
+    <polygon points="-12,45 12,45 16,210 0,242 -16,210" fill="none" stroke="url(#blackQiGrad)" stroke-width="6" opacity="0.7" />
+    <!-- Heavy Guard & Hilt -->
+    <rect x="-16" y="45" width="32" height="8" fill="#263238" rx="2" stroke="#8d6e63" />
+    <rect x="-4" y="15" width="8" height="30" fill="#424242" rx="1" />
+    <circle cx="0" cy="12" r="7" fill="#37474f" stroke="#212121" stroke-width="2" />
+    <text x="20" y="120" fill="#90a4ae" font-size="10">Meteoric Steel</text>
+    <text x="20" y="135" fill="#90a4ae" font-size="10">Fuller Groove</text>
+    <text x="20" y="150" fill="#90a4ae" font-size="10">Amethyst Qi Wake</text>
+  </g>
+
+  <!-- Color Swatches Panel B -->
+  <text x="580" y="720" fill="#90a4ae" font-size="12" font-weight="bold">COLOR PALETTE (MÃ MÀU CHUẨN XIANXIA60)</text>
+  <g transform="translate(580, 735)">
+    <rect x="0" y="0" width="95" height="35" fill="#1c1d21" rx="4" stroke="#37474f" />
+    <text x="47" y="22" fill="#cfd8dc" font-size="10" font-weight="bold" text-anchor="middle">#1C1D21 Robe</text>
+
+    <rect x="110" y="0" width="95" height="35" fill="#3e2723" rx="4" />
+    <text x="157" y="22" fill="#d7ccc8" font-size="10" font-weight="bold" text-anchor="middle">#3E2723 Leather</text>
+
+    <rect x="220" y="0" width="95" height="35" fill="#6a1b9a" rx="4" />
+    <text x="267" y="22" fill="#f3e5f5" font-size="10" font-weight="bold" text-anchor="middle">#6A1B9A Qi</text>
+
+    <rect x="330" y="0" width="95" height="35" fill="#546e7a" rx="4" />
+    <text x="377" y="22" fill="#eceff1" font-size="10" font-weight="bold" text-anchor="middle">#546E7A Iron</text>
+  </g>
+
+  <!-- Martial Grammar & Negatives -->
+  <rect x="580" y="795" width="440" height="325" rx="8" fill="#15191e" stroke="#37474f" stroke-width="1" />
+  <text x="600" y="825" fill="#ba68c8" font-size="12" font-weight="bold">MARTIAL GRAMMAR &amp; FORBIDDEN DRIFT</text>
+  <g transform="translate(600, 850)" fill="#b0bec5" font-size="11">
+    <text x="0" y="0"><tspan fill="#81c784">[+]</tspan> Kinetic dominance, heavy cleaving arcs, grounded stance</text>
+    <text x="0" y="20"><tspan fill="#81c784">[+]</tspan> Dark qi barrier (X06), crushing pressure, shockwave pulses</text>
+    <text x="0" y="40"><tspan fill="#81c784">[+]</tspan> Honorable defeat concession on one knee at X11</text>
+    <line x1="0" y1="55" x2="400" y2="55" stroke="#263238" stroke-width="1" />
+    <text x="0" y="75"><tspan fill="#e57373">[-]</tspan> FORBIDDEN: No cartoon villain smirks or manic laughter</text>
+    <text x="0" y="95"><tspan fill="#e57373">[-]</tspan> FORBIDDEN: No demonic transformations, horns, or black ooze</text>
+    <text x="0" y="115"><tspan fill="#e57373">[-]</tspan> FORBIDDEN: No cowardice, frantic running, or undignified poses</text>
+    <text x="0" y="135"><tspan fill="#e57373">[-]</tspan> FORBIDDEN: No modern combat gear, steel plates, or guns</text>
+    <text x="0" y="160" fill="#ffd54f" font-weight="bold">REFERENCE STATUS: UNBOUND</text>
+    <text x="0" y="180" fill="#ff8a80">[!] OWNER_IMAGE_SOURCE_REQUIRED</text>
+    <text x="0" y="198" fill="#90a4ae">Target Asset ID: CHAR_BLACK_CULTIVATOR_REF_V1</text>
+  </g>
+
+
+  <!-- ========================================================================= -->
+  <!-- PANEL C: VÂN ĐÀI ARENA & SPATIAL AXIS (CHOREOGRAPHY MAP) -->
+  <!-- ========================================================================= -->
+  <rect x="1080" y="170" width="480" height="970" rx="10" fill="#1e2329" stroke="#ffd54f" stroke-width="1.5" />
+
+  <!-- Panel C Header -->
+  <rect x="1080" y="170" width="480" height="55" rx="10" fill="#263238" />
+  <text x="1100" y="205" fill="#ffffff" font-size="18" font-weight="bold">VÂN ĐÀI TERRACE — ARENA &amp; AXIS</text>
+  <text x="1530" y="205" fill="#ffd54f" font-size="12" font-weight="bold" text-anchor="end">LOC_VAN_DAI_TERRACE</text>
+
+  <!-- Top-down Arena Diagram -->
+  <g transform="translate(1320, 440)">
+    <!-- Mountain Cloud Sea (Boundary) -->
+    <circle cx="0" cy="0" r="170" fill="#1a2327" stroke="#263238" stroke-width="2" stroke-dasharray="4,4" />
+    <!-- 30m Granite Terrace -->
+    <circle cx="0" cy="0" r="140" fill="url(#terraceGrad)" stroke="#455a64" stroke-width="3" />
+    <!-- Concentric Daoist Paver Rings -->
+    <circle cx="0" cy="0" r="90" fill="none" stroke="#37474f" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#37474f" stroke-width="1" stroke-dasharray="2,2" />
+
+    <!-- Cardinal Markers -->
+    <!-- North Marker -->
+    <rect x="-10" y="-148" width="20" height="16" fill="#546e7a" rx="2" />
+    <text x="0" y="-156" fill="#90a4ae" font-size="11" font-weight="bold" text-anchor="middle">NORTH (Cloud Ocean)</text>
+    
+    <!-- South Marker (Camera Protected Hemisphere) -->
+    <rect x="-10" y="132" width="20" height="16" fill="#43a047" rx="2" />
+    <text x="0" y="166" fill="#81c784" font-size="11" font-weight="bold" text-anchor="middle">SOUTH (Protected Camera Axis)</text>
+
+    <!-- West Marker (Initial White Cultivator) -->
+    <rect x="-148" y="-10" width="16" height="20" fill="#81d4fa" rx="2" />
+    <text x="-152" y="5" fill="#81d4fa" font-size="10" font-weight="bold" text-anchor="end">WEST (White Start)</text>
+
+    <!-- East Marker (Initial Black Cultivator) -->
+    <rect x="132" y="-10" width="16" height="20" fill="#ba68c8" rx="2" />
+    <text x="152" y="5" fill="#ba68c8" font-size="10" font-weight="bold" text-anchor="start">EAST (Black Start)</text>
+
+    <!-- East-West 180° Action Axis Line -->
+    <line x1="-130" y1="0" x2="130" y2="0" stroke="#e53935" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.7" />
+    <text x="0" y="-6" fill="#e57373" font-size="9" text-anchor="middle">180° ACTION AXIS (LINE OF ACTION)</text>
+
+    <!-- Initial Positions (X01-X07) -->
+    <circle cx="-70" cy="0" r="8" fill="#81d4fa" />
+    <text x="-70" y="-14" fill="#81d4fa" font-size="10" font-weight="bold" text-anchor="middle">White (X01-07)</text>
+    
+    <circle cx="70" cy="0" r="8" fill="#ba68c8" />
+    <text x="70" y="-14" fill="#ba68c8" font-size="10" font-weight="bold" text-anchor="middle">Black (X01-07)</text>
+
+    <!-- X08 Dynamic Inversion Arc -->
+    <path d="M-65,-12 Q0,-95 75,-12" fill="none" stroke="#ffd54f" stroke-width="2.5" stroke-dasharray="4,3" />
+    <polygon points="75,-12 65,-20 68,-8" fill="#ffd54f" />
+    <text x="0" y="-75" fill="#ffd54f" font-size="10" font-weight="bold" text-anchor="middle">X08 AERIAL INVERSION LEAP</text>
+
+    <!-- Post-X08 Positions (X09-X12) -->
+    <circle cx="75" cy="15" r="8" fill="#81d4fa" stroke="#ffffff" stroke-width="2" />
+    <text x="75" y="38" fill="#81d4fa" font-size="10" font-weight="bold" text-anchor="middle">White (X09-12)</text>
+
+    <circle cx="-25" cy="15" r="8" fill="#ba68c8" stroke="#ffffff" stroke-width="2" />
+    <text x="-25" y="38" fill="#ba68c8" font-size="10" font-weight="bold" text-anchor="middle">Black (X09-12)</text>
+
+    <!-- Camera Positions (South Hemisphere 150°-210°) -->
+    <g transform="translate(0, 105)">
+      <polygon points="0,0 -12,18 12,18" fill="#43a047" />
+      <text x="0" y="32" fill="#a5d6a7" font-size="10" font-weight="bold" text-anchor="middle">CAMERAS STRICTLY SOUTH</text>
+      <text x="0" y="45" fill="#81c784" font-size="9" text-anchor="middle">Shots X01 - X12 (Zero North Crossings)</text>
+    </g>
+  </g>
+
+  <!-- Lighting Progression Card -->
+  <rect x="1100" y="650" width="440" height="140" rx="8" fill="#15191e" stroke="#37474f" stroke-width="1" />
+  <text x="1120" y="678" fill="#ffd54f" font-size="12" font-weight="bold">LIGHTING &amp; ATMOSPHERE THREE-PHASE PROGRESSION</text>
+  <g transform="translate(1120, 700)" fill="#b0bec5" font-size="11">
+    <text x="0" y="0"><tspan fill="#81d4fa" font-weight="bold">Phase 1 (X01-X06):</tspan> Cold grey-cyan dawn mist, 6800K, diffuse soft ambient</text>
+    <text x="0" y="25"><tspan fill="#ba68c8" font-weight="bold">Phase 2 (X07-X09):</tspan> Turbulent swirling fog, glancing sidelight, impact sparks</text>
+    <text x="0" y="50"><tspan fill="#ffd54f" font-weight="bold">Phase 3 (X10-X12):</tspan> Cloud rupture, warm sunrise breakthrough 5200K from E-SE</text>
+    <text x="0" y="75" fill="#90a4ae">Grounded transition from tension &gt; kinetic clash &gt; luminous tranquility</text>
+  </g>
+
+  <!-- Lens & Coverage Table -->
+  <rect x="1100" y="805" width="440" height="315" rx="8" fill="#15191e" stroke="#37474f" stroke-width="1" />
+  <text x="1120" y="835" fill="#ffd54f" font-size="12" font-weight="bold">LENS PACKAGE &amp; CHOREOGRAPHY COVERAGE</text>
+  <g transform="translate(1120, 860)" fill="#b0bec5" font-size="11">
+    <text x="0" y="0"><tspan fill="#eceff1" font-weight="bold">28mm Cine Prime:</tspan> X01 (Establish), X12 (Aftermath Horizon)</text>
+    <text x="0" y="22"><tspan fill="#eceff1" font-weight="bold">40mm Dynamic Two-Shot:</tspan> X03 (Advance Lunge), X08 (Aerial Leap)</text>
+    <text x="0" y="44"><tspan fill="#eceff1" font-weight="bold">50mm Engagement Normal:</tspan> X05 (Evasion), X06 (Barrier), X09 (Sweep)</text>
+    <text x="0" y="66"><tspan fill="#eceff1" font-weight="bold">85mm Telephoto Payoff:</tspan> X02 (Draw), X04 (Sparks), X07 (Shield Point),</text>
+    <text x="150" y="86"><tspan fill="#ffd54f" font-weight="bold">X10 (Decisive Thrust)</tspan>, X11 (Concession)</text>
+    <line x1="0" y1="105" x2="400" y2="105" stroke="#263238" stroke-width="1" />
+    <text x="0" y="125" fill="#ffd54f" font-weight="bold">LOCATION REFERENCE STATUS: UNBOUND</text>
+    <text x="0" y="145" fill="#ff8a80">[!] OWNER_IMAGE_SOURCE_REQUIRED</text>
+    <text x="0" y="165" fill="#90a4ae">Target Asset ID: LOC_VAN_DAI_TERRACE_REF_V1</text>
+  </g>
+
+  <!-- FOOTER NOTICE -->
+  <text x="800" y="1175" fill="#78909c" font-size="11" text-anchor="middle">
+    AI-Film-Pipeline Xianxia60 Pre-Production Package | Pinned POLICY_REF: 45f71d6226c5ffc58b4e70f3bcea1bb0151b7003 | Gemini Flash 3.8 Worker
+  </text>
+</svg>

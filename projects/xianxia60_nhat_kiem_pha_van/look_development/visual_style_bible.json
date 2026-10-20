@@ -1,0 +1,154 @@
+{
+  "style_bible_version": "1.0.0-xianxia60",
+  "cinematic_philosophy": "Grounded Eastern Xianxia Realism (Cổ Phong Tiên Hiệp Điện Ảnh Chân Thực) inspired by the atmospheric depth of Crouching Tiger Hidden Dragon and Shadow, avoiding garish mobile-game neon or cartoon tropes.",
+  "color_palette": {
+    "primary_hues": {
+      "white_cultivator_robe": {
+        "hex": "#F8F9FA",
+        "name": "Pristine Mist White",
+        "role": "Protagonist outer robes"
+      },
+      "white_cultivator_inner": {
+        "hex": "#E0E7ED",
+        "name": "Pale Cloud Azure",
+        "role": "Protagonist inner collar and silk trim"
+      },
+      "white_cultivator_metal": {
+        "hex": "#CFD8DC",
+        "name": "Sterling Silver",
+        "role": "Hairpin, bracers, scabbard accents"
+      },
+      "white_cultivator_qi": {
+        "hex": "#81D4FA",
+        "name": "Luminous Azure Needles",
+        "role": "Refined linear blade energy"
+      },
+      "black_cultivator_robe": {
+        "hex": "#1C1D21",
+        "name": "Charcoal Obsidian",
+        "role": "Antagonist heavy outer coat"
+      },
+      "black_cultivator_leather": {
+        "hex": "#2B2B2B",
+        "name": "Boiled Matte Leather",
+        "role": "Right pauldron, bracers, boot leather"
+      },
+      "black_cultivator_metal": {
+        "hex": "#546E7A",
+        "name": "Aged Meteoric Iron",
+        "role": "Hair clasp, broadsword blade, belt buckle"
+      },
+      "black_cultivator_qi": {
+        "hex": "#6A1B9A",
+        "name": "Deep Amethyst Vapor",
+        "role": "Dense gravitational shockwave qi"
+      },
+      "arena_granite": {
+        "hex": "#454D53",
+        "name": "Weathered Granite Gray",
+        "role": "Terrace floor pavers and balustrade"
+      },
+      "mountain_mist": {
+        "hex": "#B0BEC5",
+        "name": "Dawn Cyan Mist",
+        "role": "Ambient atmosphere and low clouds"
+      },
+      "sunrise_breakthrough": {
+        "hex": "#FFD54F",
+        "name": "Warm Morning Gold",
+        "role": "Climax lighting key at X10-X12"
+      }
+    },
+    "saturation_limits": "Robe and environment saturation capped at 25%; Qi energy luminosity contrast elevated while maintaining naturalistic diffusion",
+    "contrast_profile": "Cinematic log curve with deep natural blacks (not crushed to 0) and protected highlights"
+  },
+  "weapons_and_props": {
+    "sword_white_cultivator": {
+      "name": "Thanh Sương Kiếm (Phá Vân Kiếm)",
+      "type": "Slender Double-Edged Straight Sword (Tiên Hiệp Trường Kiếm)",
+      "blade_length_cm": 92.0,
+      "blade_width_cm": 3.2,
+      "total_weight_kg": 1.1,
+      "materials": "Folded Damascus patterned cold steel, hilt of carved white mutton-fat jade wrapped with fine silver wire, guard with cloud-relief chasing",
+      "scabbard": "Lacquered white hornbeam wood mounted with engraved silver throat, chape, and dual suspension bands",
+      "visual_dynamics": "Gleams with crisp cold specular reflection along blade ridge; leaves subtle micro-reflections in misty air"
+    },
+    "sword_black_cultivator": {
+      "name": "Huyền Minh Kiếm (Trảm Đoán Trọng Kiếm)",
+      "type": "Heavy Two-Handed Cleaving Broadsword (Hắc Thiết Trọng Kiếm)",
+      "blade_length_cm": 105.0,
+      "blade_width_cm": 14.0,
+      "total_weight_kg": 4.8,
+      "materials": "Forged dark meteoric iron with deep fuller/blood-groove, hilt wrapped in dark grey stingray skin, heavy forged iron counterweight pommel",
+      "scabbard": "Aged dark bronze-trimmed oxhide sheath with wide cross-back harness",
+      "visual_dynamics": "Matte gunmetal finish absorbs light; creates heavy displacement wake in mist during fast swings"
+    }
+  },
+  "qi_energy_visual_mechanics": {
+    "pale_azure_qi": {
+      "geometry": "Razor-thin crystalline filaments, needles, and laminar ribbons adhering closely to blade edge (2-5cm offset)",
+      "behavior": "Condenses silently; hums with high-frequency harmonic vibration; slices cleanly through mist leaving crisp negative voids",
+      "decay": "Evaporates into fine crystalline light dust within 0.4 seconds of motion completion"
+    },
+    "dark_purple_qi": {
+      "geometry": "Dense turbulent vapor and gravitational shockwave rings radiating 30-60cm from broadsword face",
+      "behavior": "Distorts background mist like heat-shimmer; creates radial ground pressure waves skimming across flagstones",
+      "decay": "Dissolves into dark smoky mist wisps that dissipate into ambient fog"
+    },
+    "collision_dynamics": {
+      "impact_spark_profile": "Sharp amber/white particle sparks bursting radially at blade contact point (X04, X07)",
+      "barrier_shatter_x10": "Geometric crystalline fracturing of dark qi shield into luminous purple and azure shards before vaporizing into clear dawn air"
+    }
+  },
+  "camera_and_optics_bible": {
+    "sensor_format": "Large Format Digital Cinema (43.8 x 30.2mm equivalent)",
+    "aspect_ratio": "16:9 widescreen composition",
+    "lens_choices": {
+      "establishing_wide": {
+        "focal_mm": 28,
+        "shots": [
+          "X01",
+          "X12"
+        ],
+        "character": "Deep perspective, vast sea of clouds framing circular arena"
+      },
+      "full_dynamic_two_shot": {
+        "focal_mm": 40,
+        "shots": [
+          "X03",
+          "X08"
+        ],
+        "character": "Preserves full body martial silhouettes and clear 180-degree axis"
+      },
+      "medium_combat_engagements": {
+        "focal_mm": 50,
+        "shots": [
+          "X05",
+          "X06",
+          "X09"
+        ],
+        "character": "Neutral human perspective, authentic physical weight transfer"
+      },
+      "intense_closeup_payoff": {
+        "focal_mm": 85,
+        "shots": [
+          "X02",
+          "X04",
+          "X07",
+          "X10",
+          "X11"
+        ],
+        "character": "Shallow depth of field, crisp focus on eye intensity, blade tip, and weapon collision"
+      }
+    },
+    "shutter_discipline": "Strict 180-degree shutter (1/48s at 24fps) to preserve naturalistic organic motion blur on rapid blade extensions"
+  },
+  "prohibited_visual_drifts": [
+    "No oversaturated neon effects or cartoon cell-shading",
+    "No video-game style HUD, damage numbers, or glowing magical rings on ground",
+    "No flying swords swarming the sky (only the two physical weapons wielded in hand)",
+    "No anime spiky hair or gravity-defying floating clothing in still poses",
+    "No modern military tactical vests, boots, or tactical gloves",
+    "No gore, severed limbs, or graphic blood splatters (duel resolves with honor and concession)"
+  ]
+}

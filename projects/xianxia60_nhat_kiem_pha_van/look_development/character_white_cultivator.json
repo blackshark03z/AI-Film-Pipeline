@@ -1,0 +1,53 @@
+{
+  "character_id": "WHITE_CULTIVATOR",
+  "identity_version": "v1.0.0-lookdev-draft",
+  "visual_identity": {
+    "description": "Protagonist Lý Phá Vân (Bạch Y Kiếm Tu): youthful yet profoundly disciplined Daoist swordsman embodying serene elegance, razor-sharp focus, and effortless agility in high-altitude mountain combat.",
+    "face_geometry": "Clean refined jawline with sculpted cheekbones, calm almond-shaped eyes with deep dark irises, straight noble nose bridge, serene and composed facial expression without excess muscle tension.",
+    "body_proportions": "Slender athletic martial build, approximately 178cm height, long limbs, upright spine with perfectly centered balance and erect posture.",
+    "age_range": "21-24 years old",
+    "hair": "Lustrous ink-black straight hair reaching mid-back, upper section gathered into a high bun secured by an engraved sterling-silver crown hairpin (ngân quan), paired with dual flowing black silk ribbons cascading down the shoulder blades.",
+    "skin": "Fair porcelain complexion with subtle cold-undertone radiance, immaculate texture reflecting diffuse dawn mist.",
+    "silhouette": "Vertical, fluid, and wind-responsive; slender core accentuated by fitted waist and billowy lower robe layers creating a dynamic aerodynamic trail during footwork and leaps.",
+    "unique_traits": [
+      "Serene unblinking gaze during sword engagements",
+      "Slight silver gleam in hair accessory under morning light",
+      "Zero extraneous head or torso bobbing during rapid linear lunges"
+    ]
+  },
+  "behavioral_identity": {
+    "baseline": [
+      "Maintains defensive poise and observant distance before committing to attacks",
+      "Executes precision deflections using minimal angular rotation of the wrist and elbow",
+      "Glides across stone pavers with near-silent weight transfer and stable horizontal eyeline",
+      "Single decisive payoff thrust (X10) delivered without emotional flourish or theatrical hesitation",
+      "Restrained breathing and composed posture even after heavy kinetic clashes"
+    ],
+    "forbidden": [
+      "No wild screaming or theatrical battle roars",
+      "No uncontrolled wide slashing motions or over-extended swings",
+      "No modern military tactical stances or boxing guards",
+      "No anime-style exaggerated facial distortions or sweat drops",
+      "No demonic or corrupt energy manifestations"
+    ]
+  },
+  "vocal_identity": null,
+  "look_states": [
+    {
+      "look_state_id": "LOOK_WHITE_ROBE_V1",
+      "description": "Pristine White Daoist Martial Robes (Bạch Y Đạo Bào) for high-mountain duel at dawn.",
+      "wardrobe": "Multi-layered ceremonial martial vestment: inner white unbleached linen tunic, middle light azure-tinted silk cross-collar robe, outer flowing pure white heavy silk-crepe robe featuring delicate tone-on-tone silver cloud embroidery along lapels and sleeve borders; wide white silk waist sash bound by a dark silver plate and jade cord toggle; dark silver-grey embossed leather bracers tightly buckled over wrists; flexible black-soled white cloth combat boots.",
+      "hair": "Neatly combed high crown bun with two black silk ribbon tails, stray sideburn wisps fluttering naturally in mountain breeze.",
+      "makeup": "Subtle cinematic realism: matte natural skin, defined dark brows, natural lip tone, faint cold exposure blush on cheekbones.",
+      "accessories": [
+        "Sterling silver cloud-motif crown hairpin (ngân quan)",
+        "Dual dark silver-chased leather forearm bracers (hộ oản)",
+        "Thanh Sương (Phá Vân Kiếm): 92cm slender double-edged straight sword with white mutton-fat jade hilt and silver cloud scabbard"
+      ],
+      "condition": [
+        "Clean, pristine fabric with mist moisture sheen",
+        "No blood, no tears; light wind-borne dust on hem only after X08 aerial landing"
+      ]
+    }
+  ]
+}

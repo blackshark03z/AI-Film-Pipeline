@@ -1,0 +1,136 @@
+{
+  "ledger_version": "1.0.0-xianxia60",
+  "ledger_status": "AUDITED_FAIL_CLOSED_NO_REAL_IMAGE_ON_DISK",
+  "total_canonical_references": 5,
+  "unbound_references_count": 5,
+  "bound_references_count": 0,
+  "records": [
+    {
+      "asset_id": "CHAR_WHITE_CULTIVATOR_REF_V1",
+      "asset_type": "image",
+      "origin": "reference",
+      "uri_or_path": "UNBOUND:OWNER_IMAGE_SOURCE_REQUIRED",
+      "sha256": null,
+      "mime_type": "image/png",
+      "duration_s": null,
+      "width": null,
+      "height": null,
+      "source_attempt_id": null,
+      "provider_asset_id": null,
+      "rights_metadata": {
+        "target_character_id": "WHITE_CULTIVATOR",
+        "creative_alias": "Lý Phá Vân (Bạch Y Kiếm Tu)",
+        "qualification_tier": "DESIGN_CANDIDATE",
+        "binding_status": "UNBOUND",
+        "missing_action": "OWNER_IMAGE_SOURCE_REQUIRED",
+        "provenance": "Pending Owner face/costume reference image selection or authorized image-prompt generation wave",
+        "rights_owner": "Owner approval required",
+        "license": "PENDING_OWNER_PROVENANCE",
+        "intended_conditioning": "Character consistency anchor across Shots X01-X12",
+        "required_views": [
+          "Front facial portrait",
+          "Three-quarter action stance",
+          "Side profile in mountain mist"
+        ]
+      }
+    },
+    {
+      "asset_id": "CHAR_BLACK_CULTIVATOR_REF_V1",
+      "asset_type": "image",
+      "origin": "reference",
+      "uri_or_path": "UNBOUND:OWNER_IMAGE_SOURCE_REQUIRED",
+      "sha256": null,
+      "mime_type": "image/png",
+      "duration_s": null,
+      "width": null,
+      "height": null,
+      "source_attempt_id": null,
+      "provider_asset_id": null,
+      "rights_metadata": {
+        "target_character_id": "BLACK_CULTIVATOR",
+        "creative_alias": "Dạ Vô Nhai (Hắc Y Kiếm Tu)",
+        "qualification_tier": "DESIGN_CANDIDATE",
+        "binding_status": "UNBOUND",
+        "missing_action": "OWNER_IMAGE_SOURCE_REQUIRED",
+        "provenance": "Pending Owner face/costume reference image selection or authorized image-prompt generation wave",
+        "rights_owner": "Owner approval required",
+        "license": "PENDING_OWNER_PROVENANCE",
+        "intended_conditioning": "Character consistency anchor across Shots X01-X12",
+        "required_views": [
+          "Front facial portrait with intense gaze",
+          "Three-quarter broadsword combat stance",
+          "Profile showing shoulder pauldron"
+        ]
+      }
+    },
+    {
+      "asset_id": "WARDROBE_WHITE_ROBE_V1",
+      "asset_type": "image",
+      "origin": "reference",
+      "uri_or_path": "UNBOUND:OWNER_IMAGE_SOURCE_REQUIRED",
+      "sha256": null,
+      "mime_type": "image/png",
+      "duration_s": null,
+      "width": null,
+      "height": null,
+      "source_attempt_id": null,
+      "provider_asset_id": null,
+      "rights_metadata": {
+        "target_wardrobe_id": "LOOK_WHITE_ROBE_V1",
+        "qualification_tier": "DESIGN_CANDIDATE",
+        "binding_status": "UNBOUND",
+        "missing_action": "OWNER_IMAGE_SOURCE_REQUIRED",
+        "provenance": "Pending fabric texture reference (pure white silk-crepe with silver cloud embroidery and silver bracers)",
+        "rights_owner": "Owner approval required",
+        "license": "PENDING_OWNER_PROVENANCE",
+        "intended_conditioning": "Texture and drape consistency anchor for white robes across dynamic movement"
+      }
+    },
+    {
+      "asset_id": "WARDROBE_BLACK_ROBE_V1",
+      "asset_type": "image",
+      "origin": "reference",
+      "uri_or_path": "UNBOUND:OWNER_IMAGE_SOURCE_REQUIRED",
+      "sha256": null,
+      "mime_type": "image/png",
+      "duration_s": null,
+      "width": null,
+      "height": null,
+      "source_attempt_id": null,
+      "provider_asset_id": null,
+      "rights_metadata": {
+        "target_wardrobe_id": "LOOK_BLACK_ROBE_V1",
+        "qualification_tier": "DESIGN_CANDIDATE",
+        "binding_status": "UNBOUND",
+        "missing_action": "OWNER_IMAGE_SOURCE_REQUIRED",
+        "provenance": "Pending wardrobe texture reference (charcoal twill, matte black leather single pauldron with bronze rivets)",
+        "rights_owner": "Owner approval required",
+        "license": "PENDING_OWNER_PROVENANCE",
+        "intended_conditioning": "Texture and silhouette anchor for heavy black combat attire"
+      }
+    },
+    {
+      "asset_id": "LOC_VAN_DAI_TERRACE_REF_V1",
+      "asset_type": "image",
+      "origin": "reference",
+      "uri_or_path": "UNBOUND:OWNER_IMAGE_SOURCE_REQUIRED",
+      "sha256": null,
+      "mime_type": "image/png",
+      "duration_s": null,
+      "width": null,
+      "height": null,
+      "source_attempt_id": null,
+      "provider_asset_id": null,
+      "rights_metadata": {
+        "target_location_id": "LOC_VAN_DAI_TERRACE",
+        "qualification_tier": "DESIGN_CANDIDATE",
+        "binding_status": "UNBOUND",
+        "missing_action": "OWNER_IMAGE_SOURCE_REQUIRED",
+        "provenance": "Pending high-mountain stone terrace environment keyframe (weathered circular granite platform, sea of clouds, morning mist)",
+        "rights_owner": "Owner approval required",
+        "license": "PENDING_OWNER_PROVENANCE",
+        "intended_conditioning": "Environment world-geometry and lighting coherence anchor across X01-X12"
+      }
+    }
+  ]
+}
