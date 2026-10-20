@@ -1,0 +1,87 @@
+{
+  "schema_id": "XIANXIA60_CANDIDATE_INGEST_REVIEW_v1 (delivery metadata, NOT competing Film SoT)",
+  "film": "Nhat Kiem Pha Van / XIANXIA60",
+  "generated_art_source": "ChatGPT Images in this chat",
+  "source_generation_id": "aaa9a666-817b-4932-9046-1a235e3cbea0",
+  "source_original_file": "owner_provisional_composite_source.png",
+  "source_sha256": "21f7bcb26510aa110f762a577401b3f042add2916b875fe6eff750077aaaa6ad",
+  "source_dimensions": [
+    1536,
+    1024
+  ],
+  "model_version": "NOT_ATTESTED_BY_ARTIFACT",
+  "exact_image_generation_prompt": "NOT_AVAILABLE_IN_EXPORTED_TOOL_METADATA",
+  "generation_seed": "UNKNOWN",
+  "owner_review_state": "TAM_DUOC / provisional acceptance of overall matte-look direction; NOT creative identity lock",
+  "provider_actual_media_id": null,
+  "license_rights_review": "PENDING (no specific usage rights independently attested)",
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "subject_id": "WHITE_CULTIVATOR",
+      "file": "ly_pha_van_portrait_candidate.png",
+      "source_parent": "owner_provisional_composite_source.png",
+      "crop_bbox_xyxy_pixels": [
+        0,
+        0,
+        765,
+        626
+      ],
+      "width": 765,
+      "height": 626,
+      "mime_type": "image/png",
+      "sha256": "7cb5c496bb1b67f16bb7b09f4ca9bf625873240e14fde23769421cd59120a3e0",
+      "suggested_canonical_reference_id": "CHAR_WHITE_CULTIVATOR_REF_V1",
+      "candidate_status": "OWNER_PROVISIONAL_LOOK_ACCEPTED_NOT_VISUAL_LOCKED",
+      "local_binding_status": "UNBOUND",
+      "provider_attestation_status": "NOT_ATTESTED",
+      "notes": "Cropped from provisional ChatGPT Images composite; insufficient verified front/profile/wardrobe views; character portrait is sub-1024px"
+    },
+    {
+      "subject_id": "BLACK_CULTIVATOR",
+      "file": "da_vo_nhai_portrait_candidate.png",
+      "source_parent": "owner_provisional_composite_source.png",
+      "crop_bbox_xyxy_pixels": [
+        774,
+        0,
+        1536,
+        626
+      ],
+      "width": 762,
+      "height": 626,
+      "mime_type": "image/png",
+      "sha256": "a89e067c39445c4485aa010d927270d025bc06ccffdc21d5fdc3303d493f3446",
+      "suggested_canonical_reference_id": "CHAR_BLACK_CULTIVATOR_REF_V1",
+      "candidate_status": "OWNER_PROVISIONAL_LOOK_ACCEPTED_NOT_VISUAL_LOCKED",
+      "local_binding_status": "UNBOUND",
+      "provider_attestation_status": "NOT_ATTESTED",
+      "notes": "Cropped from provisional ChatGPT Images composite; insufficient verified front/profile/wardrobe views; character portrait is sub-1024px"
+    },
+    {
+      "subject_id": "LOC_VAN_DAI_TERRACE",
+      "file": "van_dai_arena_candidate.png",
+      "source_parent": "owner_provisional_composite_source.png",
+      "crop_bbox_xyxy_pixels": [
+        0,
+        635,
+        1536,
+        1024
+      ],
+      "width": 1536,
+      "height": 389,
+      "mime_type": "image/png",
+      "sha256": "545d02eda6684c7121f6e49cc8e14057f9ba1630aaad49c073dfbf15a8453694",
+      "suggested_canonical_reference_id": "LOC_VAN_DAI_TERRACE_REF_V1",
+      "candidate_status": "OWNER_PROVISIONAL_LOOK_ACCEPTED_NOT_VISUAL_LOCKED",
+      "local_binding_status": "UNBOUND",
+      "provider_attestation_status": "NOT_ATTESTED",
+      "notes": "Wide scene crop only 389px high; insufficient provider-ready location master"
+    }
+  ],
+  "wardrobe_reference_ids_not_separately_resolved": [
+    "WARDROBE_WHITE_ROBE_V1",
+    "WARDROBE_BLACK_ROBE_V1"
+  ],
+  "asset_ingest_rule": "Import as candidates with real hashes; preserve existing UNBOUND canonical ledger until Owner visual lock and required validations; do not fabricate provider reference media ID.",
+  "no_external_mutation": "No provider requests or uploads or video generations performed while packaging."
+}

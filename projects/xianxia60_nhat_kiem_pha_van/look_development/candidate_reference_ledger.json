@@ -1,0 +1,180 @@
+{
+  "ledger_version": "1.0.0-chatgpt-candidates-wave01",
+  "ledger_status": "OWNER_PROVISIONAL_CANDIDATES_IMPORTED_UNBOUND",
+  "source_generation_id": "aaa9a666-817b-4932-9046-1a235e3cbea0",
+  "chat_provider_source": "ChatGPT Images",
+  "owner_review_state": "TAM_DUOC / provisional acceptance of matte-skin direction; NOT creative identity lock",
+  "model_version": "NOT_ATTESTED_BY_ARTIFACT",
+  "generation_seed": "UNKNOWN",
+  "exact_image_generation_prompt": "NOT_AVAILABLE_IN_EXPORTED_TOOL_METADATA",
+  "license_rights_review": "PENDING (no specific usage rights independently attested)",
+  "canonical_reference_status": {
+    "CHAR_WHITE_CULTIVATOR_REF_V1": "UNBOUND",
+    "CHAR_BLACK_CULTIVATOR_REF_V1": "UNBOUND",
+    "WARDROBE_WHITE_ROBE_V1": "UNBOUND",
+    "WARDROBE_BLACK_ROBE_V1": "UNBOUND",
+    "LOC_VAN_DAI_TERRACE_REF_V1": "UNBOUND"
+  },
+  "wardrobe_reference_ids_not_separately_resolved": [
+    "WARDROBE_WHITE_ROBE_V1",
+    "WARDROBE_BLACK_ROBE_V1"
+  ],
+  "candidate_records_count": 4,
+  "records": [
+    {
+      "asset_id": "CANDIDATE_COMPOSITE_SOURCE_WAVE01",
+      "asset_type": "image",
+      "origin": "source",
+      "uri_or_path": "projects/xianxia60_nhat_kiem_pha_van/assets/references/chatgpt_candidates_wave01/XIANXIA60_ChatGPT_Reference_Candidates_v1/owner_provisional_composite_source.png",
+      "sha256": "21f7bcb26510aa110f762a577401b3f042add2916b875fe6eff750077aaaa6ad",
+      "mime_type": "image/png",
+      "duration_s": null,
+      "width": 1536,
+      "height": 1024,
+      "source_attempt_id": null,
+      "provider_asset_id": null,
+      "rights_metadata": {
+        "subject_id": "COMPOSITE_TRIPTYCH",
+        "description": "Original uncropped ChatGPT Images composite triptych containing White Cultivator, Black Cultivator, and Van Dai Arena",
+        "chat_provider_source": "ChatGPT Images",
+        "source_generation_id": "aaa9a666-817b-4932-9046-1a235e3cbea0",
+        "candidate_status": "OWNER_PROVISIONAL_LOOK_ACCEPTED_NOT_VISUAL_LOCKED",
+        "binding_status": "UNBOUND",
+        "provider_attestation_status": "NOT_ATTESTED",
+        "model_version": "NOT_ATTESTED_BY_ARTIFACT",
+        "generation_seed": "UNKNOWN",
+        "exact_image_generation_prompt": "NOT_AVAILABLE_IN_EXPORTED_TOOL_METADATA",
+        "owner_review_state": "TAM_DUOC / provisional acceptance of matte-skin direction; NOT creative identity lock",
+        "license_rights_review": "PENDING (no specific usage rights independently attested)"
+      }
+    },
+    {
+      "asset_id": "CANDIDATE_CHAR_WHITE_CULTIVATOR_WAVE01_V1",
+      "asset_type": "image",
+      "origin": "reference",
+      "uri_or_path": "projects/xianxia60_nhat_kiem_pha_van/assets/references/chatgpt_candidates_wave01/XIANXIA60_ChatGPT_Reference_Candidates_v1/ly_pha_van_portrait_candidate.png",
+      "sha256": "7cb5c496bb1b67f16bb7b09f4ca9bf625873240e14fde23769421cd59120a3e0",
+      "mime_type": "image/png",
+      "duration_s": null,
+      "width": 765,
+      "height": 626,
+      "source_attempt_id": null,
+      "provider_asset_id": null,
+      "rights_metadata": {
+        "subject_id": "WHITE_CULTIVATOR",
+        "creative_alias": "Lý Phá Vân (Bạch Y Kiếm Tu)",
+        "suggested_canonical_reference_id": "CHAR_WHITE_CULTIVATOR_REF_V1",
+        "candidate_status": "OWNER_PROVISIONAL_LOOK_ACCEPTED_NOT_VISUAL_LOCKED",
+        "binding_status": "UNBOUND",
+        "provider_attestation_status": "NOT_ATTESTED",
+        "chat_provider_source": "ChatGPT Images",
+        "source_generation_id": "aaa9a666-817b-4932-9046-1a235e3cbea0",
+        "source_parent_file": "owner_provisional_composite_source.png",
+        "source_parent_sha256": "21f7bcb26510aa110f762a577401b3f042add2916b875fe6eff750077aaaa6ad",
+        "crop_bbox_xyxy_pixels": [
+          0,
+          0,
+          765,
+          626
+        ],
+        "crop_method": "lossless_pixel_crop_no_ai_upscale",
+        "model_version": "NOT_ATTESTED_BY_ARTIFACT",
+        "generation_seed": "UNKNOWN",
+        "exact_image_generation_prompt": "NOT_AVAILABLE_IN_EXPORTED_TOOL_METADATA",
+        "owner_review_state": "TAM_DUOC / provisional acceptance of matte-skin direction; NOT creative identity lock",
+        "license_rights_review": "PENDING (no specific usage rights independently attested)",
+        "technical_limitations": [
+          "Resolution 765x626 is below master portrait resolution (sub-1024px)",
+          "Single 3/4 sword-extended perspective; lacks front, side profile, and full-body turnaround",
+          "Face archetype shows heavy structural similarity to Black Cultivator candidate",
+          "Sword pommel and hilt details are partial"
+        ]
+      }
+    },
+    {
+      "asset_id": "CANDIDATE_CHAR_BLACK_CULTIVATOR_WAVE01_V1",
+      "asset_type": "image",
+      "origin": "reference",
+      "uri_or_path": "projects/xianxia60_nhat_kiem_pha_van/assets/references/chatgpt_candidates_wave01/XIANXIA60_ChatGPT_Reference_Candidates_v1/da_vo_nhai_portrait_candidate.png",
+      "sha256": "a89e067c39445c4485aa010d927270d025bc06ccffdc21d5fdc3303d493f3446",
+      "mime_type": "image/png",
+      "duration_s": null,
+      "width": 762,
+      "height": 626,
+      "source_attempt_id": null,
+      "provider_asset_id": null,
+      "rights_metadata": {
+        "subject_id": "BLACK_CULTIVATOR",
+        "creative_alias": "Dạ Vô Nhai (Hắc Y Kiếm Tu)",
+        "suggested_canonical_reference_id": "CHAR_BLACK_CULTIVATOR_REF_V1",
+        "candidate_status": "OWNER_PROVISIONAL_LOOK_ACCEPTED_NOT_VISUAL_LOCKED",
+        "binding_status": "UNBOUND",
+        "provider_attestation_status": "NOT_ATTESTED",
+        "chat_provider_source": "ChatGPT Images",
+        "source_generation_id": "aaa9a666-817b-4932-9046-1a235e3cbea0",
+        "source_parent_file": "owner_provisional_composite_source.png",
+        "source_parent_sha256": "21f7bcb26510aa110f762a577401b3f042add2916b875fe6eff750077aaaa6ad",
+        "crop_bbox_xyxy_pixels": [
+          774,
+          0,
+          1536,
+          626
+        ],
+        "crop_method": "lossless_pixel_crop_no_ai_upscale",
+        "model_version": "NOT_ATTESTED_BY_ARTIFACT",
+        "generation_seed": "UNKNOWN",
+        "exact_image_generation_prompt": "NOT_AVAILABLE_IN_EXPORTED_TOOL_METADATA",
+        "owner_review_state": "TAM_DUOC / provisional acceptance of matte-skin direction; NOT creative identity lock",
+        "license_rights_review": "PENDING (no specific usage rights independently attested)",
+        "technical_limitations": [
+          "Resolution 762x626 is below master portrait resolution (sub-1024px)",
+          "Single 3/4 combat stance; lacks front, side profile, and full-body turnaround",
+          "Facial morphology shares close AI archetype with White Cultivator (twin-like jawline, nose, brow)",
+          "Leather pauldron visible, but complete broadsword weapon reference is cropped out"
+        ]
+      }
+    },
+    {
+      "asset_id": "CANDIDATE_LOC_VAN_DAI_TERRACE_WAVE01_V1",
+      "asset_type": "image",
+      "origin": "reference",
+      "uri_or_path": "projects/xianxia60_nhat_kiem_pha_van/assets/references/chatgpt_candidates_wave01/XIANXIA60_ChatGPT_Reference_Candidates_v1/van_dai_arena_candidate.png",
+      "sha256": "545d02eda6684c7121f6e49cc8e14057f9ba1630aaad49c073dfbf15a8453694",
+      "mime_type": "image/png",
+      "duration_s": null,
+      "width": 1536,
+      "height": 389,
+      "source_attempt_id": null,
+      "provider_asset_id": null,
+      "rights_metadata": {
+        "subject_id": "LOC_VAN_DAI_TERRACE",
+        "creative_alias": "Vân Đài Đỉnh Sơn (Thiên Lăng Phong)",
+        "suggested_canonical_reference_id": "LOC_VAN_DAI_TERRACE_REF_V1",
+        "candidate_status": "OWNER_PROVISIONAL_LOOK_ACCEPTED_NOT_VISUAL_LOCKED",
+        "binding_status": "UNBOUND",
+        "provider_attestation_status": "NOT_ATTESTED",
+        "chat_provider_source": "ChatGPT Images",
+        "source_generation_id": "aaa9a666-817b-4932-9046-1a235e3cbea0",
+        "source_parent_file": "owner_provisional_composite_source.png",
+        "source_parent_sha256": "21f7bcb26510aa110f762a577401b3f042add2916b875fe6eff750077aaaa6ad",
+        "crop_bbox_xyxy_pixels": [
+          0,
+          635,
+          1536,
+          1024
+        ],
+        "crop_method": "lossless_pixel_crop_no_ai_upscale",
+        "model_version": "NOT_ATTESTED_BY_ARTIFACT",
+        "generation_seed": "UNKNOWN",
+        "exact_image_generation_prompt": "NOT_AVAILABLE_IN_EXPORTED_TOOL_METADATA",
+        "owner_review_state": "TAM_DUOC / provisional acceptance of matte-skin direction; NOT creative identity lock",
+        "license_rights_review": "PENDING (no specific usage rights independently attested)",
+        "technical_limitations": [
+          "Aspect ratio is 3.95:1 (1536x389), extremely letterboxed/narrow vertically",
+          "Vertical height (389px) is too small to serve as direct full-frame 16:9 video conditioning master without severe crop or blur",
+          "Shows wide platform geometry and background peaks, but lacks reverse-angle and side-angle spatial anchors"
+        ]
+      }
+    }
+  ]
+}
