@@ -1,0 +1,39 @@
+# S3 XIANXIA60 — ONE FILM production package / pre-production WP
+
+**Date:** 2026-10-20. **State:** BOUND / OWNER CREATIVE DIRECTION APPROVED AT GOAL LEVEL / NO PROVIDER RELEASE AUTHORITY. **Purpose:** Replace repetitive single-shot task loop with ONE production package for ONE genuine, coherent 60-second xianxia duel movie. This is a film-scope WP, not a new SoT, system, lifecycle or orchestration framework.
+
+## Authority and preflight
+- **Primary Git:** `D:\AI FILM MAKER\AI-Film-Pipeline` mission checkout `mission/quality-v2-022-120s`, pre-WP baseline HEAD `5a4a800e1d344869a3fbd488a95aeaecdaea8da9`; verify actual root/Worker HEAD and dirty WIP at task execution. Read **`git show 45f71d6226c5ffc58b4e70f3bcea1bb0151b7003:AGENTS.md`**, compare `HEAD:AGENTS.md` blob `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`, read frozen Development/Film SoTs, root `CURRENT_SLICE.md` and `IMPLEMENTATION_STATUS.md`.
+- **Owner decision:** “Đổi thành 1 phút phim mục tiêu được không, cảnh tu tiên, đánh nhau là tốt nhất.” This **supersedes old S3 gardener 120s/24-shot target**, but preserves old Film State, journals, WIP, media, account/proxy/session and accepted assets intact. **No old gardener shot becomes a new accepted xianxia shot**.
+- **Creative intent:** Xianxia sword duel in a single misty high-mountain stone platform/terrace, light and dark contrasting sword cultivators (one protagonist vs one antagonist), restrained shimmering `ki`/qi around physically legible sword contacts, no third character. A duel must tell a mini-story, not a music video of disconnected energy effects. Initial working title: `Nhất Kiếm Phá Vân` (not Owner-locked).
+- **Target master:** **55–65 seconds, intended 60**, initial **12 approximately five-second source-specific beats**, at least ~35s perceivably active challenge/combat/counter; no slates, black filler or reused clip masquerading as unique shot; video with coherent sound FX/music, edit continuity, grading and finishing. Limit to 1–2 characters and one fighting location for provider coherence.
+- **NOT AUTHORIZED:** any video/image provider Generate/POST, use of free credits or paid currency, browser credential capture, account switching/expansion, Git push/merge, source film overwrites, public release or creative acceptance by Worker. Financial limit for current WP: **zero external requests, $0 paid**. Later multi-shot Generate waves require **separate explicit Owner permission** for exact account/provider/model, shot set and maximum requests / paid cap.
+
+## Initial film storyboard (one connected duel; editorial plan, not yet committed ShotSpec)
+| Shot | Timing target | Dramatic beat and **one primary performance** | Camera/readability |
+| --- | --- | --- | --- |
+| X01 | 00–05 | Two cultivators face off on cloud-veiled mountain platform | Wide, geography and axis; white on screen-left, black on right |
+| X02 | 05–10 | White cultivator draws sword; narrow line of pale qi appears | MCU insert, one clean weapon action |
+| X03 | 10–15 | Black cultivator lunges once across the axis | Medium tracking or locked profile, readable vector |
+| X04 | 15–20 | First swords collide with a controlled bright strike | Matching close/medium contact; protect hand/blade anatomy |
+| X05 | 20–25 | White fighter sidesteps a second slash | Wide/medium, full-body footwork readable |
+| X06 | 25–30 | Black fighter opens a short qi barrier with palm | Medium insert, clear palm-energy cause |
+| X07 | 30–35 | Sword strikes barrier and sparks scatter at impact | Angle matched to X06, physically local VFX |
+| X08 | 35–40 | White fighter leaps past opponent in one clean arc | Backlit wide silhouette, avoid multiperson warping |
+| X09 | 40–45 | Black fighter turns and releases one dark energy slash | Medium locked, intentional clear eye/hand/weapon vector |
+| X10 | 45–50 | White fighter's bright sword-line neutralizes the slash | Wide collision, one decisive action, limited particles |
+| X11 | 50–55 | Dust/mist settles; loser lowers sword and kneels/stands in defeat | Medium, one unambiguous outcome and no gore |
+| X12 | 55–60 | Winner lowers sword; two silhouettes remain against opening cloudlight | Wide resolution, complete visual ending |
+
+**Initial timecodes are EDITORIAL TARGETS**, not proof of provider duration or finalized cuts. Avoid creating one giant prompt requiring two fighters to perform multiple complex moves in a 5s generation. Match movement screen direction and use continuity bibles: exact lead/opponent silhouettes and swords; white vs black robe, facial identity, sword handedness; mountain stone platform shape, nearest pillar/ledge, sky/lighting/cloud direction, camera axis, positions after each strike, wound/weapon/qi state, shot-in/shot-out relations.
+
+## One production-delivery task; reuse existing architecture
+1. **SHAPE/BOUND only before Generate:** create/reuse existing film IR for distinct scope e.g. `XIANXIA60`, film title, short logline, 12-film-beat action script, 2-character/world/camera/continuity bibles, real ShotSpecs/prompt plans derived from intent and shot dependencies; do not hack old `V2_022` state or create competing SoT. Reuse existing models, compilation, local files, tests, FFmpeg/Resolve handoff, accurate lineage/cost semantics. Put new project under a separate non-colliding namespace **only after preflight** and verify no path collision.
+2. For each shot attach staging inputs/outputs, exact continuity check, likely provider capability risk and fallback editorial solution (trim/cutaway/pickup). Focus risk on 2-character fight coherence, hand/sword contact, black/white identity, no random teleport, qi effect causality. Rank which shots must be generated first to test action style and identity before committing to a full provider spend.
+3. Preproduce a **film EditManifest** and source-free timing/shot plan (a planning board or explicit placeholders clearly labeled **NOT a real preview**, never masquerading as finished film); sound FX/music/ambience plan, rights/usage and Resolve-compatible finishing plan.
+4. **Route/budget preflight from safe data only:** inventory currently qualified providers and legitimate pre-enrolled accounts without sessions/credentials/Chrome capture unless separately authorized. Never assume an old account's past `2 credits` covers 12 shots. Produce exact proposal for ONE or TWO finite production waves: candidate shot set, maximum releases, account/model, verified quota/cost at execution, free vs paid budget ceiling, provider response/UNKNOWN stop, no blind retry, source-specific journals and latches. Request Owner approval for the whole bounded wave at once, not for every shot.
+5. One cohesive pre-production delivery (storyboard, shot graph, bibles, EditManifest, provider/budget plan, risks and first actual release gate) and a scoped Git commit from assigned Worker only, with no external media actions. Tech Lead independent PROVE against frozen Film SoTs, then only Owner-authorized wave may BUILD provider video, one film rough cut and editorial checkpoint per wave, followed by pickups, sound, finishing and true movie master.
+
+## Acceptance / explicit STOP
+- PASS pre-production means a coherent **one-minute sword-duel film plan** with 12 justified connected beats, consistent visual geography, realistic 5s action tasks, exact technical lineage/cost plan and concrete capped production authorization proposal; **not** a shipped movie or 12 videos.
+- NO new provider sends, no paid costs, no identity/session changes, no touching original gardener film, no reusing existing old shot QC count, no auto-WP per X01–X12. Stop on inability to validate pinned policy, live primary Current Slice or collision/conflict with protected worker WIP. Worker cannot autonomously approve provider expenses, Owner creative lock or final film release.
