@@ -373,7 +373,51 @@ class XianxiaDirectorCompiler(DirectorCompiler):
             ))
         return intents
 
-    def _graph(self, intents, *, world_state, cast):
+    def __init__(
+        self,
+        *,
+        screen_direction: str = "left-to-right",
+        light_direction: str = "overcast diffuse",
+        world_states: list[WorldState] | None = None,
+        c_states: list[dict] | None = None,
+        **kwargs,
+    ) -> None:
+        super().__init__(
+            screen_direction=screen_direction,
+            light_direction=light_direction,
+            **kwargs,
+        )
+        self.world_states = world_states if world_states is not None else WORLD_STATES
+        self.c_states = c_states if c_states is not None else C_STATES
+
+    def design(
+        self,
+        beats: list[StoryBeat],
+        *,
+        world_state: WorldState,
+        cast: list[dict],
+        world_states: list[WorldState] | None = None,
+        c_states: list[dict] | None = None,
+    ) -> tuple[ShotGraph, list[DirectorShotIntent]]:
+        w_states = world_states if world_states is not None else self.world_states
+        c_st = c_states if c_states is not None else self.c_states
+        intents = self._treat(beats)
+        intents = self._optimize(intents)
+        graph = self._graph(
+            intents,
+            world_state=world_state,
+            cast=cast,
+            world_states=w_states,
+            c_states=c_st,
+        )
+        return graph, intents
+
+    def _graph(self, intents, *, world_state, cast, world_states=None, c_states=None):
+        if world_states is None:
+            world_states = getattr(self, "world_states", None) or WORLD_STATES
+        if c_states is None:
+            c_states = getattr(self, "c_states", None) or C_STATES
+
         graph = ShotGraph()
         char_states = [
             ("White: ready stance at West ledge", "Black: ready stance at East ledge"),
@@ -387,23 +431,43 @@ class XianxiaDirectorCompiler(DirectorCompiler):
             ("White: grounded at East ledge in ready guard", "Black: sweeping crescent blade from West ledge"),
             ("White: immaculate linear counter-thrust", "Black: staggered back, crescent shattered"),
             ("White: holding victorious stance on East ledge", "Black: kneeling on one knee in defeat"),
-            ("White: sheathing blade at sunrise", "Black: kneeling peacefully in surrender")
+            ("White: sheathing blade at sunrise", "Black: kneeling peacefully in surrender"),
         ]
         for index, intent in enumerate(intents):
+            shot_world = world_states[index] if (world_states and index < len(world_states)) else world_state
+            prev_world = WORLD_INITIAL if index == 0 else (world_states[index - 1] if (world_states and index - 1 < len(world_states)) else world_state)
+            c_start = c_states[index]["start"] if (c_states and index < len(c_states)) else {}
+            c_end = c_states[index]["end"] if (c_states and index < len(c_states)) else {}
+
             incoming = {
                 "screen_direction": intent.screen_direction,
-                "world": world_state.model_dump(),
+                "world": prev_world.model_dump(),
                 "characters": {
                     "White Cultivator": char_states[index][0],
-                    "Black Cultivator": char_states[index][1]
-                }
+                    "Black Cultivator": char_states[index][1],
+                },
+                "start_state": c_start,
+                "white_cultivator": c_start.get("white_cultivator", {}),
+                "black_cultivator": c_start.get("black_cultivator", {}),
+                "arena": c_start.get("arena", {})
             }
-            outgoing = dict(incoming)
-            outgoing["last_function"] = intent.function
+            outgoing = {
+                "screen_direction": intent.screen_direction,
+                "world": shot_world.model_dump(),
+                "characters": {
+                    "White Cultivator": char_states[index][0],
+                    "Black Cultivator": char_states[index][1],
+                },
+                "last_function": intent.function,
+                "end_state": c_end,
+                "white_cultivator": c_end.get("white_cultivator", {}),
+                "black_cultivator": c_end.get("black_cultivator", {}),
+                "arena": c_end.get("arena", {})
+            }
             continuity = [
                 f"screen direction must remain {intent.screen_direction}",
                 "camera must remain strictly on South side of combat axis",
-                "wardrobe, weapons, and environmental damage persist unless combat changes them"
+                "wardrobe, weapons, and environmental damage persist unless combat changes them",
             ]
             node = ShotGraphNode(
                 shot_id=intent.shot_id,
@@ -412,10 +476,12 @@ class XianxiaDirectorCompiler(DirectorCompiler):
                 function=intent.function,
                 incoming_state=incoming,
                 outgoing_state=outgoing,
-                world_state=world_state.model_dump(),
+                world_state=shot_world.model_dump(),
                 character_state={
                     "White Cultivator": char_states[index][0],
-                    "Black Cultivator": char_states[index][1]
+                    "Black Cultivator": char_states[index][1],
+                    "white_cultivator": c_start.get("white_cultivator", {}),
+                    "black_cultivator": c_start.get("black_cultivator", {}),
                 },
                 camera_intent={
                     "shot_size": intent.shot_size,
@@ -423,14 +489,14 @@ class XianxiaDirectorCompiler(DirectorCompiler):
                     "movement": intent.camera_movement,
                     "screen_direction": intent.screen_direction,
                     "light_direction": intent.light_direction,
-                    "duration_target_s": intent.duration_target_s
+                    "duration_target_s": intent.duration_target_s,
                 },
                 motion_intent=intent.motion_vector,
                 continuity_constraints=continuity,
                 duration_target_s=intent.duration_target_s,
                 priority="P0" if intent.function in ("PAYOFF", "DECISION") else "P1",
                 repairability="MEDIUM" if intent.shot_size in ("CLOSE", "MEDIUM_CLOSE") else "HIGH",
-                provider_requirements={"duration_class": 5, "model": "free-route default", "references": "TEXT_ANCHOR_ONLY"}
+                provider_requirements={"duration_class": 5, "model": "free-route default", "references": "TEXT_ANCHOR_ONLY"},
             )
             graph.add_node(node)
             if index > 0:
@@ -438,7 +504,7 @@ class XianxiaDirectorCompiler(DirectorCompiler):
                     src=intents[index - 1].shot_id,
                     dst=intent.shot_id,
                     kind=intent.transition_intent,
-                    rationale=f"{intent.function} after {intents[index - 1].function}"
+                    rationale=f"{intent.function} after {intents[index - 1].function}",
                 ))
         return graph
 
@@ -1700,12 +1766,16 @@ def build_compilation() -> int:
     print("\n[Phase D] Running XianxiaDirectorCompiler (synchronized ShotGraph)...")
     director = XianxiaDirectorCompiler(
         screen_direction="left-to-right",
-        light_direction=WORLD_INITIAL.lighting
+        light_direction=WORLD_INITIAL.lighting,
+        world_states=WORLD_STATES,
+        c_states=C_STATES,
     )
     shot_graph, intents = director.design(
         compiled_narrative["beats"],
         world_state=WORLD_INITIAL,
-        cast=CAST
+        cast=CAST,
+        world_states=WORLD_STATES,
+        c_states=C_STATES,
     )
     print(f"  Director intents: {len(intents)}")
     print(f"  ShotGraph nodes: {len(shot_graph.nodes)}")
@@ -2050,7 +2120,7 @@ def build_compilation() -> int:
     # 5. Master Compilation Document
     master_compilation = {
         "version": "xianxia60-compilation-v1",
-        "compiled_at": datetime.now(timezone.utc).isoformat(),
+        "compiled_at": "2026-10-20T12:00:00+00:00",
         "metadata": {
             "film_title": "Nhất Kiếm Phá Vân",
             "working_title": "XIANXIA60",

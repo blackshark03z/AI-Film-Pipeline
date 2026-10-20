@@ -91,7 +91,7 @@ Dây chuyền Film Core đã được thực thi toàn bộ bằng công cụ of
 | **TỔNG** | 12 Beats | 12 Nodes | 12 ShotSpecs chuẩn hóa JSON Schema | 12 PromptPlans chuẩn hóa JSON Schema | 12 Clips contig 1..12 | **60.0s** |
 
 - **EditManifest ID:** `edit_bfc4829aa78e125c812b3f728a5abe1ba7ec6c8b59a9ebc9571db03fa81fa2bd`
-- **Tập tin tổng hợp:** `projects/xianxia60_nhat_kiem_pha_van/XIANXIA60_COMPILATION.json` (SHA-256: `2a9f649a45d94a21cabd1993bcb25d3eb60f73715dfbbc2b6347b105ba7e5fb9`, 626,818 bytes).
+- **Tập tin tổng hợp:** `projects/xianxia60_nhat_kiem_pha_van/XIANXIA60_COMPILATION.json` (SHA-256: `f21b7b0f15c05cfa8f38ca385b58abf7bc9b2a479bc8a46f01e4b6949ff4ea5b`, 677,545 bytes).
 
 ---
 
@@ -196,12 +196,12 @@ Bộ kiểm thử chuyên sâu được thực thi trên chính mã nguồn và 
   $env:PYTHONPATH="src;tools"; $env:PYTHONIOENCODING="utf-8"; python -m pytest tests/test_film_core_slice.py tests/test_narrative_compiler_021.py tests/test_xianxia60_compilation.py -v
   ```
 - **Kết quả kiểm thử:**
-  - `tests/test_xianxia60_compilation.py`: **14/14 PASS** (0.42s)
+  - `tests/test_xianxia60_compilation.py`: **16/16 PASS** (0.65s)
   - `tests/test_film_core_slice.py`: **16/16 PASS**
   - `tests/test_narrative_compiler_021.py`: **15/15 PASS**
-  - **TỔNG CỘNG: 45/45 PASS (100% Không có hồi quy, 0 failure)**.
+  - **TỔNG CỘNG: 47/47 PASS (100% Không có hồi quy, 0 failure)**.
 
-### Chi Tiết 14 Hạng Mục Đã Kiểm Chứng Trong `test_xianxia60_compilation.py`:
+### Chi Tiết 16 Hạng Mục Đã Kiểm Chứng Trong `test_xianxia60_compilation.py`:
 1. `test_xianxia60_compilation_executes_and_yields_valid_master`: Master JSON hợp lệ, phiên bản `xianxia60-compilation-v1`, thời lượng 60.0s.
 2. `test_xianxia60_narrative_and_director_beat_structure`: Đúng 12 beats từ `ESTABLISH` đến `RESOLVE`, không có hai beat liền kề nào trùng function.
 3. `test_xianxia60_character_bibles_and_fingerprints`: Fingerprint của 2 nhân vật ổn định (`edb2d2d99cd0fae0` và `451172ec254174f6`).
@@ -216,6 +216,8 @@ Bộ kiểm thử chuyên sâu được thực thi trên chính mã nguồn và 
 12. `test_xianxia60_consecutive_cut_continuity_end_to_start_congruence`: Kiểm tra khớp trạng thái đầu - cuối (`end_state == start_state`) qua 11 mối cắt liền kề; đảm bảo 100% các khóa thực thể đầy đủ; phát hiện lỗi dịch chuyển tức thời sai lệch.
 13. `test_xianxia60_x07_x08_x09_positional_inversion_geometry`: Kiểm tra hình học hoán đổi vị trí của cú phi thân qua đầu; phân biệt thay đổi có lý do với lỗi discontinuity; bảo toàn nghiêm ngặt trục máy quay phía Nam.
 14. `test_xianxia60_world_state_graph_explicit_entities`: Kiểm tra WorldStateGraph lưu trữ đầy đủ thực thể vật lý của cả hai đấu thủ, vũ khí, khiên khí, mặt đá và đường mây, không dùng mô tả rút gọn 60 ký tự.
+15. `test_xianxia60_shotgraph_world_state_cross_layer_congruence`: Kiểm tra đồng bộ hóa 12/12 `ShotGraphNode.world_state` với `WorldStateGraph.states[1..12].world`, 12/12 `incoming_state`/`outgoing_state` khớp `ShotSpec.continuity`, và 11/11 cut transitions liền mạch trong ShotGraph.
+16. `test_xianxia60_shotgraph_x09_position_detector_anti_regression`: Focused test độc lập kiểm tra vị trí chiến thuật của S09 (Bạch Y bên phải, Hắc Y bên trái), tích hợp bộ dò đột biến (negative mutation detector) phát hiện ngay lập tức nếu node S09 bị gán nhầm trạng thái `WORLD_INITIAL` hoặc đảo hướng nhìn.
 
 ---
 
@@ -251,6 +253,29 @@ Theo chỉ đạo của Tech Lead GPT-6 sau vòng independent PROVE sơ bộ, Wo
   - Đưa dữ liệu di chuyển máy quay giả mạo (`LOCKED` vs `tracking`) -> Test khẳng định phải bắt được lỗi.
   - Sửa đổi vị trí nhân vật trong `start_state` thành vị trí dịch chuyển tức thời sai lệch -> Test khẳng định `start_state != end_state`.
 
+### 10.5. Đồng Bộ Hóa Toàn Diện ShotGraph World-State & Cut Continuity (12/12 Congruence)
+- **Vấn đề nhận diện từ Independent PROVE:** Trước lần hiệu chỉnh cuối, `XianxiaDirectorCompiler._graph` vẫn tái sử dụng biến `WORLD_INITIAL` cố định cho mọi `ShotGraphNode.world_state`. Hậu quả là chỉ có 1/12 node (S01) khớp với `WorldStateGraph`, và cảnh then chốt S09 vẫn ghi Bạch Y ở bên trái, Hắc Y ở bên phải (trái ngược hoàn toàn với cú phi thân đổi vị trí tại X08).
+- **Giải pháp Film Core chuẩn tắc:**
+  - Chuyển `world_states=WORLD_STATES` và `c_states=C_STATES` vào `XianxiaDirectorCompiler.design()`.
+  - Thiết lập cho từng node $i \in [0, 11]$:
+    - `node.world_state = WORLD_STATES[i].model_dump()`: Khớp 100% với `WorldStateGraph.states[i+1].world`.
+    - `node.incoming_state`: Nhận `prev_world` (S01 nhận `WORLD_INITIAL`, $i > 0$ nhận `WORLD_STATES[i-1]`), `start_state` từ `C_STATES[i]["start"]`, cùng các thực thể `white_cultivator`, `black_cultivator`, `arena`. Khớp 100% với canonical `ShotSpec[sid].continuity.start_state`.
+    - `node.outgoing_state`: Ghi nhận `shot_world` (`WORLD_STATES[i]`), `end_state` từ `C_STATES[i]["end"]`, `last_function`, cùng các thực thể kết thúc. Khớp 100% với canonical `ShotSpec[sid].continuity.end_state`.
+  - Khẳng định 11/11 mối cắt liền kề trong ShotGraph đạt tính liên tục tuyệt đối: `node[i].outgoing_state["end_state"] == node[i+1].incoming_state["start_state"]` và `node[i].outgoing_state["world"] == node[i+1].incoming_state["world"]`.
+
+### 10.6. Kiểm Chứng Độc Lập Hình Học X09 & Bộ Dò Sai Lệch Vị Trí (Anti-Regression Detector)
+- **Kiểm chứng thực thể X09 (S09):**
+  - Bạch Y Kiếm Tu: Đứng vững tại rìa phía Đông (`east_ledge_screen_right`), mặt hướng Tây (`facing_west`), kiếm thẳng hạ thế thủ sẵn sàng đón đòn.
+  - Hắc Y Kiếm Tu: Tại trung tâm lệch trái (`center_left` / Rìa Tây), mặt hướng Đông (`facing_east`), vung trọng kiếm quét kiếm khí đen từ Trái sang Phải về phía đối thủ.
+  - Trục máy quay: Giữ nghiêm ngặt ở phía Nam nhìn ra biển mây phía Bắc (`camera_side_of_axis = "south"`), không nhảy trục.
+- **Bộ dò đột biến sai lệch (Negative Mutation Anti-Regression Detector):**
+  - Hàm kiểm thử `test_xianxia60_shotgraph_x09_position_detector_anti_regression` thực hiện kiểm định hình học độc lập, từ chối bất kỳ dữ liệu nào ghi nhận Bạch Y ở bên trái hoặc Hắc Y ở bên phải trong S09.
+  - Tích hợp 3 kiểm thử đột biến âm tính (negative mutation):
+    1. Giả lập lỗi S09 bị gán nhầm `WORLD_INITIAL.character_position` (Bạch Y bên trái, Hắc Y bên phải) -> Bộ dò bắt được lỗi ngay lập tức.
+    2. Giả lập lỗi S09 có `incoming_state["white_cultivator"]["position"] = "west_ledge_screen_left"` -> Bộ dò bắt được lỗi ngay lập tức.
+    3. Giả lập lỗi S09 có hướng nhìn tiền phi thân (`facing East`) -> Bộ dò bắt được lỗi ngay lập tức.
+  - Ngăn chặn hoàn toàn việc kiểm thử chỉ so sánh các chuỗi sao chép từ cùng một nguồn sai.
+
 ---
 
 ## 11. Đánh Giá Hạn Chế Của Hệ Thống Hiện Hữu (Honest Limitations & Gaps)
@@ -268,7 +293,7 @@ Theo chỉ đạo của Tech Lead GPT-6 sau vòng independent PROVE sơ bộ, Wo
 
 ## 12. Kết Luận & Đề Xuất Hành Động Tiếp Theo
 
-Gói tiền kỳ và bản hiệu chỉnh continuity toàn phim cho *Nhất Kiếm Phá Vân* (60 giây / 12 cảnh) đã hoàn tất trọn vẹn, có thể tái lập 100%, bảo toàn tuyệt đối toàn bộ tài nguyên cũ. Toàn bộ 45/45 kiểm thử trong repo đều PASS.
+Gói tiền kỳ và bản hiệu chỉnh continuity toàn phim cho *Nhất Kiếm Phá Vân* (60 giây / 12 cảnh) đã hoàn tất trọn vẹn, có thể tái lập 100%, bảo toàn tuyệt đối toàn bộ tài nguyên cũ. Toàn bộ 47/47 kiểm thử trong repo đều PASS.
 
 **Bước tiếp theo đề xuất:**
 1. Trình nộp báo cáo cho **Tech Lead GPT-6** thực hiện quy trình thẩm định độc lập (`independent PROVE`).

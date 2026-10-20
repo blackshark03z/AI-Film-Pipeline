@@ -453,3 +453,157 @@ def test_xianxia60_world_state_graph_explicit_entities(compilation_data):
         )
         assert world["camera_side_of_axis"] == "south"
         assert len(world["held_objects"]) >= 2
+
+
+def test_xianxia60_shotgraph_world_state_cross_layer_congruence(compilation_data):
+    """Verify 12/12 ShotGraph nodes synchronize world_state, incoming_state, and outgoing_state with WorldStateGraph and ShotSpecs.
+
+    Ensures:
+    - 12/12 ShotGraphNode.world_state match WorldStateGraph.states[1..12].world.
+    - 12/12 ShotGraphNode incoming_state/outgoing_state match canonical ShotSpec start_state/end_state.
+    - 11/11 cut transitions in ShotGraph preserve continuous physical entities:
+      two fighters, swords, qi, barrier, and arena pavement.
+    """
+    shot_graph_nodes = compilation_data["shot_graph"]["nodes"]
+    world_manifest = compilation_data["world_state_graph"]
+    shot_specs = compilation_data["shot_specs"]
+
+    assert len(shot_graph_nodes) == 12
+    assert len(world_manifest["states"]) == 13
+
+    # 1. Verify 12/12 nodes world_state congruence with WorldStateGraph and canonical ShotSpecs
+    for i, node in enumerate(shot_graph_nodes):
+        sid = f"X{i+1:02d}"
+        node_id = f"S{i+1:02d}"
+        assert node["shot_id"] == node_id
+
+        # WorldStateGraph truth for this shot
+        ws_expected = world_manifest["states"][i + 1]["world"]
+        shot_spec = shot_specs[sid]
+
+        # Exact world_state dictionary match
+        assert node["world_state"] == ws_expected, (
+            f"ShotGraphNode {node_id} world_state diverges from WorldStateGraph {sid}:\n"
+            f"Node: {node['world_state']}\nExpected: {ws_expected}"
+        )
+        assert node["world_state"]["character_position"] == ws_expected["character_position"]
+        assert node["world_state"]["character_orientation"] == ws_expected["character_orientation"]
+        assert node["world_state"]["held_objects"] == ws_expected["held_objects"]
+        assert node["world_state"]["props_present"] == ws_expected["props_present"]
+        assert node["world_state"]["camera_side_of_axis"] == "south"
+
+        # Synchronized start_state and end_state
+        assert node["incoming_state"]["start_state"] == shot_spec["continuity"]["start_state"], (
+            f"Incoming start_state divergence at {node_id} vs {sid}"
+        )
+        assert node["outgoing_state"]["end_state"] == shot_spec["continuity"]["end_state"], (
+            f"Outgoing end_state divergence at {node_id} vs {sid}"
+        )
+
+        # Entity shortcuts
+        assert node["incoming_state"]["white_cultivator"] == shot_spec["continuity"]["start_state"]["white_cultivator"]
+        assert node["incoming_state"]["black_cultivator"] == shot_spec["continuity"]["start_state"]["black_cultivator"]
+        assert node["incoming_state"]["arena"] == shot_spec["continuity"]["start_state"]["arena"]
+        assert node["outgoing_state"]["white_cultivator"] == shot_spec["continuity"]["end_state"]["white_cultivator"]
+        assert node["outgoing_state"]["black_cultivator"] == shot_spec["continuity"]["end_state"]["black_cultivator"]
+        assert node["outgoing_state"]["arena"] == shot_spec["continuity"]["end_state"]["arena"]
+
+    # 2. Verify 11/11 cut transitions in ShotGraph (outgoing_state[i] == incoming_state[i+1])
+    for i in range(11):
+        prev_node = shot_graph_nodes[i]
+        next_node = shot_graph_nodes[i + 1]
+
+        assert prev_node["outgoing_state"]["world"] == next_node["incoming_state"]["world"], (
+            f"ShotGraph cut {i+1} world continuity divergence between {prev_node['shot_id']} and {next_node['shot_id']}"
+        )
+        assert prev_node["outgoing_state"]["end_state"] == next_node["incoming_state"]["start_state"], (
+            f"ShotGraph cut {i+1} end_to_start state divergence between {prev_node['shot_id']} and {next_node['shot_id']}"
+        )
+        assert prev_node["outgoing_state"]["white_cultivator"] == next_node["incoming_state"]["white_cultivator"]
+        assert prev_node["outgoing_state"]["black_cultivator"] == next_node["incoming_state"]["black_cultivator"]
+        assert prev_node["outgoing_state"]["arena"] == next_node["incoming_state"]["arena"]
+
+
+def test_xianxia60_shotgraph_x09_position_detector_anti_regression(compilation_data):
+    """Focused test detecting incorrect fighter positioning in ShotGraph S09/X09.
+
+    Prevents regression where ShotSpec and WorldStateGraph are correct but ShotGraph S09
+    inadvertently retains pre-leap positioning (White on left, Black on right).
+
+    Validates:
+    - S09 world_state and incoming_state strictly place White on East ledge (screen-right).
+    - S09 world_state and incoming_state strictly place Black on West ledge / center-left (screen-left).
+    - Semantic validation rejects WORLD_INITIAL or pre-leap state in S09.
+    - Active mutation detector: catches simulated corruption where ShotGraph S09 is mispositioned.
+    """
+    shot_graph_nodes = {n["shot_id"]: n for n in compilation_data["shot_graph"]["nodes"]}
+    s09 = shot_graph_nodes["S09"]
+
+    def validate_s09_shotgraph_tactical_position(node: dict) -> bool:
+        """Independent geometric audit of ShotGraph S09."""
+        ws = node.get("world_state", {})
+        pos = ws.get("character_position", "")
+        ori = ws.get("character_orientation", "")
+
+        inc = node.get("incoming_state", {})
+        white_inc_pos = inc.get("white_cultivator", {}).get("position", "")
+        black_inc_pos = inc.get("black_cultivator", {}).get("position", "")
+
+        # 1. Defect pattern: White on West ledge / screen-left, Black on East ledge / screen-right
+        if "White: West ledge" in pos and "Black: East ledge" in pos:
+            return False
+        if "screen-left" in pos.split("|")[0]:  # White portion on screen-left
+            return False
+        if white_inc_pos == "west_ledge_screen_left":
+            return False
+        if black_inc_pos == "east_ledge_screen_right":
+            return False
+
+        # 2. Required post-leap pattern: White on East ledge / screen-right, Black on West / center-left
+        if "East ledge" not in pos or "screen-right" not in pos:
+            return False
+        if white_inc_pos != "east_ledge_screen_right":
+            return False
+        if "center_left" not in black_inc_pos and "west" not in black_inc_pos:
+            return False
+
+        # 3. Orientation check: White facing West (screen-left), Black facing East (screen-right)
+        if "White: facing West" not in ori or "Black: facing East" not in ori:
+            return False
+
+        # 4. Arena camera axis invariant
+        if ws.get("camera_side_of_axis") != "south":
+            return False
+
+        return True
+
+    # 1. Genuine compiled S09 node must pass the tactical audit
+    assert validate_s09_shotgraph_tactical_position(s09) is True, (
+        f"S09 ShotGraph node failed tactical position audit: {s09['world_state']['character_position']}"
+    )
+
+    # 2. Negative mutation test 1: Simulated WORLD_INITIAL defect (White on left, Black on right)
+    corrupted_initial = copy.deepcopy(s09)
+    corrupted_initial["world_state"]["character_position"] = (
+        "White: West ledge (screen-left) | Black: East ledge (screen-right), 15 paces apart"
+    )
+    assert validate_s09_shotgraph_tactical_position(corrupted_initial) is False, (
+        "Focused detector failed to detect WORLD_INITIAL corruption in S09 character_position!"
+    )
+
+    # 3. Negative mutation test 2: Simulated incoming_state White position corruption
+    corrupted_incoming = copy.deepcopy(s09)
+    corrupted_incoming["incoming_state"]["white_cultivator"]["position"] = "west_ledge_screen_left"
+    assert validate_s09_shotgraph_tactical_position(corrupted_incoming) is False, (
+        "Focused detector failed to detect incoming_state position corruption in S09!"
+    )
+
+    # 4. Negative mutation test 3: Simulated pre-leap orientation corruption
+    corrupted_orientation = copy.deepcopy(s09)
+    corrupted_orientation["world_state"]["character_orientation"] = (
+        "White: facing East (screen-right) | Black: facing West (screen-left)"
+    )
+    assert validate_s09_shotgraph_tactical_position(corrupted_orientation) is False, (
+        "Focused detector failed to detect pre-leap orientation corruption in S09!"
+    )
+
