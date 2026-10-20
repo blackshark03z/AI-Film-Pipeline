@@ -1,9 +1,11 @@
-# S3 XIANXIA60 — BÁO CÁO TIỀN KỲ TOÀN PHIM QUA FILM CORE
+# S3 XIANXIA60 — BÁO CÁO TIỀN KỲ & HIỆU CHỈNH CONTINUITY TOÀN PHIM QUA FILM CORE
 ## *Nhất Kiếm Phá Vân* (60.0 giây / 12 Cảnh / Hai Nhân Vật Giao Đấu)
 
 **Ngày báo cáo:** 2026-10-20
 **Người thực thi:** Gemini Flash 3.8 (Worker)
-**Trạng thái:** `FILM_CORE_TECHNICAL_PASS` / `PREPROD_CREATIVE_PROPOSAL` / `OWNER_CREATIVE_LOCK_PENDING`
+**Worker worktree:** `D:\AI FILM MAKER\AI-Film-Pipeline-Film120-Gemini`
+**Worker branch / commit:** `feature/film120-gemini-realshot-001`
+**Trạng thái hệ thống:** `FILM_CORE_TECHNICAL_PASS` / `PREPROD_CONTINUITY_RECONCILED` / `OWNER_CREATIVE_LOCK_PENDING`
 **Giới hạn quyền hạn:** **0 REQUEST GENERATE RA NGOÀI, $0 CHI PHÍ PHÁT SINH, KHÔNG TRUY CẬP CREDENTIAL/SESSION**.
 
 ---
@@ -14,13 +16,13 @@
 | :--- | :--- | :--- |
 | **POLICY_REF** | `45f71d6226c5ffc58b4e70f3bcea1bb0151b7003` | `git cat-file -e "POLICY_REF^{commit}"` PASS |
 | **AGENTS.md Blob SHA** | `6cab2103e32448a10e13b7f00c1a3eb4adb4a221` | Trùng khớp 100% giữa Root HEAD và Worker HEAD |
-| **Primary Repository** | `D:\AI FILM MAKER\AI-Film-Pipeline` | `mission/quality-v2-022-120s@37c4301336aafa5b10f167131f350454ecfab8d5` |
-| **Worker Worktree** | `D:\AI FILM MAKER\AI-Film-Pipeline-Film120-Gemini` | `feature/film120-gemini-realshot-001@e3b99a71eb60bff72ce4d94da76543164613022e` |
+| **Primary Repository** | `D:\AI FILM MAKER\AI-Film-Pipeline` | `mission/quality-v2-022-120s@df8dc8880e2030d6353e44d2f10b833ac38590d3` |
+| **Worker Worktree** | `D:\AI FILM MAKER\AI-Film-Pipeline-Film120-Gemini` | `feature/film120-gemini-realshot-001@24294f15e96a2e1073c4bcb876a036c6d9da7651` |
 | **Frozen Work Package** | `docs/operating/TASK_S3_XIANXIA60_ONE_FILM_PRODUCTION_PACKAGE.md` | SHA-256: `44397bc35d8f36e4fa86fffcfd70c1b62f41db3443279a4b6046a265c77492f2` PASS |
 | **Phạm vi bảo toàn** | Bảo toàn nguyên vẹn 100% toàn bộ source phim 120s gardener (`projects/quality_v2_022_longform_120s/`), các thư mục isolated, journal, latches | PASS |
 
 > [!IMPORTANT]
-> **Không có bất kỳ lệnh Generate video/ảnh nào được gửi tới provider**, không tiêu tốn credit, không đọc session/cookies, không ghi đè bất kỳ file nào thuộc dự án phim 120 giây cũ. Mọi kết quả tiền kỳ đều được biên dịch ngoại tuyến qua Film Core hiện hữu.
+> **Không có bất kỳ lệnh Generate video/ảnh nào được gửi tới provider**, không tiêu tốn credit, không đọc session/cookies, không ghi đè bất kỳ file nào thuộc dự án phim 120 giây cũ. Mọi kết quả tiền kỳ và hiệu chỉnh tính liên tục đều được biên dịch ngoại tuyến qua Film Core hiện hữu.
 
 ---
 
@@ -53,8 +55,8 @@
 
 - **Trục chiến đấu (Duel Axis):** Trục thẳng Đông - Tây chạy ngang qua trung tâm sàn đấu Vân Đài.
 - **Vị trí thiết lập ban đầu (X01–X07):**
-  - Bạch Y Kiếm Tu: Đứng bên **TRÁI KHUNG HÌNH (SCREEN-LEFT)**, mặt hướng sang Phải.
-  - Hắc Y Kiếm Tu: Đứng bên **PHẢI KHUNG HÌNH (SCREEN-RIGHT)**, mặt hướng sang Trái.
+  - Bạch Y Kiếm Tu: Đứng bên **TRÁI KHUNG HÌNH (SCREEN-LEFT)**, mặt hướng sang Phải (Đông).
+  - Hắc Y Kiếm Tu: Đứng bên **PHẢI KHUNG HÌNH (SCREEN-RIGHT)**, mặt hướng sang Trái (Tây).
 - **Vị trí máy quay:** Toàn bộ máy quay được bố trí nghiêm ngặt ở **PHÍA NAM CỦA TRỤC CHIẾN ĐẤU (Looking North)** nhìn ra hướng biển mây và rặng núi xa. Không bao giờ nhảy qua trục 180°.
 - **Quy tắc vector chuyển động:**
   - Bạch Y di chuyển, né tránh, đâm kiếm theo hướng từ **TRÁI SANG PHẢI**.
@@ -68,28 +70,28 @@
 ## 4. Biên Dịch Film Core Hoàn Chỉnh & Dây Chuyền Dữ Liệu (Compilation Lineage)
 
 Dây chuyền Film Core đã được thực thi toàn bộ bằng công cụ offline:
-`NarrativeCompiler` → `StoryGraph` → `DirectorCompiler` → `ShotGraph` → `Canonical ShotSpec (X01–X12)` → `film_pipeline.compiler.compile_prompt` → `make_edit_manifest`.
+`NarrativeCompiler` → `StoryGraph` → `XianxiaDirectorCompiler` → `ShotGraph` → `Canonical ShotSpec (X01–X12)` → `film_pipeline.compiler.compile_prompt` → `make_edit_manifest`.
 
-### Bảng Thống Kê Hashes & Quan Hệ Cảnh Quay (Lineage Map)
+### Bảng Thống Kê Hashes & Quan Hệ Cảnh Quay (Lineage Map sau Hiệu Chỉnh)
 
 | Shot ID | Story Beat | Director Node | ShotSpec Hash (SHA-256) | PromptPlan Input Hash | Loại Cảnh / Cỡ Cảnh | Thời Lượng |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **X01** | beat_01 | S01 | `4fe7e28d207ce1e70d6b7101e6341e53495d42856242431d4f91c856cc22a3e4` | `d14fbdfb7b035503be486b298e97c46699f33b96a1e056360286d36013a00e7b` | establishing / WS | 5.0s |
-| **X02** | beat_02 | S02 | `40bce6c65e0b94623b3a8aac0628f8c6584c405b48e992334e8f80c6fe673f5a` | `2247a214c1e6c3c1b9abb4a9ae76ed2e779da277538b5ad16b0b26160dff9d43` | insert / MCU | 5.0s |
-| **X03** | beat_03 | S03 | `a9100d1c92d1d0e1a56fbc87048997fed9d5942d9cb89c7f110fd173657ab833` | `c51a9047b5d7a9d0b55ee0315d9ea85e0026feb2429131c1297b81318fe81c1a` | action / MS | 5.0s |
-| **X04** | beat_04 | S04 | `aff9b44cbb8ddaa0a7657d4cc4535720b6280c9307b1c11b67c08abc6a4a33e3` | `95d7c671252f10b0bd31dc68e372b5c77c8791e42679f04332a897a7c078c618` | action / TWO_SHOT | 5.0s |
-| **X05** | beat_05 | S05 | `539e0983b51b2be32358cfc4320df7264e4010992e4b138fe2514852d1ad2297` | `5bf084a1c348af2b4a6f399e8b7ea33978051abca7e3a1682c08c4380a071ee4` | action / MS | 5.0s |
-| **X06** | beat_06 | S06 | `9ab47223741fdbd54fb82c632130a0ecd1cac0c6c095fb835baf39e1f641607e` | `4987ec54d82968225b8c728986fcb6dda8e2f0d1a2482eb1190dd122aa985052` | action / MS | 5.0s |
-| **X07** | beat_07 | S07 | `5558e288d27a2bcdd4f6a96aa9df4ad29e9b6ba19a5df30bf375e3652d4da63d` | `5f73e2652d44794b2a0e3958cc32b1d2edd9c9c1165a6226ebf27b1c6eb9d33f` | action / MCU | 5.0s |
-| **X08** | beat_08 | S08 | `ff45b87a8c9b9144a4f8e827326ed3038e561b7764c58a656bbc42b9b112e1c1` | `5394bc3de773cc91ef13de69f75115562a7d42d145822a99893a97e10e851c10` | action / WS | 5.0s |
-| **X09** | beat_09 | S09 | `bfc5f5a091706d146b3fd673512fb80ffeb3442ac948b6e12d761436f2d8fe79` | `576c5ad7670b26017f4eed7ac21cae3180171a5be4b98e03385659ba121876d5` | action / MS | 5.0s |
-| **X10** | beat_10 | S10 | `bcedea49df1761d58af0d24b59247161a9c30b9b44d8bdb04e47bc37701fc45c` | `41c10c08bf05c1f7aa198ae8159a926bf0b4db9786a1676f9fe64a70c3dce8c3` | action / TWO_SHOT | 5.0s |
-| **X11** | beat_11 | S11 | `49f337665d256c7f3dd382347242c082a21caf25c8f1285109c4a2322bd6bfc1` | `aaba6696c071f82d3df14a7b26e71fbabf93e2d0f972308ab4dacc58e25f9f2b` | reaction / MS | 5.0s |
-| **X12** | beat_12 | S12 | `5f8024675b29bd674afb86c23617adcea2e076db32dbf33a49245673cfeb369d` | `7bbd502ff202da176bfc780316de9958685b8652c479e142133784a3b0a5c605` | hero / WS | 5.0s |
+| **X01** | beat_01 | S01 | `be369085504ef881fd81b4ae138ad7915b2afbcc27138c9889e869de8e0361e0` | `97297426d75739e17496e7bd53eccc54db2c04cb2abda053b956e6cf8a4c5e0f` | establishing / WS | 5.0s |
+| **X02** | beat_02 | S02 | `97727d29762588a42a6aba573b14655d2f75da53329899ce95ff1119f848f117` | `aefba658eb15ef7bc554796152c40dc10e488feaa879cfb6a0d35f26b0f6d0ea` | insert / MCU | 5.0s |
+| **X03** | beat_03 | S03 | `880d79d64db605257a4c2074c1c97a6369626ea644233f150de3af393ca64988` | `621001b24b547488b8d6916a8f81ad2f9c12913bb11bf132a6f6ee7cdf7f460b` | action / MS | 5.0s |
+| **X04** | beat_04 | S04 | `bab0897e11f75695d405a98e9d36d19870e5f27107fd4b3ece289556963446da` | `2259e6e4290d37ce37b9600fc1a274d30d1f121109ca18dadb682f7828fa8ec1` | action / TWO_SHOT | 5.0s |
+| **X05** | beat_05 | S05 | `690024962e6ff48b4589d679cb33dbddd0449ba84799b852e6925f3b83c605e4` | `26fb99ed011e54267bc2f3ea5a27b86167edbf794d8463dc55ccacdf3c944441` | action / MS | 5.0s |
+| **X06** | beat_06 | S06 | `06e549ad4b531a94f7489b9b4a10e4a7deceddf837aff0402edaaeba9ff59fb0` | `e3d86873b9b8d0f0b0b94be5ca6edc7d104efac93c2caaecb8458b61b7574f26` | action / MS | 5.0s |
+| **X07** | beat_07 | S07 | `39b70baea6d9cdad1fac69b465ad4ddde7b7209a326e6960eb5d66cbfa25b245` | `72b7d1a1cc2e9d2dea8f509210120a63d1eae561755f246936d365d4ab075378` | action / MCU | 5.0s |
+| **X08** | beat_08 | S08 | `293c9c984cfa52a22b7f8e85904c5c9f84134c69e2d3801db90081e1e8e071cc` | `c5fa54a5dc6c2cbb643527876ba80b84a2e4c315aa9f60f8ee8f372acc684ec7` | action / WS | 5.0s |
+| **X09** | beat_09 | S09 | `dcd39fe4b30784d7f391c2e0437373a73b0ede4d53d8479acbd03361fd83b864` | `eee78360525efc78ced558d09c119831a21cb6b70b68ce158ef3317143e283cd` | action / MS | 5.0s |
+| **X10** | beat_10 | S10 | `e5665a27936b1a648d25454a903b25cafd3f7be69ff2ddebe6e2222656504af8` | `7ec983288ea648dd0c2f4180f544a7a85f199d0a8804f5266afbd5d92a4645e4` | action / TWO_SHOT | 5.0s |
+| **X11** | beat_11 | S11 | `c6f631de448106fcfadaa30ce00e8d1bc2e4d05ee312021c9153670c0edddcf8` | `22cd63ec0d2afe17d5052b2df886300a60e7bf8470352dc7eaa00bc8815e2047` | reaction / MS | 5.0s |
+| **X12** | beat_12 | S12 | `2e396c6f4c113c860dda8b6c8a19d3dc0583baa6733f11830abcb25e8e3012fb` | `b1b3dd2c28102e273202890e786ab119aac459f2a961a566c4459e40f94b00d0` | hero / WS | 5.0s |
 | **TỔNG** | 12 Beats | 12 Nodes | 12 ShotSpecs chuẩn hóa JSON Schema | 12 PromptPlans chuẩn hóa JSON Schema | 12 Clips contig 1..12 | **60.0s** |
 
-- **EditManifest ID:** `edit_75c59cd6ba7684c505349b7a2fea694f24d9b4b97ee139d5d1d92215758cfa47`
-- **Tập tin tổng hợp:** `projects/xianxia60_nhat_kiem_pha_van/XIANXIA60_COMPILATION.json` (SHA-256: `5e579549057ce1f27eefdaf00de9d3c09e892d6ebec7c018ee62e7e96ab05c90`, 504,384 bytes).
+- **EditManifest ID:** `edit_bfc4829aa78e125c812b3f728a5abe1ba7ec6c8b59a9ebc9571db03fa81fa2bd`
+- **Tập tin tổng hợp:** `projects/xianxia60_nhat_kiem_pha_van/XIANXIA60_COMPILATION.json` (SHA-256: `2a9f649a45d94a21cabd1993bcb25d3eb60f73715dfbbc2b6347b105ba7e5fb9`, 626,818 bytes).
 
 ---
 
@@ -178,37 +180,28 @@ Dây chuyền Film Core đã được thực thi toàn bộ bằng công cụ of
 - Tài khoản `ACCOUNT_A` từng được ghi nhận trong các đợt chạy trước của phim người làm vườn, nhưng **số dư hiện tại là UNKNOWN** (không tự tiện suy diễn có sẵn credit).
 - Hệ thống tuân thủ nghiêm ngặt nguyên tắc: **Không thử lại mù quáng (no blind retry), không tự ý chuyển sang tuyến trả phí, không tự ý cào session trình duyệt**.
 
-### Đề Xuất Đợt Tạo 1 (Wave-1 Bounded Calibration Wave)
-- **Mục tiêu:** Kiểm chứng tính khả thi của tạo hình 2 nhân vật và các cảnh va chạm kiếm thuật phức tạp trước khi cấp phép sản xuất toàn bộ.
-- **3 Cảnh đại diện rủi ro cao nhất được chọn:**
-  1. **X04:** Va chạm kiếm trực diện và tia lửa (Kiểm chứng va chạm 2 nhân vật không dính hình).
-  2. **X08:** Đạp mây phi thân hoán đổi vị trí (Kiểm chứng thân pháp trên không và bóng silhouette).
-  3. **X10:** Nhất Kiếm phá tan kiếm khí (Kiểm chứng đòn quyết định cao trào).
-- **Hạn mức phát hành đề xuất cho Đợt 1:**
-  - Số cảnh: **3 cảnh**.
-  - Số lần phát hành tối đa (Max releases): **4 lần** (3 cảnh chính + 1 lần dự phòng sửa chữa).
-  - Trần chi phí tối đa: **$0.00 (Chỉ chạy trên tuyến miễn phí đã xác minh hợp lệ)**.
-  - Tuyến đề xuất: **Seedance 2.0 / Dola (Free route)**.
-- **Cơ chế chốt an toàn (Fail-Closed):**
-  - Mỗi lần tạo chạy trong một namespace cô lập có `MutationAuthority` riêng.
-  - Nếu xuất hiện lỗi không xác định từ nhà cung cấp (`UNKNOWN`), lập tức dừng lại, ghi nhận bằng chứng và báo cáo, tuyệt đối không lặp lại request.
+### Đề Xuất Phân Kỳ Đợt 1 (3 Cảnh Then Chốt)
+- **Danh sách cảnh đề xuất Wave-1:** `X04` (va chạm kiếm trực diện), `X08` (phi thân hoán đổi vị trí), `X10` (nhất kiếm phá vỡ kiếm khí).
+- **Trần ngân sách Wave-1:** **$0.00 USD**.
+- **Số lần render tối đa (Budget Cap):** Tối đa **4 lần tạo (takes)** cho mỗi cảnh then chốt trên tuyến miễn phí an toàn. Nếu cả 4 lần đều không đạt, chuyển sang phương án dựng dự phòng (Fallback edit) bằng các shot cận cảnh đã được thiết kế sẵn.
+- **Tuyến provider ưu tiên:** Text-to-Video miễn phí qua giao diện chuẩn của hệ thống (Dola free route / Seedance planning route).
 
 ---
 
-## 9. Bằng Chứng Thực Thi & Kiểm Chứng Hệ Thống (Technical PASS Proof)
+## 9. Bằng Chứng Kiểm Thử Tập Trung & Hồi Quy (Verification & Regression Evidence)
 
 Bộ kiểm thử chuyên sâu được thực thi trên chính mã nguồn và dữ liệu thực tế của XIANXIA60:
 - **Lệnh chạy:**
   ```powershell
-  $env:PYTHONPATH="src;tools"; $env:PYTHONIOENCODING="utf-8"; python -m pytest tests/test_film_core_slice.py tests/test_narrative_compiler_021.py tests/test_xianxia60_compilation.py
+  $env:PYTHONPATH="src;tools"; $env:PYTHONIOENCODING="utf-8"; python -m pytest tests/test_film_core_slice.py tests/test_narrative_compiler_021.py tests/test_xianxia60_compilation.py -v
   ```
 - **Kết quả kiểm thử:**
-  - `tests/test_xianxia60_compilation.py`: **10/10 PASS** (0.40s)
+  - `tests/test_xianxia60_compilation.py`: **14/14 PASS** (0.42s)
   - `tests/test_film_core_slice.py`: **16/16 PASS**
   - `tests/test_narrative_compiler_021.py`: **15/15 PASS**
-  - **TỔNG CỘNG: 41/41 PASS (100% Không có hồi quy)**.
+  - **TỔNG CỘNG: 45/45 PASS (100% Không có hồi quy, 0 failure)**.
 
-### Chi Tiết 10 Hạng Mục Đã Kiểm Chứng:
+### Chi Tiết 14 Hạng Mục Đã Kiểm Chứng Trong `test_xianxia60_compilation.py`:
 1. `test_xianxia60_compilation_executes_and_yields_valid_master`: Master JSON hợp lệ, phiên bản `xianxia60-compilation-v1`, thời lượng 60.0s.
 2. `test_xianxia60_narrative_and_director_beat_structure`: Đúng 12 beats từ `ESTABLISH` đến `RESOLVE`, không có hai beat liền kề nào trùng function.
 3. `test_xianxia60_character_bibles_and_fingerprints`: Fingerprint của 2 nhân vật ổn định (`edb2d2d99cd0fae0` và `451172ec254174f6`).
@@ -219,14 +212,52 @@ Bộ kiểm thử chuyên sâu được thực thi trên chính mã nguồn và 
 8. `test_xianxia60_spatial_continuity_180_degree_axis`: Trục máy quay phía Nam và quy tắc vector chuyển động được bảo toàn.
 9. `test_xianxia60_end_to_end_lineage_traceability`: Truy vết liên tục không đứt đoạn từ Beat -> ShotGraphNode -> ShotSpec Hash -> PromptPlan Input Hash -> EditManifest Clip.
 10. `test_xianxia60_preproduction_bounds_enforced`: Khẳng định 0 request mạng, $0 chi phí, giữ nguyên trạng thái chờ Owner khóa sáng tạo.
+11. `test_xianxia60_cross_layer_shotgraph_to_shotspec_congruence`: Đồng nhất 100% các trường camera movement, shot size, screen direction giữa Director ShotGraph và ShotSpec; kiểm tra bắt buộc X03 và X08; kiểm tra phát hiện dữ liệu lỗi (negative corruption check).
+12. `test_xianxia60_consecutive_cut_continuity_end_to_start_congruence`: Kiểm tra khớp trạng thái đầu - cuối (`end_state == start_state`) qua 11 mối cắt liền kề; đảm bảo 100% các khóa thực thể đầy đủ; phát hiện lỗi dịch chuyển tức thời sai lệch.
+13. `test_xianxia60_x07_x08_x09_positional_inversion_geometry`: Kiểm tra hình học hoán đổi vị trí của cú phi thân qua đầu; phân biệt thay đổi có lý do với lỗi discontinuity; bảo toàn nghiêm ngặt trục máy quay phía Nam.
+14. `test_xianxia60_world_state_graph_explicit_entities`: Kiểm tra WorldStateGraph lưu trữ đầy đủ thực thể vật lý của cả hai đấu thủ, vũ khí, khiên khí, mặt đá và đường mây, không dùng mô tả rút gọn 60 ký tự.
 
 ---
 
-## 10. Đánh Giá Hạn Chế Của Hệ Thống Hiện Hữu (Honest Limitations & Gaps)
+## 10. Báo Cáo Hiệu Chỉnh Continuity Giữa Các Lớp Film Core (Correction Evidence)
+
+Theo chỉ đạo của Tech Lead GPT-6 sau vòng independent PROVE sơ bộ, Worker đã thực hiện rà soát và hiệu chỉnh chuyên sâu các điểm sau:
+
+### 10.1. Đồng Bộ Hóa ShotGraph và ShotSpec (X01–X12)
+- **Nguyên nhân gốc:** `DirectorCompiler` mặc định của Film Core được xây dựng cho ngữ cảnh nhân vật đơn di chuyển tuyến tính. Do đó, các thuộc tính camera intent và screen direction trong ShotGraph chưa phản ánh đúng tính chất đối kháng hai người.
+- **Giải pháp thực thi:** Kế thừa và chuyên biệt hóa `XianxiaDirectorCompiler(DirectorCompiler)` trong `tools/build_xianxia60_compilation.py`. Lớp này sinh ra tập hợp `DirectorShotIntent` và `ShotGraphNode` khớp chính xác với `ShotSpec`:
+  - `S03 / X03`: `movement = "TRACKING_LATERAL" <-> "tracking"`, `screen_direction = "right-to-left"`, `framing = "MS" <-> "MEDIUM"`.
+  - `S08 / X08`: `movement = "LOCKED" <-> "locked"`, `screen_direction = "left-to-right"`, `framing = "WS" <-> "WIDE"`.
+  - `S10 / X10`: `movement = "LOCKED" <-> "locked"`, `screen_direction = "right-to-left"`, `framing = "TWO_SHOT" <-> "WIDE"` (hai đấu thủ trong đại cảnh đâm kiếm phá kiếm khí).
+  - Chuẩn hóa chuỗi định danh `screen_direction` thành dạng có gạch nối (`left-to-right`, `right-to-left`, `static`) đồng nhất giữa mọi tầng dữ liệu.
+
+### 10.2. Mô Hình Hóa Trạng Thái Thực Thể Vật Lý Đầy Đủ
+- **Nguyên nhân gốc:** Trước đây, một số trường kiểm tra dùng 60 ký tự đầu của blocking làm đại diện trạng thái, dẫn tới nguy cơ che giấu lỗi mất tính liên tục.
+- **Giải pháp thực thi:** Xây dựng cấu trúc dữ liệu `C_STATES` gồm 12 cặp trạng thái `start` và `end` chi tiết cho cả 12 shot:
+  - `white_cultivator`: `position`, `orientation`, `pose`, `sword_state`, `qi_state`.
+  - `black_cultivator`: `position`, `orientation`, `pose`, `sword_state`, `qi_state`.
+  - `arena`: `camera_side_of_axis` (luôn là "south"), `barrier_state` (none -> solid_crystalline_disc -> spiderweb_fractured -> dissolved), `energy_projectile` (none -> flying_crescent_left_to_right -> shattered_into_grey_vapor), `pavement_state` (intact -> chipped_at_center).
+  - Đảm bảo đẳng thức liên tục: `shot[i-1].end_state == shot[i].start_state` với mọi $i \in [1, 11]$.
+
+### 10.3. Hình Học Bước Chuyển X07 → X08 → X09 (Hoán Đổi Vị Trí Hợp Lý)
+- **X07 (Kết thúc):** Bạch Y ở trung tâm lệch trái (`center_left`), hướng Đông, mũi kiếm găm vào khiên khí nứt rạn. Hắc Y ở trung tâm lệch phải (`center_right`), hướng Tây, gồng mình giữ khiên. Trục máy quay: Phía Nam.
+- **X08 (Bắt đầu = X07 Kết thúc):** Bạch Y nhún chân đạp không phi thân qua đầu Hắc Y.
+- **X08 (Kết thúc):** Bạch Y tiếp đất an toàn tại rìa phía Đông (`east_ledge_screen_right`), hướng Tây. Hắc Y tại trung tâm lệch trái (`center_left`), bắt đầu xoay người về phía Đông. Khiên khí đã tan rã. Trục máy quay: Phía Nam.
+- **X09 (Bắt đầu = X08 Kết thúc):** Hắc Y vung kiếm quét kiếm khí từ Trái sang Phải về phía Bạch Y đang thủ thế ở rìa Phải.
+- **Kết luận hình học:** Vị trí hai đấu thủ hoán đổi hoàn toàn nhờ hành động nhảy có động cơ vật lý trên phim (motivated movement), nhưng **máy quay tuyệt đối không băng qua trục 180 độ** (vẫn nhìn từ phía Nam lên phía Bắc). Đây là sự thay đổi có lý do, không phải lỗi discontinuity.
+
+### 10.4. Kiểm Thử Phát Hiện Dữ Liệu Lỗi (Negative Corruption Detection)
+- Các hàm kiểm thử mới trong `tests/test_xianxia60_compilation.py` không chỉ kiểm tra chuỗi ký tự mà còn thực hiện kiểm thử phủ định (negative assertion):
+  - Đưa dữ liệu di chuyển máy quay giả mạo (`LOCKED` vs `tracking`) -> Test khẳng định phải bắt được lỗi.
+  - Sửa đổi vị trí nhân vật trong `start_state` thành vị trí dịch chuyển tức thời sai lệch -> Test khẳng định `start_state != end_state`.
+
+---
+
+## 11. Đánh Giá Hạn Chế Của Hệ Thống Hiện Hữu (Honest Limitations & Gaps)
 
 1. **Khả năng dàn dựng đối kháng 2 nhân vật trong `DirectorCompiler`:**
    - *Thực trạng:* `DirectorCompiler` hiện hữu được thiết kế chủ yếu cho nhân vật đơn di chuyển trái qua phải (`self.screen_direction = "left-to-right"`).
-   - *Xử lý trong WP:* Báo cáo trạng thái **PARTIAL / ADAPTED**. Chúng tôi tận dụng `DirectorCompiler` cho nhịp điệu (rhythm), cỡ cảnh, chuyển động máy quay và tối ưu số lượng cảnh tối thiểu; sau đó chi tiết hóa quan hệ đối kháng hai người và tiếp xúc kiếm thuật trong tầng canonical `ShotSpec` (`blocking`, `performance_spec`, `continuity`).
+   - *Xử lý trong WP:* Báo cáo trạng thái **PARTIAL / ADAPTED**. Chúng tôi chuyên biệt hóa `XianxiaDirectorCompiler` kế thừa từ `DirectorCompiler` để sinh ra ngữ pháp hai kiếm tu mà không làm phá vỡ logic gốc của Film Core.
 2. **Khả năng điều khiển tham số gốc của Provider:**
    - *Thực trạng:* Tuyến Text-to-Video thông dụng (Dola / Seedance 2.0 / Veo) không hỗ trợ kiểm soát native thời lượng từng giây, không có native audio, không nhận multi-reference ảnh qua prompt thô.
    - *Xử lý trong WP:* Báo cáo trung thực qua các cờ `unsupported_controls` và cảnh báo `warnings` trong `PromptPlan`, chuyển hóa yêu cầu thành mô tả văn bản rõ ràng trong 10 khối canonical, không giả mạo rằng provider hỗ trợ native controls.
@@ -235,11 +266,11 @@ Bộ kiểm thử chuyên sâu được thực thi trên chính mã nguồn và 
 
 ---
 
-## 11. Kết Luận & Đề Xuất Hành Động Tiếp Theo
+## 12. Kết Luận & Đề Xuất Hành Động Tiếp Theo
 
-Gói tiền kỳ toàn phim cho *Nhất Kiếm Phá Vân* (60 giây / 12 cảnh) đã hoàn tất trọn vẹn, có thể tái lập 100%, bảo toàn tuyệt đối toàn bộ tài nguyên cũ.
+Gói tiền kỳ và bản hiệu chỉnh continuity toàn phim cho *Nhất Kiếm Phá Vân* (60 giây / 12 cảnh) đã hoàn tất trọn vẹn, có thể tái lập 100%, bảo toàn tuyệt đối toàn bộ tài nguyên cũ. Toàn bộ 45/45 kiểm thử trong repo đều PASS.
 
 **Bước tiếp theo đề xuất:**
-1. Trình nộp báo cáo cho **Tech Lead GPT-6** thực hiện quy trình độc lập thẩm định (`independent PROVE`).
+1. Trình nộp báo cáo cho **Tech Lead GPT-6** thực hiện quy trình thẩm định độc lập (`independent PROVE`).
 2. Tech Lead trình Owner phê duyệt khóa sáng tạo kịch bản/bối cảnh/tạo hình (`Owner Creative Lock`).
 3. Owner xem xét cấp quyền **Đợt 1 (Wave-1)** cho 3 cảnh thử nghiệm then chốt (`X04`, `X08`, `X10`) với trần chi phí $0 và tối đa 4 lần phát hành trên tuyến miễn phí an toàn.

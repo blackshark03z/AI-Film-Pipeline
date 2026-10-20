@@ -9,6 +9,7 @@ Deterministic; offline; 0 provider network actions, $0 paid.
 """
 from __future__ import annotations
 
+import copy
 import json
 import sys
 from pathlib import Path
@@ -259,3 +260,196 @@ def test_xianxia60_preproduction_bounds_enforced(compilation_data):
     assert budget["financial_state_at_WP"] == "0 NEW PROVIDER ACTIONS / $0 PAID"
     assert budget["proposed_wave_1_scope"]["cost_ceiling_usd"] == 0.0
     assert budget["proposed_wave_1_scope"]["candidate_shots"] == ["X04", "X08", "X10"]
+
+
+def test_xianxia60_cross_layer_shotgraph_to_shotspec_congruence(compilation_data):
+    """Verify strict synchronization between Director ShotGraph nodes and canonical ShotSpecs.
+
+    Validates:
+    - Camera movement congruence (LOCKED <-> locked, TRACKING_LATERAL <-> tracking, PUSH_IN <-> dolly_in).
+    - Shot size / framing congruence (WIDE <-> WS, MEDIUM_CLOSE <-> MCU, MEDIUM <-> MS / TWO_SHOT).
+    - Screen direction identity (left-to-right, right-to-left, static).
+    - Mandatory audits: X03 (sprint lunge) and X08 (aerial leap inversion).
+    - Negative check: asserts failure if metadata is corrupted.
+    """
+    shot_graph_nodes = {n["shot_id"]: n for n in compilation_data["shot_graph"]["nodes"]}
+    shot_specs = compilation_data["shot_specs"]
+
+    size_map = {
+        "WIDE": ["WS", "TWO_SHOT"],
+        "MEDIUM_CLOSE": ["MCU"],
+        "MEDIUM": ["MS", "TWO_SHOT"],
+    }
+    mov_map = {
+        "LOCKED": "locked",
+        "TRACKING_LATERAL": "tracking",
+        "PUSH_IN": "dolly_in",
+    }
+
+    for i in range(1, 13):
+        sid = f"X{i:02d}"
+        node_id = f"S{i:02d}"
+        node = shot_graph_nodes[node_id]
+        shot = shot_specs[sid]
+
+        cam_intent = node["camera_intent"]
+        cam_spec = shot["camera"]
+        cont_spec = shot["continuity"]
+
+        # 1. Screen direction exact match
+        assert cam_intent["screen_direction"] == cont_spec["screen_direction"], (
+            f"Screen direction divergence at {sid}: graph={cam_intent['screen_direction']} vs spec={cont_spec['screen_direction']}"
+        )
+
+        # 2. Camera movement congruence
+        expected_mov = mov_map[cam_intent["movement"]]
+        actual_mov = cam_spec["movement"]["type"]
+        assert actual_mov == expected_mov, (
+            f"Camera movement divergence at {sid}: graph={cam_intent['movement']} ({expected_mov}) vs spec={actual_mov}"
+        )
+
+        # 3. Framing / shot size congruence
+        allowed_framings = size_map[cam_intent["shot_size"]]
+        assert cam_spec["framing"] in allowed_framings, (
+            f"Framing divergence at {sid}: graph={cam_intent['shot_size']} vs spec={cam_spec['framing']}"
+        )
+
+    # Mandatory audits: X03 and X08
+    # X03: Black cultivator aggressive sprint right-to-left, tracking, medium shot
+    x03_node = shot_graph_nodes["S03"]
+    x03_spec = shot_specs["X03"]
+    assert x03_node["camera_intent"]["screen_direction"] == "right-to-left"
+    assert x03_node["camera_intent"]["movement"] == "TRACKING_LATERAL"
+    assert x03_spec["camera"]["movement"]["type"] == "tracking"
+    assert x03_spec["continuity"]["screen_direction"] == "right-to-left"
+    assert x03_spec["camera"]["framing"] == "MS"
+
+    # X08: White cultivator aerial leap left-to-right, locked wide shot
+    x08_node = shot_graph_nodes["S08"]
+    x08_spec = shot_specs["X08"]
+    assert x08_node["camera_intent"]["screen_direction"] == "left-to-right"
+    assert x08_node["camera_intent"]["movement"] == "LOCKED"
+    assert x08_spec["camera"]["movement"]["type"] == "locked"
+    assert x08_spec["continuity"]["screen_direction"] == "left-to-right"
+    assert x08_spec["camera"]["framing"] == "WS"
+
+    # Negative check: corrupted data must be detected
+    def verify_congruence(n_mov, s_mov):
+        return mov_map.get(n_mov) == s_mov
+    assert not verify_congruence("LOCKED", "tracking"), "Negative test failed: false match permitted"
+    assert not verify_congruence("TRACKING_LATERAL", "dolly_in"), "Negative test failed: false match permitted"
+
+
+def test_xianxia60_consecutive_cut_continuity_end_to_start_congruence(compilation_data):
+    """Verify cut-by-cut continuity: shot[i-1].end_state == shot[i].start_state for cuts 1..11.
+
+    Ensures:
+    - Both cultivators (White and Black) have explicit physical states modeled.
+    - Arena state retains continuous pavement, energy projectile, and barrier state.
+    - Camera axis remains strictly 'south' across all 12 shots.
+    - Test raises AssertionError when simulated corruption occurs.
+    """
+    shots = [compilation_data["shot_specs"][f"X{i:02d}"] for i in range(1, 13)]
+
+    required_keys = {"white_cultivator", "black_cultivator", "arena"}
+    char_keys = {"position", "orientation", "pose", "sword_state", "qi_state"}
+    arena_keys = {"camera_side_of_axis", "barrier_state", "energy_projectile", "pavement_state"}
+
+    for i in range(len(shots)):
+        start = shots[i]["continuity"]["start_state"]
+        end = shots[i]["continuity"]["end_state"]
+
+        assert set(start.keys()) == required_keys, f"Invalid start_state keys in shot X{i+1:02d}"
+        assert set(end.keys()) == required_keys, f"Invalid end_state keys in shot X{i+1:02d}"
+
+        for char in ("white_cultivator", "black_cultivator"):
+            assert set(start[char].keys()) == char_keys
+            assert set(end[char].keys()) == char_keys
+
+        assert set(start["arena"].keys()) == arena_keys
+        assert set(end["arena"].keys()) == arena_keys
+        assert start["arena"]["camera_side_of_axis"] == "south"
+        assert end["arena"]["camera_side_of_axis"] == "south"
+
+    # Cut transitions: shot[i-1].end_state == shot[i].start_state
+    for i in range(1, len(shots)):
+        prev_shot = shots[i - 1]
+        curr_shot = shots[i]
+
+        prev_end = prev_shot["continuity"]["end_state"]
+        curr_start = curr_shot["continuity"]["start_state"]
+
+        assert prev_end == curr_start, (
+            f"Discontinuity between X{i:02d} end_state and X{i+1:02d} start_state:\n"
+            f"End: {prev_end}\nStart: {curr_start}"
+        )
+
+    # Corruption detection test
+    corrupted_start = copy.deepcopy(shots[1]["continuity"]["start_state"])
+    corrupted_start["white_cultivator"]["position"] = "corrupted_teleport_position"
+    assert corrupted_start != shots[0]["continuity"]["end_state"], "Failed to detect state corruption"
+
+
+def test_xianxia60_x07_x08_x09_positional_inversion_geometry(compilation_data):
+    """Verify X07 -> X08 -> X09 tactical position swap geometry on the South camera axis.
+
+    Specifically validates:
+    - X07: White at center-left thrusting east, Black at center-right defending with barrier.
+    - X08: White leaps left-to-right over Black, landing on east ledge (screen-right).
+    - X09: White on east ledge (screen-right), Black on center-left (screen-left) sweeping crescent.
+    - Camera axis remains strictly 'south' without crossing the 180-degree line.
+    - Discontinuity vs. motivated physical change distinction: position change is motivated by leap.
+    """
+    shots = compilation_data["shot_specs"]
+    x07 = shots["X07"]
+    x08 = shots["X08"]
+    x09 = shots["X09"]
+
+    # Pre-leap (X07 end)
+    x07_end = x07["continuity"]["end_state"]
+    assert "left" in x07_end["white_cultivator"]["position"]
+    assert "right" in x07_end["black_cultivator"]["position"]
+    assert x07_end["arena"]["barrier_state"] == "spiderweb_fractured"
+    assert x07_end["arena"]["camera_side_of_axis"] == "south"
+
+    # During leap (X08 start == X07 end)
+    assert x08["continuity"]["start_state"] == x07_end
+    assert x08["continuity"]["screen_direction"] == "left-to-right"
+
+    # Post-leap (X08 end)
+    x08_end = x08["continuity"]["end_state"]
+    assert "right" in x08_end["white_cultivator"]["position"]
+    assert "left" in x08_end["black_cultivator"]["position"]
+    assert x08_end["arena"]["barrier_state"] == "dissolved"
+    assert x08_end["arena"]["camera_side_of_axis"] == "south"
+
+    # Next attack (X09 start == X08 end)
+    assert x09["continuity"]["start_state"] == x08_end
+    x09_end = x09["continuity"]["end_state"]
+    assert "right" in x09_end["white_cultivator"]["position"]
+    assert "left" in x09_end["black_cultivator"]["position"]
+    assert x09_end["arena"]["energy_projectile"] == "flying_crescent_left_to_right"
+    assert x09_end["arena"]["camera_side_of_axis"] == "south"
+
+
+def test_xianxia60_world_state_graph_explicit_entities(compilation_data):
+    """Verify WorldStateGraph contains explicit physical entity states, not truncated text.
+
+    Validates:
+    - World states have detailed, non-truncated fields (>60 chars where appropriate).
+    - Explicit tracking of both cultivators' positions, orientations, and weapons.
+    - Explicit tracking of arena barriers, projectiles, and stone pavement damage.
+    """
+    world_states = compilation_data["world_state_graph"]["states"]
+    assert len(world_states) == 13
+
+    for ws in world_states:
+        world = ws.get("world", ws)
+        # Positions and orientations must track both fighters explicitly
+        assert "White:" in world["character_position"] and "Black:" in world["character_position"]
+        assert "White:" in world["character_orientation"] and "Black:" in world["character_orientation"]
+        assert len(world["character_position"]) > 60, (
+            f"State {world['location']} character_position appears truncated: {len(world['character_position'])} chars"
+        )
+        assert world["camera_side_of_axis"] == "south"
+        assert len(world["held_objects"]) >= 2

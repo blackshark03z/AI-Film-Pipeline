@@ -33,8 +33,10 @@ from film_pipeline.core import (
 )
 from film_pipeline.editorial import EditClip, make_edit_manifest
 from film_pipeline.narrative import (
-    CharacterBible, DirectorCompiler, NarrativeCompiler, StoryGraph,
-    WorldState, WorldStateGraph,
+    CharacterBible, NarrativeCompiler, StoryGraph, WorldState, WorldStateGraph,
+)
+from film_pipeline.narrative.director import (
+    DirectorCompiler, DirectorShotIntent, ShotGraph, ShotGraphEdge, ShotGraphNode,
 )
 
 PROJECT_DIR = ROOT / "projects" / "xianxia60_nhat_kiem_pha_van"
@@ -100,15 +102,210 @@ WORLD_INITIAL = WorldState(
     lighting="diffuse cold morning cloudlight, soft shadows, luminous sky horizon",
     terrain="weathered dark granite flagstones with faint Daoist geometric ring engravings and low stone balustrade",
     architecture="ancient open mountain terrace with four weathered stone marker pillars at cardinal edges",
-    props_present=["four weathered stone marker pillars", "stone balustrade"],
-    character_position="White on screen-left west ledge, Black on screen-right east ledge, 15 paces apart",
-    character_orientation="facing each other across the east-west axis",
-    wardrobe_state="clean, pristine robes moving slightly in the mountain breeze",
+    props_present=["four weathered stone marker pillars", "low stone balustrade", "intact granite flagstones"],
+    character_position="White: West ledge (screen-left) | Black: East ledge (screen-right), 15 paces apart",
+    character_orientation="White: facing East (screen-right) | Black: facing West (screen-left)",
+    wardrobe_state="clean white robes and clean charcoal-black robes moving in wind",
     damage_dirt="clean",
-    held_objects=["White cultivator holds sheathed straight sword", "Black cultivator holds sheathed broad sword"],
+    held_objects=["White: sheathed straight sword", "Black: sheathed heavy broadsword"],
     camera_side_of_axis="south",
-    screen_direction="left-to-right",
+    screen_direction="static",
 )
+
+WORLD_STATES = [
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="mountain mist drifting low across stone pavers, cold gentle breeze",
+        lighting="diffuse cold morning cloudlight, soft shadows, luminous sky horizon",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "intact granite flagstones"],
+        character_position="White: West ledge (screen-left) | Black: East ledge (screen-right), 15 paces apart",
+        character_orientation="White: facing East (screen-right) | Black: facing West (screen-left)",
+        wardrobe_state="clean white robes and clean charcoal-black robes moving in wind",
+        damage_dirt="clean",
+        held_objects=["White: sheathed straight sword", "Black: sheathed heavy broadsword"],
+        camera_side_of_axis="south",
+        screen_direction="static",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="mountain mist drifting low across stone pavers, cold gentle breeze",
+        lighting="diffuse cold morning cloudlight, specular reflection on drawn steel",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "intact granite flagstones"],
+        character_position="White: West ledge (screen-left), stationary draw | Black: East ledge (screen-right), stationary ready",
+        character_orientation="White: facing East (screen-right) | Black: facing West (screen-left)",
+        wardrobe_state="clean white robes and clean charcoal-black robes moving in wind",
+        damage_dirt="clean",
+        held_objects=["White: drawn straight sword (pale azure qi active)", "Black: sheathed heavy broadsword"],
+        camera_side_of_axis="south",
+        screen_direction="left-to-right",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="mountain mist drifting low across stone pavers, cold gentle breeze",
+        lighting="diffuse cold morning cloudlight, rim light on sprinting silhouette",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "intact granite flagstones"],
+        character_position="White: West ledge (screen-left), anchored | Black: sprinting right-to-left across center-line",
+        character_orientation="White: facing East (screen-right) | Black: facing West (screen-left)",
+        wardrobe_state="white robes braced; black robes billowing in forward sprint wake",
+        damage_dirt="clean",
+        held_objects=["White: drawn straight sword", "Black: drawn heavy broadsword (trailing dark qi)"],
+        camera_side_of_axis="south",
+        screen_direction="right-to-left",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="mountain mist parting radially from kinetic shockwave",
+        lighting="sharp specular spark flash illuminating faces and crossed blades",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "intact granite flagstones"],
+        character_position="White: center-left in parry lock | Black: center-left pressing downward in blade lock",
+        character_orientation="White: facing East (screen-right) | Black: facing West (screen-left)",
+        wardrobe_state="robe hems ruffled by spark and shockwave burst",
+        damage_dirt="clean",
+        held_objects=["White: straight sword in parry lock", "Black: heavy broadsword in cleave lock"],
+        camera_side_of_axis="south",
+        screen_direction="left-to-right",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="mountain mist drifting across stone pavement",
+        lighting="diffuse cold morning cloudlight catching stone chips and dust",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "chipped granite flagstone at center"],
+        character_position="White: pivoted to foreground-left | Black: overextended at center with blade struck in stone",
+        character_orientation="White: facing East (screen-right) | Black: facing West (screen-left)",
+        wardrobe_state="white robes clean in low evasion; stone dust on black boots and robe hem",
+        damage_dirt="minor stone dust on Black boots and sword tip; White pristine",
+        held_objects=["White: straight sword leveled in guard", "Black: heavy broadsword struck in stone pavement"],
+        camera_side_of_axis="south",
+        screen_direction="left-to-right",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="mountain mist swirling around projected qi barrier",
+        lighting="violet luminescence emanating from dark crystalline qi barrier",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "chipped granite flagstone", "manifested dark qi barrier disc"],
+        character_position="White: poised at foreground-left | Black: stepped back to center-right behind qi barrier",
+        character_orientation="White: facing East (screen-right) | Black: facing West (screen-left)",
+        wardrobe_state="white robes poised; black sleeve fabric rippling backward from palm shockwave",
+        damage_dirt="minor stone dust on Black boots; White pristine",
+        held_objects=["White: straight sword in ready guard", "Black: heavy broadsword at hip + manifested dark qi barrier disc"],
+        camera_side_of_axis="south",
+        screen_direction="right-to-left",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="mountain mist crackling with static energy at barrier fracture",
+        lighting="sharp azure and violet specular highlights tracing along barrier fractures",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "chipped granite flagstone", "spiderweb-fractured dark qi barrier disc"],
+        character_position="White: lunging rightward at center-left with tip in barrier | Black: center-right bracing barrier",
+        character_orientation="White: facing East (screen-right) | Black: facing West (screen-left)",
+        wardrobe_state="white sleeves forward in thrust; black robes tensed under impact force",
+        damage_dirt="minor stone dust on Black boots; White pristine",
+        held_objects=["White: straight sword tip wedged in barrier", "Black: heavy broadsword at hip + spiderweb-fractured dark qi barrier disc"],
+        camera_side_of_axis="south",
+        screen_direction="left-to-right",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="rising mountain mist backlighting airborne silhouette",
+        lighting="strong golden-white rim light outlining leaping silhouette against morning sky",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "chipped granite flagstone"],
+        character_position="White: aerial leap from West to East ledge (screen-right) | Black: turning at center-left",
+        character_orientation="White: facing East in flight, landing facing West | Black: pivoting from West to East",
+        wardrobe_state="white robes billowing wide like wings in flight; black robes settling after barrier collapse",
+        damage_dirt="minor stone dust on Black boots; White pristine",
+        held_objects=["White: straight sword tucked along forearm in flight", "Black: heavy broadsword in hand (barrier dissolved)"],
+        camera_side_of_axis="south",
+        screen_direction="left-to-right",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="mist parting along the horizontal trajectory of flying dark crescent",
+        lighting="deep violet glow from flying crescent blade casting dynamic moving shadows",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "chipped granite flagstone", "flying dark crescent blade"],
+        character_position="White: grounded on East ledge (screen-right) | Black: West ledge (screen-left) sweeping crescent",
+        character_orientation="White: facing West (screen-left) | Black: facing East (screen-right)",
+        wardrobe_state="white robes grounded on East ledge; black cloak whipped around torso in follow-through",
+        damage_dirt="minor stone dust on Black boots; White pristine",
+        held_objects=["White: straight sword in ready guard", "Black: two-handed heavy broadsword + launched dark crescent energy"],
+        camera_side_of_axis="south",
+        screen_direction="left-to-right",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="mist cleared in radial circle by title strike shockwave",
+        lighting="brilliant white-azure puncture point light illuminating arena before clearing",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "chipped granite flagstone", "dissipating grey vapor"],
+        character_position="White: lunging leftward from East ledge | Black: staggered back on West ledge (screen-left)",
+        character_orientation="White: facing West (screen-left) | Black: facing East (screen-right)",
+        wardrobe_state="white robes flowing backward in lunging line; black robes disheveled by impact shock",
+        damage_dirt="minor stone dust on Black boots; White pristine",
+        held_objects=["White: straight sword in decisive linear thrust", "Black: heavy broadsword deflected low (crescent shattered)"],
+        camera_side_of_axis="south",
+        screen_direction="right-to-left",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning",
+        weather="still mountain air, thinning quiet mist",
+        lighting="soft diffuse cloudlight softening dark robes in quiet aftermath",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "chipped granite flagstone"],
+        character_position="White: standing heroically on East ledge | Black: kneeling in defeat on West ledge (screen-left)",
+        character_orientation="White: facing West (screen-left) | Black: facing East (screen-right)",
+        wardrobe_state="white robes erect and pristine; black robe hems draping onto wet granite pavement",
+        damage_dirt="stone dust on Black boots and right knee; White pristine",
+        held_objects=["White: straight sword held at rest", "Black: heavy broadsword tip resting on stone pavement"],
+        camera_side_of_axis="south",
+        screen_direction="static",
+    ),
+    WorldState(
+        location=WORLD_INITIAL.location,
+        time_of_day="cold morning sunrise",
+        weather="parting clouds, gentle warm morning breeze",
+        lighting="warm golden sunbeams breaking through opening clouds across terrace and sea of clouds",
+        terrain=WORLD_INITIAL.terrain,
+        architecture=WORLD_INITIAL.architecture,
+        props_present=["four weathered stone marker pillars", "low stone balustrade", "chipped granite flagstone", "morning sunbeams breaking through clouds"],
+        character_position="White: standing at East ledge sheathing blade | Black: kneeling in peace on West ledge",
+        character_orientation="White: facing East toward morning horizon | Black: facing East in peace",
+        wardrobe_state="white robes catching golden morning light; black robes resting peacefully in shade",
+        damage_dirt="stone dust on Black boots and right knee; White pristine",
+        held_objects=["White: straight sword fully sheathed in silver scabbard", "Black: heavy broadsword resting on stone pavement"],
+        camera_side_of_axis="south",
+        screen_direction="left-to-right",
+    ),
+]
 
 NEGATIVES = [
     "no modern clothing, no modern buildings, no vehicles, no firearms,",
@@ -119,8 +316,295 @@ NEGATIVES = [
 ]
 
 # -----------------------------------------------------------------------------
-# 2. Shot Data Definition for X01 to X12
+# 2. Xianxia Director Compiler (Specialized Film Core Director)
 # -----------------------------------------------------------------------------
+
+class XianxiaDirectorCompiler(DirectorCompiler):
+    """Specialized DirectorCompiler modeling opposing two-cultivator combat grammar.
+
+    Synchronizes ShotGraph nodes with the canonical ShotSpec combat plan,
+    resolving screen direction, camera movements, and two-fighter states.
+    """
+
+    def _treat(self, beats):
+        intents = []
+        specs = [
+            ("S01", "ESTABLISH", "WIDE", "LOCKED", "eye level", "static",
+             "White on left, Black on right across misty terrace", "standing face-off tension", "CUT"),
+            ("S02", "DECISION", "MEDIUM_CLOSE", "LOCKED", "eye level profile", "left-to-right",
+             "White draws straight sword facing right", "smooth linear draw left-to-right", "CUT"),
+            ("S03", "APPROACH", "MEDIUM", "TRACKING_LATERAL", "low angle", "right-to-left",
+             "Black accelerates sprint lunge right-to-left", "rapid sprint right-to-left", "MATCH_CUT"),
+            ("S04", "DISCOVER", "MEDIUM", "PUSH_IN", "eye level", "left-to-right",
+             "swords collide in spark burst at center-left", "kinetic convergence into blade lock", "CUT"),
+            ("S05", "REACTION", "MEDIUM", "LOCKED", "eye level", "left-to-right",
+             "White sidesteps clockwise to foreground-left, Black strikes stone", "rotational sidestep evasion left-to-right", "CUT"),
+            ("S06", "PRESSURE", "MEDIUM", "PUSH_IN", "eye level", "right-to-left",
+             "Black thrusts left palm projecting dark qi barrier", "palm thrust projecting barrier right-to-left", "MATCH_CUT"),
+            ("S07", "DISCOVER", "MEDIUM_CLOSE", "PUSH_IN", "eye level", "left-to-right",
+             "White sword tip strikes and fractures qi barrier", "linear thrust left-to-right into barrier", "CUT"),
+            ("S08", "DECISION", "WIDE", "LOCKED", "low angle backlit", "left-to-right",
+             "White aerial leap from left to right over opponent", "aerial arc left-to-right swapping positions", "CUT"),
+            ("S09", "PRESSURE", "MEDIUM", "LOCKED", "eye level", "left-to-right",
+             "Black sweeps crescent blade left-to-right toward White", "rotational torque launching dark crescent left-to-right", "MATCH_CUT"),
+            ("S10", "PAYOFF", "WIDE", "LOCKED", "eye level", "right-to-left",
+             "White linear thrust pierces and shatters dark crescent", "immaculate linear lunge right-to-left", "CUT"),
+            ("S11", "AFTERMATH", "MEDIUM", "LOCKED", "high angle", "static",
+             "Black lowers sword and kneels on one knee in defeat", "slow controlled downward descent onto one knee", "CUT"),
+            ("S12", "RESOLVE", "WIDE", "TRACKING_LATERAL", "eye level", "left-to-right",
+             "White sheathes blade at sunrise, Black kneeling", "graceful sheathing and horizon contemplation left-to-right", "CUT"),
+        ]
+        for i, (sid, func, size, mov, ang, sdir, blk, mvec, tr) in enumerate(specs):
+            intents.append(DirectorShotIntent(
+                shot_id=sid,
+                function=func,
+                beat_ids=[beats[i].beat_id],
+                story_purpose=beats[i].summary[:160],
+                shot_size=size,
+                camera_angle=ang,
+                camera_movement=mov,
+                blocking=blk,
+                screen_direction=sdir,
+                light_direction=self.light_direction,
+                motion_vector=mvec,
+                duration_target_s=5.0,
+                transition_intent=tr,
+                story_node_ids=list(beats[i].event_ids)
+            ))
+        return intents
+
+    def _graph(self, intents, *, world_state, cast):
+        graph = ShotGraph()
+        char_states = [
+            ("White: ready stance at West ledge", "Black: ready stance at East ledge"),
+            ("White: drawing straight sword", "Black: observing from East ledge"),
+            ("White: anchored defensive guard", "Black: sprinting lunge right-to-left"),
+            ("White: upward parry in blade lock", "Black: downward cleave in blade lock"),
+            ("White: evasive sidestep to foreground-left", "Black: overextended with blade in stone"),
+            ("White: counter guard at foreground-left", "Black: left palm projecting dark qi barrier"),
+            ("White: thrusting sword tip into barrier", "Black: bracing fractured dark qi barrier"),
+            ("White: aerial leap over opponent to East ledge", "Black: barrier dissolved, beginning turn"),
+            ("White: grounded at East ledge in ready guard", "Black: sweeping crescent blade from West ledge"),
+            ("White: immaculate linear counter-thrust", "Black: staggered back, crescent shattered"),
+            ("White: holding victorious stance on East ledge", "Black: kneeling on one knee in defeat"),
+            ("White: sheathing blade at sunrise", "Black: kneeling peacefully in surrender")
+        ]
+        for index, intent in enumerate(intents):
+            incoming = {
+                "screen_direction": intent.screen_direction,
+                "world": world_state.model_dump(),
+                "characters": {
+                    "White Cultivator": char_states[index][0],
+                    "Black Cultivator": char_states[index][1]
+                }
+            }
+            outgoing = dict(incoming)
+            outgoing["last_function"] = intent.function
+            continuity = [
+                f"screen direction must remain {intent.screen_direction}",
+                "camera must remain strictly on South side of combat axis",
+                "wardrobe, weapons, and environmental damage persist unless combat changes them"
+            ]
+            node = ShotGraphNode(
+                shot_id=intent.shot_id,
+                story_purpose=intent.story_purpose,
+                story_node_ids=intent.story_node_ids,
+                function=intent.function,
+                incoming_state=incoming,
+                outgoing_state=outgoing,
+                world_state=world_state.model_dump(),
+                character_state={
+                    "White Cultivator": char_states[index][0],
+                    "Black Cultivator": char_states[index][1]
+                },
+                camera_intent={
+                    "shot_size": intent.shot_size,
+                    "angle": intent.camera_angle,
+                    "movement": intent.camera_movement,
+                    "screen_direction": intent.screen_direction,
+                    "light_direction": intent.light_direction,
+                    "duration_target_s": intent.duration_target_s
+                },
+                motion_intent=intent.motion_vector,
+                continuity_constraints=continuity,
+                duration_target_s=intent.duration_target_s,
+                priority="P0" if intent.function in ("PAYOFF", "DECISION") else "P1",
+                repairability="MEDIUM" if intent.shot_size in ("CLOSE", "MEDIUM_CLOSE") else "HIGH",
+                provider_requirements={"duration_class": 5, "model": "free-route default", "references": "TEXT_ANCHOR_ONLY"}
+            )
+            graph.add_node(node)
+            if index > 0:
+                graph.add_edge(ShotGraphEdge(
+                    src=intents[index - 1].shot_id,
+                    dst=intent.shot_id,
+                    kind=intent.transition_intent,
+                    rationale=f"{intent.function} after {intents[index - 1].function}"
+                ))
+        return graph
+
+# -----------------------------------------------------------------------------
+# 3. Shot Data Definition with Strict End-to-Start Continuity
+# -----------------------------------------------------------------------------
+
+# Typed continuity state schemas (100% congruent across all 11 cuts)
+C_STATES = [
+    # X01 (00-05s)
+    {
+        "start": {
+            "white_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "calm_standing_faceoff", "sword_state": "sheathed", "qi_state": "dormant"},
+            "black_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "aggressive_standing_faceoff", "sword_state": "sheathed", "qi_state": "dormant"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "intact"}
+        },
+        "end": {
+            "white_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "hand_on_sword_hilt", "sword_state": "sheathed", "qi_state": "awakening"},
+            "black_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "weight_shifted_forward", "sword_state": "sheathed", "qi_state": "dormant"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "intact"}
+        }
+    },
+    # X02 (05-10s)
+    {
+        "start": {
+            "white_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "hand_on_sword_hilt", "sword_state": "sheathed", "qi_state": "awakening"},
+            "black_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "weight_shifted_forward", "sword_state": "sheathed", "qi_state": "dormant"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "intact"}
+        },
+        "end": {
+            "white_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "straight_guard_at_45_degrees", "sword_state": "drawn_cleanly", "qi_state": "pale_azure_line_active"},
+            "black_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "coiling_into_sprint_stance", "sword_state": "drawing_heavy_sword", "qi_state": "dark_purple_awakening"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "intact"}
+        }
+    },
+    # X03 (10-15s)
+    {
+        "start": {
+            "white_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "straight_guard_at_45_degrees", "sword_state": "drawn_cleanly", "qi_state": "pale_azure_line_active"},
+            "black_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "coiling_into_sprint_stance", "sword_state": "drawing_heavy_sword", "qi_state": "dark_purple_awakening"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "intact"}
+        },
+        "end": {
+            "white_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "rooted_defensive_stance", "sword_state": "sword_raised_in_parry_angle", "qi_state": "pale_azure_line_active"},
+            "black_cultivator": {"position": "center_left_striking_range", "orientation": "facing_west", "pose": "sprint_lunge_reaching_apex", "sword_state": "heavy_sword_coiled_to_cleave", "qi_state": "trailing_dark_purple_smoke"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "intact"}
+        }
+    },
+    # X04 (15-20s)
+    {
+        "start": {
+            "white_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "rooted_defensive_stance", "sword_state": "sword_raised_in_parry_angle", "qi_state": "pale_azure_line_active"},
+            "black_cultivator": {"position": "center_left_striking_range", "orientation": "facing_west", "pose": "sprint_lunge_reaching_apex", "sword_state": "heavy_sword_coiled_to_cleave", "qi_state": "trailing_dark_purple_smoke"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "intact"}
+        },
+        "end": {
+            "white_cultivator": {"position": "center_left", "orientation": "facing_east", "pose": "bracing_rear_foot_in_blade_lock", "sword_state": "straight_sword_in_parry_lock", "qi_state": "pale_azure_sparking"},
+            "black_cultivator": {"position": "center_left", "orientation": "facing_west", "pose": "two_handed_downward_power_press", "sword_state": "heavy_sword_in_cleave_lock", "qi_state": "dark_purple_sparking"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "intact"}
+        }
+    },
+    # X05 (20-25s)
+    {
+        "start": {
+            "white_cultivator": {"position": "center_left", "orientation": "facing_east", "pose": "bracing_rear_foot_in_blade_lock", "sword_state": "straight_sword_in_parry_lock", "qi_state": "pale_azure_sparking"},
+            "black_cultivator": {"position": "center_left", "orientation": "facing_west", "pose": "two_handed_downward_power_press", "sword_state": "heavy_sword_in_cleave_lock", "qi_state": "dark_purple_sparking"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "intact"}
+        },
+        "end": {
+            "white_cultivator": {"position": "foreground_left", "orientation": "facing_east", "pose": "low_evasion_stance", "sword_state": "straight_sword_leveled_at_flank", "qi_state": "pale_azure_ready"},
+            "black_cultivator": {"position": "center_overextended", "orientation": "facing_west", "pose": "overextended_lurch", "sword_state": "heavy_sword_struck_in_flagstone", "qi_state": "dark_purple_flickering"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        }
+    },
+    # X06 (25-30s)
+    {
+        "start": {
+            "white_cultivator": {"position": "foreground_left", "orientation": "facing_east", "pose": "low_evasion_stance", "sword_state": "straight_sword_leveled_at_flank", "qi_state": "pale_azure_ready"},
+            "black_cultivator": {"position": "center_overextended", "orientation": "facing_west", "pose": "overextended_lurch", "sword_state": "heavy_sword_struck_in_flagstone", "qi_state": "dark_purple_flickering"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        },
+        "end": {
+            "white_cultivator": {"position": "foreground_left", "orientation": "facing_east", "pose": "stepping_into_linear_advance", "sword_state": "straight_sword_coiled_to_thrust", "qi_state": "pale_azure_concentrating"},
+            "black_cultivator": {"position": "center_right", "orientation": "facing_west", "pose": "left_palm_extended_rear_guard", "sword_state": "heavy_sword_at_right_hip", "qi_state": "dark_purple_channeling_to_palm"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "solid_crystalline_disc", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        }
+    },
+    # X07 (30-35s)
+    {
+        "start": {
+            "white_cultivator": {"position": "foreground_left", "orientation": "facing_east", "pose": "stepping_into_linear_advance", "sword_state": "straight_sword_coiled_to_thrust", "qi_state": "pale_azure_concentrating"},
+            "black_cultivator": {"position": "center_right", "orientation": "facing_west", "pose": "left_palm_extended_rear_guard", "sword_state": "heavy_sword_at_right_hip", "qi_state": "dark_purple_channeling_to_palm"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "solid_crystalline_disc", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        },
+        "end": {
+            "white_cultivator": {"position": "center_left", "orientation": "facing_east", "pose": "lunging_thrust_held", "sword_state": "sword_tip_embedded_in_barrier", "qi_state": "pale_azure_concentrated_at_tip"},
+            "black_cultivator": {"position": "center_right", "orientation": "facing_west", "pose": "bracing_rear_leg_under_impact", "sword_state": "heavy_sword_at_right_hip", "qi_state": "dark_purple_strained"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "spiderweb_fractured", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        }
+    },
+    # X08 (35-40s) — Clean Positional Inversion
+    {
+        "start": {
+            "white_cultivator": {"position": "center_left", "orientation": "facing_east", "pose": "lunging_thrust_held", "sword_state": "sword_tip_embedded_in_barrier", "qi_state": "pale_azure_concentrated_at_tip"},
+            "black_cultivator": {"position": "center_right", "orientation": "facing_west", "pose": "bracing_rear_leg_under_impact", "sword_state": "heavy_sword_at_right_hip", "qi_state": "dark_purple_strained"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "spiderweb_fractured", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        },
+        "end": {
+            "white_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "low_balanced_landing_crouch", "sword_state": "tucked_along_forearm", "qi_state": "pale_azure_dormant"},
+            "black_cultivator": {"position": "center_left", "orientation": "pivoting_toward_east", "pose": "mid_turn_recovering", "sword_state": "heavy_sword_held_in_two_hands", "qi_state": "dark_purple_coiling_for_sweep"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "dissolved", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        }
+    },
+    # X09 (40-45s)
+    {
+        "start": {
+            "white_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "low_balanced_landing_crouch", "sword_state": "tucked_along_forearm", "qi_state": "pale_azure_dormant"},
+            "black_cultivator": {"position": "center_left", "orientation": "pivoting_toward_east", "pose": "mid_turn_recovering", "sword_state": "heavy_sword_held_in_two_hands", "qi_state": "dark_purple_coiling_for_sweep"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "dissolved", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        },
+        "end": {
+            "white_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "rooted_defensive_stance", "sword_state": "straight_sword_ready_guard", "qi_state": "pale_azure_concentrating_at_point"},
+            "black_cultivator": {"position": "center_left", "orientation": "facing_east", "pose": "horizontal_sweep_follow_through", "sword_state": "heavy_sword_pointed_forward_right", "qi_state": "expended_into_projectile"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "flying_crescent_left_to_right", "pavement_state": "chipped_at_center"}
+        }
+    },
+    # X10 (45-50s)
+    {
+        "start": {
+            "white_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "rooted_defensive_stance", "sword_state": "straight_sword_ready_guard", "qi_state": "pale_azure_concentrating_at_point"},
+            "black_cultivator": {"position": "center_left", "orientation": "facing_east", "pose": "horizontal_sweep_follow_through", "sword_state": "heavy_sword_pointed_forward_right", "qi_state": "expended_into_projectile"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "flying_crescent_left_to_right", "pavement_state": "chipped_at_center"}
+        },
+        "end": {
+            "white_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "full_orthodox_lunging_thrust", "sword_state": "straight_sword_extended_horizontal", "qi_state": "white_azure_beam_piercing"},
+            "black_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "staggered_backward_reeling", "sword_state": "heavy_sword_knocked_aside_low", "qi_state": "empty"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "shattered_into_grey_vapor", "pavement_state": "chipped_at_center"}
+        }
+    },
+    # X11 (50-55s)
+    {
+        "start": {
+            "white_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "full_orthodox_lunging_thrust", "sword_state": "straight_sword_extended_horizontal", "qi_state": "white_azure_beam_piercing"},
+            "black_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "staggered_backward_reeling", "sword_state": "heavy_sword_knocked_aside_low", "qi_state": "empty"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "shattered_into_grey_vapor", "pavement_state": "chipped_at_center"}
+        },
+        "end": {
+            "white_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "standing_erect_at_rest", "sword_state": "straight_sword_lowered", "qi_state": "calm_harmonic"},
+            "black_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "kneeling_on_right_knee_bowed", "sword_state": "heavy_sword_tip_resting_on_stone", "qi_state": "dormant"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        }
+    },
+    # X12 (55-60s)
+    {
+        "start": {
+            "white_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_west", "pose": "standing_erect_at_rest", "sword_state": "straight_sword_lowered", "qi_state": "calm_harmonic"},
+            "black_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "kneeling_on_right_knee_bowed", "sword_state": "heavy_sword_tip_resting_on_stone", "qi_state": "dormant"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "chipped_at_center"}
+        },
+        "end": {
+            "white_cultivator": {"position": "east_ledge_screen_right", "orientation": "facing_east", "pose": "standing_peaceful_contemplation", "sword_state": "fully_sheathed_in_silver_scabbard", "qi_state": "dormant"},
+            "black_cultivator": {"position": "west_ledge_screen_left", "orientation": "facing_east", "pose": "kneeling_peaceful_surrender", "sword_state": "heavy_sword_resting_on_stone", "qi_state": "dormant"},
+            "arena": {"camera_side_of_axis": "south", "barrier_state": "none", "energy_projectile": "none", "pavement_state": "chipped_at_center_illuminated_by_sunbeams"}
+        }
+    }
+]
 
 SHOTS_RAW = [
     {
@@ -156,11 +640,12 @@ SHOTS_RAW = [
         "continuity": {
             "screen_direction": "static",
             "eyeline": "across_axis_horizontal",
-            "start_state": {"white_pos": "screen_left_west", "black_pos": "screen_right_east", "weapons": "sheathed"},
-            "end_state": {"white_pos": "screen_left_west", "black_pos": "screen_right_east", "weapons": "sheathed"},
+            "start_state": C_STATES[0]["start"],
+            "end_state": C_STATES[0]["end"],
             "previous_shot_id": None,
             "critical_invariants": [
                 "White cultivator strictly screen-left, Black cultivator strictly screen-right",
+                "Camera strictly on South side of combat axis looking North",
                 "Sea of clouds visible beyond low balustrade",
                 "No third character in frame"
             ]
@@ -238,13 +723,13 @@ SHOTS_RAW = [
             "notes": "Cold metallic reflection along blade ridge; pale azure rim light on white silk collar"
         },
         "continuity": {
-            "screen_direction": "left_to_right",
+            "screen_direction": "left-to-right",
             "eyeline": "screen_right",
-            "start_state": {"sword": "sheathed", "qi": "dormant"},
-            "end_state": {"sword": "drawn_and_ready", "qi": "pale_azure_active"},
+            "start_state": C_STATES[1]["start"],
+            "end_state": C_STATES[1]["end"],
             "previous_shot_id": "X01",
             "critical_invariants": [
-                "Profile facing screen-right",
+                "White cultivator facing screen-right on South camera axis",
                 "White robes with silver cloud embroidery",
                 "Slender straight double-edged blade (orthodox Daoist jian)"
             ]
@@ -298,7 +783,7 @@ SHOTS_RAW = [
         "shot_type": "action",
         "camera": {
             "framing": "MS", "height": "low", "lens_intent": "wide", "focal_hint_mm": 35.0,
-            "movement": {"type": "tracking", "purpose": "track black cultivator sprint right-to-left parallel to travel vector", "timing": "entire 5s"}
+            "movement": {"type": "tracking", "purpose": "lateral tracking right to left matching sprint lunge", "timing": "entire 5s"}
         },
         "blocking": {
             "start": "Black cultivator framed in medium shot sprinting right-to-left across the dark granite flagstones.",
@@ -323,13 +808,13 @@ SHOTS_RAW = [
             "notes": "Low-angle rim light catching flying droplets and edges of black leather shoulder guard"
         },
         "continuity": {
-            "screen_direction": "right_to_left",
+            "screen_direction": "right-to-left",
             "eyeline": "screen_left",
-            "start_state": {"black_pos": "screen_right_start", "vector": "sprint_accelerating"},
-            "end_state": {"black_pos": "screen_center_closing", "vector": "entering_strike_range"},
+            "start_state": C_STATES[2]["start"],
+            "end_state": C_STATES[2]["end"],
             "previous_shot_id": "X02",
             "critical_invariants": [
-                "Travel direction strictly right-to-left",
+                "Travel direction strictly right-to-left on South camera axis",
                 "Black robes with obsidian leather shoulder guards",
                 "Dark straight-broad sword held in trailing right hand"
             ]
@@ -383,7 +868,7 @@ SHOTS_RAW = [
         "shot_type": "action",
         "camera": {
             "framing": "TWO_SHOT", "height": "eye_level", "lens_intent": "wide", "focal_hint_mm": 35.0,
-            "movement": {"type": "dolly_in", "purpose": "push into point of blade contact to emphasize impact shock", "timing": "first 2s push then lock"}
+            "movement": {"type": "dolly_in", "purpose": "push into sword collision point", "timing": "first 2s push then lock"}
         },
         "blocking": {
             "start": "Black cultivator's downward diagonal cleave meets White cultivator's upward angled straight sword parry at center-left.",
@@ -409,14 +894,14 @@ SHOTS_RAW = [
             "notes": "Sharp specular flash from spark burst illuminating faces, surrounded by cold morning sky"
         },
         "continuity": {
-            "screen_direction": "left_to_right",
+            "screen_direction": "left-to-right",
             "eyeline": "mutual_lock",
-            "start_state": {"contact": "approaching_impact"},
-            "end_state": {"contact": "blades_firmly_locked"},
+            "start_state": C_STATES[3]["start"],
+            "end_state": C_STATES[3]["end"],
             "previous_shot_id": "X03",
             "critical_invariants": [
                 "White cultivator on screen-left, Black cultivator on screen-right",
-                "Contact point localized at center-left of frame",
+                "Contact point localized at center-left of frame on South camera axis",
                 "Both swords intact and physically legible"
             ]
         },
@@ -495,13 +980,13 @@ SHOTS_RAW = [
             "notes": "Diffuse cold daylight catching stone chips and swirling mist around White's pivoting foot"
         },
         "continuity": {
-            "screen_direction": "left_to_right",
+            "screen_direction": "left-to-right",
             "eyeline": "screen_right",
-            "start_state": {"white_pos": "center_left", "black_pos": "center"},
-            "end_state": {"white_pos": "foreground_left", "black_pos": "center_overextended"},
+            "start_state": C_STATES[4]["start"],
+            "end_state": C_STATES[4]["end"],
             "previous_shot_id": "X04",
             "critical_invariants": [
-                "White cultivator sidesteps toward foreground-left (protecting South axis)",
+                "White cultivator sidesteps toward foreground-left on South camera axis",
                 "Black cultivator overextends toward left-down",
                 "Stone pavement chipped at impact point"
             ]
@@ -555,7 +1040,7 @@ SHOTS_RAW = [
         "shot_type": "action",
         "camera": {
             "framing": "MS", "height": "eye_level", "lens_intent": "normal", "focal_hint_mm": 50.0,
-            "movement": {"type": "dolly_in", "purpose": "focus in on the manifestation of the dark qi barrier", "timing": "first 2s"}
+            "movement": {"type": "dolly_in", "purpose": "dolly in on qi barrier", "timing": "first 2s"}
         },
         "blocking": {
             "start": "Black cultivator recoils from overextension, yanking his heavy sword free from the stone pavement.",
@@ -580,13 +1065,13 @@ SHOTS_RAW = [
             "notes": "Dark purple internal luminescence emanating from qi barrier casting violet highlights on Black's face"
         },
         "continuity": {
-            "screen_direction": "right_to_left",
+            "screen_direction": "right-to-left",
             "eyeline": "screen_left",
-            "start_state": {"black_palm": "thrusting", "barrier": "forming"},
-            "end_state": {"black_palm": "extended", "barrier": "solidified"},
+            "start_state": C_STATES[5]["start"],
+            "end_state": C_STATES[5]["end"],
             "previous_shot_id": "X05",
             "critical_invariants": [
-                "Black cultivator facing screen-left",
+                "Black cultivator facing screen-left on South camera axis",
                 "Barrier disc positioned between fighters (approx 3 feet diameter)",
                 "Translucent dark purple crystalline texture with smoky edges"
             ]
@@ -640,7 +1125,7 @@ SHOTS_RAW = [
         "shot_type": "action",
         "camera": {
             "framing": "MCU", "height": "eye_level", "lens_intent": "normal", "focal_hint_mm": 50.0,
-            "movement": {"type": "dolly_in", "purpose": "push into point of sword-barrier impact to highlight fracture detail", "timing": "first 2s"}
+            "movement": {"type": "dolly_in", "purpose": "push in on barrier fracture point", "timing": "first 2s"}
         },
         "blocking": {
             "start": "White cultivator executes a precise straight thrust with his orthodox sword pointing toward screen-right.",
@@ -666,13 +1151,13 @@ SHOTS_RAW = [
             "notes": "Sharp azure and violet specular highlights tracing along fracture cracks across the barrier"
         },
         "continuity": {
-            "screen_direction": "left_to_right",
+            "screen_direction": "left-to-right",
             "eyeline": "screen_right",
-            "start_state": {"sword": "thrusting_forward", "barrier": "intact"},
-            "end_state": {"sword": "tip_embedded_in_surface", "barrier": "spiderweb_fractured"},
+            "start_state": C_STATES[6]["start"],
+            "end_state": C_STATES[6]["end"],
             "previous_shot_id": "X06",
             "critical_invariants": [
-                "Thrust vector strictly left-to-right",
+                "Thrust vector strictly left-to-right on South camera axis",
                 "Barrier disc positioned center-right",
                 "Sword blade straight and unbroken"
             ]
@@ -719,9 +1204,10 @@ SHOTS_RAW = [
             "knowledge_state": "White perceives barrier will collapse under another focused attack"
         }
     },
+    # X08 (35-40s) — The Clean Aerial Positional Inversion
     {
         "shot_id": "X08",
-        "dramatic_purpose": "White cultivator disengages from barrier resistance and performs a high aerial leap, arcing cleanly past opponent through backlit mist.",
+        "dramatic_purpose": "White cultivator disengages from barrier resistance and performs a high aerial leap, arcing cleanly past opponent through backlit mist to invert screen positions.",
         "duration_target_s": 5.0,
         "shot_type": "action",
         "camera": {
@@ -752,15 +1238,15 @@ SHOTS_RAW = [
             "notes": "Strong rim light outlining white cultivator silhouette against bright morning mist"
         },
         "continuity": {
-            "screen_direction": "left_to_right",
+            "screen_direction": "left-to-right",
             "eyeline": "screen_left",
-            "start_state": {"white_pos": "screen_left_ground", "black_pos": "screen_center"},
-            "end_state": {"white_pos": "screen_right_ground", "black_pos": "screen_left_midground"},
+            "start_state": C_STATES[7]["start"],
+            "end_state": C_STATES[7]["end"],
             "previous_shot_id": "X07",
             "critical_invariants": [
-                "Flight arc strictly left-to-right",
-                "Tactical positions smoothly inverted (White now on right, Black on left)",
-                "Camera maintains South vantage looking North at mountain clouds"
+                "Flight arc strictly left-to-right on South camera axis",
+                "Tactical positions smoothly inverted (White now on East ledge screen-right, Black on West ledge screen-left)",
+                "Camera maintains South vantage looking North at mountain clouds without crossing axis"
             ]
         },
         "audio": {
@@ -838,13 +1324,13 @@ SHOTS_RAW = [
             "notes": "Deep violet glow from crescent blade casting dynamic moving shadows across dark flagstones"
         },
         "continuity": {
-            "screen_direction": "left_to_right",
+            "screen_direction": "left-to-right",
             "eyeline": "screen_right",
-            "start_state": {"black_pos": "screen_left_midground", "energy": "coiled"},
-            "end_state": {"black_pos": "screen_left_midground", "energy": "projected_toward_right"},
+            "start_state": C_STATES[8]["start"],
+            "end_state": C_STATES[8]["end"],
             "previous_shot_id": "X08",
             "critical_invariants": [
-                "Black cultivator now positioned at screen-left facing right",
+                "Black cultivator now positioned at screen-left facing right on South camera axis",
                 "Dark crescent blade travels strictly left-to-right along flagstone plane",
                 "Mist wake trailing behind energy projectile"
             ]
@@ -924,13 +1410,13 @@ SHOTS_RAW = [
             "notes": "Brilliant point light at puncture center illuminating duelists before settling into soft morning light"
         },
         "continuity": {
-            "screen_direction": "right_to_left",
+            "screen_direction": "right-to-left",
             "eyeline": "mutual_sightline",
-            "start_state": {"crescent": "incoming", "thrust": "initiated"},
-            "end_state": {"crescent": "shattered_into_vapor", "thrust": "held_in_victory"},
+            "start_state": C_STATES[9]["start"],
+            "end_state": C_STATES[9]["end"],
             "previous_shot_id": "X09",
             "critical_invariants": [
-                "White cultivator on screen-right thrusting leftward",
+                "White cultivator on screen-right thrusting leftward on South camera axis",
                 "Black cultivator on screen-left staggered back",
                 "Dark crescent completely shattered and gone, no lingering fire"
             ]
@@ -1012,11 +1498,11 @@ SHOTS_RAW = [
         "continuity": {
             "screen_direction": "static",
             "eyeline": "ground_level",
-            "start_state": {"black_pose": "standing_shaken"},
-            "end_state": {"black_pose": "kneeling_defeated"},
+            "start_state": C_STATES[10]["start"],
+            "end_state": C_STATES[10]["end"],
             "previous_shot_id": "X10",
             "critical_invariants": [
-                "Black cultivator kneeling on screen-left",
+                "Black cultivator kneeling on screen-left on South camera axis",
                 "Sword point resting peacefully on stone, intact",
                 "No blood, no wounds, clean dignified martial defeat"
             ]
@@ -1096,13 +1582,13 @@ SHOTS_RAW = [
             "notes": "Warm golden morning rays piercing through parted clouds, illuminating white robes and misty terrace"
         },
         "continuity": {
-            "screen_direction": "left_to_right",
+            "screen_direction": "left-to-right",
             "eyeline": "horizon_morning_sky",
-            "start_state": {"sword": "drawn", "sky": "overcast_mist"},
-            "end_state": {"sword": "sheathed", "sky": "parted_clouds_golden_light"},
+            "start_state": C_STATES[11]["start"],
+            "end_state": C_STATES[11]["end"],
             "previous_shot_id": "X11",
             "critical_invariants": [
-                "White standing upright on screen-right, Black kneeling on screen-left",
+                "White standing upright on screen-right, Black kneeling on screen-left on South camera axis",
                 "Sword fully sheathed at shot completion",
                 "Golden morning sunbeams illuminating mountain clouds",
                 "Total film runtime exactly 60.0s"
@@ -1153,12 +1639,12 @@ SHOTS_RAW = [
 ]
 
 # -----------------------------------------------------------------------------
-# 3. Main Compilation Logic
+# 4. Main Compilation Logic
 # -----------------------------------------------------------------------------
 
 def build_compilation() -> int:
     print("=" * 70)
-    print("XIANXIA60 — Film Core Pre-Production Compilation Builder")
+    print("XIANXIA60 — Film Core Pre-Production Compilation Builder (v2 Correction)")
     print("Film: Nhất Kiếm Phá Vân (60.0s, 12 shots, Van Dai Mountain Terrace)")
     print("=" * 70)
 
@@ -1201,22 +1687,18 @@ def build_compilation() -> int:
     print(f"  White Cultivator fingerprint: {white_bible.identity_fingerprint()}")
     print(f"  Black Cultivator fingerprint: {black_bible.identity_fingerprint()}")
 
-    # C. WorldStateGraph
-    print("\n[Phase C] Building WorldStateGraph...")
-    world_graph = WorldStateGraph(WORLD_INITIAL)
+    # C. WorldStateGraph (Using explicit physical states for both fighters and terrace)
+    print("\n[Phase C] Building WorldStateGraph with explicit entity states...")
+    world_graph = WorldStateGraph(WORLD_STATES[0])
     for i, event in enumerate(compiled_narrative["events"]):
         sid = f"X{i+1:02d}"
-        state_copy = WORLD_INITIAL.model_copy(update={
-            "character_position": SHOTS_RAW[i]["blocking"]["start"][:60],
-            "held_objects": SHOTS_RAW[i]["blocking"]["prop_interactions"]
-        })
-        world_graph.push_shot_state(sid, state_copy, justified_by_event=event.event_id)
+        world_graph.push_shot_state(sid, WORLD_STATES[i], justified_by_event=event.event_id)
     print(f"  WorldStateGraph states: {len(world_graph.states)}")
     print(f"  WorldStateGraph transitions: {len(world_graph.transitions)}")
 
-    # D. DirectorCompiler
-    print("\n[Phase D] Running DirectorCompiler...")
-    director = DirectorCompiler(
+    # D. XianxiaDirectorCompiler (Synchronized ShotGraph)
+    print("\n[Phase D] Running XianxiaDirectorCompiler (synchronized ShotGraph)...")
+    director = XianxiaDirectorCompiler(
         screen_direction="left-to-right",
         light_direction=WORLD_INITIAL.lighting
     )
