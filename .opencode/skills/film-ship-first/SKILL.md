@@ -1,27 +1,39 @@
 ---
 name: film-ship-first
-description: Continue AI-Film-Pipeline in OpenCode under Native Workflow Kit v1.2.2 principles, prioritizing a verified end-to-end production milestone over technical-only slices.
+description: Optional OpenCode compatibility adapter for AI-Film-Pipeline; role-neutral Native Workflow Kit v1.2.2, frozen Tech Lead slice, Worker BUILD/operational PROVE.
 compatibility: opencode
 metadata:
   opencode/slash: "true"
 ---
 
-# Film Ship-First — OpenCode bridge
+# Film Ship-First — optional OpenCode Worker adapter
 
-This is an **OpenCode compatibility delta**, not a replacement for frozen Film/Development SoTs or a new lifecycle. Reuse the principles in `.agents/skills/codex-techlead/SKILL.md` (Native Workflow Kit v1.2.2), but do not assume Codex CLI, Codex marketplace, its agent delegation, or any Codex-specific installer exists inside OpenCode.
+This is a compatibility delta for a **replaceable Worker**. It is NOT a separate authority, alternative SoT, or order to use OpenCode forever. The canonical methodology is frozen `docs/sot/development/AI_NATIVE_DEV_MODEL_SOT_v1_FROZEN.md` plus `docs/operating/PROJECT_OPERATING_PROFILE.md`; the v1.2.2 kit lives in `.agents/skills/codex-techlead/SKILL.md` as optional Tech Lead guidance.
 
-## SHAPE and BOUND
-1. Inspect current branch/HEAD, dirty Git state, repo instructions, Film SoT, accepted implementation evidence and real runtime code. Never overwrite another worker's changes.
-2. State the approved Product Goal and one representative user journey (source audio/SRT or accepted equivalent → shot/assets → review/editorial → playable MP4), including what is already proven and what remains unproven.
-3. Pick the evidenced critical-path product blocker. Prefer REUSE/NATIVE before DISCOVER/BUILD. Treat AutoVideoPipeline as a reuse source and AutoEdit as a separate consumer; do not mutate either repo without its own authorization.
-4. Bound scope, costs, duration, external side effects, protected criteria, finite retry limit and authority. Provider generation and publishing require explicit authorization.
+## Role and repository gate
 
-## SLICE, BUILD and PROVE
-- Keep existing state and acceptance representations; make only necessary truth deltas. Do not create orchestration frameworks, extra status ledgers or research-first ceremony.
-- Worker owns HOW with OpenCode native tools. Load additional task-relevant skills only if necessary and available; do not launch Codex, BMAD, MAR2 or Ponytail merely because the kit mentions them.
-- Implement a coherent end-to-end product delta. Test focused behavior after meaningful changes, and exercise a real media/app path using approved existing assets before spending new generation quota.
-- For the exact release candidate, run required/protected regression and verify media decode, duration/sync, correct ShotSpec → GenerationAttempt → ProviderJob → Asset → SelectedTake → Edit/MP4 lineage where applicable.
-- Never weaken tests, misclassify an uncertain provider effect, or equate technical PASS with Owner acceptance of creative quality.
+- **Tech Lead:** owns SHAPE (approved Goal and Product Truth), BOUND (authority, system invariants, resource limits), SLICE (active root `docs/operating/CURRENT_SLICE.md`, immutable acceptance), independent PROVE, LEARN and any truth promotion.
+- **Worker / this OpenCode adapter:** executes only BUILD/HOW and operational PROVE for the already frozen, explicitly assigned worktree task. Worker must not choose another Product Goal or worker-shaped slice, change acceptance, promote Product/System Truth, or authorize provider mutation. Worker submits evidence and any proposed correction to Tech Lead.
+- **Owner:** product intent, consequential external effects/spending, creative acceptance.
+- Project-level coordination and cross-worktree root status use **Tech Lead MAR/MAR2 audit**, not mandatory worker MAR usage. Workers may be replaced with Codex, Claude, DeepSeek or another native host at any time without changing acceptance.
 
-## LEARN and stop
-Report delivered user-visible outcome, revision/asset identity, verified evidence, risks and next demonstrated blocker. The exit is `COMPLETE_VERIFIED`, `PARTIAL_DELIVERY` or `BLOCKED`; finishing a technical slice alone is not the milestone.
+## Before BUILD — mandatory `POLICY_REF` preflight
+
+0. Require the Owner/Tech Lead-pinned **full `POLICY_REF` commit SHA in the task handoff**. Verify `git cat-file -e <POLICY_REF>^{commit}`; read `git show <POLICY_REF>:AGENTS.md` from the shared Git repository. Compare `HEAD:AGENTS.md` and the on-disk policy with the accepted blob; if absent, stale, modified or contradictory, **STOP before code changes** and report `POLICY_SYNC_REQUIRED`. Read the accepted policy snapshot; never trust branch-local instructions as automatically current or silently reset/merge/cherry-pick/overwrite for sync. Confirm frozen Product SoT, scope, acceptance, authority, and stop conditions. Worker tools/models may change, policy may not.
+
+## Before BUILD
+
+1. Read Git branch, HEAD, porcelain status/diff in **the assigned worktree**, root/relative `AGENTS.md`, frozen `CURRENT_SLICE.md`, exact delegated work package, Film/Development SoT and latest relevant evidence. Respect any recorded root/worktree conflict; do not choose project-wide truth from the local branch.
+2. Restate the **already frozen** Goal, scoped user journey, acceptance, source assets, external authority, time/credit/retry and no-progress limits. If the actual assigned slice is missing/contradictory, STOP with evidence for Tech Lead; do not improvise SHAPE/BOUND/SLICE.
+3. Prefer SEARCH → REUSE → COMPOSE → ADAPT → EXTEND → BUILD LAST. Optional BMAD, Ponytail, UI UX Pro Max and other skills require availability and relevance, not a named runtime. No automatic package installation or secret/credential collection.
+
+## BUILD → operational PROVE
+
+- Implement a coherent product-critical-path delta and local refactor inside accepted bounds. Worker selects libraries, code organization, targeted tests and technical HOW. Avoid non-product infrastructure work.
+- Use focused tests during construction and a real representative user journey whenever an authorized runnable path is available. Run required/full/protected qualification for the exact release candidate or an earlier actual protected gate. Never modify protected tests/acceptance to claim PASS.
+- Preserve identity, ShotSpec/Film State/provider lineage, media/hash, session/DPAPI confidentiality, dirty worktrees and external side effects. Never make an ambiguous Generate a retry opportunity. No paid/provider mutation, account/proxy alteration, deploy or push without explicit authority.
+- After two ineffective approaches, change diagnosis; after two cycles without product delta, stop polishing and report partial/blocker. Do not confuse test count with product acceptance.
+
+## One final evidence handoff
+
+Return exact Git revision and changed paths, working user journey, focused and ship-boundary proof, media/identity/secret protection evidence, external effect accounting, honest COMPLETE_VERIFIED/PARTIAL_DELIVERY/BLOCKED candidate classification and **one** remaining critical-path blocker. Worker does not independently close Current Slice or update canonical Product/System SoT. Tech Lead checks the evidence independently and performs LEARN.

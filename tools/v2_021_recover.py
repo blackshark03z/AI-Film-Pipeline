@@ -27,6 +27,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -49,8 +50,10 @@ from v2_021_common import enrolled_profile_root  # noqa: E402
 from v2_021_common import needle_for as _needle_for_comp  # noqa: E402
 
 PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
-COMP = json.loads((PKG / "V2_021_FIXTURE_COMPILATION_5SHOT.json")
-                  .read_text(encoding="utf-8"))
+COMP = json.loads(
+    Path(os.environ.get("RECOVER_COMPILATION")
+         or (PKG / "V2_021_FIXTURE_COMPILATION_5SHOT.json"))
+    .read_text(encoding="utf-8"))
 SHOT_IDS = [n["shot_id"] for n in COMP["shot_graph"]["nodes"]]
 
 

@@ -8,6 +8,15 @@ description: >
 
 You are the integration owner, not a replacement harness. Follow the user's actual request and the host's permission limits. Favor doing the work over explaining a proposed process.
 
+## Project policy preflight (when assigned to AI-Film-Pipeline)
+
+For this repository, **`AGENTS.md` at the Owner-pinned `POLICY_REF` is the single agent-policy entrypoint**. This skill does not create a separate authority or require the Codex runtime. At the start of a new Tech Lead session, continuation, acceptance or task handoff:
+
+- Through MAR, first select the **primary AI-Film-Pipeline repository** and enumerate root plus Git worktrees, branch, HEAD and dirty state. Do not mistake a OneClick/Film120/other worktree for the whole project.
+- Require the exact `POLICY_REF` (full accepted Git commit SHA), verify it exists, read `<POLICY_REF>:AGENTS.md` directly, and compare the target worktree's policy blob/working state to that revision. Read its referenced Development/Film SoT, root Current Slice, Implementation Status and relevant proof. **An older or absent branch-local `AGENTS.md` is not sufficient**. STOP before BUILD/task assignment on unresolved policy conflict; never auto-merge/cherry-pick/reset/overwrite active work.
+- Follow the existing root Product Truth and the Product Progress Gate in `AGENTS.md`. After every Worker proof, independently establish real Product Delta, evidence, main blocker and whether the next step remains on the approved Goal. After two ineffective cycles reassess rather than reflexively harden infrastructure. Worker/runtime/model may change; frozen acceptance does not.
+- This is a policy-only preflight; no new lifecycle, manager, SoT or mandatory worker orchestration. Any direct Codex/BMAD/UI-skill instructions elsewhere in this portable skill remain **optional host-dependent techniques subordinate to the repo's accepted `AGENTS.md`**.
+
 ## 0. Product Delivery Guard (mandatory Tech Lead rule)
 
 Keep SHAPE -> BOUND -> SLICE -> BUILD -> PROVE -> LEARN. This guard does not override Product/System SoT, protected acceptance, or Owner decisions.

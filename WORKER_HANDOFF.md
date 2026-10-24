@@ -1,3 +1,7 @@
+# ARCHIVED WORKER HANDOFF — SLICE-0001 BOOTSTRAP (NOT AN ACTIVE TASK)
+
+> Historical evidence only. The current Tech Lead task authority is the root `docs/operating/CURRENT_SLICE.md`, with the exact frozen Worker contract in its assigned worktree. Do **not** execute this old bootstrap mission or let its GitHub create/push instructions authorize new effects. Worker runtime is replaceable. Tech Lead owns SHAPE/BOUND/SLICE and independent PROVE/LEARN; Worker owns BUILD/operational PROVE. This warning does not rewrite the historical task below.
+
 # Worker Handoff — AI Film Pipeline Bootstrap
 
 You are the BUILD worker for `SLICE-0001`.
