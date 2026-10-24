@@ -81,3 +81,29 @@ ZCode may finish sooner than eight hours. A prepared worktree or handoff is not 
 **Product Delta:** NONE. All five canonical production refs remained UNBOUND; original `shots/X04.json` unchanged; film `PAUSED_BY_OWNER / CREATIVE_REJECTED / NOT_SHIPPED`. No ComfyUI/Blender install or execution, Flow/Dola/Vast session, paid GPU, rendering, media copying, service or credit charge. Decisions D1 (B multi-cut acceptable?), D2 (identity/reference rights/upload permission?) and D3 (exact capped A/A+ spend/attempts/provider and resume?) are **all still on Owner HOLD**. Do not restart film production or automatically promote code to PR #2/#3/#4.
 
 **Next technical action:** reviewer may attach explicit criterion-specific evidence to this isolated local candidate and decide offline integration custody after independent review, without changing Owner creative truth. Next film action requires separate Owner decision.
+
+
+---
+
+## 2026-10-25 — ZCode terminal delivery and independent Tech Lead adversarial PROVE
+
+**Executor/provenance:** ZCode (not MAR) delivered the audited code under `D:\AI FILM MAKER\AI-Film-Pipeline-ZCode-ControlledShot-20261025`, branch `zcode/controlled-shot-v0-reproof-20261025`, **HEAD `93d684f4d1e078c1b0efbf9920863301991204ac`** (parent prior MAR-authored candidate `87a2308de9b6c711cece87c02afdee12d816c39a`). Branch worktree clean. Exactly 3 file changes: `src/film_pipeline/creative_control/__init__.py`, new `src/film_pipeline/creative_control/__main__.py`, `tests/test_controlled_shot_offline.py`. `git diff --check` PASS; `AGENTS.md` blob unchanged `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`. Independent MAR read-only/git custody and local Python verification used **only by Tech Lead**, not as coding Worker.
+
+**Independent exact tests (PASS):** On the **committed ZCode worktree**, Python `-B`, `pytest -q -p no:cacheprovider tests/test_controlled_shot_offline.py tests/test_narrative_compiler_021.py tests/test_canonical_reference_binding.py tests/test_film_core_slice.py` gave **99/99 PASS in 2.03s**, two pre-existing Pydantic deprecation warnings. Replayed `python -B -m film_pipeline.creative_control` from `PYTHONPATH=src`: `gate=INPUTS_BLOCKED`, `dispatch_count=0`, **five** `REFERENCE_UNBOUND` and **five** `RIGHTS_OR_OWNER_PENDING`, plus absent control media/model and production evidence refusal. Synthetic positive remains `PAPER_VALID_ONLY`, **not dispatch authorization**. Root WIP remains 7 preexisting modified/175 untracked; no real media/provider read or generation.
+
+**New independent criterion-level blockers (FAIL; ZCode's 99 tests did not cover them):**
+
+| Input and pure in-memory replay | Actual observed result | Required result / reason |
+| --- | --- | --- |
+| Synthetic X04 actor `WeaponFrame.tip_xyz=(NaN,1,0)` | `PAPER_VALID_ONLY` / no blockers | `INPUTS_BLOCKED`: non-finite weapon geometry must not qualify. |
+| Actor sword tip `(Infinity,1,0)` | `PAPER_VALID_ONLY` / no blockers | `INPUTS_BLOCKED` for non-finite prop coordinates. |
+| `ContactEvent.position_xyz=(NaN,1,0)` | `PAPER_VALID_ONLY` / no blockers | `INPUTS_BLOCKED`; NaN makes distance comparisons silently false. |
+| `estimate_cost(gpu_hours=1,gpu_rate=NaN,` other usage zero) | `CostResult(status=ILLUSTRATIVE_ONLY,usd=NaN)` | `UNKNOWN` or explicit invalid-input refusal; never declare a non-finite expense estimate. |
+| `estimate_cost(gpu_hours=1,gpu_rate=Infinity,` other usage zero); also `gpu_hours=NaN`, `storage_gb_hours=Infinity` | `ILLUSTRATIVE_ONLY`, non-finite USD | Validate all quoted rates, quantities, optional credits/cash values as finite and nonnegative before arithmetic. |
+| Actor frame `second=NaN`; `model_revision=123` | Uncaught `ValueError` / `AttributeError` respectively | Static validator should fail closed with deterministic named invalid-type/finite blockers, not crash on malformed input. |
+
+**Likely cause:** Dataclass annotations and `Literal` declarations do **not** perform runtime input type/finite validation. In `validate()`, `_segment_distance()` produces NaN, and `gap > blade_len` is False for NaN, so a dangerous geometry can reach `PAPER_VALID_ONLY`. `estimate_cost()` checks negative values but does not reject `math.nan` / `math.inf`. This is a **technical acceptance blocker**, not a claim that a real sword-contact render was validated or a new architecture scope is needed.
+
+**Owner-authorized next bounded ZCode revision:** On the SAME isolated ZCode branch/worktree, add robust input-type and `math.isfinite` preflight for durations/fps/frame timestamps, actor blade endpoints/contact XYZ, model revision and billed resource usage/rates; return named fail-closed blockers or explicit structured invalid-cost states. Add adversarial tests proving every replay above is rejected and that valid synthetic fixture/CLI remain stable. Re-run four scoped suites, Python compile, `git diff --check`, exact commit and clean worktree. Do **not** implement an actual renderer, engine integration, new modules beyond the minimal fix, or use third-party services. ZCode owns code; Tech Lead only independently PROVEs new SHA. No automatic acceptance until the new counterexamples PASS.
+
+**Review disposition:** `ZCODE_REPROOF_BLOCKED_NONFINITE_INPUTS` despite **99/99 existing scoped tests PASS**. **DO NOT** mark `OFFLINE_CONTROL_CONTRACT_TECHNICAL_PASS`, dispatch-ready, merged, or Owner creative accepted. Real X04 remains `INPUTS_BLOCKED` by five unresolved canonical refs; film `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`. D1 B multi-cut allowance, D2 licensed/approved actor refs and upload permission, and D3 explicit capped paid A/A+ route all stay **HOLD**. No push, merge, provider sessions, Vast charges or film rendering occurred in this review.
