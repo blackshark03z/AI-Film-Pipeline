@@ -5,8 +5,10 @@ Locks the 120-second mission contract before any paid mutation:
   1. the builder compiles the frozen prose to EXACTLY 24 shots (5s each,
      120.0s) with the intended function pattern and a unique motion
      needle per shot (duplicate needles cross-match discovery)
-  2. the Owner-authorized budget (cap 25 = 24 + 1 repair reserve) is
-     encoded and enforced by the builder
+  2. the Owner-authorized budget is encoded and enforced by the
+     builder (cap 27 = 24 shots + 1 repair reserve + 2 evidenced day-1
+     refusal extensions; dated 25 -> 26 -> 27 lineage in the builder's
+     mutation-budget rationale — a docstring is never spend authority)
   3. the v2-022 operator tool is single-variant: starts with >= 1 usable
      credit, uses the v2-022 state/gate/manifest namespace, and reads
      the compilation via V2_022_COMPILATION when set
@@ -92,6 +94,14 @@ def test_runner_single_variant_namespace(tmp_path, monkeypatch):
     assert tool.COMP_PATH.name == "V2_022_LONGFORM_COMPILATION.json"
     assert tool._state_path(tmp_path).name == "v2_022_run_state.json"
     assert tool._comp_for(0) is None
+    # the runtime compilation is Git-ignored, so a fresh checkout must
+    # not depend on it: a deterministic builder sample (strictly
+    # NON-AUTHORITATIVE for spend) stands in via V2_022_COMPILATION
+    _build_compilation(tmp_path)
+    monkeypatch.setenv("V2_022_COMPILATION",
+                       str(tmp_path / "V2_022_LONGFORM_COMPILATION.json"))
+    monkeypatch.setattr(tool, "COMP", None)
+    monkeypatch.setattr(tool, "BUDGET", None)
     chosen = tool._comp_for(1)
     assert chosen is not None
     path, comp = chosen
@@ -120,6 +130,24 @@ def test_receipt_miss_streak_rule():
     assert tool._receipt_miss_streak_stop(1) is False
     assert tool._receipt_miss_streak_stop(2) is True
     assert tool._receipt_miss_streak_stop(4) is True
+
+
+def test_provider_transient_failure_classified_before_policy_refusal():
+    import v2_020_runner as runner
+    # verbatim day-1 provider reply: generation failed server-side,
+    # no credit consumed — transient, not a content-policy refusal
+    failure_text = ("動画を生成できません。今回の生成でクレジットは"
+                    "使用されませんでした。")
+    assert any(m in failure_text
+               for m in runner.TRANSIENT_FAILURE_MARKERS)
+    assert any(m in failure_text for m in runner.REFUSAL_MARKERS)
+    rows = [{"text": failure_text, "creations": []}]
+    assert runner.classify_recent_failure(rows) == \
+        "TRANSIENT_GENERATION_FAILURE_NO_CREDIT"
+    ok_text = "動画が生成されました。"
+    assert not any(m in ok_text
+                   for m in runner.TRANSIENT_FAILURE_MARKERS)
+    assert not any(m in ok_text for m in runner.REFUSAL_MARKERS)
 
 
 def test_repair_tool_archives_and_resets(tmp_path):

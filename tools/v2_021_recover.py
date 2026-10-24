@@ -45,16 +45,83 @@ from film_pipeline.providers.dola_production.variants import (  # noqa: E402
     _host_allowed, extract_renditions)
 from v2_020_runner import (CONSENT_DISMISS_JS, PULL_RAW_JS,  # noqa: E402
                            RECENT_CONVS_JS, REFUSAL_MARKERS,
+                           TRANSIENT_FAILURE_MARKERS,
                            download_allowlisted, emit, utcnow)
 from v2_021_common import enrolled_profile_root  # noqa: E402
 from v2_021_common import needle_for as _needle_for_comp  # noqa: E402
 
 PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
-COMP = json.loads(
-    Path(os.environ.get("RECOVER_COMPILATION")
-         or (PKG / "V2_021_FIXTURE_COMPILATION_5SHOT.json"))
-    .read_text(encoding="utf-8"))
-SHOT_IDS = [n["shot_id"] for n in COMP["shot_graph"]["nodes"]]
+# Lazily loaded fixture compilation: the runtime file is Git-ignored, so
+# a fresh clean checkout (CI included) must be able to import this
+# module and its pure helpers; only scan/bind paths that genuinely need
+# shot needles require the compilation and fail closed with an
+# informative error (never FileNotFoundError at import).
+COMP: dict | None = None
+
+
+def _require_comp() -> dict:
+    global COMP
+    if COMP is None:
+        path = Path(os.environ.get("RECOVER_COMPILATION")
+                    or (PKG / "V2_021_FIXTURE_COMPILATION_5SHOT.json"))
+        try:
+            COMP = json.loads(path.read_text(encoding="utf-8"))
+        except FileNotFoundError as error:
+            raise RuntimeError(
+                f"V2-021 fixture compilation missing: {path} "
+                f"(Git-ignored runtime artifact; fresh checkouts do not "
+                f"carry it — set RECOVER_COMPILATION to an explicit "
+                f"copy to run reconciliation)") from error
+        except json.JSONDecodeError as error:
+            raise RuntimeError(
+                f"V2-021 fixture compilation malformed: {path}: "
+                f"{error}") from error
+    return COMP
+
+
+def _shot_ids() -> list[str]:
+    return [n["shot_id"] for n in _require_comp()["shot_graph"]["nodes"]]
+
+
+def _preflight_plan() -> list[str]:
+    """Validate the required compilation/shot plan BEFORE any session,
+    browser evaluation or account read. Returns the shot ids; raises
+    RuntimeError (fail-closed, informative) when the artifact is
+    missing or malformed — a recovery scan must never open a provider
+    session it cannot use."""
+    comp = _require_comp()
+    problems: list[str] = []
+    graph = comp.get("shot_graph")
+    nodes = graph.get("nodes") if isinstance(graph, dict) else None
+    if not isinstance(nodes, list) or not nodes:
+        problems.append("shot_graph.nodes must be a non-empty list")
+    else:
+        for node in nodes:
+            if not isinstance(node, dict) or \
+                    not isinstance(node.get("shot_id"), str) or \
+                    not node.get("shot_id"):
+                problems.append("shot_graph.nodes entries must be "
+                                "objects with a non-empty string shot_id")
+                break
+    plans = comp.get("prompt_plans")
+    if not isinstance(plans, dict):
+        problems.append("prompt_plans must be a JSON object")
+    if not problems:
+        for node in nodes:
+            sid = node["shot_id"]
+            plan = plans.get(sid) or {}
+            sections = plan.get("sections") or {}
+            motion = sections.get("motion") \
+                if isinstance(sections, dict) else None
+            if not isinstance(motion, str) or not motion.strip():
+                problems.append(
+                    f"prompt_plans[{sid}].sections.motion missing — no "
+                    f"discovery needle for this shot")
+    if problems:
+        raise RuntimeError(
+            "recovery preflight failed — required V2-021 compilation/"
+            "shot plan invalid: " + "; ".join(problems[:4]))
+    return [node["shot_id"] for node in nodes]
 
 
 def profile_root(alias: str) -> Path:
@@ -62,7 +129,7 @@ def profile_root(alias: str) -> Path:
 
 
 def needle_for(shot_id: str) -> str:
-    return _needle_for_comp(COMP, shot_id)
+    return _needle_for_comp(_require_comp(), shot_id)
 
 
 async def _open(alias: str):
@@ -105,7 +172,20 @@ def _refusal(rows: list[dict]) -> bool:
                for r in rows[:4] for m in REFUSAL_MARKERS)
 
 
+def _transient_failure(rows: list[dict]) -> bool:
+    return any(m in (r.get("text") or "")
+               for r in rows[:4] for m in TRANSIENT_FAILURE_MARKERS)
+
+
 async def scan(accounts: list[str]) -> int:
+    # compile-time artifact validation FIRST: zero sessions may open if
+    # the required compilation/shot plan is missing or malformed
+    try:
+        shot_ids = _preflight_plan()
+    except RuntimeError as error:
+        emit({"status": "RECOVERY_PREFLIGHT_FAILED",
+              "error": str(error)[:400], "sessions_opened": 0})
+        return 1
     result = {}
     for alias in accounts:
         entry = {"account": alias, "shots": {}}
@@ -120,7 +200,7 @@ async def scan(accounts: list[str]) -> int:
                         PULL_RAW_JS, {"conversationId": conv})
                 except Exception:
                     continue
-                for sid in SHOT_IDS:
+                for sid in shot_ids:
                     needle = needle_for(sid)
                     if not any(needle in (r.get("text") or "")
                                for r in rows):
@@ -137,6 +217,7 @@ async def scan(accounts: list[str]) -> int:
                         "done_creations": done,
                         "distinct_download_urls": len(urls),
                         "refusal": _refusal(rows),
+                        "transient_failure": _transient_failure(rows),
                     })
             emit({"event": "account_scanned", "account": alias,
                   "hits": {s: len(v) for s, v in entry["shots"].items()}})
