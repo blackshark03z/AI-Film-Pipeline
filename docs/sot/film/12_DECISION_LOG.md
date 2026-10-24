@@ -1,5 +1,17 @@
 # Decision Log — V1 Freeze
 
+## 2026-10-25 — Owner decision: compare ComfyUI before considering a new BUILD
+
+**Research permission, not architecture adoption:** Owner requests a read-only comparison of the present AI-Film-Pipeline with concrete Chinese-language ComfyUI filmmaking workflows before deciding a new implementation round. This does not authorize ComfyUI setup, model download, workflow execution, GPU/provider use, media generation, or changed architecture.
+
+**Frozen V1 decisions still apply:** DR-001/002/003 (Film State/ShotSpec, continuity, replaceable adapters), DR-006 (no blind retry), DR-009 (ComfyUI/image-first is optional and deferred), local-first persistence and Resolve finishing are not superseded. Research evidence alone cannot promote a new Film/System Truth.
+
+**Future evidence gate:** Inspect real workflow graphs/JSON and verify licensing/provenance; compare character identity, two-person blade contact, pose/depth/keyframes, blocking/eyelines, shot continuity, generation quality, costs/GPU and integration with QC/lineage against one identical XIANXIA60 combat shot. Tech Lead presents a bounded candidate experiment; only separate Owner approval can authorize BUILD, generation, spending or a revised SoT.
+
+**Film remains:** `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`. The narrow requested desk research is not production resumption. See canonical operating `CURRENT_SLICE.md` and `IMPLEMENTATION_STATUS.md`; prior budgets are historical and grant no new spend.
+
+---
+
 ## FROZEN
 
 ### DR-001 — Film State / ShotSpec over prompt-as-truth

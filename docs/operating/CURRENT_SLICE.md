@@ -1,5 +1,19 @@
 # CURRENT SLICE — S3 XIANXIA60 / OWNER-PAUSED — NOT SHIPPED
 
+## 2026-10-25 — ACTIVE OWNER DECISION (supersedes older active/shipped headings below)
+
+**Product Goal unchanged:** One genuinely convincing ~55–65s XIANXIA60 `Nhất Kiếm Phá Vân` film: two-character sword contact, White/Black identity, blocking/eyelines, coherent space and continuity, actual source-to-master QC/lineage/audio, plus Owner creative acceptance. A technically decoded master or passing tests is NOT Product/Owner PASS.
+
+**CURRENT AUTHORITY:** `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`. The principal evidenced creative blocker is two-person physical sword combat with identity and spatial geometry. Historical account/credit/output envelopes are suspended, **0 new generation/credit/provider session or creative recut authorized**; no deployment or release. A separate explicit Owner decision is needed to resume production.
+
+**Engineering checkpoint:** PR #2 remote head `181b23aa47ebb4d1601425593059532d1ffe919d`, OPEN and unmerged: three independently PROVEN V2-021 D3 fail-closed commits plus accepted policy blob sync; 68/68 focused local clean-promotion tests PASS, **no GitHub CI verified for this PR #2 head**. PR #3 DRAFT at `cc2edc9050c42e5f2078494fd1ac87d27c5a2f05` stacked on #2; PR #4 DRAFT at `a899081b549bd365850d93b8ac2db7e43d93a8a5` stacked on #3 with **87/87 GitHub Actions PASS only for its own tested head**. PRs unmerged; no `main` change. The cap-25 wording in PR #3 versus audited builder/tests cap-27 lineage requires review; this is no new spend approval.
+
+**NEXT AUTHORIZED FOCUS (research, NOT BUILD):** Sync decisions in existing SoT/operating records, then desk-research verifiable Chinese-language ComfyUI workflow graphs for two-actor action, identity conditioning, pose/depth, keyframes, spatial constraints and inter-shot continuity. Compare with the provider-neutral existing pipeline, produce a bounded proposed A/B duel-shot experiment for Owner consideration. **No ComfyUI installation, downloads, generation or new Worker BUILD** under this decision.
+
+**WIP safety:** Primary root's 7 tracked modified and 175 untracked paths remain protected. Below 2026-10-21 `ACTIVE`, `PRODUCT PASS` and `SHIPPED` headings remain history and are superseded for present authority by this Owner Pause. Film and Development frozen SoTs are unchanged.
+
+---
+
 **2026-10-22 — AUTHORITATIVE OWNER PAUSE (Tech Lead independent PROVE):**
 - **Product goal unchanged:** One compelling, identity-continuous, spatially coherent 55–65s `Nhất Kiếm Phá Vân` sword-duel film, subject to Owner creative and release acceptance.
 - **Effective state:** `DEVELOPMENT=PAUSED_BY_OWNER`; `OWNER_CREATIVE_ACCEPTANCE=REJECTED`; `FILM_RELEASE=NOT_SHIPPED`. **Stop new video Generate, provider account activity, credit spend, recuts, releases and further Worker tasks.**

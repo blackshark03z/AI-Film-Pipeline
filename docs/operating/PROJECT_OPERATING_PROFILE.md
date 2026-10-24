@@ -1,5 +1,15 @@
 # Project Operating Profile — AI Film Pipeline
 
+## 2026-10-25 — Decision and operating precedence checkpoint
+
+1. **Canonical precedence:** The dated current header of root `CURRENT_SLICE.md` governs project status; `IMPLEMENTATION_STATUS.md` records independently verified product progress, while this profile binds them to frozen Film/Development SoTs. Older `ACTIVE`, `PRODUCT PASS` and `MASTER SHIPPED` passages remain historical technical/Worker evidence, not Owner creative or release acceptance. This is not a fourth truth or new lifecycle.
+2. **Owner Pause persists:** `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`; the main blocker is convincing two-person sword contact with persistent actor identity, shot geometry, eyelines and choreography. No further provider sessions, generation, credit spend, recut, CD or deployment absent separate explicit Owner resume.
+3. **Engineering exact evidence:** PR #2 remote head `181b23aa47ebb4d1601425593059532d1ffe919d` received three independently PROVEN D3 fail-closed commits and a policy-only commit matching pinned `AGENTS.md` blob `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`. Independent local promotion focused tests 68/68 PASS; GitHub Actions at this PR #2 head **NOT VERIFIED**. PR #3 remains draft `cc2edc9`; PR #4 draft `a899081`, with its own clean-checkout GitHub Actions 87/87 PASS (only that head). None merged to `main`.
+4. **Custody:** Preserve original primary checkout 7 tracked dirty and 175 untracked paths. Do not rebase/reset/stash/overwrite those WIP files or automatically incorporate worktree evidence. PR #3 old cap-25 text versus executable/historic 27-budget lineage requires evidence reconciliation, NOT renewed spending authorization.
+5. **Next sequence:** Finish documentary and PR/CI review gates, stop speculative code hardening, then conduct Owner-requested **read-only comparative study** of ComfyUI workflows before proposing any new build. ComfyUI remains deferred in V1 by default; no engine/model selection or production resume is yet approved.
+
+---
+
 **Status:** FROZEN FOR V1 EXECUTION  
 **Governing lifecycle:** AI-Native Development Model SoT v1  
 **Product/System SoT:** AI Film Pipeline V1 SoT

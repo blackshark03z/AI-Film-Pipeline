@@ -1,5 +1,18 @@
 # Implementation Status
 
+## 2026-10-25 — AUTHORITATIVE PRODUCT PROGRESS GATE (supersedes historical claims below)
+
+**Canonical status:** `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`. The unchanged product goal is a believable full ~55–65s XIANXIA60 two-person sword-duel film with stable identities, geometry, continuity, soundtrack and verifiable asset/cost provenance. Older technically playable master and `PRODUCT PASS` headlines do not override Owner creative rejection.
+
+1. **Product Delta:** Engineering guard/provenance improvements only; no newly accepted two-person blade contact, no creative-ready master and no Owner picture/release lock. Technical PASS does not imply Product PASS.
+2. **Proof:** V2-021 D3 missing/malformed compilation manifests, auto and direct gate independently fail closed before fake account probes; focused 68/68 PASS at `3d1c89e` and independent clean policy-synced PR #2 promotion 68/68 PASS. PR #2 remote head `181b23aa47ebb4d1601425593059532d1ffe919d` OPEN/not merged; PR #2 GitHub CI **not verified**. PR #3 DRAFT `cc2edc9`, PR #4 DRAFT `a899081`; PR #4 own GitHub Actions run `40122636798` **87/87 PASS** for that earlier tested revision only. No full-suite green or merged-stack green claim. Detailed independent proof in `docs/operating/TECH_LEAD_PROVE_OFFLINE_HARDENING_GLM53_20261024.md`.
+3. **Main blocker:** Two-character sword contact and reaction while preserving spatial/actor identity; separate **Owner Pause** blocks actual generation regardless of technical readiness.
+4. **Next choice / Owner authority:** Do not resume broad hardening or production. Owner requests **read-only** comparison of the current provider-neutral pipeline with real Chinese-language ComfyUI filmmaking workflows. Assess graph JSON, pose/depth/keyframes, consistent actors/blocking, cost/GPU/licensing, integration with continuity/QC. Deliver evidence-backed recommendation and one bounded experimental design; no actual test render/ComfyUI install/model download/GPU/provider session/credit use without separate Owner approval. Finish PR/CI and dirty-WIP merge custody only via separate reviewed gates.
+
+**Open control items:** PR #3 title/body cap 25 differs from historical 27 compiled budget; reconcile text with dated evidence, not new spending permission. Root retains 7 tracked modified and 175 untracked WIP. Pinned policy ref `45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`, accepted AGENTS blob `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`. Frozen Film/Development invariants are not changed.
+
+---
+
 ## 2026-10-22 — OWNER PAUSE CLOSEOUT / TECH LEAD INDEPENDENT PROVE
 
 **GOAL:** Preserve all work for future authorized resumption, without misrepresenting rejected footage as shipped. `DEVELOPMENT=PAUSED_BY_OWNER; OWNER_CREATIVE_ACCEPTANCE=REJECTED; FILM_RELEASE=NOT_SHIPPED`. S3 XIANXIA60 is the unchanged active Product Goal, **not an active execution license**.
