@@ -1,12 +1,29 @@
 # Owner-approved bounded offline Work Package — XIANXIA60 controlled-shot feasibility (up to 8h)
 
+## 2026-10-25 — OWNER EXECUTOR CORRECTION / ZCODE ONLY (supersedes any executor ambiguity below)
+
+**EXECUTOR=ZCODE AGENT ONLY.** Owner explicitly selected **ZCode as coding Worker**. Earlier Tech Lead use of `mcp__MAR__submit` to run a coding worker was a **ROLE/EXECUTOR DRIFT**, not an Owner-approved choice. **DO NOT dispatch another MAR coding Worker for this slice.** Tech Lead may use MAR for read-only repo verification, Git/worktree custody and documentation but **not** as a substitute coding executor. This specific Owner choice overrides generic platform-interchangeability for this slice without changing frozen `AGENTS.md`.
+
+**Current ZCode handoff status:** `ZCODE_READY_NOT_STARTED` as of this correction; a prepared clean dedicated worktree is **not** proof that ZCode is running. No ZCode connection, CLI or native launch operation was available in the Tech Lead's active tool session; the ZCode agent must be started using its own user-accessible execution interface, and its state confirmed before claiming `RUNNING`.
+
+**Pre-created ZCode workspace (Tech Lead Git custody only, not Worker BUILD):**
+- Worktree: `D:\AI FILM MAKER\AI-Film-Pipeline-ZCode-ControlledShot-20261025`
+- Branch: `zcode/controlled-shot-v0-reproof-20261025`
+- Starting HEAD: `87a2308de9b6c711cece87c02afdee12d816c39a`, clean at handoff, with pinned `AGENTS.md` blob `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`.
+- **Provenance warning:** starting HEAD is a prior **MAR-authored candidate**, not a ZCode deliverable and **not accepted/integrated**. It comprises exactly `src/film_pipeline/creative_control/__init__.py` and `tests/test_controlled_shot_offline.py` since `22e9d8e`. ZCode must independently inspect and re-PROVE, repair discovered flaws within original scope, and own any new commits on the `zcode/` branch. Do not passively rename MAR work as ZCode work.
+- Tech Lead local pytest of MAR candidate: **42/42 scoped PASS**, but MAR machine result was **`BLOCKED / UNVERIFIED / NOT_INTEGRATED`** due to missing criterion-specific oracles. Product Delta = NONE. Neither result authorizes acceptance, production or a merge.
+- Root operating documentation (newer than the candidate parent) is authoritative; read current root `CURRENT_SLICE.md` and `IMPLEMENTATION_STATUS.md` without writing to them. Preserve 7 tracked modified + 175 untracked protected root paths.
+
+**ZCode assignment:** Goal/long-running mode, optional higher reasoning, **up to 8 hours**, stop upon PASS or blocker. This is an offline *reproof/hardening of the existing candidate*, not permission for a new unrelated feature build. Same seven acceptance/stop gates in this work package apply. Owner D1–D3 are on HOLD (B multi-cut acceptance, rights/reference selection/cloud upload, explicit paid A/A+ budget and production resume).
+
+
 **Date:** 2026-10-25 Asia/Bangkok
 **Status:** `FROZEN_WORK_PACKAGE / OFFLINE_ONLY / OWNER_CREATIVE_PAUSE_REMAINS`
 **Owner authorization:** User requests a decision-grade research closure, implementation plan and an **up-to-eight-hour unattended Worker task**. This authorizes ONLY the minimum **isolated, local, offline research-to-prototype implementation** specified here. It does **NOT** authorize generation, uploading real media, provider/Flow/Dola account sessions, Vast.ai rental, model downloads, Blender/ComfyUI installation/execution, new budget, GitHub push/merge, film release or changes to accepted Film/Development SoTs. No assumption of future automatic progress, exact 8-hour wall time, or readiness to ship.
 
 ## Authority and exact scope
 
-- **Root project:** `D:\AI FILM MAKER\AI-Film-Pipeline`. **Baseline before this doc:** `mission/quality-v2-022-120s@245a2883be9a3c13d3b3b96bd67372c28b0bb1fd`. If this document is later committed, use the **new verified exact HEAD** for any MAR submitted contract.
+- **Root project:** `D:\AI FILM MAKER\AI-Film-Pipeline`. **Baseline before this doc:** `mission/quality-v2-022-120s@245a2883be9a3c13d3b3b96bd67372c28b0bb1fd`. This is the **historical baseline before the documentation handoff**. The current ZCode worktree/HEAD is pinned by the Owner correction above; **no MAR coding-worker submission** is authorized.
 - **Accepted unified policy:** `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`, expected `AGENTS.md` Git blob `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`. Before BUILD, compare HEAD and frozen policy; if not matching, STOP. No edit to `AGENTS.md`.
 - **SoT and status:** `docs/sot/development/AI_NATIVE_DEV_MODEL_SOT_v1_FROZEN.md`, `docs/sot/film/00_SOT_INDEX.md`, Film Decision Log, Operating Profile, root Current Slice and Implementation Status. **Product:** one creative-accepted 55–65s XIANXIA60 duel film, still `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`. This is only a narrow authorized **offline R&D exception**, not film resumption.
 - **Evidence dossier (the single research item):** `docs/research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md`, especially R8 (canonical X04 ≠ recoil diagnostic) and R10 (stage decision, owner gates). Do not copy the research into other documents or invent another SoT.
@@ -46,7 +63,7 @@ X04 has **two separate targets** and no Worker may silently change canonical cre
 
 `GOAL → PRODUCT DELTA → EXACT WORKTREE/BRANCH/HEAD → CHANGED PATHS → TESTS/ADVERSARIAL EVIDENCE → REAL X04 INPUTS_BLOCKED PROOF → STOP/BLOCKER → OWNER DECISIONS → NEXT RECOMMENDATION`.
 
-The Worker may finish sooner than eight hours. An asynchronous task submission does **not** establish that it will run continuously for the full duration. Task executor availability and actual status must be checked through MAR before reporting it as running.
+ZCode may finish sooner than eight hours. A prepared worktree or handoff is not an agent launch. Confirm actual execution status through the ZCode application; otherwise report ZCODE_READY_NOT_STARTED.
 
 
 ---
