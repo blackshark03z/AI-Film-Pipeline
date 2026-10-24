@@ -2,6 +2,8 @@
 
 ## 2026-10-25 — AUTHORITATIVE PRODUCT PROGRESS GATE (supersedes historical claims below)
 
+**2026-10-25 limited next Work Package (not Product PASS):** Owner permits a separate, timeboxed, **up-to-eight-hour OFFLINE-ONLY** Worker prototype under [TASK_XIANXIA60_CONTROLLED_SHOT_OFFLINE_8H_20261025.md](TASK_XIANXIA60_CONTROLLED_SHOT_OFFLINE_8H_20261025.md). Goal: additive typed ControlledShotPackage and fail-closed static tests distinguishing X04 canonical collision/lock from diagnostic recoil, blocking 5 unbound identity/wardrobe/arena references, and differentiating ComfyUI UI JSON from API graph. This permission excludes real film images/output, backend generation, Vast rental, provider sessions, production credits, SoT edits and remote merge/push. Current **Product Delta=none** until Owner visual acceptance; Film remains PAUSED_BY_OWNER / CREATIVE_REJECTED / NOT_SHIPPED. Research/evidence lives only in [single dossier](../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md).
+
 **Research evidence (not Product PASS):** [Foyege24 / Chinese ComfyUI workflow audit](../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md). Continue future rounds there; no benchmark generation or new release authorization.
 
 **Canonical status:** `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`. The unchanged product goal is a believable full ~55–65s XIANXIA60 two-person sword-duel film with stable identities, geometry, continuity, soundtrack and verifiable asset/cost provenance. Older technically playable master and `PRODUCT PASS` headlines do not override Owner creative rejection.

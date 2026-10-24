@@ -2,6 +2,8 @@
 
 ## 2026-10-25 — ACTIVE OWNER DECISION (supersedes older active/shipped headings below)
 
+**2026-10-25 Owner offline exception — scope only:** Owner approved an *up-to-eight-hour isolated offline Worker prototype* following decision-grade desk research: [frozen task contract](TASK_XIANXIA60_CONTROLLED_SHOT_OFFLINE_8H_20261025.md) and [single research dossier](../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md). This narrowly supersedes the earlier research-only prohibition **for static schema/prototype/tests in a clean separate branch**, but does NOT resume film production, authorize image/reference binding, paid Vast/GPU, video generation, provider access, media upload, deployment, branch push/merge or Owner creative acceptance. Canonical X04 collision→sustained sword lock remains unchanged; diagnostic recoil test is a separate variant. Stop Worker at proof completion or supported maximum eight hours.
+
 **Research artifact:** [Foyege24 / Chinese ComfyUI workflow audit](../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md) — one running research item; all research hypotheses remain below Owner/Film SoT authority.
 
 **Product Goal unchanged:** One genuinely convincing ~55–65s XIANXIA60 `Nhất Kiếm Phá Vân` film: two-character sword contact, White/Black identity, blocking/eyelines, coherent space and continuity, actual source-to-master QC/lineage/audio, plus Owner creative acceptance. A technically decoded master or passing tests is NOT Product/Owner PASS.

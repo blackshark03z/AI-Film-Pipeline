@@ -2,6 +2,8 @@
 
 ## 2026-10-25 — Owner decision: compare ComfyUI before considering a new BUILD
 
+**2026-10-25 operational authorization clarification (no Film SoT change):** Owner authorizes a [bounded, up-to-eight-hour OFFLINE ONLY controlled-shot prototype](../../operating/TASK_XIANXIA60_CONTROLLED_SHOT_OFFLINE_8H_20261025.md) to test a proposed additive contract in an isolated worktree. This is **not** approval of a production engine, revised X04 story, reference binding, any real GPU/provider/render spend, deployment or film-resumption; all frozen DRs and creative Owner Pause prevail. See the [single research dossier](../../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md) for evidence and three subsequent Owner gates.
+
 **Single research evidence item (not SoT):** [Foyege24 / Chinese ComfyUI workflow audit](../../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md). Future rounds update this file only; V1 freeze and Owner Pause remain.
 
 **Research permission, not architecture adoption:** Owner requests a read-only comparison of the present AI-Film-Pipeline with concrete Chinese-language ComfyUI filmmaking workflows before deciding a new implementation round. This does not authorize ComfyUI setup, model download, workflow execution, GPU/provider use, media generation, or changed architecture.
