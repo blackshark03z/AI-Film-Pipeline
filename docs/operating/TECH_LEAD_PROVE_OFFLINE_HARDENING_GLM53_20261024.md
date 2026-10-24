@@ -1,0 +1,41 @@
+# Tech Lead independent PROVE — GLM 5.3 Offline Hardening (2026-10-24)
+
+**Decision:** `FOCUSED_TESTS_VERIFIED / CORRECTIVE_REVIEW_REQUIRED / NOT_INTEGRATION_READY`.
+**Product state unchanged:** `DEVELOPMENT=PAUSED_BY_OWNER`, `OWNER_CREATIVE_ACCEPTANCE=REJECTED`, `FILM_RELEASE=NOT_SHIPPED`. This document is evidence and a bounded QA correction for existing WP `TASK_OFFLINE_HARDENING_GLM53_RESUME_READINESS_20261024.md`, **not** a second SoT or authorization to resume any provider/media work.
+
+## Scope and exact revisions
+
+- Primary root: `D:\AI FILM MAKER\AI-Film-Pipeline`, `mission/quality-v2-022-120s@e363eb5f39617d7654ffbf86acc2f802c6fb02b3` before this independent PROVE report commit, with **7 tracked modified and 175 untracked entries preserved**; no primary dirty file was edited, staged or removed.
+- Worker: `D:\AI FILM MAKER\AI-Film-Pipeline-Offline-Hardening-GLM53`, branch `feature/offline-hardening-glm53-20261024@00eb887b14fab32f90c46c967e859563a5e098d8`, worktree clean. Four commits: `d9d0718`, `e3d449d`, `995a935`, `00eb887`.
+- Independent `git diff --stat e363eb5..feature/offline-hardening-glm53-20261024`: **11 changed paths, 1,017 insertions / 39 deletions** (Worker report's 10/885 omits its own final report). `git diff --check`: exit 0. Worker tree `AGENTS.md` Git blob matches pinned POLICY_REF blob `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`.
+- Independent targeted test run: from Worker worktree using Python from the primary project's `.venv`, `python -B -m pytest -q -p no:cacheprovider` with `PYTHONPATH=src` effect set in-process, files `test_v2_022_compilation.py`, `test_v2_022_fresh_checkout_bootstrap.py`, `test_v2_022_transient_failure.py`, `test_v2_021_hardening.py`, `test_dispatch_recovery.py`, `test_v2_022_account_routing.py`: **76 passed in 28.38s; exit 0**. No live network/provider calls. Git whitespace check against Worker tracked `.py/.md`: zero matches.
+- Worker reports bounded full suite **1241 passed / 122 failed / 62 errors**, with majority missing Git-ignored runtime artifacts. This full-suite outcome/classification was **not independently replayed** in this PROVE. New CI workflow is **not yet run on GitHub**; do not claim green CI or full regression acceptance.
+
+## Independent offline defects requiring correction before integration
+
+### P1 — Frozen compilation content is not cryptographically bound
+
+`tools/run_v2_022_production.py::load_compilation` validates only shape, and `_activate_comp` checks `fixture_id`, `planned_shots` and gate budget, not the actual compilation content SHA-256. In a local `tempfile.TemporaryDirectory` with a structurally valid test fixture, independent PROVE changed `prompt_plans.S01.compiled_text` from `ORIGINAL` to `ALTERED`, keeping state identity/count/budget constant; `_activate_comp` **accepted the modified prompt**. This fails the WP's integrity-check objective; do not mistake a state path/metadata match for frozen design attestation.
+
+**Corrective acceptance:** persist and verify full-file SHA-256 tied to a trusted, already-authorized run evidence source (or explicit `UNVERIFIED/AUTHORITY_REQUIRED` stop for legacy state), including the gate-to-auto-to-manifest boundary and fresh process. Do **not** silently pin arbitrary current bytes, treat a regenerated sample as paid-generation authorization, rewrite legacy runtime artifacts, or change the Owner-authorized budget. Add offline tamper tests proving prompt mutation with unchanged identity/budget is rejected. Existing running state must fail closed if trustworthy digest is unavailable; provide a read-only migration/report path, not auto-rebind.
+
+### P2 — Malformed nested type throws the wrong exception
+
+Calling `load_compilation` with `shot_graph: ["invalid-shape"]` (other required keys present) raises raw `AttributeError: 'list' object has no attribute 'get'` at nested `.get`, not the intended `CompilationUnavailableError`. Independently reproduced with a temporary JSON file, zero paid/remote work.
+
+**Corrective acceptance:** type-check nested `shot_graph`, `prompt_plans`, budget fields and shot IDs before indexing; route malformed data through the documented fail-closed error/CLI exit code 4. Add regression tests for wrong container types, not just missing fields.
+
+### P1 — Recovery scan enters session path before artifact preflight
+
+In `tools/v2_021_recover.py::scan`, `_open(alias)` executes before `_shot_ids()` loads the ignored required compilation. Independently reproduced with a **fake async `_open`** (no actual provider): with `RECOVER_COMPILATION` pointing to an absent temporary file, `scan(["DUMMY_ACCOUNT"])` still called fake session-open once before reporting compilation missing. The exception is caught and an error record written in temporary storage; no real account/session was accessed.
+
+**Corrective acceptance:** validate required compilation and shot ID plan **before calling `_open`, browser eval or account/session read**, fail closed with a clear error/result, preserve current read-only recovery behavior when valid, and test ordering with fake `_open` asserting zero session opens on missing/malformed compilation. No provider access in testing.
+
+## Integration gate / next step
+
+- Keep existing Worker branch `feature/offline-hardening-glm53-20261024`; execute **one narrowly scoped corrective pass on that same isolated Worker worktree**, addressing the three findings, with targeted tests and exact commit(s), no remote push/merge/rebase.
+- Existing root WIP overlaps `tools/v2_020_runner.py`, `tools/v2_021_recover.py`, `tests/test_v2_022_compilation.py`; do not cherry-pick into dirty primary checkout. Later integration requires independent diff conflict resolution in a clean worktree after Owner/Tech Lead decides the dirty WIP custody and confirms PR #2/#3 topology.
+- After corrections Tech Lead reruns focused suites, tamper/type/session-order probes and `git diff --check`. Only after independent PASS should integration/CI first push be considered via explicit review. `uv.lock` remains untracked/protected and lockfile policy deferred.
+- **No video Generate, editing, provider session, credit spend, publication or creative acceptance change is authorized.** The XIANXIA60 film-critical blocker remains two-actor controlled martial contact/geometry/identity; offline CI and test PASS do not resolve it.
+
+**Product Progress Gate:** Product delta = engineering safety improvement only, not film progress; proof = targeted 76/76 plus independent adversarial probes; main blocker = three identified pre-integration hardening gaps (engineering) and unqualified two-person controlled combat (film); next choice = finish in-scope corrective verification, then Tech Lead decides integration and requests separate explicit Owner authorization before any film production resumes.
