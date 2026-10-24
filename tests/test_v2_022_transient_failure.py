@@ -310,3 +310,107 @@ def test_recovery_imports_and_fails_closed_without_compilation(
     monkeypatch.setattr(recover, "COMP", None)
     assert recover._shot_ids() == ["S01"]
     assert recover.needle_for("S01") == "m" * 80
+
+
+# ------------------------------------- PROVE P1: recovery preflight order
+
+def _wire_fake_open(monkeypatch, recover):
+    """Fake async _open that records every session-open attempt; the
+    assertion inside guarantees any open without a valid plan fails
+    the test even if scan tried to continue."""
+    opens = []
+
+    async def fake_open(alias):
+        opens.append(alias)
+        raise AssertionError(
+            f"session opened for {alias} before plan validation")
+
+    monkeypatch.setattr(recover, "_open", fake_open)
+    emitted = []
+    monkeypatch.setattr(recover, "emit",
+                        lambda payload: emitted.append(payload))
+    return opens, emitted
+
+
+def test_recovery_scan_never_opens_session_without_valid_plan(
+        tmp_path, monkeypatch):
+    import v2_021_recover as recover
+    opens, emitted = _wire_fake_open(monkeypatch, recover)
+
+    # missing compilation file
+    monkeypatch.delenv("RECOVER_COMPILATION", raising=False)
+    monkeypatch.setattr(recover, "COMP", None)
+    monkeypatch.setattr(recover, "PKG", tmp_path / "missing_pkg")
+    assert asyncio.run(recover.scan(["DUMMY_ACCOUNT"])) == 1
+    assert opens == []
+
+    # malformed JSON
+    bad = tmp_path / "bad.json"
+    bad.write_text("{oops", encoding="utf-8")
+    monkeypatch.setenv("RECOVER_COMPILATION", str(bad))
+    monkeypatch.setattr(recover, "COMP", None)
+    assert asyncio.run(recover.scan(["DUMMY_ACCOUNT"])) == 1
+    assert opens == []
+
+    # structurally invalid: nodes not a list
+    wrong_shape = tmp_path / "wrong_shape.json"
+    wrong_shape.write_text(json.dumps({
+        "shot_graph": {"nodes": "nope"},
+        "prompt_plans": {}}), encoding="utf-8")
+    monkeypatch.setenv("RECOVER_COMPILATION", str(wrong_shape))
+    monkeypatch.setattr(recover, "COMP", None)
+    assert asyncio.run(recover.scan(["DUMMY_ACCOUNT"])) == 1
+    assert opens == []
+
+    # plan present but a shot has no motion needle
+    no_needle = tmp_path / "no_needle.json"
+    no_needle.write_text(json.dumps({
+        "shot_graph": {"nodes": [{"shot_id": "S01"}]},
+        "prompt_plans": {"S01": {"sections": {"motion": ""}}}}),
+        encoding="utf-8")
+    monkeypatch.setenv("RECOVER_COMPILATION", str(no_needle))
+    monkeypatch.setattr(recover, "COMP", None)
+    assert asyncio.run(recover.scan(["DUMMY_ACCOUNT"])) == 1
+    assert opens == []
+    assert emitted[-1]["status"] == "RECOVERY_PREFLIGHT_FAILED"
+    assert emitted[-1]["sessions_opened"] == 0
+    assert "motion" in emitted[-1]["error"]
+
+
+def test_recovery_scan_opens_sessions_only_after_valid_preflight(
+        tmp_path, monkeypatch):
+    import v2_021_recover as recover
+    fixture = tmp_path / "fixture.json"
+    fixture.write_text(json.dumps({
+        "shot_graph": {"nodes": [{"shot_id": "S01"}]},
+        "prompt_plans": {"S01": {"sections": {"motion": "m" * 200}}}}),
+        encoding="utf-8")
+    monkeypatch.setenv("RECOVER_COMPILATION", str(fixture))
+    monkeypatch.setattr(recover, "COMP", None)
+    out_pkg = tmp_path / "out_pkg"
+    out_pkg.mkdir()
+    monkeypatch.setattr(recover, "PKG", out_pkg)
+    opens = []
+
+    class _Page:
+        async def evaluate(self, js, arg=None):
+            return []  # no recent conversations
+
+    class _Manager:
+        async def close(self):
+            pass
+
+    async def fake_open(alias):
+        opens.append(alias)
+        return _Manager(), _Page()
+
+    monkeypatch.setattr(recover, "_open", fake_open)
+    emitted = []
+    monkeypatch.setattr(recover, "emit",
+                        lambda payload: emitted.append(payload))
+
+    assert asyncio.run(recover.scan(["ACCOUNT_X"])) == 0
+    assert opens == ["ACCOUNT_X"]  # opened exactly once, AFTER preflight
+    report = json.loads((out_pkg / "V2_021_RECOVERY_SCAN.json")
+                        .read_text(encoding="utf-8"))
+    assert report["accounts"]["ACCOUNT_X"]["recent_conversations"] == 0

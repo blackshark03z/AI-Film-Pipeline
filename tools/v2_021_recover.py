@@ -83,6 +83,47 @@ def _shot_ids() -> list[str]:
     return [n["shot_id"] for n in _require_comp()["shot_graph"]["nodes"]]
 
 
+def _preflight_plan() -> list[str]:
+    """Validate the required compilation/shot plan BEFORE any session,
+    browser evaluation or account read. Returns the shot ids; raises
+    RuntimeError (fail-closed, informative) when the artifact is
+    missing or malformed — a recovery scan must never open a provider
+    session it cannot use."""
+    comp = _require_comp()
+    problems: list[str] = []
+    graph = comp.get("shot_graph")
+    nodes = graph.get("nodes") if isinstance(graph, dict) else None
+    if not isinstance(nodes, list) or not nodes:
+        problems.append("shot_graph.nodes must be a non-empty list")
+    else:
+        for node in nodes:
+            if not isinstance(node, dict) or \
+                    not isinstance(node.get("shot_id"), str) or \
+                    not node.get("shot_id"):
+                problems.append("shot_graph.nodes entries must be "
+                                "objects with a non-empty string shot_id")
+                break
+    plans = comp.get("prompt_plans")
+    if not isinstance(plans, dict):
+        problems.append("prompt_plans must be a JSON object")
+    if not problems:
+        for node in nodes:
+            sid = node["shot_id"]
+            plan = plans.get(sid) or {}
+            sections = plan.get("sections") or {}
+            motion = sections.get("motion") \
+                if isinstance(sections, dict) else None
+            if not isinstance(motion, str) or not motion.strip():
+                problems.append(
+                    f"prompt_plans[{sid}].sections.motion missing — no "
+                    f"discovery needle for this shot")
+    if problems:
+        raise RuntimeError(
+            "recovery preflight failed — required V2-021 compilation/"
+            "shot plan invalid: " + "; ".join(problems[:4]))
+    return [node["shot_id"] for node in nodes]
+
+
 def profile_root(alias: str) -> Path:
     return enrolled_profile_root(alias, ACCOUNT_PROFILES)
 
@@ -137,6 +178,14 @@ def _transient_failure(rows: list[dict]) -> bool:
 
 
 async def scan(accounts: list[str]) -> int:
+    # compile-time artifact validation FIRST: zero sessions may open if
+    # the required compilation/shot plan is missing or malformed
+    try:
+        shot_ids = _preflight_plan()
+    except RuntimeError as error:
+        emit({"status": "RECOVERY_PREFLIGHT_FAILED",
+              "error": str(error)[:400], "sessions_opened": 0})
+        return 1
     result = {}
     for alias in accounts:
         entry = {"account": alias, "shots": {}}
@@ -151,7 +200,7 @@ async def scan(accounts: list[str]) -> int:
                         PULL_RAW_JS, {"conversationId": conv})
                 except Exception:
                     continue
-                for sid in _shot_ids():
+                for sid in shot_ids:
                     needle = needle_for(sid)
                     if not any(needle in (r.get("text") or "")
                                for r in rows):
