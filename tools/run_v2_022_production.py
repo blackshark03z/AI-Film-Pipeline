@@ -183,14 +183,34 @@ def load_compilation(path: Path | None = None) -> dict:
             for key in ("total_budget", "planned_shots", "rule"):
                 if key not in budget:
                     problems.append(f"mutation_budget.{key} missing")
+            for key in ("total_budget", "planned_shots"):
+                if key in budget and (type(budget[key]) is not int
+                                      or budget[key] <= 0):
+                    problems.append(
+                        f"mutation_budget.{key} must be a positive "
+                        f"integer (bool excluded), got "
+                        f"{type(budget[key]).__name__}")
+            if "rule" in budget and (
+                    not isinstance(budget["rule"], str)
+                    or not budget["rule"].strip()):
+                problems.append(
+                    "mutation_budget.rule must be a nonblank string")
         if isinstance(nodes, list) and nodes \
                 and all(isinstance(node, dict) for node in nodes) \
-                and isinstance(budget, dict):
-            if len(nodes) != budget.get("planned_shots"):
+                and isinstance(budget, dict) \
+                and type(budget.get("planned_shots")) is int \
+                and type(budget.get("total_budget")) is int:
+            planned = budget["planned_shots"]
+            if len(nodes) != planned:
                 problems.append(
                     f"shot_graph.nodes ({len(nodes)}) disagrees with "
                     f"mutation_budget.planned_shots "
-                    f"({budget.get('planned_shots')})")
+                    f"({planned})")
+            if budget["total_budget"] < planned:
+                problems.append(
+                    f"mutation_budget.total_budget "
+                    f"({budget['total_budget']}) must be >= "
+                    f"planned_shots ({planned})")
     if problems:
         raise CompilationUnavailableError(
             f"V2-022 compilation malformed: {target}: "
@@ -362,6 +382,47 @@ def cmd_gate(run_dir: Path) -> int:
     # provider access when the design authority is missing)
     _require_compilation()
     state = _load_state(run_dir)
+    # TRUST PREFLIGHT — before entering the POOL_ACCOUNTS probe loop
+    # and before any gate authorization mutation: if the compilation
+    # digest has no trusted anchor (or the anchor mismatches), ZERO
+    # provider/account interaction may happen. A mid-run re-gate may
+    # stand on the state's own previously pinned digest instead of a
+    # fresh anchor. Read-only `verify` documents the same digest.
+    gate_path = _compilation_path()
+    gate_digest = _compilation_sha256(gate_path)
+    gate_pinned = state.get("compilation_sha256")
+    gate_pinned_ok = (
+        gate_pinned is not None
+        and str(gate_pinned).lower() == gate_digest
+        and state.get("compilation_path") == str(gate_path))
+    gate_anchor = _trusted_compilation_digest(gate_path)
+    if not (gate_pinned_ok
+            or (gate_anchor is not None and gate_anchor == gate_digest)):
+        decision = ("STOP_COMPILATION_TRUST_MISSING"
+                    if gate_anchor is None
+                    else "STOP_COMPILATION_TRUST_MISMATCH")
+        state["gate"] = {
+            "decision": decision,
+            "computed_budget": BUDGET["total_budget"],
+            "rule": BUDGET["rule"],
+            "unpinned_digest": gate_digest,
+            "probes_suppressed": True,
+            "pin_instruction":
+                "pin the frozen compilation digest deliberately "
+                "(set V2_022_COMPILATION_SHA256 or create "
+                f"{gate_path}.sha256) and re-run gate; `verify` reports "
+                "the current digest read-only; no account was probed",
+        }
+        _save(run_dir, state)
+        (run_dir / "V2_022_POOL_GATE.json").write_text(
+            json.dumps({"budget": BUDGET["total_budget"], "pool": {},
+                        "total_available": 0, "decision": decision,
+                        "owner_matrix_required": True}, indent=1,
+                       ensure_ascii=False), encoding="utf-8")
+        emit({"status": decision, "budget": BUDGET["total_budget"],
+              "probes": 0, "trust": "unverified",
+              "digest": gate_digest})
+        return 2
     matrix = {}
     total_available = 0
     for alias in POOL_ACCOUNTS:

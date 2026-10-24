@@ -471,3 +471,121 @@ def test_verify_command_reports_without_mutating(tmp_path, monkeypatch):
     assert tool.cmd_verify(run_dir) == 0
     assert emitted[-1]["status"] == "ANCHOR_OK_STATE_UNPINNED"
     assert (run_dir / "v2_022_run_state.json").read_bytes() == before
+
+
+# =========================================================================
+# PROVE addendum 2026-10-25: trust preflight BEFORE probes; budget values
+# =========================================================================
+
+def test_gate_trust_preflight_precedes_any_probe(tmp_path, monkeypatch):
+    """PROVE addendum finding 1: with a missing or mismatched trust
+    anchor the gate must stop BEFORE the POOL_ACCOUNTS probe loop —
+    zero provider/account interaction. A valid anchor proceeds into
+    the (fake) probe loop."""
+    import hashlib
+    import run_v2_022_production as tool
+    sample = _build_sample(tmp_path)
+    monkeypatch.setenv("V2_022_COMPILATION", str(sample))
+    monkeypatch.setattr(tool, "COMP", None)
+    monkeypatch.setattr(tool, "BUDGET", None)
+    probes = []
+
+    def no_probe(alias):
+        probes.append(alias)
+        raise AssertionError(
+            f"_probe({alias}) must not run while the trust anchor is "
+            f"missing or mismatched")
+
+    monkeypatch.setattr(tool, "_probe", no_probe)
+    monkeypatch.setattr(tool, "_stale_overrides", lambda: {})
+    emitted = []
+    monkeypatch.setattr(tool, "emit",
+                        lambda payload: emitted.append(payload))
+
+    # missing anchor: stop with ZERO probes
+    monkeypatch.delenv("V2_022_COMPILATION_SHA256", raising=False)
+    run_a = tmp_path / "gate_missing"
+    run_a.mkdir()
+    assert tool.cmd_gate(run_a) == 2
+    assert probes == []
+    state = json.loads((run_a / "v2_022_run_state.json")
+                       .read_text(encoding="utf-8"))
+    assert state["gate"]["decision"] == "STOP_COMPILATION_TRUST_MISSING"
+    assert state["gate"]["probes_suppressed"] is True
+    pool_gate = json.loads((run_a / "V2_022_POOL_GATE.json")
+                           .read_text(encoding="utf-8"))
+    assert pool_gate["decision"] == "STOP_COMPILATION_TRUST_MISSING"
+    assert pool_gate["pool"] == {}
+
+    # mismatched anchor: same zero-probe guarantee
+    monkeypatch.setenv("V2_022_COMPILATION_SHA256", "f" * 64)
+    run_b = tmp_path / "gate_mismatch"
+    run_b.mkdir()
+    assert tool.cmd_gate(run_b) == 2
+    assert probes == []
+    state = json.loads((run_b / "v2_022_run_state.json")
+                       .read_text(encoding="utf-8"))
+    assert state["gate"]["decision"] == "STOP_COMPILATION_TRUST_MISMATCH"
+
+    # valid anchor: the gate DOES proceed into the probe loop
+    digest = hashlib.sha256(sample.read_bytes()).hexdigest()
+    monkeypatch.setenv("V2_022_COMPILATION_SHA256", digest)
+    monkeypatch.setattr(
+        tool, "_probe",
+        lambda alias: probes.append(alias) or {
+            "session_state": "SESSION_VALID", "known_credit_state": 30})
+    run_c = tmp_path / "gate_valid"
+    run_c.mkdir()
+    assert tool.cmd_gate(run_c) == 0
+    assert len(probes) == len(tool.POOL_ACCOUNTS)
+    state = json.loads((run_c / "v2_022_run_state.json")
+                       .read_text(encoding="utf-8"))
+    assert state["gate"]["decision"] == "DISPATCH_AUTHORIZED"
+    assert state["compilation_sha256"] == digest
+
+
+def test_malformed_budget_values_fail_closed(tmp_path, monkeypatch):
+    """PROVE addendum finding 2: budget values of the wrong type or
+    range (list/str/bool/float/zero/negative, blank rule, budget below
+    planned shots) must fail closed through CompilationUnavailableError."""
+    tool, _ = _no_default_comp(monkeypatch, tmp_path)
+    cases = {
+        "total-budget-is-list": {"total_budget": ["27"],
+                                 "planned_shots": 1, "rule": "r"},
+        "total-budget-is-string": {"total_budget": "27",
+                                   "planned_shots": 1, "rule": "r"},
+        "total-budget-is-bool": {"total_budget": True,
+                                 "planned_shots": 1, "rule": "r"},
+        "total-budget-is-float": {"total_budget": 27.0,
+                                  "planned_shots": 1, "rule": "r"},
+        "total-budget-zero": {"total_budget": 0,
+                              "planned_shots": 1, "rule": "r"},
+        "total-budget-negative": {"total_budget": -3,
+                                  "planned_shots": 1, "rule": "r"},
+        "planned-shots-is-string": {"total_budget": 27,
+                                    "planned_shots": "1", "rule": "r"},
+        "planned-shots-is-bool": {"total_budget": 27,
+                                  "planned_shots": True, "rule": "r"},
+        "planned-shots-zero": {"total_budget": 27, "planned_shots": 0,
+                               "rule": "r"},
+        "planned-shots-negative": {"total_budget": 27,
+                                   "planned_shots": -1, "rule": "r"},
+        "rule-blank": {"total_budget": 27, "planned_shots": 1,
+                       "rule": "   "},
+        "rule-is-list": {"total_budget": 27, "planned_shots": 1,
+                         "rule": ["rule"]},
+        "budget-below-planned": {"total_budget": 1,
+                                 "planned_shots": 3, "rule": "r"},
+    }
+    for name, budget in cases.items():
+        path = tmp_path / "case.json"
+        path.write_text(json.dumps({
+            "shot_graph": {"nodes": [{"shot_id": "S01"}]},
+            "prompt_plans": {"S01": {"sections": {"motion": "m" * 100}}},
+            "mutation_budget": budget}), encoding="utf-8")
+        try:
+            tool.load_compilation(path)
+            raise AssertionError(f"{name} must fail closed")
+        except tool.CompilationUnavailableError as error:
+            assert "mutation_budget" in str(error) or \
+                "shot_graph" in str(error), name
