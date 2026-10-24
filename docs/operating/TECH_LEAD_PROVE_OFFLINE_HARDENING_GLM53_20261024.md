@@ -70,3 +70,21 @@ In `tools/v2_021_recover.py::scan`, `_open(alias)` executes before `_shot_ids()`
 - The Worker-reported full-suite outcome at an earlier revision was **1241 passed, 122 failed, 62 errors**, largely due to unavailable ignored `projects/*` runtime evidence. Not independently rerun here; no full-suite pass claim. GitHub Actions workflow exists on Worker branch but is not proven to have run remotely.
 
 **Close this OFFLINE hardening Worker package at TECHNICAL_PASS rather than inventing another refactor loop.** Next meaningful engineering action is integration conflict/custody resolution and a real CI run; separate explicit Owner resume and a new film critical-path decision are required for production. All code remains on the Worker branch until reviewed integration.
+
+---
+
+## PR #2 V2-021 D3 corrective review — independent PROVE (2026-10-25)
+
+**Audit scope:** local-only Worker `fix/pr2-d3-compilation-provenance@847b2675e76b6cb81f5622061a136cf4d3948ecd` (parent `ba4c5ee08a88fea9ffdc6dca26973eba87d720e4`; same PR #2 base, but correction **not pushed** to the PR). Worker worktree `D:\AI FILM MAKER\AI-Film-Pipeline-PR2-D3-Fix` clean; exactly two changed files (`tools/run_v2_021_production.py`, `tests/test_v2_021_hardening.py`), +188/-5; `git diff --check ba4c5ee..847b267` PASS. Primary root 7 tracked dirty + 175 untracked protected paths unchanged.
+
+**Independent test evidence:** `tests/test_v2_021_hardening.py` + `tests/test_narrative_compiler_021.py` + `tests/test_dispatch_recovery.py` run in Worker worktree via primary Python `.venv`, Python `-B`, `pytest -q -p no:cacheprovider`: **62/62 passed in 21.48s**, 2 Pydantic deprecation warnings. Only offline fakes and temporary local compilation fixtures; zero real provider interaction or spend.
+
+**Original D3 fixed at tested boundary:** With 6-shot import-time fixture and 5-shot executed state naming a nonexistent state-selected compilation, `manifest` returns **4** (`COMPILATION_UNAVAILABLE`), fake probes=0, no manifest output; `auto` with `gate.decision=DISPATCH_AUTHORIZED` returns **4**, fake probes=0, dispatch=0. Previous PR #2 `ba4c5ee` returned success and silently wrote incorrect 6-shot manifest. Preserves pre-gate default for a new state with no recorded path.
+
+**Two residual acceptance gaps discovered in additional adversarial probes:**
+1. **P1 — re-gate probes before provenance check:** For already recorded *missing* `compilation_path` with `gate=None`, `cmd_auto` calls `cmd_gate` before `_activate_comp`. With `POOL_ACCOUNTS=['FAKE_A','FAKE_B']`, fake `_probe` and fake `_comp_for=lambda _:None`, got **rc=2, probes=2, dispatch=0**, not trust preflight rc=4/probes=0. Require preflight of recorded path before any account probe regardless of gate status; do not disable normal fresh-run planning with no recorded path.
+2. **P2 — nested malformed compilation accepted:** `_load_state_compilation` accepts `shot_graph.nodes=['badnode']` when outer `shot_graph`/`prompt_plans`/`mutation_budget` are dict containers. Validate shot node dict+shot_id and required plan mapping/consumer structure with a controlled `CompilationUnavailableError`; prevent malformed data flowing into a manifest or runtime error. Add direct adversarial regression cases.
+
+**Policy custody:** PR #2 is older than the accepted policy commit: `HEAD:AGENTS.md` blob `8026ed4a4c968153c9e4881fdf30728cc933e25e` differs from `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003` blob `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`. Mark `POLICY_SYNC_REQUIRED` at the PR #2 checkout; never reconcile via unreviewed reset/cherry-pick onto dirty root. An accepted-policy-bearing clean stacked integration exists separately; don't conflate this old branch with accepted governing instructions.
+
+**Review verdict:** `D3_ORIGINAL_REPRO_FIXED / 62_OF_62_RELEVANT_PASS / TWO_FINAL_GUARD_GAPS / PR2_NOT_MERGE_READY`. GitHub PR #2 review comment posted with exact repros, and PR #3's stale 25-vs-27 budget wording remains a distinct documentation review item. PR #4 CI is independently SUCCESS at `a899081` (87/87) but does not qualify this unpushed PR #2 correction. No PR merged; film remains `PAUSED_BY_OWNER / CREATIVE_REJECTED / NOT_SHIPPED`.
