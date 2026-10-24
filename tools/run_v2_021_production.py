@@ -38,6 +38,7 @@ from dola_010e_dispatch_journal import (
     NETWORK_RELEASE_OBSERVED, SSE_RECEIPT_CAPTURED, TERMINAL_SUCCESS,
     DispatchJournal)
 from mutation_authority import MutationAuthority
+from v2_021_common import enrolled_profile_root, needle_for
 import v2_020_runner as _runner_mod
 from v2_020_runner import (RunnerEvents, dispatch_and_acquire, emit,
                            extract_frames, probe_account_readonly,
@@ -55,10 +56,6 @@ SKIP_STATUSES = ("QC_ACCEPT", "EDITORIAL_LOCKED", "RELEASED",
 RUN20 = ROOT / "projects/quality_v2_020_autonomous_production"
 PKG = ROOT / "projects/quality_v2_021_narrative_compiler"
 
-# profile roots: automation slots live under the 010E runtime; the
-# V2-021 enrolled slots live in this package
-_PKG_PROFILES = PKG / "pool_profiles"
-
 
 def _stale_overrides() -> dict:
     path = PKG / "stale_credit_overrides.json"
@@ -71,16 +68,12 @@ def _stale_overrides() -> dict:
 def _profile_root(alias: str):
     """Alias -> the profile root that holds its enrolled browser state.
 
-    The V2-021 enrolled slots (ACCOUNT_E/ACCOUNT_F) live in THIS
-    package's pool_profiles; the rest of the pool lives in the 010E
-    runtime root. Every browser touch for an alias — probe OR dispatch —
-    must address the same root, otherwise a dispatch silently opens an
-    empty profile and the provider reports USER_LOGIN_REQUIRED.
+    Mapping lives in v2_021_common (single source of truth shared with
+    the reconcile and recover tools); this context manager only routes
+    it into the runner module the dispatch flow reads.
     """
     original = _runner_mod.ACCOUNT_PROFILES
-    _runner_mod.ACCOUNT_PROFILES = (_PKG_PROFILES
-                                    if alias in ("ACCOUNT_E", "ACCOUNT_F")
-                                    else original)
+    _runner_mod.ACCOUNT_PROFILES = enrolled_profile_root(alias, original)
     try:
         yield
     finally:
@@ -98,8 +91,8 @@ POOL_ACCOUNTS = ["ACCOUNT_D", "ACCOUNT_A", "ACCOUNT_C", "ACCOUNT_B",
                  "ACCOUNT_E", "ACCOUNT_F"]
 import os as _os
 
-COMP = json.loads((_os.environ.get("V2_021_COMPILATION") or
-                   COMPS["6"]).read_text(encoding="utf-8"))
+COMP = json.loads(Path(_os.environ.get("V2_021_COMPILATION")
+                       or COMPS["6"]).read_text(encoding="utf-8"))
 BUDGET = COMP["mutation_budget"]
 
 
@@ -111,6 +104,126 @@ def _comp_for(available: int) -> tuple[Path, dict] | None:
         if available >= comp["mutation_budget"]["total_budget"]:
             return COMPS[key], comp
     return None
+
+
+class CompilationUnavailableError(RuntimeError):
+    """Fail-closed provenance: the run state names a compilation that is
+    missing, unreadable or malformed. The runner must NEVER silently
+    fall back to the import-time default COMP/BUDGET in that case — the
+    V2-021 executed run's manifest documented a 6-node shot graph
+    beside its 5-shot execution record. Restore the exact recorded file
+    or reconcile the run evidence with the Tech Lead; never re-dispatch
+    or document a substituted design. Pre-gate states without a
+    compilation_path keep the import-time default legitimately."""
+
+
+def _load_state_compilation(path) -> dict:
+    """Load and structurally validate the state-selected compilation;
+    any missing/unreadable/malformed input raises the documented
+    fail-closed error instead of leaking a wrong design downstream."""
+    target = Path(path)
+    try:
+        raw = target.read_text(encoding="utf-8")
+    except FileNotFoundError as error:
+        raise CompilationUnavailableError(
+            f"run state names compilation {path} which no longer "
+            f"exists; refusing to silently fall back to the import-time "
+            f"default — restore the exact recorded compilation or "
+            f"reconcile the run evidence before any resume") from error
+    except OSError as error:
+        raise CompilationUnavailableError(
+            f"run state compilation unreadable: {path}: {error}") \
+            from error
+    try:
+        comp = json.loads(raw)
+    except json.JSONDecodeError as error:
+        raise CompilationUnavailableError(
+            f"run state compilation is not valid JSON: {path}: {error}") \
+            from error
+    problems: list[str] = []
+    if not isinstance(comp, dict):
+        problems.append("document is not a JSON object")
+    else:
+        graph = comp.get("shot_graph")
+        budget = comp.get("mutation_budget")
+        plans = comp.get("prompt_plans")
+        nodes = graph.get("nodes") if isinstance(graph, dict) else None
+        valid_nodes: list[dict] = []
+        if not isinstance(graph, dict):
+            problems.append("shot_graph must be a JSON object")
+        if not isinstance(plans, dict):
+            problems.append("prompt_plans must be a JSON object")
+        if not isinstance(budget, dict):
+            problems.append("mutation_budget must be a JSON object")
+        else:
+            for key in ("total_budget", "planned_shots"):
+                if key not in budget:
+                    problems.append(f"mutation_budget.{key} missing")
+        if not isinstance(nodes, list) or not nodes:
+            problems.append("shot_graph.nodes must be a non-empty list")
+        else:
+            bad = [i for i, node in enumerate(nodes)
+                   if not isinstance(node, dict)
+                   or not isinstance(node.get("shot_id"), str)
+                   or not node.get("shot_id").strip()]
+            if bad:
+                problems.append(
+                    "shot_graph.nodes entries must be objects with a "
+                    f"non-empty string shot_id (bad indexes: {bad[:4]})")
+            else:
+                valid_nodes = nodes
+        # plan coverage + consumer structure: every node needs a usable
+        # plan (motion needle for discovery, sha256 for the manifest,
+        # compiled_text as the dispatch prompt) BEFORE the data can
+        # reach manifest or auto
+        for node in valid_nodes:
+            sid = node["shot_id"]
+            plan = plans.get(sid) if isinstance(plans, dict) else None
+            if not isinstance(plan, dict):
+                problems.append(
+                    f"prompt_plans[{sid}] must be an object covering "
+                    f"every shot_graph node")
+                continue
+            sections = plan.get("sections")
+            motion = sections.get("motion") \
+                if isinstance(sections, dict) else None
+            if not isinstance(motion, str) or not motion.strip():
+                problems.append(
+                    f"prompt_plans[{sid}].sections.motion must be a "
+                    f"non-empty string (discovery needle)")
+            if "sha256" not in plan:
+                problems.append(f"prompt_plans[{sid}].sha256 missing")
+            if not isinstance(plan.get("compiled_text"), str) \
+                    or not plan.get("compiled_text", "").strip():
+                problems.append(
+                    f"prompt_plans[{sid}].compiled_text must be a "
+                    f"non-empty string (dispatch prompt)")
+    if problems:
+        raise CompilationUnavailableError(
+            f"run state compilation malformed: {path}: "
+            + "; ".join(problems))
+    return comp
+
+
+def _activate_comp(state: dict) -> None:
+    """Bind module-level COMP/BUDGET to the run's chosen compilation.
+
+    The state file is the run's authority: a fresh CLI process (auto,
+    manifest) must execute/document the SAME variant the gate selected.
+    Without this the import-time default leaks in — the V2-021 executed
+    run's manifest documented a 6-node shot graph beside its 5-shot
+    execution record. A state-recorded compilation that is missing,
+    unreadable or malformed FAILS CLOSED here (never a silent fallback,
+    never a substitute). A state with no compilation_path is a
+    legitimate pre-gate planning surface and keeps the import-time
+    default."""
+    global COMP, BUDGET
+    path = state.get("compilation_path")
+    if not path:
+        return
+    comp = _load_state_compilation(path)
+    COMP = comp
+    BUDGET = comp["mutation_budget"]
 
 
 def _state_path(run_dir: Path) -> Path:
@@ -140,6 +253,16 @@ def _save(run_dir: Path, state: dict) -> None:
 
 def cmd_gate(run_dir: Path) -> int:
     state = _load_state(run_dir)
+    # PROVENANCE PREFLIGHT: a run that already recorded its authorized
+    # compilation must fail closed BEFORE any account probe,
+    # authorization decision or state replacement — a direct gate must
+    # never be able to probe accounts or silently substitute a
+    # different design while the recorded design file is missing,
+    # unreadable or malformed. The original run state is preserved
+    # untouched. Genuinely fresh runs with no recorded path gate
+    # exactly as before.
+    if state.get("compilation_path"):
+        _activate_comp(state)
     matrix = {}
     total_available = 0
     for alias in POOL_ACCOUNTS:
@@ -185,9 +308,18 @@ def cmd_gate(run_dir: Path) -> int:
                     else "DISPATCH_AUTHORIZED_EXPECTED")
         state["compilation_path"] = str(comp_path)
         state["planned_shots"] = comp["mutation_budget"]["planned_shots"]
-        # rebuild shot state for the chosen variant (no mutations yet)
-        state["shots"] = {n["shot_id"]: {"status": "PENDING"}
-                          for n in comp["shot_graph"]["nodes"]}
+        # (re)build shot state for the chosen variant WITHOUT destroying
+        # progress: a standalone re-gate mid-run must preserve existing
+        # records; records for shots that leave the graph are archived
+        # under retired_shots, never dropped
+        previous = state.get("shots") or {}
+        nodes = [n["shot_id"] for n in comp["shot_graph"]["nodes"]]
+        retired = state.setdefault("retired_shots", {})
+        for sid, record in previous.items():
+            if sid not in nodes:
+                retired.setdefault(sid, record)
+        state["shots"] = {sid: previous.get(sid) or {"status": "PENDING"}
+                          for sid in nodes}
         state["gate"] = {
             "probed_at": json.dumps(matrix),
             "total_available_credits": total_available,
@@ -268,8 +400,14 @@ def _pick_account(run_dir: Path, state: dict,
 
 
 def cmd_auto(run_dir: Path) -> int:
-    global COMP, BUDGET
     state = _load_state(run_dir)
+    # PROVENANCE PREFLIGHT: a run that already recorded its authorized
+    # compilation must fail closed BEFORE any re-gate probe — a re-gate
+    # must never be able to probe accounts or silently substitute a
+    # different design while the recorded design file is missing or
+    # unusable. Fresh runs with no recorded path gate exactly as before.
+    if state.get("compilation_path"):
+        _activate_comp(state)
     if state["gate"] is None:
         code = cmd_gate(run_dir)
         state = _load_state(run_dir)
@@ -282,10 +420,7 @@ def cmd_auto(run_dir: Path) -> int:
         emit({"status": "STOPPED_BEFORE_FIRST_MUTATION",
               "gate": state["gate"].get("decision")})
         return 2
-    if state.get("compilation_path"):
-        COMP = json.loads(Path(state["compilation_path"])
-                          .read_text(encoding="utf-8"))
-        BUDGET = COMP["mutation_budget"]
+    _activate_comp(state)
     engine = ContinuityEngine()
     learning = LearningLoop()
     events = RunnerEvents(run_dir / "provider_events.jsonl")
@@ -319,9 +454,7 @@ def cmd_auto(run_dir: Path) -> int:
         spec = node  # compiled ShotGraphNode
         from film_pipeline.providers.dola_production.fixture_v2_020 import \
             ShotSpec as _Spec  # reuse the transport spec shape
-        # needle: the MOTION section is unique per shot function (two
-        # shots may share a subject line; discovery must not cross-match)
-        needle = plan["sections"]["motion"][:80]
+        needle = needle_for(COMP, sid)
         transport_spec = _Spec(
             shot_id=sid, role=node["function"],
             prompt=plan["compiled_text"],
@@ -572,6 +705,7 @@ def cmd_master(run_dir: Path) -> int:
 
 def cmd_manifest(run_dir: Path) -> int:
     state = _load_state(run_dir)
+    _activate_comp(state)
     import datetime as _dt
     doc = {
         "version": "v2-021-run-manifest-v1",
@@ -634,6 +768,13 @@ def main() -> int:
             return 3
     try:
         return _dispatch_command(run_dir, args)
+    except CompilationUnavailableError as error:
+        emit({"status": "COMPILATION_UNAVAILABLE",
+              "error": str(error)[:500],
+              "action": "fail-closed: no manifest written, no probe, "
+                        "no dispatch; restore the exact state-recorded "
+                        "compilation before resuming"})
+        return 4
     finally:
         if lock is not None:
             lock.unlink(missing_ok=True)
