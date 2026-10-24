@@ -154,6 +154,37 @@ REFUSAL_MARKERS = ("生成できません", "无法生成", "不能生成",
                    "クレジットが足りません", "クレジットが不足",
                    "残りは0", "クレジットが0")
 
+# "動画を生成できません。今回の生成でクレジットは使用されませんで
+# した。" (video could not be generated; no credits were used this time)
+# is a TRANSIENT server-side generation failure, not a content-policy
+# refusal — and it CONTAINS the refusal marker 生成できません, so it
+# must be classified BEFORE REFUSAL_MARKERS. The provider's no-credit
+# claim stays PROVISIONAL: the release is already latched and budgeted,
+# and only read-only reconciliation (v2_021_recover scan + account
+# statement) may confirm the unspent credit before any budget delta.
+TRANSIENT_FAILURE_MARKERS = ("クレジットは使用されませんでした",)
+
+
+def classify_recent_failure(rows: list[dict]) -> str | None:
+    """Priority-classify the recent conversation rows of a dispatched
+    shot (see TRANSIENT_FAILURE_MARKERS for the ordering constraint).
+
+    Returns "TRANSIENT_GENERATION_FAILURE_NO_CREDIT",
+    "POLICY_REFUSAL", or None — None means no decisive failure text
+    (still generating, succeeded, or ambiguous). A failure marker is
+    only decisive when no provider creation accompanies the recent
+    rows: a completed creation next to old failure text is a success,
+    not a refusal."""
+    recent = rows[:4]
+    if any(r.get("creations") for r in recent):
+        return None
+    text = "\n".join(r.get("text") or "" for r in recent)
+    if any(m in text for m in TRANSIENT_FAILURE_MARKERS):
+        return "TRANSIENT_GENERATION_FAILURE_NO_CREDIT"
+    if any(m in text for m in REFUSAL_MARKERS):
+        return "POLICY_REFUSAL"
+    return None
+
 
 def utcnow() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -597,10 +628,16 @@ async def dispatch_and_acquire(
                 done = [c for r in rows for c in r.get("creations", [])
                         if c.get("type") == 2 and c.get("download_url")
                         and c.get("id") not in baseline]
-                refusal = any(m in (r.get("text") or "")
-                              for r in rows[:4] for m in REFUSAL_MARKERS)
-                if refusal and not any(r.get("creations")
-                                       for r in rows[:4]):
+                outcome = classify_recent_failure(rows)
+                if outcome == "TRANSIENT_GENERATION_FAILURE_NO_CREDIT":
+                    # provider claims the failed generation consumed no
+                    # credit — PROVISIONAL only: the release is already
+                    # latched and the budget counted; reconciliation
+                    # must confirm before any adjustment. No retry, no
+                    # second paid mutation (fail closed).
+                    raise RuntimeError(
+                        "STOPPED_PROVIDER_GENERATION_FAILED_NO_CREDIT")
+                if outcome == "POLICY_REFUSAL":
                     raise RuntimeError("STOPPED_PROVIDER_POLICY_REFUSAL")
                 if done:
                     # normalized events for the deep surface (Phase 4)

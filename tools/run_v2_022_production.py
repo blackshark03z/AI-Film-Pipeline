@@ -12,8 +12,11 @@ Commands:
   qc-visual <SHOT> <VERDICT> [notes...]   attach evidence-based review
   assemble / finish / master / manifest / status
 
-Design authority: V2_022_LONGFORM_COMPILATION.json (frozen, 24 shots,
-Owner-authorized cap 25). Prompts are the compiled ProviderPromptPlans —
+Design authority: V2_022_LONGFORM_COMPILATION.json (frozen, 24 shots;
+Owner-authorized budget cap 27 = 24 shots + 1 repair reserve + 2
+evidenced day-1 refusal extensions — see the mutation-budget rationale
+in build_v2_022_compilation.py for the dated 25 -> 26 -> 27 lineage).
+Prompts are the compiled ProviderPromptPlans —
 never hand-edited mid-run. Derived from the live-proven V2-021 operator
 flow; differences: single compilation (no 6/5 variant selection) and the
 v2-022 state/manifest namespace.
@@ -90,22 +93,111 @@ def _probe(alias: str) -> dict:
 COMP_PATH = PKG / "V2_022_LONGFORM_COMPILATION.json"
 POOL_ACCOUNTS = ["ACCOUNT_D", "ACCOUNT_A", "ACCOUNT_C", "ACCOUNT_B",
                  "ACCOUNT_E", "ACCOUNT_F"]
-import os as _os
 
-COMP = json.loads(Path(_os.environ.get("V2_022_COMPILATION")
-                       or COMP_PATH).read_text(encoding="utf-8"))
-BUDGET = COMP["mutation_budget"]
+
+class CompilationUnavailableError(RuntimeError):
+    """Fail-closed bootstrap: the frozen V2-022 compilation is absent,
+    unreadable, malformed or disagrees with the run state.
+
+    The runtime compilation under projects/ is Git-ignored by design, so
+    a fresh clean checkout does NOT have it. Importing this module and
+    running read-only helpers (status on an existing run, help, tests)
+    must stay possible; every path that would init run state, authorize
+    a gate or dispatch a paid mutation must refuse with this error
+    instead of crashing or synthesizing a compilation."""
+
+
+def _compilation_path() -> Path:
+    override = os.environ.get("V2_022_COMPILATION")
+    return Path(override) if override else COMP_PATH
+
+
+def load_compilation(path: Path | None = None) -> dict:
+    """Load and structurally validate a V2-022 compilation; fail closed.
+
+    Never synthesizes a live-approved compilation: the caller gets either
+    a structurally consistent frozen document or an informative
+    CompilationUnavailableError. A deterministic rebuild produced by
+    tools/build_v2_022_compilation.py is fine for read-only simulation
+    and tests but stays NON-AUTHORITATIVE for spend authority."""
+    target = Path(path) if path is not None else _compilation_path()
+    sample_hint = ("regenerate a deterministic, NON-AUTHORITATIVE sample "
+                   "via `python tools/build_v2_022_compilation.py`, or "
+                   "set V2_022_COMPILATION to an explicit frozen copy")
+    try:
+        raw = target.read_text(encoding="utf-8")
+    except FileNotFoundError as error:
+        raise CompilationUnavailableError(
+            f"V2-022 compilation missing: {target}. The runtime "
+            f"compilation is Git-ignored; fresh checkouts do not carry "
+            f"it. To continue read-only: {sample_hint}. Paid mutation "
+            f"requires the genuinely frozen Owner-authorized file — "
+            f"refusing to proceed.") from error
+    except OSError as error:
+        raise CompilationUnavailableError(
+            f"V2-022 compilation unreadable: {target}: {error}") \
+            from error
+    try:
+        comp = json.loads(raw)
+    except json.JSONDecodeError as error:
+        raise CompilationUnavailableError(
+            f"V2-022 compilation is not valid JSON: {target}: {error}") \
+            from error
+    problems: list[str] = []
+    budget = comp.get("mutation_budget") if isinstance(comp, dict) else None
+    nodes = ((comp.get("shot_graph") or {}).get("nodes")
+             if isinstance(comp, dict) else None)
+    if not isinstance(comp, dict):
+        problems.append("document is not a JSON object")
+    else:
+        if "prompt_plans" not in comp:
+            problems.append("prompt_plans missing")
+        if not isinstance(budget, dict):
+            problems.append("mutation_budget missing")
+        else:
+            for key in ("total_budget", "planned_shots", "rule"):
+                if key not in budget:
+                    problems.append(f"mutation_budget.{key} missing")
+        if not isinstance(nodes, list) or not nodes:
+            problems.append("shot_graph.nodes must be a non-empty list")
+        elif isinstance(budget, dict) and \
+                len(nodes) != budget.get("planned_shots"):
+            problems.append(
+                f"shot_graph.nodes ({len(nodes)}) disagrees with "
+                f"mutation_budget.planned_shots "
+                f"({budget.get('planned_shots')})")
+    if problems:
+        raise CompilationUnavailableError(
+            f"V2-022 compilation malformed: {target}: "
+            + "; ".join(problems))
+    return comp
+
+
+def _require_compilation() -> dict:
+    """Bind the frozen compilation to COMP/BUDGET once (fail closed)."""
+    global COMP, BUDGET
+    if COMP is None:
+        COMP = load_compilation()
+        BUDGET = COMP["mutation_budget"]
+    return COMP
+
+
+# Lazily loaded frozen compilation (see _require_compilation); None in a
+# fresh checkout until an authorized path needs it
+COMP: dict | None = None
+BUDGET: dict | None = None
 
 
 def _comp_for(available: int) -> tuple[Path, dict] | None:
     """Single frozen compilation (no variant selection). The mission
     starts when the pool can fund at least one shot today; mid-run
     guards still stop at exhaustion and the mission resumes as the
-    daily quota refreshes."""
-    comp = json.loads(COMP_PATH.read_text(encoding="utf-8"))
-    if available >= 1:
-        return COMP_PATH, comp
-    return None
+    daily quota refreshes. A fundable pool without a usable compilation
+    fails closed rather than dispatching unbound."""
+    if available < 1:
+        return None
+    path = _compilation_path()
+    return path, load_compilation(path)
 
 
 def _activate_comp(state: dict) -> None:
@@ -115,13 +207,43 @@ def _activate_comp(state: dict) -> None:
     manifest) must execute/document the SAME variant the gate selected.
     Without this the import-time default leaks in — the V2-021 executed
     run's manifest documented a 6-node shot graph beside its 5-shot
-    execution record.
-    """
+    execution record. State and compilation must AGREE (identity,
+    planned shots, gate budget): a disagreement refuses instead of
+    silently rebinding run authority."""
     global COMP, BUDGET
     path = state.get("compilation_path")
-    if path and Path(path).exists():
-        COMP = json.loads(Path(path).read_text(encoding="utf-8"))
-        BUDGET = COMP["mutation_budget"]
+    if not path:
+        _require_compilation()
+        return
+    target = Path(path)
+    if not target.exists():
+        raise CompilationUnavailableError(
+            f"run state names compilation {path} which no longer exists; "
+            f"refusing to silently substitute a different compilation")
+    comp = load_compilation(target)
+    identity = comp.get("fixture_id", comp.get("version"))
+    recorded_identity = state.get("fixture_id")
+    if recorded_identity is not None and identity != recorded_identity:
+        raise CompilationUnavailableError(
+            f"run state fixture identity '{recorded_identity}' "
+            f"disagrees with compilation '{identity}' at {path}; "
+            f"refusing to rebind run identity")
+    recorded_planned = state.get("planned_shots")
+    if recorded_planned is not None and \
+            comp["mutation_budget"]["planned_shots"] != recorded_planned:
+        raise CompilationUnavailableError(
+            f"run state planned_shots {recorded_planned} disagrees with "
+            f"compilation "
+            f"{comp['mutation_budget']['planned_shots']} at {path}")
+    gate_budget = (state.get("gate") or {}).get("computed_budget")
+    if gate_budget is not None and \
+            comp["mutation_budget"]["total_budget"] != gate_budget:
+        raise CompilationUnavailableError(
+            f"gate-computed budget {gate_budget} disagrees with "
+            f"compilation total_budget "
+            f"{comp['mutation_budget']['total_budget']} at {path}")
+    COMP = comp
+    BUDGET = comp["mutation_budget"]
 
 
 def _state_path(run_dir: Path) -> Path:
@@ -131,12 +253,16 @@ def _state_path(run_dir: Path) -> Path:
 def _load_state(run_dir: Path) -> dict:
     if _state_path(run_dir).exists():
         return json.loads(_state_path(run_dir).read_text(encoding="utf-8"))
+    # initializing a NEW run state needs the frozen shot graph — fail
+    # closed (informative) when no usable compilation exists; resuming
+    # an EXISTING run stays read-only and compilation-free
+    comp = _require_compilation()
     return {
         "version": "v2-022-run-state-v1",
-        "fixture_id": COMP["fixture_id"] if "fixture_id" in COMP else
-        COMP["version"],
+        "fixture_id": comp["fixture_id"] if "fixture_id" in comp else
+        comp["version"],
         "shots": {sid: {"status": "PENDING"} for sid in
-                  (n["shot_id"] for n in COMP["shot_graph"]["nodes"])},
+                  (n["shot_id"] for n in comp["shot_graph"]["nodes"])},
         "mutations_used": 0, "repairs": [], "gate": None,
     }
 
@@ -150,6 +276,10 @@ def _save(run_dir: Path, state: dict) -> None:
 
 
 def cmd_gate(run_dir: Path) -> int:
+    # the gate cannot state a budget or authorize anything without the
+    # frozen compilation — refuse BEFORE any account probe (zero
+    # provider access when the design authority is missing)
+    _require_compilation()
     state = _load_state(run_dir)
     matrix = {}
     total_available = 0
@@ -678,6 +808,14 @@ def main() -> int:
             return 3
     try:
         return _dispatch_command(run_dir, args)
+    except CompilationUnavailableError as error:
+        emit({"status": "COMPILATION_UNAVAILABLE",
+              "error": str(error)[:500],
+              "action": "fail-closed: no state init, no probe, no "
+                        "dispatch; regenerate a non-authoritative "
+                        "sample with tools/build_v2_022_compilation.py "
+                        "for read-only simulation only"})
+        return 4
     finally:
         if lock is not None:
             lock.unlink(missing_ok=True)
