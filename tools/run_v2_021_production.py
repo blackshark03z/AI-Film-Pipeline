@@ -253,6 +253,16 @@ def _save(run_dir: Path, state: dict) -> None:
 
 def cmd_gate(run_dir: Path) -> int:
     state = _load_state(run_dir)
+    # PROVENANCE PREFLIGHT: a run that already recorded its authorized
+    # compilation must fail closed BEFORE any account probe,
+    # authorization decision or state replacement — a direct gate must
+    # never be able to probe accounts or silently substitute a
+    # different design while the recorded design file is missing,
+    # unreadable or malformed. The original run state is preserved
+    # untouched. Genuinely fresh runs with no recorded path gate
+    # exactly as before.
+    if state.get("compilation_path"):
+        _activate_comp(state)
     matrix = {}
     total_available = 0
     for alias in POOL_ACCOUNTS:

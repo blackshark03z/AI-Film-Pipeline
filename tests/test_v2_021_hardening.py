@@ -553,3 +553,119 @@ def test_state_compilation_rejects_malformed_nodes_and_plans(
     # paths intact)
     activate(base())
     assert runner_mod.BUDGET["total_budget"] == 2
+
+
+# ------------------ direct-gate provenance guard (final PR #2 blocker)
+
+
+def test_direct_gate_fails_closed_on_missing_recorded_compilation(
+        tmp_path, monkeypatch, runner_mod):
+    """Exact reviewer repro: 5-shot run state whose recorded
+    compilation is MISSING, gate=None, one fake fundable account (6
+    credits) and a valid alternative 6-shot compilation — previously
+    rc 0 / DISPATCH_AUTHORIZED / 1 probe / state compilation replaced
+    and shots grown 5 -> 6. Now: exit 4, zero probes, original state
+    preserved byte-for-byte."""
+    alternative = _write_comp(tmp_path / "alt6.json", 6, budget=6)
+    monkeypatch.setattr(runner_mod, "COMPS", {"6": alternative,
+                                              "5": alternative})
+    probes = []
+
+    def fake_probe(alias):
+        probes.append(alias)
+        return {"account_alias": alias, "session_state": "SESSION_VALID",
+                "known_credit_state": 6}
+
+    monkeypatch.setattr(runner_mod, "POOL_ACCOUNTS", ["FAKE_A"])
+    monkeypatch.setattr(runner_mod, "_probe", fake_probe)
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    state = {"version": "v2-021-run-state-v1", "fixture_id": "t",
+             "compilation_path": str(tmp_path / "vanished_5shot.json"),
+             "shots": {f"S0{i}": {"status": "PENDING"}
+                       for i in range(1, 6)},
+             "mutations_used": 0, "repairs": [], "gate": None}
+    (run_dir / "v2_021_run_state.json").write_text(
+        json.dumps(state), encoding="utf-8")
+    before = (run_dir / "v2_021_run_state.json").read_text(
+        encoding="utf-8")
+
+    monkeypatch.setattr(sys, "argv", ["t", str(run_dir), "gate"])
+    assert runner_mod.main() == 4
+    assert probes == []
+    # original run state preserved untouched; no rebind, no shots
+    # growth, no authorization artifact
+    assert (run_dir / "v2_021_run_state.json").read_text(
+        encoding="utf-8") == before
+    assert not (run_dir / "V2_021_POOL_GATE.json").exists()
+
+
+def test_direct_gate_fresh_run_without_recorded_path_authorizes(
+        tmp_path, monkeypatch, runner_mod):
+    """Positive: a genuinely fresh run (no recorded path) keeps
+    legitimate gate behavior — the probe runs and an affordable
+    compilation is selected and authorized."""
+    comp6 = _write_comp(tmp_path / "c6.json", 6, budget=6)
+    monkeypatch.setattr(runner_mod, "COMPS", {"6": comp6, "5": comp6})
+    default6 = json.loads(comp6.read_text(encoding="utf-8"))
+    default6["fixture_id"] = "fresh-run-default"
+    monkeypatch.setattr(runner_mod, "COMP", default6)
+    monkeypatch.setattr(runner_mod, "BUDGET",
+                        default6["mutation_budget"])
+    probes = []
+
+    def fake_probe(alias):
+        probes.append(alias)
+        return {"account_alias": alias, "session_state": "SESSION_VALID",
+                "known_credit_state": 6}
+
+    monkeypatch.setattr(runner_mod, "POOL_ACCOUNTS", ["FAKE_A"])
+    monkeypatch.setattr(runner_mod, "_probe", fake_probe)
+    run_dir = tmp_path / "fresh"  # no state file at all
+    monkeypatch.setattr(sys, "argv", ["t", str(run_dir), "gate"])
+    assert runner_mod.main() == 0
+    assert len(probes) == 1  # the gate DID probe the account
+    after = json.loads((run_dir / "v2_021_run_state.json")
+                       .read_text(encoding="utf-8"))
+    assert after["gate"]["decision"] == "DISPATCH_AUTHORIZED"
+    assert after["compilation_path"] == str(comp6)
+
+
+def test_direct_gate_with_valid_recorded_compilation_proceeds(
+        tmp_path, monkeypatch, runner_mod):
+    """Positive: a run whose recorded compilation is INTACT gates
+    normally — probe runs, the same affordable variant is re-selected,
+    and nothing is rebound."""
+    recorded5 = _write_comp(tmp_path / "recorded5.json", 5, budget=5)
+    comp6 = _write_comp(tmp_path / "c6.json", 6, budget=6)
+    monkeypatch.setattr(runner_mod, "COMPS", {"6": comp6,
+                                              "5": recorded5})
+    probes = []
+
+    def fake_probe(alias):
+        probes.append(alias)
+        return {"account_alias": alias, "session_state": "SESSION_VALID",
+                "known_credit_state": 5}
+
+    monkeypatch.setattr(runner_mod, "POOL_ACCOUNTS", ["FAKE_A"])
+    monkeypatch.setattr(runner_mod, "_probe", fake_probe)
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    state = {"version": "v2-021-run-state-v1", "fixture_id": "t",
+             "compilation_path": str(recorded5),
+             "shots": {f"S0{i}": {"status": "PENDING"}
+                       for i in range(1, 6)},
+             "mutations_used": 0, "repairs": [], "gate": None}
+    (run_dir / "v2_021_run_state.json").write_text(
+        json.dumps(state), encoding="utf-8")
+
+    monkeypatch.setattr(sys, "argv", ["t", str(run_dir), "gate"])
+    # 5 credits: the 6-shot variant is NOT affordable, the recorded
+    # 5-shot variant is — selection equals the recording, no rebind
+    assert runner_mod.main() == 0
+    assert len(probes) == 1
+    after = json.loads((run_dir / "v2_021_run_state.json")
+                       .read_text(encoding="utf-8"))
+    assert after["gate"]["decision"] == "DISPATCH_AUTHORIZED"
+    assert after["compilation_path"] == str(recorded5)
+    assert sorted(after["shots"]) == [f"S0{i}" for i in range(1, 6)]
