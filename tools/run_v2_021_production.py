@@ -106,6 +106,66 @@ def _comp_for(available: int) -> tuple[Path, dict] | None:
     return None
 
 
+class CompilationUnavailableError(RuntimeError):
+    """Fail-closed provenance: the run state names a compilation that is
+    missing, unreadable or malformed. The runner must NEVER silently
+    fall back to the import-time default COMP/BUDGET in that case — the
+    V2-021 executed run's manifest documented a 6-node shot graph
+    beside its 5-shot execution record. Restore the exact recorded file
+    or reconcile the run evidence with the Tech Lead; never re-dispatch
+    or document a substituted design. Pre-gate states without a
+    compilation_path keep the import-time default legitimately."""
+
+
+def _load_state_compilation(path) -> dict:
+    """Load and structurally validate the state-selected compilation;
+    any missing/unreadable/malformed input raises the documented
+    fail-closed error instead of leaking a wrong design downstream."""
+    target = Path(path)
+    try:
+        raw = target.read_text(encoding="utf-8")
+    except FileNotFoundError as error:
+        raise CompilationUnavailableError(
+            f"run state names compilation {path} which no longer "
+            f"exists; refusing to silently fall back to the import-time "
+            f"default — restore the exact recorded compilation or "
+            f"reconcile the run evidence before any resume") from error
+    except OSError as error:
+        raise CompilationUnavailableError(
+            f"run state compilation unreadable: {path}: {error}") \
+            from error
+    try:
+        comp = json.loads(raw)
+    except json.JSONDecodeError as error:
+        raise CompilationUnavailableError(
+            f"run state compilation is not valid JSON: {path}: {error}") \
+            from error
+    problems: list[str] = []
+    if not isinstance(comp, dict):
+        problems.append("document is not a JSON object")
+    else:
+        graph = comp.get("shot_graph")
+        budget = comp.get("mutation_budget")
+        nodes = graph.get("nodes") if isinstance(graph, dict) else None
+        if not isinstance(graph, dict):
+            problems.append("shot_graph must be a JSON object")
+        if not isinstance(comp.get("prompt_plans"), dict):
+            problems.append("prompt_plans must be a JSON object")
+        if not isinstance(budget, dict):
+            problems.append("mutation_budget must be a JSON object")
+        else:
+            for key in ("total_budget", "planned_shots"):
+                if key not in budget:
+                    problems.append(f"mutation_budget.{key} missing")
+        if not isinstance(nodes, list) or not nodes:
+            problems.append("shot_graph.nodes must be a non-empty list")
+    if problems:
+        raise CompilationUnavailableError(
+            f"run state compilation malformed: {path}: "
+            + "; ".join(problems))
+    return comp
+
+
 def _activate_comp(state: dict) -> None:
     """Bind module-level COMP/BUDGET to the run's chosen compilation.
 
@@ -113,13 +173,18 @@ def _activate_comp(state: dict) -> None:
     manifest) must execute/document the SAME variant the gate selected.
     Without this the import-time default leaks in — the V2-021 executed
     run's manifest documented a 6-node shot graph beside its 5-shot
-    execution record.
-    """
+    execution record. A state-recorded compilation that is missing,
+    unreadable or malformed FAILS CLOSED here (never a silent fallback,
+    never a substitute). A state with no compilation_path is a
+    legitimate pre-gate planning surface and keeps the import-time
+    default."""
     global COMP, BUDGET
     path = state.get("compilation_path")
-    if path and Path(path).exists():
-        COMP = json.loads(Path(path).read_text(encoding="utf-8"))
-        BUDGET = COMP["mutation_budget"]
+    if not path:
+        return
+    comp = _load_state_compilation(path)
+    COMP = comp
+    BUDGET = comp["mutation_budget"]
 
 
 def _state_path(run_dir: Path) -> Path:
@@ -647,6 +712,13 @@ def main() -> int:
             return 3
     try:
         return _dispatch_command(run_dir, args)
+    except CompilationUnavailableError as error:
+        emit({"status": "COMPILATION_UNAVAILABLE",
+              "error": str(error)[:500],
+              "action": "fail-closed: no manifest written, no probe, "
+                        "no dispatch; restore the exact state-recorded "
+                        "compilation before resuming"})
+        return 4
     finally:
         if lock is not None:
             lock.unlink(missing_ok=True)

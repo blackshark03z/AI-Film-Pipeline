@@ -313,3 +313,114 @@ def test_manifest_follows_state_compilation(tmp_path, runner_mod):
     assert sorted(doc["prompt_plans"]) == \
         [f"S0{i}" for i in range(1, 6)]
     assert runner_mod.BUDGET["total_budget"] == 5
+
+
+# ---------------------------------- D3 fail-closed on missing compilation
+# PR #2 Tech Lead review blocker: a state-selected compilation that is
+# missing/unreadable/malformed must fail closed for BOTH auto and
+# manifest — never a silent fallback to the 6-shot import-time default.
+
+
+def _executed_state(run_dir: Path, compilation_path: str | None) -> None:
+    """Five-shot executed run as the review repro builds it (the named
+    5-shot compilation is absent; the import-time default is 6-shot)."""
+    state = {"version": "v2-021-run-state-v1", "fixture_id": "t",
+             "compilation_path": compilation_path,
+             "planned_shots": 5,
+             "shots": {f"S0{i}": {"status": "QC_ACCEPT"}
+                       for i in range(1, 6)},
+             "mutations_used": 5, "repairs": [],
+             "gate": {"decision": "DISPATCH_AUTHORIZED",
+                      "computed_budget": 5}}
+    (run_dir / "v2_021_run_state.json").write_text(
+        json.dumps(state), encoding="utf-8")
+
+
+def test_manifest_fails_closed_on_missing_state_compilation(
+        tmp_path, monkeypatch, runner_mod):
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    missing = tmp_path / "vanished_5shot.json"
+    _executed_state(run_dir, str(missing))
+
+    with pytest.raises(runner_mod.CompilationUnavailableError,
+                       match="no longer exists"):
+        runner_mod.cmd_manifest(run_dir)
+    # ZERO incorrect manifest output: nothing was written anywhere
+    assert not (run_dir / "qualification_run").exists()
+
+    # same refusal through the CLI surface with the documented exit code
+    monkeypatch.setattr(sys, "argv", ["t", str(run_dir), "manifest"])
+    assert runner_mod.main() == 4
+    assert not (run_dir / "qualification_run").exists()
+
+
+def test_auto_fails_closed_on_missing_state_compilation_zero_dispatch(
+        tmp_path, monkeypatch, runner_mod):
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    missing = tmp_path / "vanished_5shot.json"
+    _executed_state(run_dir, str(missing))
+
+    def guard(*args, **kwargs):
+        raise AssertionError(
+            "no account probe or dispatch may run when the state-named "
+            "compilation is missing")
+
+    monkeypatch.setattr(runner_mod, "_probe", guard)
+    monkeypatch.setattr(runner_mod, "dispatch_and_acquire", guard)
+    monkeypatch.setattr(sys, "argv", ["t", str(run_dir), "auto"])
+    assert runner_mod.main() == 4
+    assert not list(run_dir.glob("dispatch_journal_*.jsonl"))
+    assert not (run_dir / "slots").exists()
+
+
+def test_activate_comp_fails_closed_on_unreadable_or_malformed(
+        tmp_path, runner_mod):
+    # unreadable (directory instead of a file)
+    directory = tmp_path / "as_directory"
+    directory.mkdir()
+    with pytest.raises(runner_mod.CompilationUnavailableError,
+                       match="unreadable"):
+        runner_mod._activate_comp(
+            {"compilation_path": str(directory)})
+
+    # malformed: not valid JSON
+    bad_json = tmp_path / "bad.json"
+    bad_json.write_text("{not json", encoding="utf-8")
+    with pytest.raises(runner_mod.CompilationUnavailableError,
+                       match="not valid JSON"):
+        runner_mod._activate_comp({"compilation_path": str(bad_json)})
+
+    # malformed: wrong nested container type (never a raw AttributeError)
+    bad_shape = tmp_path / "bad_shape.json"
+    bad_shape.write_text(json.dumps({
+        "shot_graph": ["invalid-shape"], "prompt_plans": {},
+        "mutation_budget": {"total_budget": 5, "planned_shots": 5}}),
+        encoding="utf-8")
+    with pytest.raises(runner_mod.CompilationUnavailableError,
+                       match="shot_graph"):
+        runner_mod._activate_comp({"compilation_path": str(bad_shape)})
+
+    # malformed: structurally incomplete
+    thin = tmp_path / "thin.json"
+    thin.write_text(json.dumps({"version": "x"}), encoding="utf-8")
+    with pytest.raises(runner_mod.CompilationUnavailableError,
+                       match="malformed"):
+        runner_mod._activate_comp({"compilation_path": str(thin)})
+
+
+def test_pregate_state_keeps_import_time_default(runner_mod, monkeypatch):
+    """Legitimate pre-gate behavior preserved: a state WITHOUT a
+    compilation_path is a planning surface and keeps the import-time
+    compilation — no refusal, no rebind."""
+    sentinel = {"fixture_id": "import-default",
+                "shot_graph": {"nodes": [{"shot_id": "S01"}]},
+                "prompt_plans": {}, "input": {},
+                "mutation_budget": {"total_budget": 6, "planned_shots": 6,
+                                    "rule": "r"}}
+    monkeypatch.setattr(runner_mod, "COMP", sentinel)
+    monkeypatch.setattr(runner_mod, "BUDGET",
+                        sentinel["mutation_budget"])
+    runner_mod._activate_comp({"gate": None, "shots": {}})
+    assert runner_mod.COMP is sentinel  # unchanged, by design
