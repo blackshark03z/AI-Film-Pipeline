@@ -167,12 +167,76 @@ A/B comparison should also record **attempts per accepted shot, generation wall-
 
 **R4 bottom line (H):** Two-tier **cost strategy is sensible**, but **tier B should be local-managed, not necessarily local-generated**, and A/A+ should be **selective paid acceleration of the hard creative shots**, not a full Film Core rewrite. The biggest cost lever is likely **reducing discarded generations with reliable control/previz**, not finding the lowest $/GPU-hour. No creative quality benchmark was run.
 
+## 5b. Round R5 — Foyege24's control separation, 2026-10-25
+
+**Creator-primary additional evidence:** [Foyege @Magncsans post](https://x.com/Magncsans/status/2097184907223015505) says `blender白模 控制运镜和构图，提示词约束人物状态和表演` — meaning **Blender white-box controls camera movement and framing; prompt constrains character state and performance**. This is a strong **S** attribution for a *division of creative control*, **not** a statement that Blender predicts physically accurate swords, nor proof of Foyege's specific shot acceptance rate. [Foyege's Sept-11 tutorial](https://www.bilibili.com/video/BV1GPYj6nEo3/) and [his earlier creator claim that white-box/prompts would be shared](https://zamantika.com/Magncsans/status/2098289393912156369) are cross-references: the latter is a **mirror**, not an independently retrieved creator-authenticated download archive. White-box files and prompt pack remain **UNVERIFIED / rights unknown**; do not copy, download or republish without verifying the original creator release and permission.
+
+**Workflow inference (H; no invented tool chain):** director creates or supervises (1) shot objective and blocking, (2) explicit rough 3D actors/props/platform + camera path, (3) white-box rendered pose/temporal guide, (4) model-specific appearance/performance prompt and references, (5) generated source QC, (6) editorial. As a useful boundary: white-box controls **where and when**, image references constrain **who and what look**, prompt tells **how to act / performance tone**, while the generator attempts to synthesize them. The output can still hallucinate sword geometry or contact; QA must judge actual frames.
+
+**B/A/A+ consequence:** The *same* inexpensive low-poly previz may benefit both modes and should be evaluated before changing model. B can use it as a **storyboard or cut-planning guide**, if free-cloud models do not accept motion inputs. A can feed compatible **control video/reference conditioning** on paid rented GPU; A+ might require manual collision/contact animation, VFX cleanup and compositing, not merely more inference steps. None is yet qualified in our production.
+
+## 5c. Round R6 — ComfyUI execution contract and traceability gap (read-only)
+
+**Primary official format evidence:** [Comfy-Org Workflow API Format](https://github.com/Comfy-Org/docs/blob/main/development/api-development/workflow-api-format.mdx): canvas/save JSON with `nodes[]`, `links[]`, UI positions and nested subgraphs is **not** the same artifact as **API-format** graph keyed by node ID with `class_type`, `inputs`; use an actual exported API graph from the matching runtime/editor. A saved UI graph from R2/R2b **must not be sent directly to `/prompt`**. H3's reviewed example nests 22 nodes under one visible UI subgraph; flattening/validation is a genuine integration risk. [Comfy-Org TypeScript SDK](https://github.com/Comfy-Org/comfy-typescript-sdk/blob/main/README.md) explicitly supports API-format workflows, job submission/polling, outputs, asset integrity and idempotency controls; this documents a possible adapter interface, **not an approved SDK dependency**.
+
+**Preflight gate proposal (design only):** Before creating an external inference job, fail closed unless all are true:
+
+1. `shot_spec_hash`, identity versions, world/camera versions, and references are **present and bound with content hashes / rights**; current XIANXIA ref binding status remains unresolved, so **current X04 is NOT dispatch-ready**.
+2. `controlled_shot_package` ties two actors and weapon identities to time-based pose/contact/recoil; its white-box or control-video evidence has immutable checksums, valid length/frame rate, correct orientation, and licensed input provenance. Missing geometry or non-reproducible input ⇒ **NO_CONTROL_EVIDENCE**; do not silently degrade to text-only.
+3. Required engine capability says whether it genuinely supports **two appearance references + control video / pose / depth / first-last**, on **the exact active graph/runtime/model**. A generic boolean `supports_image_input` is insufficient; route by **set of typed conditioned inputs and degradation policy**, not by brand.
+4. Save **both** authoring `workflow_ui_sha256` and executable `workflow_api_sha256`, model/LoRA hashes, custom-node versions, control asset hashes, GPU/driver/runtime image, seed, steps, sampler, dimensions and job/attempt IDs. Keep auth tokens/account data out of Film Core/evidence commits.
+5. Before any paid Vast.ai run, require quoted GPU $/hr, storage GB-hour, ingress/egress, max instance lifetime, safety of source uploads, deletion/retention plan, checksum retrieval and human action to approve an exact **cost/attempt ceiling**. Vast documentation says stopped instances can continue to accrue storage and interruptible instances can lose bids; persistent storage and retry semantics matter even if raw GPU $/hr is low. [Official source](https://github.com/vast-ai/docs/blob/main/guides/pricing.mdx).
+
+**After submit:** Record a consumed attempt *before* mutation, correlation to provider job, queue/running/completed/failed states and acquired output checksums; on response ambiguity reconcile known job state, **never blind-retry or create a second job**. A graph export success or decoded MP4 is **not** blade-contact acceptance. This is a future extension of existing `VideoProvider` and GenerationAttempt evidence, not a replacement controller or a new SoT.
+
+**Resource comparison caution:** [Official Wan2.2 Fun Control tutorial](https://github.com/Comfy-Org/docs/blob/main/tutorials/video/wan/wan2-2-fun-control.mdx) publishes two distinct 4090D/24GB settings at 640²/81 frames: fp8 20-step ~520s steady run vs accelerated 4-step ~79s second run, *with possible loss in dynamics*. It does not establish that a 4-step sword collision is acceptable. A realistic A-mode budget must allow candidate quality failures, model start/load time, graph-prep time and any asset upload/downloading; do **not** multiply the fastest vendor seconds by the lowest hourly GPU offer and present it as cost per accepted shot.
+
+## 5d. Round R7 — X04 controlled-shot mapping and grade-specific qualification (paper only)
+
+**Authoritative source:** `docs/operating/TASK_S3_XIANXIA60_MOTION_CONTROL_OR_STOP.md` (2026-10-22, **superseded for execution by Owner Pause**) establishes an unusually concrete *product test*: ~3–5 seconds, **Black screen-right** makes a downward diagonal sword strike; **White screen-left** blocks at believable sword reach; **visible transfer of force and immediate Black recoil**; both on same stone platform, two recognizable fighters during contact, no camera orbit. An unconditioned text prompt or a montage with just sword waving cannot meet that original **continuous-action motion-proof** test. Previously reviewed Dola X04-A solo attack movement offered a promising limb/body stroke but not independently proved the two-person contact. Do not use existing Worker report QC as final Owner acceptance.
+
+### Candidate `ControlledShotPackage-v0` (not actual schema or code)
+
+| Planned field | Existing source | New requirement / state |
+| --- | --- | --- |
+| `shot_id, shot_spec_sha256, duration_target_s, grade_policy` | `ShotSpec`, per-shot route from Film Core | Inherit canonical identity/version; `grade_policy` affects expense/quality rubric only, **never changes story truth**. |
+| `actor_A_id, actor_B_id, appearance_refs[]` | `ShotSpec.characters` / `References` | Two actor face/hair/wardrobe/weapon IDs, actual asset checksums and rights. **Five canonical reference identities still UNBOUND in current Owner Pause evidence**. |
+| `world_geometry, staging_units, scale_reference` | `Environment` / `Blocking` (descriptive) | New optional versioned low-poly geometry or storyboard. No invented meters or coordinate axis without measured proof. |
+| `camera_path, projection, cut_axis` | `Camera`, `Continuity.screen_direction` | Camera fixed/no orbit for X04; preserve Black-right / White-left axis, eyeline, lens/framing evidence. |
+| `time_events, blade_paths, contact_window, force/recoil` | `PerformanceSpec.contact_event`, `Blocking.action_beats` mostly strings | Timed, explicit per-actor path and collision evidence; **not yet authored**. Mark `MISSING`, do not hallucinate a simulation. |
+| `keyframes, pose_video, depth_video, control_sha256` | No qualified authoritative control-media package yet | The generated/approved previz is signed evidence; typed modality support is required before route to a control-video model. |
+| `workflow_ui_sha, workflow_api_sha, weights_sha, runtime_manifest` | Future adapter metadata | Must be established and pinned for a paid inference route; **unavailable now**. |
+| `quality_rubric, attempt_cap, cash_cap, rights_status` | Existing attempt/QC/routing semantics | B may use editorial atoms, A targets continuous action; A+ requires stronger temporal/finishing fidelity. No current spend permission. |
+
+**Counterfactual on paper (not an actual benchmark):**
+
+- **Historical baseline:** X04 Flow text-to-video qualification failed contact (reported frozen standoff); 2026-10-22 Dola solo X04-A showed attacker movement but no complete two-body impact. Preserve both as evidence, no extra generation.
+- **B treatment:** Planned 3 editorial atoms — Black solo attack → explicit sword contact insert → White defensive reaction; use same actor/world assets and fixed screen axis. *Acceptance is the full edited beat* (legible cause/contact/reaction), **not** the earlier single-take motion-proof. If the Owner requires an uninterrupted shot, this B route is disqualified rather than relabeled as pass.
+- **A treatment:** One ~3–5s shared-space clip, control-conditioned by actual licensed white-box/video/pose guidance, fixed identity and timed collision; Vast rented GPU only after approval. Passing motion in a one-person clip or a visually pretty close-up alone is **FAIL**.
+- **A+ treatment:** Same physical proof as A **plus** near film-ready face/weapon temporal coherence, cinematic camera and sound, editorial integration and repeatability across neighboring shots. Higher expense is not itself qualification.
+
+**Minimum common invariant across grades:** Both actors stay identifiable, weapon/contact is causally readable and spatially consistent, no duplicate/ghost sword/hands, the story beat is achieved, provider/job/asset provenance and rights are attached. Additional premium expectations may differ, but **B cannot downgrade the canonical film truth or lie about what source shows**.
+
+**Comparability rule:** Two modes are compared by *same narrative event* and shared common acceptance checks; B and A differ in permitted **editing strategy** (multi-cut vs continuous), so always report them in distinct `B_EDITORIAL` / `A_CONTINUOUS` columns. Do **not** call a 3-cut montage a successful single-take physical-contact proof. Owner chooses whether editorial B is acceptable to the final film.
+
+### Work required to turn this into a real benchmark
+
+| Stage | B local-first | A/A+ Vast.ai | Shared stop |
+| --- | --- | --- | --- |
+| Authoring | Local diagram/storyboard of attack/contact/recoil; identity-bound reference package | Same canonical scene plus low-poly camera and actor/weapon trajectory/pose-video | Stop if actor refs/rights/geometry cannot be bound |
+| Static validation | Verify cut direction, weapon hand, cast, shot-to-shot continuity | Validate API graph export, models/custom-node/weights and expected control input modalities | Stop on silent loss of conditioning |
+| Controlled video (not authorized now) | Free eligible Veo/Dola only where terms and current entitlement are verified | Price and rent exact 24GB+ GPU/host, execute pinned model only after explicit capped approval | Stop on ambiguous attempt/receipt or cap reached |
+| QC | Finished edited beat must pass story and action legibility | Actual continuous contact/recoil in moving frames; A+ polish separately | Independent visual Owner QC; no test-only pass |
+| Accounting | Real credit/attempt cost + human editorial hours | GPU load/compute/storage/egress + multiple attempts + human prep/QC | Compare **cost per Owner-accepted action beat**, not raw cost/video |
+
+**Release of architecture decision:** At present `ControlledShotPackage-v0` is a *hypothesis* supported by gaps in the reviewed code and external workflow docs. Upgrade priority is **(1) actor asset binding + credible common geometry, (2) exact control modality and creator evidence, (3) typed package validation, (4) provider/Vast execution adapter only after measured quality benefit**. Keep ShotSpec/Continuity and lineage unchanged. A future Owner decision should ask: (i) permit B's edited 3-beat presentation? (ii) choose one bounded paid A continuous-action X04 benchmark? (iii) exact USD and attempt ceiling and rights? These have **not been answered or authorized**.
+
 ## 6. Next research rounds to append here only
 
-- **R5 — Foyege24 provenance:** If original white-box/project/prompt archives are located, record creator link, rights, revision, file type, available keyframes and independently inspectable sequence; if not, maintain `UNVERIFIED`.
-- **R6 — remaining graph contract audit:** the initial node-level review is recorded in R2b; next inspect how UI JSON maps to validated API prompt payloads and how missing conditioning inputs/custom node/weight revisions would be refused. Do not execute graphs.
-- **R7 — local matching audit:** map X04 ShotSpec references, geometry and existing QC failure taxonomy into a hypothetical `ControlledShotPackage` contract, **without implementation**; quantify gap coverage and blockers.
-- **Decision meeting:** Tech Lead presents concrete alternatives and unknowns to Owner. Owner alone selects a new BUILD slice, benchmark spend, engine and any production resumption.
+- **R8 — Foyege24 asset provenance and rights:** New primary post from creator is recorded at R5; find the creator-authenticated shared white-box/project/prompt archive rather than assuming that mirrored claims authorize download/reuse. Record license, revision, checksum and actor/IP rights; otherwise leave `UNVERIFIED`.
+- **R9 — X04 control data feasibility:** Read-only audit any already recorded X04 storyboard/reference hashes and accepted camera/actor/collision measures. Resolve the five `UNBOUND` identities on paper as missing inputs, not as fake hashes or generated media.
+- **R10 — decision-grade economics:** Request an exact current per-host Vast GPU/storage/transfer quote, actual approved free-pool entitlement and one capped experiment **only if Owner later reopens execution**; prior public pricing and tutorial timings are insufficient.
+- **Decision meeting:** Tech Lead presents `B_EDITORIAL` vs `A_CONTINUOUS` evidence and explicit accept/reject criteria. Owner alone selects a new BUILD slice, actual budget, provider/GPU permissions and film production resumption.
 
 ---
 
