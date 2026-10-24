@@ -47,3 +47,20 @@ X04 has **two separate targets** and no Worker may silently change canonical cre
 `GOAL → PRODUCT DELTA → EXACT WORKTREE/BRANCH/HEAD → CHANGED PATHS → TESTS/ADVERSARIAL EVIDENCE → REAL X04 INPUTS_BLOCKED PROOF → STOP/BLOCKER → OWNER DECISIONS → NEXT RECOMMENDATION`.
 
 The Worker may finish sooner than eight hours. An asynchronous task submission does **not** establish that it will run continuously for the full duration. Task executor availability and actual status must be checked through MAR before reporting it as running.
+
+
+---
+
+## 2026-10-25 — Post-execution custody / independent Tech Lead PROVE (does NOT amend the frozen WP)
+
+**MAR task:** `task-8b0b37cb1226496885913034da6e1e27`, result `result-6ec5b89c94f14f22a76498d095904f3e`, evidence `evidence-382ec0084ec34dd68d5a62377d3a8db6`. Submitted from Owner-approved policy-correct base `22e9d8eac176fbc5224a52a160d41f06ba32eb99`, local sandbox workspace `D:\MAR\.mar\w\e0ac1ab0bcfc7f328d1cdefacf519954`. MAR candidate commit `87a2308de9b6c711cece87c02afdee12d816c39a` preserved under `review/controlled-shot-v0-offline-20261025` **local only**. Branch and commit parent were independently verified; no push/merge.
+
+**Exact candidate scope:** only `src/film_pipeline/creative_control/__init__.py` (300 lines) and `tests/test_controlled_shot_offline.py` (197 lines), additive and synthetic-only. Implements paper package, explicit canonical-lock vs recoil-variant distinction, five-ref rights/binding preflight, two actors/two swords/weapon path/contact timing, required control-video/capability checks, ComfyUI UI-versus-API JSON validation including linked typed graph inputs, separate B editorial/A continuous/A+ metadata and quote-only cost calculation. It does **not** perform any provider/job/film mutation or visual inference.
+
+**Independent scoped PROVE:** Tech Lead invoked primary project Python against the isolated MAR workspace using `-B`, `pytest -q -p no:cacheprovider tests/test_controlled_shot_offline.py tests/test_narrative_compiler_021.py`; **42 tests PASS, zero FAIL**, with two existing Pydantic deprecation warnings. AST parsing and whitespace check on both new files PASS; `git diff --check 22e9d8e..87a2308` PASS. Git policy blob unchanged `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`; root WIP was exactly **7 tracked modified + 175 untracked** before/after. This is **scoped static/technical evidence**, not full-suite, engine, media, owner creative or release acceptance.
+
+**MAR verifier's separate status is `BLOCKED / UNVERIFIED / NOT_INTEGRATED`**, not silently upgraded: built-in verifier executed `python -m unittest discover -v` and `python -m compileall -q .` successfully, but marked seven contract acceptance criteria `UNVERIFIED` for lack of criterion-specific scenarios/oracles. This mismatch is a **verification-profile evidence gap**, not a failing pytest assertion. A dedicated criterion/oracle verification or an independent reviewed promotion decision is required before declaring a formally accepted next BUILD slice. Task stopped early as authorized (no artificial eight-hour occupation).
+
+**Product Delta:** NONE. All five canonical production refs remained UNBOUND; original `shots/X04.json` unchanged; film `PAUSED_BY_OWNER / CREATIVE_REJECTED / NOT_SHIPPED`. No ComfyUI/Blender install or execution, Flow/Dola/Vast session, paid GPU, rendering, media copying, service or credit charge. Decisions D1 (B multi-cut acceptable?), D2 (identity/reference rights/upload permission?) and D3 (exact capped A/A+ spend/attempts/provider and resume?) are **all still on Owner HOLD**. Do not restart film production or automatically promote code to PR #2/#3/#4.
+
+**Next technical action:** reviewer may attach explicit criterion-specific evidence to this isolated local candidate and decide offline integration custody after independent review, without changing Owner creative truth. Next film action requires separate Owner decision.
