@@ -10,10 +10,15 @@ Commands:
               across days as the pool quota refreshes; then editorial +
               finishing + master + manifest
   qc-visual <SHOT> <VERDICT> [notes...]   attach evidence-based review
+  verify     read-only compilation integrity report (digest, state pin,
+             trust anchor; never authorizes, never mutates state)
   assemble / finish / master / manifest / status
 
-Design authority: V2_022_LONGFORM_COMPILATION.json (frozen, 24 shots,
-Owner-authorized cap 25). Prompts are the compiled ProviderPromptPlans —
+Design authority: V2_022_LONGFORM_COMPILATION.json (frozen, 24 shots;
+Owner-authorized budget cap 27 = 24 shots + 1 repair reserve + 2
+evidenced day-1 refusal extensions — see the mutation-budget rationale
+in build_v2_022_compilation.py for the dated 25 -> 26 -> 27 lineage).
+Prompts are the compiled ProviderPromptPlans —
 never hand-edited mid-run. Derived from the live-proven V2-021 operator
 flow; differences: single compilation (no 6/5 variant selection) and the
 v2-022 state/manifest namespace.
@@ -90,22 +95,180 @@ def _probe(alias: str) -> dict:
 COMP_PATH = PKG / "V2_022_LONGFORM_COMPILATION.json"
 POOL_ACCOUNTS = ["ACCOUNT_D", "ACCOUNT_A", "ACCOUNT_C", "ACCOUNT_B",
                  "ACCOUNT_E", "ACCOUNT_F"]
-import os as _os
 
-COMP = json.loads(Path(_os.environ.get("V2_022_COMPILATION")
-                       or COMP_PATH).read_text(encoding="utf-8"))
-BUDGET = COMP["mutation_budget"]
+
+class CompilationUnavailableError(RuntimeError):
+    """Fail-closed bootstrap: the frozen V2-022 compilation is absent,
+    unreadable, malformed or disagrees with the run state.
+
+    The runtime compilation under projects/ is Git-ignored by design, so
+    a fresh clean checkout does NOT have it. Importing this module and
+    running read-only helpers (status on an existing run, help, tests)
+    must stay possible; every path that would init run state, authorize
+    a gate or dispatch a paid mutation must refuse with this error
+    instead of crashing or synthesizing a compilation."""
+
+
+def _compilation_path() -> Path:
+    override = os.environ.get("V2_022_COMPILATION")
+    return Path(override) if override else COMP_PATH
+
+
+def load_compilation(path: Path | None = None) -> dict:
+    """Load and structurally validate a V2-022 compilation; fail closed.
+
+    Never synthesizes a live-approved compilation: the caller gets either
+    a structurally consistent frozen document or an informative
+    CompilationUnavailableError. A deterministic rebuild produced by
+    tools/build_v2_022_compilation.py is fine for read-only simulation
+    and tests but stays NON-AUTHORITATIVE for spend authority."""
+    target = Path(path) if path is not None else _compilation_path()
+    sample_hint = ("regenerate a deterministic, NON-AUTHORITATIVE sample "
+                   "via `python tools/build_v2_022_compilation.py`, or "
+                   "set V2_022_COMPILATION to an explicit frozen copy")
+    try:
+        raw = target.read_text(encoding="utf-8")
+    except FileNotFoundError as error:
+        raise CompilationUnavailableError(
+            f"V2-022 compilation missing: {target}. The runtime "
+            f"compilation is Git-ignored; fresh checkouts do not carry "
+            f"it. To continue read-only: {sample_hint}. Paid mutation "
+            f"requires the genuinely frozen Owner-authorized file — "
+            f"refusing to proceed.") from error
+    except OSError as error:
+        raise CompilationUnavailableError(
+            f"V2-022 compilation unreadable: {target}: {error}") \
+            from error
+    try:
+        comp = json.loads(raw)
+    except json.JSONDecodeError as error:
+        raise CompilationUnavailableError(
+            f"V2-022 compilation is not valid JSON: {target}: {error}") \
+            from error
+    problems: list[str] = []
+    if not isinstance(comp, dict):
+        problems.append("document is not a JSON object")
+    else:
+        graph = comp.get("shot_graph")
+        budget = comp.get("mutation_budget")
+        plans = comp.get("prompt_plans")
+        nodes = graph.get("nodes") if isinstance(graph, dict) else None
+        # type-check every nested container BEFORE indexing it: a wrong
+        # container type (list/str where an object is required) must
+        # route to this fail-closed error, never a raw AttributeError
+        if not isinstance(graph, dict):
+            problems.append("shot_graph must be a JSON object")
+        if not isinstance(plans, dict):
+            problems.append("prompt_plans must be a JSON object")
+        if not isinstance(budget, dict):
+            problems.append("mutation_budget must be a JSON object")
+        if not isinstance(nodes, list) or not nodes:
+            problems.append("shot_graph.nodes must be a non-empty list")
+        else:
+            bad = [i for i, node in enumerate(nodes)
+                   if not isinstance(node, dict)
+                   or not isinstance(node.get("shot_id"), str)
+                   or not node.get("shot_id")]
+            if bad:
+                problems.append(
+                    "shot_graph.nodes entries must be objects with a "
+                    f"non-empty string shot_id (bad indexes: {bad[:4]})")
+            elif isinstance(plans, dict):
+                unplanned = [node["shot_id"] for node in nodes
+                             if node["shot_id"] not in plans]
+                if unplanned:
+                    problems.append("prompt_plans missing shot ids: "
+                                    f"{unplanned[:4]}")
+        if isinstance(budget, dict):
+            for key in ("total_budget", "planned_shots", "rule"):
+                if key not in budget:
+                    problems.append(f"mutation_budget.{key} missing")
+            for key in ("total_budget", "planned_shots"):
+                if key in budget and (type(budget[key]) is not int
+                                      or budget[key] <= 0):
+                    problems.append(
+                        f"mutation_budget.{key} must be a positive "
+                        f"integer (bool excluded), got "
+                        f"{type(budget[key]).__name__}")
+            if "rule" in budget and (
+                    not isinstance(budget["rule"], str)
+                    or not budget["rule"].strip()):
+                problems.append(
+                    "mutation_budget.rule must be a nonblank string")
+        if isinstance(nodes, list) and nodes \
+                and all(isinstance(node, dict) for node in nodes) \
+                and isinstance(budget, dict) \
+                and type(budget.get("planned_shots")) is int \
+                and type(budget.get("total_budget")) is int:
+            planned = budget["planned_shots"]
+            if len(nodes) != planned:
+                problems.append(
+                    f"shot_graph.nodes ({len(nodes)}) disagrees with "
+                    f"mutation_budget.planned_shots "
+                    f"({planned})")
+            if budget["total_budget"] < planned:
+                problems.append(
+                    f"mutation_budget.total_budget "
+                    f"({budget['total_budget']}) must be >= "
+                    f"planned_shots ({planned})")
+    if problems:
+        raise CompilationUnavailableError(
+            f"V2-022 compilation malformed: {target}: "
+            + "; ".join(problems))
+    return comp
+
+
+def _require_compilation() -> dict:
+    """Bind the frozen compilation to COMP/BUDGET once (fail closed)."""
+    global COMP, BUDGET
+    if COMP is None:
+        COMP = load_compilation()
+        BUDGET = COMP["mutation_budget"]
+    return COMP
+
+
+def _compilation_sha256(path: Path) -> str:
+    """Full-file SHA-256 of the frozen compilation bytes."""
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def _trusted_compilation_digest(path: Path) -> str | None:
+    """Explicit, deliberate trust anchor for a compilation file: the
+    V2_022_COMPILATION_SHA256 env var (visible operator intent) or a
+    `<file>.sha256` sidecar created when the compilation was frozen.
+    A structurally valid load alone is NEVER spend authority, and the
+    builder never writes an anchor — pinning a digest is a separate,
+    visible human act, so a regenerated sample cannot authorize paid
+    generation by itself."""
+    env = os.environ.get("V2_022_COMPILATION_SHA256", "").strip()
+    if env:
+        return env.split()[0].lower()
+    sidecar = Path(str(path) + ".sha256")
+    if sidecar.exists():
+        try:
+            fields = sidecar.read_text(encoding="utf-8").split()
+        except OSError:
+            return None
+        return fields[0].lower() if fields else None
+    return None
+
+
+# Lazily loaded frozen compilation (see _require_compilation); None in a
+# fresh checkout until an authorized path needs it
+COMP: dict | None = None
+BUDGET: dict | None = None
 
 
 def _comp_for(available: int) -> tuple[Path, dict] | None:
     """Single frozen compilation (no variant selection). The mission
     starts when the pool can fund at least one shot today; mid-run
     guards still stop at exhaustion and the mission resumes as the
-    daily quota refreshes."""
-    comp = json.loads(COMP_PATH.read_text(encoding="utf-8"))
-    if available >= 1:
-        return COMP_PATH, comp
-    return None
+    daily quota refreshes. A fundable pool without a usable compilation
+    fails closed rather than dispatching unbound."""
+    if available < 1:
+        return None
+    path = _compilation_path()
+    return path, load_compilation(path)
 
 
 def _activate_comp(state: dict) -> None:
@@ -115,13 +278,73 @@ def _activate_comp(state: dict) -> None:
     manifest) must execute/document the SAME variant the gate selected.
     Without this the import-time default leaks in — the V2-021 executed
     run's manifest documented a 6-node shot graph beside its 5-shot
-    execution record.
-    """
+    execution record. State and compilation must AGREE on identity,
+    planned shots, gate budget AND full-file SHA-256: the gate pins the
+    digest of the file it authorized, and any later byte change to the
+    compilation (e.g. edited prompt_plans with identical metadata) is
+    an integrity failure. A legacy state without a pinned digest is
+    UNVERIFIED/AUTHORITY_REQUIRED unless an explicit trust anchor
+    vouches for the current bytes — never silently approved, never
+    auto-rebound."""
     global COMP, BUDGET
     path = state.get("compilation_path")
-    if path and Path(path).exists():
-        COMP = json.loads(Path(path).read_text(encoding="utf-8"))
-        BUDGET = COMP["mutation_budget"]
+    if not path:
+        # pre-gate planning surface only (fresh state init / ungated
+        # manifest): structural load, no paid authority involved
+        _require_compilation()
+        return
+    target = Path(path)
+    if not target.exists():
+        raise CompilationUnavailableError(
+            f"run state names compilation {path} which no longer exists; "
+            f"refusing to silently substitute a different compilation")
+    comp = load_compilation(target)
+    digest = _compilation_sha256(target)
+    pinned = state.get("compilation_sha256")
+    if pinned:
+        if str(pinned).lower() != digest:
+            raise CompilationUnavailableError(
+                f"compilation integrity failure: state-pinned SHA-256 "
+                f"{pinned} != current file digest {digest} at {target}; "
+                f"the frozen design changed after authorization — stop "
+                f"and reconcile evidence, never re-dispatch")
+    else:
+        anchor = _trusted_compilation_digest(target)
+        if anchor is None:
+            raise CompilationUnavailableError(
+                f"run state carries no compilation SHA-256 and no trusted "
+                f"anchor exists for {target}; legacy state is "
+                f"UNVERIFIED/AUTHORITY_REQUIRED — run the read-only "
+                f"`verify` command to report the current digest, pin it "
+                f"deliberately (V2_022_COMPILATION_SHA256 or a "
+                f"{target}.sha256 sidecar) and re-gate")
+        if anchor != digest:
+            raise CompilationUnavailableError(
+                f"compilation integrity failure: trusted anchor "
+                f"{anchor} != current file digest {digest} at {target}")
+    identity = comp.get("fixture_id", comp.get("version"))
+    recorded_identity = state.get("fixture_id")
+    if recorded_identity is not None and identity != recorded_identity:
+        raise CompilationUnavailableError(
+            f"run state fixture identity '{recorded_identity}' "
+            f"disagrees with compilation '{identity}' at {path}; "
+            f"refusing to rebind run identity")
+    recorded_planned = state.get("planned_shots")
+    if recorded_planned is not None and \
+            comp["mutation_budget"]["planned_shots"] != recorded_planned:
+        raise CompilationUnavailableError(
+            f"run state planned_shots {recorded_planned} disagrees with "
+            f"compilation "
+            f"{comp['mutation_budget']['planned_shots']} at {path}")
+    gate_budget = (state.get("gate") or {}).get("computed_budget")
+    if gate_budget is not None and \
+            comp["mutation_budget"]["total_budget"] != gate_budget:
+        raise CompilationUnavailableError(
+            f"gate-computed budget {gate_budget} disagrees with "
+            f"compilation total_budget "
+            f"{comp['mutation_budget']['total_budget']} at {path}")
+    COMP = comp
+    BUDGET = comp["mutation_budget"]
 
 
 def _state_path(run_dir: Path) -> Path:
@@ -131,12 +354,16 @@ def _state_path(run_dir: Path) -> Path:
 def _load_state(run_dir: Path) -> dict:
     if _state_path(run_dir).exists():
         return json.loads(_state_path(run_dir).read_text(encoding="utf-8"))
+    # initializing a NEW run state needs the frozen shot graph — fail
+    # closed (informative) when no usable compilation exists; resuming
+    # an EXISTING run stays read-only and compilation-free
+    comp = _require_compilation()
     return {
         "version": "v2-022-run-state-v1",
-        "fixture_id": COMP["fixture_id"] if "fixture_id" in COMP else
-        COMP["version"],
+        "fixture_id": comp["fixture_id"] if "fixture_id" in comp else
+        comp["version"],
         "shots": {sid: {"status": "PENDING"} for sid in
-                  (n["shot_id"] for n in COMP["shot_graph"]["nodes"])},
+                  (n["shot_id"] for n in comp["shot_graph"]["nodes"])},
         "mutations_used": 0, "repairs": [], "gate": None,
     }
 
@@ -150,7 +377,52 @@ def _save(run_dir: Path, state: dict) -> None:
 
 
 def cmd_gate(run_dir: Path) -> int:
+    # the gate cannot state a budget or authorize anything without the
+    # frozen compilation — refuse BEFORE any account probe (zero
+    # provider access when the design authority is missing)
+    _require_compilation()
     state = _load_state(run_dir)
+    # TRUST PREFLIGHT — before entering the POOL_ACCOUNTS probe loop
+    # and before any gate authorization mutation: if the compilation
+    # digest has no trusted anchor (or the anchor mismatches), ZERO
+    # provider/account interaction may happen. A mid-run re-gate may
+    # stand on the state's own previously pinned digest instead of a
+    # fresh anchor. Read-only `verify` documents the same digest.
+    gate_path = _compilation_path()
+    gate_digest = _compilation_sha256(gate_path)
+    gate_pinned = state.get("compilation_sha256")
+    gate_pinned_ok = (
+        gate_pinned is not None
+        and str(gate_pinned).lower() == gate_digest
+        and state.get("compilation_path") == str(gate_path))
+    gate_anchor = _trusted_compilation_digest(gate_path)
+    if not (gate_pinned_ok
+            or (gate_anchor is not None and gate_anchor == gate_digest)):
+        decision = ("STOP_COMPILATION_TRUST_MISSING"
+                    if gate_anchor is None
+                    else "STOP_COMPILATION_TRUST_MISMATCH")
+        state["gate"] = {
+            "decision": decision,
+            "computed_budget": BUDGET["total_budget"],
+            "rule": BUDGET["rule"],
+            "unpinned_digest": gate_digest,
+            "probes_suppressed": True,
+            "pin_instruction":
+                "pin the frozen compilation digest deliberately "
+                "(set V2_022_COMPILATION_SHA256 or create "
+                f"{gate_path}.sha256) and re-run gate; `verify` reports "
+                "the current digest read-only; no account was probed",
+        }
+        _save(run_dir, state)
+        (run_dir / "V2_022_POOL_GATE.json").write_text(
+            json.dumps({"budget": BUDGET["total_budget"], "pool": {},
+                        "total_available": 0, "decision": decision,
+                        "owner_matrix_required": True}, indent=1,
+                       ensure_ascii=False), encoding="utf-8")
+        emit({"status": decision, "budget": BUDGET["total_budget"],
+              "probes": 0, "trust": "unverified",
+              "digest": gate_digest})
+        return 2
     matrix = {}
     total_available = 0
     for alias in POOL_ACCOUNTS:
@@ -191,34 +463,67 @@ def cmd_gate(run_dir: Path) -> int:
     else:
         comp_path, comp = chosen
         budget = comp["mutation_budget"]["total_budget"]
-        decision = ("DISPATCH_AUTHORIZED"
-                    if total_available >= budget
-                    else "DISPATCH_AUTHORIZED_EXPECTED")
-        state["compilation_path"] = str(comp_path)
-        state["planned_shots"] = comp["mutation_budget"]["planned_shots"]
-        # (re)build shot state for the chosen variant WITHOUT destroying
-        # progress: a standalone re-gate mid-run must preserve existing
-        # records; records for shots that leave the graph are archived
-        # under retired_shots, never dropped
-        previous = state.get("shots") or {}
-        nodes = [n["shot_id"] for n in comp["shot_graph"]["nodes"]]
-        retired = state.setdefault("retired_shots", {})
-        for sid, record in previous.items():
-            if sid not in nodes:
-                retired.setdefault(sid, record)
-        state["shots"] = {sid: previous.get(sid) or {"status": "PENDING"}
-                          for sid in nodes}
-        state["gate"] = {
-            "probed_at": json.dumps(matrix),
-            "total_available_credits": total_available,
-            "expected_total_with_quota": expected_total,
-            "unobservable_slots": unobservable,
-            "computed_budget": budget,
-            "compilation": str(comp_path),
-            "variant_shots": comp["mutation_budget"]["planned_shots"],
-            "decision": decision,
-            "rule": comp["mutation_budget"]["rule"],
-        }
+        digest = _compilation_sha256(comp_path)
+        pinned = state.get("compilation_sha256")
+        # a mid-run re-gate may stand on the run's own previously pinned
+        # digest; a first gate needs an explicit trust anchor
+        pinned_ok = (pinned is not None and str(pinned).lower() == digest
+                     and state.get("compilation_path") == str(comp_path))
+        anchor = _trusted_compilation_digest(comp_path)
+        anchor_ok = anchor is not None and anchor == digest
+        if pinned_ok or anchor_ok:
+            decision = ("DISPATCH_AUTHORIZED"
+                        if total_available >= budget
+                        else "DISPATCH_AUTHORIZED_EXPECTED")
+            state["compilation_path"] = str(comp_path)
+            state["compilation_sha256"] = digest
+            state["planned_shots"] = comp["mutation_budget"]["planned_shots"]
+            # (re)build shot state for the chosen variant WITHOUT
+            # destroying progress: a standalone re-gate mid-run must
+            # preserve existing records; records for shots that leave
+            # the graph are archived under retired_shots, never dropped
+            previous = state.get("shots") or {}
+            nodes = [n["shot_id"] for n in comp["shot_graph"]["nodes"]]
+            retired = state.setdefault("retired_shots", {})
+            for sid, record in previous.items():
+                if sid not in nodes:
+                    retired.setdefault(sid, record)
+            state["shots"] = {sid: previous.get(sid) or {"status": "PENDING"}
+                              for sid in nodes}
+            state["gate"] = {
+                "probed_at": json.dumps(matrix),
+                "total_available_credits": total_available,
+                "expected_total_with_quota": expected_total,
+                "unobservable_slots": unobservable,
+                "computed_budget": budget,
+                "compilation": str(comp_path),
+                "compilation_sha256": digest,
+                "variant_shots": comp["mutation_budget"]["planned_shots"],
+                "decision": decision,
+                "rule": comp["mutation_budget"]["rule"],
+            }
+        else:
+            # fail closed BEFORE authorizing anything: a structurally
+            # valid file with no deliberate digest provenance is not
+            # spend authority, and anchor!=file means the frozen design
+            # changed after pinning
+            decision = ("STOP_COMPILATION_TRUST_MISSING" if anchor is None
+                        else "STOP_COMPILATION_TRUST_MISMATCH")
+            state["gate"] = {
+                "probed_at": json.dumps(matrix),
+                "total_available_credits": total_available,
+                "expected_total_with_quota": expected_total,
+                "unobservable_slots": unobservable,
+                "computed_budget": budget,
+                "decision": decision,
+                "rule": comp["mutation_budget"]["rule"],
+                "unpinned_digest": digest,
+                "pin_instruction":
+                    "pin the frozen compilation digest deliberately "
+                    "(set V2_022_COMPILATION_SHA256 or create "
+                    f"{comp_path}.sha256) and re-run gate; a regenerated "
+                    "builder sample is never spend authority by itself",
+            }
     _save(run_dir, state)
     (run_dir / "V2_022_POOL_GATE.json").write_text(
         json.dumps({"budget": budget, "pool": matrix,
@@ -648,6 +953,54 @@ def cmd_status(run_dir: Path) -> int:
     return 0
 
 
+def cmd_verify(run_dir: Path) -> int:
+    """Read-only integrity report for compilation provenance.
+
+    Never mutates run state and never authorizes anything: it reports
+    the current full-file SHA-256, whether the run state pins a digest,
+    and which deliberate pinning step (env var or sidecar) an
+    AUTHORITY_REQUIRED / legacy state needs before gate will authorize.
+    This is the migration/report path for pre-integrity run states."""
+    state = json.loads(_state_path(run_dir).read_text(
+        encoding="utf-8")) if _state_path(run_dir).exists() else {}
+    path = Path(state.get("compilation_path") or _compilation_path())
+    report = {"command": "verify", "compilation": str(path)}
+    if not path.exists():
+        report["status"] = "COMPILATION_MISSING"
+        emit(report)
+        return 4
+    try:
+        load_compilation(path)
+        report["structure"] = "OK"
+    except CompilationUnavailableError as error:
+        report["status"] = "COMPILATION_MALFORMED"
+        report["error"] = str(error)[:300]
+        emit(report)
+        return 4
+    digest = _compilation_sha256(path)
+    report["sha256"] = digest
+    pinned = state.get("compilation_sha256")
+    anchor = _trusted_compilation_digest(path)
+    if pinned:
+        report["state_pinned"] = pinned
+        report["status"] = ("INTEGRITY_OK" if str(pinned).lower() == digest
+                            else "INTEGRITY_MISMATCH")
+    elif anchor is not None:
+        report["anchor"] = anchor
+        report["status"] = ("ANCHOR_OK_STATE_UNPINNED"
+                            if anchor == digest else "ANCHOR_MISMATCH")
+    else:
+        report["status"] = "AUTHORITY_REQUIRED"
+        report["pin_instruction"] = (
+            f"pin the digest deliberately: create {path}.sha256 "
+            "containing the reported sha256 (or set "
+            "V2_022_COMPILATION_SHA256), then re-run gate; a structural "
+            "load or a regenerated builder sample is not authority")
+    emit(report)
+    return 0 if report["status"] in ("INTEGRITY_OK",
+                                     "ANCHOR_OK_STATE_UNPINNED") else 2
+
+
 def _acquire_run_lock(run_dir: Path) -> Path | None:
     lock = run_dir / "run.lock"
     try:
@@ -678,6 +1031,14 @@ def main() -> int:
             return 3
     try:
         return _dispatch_command(run_dir, args)
+    except CompilationUnavailableError as error:
+        emit({"status": "COMPILATION_UNAVAILABLE",
+              "error": str(error)[:500],
+              "action": "fail-closed: no state init, no probe, no "
+                        "dispatch; regenerate a non-authoritative "
+                        "sample with tools/build_v2_022_compilation.py "
+                        "for read-only simulation only"})
+        return 4
     finally:
         if lock is not None:
             lock.unlink(missing_ok=True)
@@ -701,6 +1062,8 @@ def _dispatch_command(run_dir: Path, args: list[str]) -> int:
         return cmd_manifest(run_dir)
     if command == "status":
         return cmd_status(run_dir)
+    if command == "verify":
+        return cmd_verify(run_dir)
     print(__doc__)
     return 2
 

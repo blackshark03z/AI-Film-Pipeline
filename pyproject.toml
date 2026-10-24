@@ -6,6 +6,9 @@ requires-python = ">=3.11"
 dependencies = ["pydantic>=2,<3", "jsonschema>=4,<5"]
 
 [project.optional-dependencies]
+# offline dev/test surface; browser/session tooling stays in `flow`
+# and is intentionally NOT installed for CI or focused offline suites
+dev = ["pytest>=8,<10"]
 flow = ["patchright>=1,<2", "playwright>=1,<2", "Pillow>=10,<13"]
 
 [build-system]

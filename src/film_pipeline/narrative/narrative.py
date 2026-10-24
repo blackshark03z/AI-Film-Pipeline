@@ -426,7 +426,7 @@ class WorldStateGraph:
     @staticmethod
     def delta(before: WorldState, after: WorldState) -> dict:
         changed = {}
-        for field in before.model_fields:
+        for field in type(before).model_fields:
             b, a = getattr(before, field), getattr(after, field)
             if b != a:
                 changed[field] = [str(b), str(a)]

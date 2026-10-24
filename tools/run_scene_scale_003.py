@@ -64,9 +64,28 @@ import scene_runner
 ROOT = Path(__file__).resolve().parents[1]
 SCENE_DIR = ROOT / "projects/flow_scene_scale_003"
 STORE_PATH = ROOT / "projects/flow_production_harden_002/requal_current_build/runtime.sqlite"
-BASE_REFERENCE_BINDING = json.loads(
-    (ROOT / "projects/flow_production_harden_002/requal_current_build/reference_binding.json")
-    .read_text(encoding="utf-8"))
+# The reference binding is a Git-ignored runtime artifact: load it
+# lazily so importing this module (and its pure helpers such as
+# flow_capabilities) works in a fresh clean checkout; only the paths
+# that genuinely need the binding fail closed with this error.
+_BINDING_PATH = (ROOT / "projects/flow_production_harden_002/requal_current_build/reference_binding.json")
+_BASE_REFERENCE_BINDING: dict | None = None
+
+
+def _base_reference_binding() -> dict:
+    global _BASE_REFERENCE_BINDING
+    if _BASE_REFERENCE_BINDING is None:
+        try:
+            _BASE_REFERENCE_BINDING = json.loads(
+                _BINDING_PATH.read_text(encoding="utf-8"))
+        except FileNotFoundError as error:
+            raise RuntimeError(
+                f"reference binding missing: {_BINDING_PATH} "
+                f"(Git-ignored runtime artifact; fresh checkouts do not "
+                f"carry it — restore the requal build or copy "
+                f"reference_binding.json from the production checkout "
+                f"before running scene-scale dispatch)") from error
+    return _BASE_REFERENCE_BINDING
 PROJECT_ID = "93a579b4-834e-435b-8304-5f6682937935"
 ACCOUNT_ID = "clean-pro-qualified"
 MODEL = contract.MODEL_VEO_3_1_LITE
@@ -181,9 +200,10 @@ def reference_binding_for(shot: dict) -> dict:
     """Resolve the continuity binding for one planned shot (durable ledger)."""
     kind = shot["continuity"]["kind"]
     if kind == "reference":
-        return {"media_id": BASE_REFERENCE_BINDING["media_id"],
-                "asset_id": BASE_REFERENCE_BINDING["asset_id"],
-                "attestation_id": BASE_REFERENCE_BINDING["attestation_id"],
+        binding = _base_reference_binding()
+        return {"media_id": binding["media_id"],
+                "asset_id": binding["asset_id"],
+                "attestation_id": binding["attestation_id"],
                 "mechanism": "same_reference"}
     if kind == "last_frame":
         ledger_path = SCENE_DIR / "continuity_ledger.json"
