@@ -146,10 +146,12 @@ def _load_state_compilation(path) -> dict:
     else:
         graph = comp.get("shot_graph")
         budget = comp.get("mutation_budget")
+        plans = comp.get("prompt_plans")
         nodes = graph.get("nodes") if isinstance(graph, dict) else None
+        valid_nodes: list[dict] = []
         if not isinstance(graph, dict):
             problems.append("shot_graph must be a JSON object")
-        if not isinstance(comp.get("prompt_plans"), dict):
+        if not isinstance(plans, dict):
             problems.append("prompt_plans must be a JSON object")
         if not isinstance(budget, dict):
             problems.append("mutation_budget must be a JSON object")
@@ -159,6 +161,43 @@ def _load_state_compilation(path) -> dict:
                     problems.append(f"mutation_budget.{key} missing")
         if not isinstance(nodes, list) or not nodes:
             problems.append("shot_graph.nodes must be a non-empty list")
+        else:
+            bad = [i for i, node in enumerate(nodes)
+                   if not isinstance(node, dict)
+                   or not isinstance(node.get("shot_id"), str)
+                   or not node.get("shot_id").strip()]
+            if bad:
+                problems.append(
+                    "shot_graph.nodes entries must be objects with a "
+                    f"non-empty string shot_id (bad indexes: {bad[:4]})")
+            else:
+                valid_nodes = nodes
+        # plan coverage + consumer structure: every node needs a usable
+        # plan (motion needle for discovery, sha256 for the manifest,
+        # compiled_text as the dispatch prompt) BEFORE the data can
+        # reach manifest or auto
+        for node in valid_nodes:
+            sid = node["shot_id"]
+            plan = plans.get(sid) if isinstance(plans, dict) else None
+            if not isinstance(plan, dict):
+                problems.append(
+                    f"prompt_plans[{sid}] must be an object covering "
+                    f"every shot_graph node")
+                continue
+            sections = plan.get("sections")
+            motion = sections.get("motion") \
+                if isinstance(sections, dict) else None
+            if not isinstance(motion, str) or not motion.strip():
+                problems.append(
+                    f"prompt_plans[{sid}].sections.motion must be a "
+                    f"non-empty string (discovery needle)")
+            if "sha256" not in plan:
+                problems.append(f"prompt_plans[{sid}].sha256 missing")
+            if not isinstance(plan.get("compiled_text"), str) \
+                    or not plan.get("compiled_text", "").strip():
+                problems.append(
+                    f"prompt_plans[{sid}].compiled_text must be a "
+                    f"non-empty string (dispatch prompt)")
     if problems:
         raise CompilationUnavailableError(
             f"run state compilation malformed: {path}: "
@@ -352,6 +391,13 @@ def _pick_account(run_dir: Path, state: dict,
 
 def cmd_auto(run_dir: Path) -> int:
     state = _load_state(run_dir)
+    # PROVENANCE PREFLIGHT: a run that already recorded its authorized
+    # compilation must fail closed BEFORE any re-gate probe — a re-gate
+    # must never be able to probe accounts or silently substitute a
+    # different design while the recorded design file is missing or
+    # unusable. Fresh runs with no recorded path gate exactly as before.
+    if state.get("compilation_path"):
+        _activate_comp(state)
     if state["gate"] is None:
         code = cmd_gate(run_dir)
         state = _load_state(run_dir)

@@ -424,3 +424,132 @@ def test_pregate_state_keeps_import_time_default(runner_mod, monkeypatch):
                         sentinel["mutation_budget"])
     runner_mod._activate_comp({"gate": None, "shots": {}})
     assert runner_mod.COMP is sentinel  # unchanged, by design
+
+
+# ------------------------- final guard correction (PROVE addendum c12b622)
+
+
+def test_auto_preflight_precedes_regate_and_probes(
+        tmp_path, monkeypatch, runner_mod):
+    """Residual gap 1: gate=None with an ALREADY RECORDED but missing
+    compilation must fail closed BEFORE cmd_gate or any account probe
+    (reviewer repro: two fake accounts -> previously rc 2, probes 2)."""
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    state = {"version": "v2-021-run-state-v1", "fixture_id": "t",
+             "compilation_path": str(tmp_path / "vanished_5shot.json"),
+             "shots": {f"S0{i}": {"status": "PENDING"}
+                       for i in range(1, 6)},
+             "mutations_used": 0, "repairs": [], "gate": None}
+    (run_dir / "v2_021_run_state.json").write_text(
+        json.dumps(state), encoding="utf-8")
+
+    probes = []
+
+    def fake_probe(alias):
+        probes.append(alias)
+        return {"account_alias": alias,
+                "session_state": "SESSION_INVALID"}
+
+    monkeypatch.setattr(runner_mod, "POOL_ACCOUNTS",
+                        ["FAKE_A", "FAKE_B"])
+    monkeypatch.setattr(runner_mod, "_probe", fake_probe)
+    monkeypatch.setattr(runner_mod, "_comp_for", lambda _available: None)
+    monkeypatch.setattr(sys, "argv", ["t", str(run_dir), "auto"])
+    assert runner_mod.main() == 4          # COMPILATION_UNAVAILABLE
+    assert probes == []                    # zero account probes
+    assert not list(run_dir.glob("dispatch_journal_*.jsonl"))
+    assert not (run_dir / "slots").exists()
+
+
+def test_auto_fresh_run_without_recorded_path_still_gates(
+        tmp_path, monkeypatch, runner_mod):
+    """Fresh-run behavior preserved: with NO recorded compilation path
+    the auto command still runs the gate (probes happen), and no
+    dispatch occurs when nothing is affordable."""
+    tmp6 = _write_comp(tmp_path / "c6.json", 6, budget=8)
+    tmp5 = _write_comp(tmp_path / "c5.json", 5, budget=5)
+    monkeypatch.setattr(runner_mod, "COMPS", {"6": tmp6, "5": tmp5})
+    # realistic import-time default: carries a fixture identity (the
+    # _write_comp helper omits one; real fixture compilations have it)
+    default6 = json.loads(tmp6.read_text(encoding="utf-8"))
+    default6["fixture_id"] = "fresh-run-default"
+    monkeypatch.setattr(runner_mod, "COMP", default6)
+    monkeypatch.setattr(runner_mod, "BUDGET",
+                        default6["mutation_budget"])
+    probes = []
+
+    def fake_probe(alias):
+        probes.append(alias)
+        return {"account_alias": alias,
+                "session_state": "SESSION_INVALID"}
+
+    monkeypatch.setattr(runner_mod, "_probe", fake_probe)
+    run_dir = tmp_path / "fresh"  # no state file at all
+    monkeypatch.setattr(sys, "argv", ["t", str(run_dir), "auto"])
+    assert runner_mod.main() == 2  # gate stop, NOT a provenance refusal
+    assert len(probes) == len(runner_mod.POOL_ACCOUNTS)  # gate did run
+    assert not list(run_dir.glob("dispatch_journal_*.jsonl"))
+
+
+def test_state_compilation_rejects_malformed_nodes_and_plans(
+        tmp_path, runner_mod):
+    """Residual gap 2: nested malformed shot nodes and invalid plan
+    structure must fail closed with CompilationUnavailableError before
+    the data can reach manifest or auto."""
+    def base() -> dict:
+        return {
+            "fixture_id": "t", "input": {"text": "x"},
+            "story_graph": {"nodes": []},
+            "shot_graph": {"nodes": [{"shot_id": "S01"},
+                                     {"shot_id": "S02"}]},
+            "prompt_plans": {
+                sid: {"sha256": "0" * 64,
+                      "sections": {"motion": f"motion {sid} " * 12},
+                      "compiled_text": f"prompt {sid}"}
+                for sid in ("S01", "S02")},
+            "mutation_budget": {"total_budget": 2, "planned_shots": 2,
+                                "rule": "r"}}
+
+    def activate(doc) -> None:
+        path = tmp_path / "case.json"
+        path.write_text(json.dumps(doc), encoding="utf-8")
+        runner_mod._activate_comp({"compilation_path": str(path)})
+
+    cases = []
+    doc = base()
+    doc["shot_graph"]["nodes"] = ["badnode"]
+    cases.append(("nodes-hold-strings", doc))
+    doc = base()
+    doc["shot_graph"]["nodes"] = [{"shot_id": ""}]
+    cases.append(("empty-shot-id", doc))
+    doc = base()
+    doc["shot_graph"]["nodes"] = [{"shot_id": 5}]
+    cases.append(("numeric-shot-id", doc))
+    doc = base()
+    doc["shot_graph"]["nodes"] = [{}]
+    cases.append(("missing-shot-id", doc))
+    doc = base()
+    del doc["prompt_plans"]["S02"]
+    cases.append(("plan-missing-for-node", doc))
+    doc = base()
+    doc["prompt_plans"]["S01"] = "not-an-object"
+    cases.append(("plan-not-object", doc))
+    doc = base()
+    doc["prompt_plans"]["S01"]["sections"]["motion"] = "   "
+    cases.append(("blank-motion-needle", doc))
+    doc = base()
+    del doc["prompt_plans"]["S01"]["sha256"]
+    cases.append(("sha256-missing", doc))
+    doc = base()
+    doc["prompt_plans"]["S02"]["compiled_text"] = ""
+    cases.append(("blank-compiled-text", doc))
+
+    for name, doc in cases:
+        with pytest.raises(runner_mod.CompilationUnavailableError):
+            activate(doc)
+
+    # sanity: the valid base document still activates (successful
+    # paths intact)
+    activate(base())
+    assert runner_mod.BUDGET["total_budget"] == 2
