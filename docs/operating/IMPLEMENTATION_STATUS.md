@@ -2,6 +2,8 @@
 
 ## 2026-10-25 — AUTHORITATIVE PRODUCT PROGRESS GATE (supersedes historical claims below)
 
+**Research evidence (not Product PASS):** [Foyege24 / Chinese ComfyUI workflow audit](../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md). Continue future rounds there; no benchmark generation or new release authorization.
+
 **Canonical status:** `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`. The unchanged product goal is a believable full ~55–65s XIANXIA60 two-person sword-duel film with stable identities, geometry, continuity, soundtrack and verifiable asset/cost provenance. Older technically playable master and `PRODUCT PASS` headlines do not override Owner creative rejection.
 
 1. **Product Delta:** Engineering guard/provenance improvements only; no newly accepted two-person blade contact, no creative-ready master and no Owner picture/release lock. Technical PASS does not imply Product PASS.

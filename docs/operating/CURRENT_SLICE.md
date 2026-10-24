@@ -2,6 +2,8 @@
 
 ## 2026-10-25 — ACTIVE OWNER DECISION (supersedes older active/shipped headings below)
 
+**Research artifact:** [Foyege24 / Chinese ComfyUI workflow audit](../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md) — one running research item; all research hypotheses remain below Owner/Film SoT authority.
+
 **Product Goal unchanged:** One genuinely convincing ~55–65s XIANXIA60 `Nhất Kiếm Phá Vân` film: two-character sword contact, White/Black identity, blocking/eyelines, coherent space and continuity, actual source-to-master QC/lineage/audio, plus Owner creative acceptance. A technically decoded master or passing tests is NOT Product/Owner PASS.
 
 **CURRENT AUTHORITY:** `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`. The principal evidenced creative blocker is two-person physical sword combat with identity and spatial geometry. Historical account/credit/output envelopes are suspended, **0 new generation/credit/provider session or creative recut authorized**; no deployment or release. A separate explicit Owner decision is needed to resume production.

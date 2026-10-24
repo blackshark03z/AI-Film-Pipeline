@@ -2,6 +2,8 @@
 
 ## 2026-10-25 — Decision and operating precedence checkpoint
 
+**Research index:** [Foyege24 / Chinese ComfyUI workflow audit](../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md) is the one living evidence dossier; it is not a new SoT and grants no BUILD permission.
+
 1. **Canonical precedence:** The dated current header of root `CURRENT_SLICE.md` governs project status; `IMPLEMENTATION_STATUS.md` records independently verified product progress, while this profile binds them to frozen Film/Development SoTs. Older `ACTIVE`, `PRODUCT PASS` and `MASTER SHIPPED` passages remain historical technical/Worker evidence, not Owner creative or release acceptance. This is not a fourth truth or new lifecycle.
 2. **Owner Pause persists:** `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`; the main blocker is convincing two-person sword contact with persistent actor identity, shot geometry, eyelines and choreography. No further provider sessions, generation, credit spend, recut, CD or deployment absent separate explicit Owner resume.
 3. **Engineering exact evidence:** PR #2 remote head `181b23aa47ebb4d1601425593059532d1ffe919d` received three independently PROVEN D3 fail-closed commits and a policy-only commit matching pinned `AGENTS.md` blob `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`. Independent local promotion focused tests 68/68 PASS; GitHub Actions at this PR #2 head **NOT VERIFIED**. PR #3 remains draft `cc2edc9`; PR #4 draft `a899081`, with its own clean-checkout GitHub Actions 87/87 PASS (only that head). None merged to `main`.

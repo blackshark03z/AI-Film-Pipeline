@@ -2,6 +2,8 @@
 
 ## 2026-10-25 — Owner decision: compare ComfyUI before considering a new BUILD
 
+**Single research evidence item (not SoT):** [Foyege24 / Chinese ComfyUI workflow audit](../../research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md). Future rounds update this file only; V1 freeze and Owner Pause remain.
+
 **Research permission, not architecture adoption:** Owner requests a read-only comparison of the present AI-Film-Pipeline with concrete Chinese-language ComfyUI filmmaking workflows before deciding a new implementation round. This does not authorize ComfyUI setup, model download, workflow execution, GPU/provider use, media generation, or changed architecture.
 
 **Frozen V1 decisions still apply:** DR-001/002/003 (Film State/ShotSpec, continuity, replaceable adapters), DR-006 (no blind retry), DR-009 (ComfyUI/image-first is optional and deferred), local-first persistence and Resolve finishing are not superseded. Research evidence alone cannot promote a new Film/System Truth.
