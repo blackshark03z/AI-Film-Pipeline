@@ -1,0 +1,39 @@
+name: ci
+
+# Minimal OFFLINE guard: no provider credentials, no browser sessions,
+# no network beyond package install. Windows runner because the Dola
+# session layer uses Windows DPAPI (ctypes.wintypes) at import time.
+# The focused suites must pass from a CLEAN CHECKOUT that lacks the
+# Git-ignored projects/* runtime compilations (WP A1 fail-closed
+# bootstrap guarantees this).
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  offline-checks:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install offline dev dependencies
+        run: |-
+          python -m pip install --upgrade pip
+          python -m pip install -e .[dev]
+      - name: Byte-compile tracked Python sources
+        run: python -m compileall -q src tools tests
+      - name: Whitespace check on tracked sources
+        shell: bash
+        run: |-
+          if git grep -nI ' $' -- '*.py' '*.md'; then
+            echo "FAIL: trailing whitespace found in tracked sources"
+            exit 1
+          fi
+          echo "OK: no trailing whitespace in tracked .py/.md"
+      - name: Focused offline suites (fresh-checkout safe)
+        env:
+          PYTHONPATH: src
+        run: python -m pytest tests/test_v2_022_compilation.py tests/test_v2_022_fresh_checkout_bootstrap.py tests/test_v2_022_transient_failure.py tests/test_v2_021_hardening.py tests/test_dispatch_recovery.py tests/test_v2_022_account_routing.py -q
