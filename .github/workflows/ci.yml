@@ -1,7 +1,8 @@
 name: ci
 
-# Minimal OFFLINE guard: no provider credentials, no browser sessions,
-# no network beyond package install. Windows runner because the Dola
+# OFFLINE tests: no provider credentials, account sessions or mutations.
+# Dependency bootstrap may download Python packages, a local test browser
+# and FFmpeg. Windows runner because the Dola
 # session layer uses Windows DPAPI (ctypes.wintypes) at import time.
 # The focused suites must pass from a CLEAN CHECKOUT that lacks the
 # Git-ignored projects/* runtime compilations (WP A1 fail-closed
@@ -19,10 +20,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install offline dev dependencies
+      - name: Install test dependencies (including offline browser harness)
         run: |-
           python -m pip install --upgrade pip
-          python -m pip install -e .[dev]
+          python -m pip install -e ".[dev,flow]"
+      - name: Install Chromium for local-only browser regression tests
+        run: python -m patchright install chromium
+      - name: Install FFmpeg for synthetic media fixtures
+        shell: pwsh
+        run: |-
+          choco install ffmpeg --yes --no-progress --limit-output
+          ffmpeg -version
+          ffprobe -version
       - name: Byte-compile tracked Python sources
         run: python -m compileall -q src tools tests
       - name: Whitespace check on tracked sources
