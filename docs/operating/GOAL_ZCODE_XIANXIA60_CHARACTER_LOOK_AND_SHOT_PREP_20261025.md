@@ -1,0 +1,57 @@
+# ZCode Goal — XIANXIA60 Character Look, Wardrobe and X04 Visual Preproduction
+
+**Owner instruction:** 2026-10-25 — "tiếp tục, không làm task lẻ tẻ, hạn chế tối đa human relay; kiểm tra drift, over-engineering trước khi tiếp tục." This is **one consolidated ZCode Goal**, not a series of chat relays.
+**Current status:** `READY_FOR_ZCODE_NATIVE_GOAL / NOT_LAUNCHED_BY_TECH_LEAD`.
+**Executor:** **ZCode only** for any asset-processing code, local scripts, tests or BUILD. Tech Lead handles SHAPE/BOUND/SLICE, scoped Git/doc custody and independent PROVE. MAR is NOT the coding Worker.
+**Policy:** `POLICY_REF=45f71d6226c5ffc58b4e70f3bcea1bb0151b7003`; required `AGENTS.md` Git blob `6cab2103e32448a10e13b7f00c1a3eb4adb4a221`.
+**Safe working branch:** Existing separate, clean `D:\AI FILM MAKER\AI-Film-Pipeline-ZCode-ControlledShot-20261025`, `zcode/controlled-shot-v0-reproof-20261025@366b77cdf3ce3ee754fca10fa223f013705d4ddb`. Make new LOCAL commits on that branch only; do not overwrite frozen/history root files.
+**Root authority snapshot:** `D:\AI FILM MAKER\AI-Film-Pipeline` at `mission/quality-v2-022-120s@da5c29edf1a34c59be5a7cba3f3742d1577c04a5` before this Goal documentation commit. 7 existing tracked dirty / 175 untracked — protect all without stash, clean, reset, mass-stage or merge.
+
+## A. PRE-FLIGHT DRIFT / OVER-ENGINEERING STOP GATES
+
+**Verified before Goal creation:** the canonical Film Core, actors, ShotSpec and film continuity remain unchanged; prior ZCode X04 synthetic contact contract independently PROVED **125/125 targeted tests**, at `366b77c`. It proves sword centerline contact on five synthetic keyframes, **not** continuous video, actor identity, A-grade model output or Owner creative acceptance. Production is still `DEVELOPMENT=PAUSED_BY_OWNER / OWNER_CREATIVE_ACCEPTANCE=REJECTED / FILM_RELEASE=NOT_SHIPPED`, and five real canonical reference IDs are still `UNBOUND`.
+
+**Drift caught and corrected:** (a) treating documented rights/source review as an infinite blocker for **locally authored wardrobe concepts**; (b) repeatedly handing off tiny validator tasks rather than moving the character/shot product; (c) presenting ChatGPT-created faceless costume boards as though actor identity and wardrobe were already locked; (d) letting synthesis-ready-looking static staging imply physical moving-video proof. Resume **local look-development and shot preproduction only**, not film release or real paid generation.
+
+**Over-engineering ban:** Do not create a new framework, API adapter, reference-approval service, speculative data model, ComfyUI/Blender install, Blender rigging engine, auto-provider router, new Film Core/SoT, or another research dossier. Use existing Python+Pillow/stdlib, canonical JSON and the proved X04 staging/CLI/validator. Do not broaden `ControlledShotPackage` unless a short same-shot acceptance test cannot work otherwise.
+
+## B. INPUTS, IMAGE CUSTODY AND EVIDENCE
+
+**Already on the Windows machine (read-only):** `D:\AI FILM MAKER\AI-Film-Pipeline-Film120-Gemini\projects\xianxia60_nhat_kiem_pha_van\look_development\candidate_reference_ledger.json`, `reference_asset_ledger.json`, corresponding four candidate RGB PNGs (1 composite, 3 exact crops), original `shots/X04.json`; root single dossier `docs/research/CHINA_AI_FILM_WORKFLOWS_FOYEGE24_COMFYUI.md` R11/R12 and `docs/operating/PROJECT_OPERATING_PROFILE.md`.
+
+**Two NEW optional wardrobe concept boards created by ChatGPT in this conversation**, not in Windows Git yet. One downloadable transport ZIP, **`XIANXIA60_Wardrobe_Concept_Pack_2026-10-25.zip`**, includes WHITE and BLACK costume boards, `manifest.json`, `README.md`. Verified ZIP SHA-256:
+`d66a32ca2242d2b101d60355e996f8b445a5b2e3e77dc6a5cf3f0f28c0cdea69`.
+- `wardrobe_white_concept_v1.png`: 1536×1024, SHA-256 `b853a26ea11c60bd20a40104699cde12ab2947f512a01e792b377772c7e9673a`; ivory-white silk crepe, silver cloud embroidery, silver bracers, belt and covered boots, front/side/back faceless mannequins.
+- `wardrobe_black_concept_v1.png`: 1536×1024, SHA-256 `0bae3bf8a23dcc343df483e77644e7a1ddac70430fdfc3f53e3cde068d265f29`; dark-charcoal twill, leather and aged-bronze pauldrons/rivets, front/three-quarter/back faceless mannequins.
+
+**Preferred one-time transfer location** (outside worktrees): `D:\AI FILM MAKER\_imports\XIANXIA60_Wardrobe_Concept_Pack_2026-10-25.zip`. ZCode checks whether that file exists and verifies ZIP + both inner SHA-256 before use. **If absent, DO NOT stop the Goal**: proceed using the 4 existing Film120 candidates and include `NEW_WARDROBE_BOARDS_NOT_YET_IMPORTABLE` in terminal report. Never claim the ZIP is already on Windows, fabricate images or change canonical `reference_asset_ledger.json`. Keep transport originals unchanged, and do not commit multi-megabyte generated images to Git by default. Use local scratch outside Git or output a small manifest/derived evidence under an approved scoped folder.
+
+**Rights posture for this LOCAL concept Goal:** These two boards were generated by ChatGPT for this film concept, not sourced from an unknown third-party film image. Continue local visual design without repeatedly escalating speculative paperwork. Keep factual source note; do not represent faces, unknown third-party source images, cloud upload rights or a paid-provider allowance as verified. No automatic promotion of provisional assets into production reference binding.
+
+## C. SINGLE LONG GOAL — AUTONOMOUS MILESTONES (SEQUENTIAL, NO HUMAN RELAY)
+
+**M0 — Read-only preflight and self-audit:** Confirm exact worktree/branch/policy/SHA and existing dirty root custody; read Current Slice, Implementation Status, Film SoT, original ShotSpec X04, ledger and R12. Identify conflicting acceptance text BEFORE code. Document the 3 largest drift/over-engineering risks in terminal evidence, then act on the work actually closest to a coherent X04 action beat. Do not interrupt Owner for routine choices.
+
+**M1 — Character and costume look-development review (MAIN PRODUCT ARTIFACT):** Build **one concise director-readable comparison/selection packet** covering White/Black face candidate vs their distinct costume proposals and arena, with 3-view costume silhouette, palette/material vocabulary, sword grip/bracer compatibility, motion constraints (sleeves/waistcoat visibility during parry and lock), visual separation between characters, screen axis White-left/Black-right, and differences from canonical `LOOK_WHITE_ROBE_V1`/`LOOK_BLACK_ROBE_V1`. Validate hashes for any local candidate images. If new ZIP available, include both actual boards and make a compact, legible contact sheet; if absent, still create an honest text/visual review using existing Film120 inputs. **Never splice an actor's face into a body and then claim it is an authenticated, identity-stable production reference.** Record exact unavailable views/facts, only meaningful creative tradeoffs; avoid a long paperwork ledger.
+
+**M2 — One X04 character/wardrobe/shot-continuity packet:** Ground on canonical X04 5s, 35mm TWO_SHOT dolly-in 0–2s then lock, Black attack→White block→contact→White foot-slide→sustained blade-lock, **not recoil diagnostic**. Reuse proved `fixtures/creative_control/x04_canonical_lock_scene_v0.json` and deterministic SVG; propose how each outfit's sleeve, pauldron, belt and hand bracers must stay legible/consistent at keyframes. Add **small existing-schema-compatible QC rubric**: face distinguishing cues, left/right stage, one sword per actor, blade contact/force transfer, garment silhouettes, no extra hands/props, end-state lock and camera. A one-page shot look sheet or still contact-sheet plus exact timeline suffices. No new geometry engine, synthetic video claims or real provider submission.
+
+**M3 — Executable next-slice decision packet without new runtime integration:** Compare **B editorial three-cut beat** versus **A continuous one-take X04** on the *same canonical event*, with the identity/wardrobe constraints from M1/M2 and exact human QC. A+ is finishing quality above A, not a more expensive GPU label. Specify **missing real inputs**, the smallest locally feasible reference-admission action, and what a later controlled video pilot would test. Cost/accepted beat must be **UNKNOWN** until actual credits/quote/trial; do not present GPU-hour examples as live prices. If the user makes no creative selection, recommend a reversible default for further **look development only**, not a Film QC grade or creative accept.
+
+**M4 — Optional reuse/cleanup with stop rule:** Only if the packet genuinely needs a tiny script/test for deterministic composition or hash verification, use existing modules or a **very small** focused utility with tests. Avoid building libraries or touching Film Core. If all useful artifacts and evidence are complete, **STOP EARLY** rather than filling time.
+
+**Continuous local autonomy:** Worker chooses HOW and cycles BUILD→TEST→FIX→PROVE across these milestones without routine questions, may make scoped local commits and produce a **single terminal handoff**. If an optional image import is absent, continue others. If a major missing third-party right, new paid account/cost, provider upload, hard cap or unknown asset provenance is genuinely necessary, flag it as an external gate **for future production**, not a blocker to finishing the permitted local creative packet.
+
+## D. ACCEPTANCE, STOP, NO-GO
+
+**Goal PASS requires:** (1) exact validated source/asset provenance without implicit promotion; (2) one usable human-readable White/Black/arena *look packet*, with missing or available new wardrobe boards explicitly stated; (3) one canonical X04 continuity/shot packet grounded on proved staging, not fabricated output; (4) one actionable B/A/A+ next-slice decision with input readiness, QC, price UNKNOWN where justified; (5) existing relevant tests+syntax+scoped `git diff --check` PASS, exact local SHA and clean ZCode worktree; (6) an audit that all new output is **product-facing creative evidence rather than generalized tooling**.
+
+**GOAL LIMIT:** Up to the ZCode goal runtime's supported window, **not a promise of eight hours of continuous operation**. Stop on meaningful milestone completion, irreducible failure of exact input checks, root dirty worktree/policy conflict, need for real third-party/media transfer or unauthorized paid action, two consecutive ineffective tool/build loops, or on user-enforced quota. No unbounded research, browsing or refactor.
+
+**Prohibited:** MAR as coding Worker, runtime provider/Flow/Dola/Vast calls, external upload of source images, GPU rental/credits, model downloads, real X04 video generation, Film/Core SoT rewrite, auto-canonical ref promotion, destructive root operations, PR merge/push/release. **Film remains `PAUSED_BY_OWNER / CREATIVE_REJECTED / NOT_SHIPPED`.**
+
+## E. ONE TERMINAL ZCODE HANDOFF
+
+`GOAL STATUS → M1 LOOK ARTIFACT (source/image hashes, visible character differences) → M2 X04 CHARACTER/COSTUME CONTINUITY (which exact shot-beat/frame) → M3 B/A/A+ OPTION & SMALLEST NEXT SLICE → M4 ONLY IF NEEDED → EXACT BRANCH/COMMIT/CHANGED PATHS → TESTS/SOURCE CHECKS → ORIGINALS/WIP PRESERVED → DRIFT / OVER-ENGINEERING CHECK → FILM DELTA VS SYNTHETIC PREP DELTA → REAL UNCERTAINTIES / OWNER REVIEW DECISION`.
+
+The Tech Lead will independently PROVE this **one Goal result**, not ask for a separate report after every internal milestone. This file is a planning/execution contract, **not** evidence that a ZCode native Goal has launched.
