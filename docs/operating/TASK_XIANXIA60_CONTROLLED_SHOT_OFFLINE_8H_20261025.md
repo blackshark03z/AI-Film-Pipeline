@@ -1,5 +1,7 @@
 # Owner-approved bounded offline Work Package — XIANXIA60 controlled-shot feasibility (up to 8h)
 
+**Owner continuation note, 2026-10-25:** This Work Package remains historical proof custody for MAR candidate and ZCode R1/R2. The subsequent **single autonomous multi-milestone ZCode Goal** is [GOAL_ZCODE_XIANXIA60_AUTONOMOUS_20261025.md](GOAL_ZCODE_XIANXIA60_AUTONOMOUS_20261025.md); its Owner instruction supersedes only the prior halt-on-validator-pass execution limit. Frozen SoT, root WIP protection, source rights, cost controls and creative Pause remain unchanged. Do not claim the new Goal has started merely because this note is committed.
+
 ## 2026-10-25 — OWNER EXECUTOR CORRECTION / ZCODE ONLY (supersedes any executor ambiguity below)
 
 **EXECUTOR=ZCODE AGENT ONLY.** Owner explicitly selected **ZCode as coding Worker**. Earlier Tech Lead use of `mcp__MAR__submit` to run a coding worker was a **ROLE/EXECUTOR DRIFT**, not an Owner-approved choice. **DO NOT dispatch another MAR coding Worker for this slice.** Tech Lead may use MAR for read-only repo verification, Git/worktree custody and documentation but **not** as a substitute coding executor. This specific Owner choice overrides generic platform-interchangeability for this slice without changing frozen `AGENTS.md`.
