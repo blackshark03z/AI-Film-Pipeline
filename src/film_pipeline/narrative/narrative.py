@@ -48,6 +48,24 @@ _FUNCTION_CUES: dict[str, tuple[str, ...]] = {
     "RESOLVE": ("walks on", "faster", "onward", "at last"),
 }
 
+# Vietnamese cues for Fountain scripts; an explicit [[beat: X]] note in the
+# script always wins over these
+_FUNCTION_CUES_VI: dict[str, tuple[str, ...]] = {
+    "ESTABLISH": ("mở đầu", "toàn cảnh", "câu chuyện bắt đầu"),
+    "APPROACH": ("bước vào", "đi tới", "tiến lại", "đi vào", "bước tới",
+                 "đi ngang"),
+    "DISCOVER": ("phát hiện", "nhận ra", "nhìn thấy", "bắt gặp",
+                 "tìm thấy"),
+    "PRESSURE": ("ngập ngừng", "do dự", "lo sợ", "sợ hãi", "chần chừ"),
+    "REACTION": ("sững sờ", "chết lặng", "run run", "ngước nhìn",
+                 "lặng người", "nín thở"),
+    "DECISION": ("quyết định", "dứt khoát", "đứng dậy"),
+    "REVEAL": ("thú nhận", "tiết lộ", "sự thật", "hóa ra", "thật ra"),
+    "PAYOFF": ("mỉm cười", "gật đầu", "nắm lấy tay"),
+    "AFTERMATH": ("trống trải", "lặng im", "một mình", "bỏ đi"),
+    "RESOLVE": ("rời đi", "cuối cùng", "bước ra"),
+}
+
 
 class EmotionalState(ContractModel):
     label: str
@@ -131,25 +149,28 @@ def parse_srt(text: str) -> list[dict]:
 
 
 def classify_function(sentence: str, *, position: int,
-                      total: int) -> BeatFunction:
+                      total: int,
+                      cues: dict[str, tuple[str, ...]] | None = None,
+                      default: BeatFunction = "APPROACH") -> BeatFunction:
+    cues = cues or _FUNCTION_CUES
     low = sentence.lower()
     # position-aware precedence: openings establish, endings resolve
     if position == 0:
-        for cue in _FUNCTION_CUES["ESTABLISH"] + _FUNCTION_CUES["APPROACH"]:
+        for cue in cues["ESTABLISH"] + cues["APPROACH"]:
             if cue in low:
                 return "ESTABLISH"
     if position >= total - 1:
-        for cue in _FUNCTION_CUES["PAYOFF"] + _FUNCTION_CUES["RESOLVE"]:
+        for cue in cues["PAYOFF"] + cues["RESOLVE"]:
             if cue in low:
                 return "RESOLVE"
     best: tuple[int, BeatFunction] | None = None
     for function in ("REVEAL", "DISCOVER", "DECISION", "PRESSURE",
                      "REACTION", "AFTERMATH", "PAYOFF", "APPROACH",
                      "ESTABLISH"):
-        hits = sum(1 for cue in _FUNCTION_CUES[function] if cue in low)
+        hits = sum(1 for cue in cues[function] if cue in low)
         if hits and (best is None or hits > best[0]):
             best = (hits, function)  # type: ignore[assignment]
-    return best[1] if best else "APPROACH"
+    return best[1] if best else default
 
 
 def split_sentences(text: str) -> list[tuple[int, str]]:
@@ -162,11 +183,14 @@ def split_sentences(text: str) -> list[tuple[int, str]]:
 
 
 class NarrativeCompiler:
-    """Prose / SRT / structured package -> typed narrative graph pieces."""
+    """Prose / SRT / Fountain screenplay -> typed narrative graph pieces."""
 
     def compile(self, *, source_text: str, source_kind: str = "prose",
                 cast: list[dict] | None = None,
                 world_facts: dict | None = None) -> dict:
+        if source_kind == "fountain":
+            return self._compile_fountain(source_text, cast=cast,
+                                          world_facts=world_facts)
         sentences = split_sentences(source_text)
         events: list[StoryEvent] = []
         known_characters = {c["name"].lower(): c for c in (cast or [])}
@@ -214,6 +238,79 @@ class NarrativeCompiler:
             "reveals": reveals, "objectives": objectives,
             "transitions": transitions,
             "world_facts": world_facts or {},
+        }
+
+    def _compile_fountain(self, source_text: str, *,
+                          cast: list[dict] | None,
+                          world_facts: dict | None) -> dict:
+        """One event per action paragraph or dialogue line. ``who`` is the
+        speaker for dialogue and the named characters for action. Beat
+        function: explicit ``[[beat: X]]`` note, else Vietnamese/English
+        cues, else PRESSURE for dialogue (an exchange under tension) and
+        APPROACH for action. ``source_span`` holds 1-based script lines
+        [line, line + 1) instead of character offsets."""
+        from ..drama.script import parse_fountain
+
+        script = parse_fountain(source_text)
+        names = list(dict.fromkeys(
+            script.characters + [c["name"] for c in (cast or [])]))
+        cues = {k: _FUNCTION_CUES[k] + _FUNCTION_CUES_VI[k]
+                for k in _FUNCTION_CUES}
+        flat = [(scene, element) for scene in script.scenes
+                for element in scene.elements if element.kind != "transition"]
+        events: list[StoryEvent] = []
+        transitions: list[Transition] = []
+        for position, (scene, element) in enumerate(flat):
+            if element.kind == "dialogue":
+                who = [element.character]
+                text = f"{element.character}: {element.text}"
+                default: BeatFunction = "PRESSURE"
+            else:
+                low = element.text.lower()
+                who = [n for n in names if re.search(
+                    rf"(?<!\w){re.escape(n.lower())}(?!\w)", low)]
+                text = element.text
+                default = "APPROACH"
+            explicit = element.beat if element.beat in _FUNCTION_CUES or \
+                element.beat == "TRANSITION" else ""
+            function: BeatFunction = explicit or classify_function(  # type: ignore[assignment]
+                text, position=position, total=len(flat), cues=cues,
+                default=default)
+            low = text.lower()
+            events.append(StoryEvent(
+                event_id=f"ev_{position + 1:02d}", text=text,
+                function=function, who=who,
+                wants=self._wants(function),
+                what_changes=self._change(function, low),
+                audience_understands=self._understanding(function),
+                required_visual_info=self._visual_info(function, low),
+                source_span=[element.line_no, element.line_no + 1]))
+            if position:
+                previous_scene = flat[position - 1][0]
+                kind = "CONTINUOUS" if previous_scene is scene else (
+                    "LOCATION_TRANSITION"
+                    if previous_scene.location != scene.location
+                    else "TIME_JUMP")
+                transitions.append(Transition(
+                    from_event=events[-2].event_id,
+                    to_event=events[-1].event_id, kind=kind))
+        objectives = [NarrativeObjective(
+            objective_id=f"obj_{c['name'].lower().replace(' ', '_')}",
+            character=c["name"], desire=c.get("desire", ""))
+            for c in (cast or [])]
+        return {
+            "source_kind": "fountain",
+            "events": events, "beats": self._beats(events),
+            "causality": self._causality(events),
+            "reveals": [Reveal(reveal_id=f"reveal_{i + 1:02d}",
+                               event_id=e.event_id,
+                               knowledge_change=e.what_changes,
+                               audience_learns=e.audience_understands)
+                        for i, e in enumerate(events)
+                        if e.function == "REVEAL"],
+            "objectives": objectives, "transitions": transitions,
+            "world_facts": world_facts or {},
+            "script": script,
         }
 
     @staticmethod
