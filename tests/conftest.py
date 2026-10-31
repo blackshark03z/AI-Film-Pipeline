@@ -24,7 +24,9 @@ import sqlite3
 import pytest
 
 _STRICT = os.environ.get("FILM_STRICT_LOCAL_EVIDENCE") == "1"
-_OPTIONAL_MODULES = {"patchright", "playwright"}
+_OPTIONAL_MODULES = {"patchright", "playwright", "PIL"}
+# patchright/playwright installed but `patchright install chromium` not run
+_MISSING_BROWSER = "Executable doesn't exist"
 _LOCAL_MARKERS = ("projects/", "projects\\", "Flow-Claude-Clean-Profile",
                   "OWNER_REVIEW")
 _LOCAL_VALUE_ERRORS = ("qualified synthetic reference source unavailable",)
@@ -34,6 +36,9 @@ def _missing_local_input(excinfo: pytest.ExceptionInfo) -> str | None:
     exc = excinfo.value
     if isinstance(exc, ModuleNotFoundError) and exc.name in _OPTIONAL_MODULES:
         return f"optional dependency '{exc.name}' not installed (pip install .[flow])"
+    if type(exc).__module__.startswith(("patchright", "playwright")) and \
+            _MISSING_BROWSER in str(exc):
+        return "browser binary not installed (patchright install chromium)"
     if isinstance(exc, FileNotFoundError):
         target = str(exc.filename or exc)
         if any(marker in target for marker in _LOCAL_MARKERS):
