@@ -290,12 +290,10 @@ class DolaSessionRouter:
             # shows a ログイン button; the logged-in UI does not.
             try:
                 logged_out = await page.evaluate(
-                    """() => {
+                    r"""() => {
                         const t = (document.body && document.body.innerText)
                             || "";
-                        return /(^|
-)\s*ログイン\s*(
-|$)/.test(t)
+                        return /(^|\n)\s*ログイン\s*(\n|$)/.test(t)
                             || /Log\s?in|Sign\s?in/.test(t);
                     }""")
             except Exception:

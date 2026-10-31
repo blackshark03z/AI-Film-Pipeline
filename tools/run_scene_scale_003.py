@@ -64,9 +64,18 @@ import scene_runner
 ROOT = Path(__file__).resolve().parents[1]
 SCENE_DIR = ROOT / "projects/flow_scene_scale_003"
 STORE_PATH = ROOT / "projects/flow_production_harden_002/requal_current_build/runtime.sqlite"
-BASE_REFERENCE_BINDING = json.loads(
-    (ROOT / "projects/flow_production_harden_002/requal_current_build/reference_binding.json")
-    .read_text(encoding="utf-8"))
+BASE_REFERENCE_BINDING_PATH = (
+    ROOT / "projects/flow_production_harden_002/requal_current_build/reference_binding.json")
+
+
+def base_reference_binding() -> dict:
+    """Load the qualified base reference binding lazily.
+
+    The binding lives in git-ignored local evidence (``projects/``). Reading it
+    at import time made every test that merely imports this module fail on a
+    clean checkout; resolve it only when a live run actually needs it.
+    """
+    return json.loads(BASE_REFERENCE_BINDING_PATH.read_text(encoding="utf-8"))
 PROJECT_ID = "93a579b4-834e-435b-8304-5f6682937935"
 ACCOUNT_ID = "clean-pro-qualified"
 MODEL = contract.MODEL_VEO_3_1_LITE
@@ -181,9 +190,10 @@ def reference_binding_for(shot: dict) -> dict:
     """Resolve the continuity binding for one planned shot (durable ledger)."""
     kind = shot["continuity"]["kind"]
     if kind == "reference":
-        return {"media_id": BASE_REFERENCE_BINDING["media_id"],
-                "asset_id": BASE_REFERENCE_BINDING["asset_id"],
-                "attestation_id": BASE_REFERENCE_BINDING["attestation_id"],
+        base = base_reference_binding()
+        return {"media_id": base["media_id"],
+                "asset_id": base["asset_id"],
+                "attestation_id": base["attestation_id"],
                 "mechanism": "same_reference"}
     if kind == "last_frame":
         ledger_path = SCENE_DIR / "continuity_ledger.json"

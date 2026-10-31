@@ -75,9 +75,18 @@ POLL_INTERVAL_S = 60
 RELEASE_WAIT_S = 45
 MUTATION_ROUTE = "**/batchexecute?*"
 PROFILE = "D:/AI FILM MAKER/Flow-Claude-Clean-Profile"
-BASE_REFERENCE_BINDING = json.loads(
-    (ROOT / "projects/flow_production_harden_002/requal_current_build/reference_binding.json")
-    .read_text(encoding="utf-8"))
+BASE_REFERENCE_BINDING_PATH = (
+    ROOT / "projects/flow_production_harden_002/requal_current_build/reference_binding.json")
+
+
+def base_reference_binding() -> dict:
+    """Load the qualified base reference binding lazily.
+
+    The binding lives in git-ignored local evidence (``projects/``). Reading it
+    at import time made every test that merely imports this module fail on a
+    clean checkout; resolve it only when a live run actually needs it.
+    """
+    return json.loads(BASE_REFERENCE_BINDING_PATH.read_text(encoding="utf-8"))
 
 
 def now() -> str:

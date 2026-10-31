@@ -8,7 +8,7 @@ carries zero provider authority.
 from __future__ import annotations
 
 import hashlib
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
 from pydantic import Field, model_validator
 
@@ -42,7 +42,10 @@ class DeliveryEntry(ContractModel):
     def validate_entry(self):
         if self.role not in ROLES:
             raise ValueError(f"unknown delivery role {self.role}")
-        if Path(self.path).is_absolute() or ".." in Path(self.path).parts:
+        windows = PureWindowsPath(self.path)
+        if (Path(self.path).is_absolute() or windows.is_absolute()
+                or windows.drive or ".." in Path(self.path).parts
+                or ".." in windows.parts):
             raise ValueError("delivery paths must be relative")
         expected = MEDIA_TYPES.get(Path(self.path).suffix.lower())
         if expected and expected != self.media_type:

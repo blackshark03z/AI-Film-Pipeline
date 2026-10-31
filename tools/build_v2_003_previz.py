@@ -32,7 +32,15 @@ FONT = "C:/Windows/Fonts/arial.ttf"
 
 
 def _font(size):
-    return ImageFont.truetype(FONT, size)
+    # Windows workstation font first (keeps existing pinned renders stable);
+    # portable fallbacks so the renderer also works on Linux/CI.
+    for candidate in (FONT, "DejaVuSans.ttf",
+                      "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"):
+        try:
+            return ImageFont.truetype(candidate, size)
+        except OSError:
+            continue
+    return ImageFont.load_default(size)
 
 
 def _zone_x(waypoint_zones, zone):

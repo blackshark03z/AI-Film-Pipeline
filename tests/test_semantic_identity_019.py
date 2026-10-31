@@ -94,7 +94,7 @@ def test_05_legacy_digest_pins_unchanged_by_extensions():
     # the pinned canary plan digests from the qualified route still hold
     import subprocess
     out = subprocess.run(
-        ["uv", "run", "python", "-m", "pytest",
+        [sys.executable, "-m", "pytest",
          "tests/test_flow_r2v_compact.py", "-q", "--no-header"],
         capture_output=True, text=True, cwd=ROOT)
     assert out.returncode == 0, out.stdout[-400:]
