@@ -1,0 +1,67 @@
+{
+  "scene_id": "SC01",
+  "take": "take04_flow_omni",
+  "file": "SC01_take04_flow_omni.mp4",
+  "sha256": "e93bcda047c8b17271d02db299625a6572a89cb1ae80fd17ea91ce49714c86f3",
+  "provider": "Google Flow, Omni 1.1 Flash, Video + Thanh phan (ingredients), 16:9, 720p, 8s, x1 (12 credits)",
+  "account": "Flow-Claude-Clean-Profile (PRO)",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "scope": "scene 01 shots 1-2 only (8s per generation; a 15s scene needs two generations)",
+  "reference_images": "4 of the Owner-approved illustrated refs: LINH front + three_quarter, ONG_TU front + three_quarter",
+  "probe": {
+    "duration_s": 7.964,
+    "video": "1280x720 24fps",
+    "audio": "present"
+  },
+  "planned_cuts_s": [
+    4.5
+  ],
+  "detected_cuts_s": [
+    4.458
+  ],
+  "audio_rms_db_per_quarter_s": [
+    -58.4,
+    -57.8,
+    -57.7,
+    -55.9,
+    -58.0,
+    -22.1,
+    -21.4,
+    -25.1,
+    -45.9,
+    -57.0,
+    -57.0,
+    -44.8,
+    -45.7,
+    -46.7,
+    -48.1,
+    -49.3,
+    -50.7,
+    -51.8,
+    -52.9,
+    -53.2,
+    -54.9,
+    -56.3,
+    -55.5,
+    -20.2,
+    -24.6,
+    -27.3,
+    -25.0,
+    -25.6,
+    -35.1,
+    -62.6
+  ],
+  "observations": [
+    "cut at 4.46s vs planned 4.5s; first take that hits the planned cut",
+    "speech-level audio at ~1.25-2.0s (shot 1) and ~5.75-7.25s (shot 2), matching the two lines; Vietnamese wording and lip-sync not yet verified by ear",
+    "render is near-photoreal although the refs are illustrated; Flow did not block the refs",
+    "identity follows the refs: LINH black bob, cream blouse (a neck bow was added); ONG TU grey hair, brown cardigan, loupe on a headband (sits lower, closer to the eyes than in the ref)",
+    "shot 1 wide two-shot LINH frame-left / ONG TU frame-right; shot 2 OTS from behind LINH onto ONG TU; 180-degree axis held",
+    "small sparkle watermark bottom-right"
+  ],
+  "owner_review": {
+    "status": "APPROVED",
+    "by": "Owner",
+    "at": "2026-10-31T21:58:19+00:00"
+  }
+}
