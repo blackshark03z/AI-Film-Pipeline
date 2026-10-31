@@ -1,0 +1,44 @@
+{
+  "frames": [
+    {
+      "scene_id": "SC01",
+      "shot_id": "SC01_S1",
+      "image_path": "SC01_S1.png",
+      "sha256": "6db5a4b2f81f737afb48ab7de90733949f18564d41d443d98c642b83f42bd378",
+      "status": "PENDING",
+      "reviewer": "",
+      "reviewed_at": "",
+      "note": ""
+    },
+    {
+      "scene_id": "SC01",
+      "shot_id": "SC01_S2",
+      "image_path": "SC01_S2.png",
+      "sha256": "4c4a1eaff581e17bdc219d403037b1586d36da2179c2826e808f21ef827d5126",
+      "status": "PENDING",
+      "reviewer": "",
+      "reviewed_at": "",
+      "note": ""
+    },
+    {
+      "scene_id": "SC01",
+      "shot_id": "SC01_S3",
+      "image_path": "SC01_S3.png",
+      "sha256": "161d74399c1c56c241d25f724c960e9af231da7e7e2d80a1d183a6438292c3f5",
+      "status": "PENDING",
+      "reviewer": "",
+      "reviewed_at": "",
+      "note": ""
+    },
+    {
+      "scene_id": "SC01",
+      "shot_id": "SC01_S4",
+      "image_path": "SC01_S4.png",
+      "sha256": "e7f8d918fde907d17fce4e62f2b3761cb17f1699ccf11380f1b2bce0bc3edca9",
+      "status": "PENDING",
+      "reviewer": "",
+      "reviewed_at": "",
+      "note": ""
+    }
+  ]
+}
