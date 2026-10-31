@@ -1,0 +1,65 @@
+{
+  "prompt": {
+    "scene_id": "SC01",
+    "duration_s": 15.0,
+    "sections": {
+      "characters": "LINH (see reference image): woman, late 20s, always frame-left. ÔNG TƯ (see reference image): man, 70s, loupe on forehead, always frame-right.",
+      "setting": "Watch-repair shop, late-afternoon sun.",
+      "shots": "15s scene, 16:9, hard cuts at the marks. Shot 1 (0-4.6s): wide two-shot, LINH left, ÔNG TƯ right. Shot 2 (4.6-7.5s): over LINH's shoulder onto ÔNG TƯ. Shot 3 (7.5-10.6s): close-up of ÔNG TƯ looking screen-left. Shot 4 (10.6-15s): silent close-up of LINH looking screen-right.",
+      "dialogue": "Vietnamese dialogue, lip-synced: LINH (shot 1): \"Bác sửa được không ạ?\" ÔNG TƯ (shot 2, slow): \"Cái này, bác sửa rồi.\" ÔNG TƯ (shot 3, slow): \"Cho bố cháu. Hai mươi năm trước.\"",
+      "sound": "Sound: clocks ticking.",
+      "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+    },
+    "compiled_text": "LINH (see reference image): woman, late 20s, always frame-left. ÔNG TƯ (see reference image): man, 70s, loupe on forehead, always frame-right. Watch-repair shop, late-afternoon sun. 15s scene, 16:9, hard cuts at the marks. Shot 1 (0-4.6s): wide two-shot, LINH left, ÔNG TƯ right. Shot 2 (4.6-7.5s): over LINH's shoulder onto ÔNG TƯ. Shot 3 (7.5-10.6s): close-up of ÔNG TƯ looking screen-left. Shot 4 (10.6-15s): silent close-up of LINH looking screen-right. Vietnamese dialogue, lip-synced: LINH (shot 1): \"Bác sửa được không ạ?\" ÔNG TƯ (shot 2, slow): \"Cái này, bác sửa rồi.\" ÔNG TƯ (shot 3, slow): \"Cho bố cháu. Hai mươi năm trước.\" Sound: clocks ticking. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+    "word_count": 119,
+    "reference_attachments": [
+      {
+        "character": "LINH",
+        "angle": "FRONT",
+        "path": "LINH/front.png",
+        "sha256": "c62510c7f9b339e6a2c7980c8c3bbe6c1d175b3c3168902270309aa3bf348f75",
+        "label": "@LINH"
+      },
+      {
+        "character": "ÔNG TƯ",
+        "angle": "FRONT",
+        "path": "ONG_TU/front.png",
+        "sha256": "4a399c636576ed0bee347f98597df67bad6391d9f95171262b43d40981cc9164",
+        "label": "@ÔNG TƯ"
+      },
+      {
+        "character": "LINH",
+        "angle": "THREE_QUARTER",
+        "path": "LINH/three_quarter.png",
+        "sha256": "593e28119399a78b4ac6f37403afddbd9529f1e957c7d5ca549d608a6432452a",
+        "label": "@LINH"
+      },
+      {
+        "character": "ÔNG TƯ",
+        "angle": "THREE_QUARTER",
+        "path": "ONG_TU/three_quarter.png",
+        "sha256": "d8b7d61a193920f7cf2b7baf98cbc68d851c1791f6985acfe3084ad03e30fca6",
+        "label": "@ÔNG TƯ"
+      },
+      {
+        "character": "LINH",
+        "angle": "PROFILE",
+        "path": "LINH/profile.png",
+        "sha256": "c2a700e81d11352846424c13da14d544067f272d4011b26b5fa46bc8d200232f",
+        "label": "@LINH"
+      },
+      {
+        "character": "ÔNG TƯ",
+        "angle": "PROFILE",
+        "path": "ONG_TU/profile.png",
+        "sha256": "64c0d357cdd79c03e8c89e2d0d6c1e94598172e569dfe1ab6237e42eff5edf90",
+        "label": "@ÔNG TƯ"
+      }
+    ],
+    "sha256": "7eb9d51a79ec14ccfc1e50b200a65ea5cd5a03a7af24b7d9ef32e347383ea686"
+  },
+  "preflight": {
+    "scene_id": "SC01",
+    "issues": []
+  }
+}
