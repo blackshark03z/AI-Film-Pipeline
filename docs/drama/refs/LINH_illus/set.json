@@ -1,0 +1,39 @@
+{
+  "set": {
+    "character_id": "LINH_illus",
+    "name": "LINH",
+    "synthetic_person": true,
+    "look_id": "linh_cream_blouse_bob_illustrated",
+    "images": [
+      {
+        "angle": "FRONT",
+        "path": "LINH_illus/front.png",
+        "sha256": "26599c65d01ddec205a0afb6fc930528f6311aff444c0e869f26a14637ae6d30",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T15:59:38+00:00"
+      },
+      {
+        "angle": "THREE_QUARTER",
+        "path": "LINH_illus/three_quarter.png",
+        "sha256": "3de7a81d0780f3b917098bc34677314f388a2317b592747718a03ff2c94b12f5",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T15:59:38+00:00"
+      },
+      {
+        "angle": "PROFILE",
+        "path": "LINH_illus/profile.png",
+        "sha256": "ba36151ed97835f0769cf36c0bb750fd3ee161efd49e8219a8c181738681a0f9",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T15:59:38+00:00"
+      }
+    ]
+  },
+  "source_sheet": {
+    "path": "raw/LINH_illus/img_03_2848x1600.png",
+    "sha256": "5a6354f63ba7b1215b6a3b35c74621f717d7a56125f8a54a484fadd0b2d8bed2",
+    "provider": "dola.com Seedream 4.5"
+  }
+}

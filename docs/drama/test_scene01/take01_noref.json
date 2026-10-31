@@ -1,0 +1,21 @@
+{
+  "scene_id": "SC01",
+  "take": "take01_noref",
+  "file": "SC01_take01_noref.mp4",
+  "sha256": "a96e8141ad3273ed08ebd32b5824c70d8c1fe75e0090bf006b98278dc88318b8",
+  "provider": "dola.com Pro agent, Seedance 2.0 Fast (2.5 reported unavailable)",
+  "conversation": "38418437229819665",
+  "reference_images": "none (two attempts with 6 approved refs were blocked by provider content policy)",
+  "probe": {"duration_s": 15.104, "video": "hevc 1280x720 24fps", "audio": "aac"},
+  "planned_cuts_s": [4.6, 7.5, 10.6],
+  "detected_cuts_s": [1.875, 5.375, 10.542],
+  "audio_rms_db_per_s": [-30.9, -35.6, -29.0, -31.5, -64.8, -29.2, -36.4, -29.3, -27.7, -32.1, -61.2, -58.4, -57.3, -56.3],
+  "observations": [
+    "4 shots in the planned order and coverage; 180-degree axis held (LINH frame-left, ONG TU frame-right)",
+    "shot 1 is 1.9s instead of 4.6s; later cuts drift less (5.4 vs 7.5, 10.5 vs 10.6)",
+    "audio active 0-10s, near-silent 10-15s matching the silent reaction",
+    "identity not locked: LINH has a bun not a bob; ONG TU wears double-lens glasses, not a single loupe",
+    "visible 'Dola AI' watermark on the downloaded file"
+  ],
+  "owner_review": "PENDING"
+}

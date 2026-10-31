@@ -1,0 +1,39 @@
+{
+  "set": {
+    "character_id": "ONG_TU_illus",
+    "name": "ÔNG TƯ",
+    "synthetic_person": true,
+    "look_id": "ongtu_brown_cardigan_loupe_illustrated",
+    "images": [
+      {
+        "angle": "FRONT",
+        "path": "ONG_TU_illus/front.png",
+        "sha256": "8ac5ab382080824fce5ce4d9e19ab349fe93042b5adab92b8c8fec694d44a482",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T15:59:38+00:00"
+      },
+      {
+        "angle": "THREE_QUARTER",
+        "path": "ONG_TU_illus/three_quarter.png",
+        "sha256": "1976ae4b98a942abccd3b456fdd2d803f3ed8918db819a96504ace539ac7e80a",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T15:59:38+00:00"
+      },
+      {
+        "angle": "PROFILE",
+        "path": "ONG_TU_illus/profile.png",
+        "sha256": "9dc0156f23ea35a84efa3ff29f4f1d70f71cfaa8d431934692bd874608213d00",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T15:59:38+00:00"
+      }
+    ]
+  },
+  "source_sheet": {
+    "path": "raw/ONG_TU_illus/img_00_2848x1600.png",
+    "sha256": "0441d6fe1a06dec3fa640cfd690d1c1341182d3a7fd14664e761bfcf0b3e185d",
+    "provider": "dola.com Seedream 4.5"
+  }
+}

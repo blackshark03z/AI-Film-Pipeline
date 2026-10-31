@@ -1,0 +1,24 @@
+{
+  "scene_id": "SC01",
+  "take": "take02_illusref",
+  "file": "SC01_take02_illusref.mp4",
+  "sha256": "482d01d57ca1d56fc5881d36ea0e3f09a869f0409ade5585fb6ab182045ff626",
+  "provider": "dola.com Pro agent, Seedance 2.0 Fast (2.5 reported unavailable)",
+  "account": "GPM_5FC7A2A8_80079A4C479 (first account hit the 7-day free Pro limit)",
+  "conversation": "38418293372333329",
+  "reference_images": "6 Owner-approved illustrated refs: LINH_illus/{front,three_quarter,profile}, ONG_TU_illus/{front,three_quarter,profile}; passed provider content policy",
+  "probe": {"duration_s": 15.104, "video": "hevc 1280x720 24fps", "audio": "aac"},
+  "planned_cuts_s": [4.6, 7.5, 10.6],
+  "detected_cuts_s": [1.875, 6.375, 10.875],
+  "audio_rms_db_per_s": [-25.7, -63.2, -62.1, -20.3, -18.2, -59.9, -59.3, -44.8, -46.6, -20.2, -59.2, -55.8, -53.5, -54.2, -54.0],
+  "observations": [
+    "illustrated refs were accepted where the same prompt with photoreal refs was blocked twice",
+    "identity locked to refs: LINH has the black bob and cream blouse; ONG TU has grey hair, brown cardigan and a single loupe on the forehead",
+    "4 shots in the planned order and coverage; 180-degree axis held (LINH frame-left, ONG TU frame-right)",
+    "render style is semi-realistic CG/painterly, not photoreal live-action as requested",
+    "shot 1 is 1.9s instead of 4.6s; cut 2 at 6.4 vs 7.5, cut 3 at 10.9 vs 10.6",
+    "speech-level audio bursts near 1s, 4-5s and 10s; quiet 11-15s matching the silent close-up",
+    "visible 'Dola AI' watermark on the downloaded file"
+  ],
+  "owner_review": {"status": "APPROVED", "by": "Owner", "at": "2026-10-31T16:20:10+00:00"}
+}
