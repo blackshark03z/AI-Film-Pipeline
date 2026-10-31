@@ -33,6 +33,7 @@ from .prompting import (
     compile_prompt,
 )
 from .continuity import (
+    DRAMA_REQUIRED_DIMENSIONS,
     ContinuityEngine,
     ContinuityDimension,
     EditorialIntelligence,
@@ -58,7 +59,7 @@ __all__ = [
     "ShotGraph", "ShotGraphEdge", "ShotGraphNode",
     "ProviderPromptPlan", "ReferenceStrategy", "ShotTruth",
     "compile_prompt",
-    "ContinuityEngine", "ContinuityDimension", "EditorialIntelligence",
+    "DRAMA_REQUIRED_DIMENSIONS", "ContinuityEngine", "ContinuityDimension", "EditorialIntelligence",
     "FailureClass", "RepairPlanner", "ShotQCReport",
     "Learning", "LearningLoop", "NarrationPlan", "NarrationSegment",
     "align_narration",

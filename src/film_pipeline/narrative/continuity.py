@@ -33,8 +33,19 @@ class ShotQCReport(ContractModel):
     technical: dict = Field(default_factory=dict)
     shot_local: list[ContinuityDimension] = Field(default_factory=list)
     cut_compatibility: list[ContinuityDimension] = Field(default_factory=list)
-    verdict: Literal["ACCEPT", "REPAIR_REQUIRED", "REJECT"] = "ACCEPT"
+    verdict: Literal["ACCEPT", "REVIEW_REQUIRED", "REPAIR_REQUIRED",
+                     "REJECT"] = "ACCEPT"
     failure_class: FailureClass | None = None
+    unassessed_required: list[str] = Field(default_factory=list)
+
+
+# Drama scenes fail most often on who-looks-where, who-speaks and face
+# identity; a drama shot may not be accepted until these were looked at.
+DRAMA_REQUIRED_DIMENSIONS = (
+    "IDENTITY", "WARDROBE", "SCREEN_DIRECTION", "EYELINE",
+    "BODY_ORIENTATION", "LIGHTING", "PERFORMANCE", "DIALOGUE_SYNC",
+    "AUDIO", "ARTIFACTS",
+)
 
 
 class ContinuityEngine:
@@ -49,7 +60,19 @@ class ContinuityEngine:
     DIMENSIONS = ("IDENTITY", "WORLD", "GEOGRAPHY", "LIGHTING", "WEATHER",
                   "WARDROBE", "PROP_STATE", "SCREEN_DIRECTION", "EYELINE",
                   "MOTION", "BODY_ORIENTATION", "ACTION_STATE",
-                  "NARRATIVE_STATE")
+                  "NARRATIVE_STATE",
+                  # drama additions (2026-10-31)
+                  "PERFORMANCE", "DIALOGUE_SYNC", "AUDIO", "ARTIFACTS")
+
+    def __init__(self, *, required_dimensions: tuple[str, ...] = ("IDENTITY",)
+                 ) -> None:
+        """``required_dimensions`` must carry an explicit PASS/FAIL before a
+        shot can be ACCEPTed. Previously an empty evidence dict produced
+        ACCEPT (fail-open): a shot nobody reviewed counted as approved."""
+        unknown = set(required_dimensions) - set(self.DIMENSIONS)
+        if unknown:
+            raise ValueError(f"unknown QC dimensions: {sorted(unknown)}")
+        self.required_dimensions = tuple(required_dimensions)
 
     def evaluate_shot(self, *, shot_id: str, technical: dict,
                       evidence: dict) -> ShotQCReport:
@@ -85,7 +108,12 @@ class ContinuityEngine:
             report.verdict = "REPAIR_REQUIRED"
             report.failure_class = self._classify(failures)
         else:
-            report.verdict = "ACCEPT"
+            assessed = {d.dimension for d in report.shot_local
+                        if d.verdict != "NOT_ASSESSED"}
+            missing = [d for d in self.required_dimensions
+                       if d not in assessed]
+            report.unassessed_required = missing
+            report.verdict = "REVIEW_REQUIRED" if missing else "ACCEPT"
         return report
 
     @staticmethod
@@ -96,6 +124,8 @@ class ContinuityEngine:
             return "PROMPT_REPAIRABLE"
         if dimensions & {"PROP_STATE", "ACTION_STATE", "NARRATIVE_STATE"}:
             return "STORY_DESIGN_GAP"
+        if dimensions & {"AUDIO"}:
+            return "FINISHING_REPAIRABLE"
         return "PROMPT_REPAIRABLE"
 
 

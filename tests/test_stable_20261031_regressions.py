@@ -58,3 +58,48 @@ def test_scene_scale_tool_imports_without_local_evidence():
     import importlib
     module = importlib.import_module("run_scene_scale_003")
     assert callable(module.base_reference_binding)
+
+
+# --- ContinuityEngine fail-open (found 2026-10-31) -------------------------
+
+from film_pipeline.narrative import (  # noqa: E402
+    DRAMA_REQUIRED_DIMENSIONS, ContinuityEngine)
+
+_OK_TECH = {"decode_ok": True}
+
+
+def test_unreviewed_shot_is_not_accepted():
+    report = ContinuityEngine().evaluate_shot(
+        shot_id="S01", technical=_OK_TECH, evidence={})
+    assert report.verdict == "REVIEW_REQUIRED"
+    assert report.unassessed_required == ["IDENTITY"]
+
+
+def test_drama_profile_requires_eyeline_dialogue_and_artifacts():
+    engine = ContinuityEngine(required_dimensions=DRAMA_REQUIRED_DIMENSIONS)
+    partial = {d: {"verdict": "PASS", "evidence": "ok"}
+               for d in ("IDENTITY", "WARDROBE", "LIGHTING")}
+    report = engine.evaluate_shot(shot_id="S02", technical=_OK_TECH,
+                                  evidence={"shot_local": partial})
+    assert report.verdict == "REVIEW_REQUIRED"
+    assert {"EYELINE", "DIALOGUE_SYNC", "ARTIFACTS"} <= set(
+        report.unassessed_required)
+    full = {d: {"verdict": "PASS", "evidence": "ok"}
+            for d in DRAMA_REQUIRED_DIMENSIONS}
+    assert engine.evaluate_shot(shot_id="S02", technical=_OK_TECH,
+                                evidence={"shot_local": full}
+                                ).verdict == "ACCEPT"
+
+
+def test_failures_still_win_over_missing_review():
+    engine = ContinuityEngine(required_dimensions=DRAMA_REQUIRED_DIMENSIONS)
+    report = engine.evaluate_shot(shot_id="S03", technical=_OK_TECH,
+                                  evidence={"shot_local": {
+                                      "DIALOGUE_SYNC": {"verdict": "FAIL",
+                                                        "evidence": "mouth late"}}})
+    assert report.verdict == "REPAIR_REQUIRED"
+
+
+def test_unknown_required_dimension_rejected():
+    with pytest.raises(ValueError):
+        ContinuityEngine(required_dimensions=("VIBES",))
