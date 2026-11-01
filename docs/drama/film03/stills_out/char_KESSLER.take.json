@@ -1,0 +1,21 @@
+{
+  "prompt_file": "docs/drama/film03/stills/char_KESSLER.txt",
+  "prompt_sha256": "a7bd9d3407d9d098f163f9a4f967c451adf21513da177f49803ba42fb5c21faf",
+  "prompt_words": 38,
+  "attach": [],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-02T02:20:55",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 3,
+  "new_tiles": 1,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "d23b522230d2c4738cedd2279d17f5b295a5589d99e2300a3b919ae6b07bd2fa",
+  "token_tail": "957cbefc4c",
+  "result": "PASSED",
+  "file": "char_KESSLER.jpg",
+  "sha256": "ef5b377d3a25c56e355ad08bc1d660a0cb0274d2a42fecdf8771f9c817653f90",
+  "bytes": 65784,
+  "finished": "2026-11-02T02:21:28"
+}

@@ -1,0 +1,189 @@
+{
+  "film": "film03 The Front Desk",
+  "date": "2026-11-02",
+  "source": "docs/drama/film03/takes (start-frame takes)",
+  "clips": [
+    "OPEN_card",
+    "SC01_g1",
+    "SC01_g2",
+    "SC02_g1",
+    "SC02_g2",
+    "SC03_g1",
+    "SC03_g2",
+    "SC04_g1",
+    "SC04_g2",
+    "SC05_g1",
+    "SC05_g2",
+    "SC06_g1",
+    "SC06_g2",
+    "ROLLCALL_card",
+    "SC07_g1",
+    "SC07_g2",
+    "SC08_g1",
+    "SC08_g2"
+  ],
+  "final": "film03_front_desk_final.mp4",
+  "sha256": "a4f6f3f95fc5ad8a97ca56bd2822d06d82b59ead26ad5311754c78eb8b2a99bb",
+  "duration_s": 139.125,
+  "title_s": 3.0,
+  "end_card_s": 4.0,
+  "grade": "drama.post default grade",
+  "audio": "0.05/0.08 s edge fades per clip; loudnorm 2-pass + limiter -> -15.3 LUFS integrated, -1.7 dBFS peak (ebur128)",
+  "subtitles": {
+    "language": "en",
+    "burned_in": "dialogue only",
+    "sidecars": [
+      "film03_front_desk.en.srt",
+      "film03_front_desk.vi.srt"
+    ],
+    "sidecar_content": "title, context cards, identity tags, dialogue, end card (AI notice)",
+    "timing": "silencedetect windows; text from the script"
+  },
+  "label": "AI-generated bottom-left over the body, plus end card",
+  "owner_review": "PENDING",
+  "disclosure": {
+    "json": "disclosure.json",
+    "json_sha256": "f911adf3a2faf79a32005359dd2ca2711df04f1c9d0b5fd822875cb32dfc9bc2",
+    "marked": "film03_front_desk_final_marked.mp4",
+    "marked_sha256": "79da30c68dbe4b20f43bff7ed09afb4f43c751e98211341db69b5c10693b1fed",
+    "source_final_sha256": "a4f6f3f95fc5ad8a97ca56bd2822d06d82b59ead26ad5311754c78eb8b2a99bb",
+    "metadata": true,
+    "c2pa": true
+  },
+  "comprehension": {
+    "intros": [
+      {
+        "character": "NORA",
+        "label": "NORA BELL",
+        "relation": "the precinct's new captain",
+        "needed_by": "SC01_g2",
+        "carriers": []
+      },
+      {
+        "character": "KESSLER",
+        "label": "SGT. KESSLER",
+        "relation": "the desk sergeant",
+        "needed_by": "SC02_g1",
+        "carriers": []
+      },
+      {
+        "character": "ORTIZ",
+        "label": "OFFICER ORTIZ",
+        "relation": "a rookie",
+        "needed_by": "SC03_g1",
+        "carriers": []
+      }
+    ],
+    "tags": [
+      {
+        "character": "NORA",
+        "generation_id": "SC01_g2",
+        "start_s": 0.2,
+        "end_s": 3.3,
+        "anchor_x": 0.498,
+        "anchor_y": 0.163
+      },
+      {
+        "character": "KESSLER",
+        "generation_id": "SC02_g1",
+        "start_s": 0.2,
+        "end_s": 3.2,
+        "anchor_x": 0.583,
+        "anchor_y": 0.269
+      },
+      {
+        "character": "ORTIZ",
+        "generation_id": "SC03_g1",
+        "start_s": 0.1,
+        "end_s": 2.4,
+        "anchor_x": 0.601,
+        "anchor_y": 0.457
+      }
+    ],
+    "cards": [
+      {
+        "card_id": "OPEN_card",
+        "before": "SC01_g1",
+        "lines": [
+          "The new captain arrives early"
+        ],
+        "duration_s": 2.4
+      },
+      {
+        "card_id": "ROLLCALL_card",
+        "before": "SC07_g1",
+        "lines": [
+          "Roll call, 8 a.m."
+        ],
+        "duration_s": 2.0
+      }
+    ],
+    "facts": [
+      {
+        "fact_id": "nora_is_captain",
+        "text": "NORA is the new captain; the desk has never met her",
+        "needed_by": "SC01_g1",
+        "carriers": [
+          {
+            "kind": "CARD",
+            "generation_id": "SC01_g1",
+            "detail": ""
+          }
+        ]
+      },
+      {
+        "fact_id": "letter_is_appointment",
+        "text": "the letter names her captain",
+        "needed_by": "SC02_g2",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC02_g1",
+            "detail": "Captain? Captains here don't look like you."
+          }
+        ]
+      },
+      {
+        "fact_id": "lieutenant_confirms",
+        "text": "the call from upstairs is about the new captain",
+        "needed_by": "SC06_g1",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC05_g1",
+            "detail": "Desk. Yes, Lieutenant. The new captain?"
+          },
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC05_g2",
+            "detail": "Captain Nora Bell."
+          }
+        ]
+      },
+      {
+        "fact_id": "time_jump",
+        "text": "roll call, later that morning",
+        "needed_by": "SC07_g1",
+        "carriers": [
+          {
+            "kind": "CARD",
+            "generation_id": "SC07_g1",
+            "detail": ""
+          },
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC07_g1",
+            "detail": "briefing room, officers seated"
+          }
+        ]
+      }
+    ],
+    "issues": []
+  },
+  "delivery": {
+    "film03_front_desk_final_marked.mp4": "79da30c68dbe4b20f43bff7ed09afb4f43c751e98211341db69b5c10693b1fed",
+    "disclosure.json": "f911adf3a2faf79a32005359dd2ca2711df04f1c9d0b5fd822875cb32dfc9bc2",
+    "film03_front_desk.en.srt": "bc7be182982c8e9988b5df9ffb78e032e78a6373feed3067adcc6d062c22505c",
+    "film03_front_desk.vi.srt": "f359c7fca9a9b7a44dca8cb45caa7038cc7de6bd7f56ef7dbccb85754d9c7050"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "prompt_file": "docs/drama/film03/prompts/SC02_g2.txt",
+  "prompt_sha256": "741129bb8120b8991bb8868675e37a9086a1001631ef2ee6be52847a6ec40673",
+  "prompt_words": 222,
+  "attach": [],
+  "start": "tok:6381449f1a",
+  "upload": [],
+  "started": "2026-11-02T03:31:22",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "start_slot_diff": 0.0,
+  "elapsed_s": 48,
+  "responses_seen": 19,
+  "new_tiles": 3,
+  "result": "PASSED",
+  "bound_tiles": 0,
+  "finished": "2026-11-02T03:32:36",
+  "binding": "START_FRAME_MATCH",
+  "token_tail": "haOp642YkI",
+  "binding_note": "network bind found 3 new tiles, none bound; the one new video's first frame matches start_SC02_g2 (diff 14.1, next best 52.0)",
+  "sha256": "9e92f049bbbc3f4f10d69e0b75e7088d9702ca4ffc8059a52e98d21319ae5c1b",
+  "duration_s": 7.96
+}

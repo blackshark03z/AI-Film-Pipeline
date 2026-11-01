@@ -1,0 +1,21 @@
+{
+  "prompt_file": "docs/drama/film03/stills/plate_lobby_morning.txt",
+  "prompt_sha256": "df15af4191c139fc1ec2110a4b65ffd5ef768d05611eb0cbc00fdcca84440533",
+  "prompt_words": 51,
+  "attach": [],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-02T02:22:01",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 38,
+  "responses_seen": 3,
+  "new_tiles": 1,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "d76b0b44ec7326bfe3eb689c035a84cfee8bc6563ffca173b02273472223787e",
+  "token_tail": "ac2461d8b2",
+  "result": "PASSED",
+  "file": "plate_lobby_morning.jpg",
+  "sha256": "1b5313d6370e9c576def85712ee45a35787b3bfb4c5bebe5752b291fde340cf6",
+  "bytes": 149955,
+  "finished": "2026-11-02T02:22:44"
+}

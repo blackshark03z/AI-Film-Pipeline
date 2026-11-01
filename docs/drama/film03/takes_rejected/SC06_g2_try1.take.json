@@ -1,0 +1,21 @@
+{
+  "prompt_file": "docs/drama/film03/prompts/SC06_g2.txt",
+  "prompt_sha256": "13b9de64c2ad8a0238939dfa48b69e5103cc886274cc45c5de438d032e754cd6",
+  "prompt_words": 169,
+  "attach": [],
+  "start": "tok:3aab5a25e4",
+  "upload": [],
+  "started": "2026-11-02T03:15:52",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 38,
+  "responses_seen": 9,
+  "result": "BLOCKED",
+  "page_hint": [
+    "Không thành công",
+    "Không thể tạo video có thể gây rủi ro về danh tiếng hoặc xuyên tạc các sự kiện hiện tại. Vui lòng thử một câu lệnh khác hoặc gửi ý kiến phản hồi.",
+    "Không thành công",
+    "Không thể tạo video có thể gây rủi ro về danh tiếng hoặc xuyên tạc các sự kiện hiện tại. Vui lòng thử một câu lệnh khác hoặc gửi ý kiến phản hồi.",
+    "Không thành công"
+  ],
+  "finished": "2026-11-02T03:16:42"
+}

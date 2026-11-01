@@ -1,0 +1,21 @@
+{
+  "prompt_file": "docs/drama/film03/stills/plate_briefing_morning.txt",
+  "prompt_sha256": "eb03563264601441822964956087b87c5cbe0365f1b3eac59df3f39938dd1dcd",
+  "prompt_words": 41,
+  "attach": [],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-02T02:22:45",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 3,
+  "new_tiles": 1,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "dad3276c65fa0eb4ef19017b22248514f6910745b559ef9a66b942696d82d8ac",
+  "token_tail": "6ce576ae10",
+  "result": "PASSED",
+  "file": "plate_briefing_morning.jpg",
+  "sha256": "90d5b7e7ebd7fada5d57f2726dc6c9861df1bebec73d162abd58054a80460d1b",
+  "bytes": 159681,
+  "finished": "2026-11-02T02:23:17"
+}

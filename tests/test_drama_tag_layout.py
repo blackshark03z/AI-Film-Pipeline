@@ -40,3 +40,16 @@ def test_identity_assignment_is_one_to_one_and_thresholded():
     faces = [[0.1, 0.9], [0.95, 0.1], [-1.0, 0.0]]
     assert assign_by_identity(faces, refs) == {"ROSA": 1, "ELENA": 0}
     assert assign_by_identity([[-1.0, 0.0]], refs) == {}
+
+
+def test_still_with_the_wrong_person_blocks():
+    from film_pipeline.drama.tag_layout import judge_still_identity
+    # film03 SC05_g1: KESSLER close-up rendered as NORA in uniform
+    got = [(i.check, i.severity) for i in
+           judge_still_identity("SC05_g1", ["KESSLER"], {"NORA"})]
+    assert got == [("STILL_WRONG_PERSON", "BLOCK"),
+                   ("STILL_IDENTITY_UNCONFIRMED", "WARN")]
+    assert judge_still_identity("SC01_g1", ["NORA", "KESSLER"],
+                                {"NORA", "KESSLER"}) == []
+    back = judge_still_identity("SC02_g1", ["NORA", "KESSLER"], {"KESSLER"})
+    assert [i.severity for i in back] == ["WARN"]

@@ -1,0 +1,16 @@
+{
+  "prompt_file": "docs/drama/film03/prompts/SC08_g1.txt",
+  "prompt_sha256": "764f16f2b66badff0de94693595e5f19c61f98e92aa9e84ac7921f5d16e4006f",
+  "prompt_words": 155,
+  "attach": [],
+  "start": "tok:04d36ddb39",
+  "upload": [],
+  "started": "2026-11-02T03:18:59",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 18,
+  "responses_seen": 9,
+  "new_tiles": 2,
+  "result": "AMBIGUOUS",
+  "bound_tiles": 0,
+  "finished": "2026-11-02T03:19:26"
+}

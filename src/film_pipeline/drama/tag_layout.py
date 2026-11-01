@@ -176,6 +176,34 @@ def auto_place(tags: list[IdentityTag], intros: list[CharacterIntro],
     return out, issues
 
 
+def judge_still_identity(still_id: str, expected: list[str],
+                         named: set[str]) -> list[RuleIssue]:
+    """film03 SC05_g1/SC06_g2: a KESSLER close-up came back as NORA in a
+    sergeant's uniform. A recognised face of someone not meant to be in
+    the shot blocks; an expected character not recognised (back to camera,
+    tiny in a master) is only a warning for the eye check."""
+    issues = [RuleIssue(check="STILL_WRONG_PERSON", severity="BLOCK",
+                        detail=f"{still_id}: {who} recognised, not planned "
+                               f"in frame (planned {expected})")
+              for who in sorted(named - set(expected))]
+    issues += [RuleIssue(check="STILL_IDENTITY_UNCONFIRMED", severity="WARN",
+                         detail=f"{still_id}: {who} not recognised")
+               for who in expected if who not in named]
+    return issues
+
+
+def check_still_identity(stills: dict[str, Path],
+                         expected: dict[str, list[str]],
+                         refs: dict[str, list[float]]) -> list[RuleIssue]:
+    """Start frames before any video credit: who is actually in each."""
+    import cv2
+    issues = []
+    for sid, path in stills.items():
+        named, _ = _named_faces(cv2.imread(str(path)), refs)
+        issues += judge_still_identity(sid, expected[sid], set(named))
+    return issues
+
+
 def tag_preview_sheet(tags: list[IdentityTag], intros: list[CharacterIntro],
                       clips: dict[str, Path], out: Path) -> Path:
     """Contact sheet (2 columns) of every tag over the middle frame of its

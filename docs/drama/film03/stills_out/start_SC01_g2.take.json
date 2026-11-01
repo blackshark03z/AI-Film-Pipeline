@@ -1,0 +1,25 @@
+{
+  "prompt_file": "docs/drama/film03/stills/start_SC01_g2.txt",
+  "prompt_sha256": "664b3c9606210dfdcf127a1c03081c9455486011b2d17423698a1315b7f2c133",
+  "prompt_words": 114,
+  "attach": [
+    "tok:6ce576ae10",
+    "tok:964e39bb4c",
+    "tok:957cbefc4c"
+  ],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-02T02:25:43",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 10,
+  "new_tiles": 2,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "e6fb0de3e59a4f8761797224131187a8e5055bfcc8490c07905e27c8969325a5",
+  "token_tail": "897a88d54a",
+  "result": "PASSED",
+  "file": "start_SC01_g2.jpg",
+  "sha256": "079da99785c15b1e27c249115d64bb4754a6e401736831e05d2132702f31f2d7",
+  "bytes": 131843,
+  "finished": "2026-11-02T02:26:31"
+}

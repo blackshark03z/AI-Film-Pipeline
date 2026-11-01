@@ -1,0 +1,164 @@
+{
+  "frames": [
+    {
+      "scene_id": "SC01",
+      "shot_id": "SC01_S1",
+      "image_path": "SC01_g1.png",
+      "sha256": "819ad8f81748941a7f97c4f5f9c17ef4d55061570cb96af67963a4c085786ce2",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC01",
+      "shot_id": "SC01_S2",
+      "image_path": "SC01_g2.png",
+      "sha256": "f78f1090a2e5f6bc160ad67d0b3da25d5faa2ba937bd8886722c9d5bd5306646",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC02",
+      "shot_id": "SC02_S1",
+      "image_path": "SC02_g1.png",
+      "sha256": "42aed83aa377722b78e098ac893939ee192053b45bcc0365e9deb0cc133df5ba",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC02",
+      "shot_id": "SC02_S2",
+      "image_path": "SC02_g2.png",
+      "sha256": "3f2509b72e24d5c4723b3239f8601b25a03fbcaf8294fd986a80a825535cc928",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC03",
+      "shot_id": "SC03_S1",
+      "image_path": "SC03_g1.png",
+      "sha256": "575cf9442e8172905a7ea19a570815619905ef09b13a9da221f0debe85ca8ab6",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC03",
+      "shot_id": "SC03_S2",
+      "image_path": "SC03_g2.png",
+      "sha256": "df419238b626291bc9d9042e54566f4499aabc963e8b8653544fa105881b13f3",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC04",
+      "shot_id": "SC04_S1",
+      "image_path": "SC04_g1.png",
+      "sha256": "784582b152c332d133c150f0436bbf3f8eac211bb99d6e618e02e358579aa8be",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC04",
+      "shot_id": "SC04_S2",
+      "image_path": "SC04_g2.png",
+      "sha256": "d86e7fb10ca9f1247ae4583eddbc6d1b094e862e9a787e404b9411273ee3b951",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC05",
+      "shot_id": "SC05_S1",
+      "image_path": "SC05_g1.png",
+      "sha256": "441761295e95d2e87c3a3519743f9070920ea6373d365307a207f4073c3a1eb0",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC05",
+      "shot_id": "SC05_S2",
+      "image_path": "SC05_g2.png",
+      "sha256": "3a7ac8a1fa5a15f27025867aaf5b90d2eb8c888d7e8c439d05c2a4042b0fb407",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC06",
+      "shot_id": "SC06_S1",
+      "image_path": "SC06_g1.png",
+      "sha256": "c3b5f4f49cde03ddcfdbd8d44fbf2556d7567cf704e9f0112c99f7fb7da42379",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC06",
+      "shot_id": "SC06_S2",
+      "image_path": "SC06_g2.png",
+      "sha256": "ef8a3ca228d8417d30b4c1957da5a8f377af039df7fce7a697ea6c3c2a9618a6",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC07",
+      "shot_id": "SC07_S1",
+      "image_path": "SC07_g1.png",
+      "sha256": "952b53807496f62aa20b9876012f22a8556f902408350f4e25ee0ea2f5d5b63d",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC07",
+      "shot_id": "SC07_S2",
+      "image_path": "SC07_g2.png",
+      "sha256": "c3a44529f12f00df54aa8695ed55fee2ca897a19cc8630a0006ea701e6b5070c",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC08",
+      "shot_id": "SC08_S1",
+      "image_path": "SC08_g1.png",
+      "sha256": "d284deb9d2e55c3b5adfe2888136d2168c027b2ce18f570aac0926dede8dcf0c",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC08",
+      "shot_id": "SC08_S2",
+      "image_path": "SC08_g2.png",
+      "sha256": "42fb9121a8110b5a45900f258ee9c13b702fe7f4b1d2c4600f9cc7c0f10d6335",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T20:53:26+00:00",
+      "note": ""
+    }
+  ]
+}

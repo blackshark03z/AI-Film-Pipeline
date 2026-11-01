@@ -1,0 +1,21 @@
+{
+  "prompt_file": "docs/drama/film03/stills/char_NORA.txt",
+  "prompt_sha256": "bba5980ef18188d5992c37c7d0727e8a02ab60f219f2fb8d7c4f6f37f6e7397d",
+  "prompt_words": 36,
+  "attach": [],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-02T02:20:21",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 11,
+  "new_tiles": 8,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "b8ce1bac9eec3d59af6c90116d36fb7ed1bff2e9228f9cc4f3f896f759b3d723",
+  "token_tail": "964e39bb4c",
+  "result": "PASSED",
+  "file": "char_NORA.jpg",
+  "sha256": "069defd3c079962955fdbac551d4168031d30c6f3f3c7e3d454c16bf9b108641",
+  "bytes": 90268,
+  "finished": "2026-11-02T02:20:54"
+}

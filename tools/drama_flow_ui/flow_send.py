@@ -13,7 +13,7 @@ Custody (WP1b):
      network-bound when a decoded response frame holds both that token and
      the prompt text (``NETWORK_PROMPT_MATCH``), else ``NEW_TILE_ONLY``;
   4. the video under that exact tile is downloaded and hashed.
-Result: PASSED, BLOCKED, SEND_FAILED, AMBIGUOUS or TIMEOUT, written as a JSON
+Result: PASSED, BLOCKED, SEND_FAILED, AMBIGUOUS, UNBOUND or TIMEOUT, written as a JSON
 manifest next to OUT_MP4 (``<stem>.take.json``). Every send spends credits.
 Never reads cookies, never closes the browser.
 """
@@ -53,17 +53,69 @@ JS_TILE_RECT = r"""(tok) => { const i = [...document.images].find(
 
 # picker items by token: the same token also sits on the gallery tile behind
 # the overlay, only the small picker thumbnail is clickable
-JS_PICKER_XY = r"""(t) => { const i = [...document.images].find(
-    i => (i.currentSrc || i.src).includes(t)
-        && i.getBoundingClientRect().width < 80);
-    if (!i) return null; i.scrollIntoView({block: 'center'});
-    const r = i.getBoundingClientRect();
+JS_PICKER_AT = r"""(t) => { const i = [...document.images].find(
+    i => { const r = i.getBoundingClientRect();
+        return (i.currentSrc || i.src).includes(t) && r.width > 0
+            && r.width < 80 && r.y > 0 && r.bottom < innerHeight });
+    if (!i) return null; const r = i.getBoundingClientRect();
     return [r.x + r.width / 2, r.y + r.height / 2] }"""
 
-JS_VIDEO_AT = r"""([x, y]) => { const v = [...document.querySelectorAll('video')]
+# what a click at (x, y) would hit really is that item
+JS_HIT = r"""([t, x, y]) => { const e = document.elementFromPoint(x, y);
+    const i = e && (e.tagName === 'IMG' ? e : e.querySelector('img'));
+    return !!i && (i.currentSrc || i.src).includes(t) }"""
+
+# the filled slot shows a copy under another media id: compare pixels
+JS_SLOT_BYTES = r"""async ([x, y]) => { const i = [...document.images].find(
+    i => { const r = i.getBoundingClientRect(); return r.width > 0
+        && Math.abs(r.x + r.width / 2 - x) < 90
+        && Math.abs(r.y + r.height / 2 - y) < 90 });
+    if (!i) return null; const r = await fetch(i.currentSrc || i.src);
+    return Array.from(new Uint8Array(await r.arrayBuffer())) }"""
+SLOT_DIFF_MAX = 12.0     # mean abs grey diff at 64x36; other stills >= 40
+
+
+def slot_diff(data: bytes, still: Path) -> float:
+    import cv2
+    import numpy as np
+
+    def grey(img):
+        return cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY),
+                          (64, 36)).astype(float)
+    a = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
+    return float(np.abs(grey(a) - grey(cv2.imread(str(still)))).mean())
+
+JS_VIDEO_AT =r"""([x, y]) => { const v = [...document.querySelectorAll('video')]
     .find(v => { const r = v.getBoundingClientRect();
         return r.left <= x && x <= r.right && r.top <= y && y <= r.bottom });
     return v ? (v.currentSrc || v.src) : null }"""
+
+
+# over each picker's item column: "+" attach list, start-frame slot list
+ATTACH_LIST_XY, START_LIST_XY = (384, 400), (142, 400)
+
+
+async def _picker_find(page, tok: str, over: tuple[int, int],
+                       scrolls: int = 16):
+    """The picker renders only the items in view (about 15; film03 lost
+    its lobby plate after three new stills): wheel down until it shows.
+
+    No scrollIntoView: the list is a cdk virtual scroll that recycles its
+    <img> nodes, so after a programmatic scroll the node found showed a
+    neighbour and the click picked it (film03: NORA attached for KESSLER,
+    wrong start frames). Click only where elementFromPoint hits the item."""
+    for _ in range(scrolls + 1):
+        await page.wait_for_timeout(300)
+        xy = await page.evaluate(JS_PICKER_AT, tok)
+        if xy is not None and await page.evaluate(JS_HIT, [tok, *xy]):
+            await page.wait_for_timeout(300)
+            if await page.evaluate(JS_PICKER_AT, tok) == xy:
+                return xy
+            continue
+        await page.mouse.move(*over)
+        await page.mouse.wheel(0, 250)
+        await page.wait_for_timeout(500)
+    return None
 
 
 def _sha(data: bytes | str) -> str:
@@ -183,7 +235,7 @@ async def run(args) -> dict:
             for _ in range(2):
                 await page.mouse.click(*START_XY)
                 await page.wait_for_timeout(1500)
-                xy = await page.evaluate(JS_PICKER_XY, args.start[4:])
+                xy = await _picker_find(page, args.start[4:], START_LIST_XY)
                 if xy is not None:
                     break
             await page.wait_for_timeout(500)
@@ -196,11 +248,21 @@ async def run(args) -> dict:
             if await add.count():   # some picker states fill the slot directly
                 await add.click()
             await page.wait_for_timeout(2000)
+            # film03 SC02_g2/SC03_g1: the slot stayed empty and Flow made a
+            # text-only video; check the slot holds this frame before paying
+            if args.start_file:
+                data = await page.evaluate(JS_SLOT_BYTES, list(START_XY))
+                diff = (slot_diff(bytes(data), Path(args.start_file))
+                        if data else None)
+                rec["start_slot_diff"] = diff and round(diff, 1)
+                if diff is None or diff > SLOT_DIFF_MAX:
+                    rec["result"] = f"START_NOT_SET {args.start}"
+                    return rec
         for title in args.attach:
             await page.mouse.click(*PLUS_XY)
             await page.wait_for_timeout(1500)
             if title.startswith("tok:"):   # picker item by thumbnail token
-                xy = await page.evaluate(JS_PICKER_XY, title[4:])
+                xy = await _picker_find(page, title[4:], ATTACH_LIST_XY)
                 if xy is None:
                     rec["result"] = f"ATTACH_NOT_FOUND {title}"
                     return rec
@@ -254,8 +316,18 @@ async def run(args) -> dict:
         rec["new_tiles"] = len(new)
         if len(bound) == 1:
             token, rec["binding"] = next(iter(bound)), "NETWORK_PROMPT_MATCH"
-        elif len(new) == 1 and not bound:
+        elif len(new) == 1 and not bound and args.image:
             token, rec["binding"] = next(iter(new)), "NEW_TILE_ONLY"
+        elif len(new) == 1 and not bound:
+            # film03: four failed video jobs each "found" one new tile -- an
+            # older take's re-issued thumbnail -- and saved that take again;
+            # a video is kept only when the network binds it to the prompt
+            tail = await page.evaluate(
+                "document.body.innerText.slice(0, 1500)")
+            rec["result"] = "UNBOUND"
+            rec["page_hint"] = [ln for ln in tail.splitlines()
+                                if re.search(r"(?i)không|lỗi|policy|chính sách|thất bại|error", ln)][:5]
+            return rec
         else:
             rec["result"] = "AMBIGUOUS"
             rec["bound_tiles"] = len(bound)
@@ -307,6 +379,9 @@ def main() -> None:
     ap.add_argument("--timeout", type=int, default=600)
     ap.add_argument("--start", default="",
                     help="tok:TAIL of a gallery image for the start frame")
+    ap.add_argument("--start-file", default="",
+                    help="local copy of that frame: the filled slot must "
+                         "match it before anything is sent")
     ap.add_argument("--image", action="store_true",
                     help="composer is in image mode; save the output image")
     args = ap.parse_args()

@@ -1,0 +1,614 @@
+{
+  "feasibility": [],
+  "temporal": [],
+  "generations": {
+    "SC01_g1": {
+      "words": 220,
+      "verdict": "PASS",
+      "still_words": 138,
+      "issues": []
+    },
+    "SC01_g2": {
+      "words": 205,
+      "verdict": "PASS",
+      "still_words": 114,
+      "issues": []
+    },
+    "SC02_g1": {
+      "words": 211,
+      "verdict": "PASS",
+      "still_words": 113,
+      "issues": []
+    },
+    "SC02_g2": {
+      "words": 222,
+      "verdict": "PASS",
+      "still_words": 138,
+      "issues": []
+    },
+    "SC03_g1": {
+      "words": 173,
+      "verdict": "PASS",
+      "still_words": 97,
+      "issues": []
+    },
+    "SC03_g2": {
+      "words": 216,
+      "verdict": "PASS",
+      "still_words": 139,
+      "issues": []
+    },
+    "SC04_g1": {
+      "words": 168,
+      "verdict": "PASS",
+      "still_words": 97,
+      "issues": []
+    },
+    "SC04_g2": {
+      "words": 220,
+      "verdict": "PASS",
+      "still_words": 139,
+      "issues": []
+    },
+    "SC05_g1": {
+      "words": 181,
+      "verdict": "PASS",
+      "still_words": 91,
+      "issues": []
+    },
+    "SC05_g2": {
+      "words": 171,
+      "verdict": "PASS",
+      "still_words": 92,
+      "issues": []
+    },
+    "SC06_g1": {
+      "words": 171,
+      "verdict": "PASS",
+      "still_words": 84,
+      "issues": []
+    },
+    "SC06_g2": {
+      "words": 169,
+      "verdict": "PASS",
+      "still_words": 92,
+      "issues": []
+    },
+    "SC07_g1": {
+      "words": 210,
+      "verdict": "PASS",
+      "still_words": 128,
+      "issues": []
+    },
+    "SC07_g2": {
+      "words": 157,
+      "verdict": "PASS",
+      "still_words": 72,
+      "issues": []
+    },
+    "SC08_g1": {
+      "words": 155,
+      "verdict": "PASS",
+      "still_words": 73,
+      "issues": []
+    },
+    "SC08_g2": {
+      "words": 210,
+      "verdict": "PASS",
+      "still_words": 128,
+      "issues": []
+    }
+  },
+  "comprehension": [],
+  "looks": {
+    "NORA": {
+      "look_id": "nora_navy_coat",
+      "character": "NORA",
+      "text": "Black woman, late forties, short natural hair, navy wool coat, grey turtleneck",
+      "invariants": [
+        "short natural hair",
+        "navy wool coat",
+        "grey turtleneck"
+      ],
+      "approved": true
+    },
+    "KESSLER": {
+      "look_id": "kessler_uniform",
+      "character": "KESSLER",
+      "text": "white man, mid-fifties, grey crew cut, heavy build, navy police uniform with sergeant chevrons",
+      "invariants": [
+        "grey crew cut",
+        "heavy build",
+        "navy uniform with sergeant chevrons"
+      ],
+      "approved": true
+    },
+    "ORTIZ": {
+      "look_id": "ortiz_uniform",
+      "character": "ORTIZ",
+      "text": "Latino man, mid-twenties, slim, clean-shaven, short dark hair, navy police uniform",
+      "invariants": [
+        "slim",
+        "clean-shaven",
+        "short dark hair",
+        "navy uniform"
+      ],
+      "approved": true
+    }
+  },
+  "locations": [
+    {
+      "look_id": "lobby_morning",
+      "location": "EASTGATE PRECINCT LOBBY",
+      "text": "Police station lobby: tall wooden front desk on the right with a desk phone and a trash bin behind it, grey filing cabinets at the back, glass doors on the left, morning light",
+      "invariants": [
+        "tall wooden front desk on the right",
+        "desk phone",
+        "trash bin behind the desk",
+        "grey filing cabinets",
+        "glass doors on the left"
+      ],
+      "interior": true,
+      "time_of_day": "MORNING",
+      "weather_outside": "",
+      "environment_rules": [],
+      "approved": true
+    },
+    {
+      "look_id": "briefing_morning",
+      "location": "EASTGATE PRECINCT BRIEFING ROOM",
+      "text": "Police briefing room: a wooden lectern and a whiteboard on the left, rows of grey chairs on the right, window blinds, morning light",
+      "invariants": [
+        "lectern on the left",
+        "whiteboard",
+        "rows of grey chairs",
+        "window blinds"
+      ],
+      "interior": true,
+      "time_of_day": "MORNING",
+      "weather_outside": "",
+      "environment_rules": [],
+      "approved": true
+    }
+  ],
+  "states": {
+    "SC01_g1": {
+      "positions": {
+        "NORA": "inside the glass doors, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "folded, in NORA's coat pocket",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC01_g2": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "folded, in NORA's coat pocket",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC01_end": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "folded, on the desk",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC02_g1": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "folded, on the desk",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC02_g2": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "unfolded, in KESSLER's hand",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC02_end": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "crumpled, in the trash bin",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC03_g1": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "crumpled, in the trash bin",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC03_g2": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "crumpled, in the trash bin",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC03_end": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "crumpled, in the trash bin",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC04_g1": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "crumpled, in the trash bin",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC04_g2": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "at the cabinets behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "crumpled, in the trash bin",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC04_end": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "by the trash bin behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "smoothed flat, in ORTIZ's hands",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC05_g1": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "by the trash bin behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "smoothed flat, in ORTIZ's hands",
+        "the desk phone:": "on the desk"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC05_g2": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "by the trash bin behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "smoothed flat, in ORTIZ's hands",
+        "the desk phone:": "receiver at KESSLER's ear"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC05_end": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "by the trash bin behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "smoothed flat, in ORTIZ's hands",
+        "the desk phone:": "receiver at KESSLER's ear"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC06_g1": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "by the trash bin behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "smoothed flat, in ORTIZ's hands",
+        "the desk phone:": "receiver at KESSLER's ear"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC06_g2": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "by the trash bin behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "smoothed flat, in ORTIZ's hands",
+        "the desk phone:": "receiver at KESSLER's ear"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC06_end": {
+      "positions": {
+        "NORA": "in front of the desk, frame-left",
+        "KESSLER": "seated behind the desk, frame-right",
+        "ORTIZ": "by the trash bin behind the desk, frame-right"
+      },
+      "props": {
+        "the letter:": "smoothed flat, in ORTIZ's hands",
+        "the desk phone:": "receiver at KESSLER's ear"
+      },
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "KESSLER": "kessler_uniform",
+        "ORTIZ": "ortiz_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC07_g1": {
+      "positions": {
+        "NORA": "at the lectern, frame-left",
+        "ORTIZ": "seated in the front row, frame-right",
+        "KESSLER": "standing at the back wall, frame-right"
+      },
+      "props": {},
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "ORTIZ": "ortiz_uniform",
+        "KESSLER": "kessler_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC07_g2": {
+      "positions": {
+        "NORA": "at the lectern, frame-left",
+        "ORTIZ": "seated in the front row, frame-right",
+        "KESSLER": "standing at the back wall, frame-right"
+      },
+      "props": {},
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "ORTIZ": "ortiz_uniform",
+        "KESSLER": "kessler_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC07_end": {
+      "positions": {
+        "NORA": "at the lectern, frame-left",
+        "ORTIZ": "seated in the front row, frame-right",
+        "KESSLER": "standing at the back wall, frame-right"
+      },
+      "props": {},
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "ORTIZ": "ortiz_uniform",
+        "KESSLER": "kessler_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC08_g1": {
+      "positions": {
+        "NORA": "at the lectern, frame-left",
+        "ORTIZ": "seated in the front row, frame-right",
+        "KESSLER": "standing at the back wall, frame-right"
+      },
+      "props": {},
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "ORTIZ": "ortiz_uniform",
+        "KESSLER": "kessler_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC08_g2": {
+      "positions": {
+        "NORA": "at the lectern, frame-left",
+        "ORTIZ": "seated in the front row, frame-right",
+        "KESSLER": "standing at the back wall, frame-right"
+      },
+      "props": {},
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "ORTIZ": "ortiz_uniform",
+        "KESSLER": "kessler_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC08_end": {
+      "positions": {
+        "NORA": "at the lectern, frame-left",
+        "ORTIZ": "seated in the front row, frame-right",
+        "KESSLER": "standing at the back wall, frame-right"
+      },
+      "props": {},
+      "looks": {
+        "NORA": "nora_navy_coat",
+        "ORTIZ": "ortiz_uniform",
+        "KESSLER": "kessler_uniform"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    }
+  }
+}

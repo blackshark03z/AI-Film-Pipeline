@@ -1,0 +1,22 @@
+{
+  "prompt_file": "docs/drama/film03/prompts/SC01_g2.txt",
+  "prompt_sha256": "de05d492b02d9e57e9a02424604f50e62661170af8ab664cee3be502e163b768",
+  "prompt_words": 205,
+  "attach": [],
+  "start": "tok:897a88d54a",
+  "upload": [],
+  "started": "2026-11-02T03:07:59",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 48,
+  "responses_seen": 14,
+  "new_tiles": 2,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "bdb9c830bff310bc5701420dd43e9620132da037df9ad18d57b009d184fb8d8e",
+  "token_tail": "UgC_M_S7aH",
+  "result": "PASSED",
+  "file": "SC01_g2.mp4",
+  "sha256": "334dd8111a79da4804c53481f21d32ca138c092503fdac57667ab392ac90758a",
+  "bytes": 772683,
+  "duration_s": 7.964444,
+  "finished": "2026-11-02T03:09:03"
+}

@@ -1,0 +1,21 @@
+{
+  "prompt_file": "docs/drama/film03/stills/char_ORTIZ.txt",
+  "prompt_sha256": "1dfd636e010e2db1828e5b4eef45119994ee171d36694acdcb836f8daa5b4ea3",
+  "prompt_words": 35,
+  "attach": [],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-02T02:21:28",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 3,
+  "new_tiles": 1,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "7fe1706b60e2946054e8abcddc393e7b052020d19e80974efe6d742bd0ffee4e",
+  "token_tail": "8f24302c19",
+  "result": "PASSED",
+  "file": "char_ORTIZ.jpg",
+  "sha256": "df3be067774aa7307a4182833f608c40352cc456535b82d6cf861ed3d17dd0bb",
+  "bytes": 67309,
+  "finished": "2026-11-02T02:22:01"
+}
