@@ -27,6 +27,10 @@ from film_pipeline.drama.coverage import (_SIZE, CoverageShot,  # noqa: E402
 from film_pipeline.drama.feasibility import (FeasibilityLimits,  # noqa: E402
                                              check_script)
 from film_pipeline.drama.preflight import PreflightLimits  # noqa: E402
+from film_pipeline.drama.comprehension import (  # noqa: E402
+    check_comprehension, lint_script)
+from drama_film02_story import (CARDS, FACTS, IN_FRAME,  # noqa: E402
+                                INTROS, TAGS, TAKES_ORDER)
 
 GEN_S = 8.0
 OUT = Path("docs/drama/film02")
@@ -396,6 +400,13 @@ def main():
         print(gid, report.verdict, len(text.split()), "words",
               [f"{i.severity} {i.check}: {i.detail[:100]}"
                for i in report.issues])
+    # what the viewer must know, before any credit (tags unplaced here)
+    assert IN_FRAME == {g: SHOTS[g][3] for g in TAKES_ORDER}
+    record["comprehension"] = [i.model_dump() for i in (
+        lint_script(script, INTROS, FACTS) + check_comprehension(
+            TAKES_ORDER, IN_FRAME, INTROS, FACTS, TAGS, CARDS))]
+    print("comprehension", [f"{i['severity']} {i['check']}"
+                            for i in record["comprehension"]])
     record["looks"] = {k: v.model_dump() for k, v in LOOKS.items()}
     record["locations"] = [NIGHT.model_dump(), MORNING.model_dump()]
     record["states"] = {k: v.model_dump() for k, v in STATE.items()}

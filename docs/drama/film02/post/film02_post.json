@@ -13,7 +13,7 @@
     "SC03_g2"
   ],
   "final": "film02_spare_key_final.mp4",
-  "sha256": "43d2b2c06c48dd66f0323a8c23c411e84c403b27d3a181818e385cbd7e2287b4",
+  "sha256": "fa83aa6983cf4511776c667d3ebe2b53cb2c1d85fbf26605777668011f7005bc",
   "duration_s": 59.333333,
   "title_s": 3.0,
   "end_card_s": 4.0,
@@ -29,10 +29,10 @@
   "owner_review": "PENDING",
   "disclosure": {
     "json": "disclosure.json",
-    "json_sha256": "b87bd56596c7a03150fe7430b7c0e78cf751e6fde102adfd24cd0f760307ce53",
+    "json_sha256": "71048f9b97fe2e82ad6ba7705121f132749c078f7526585ad60fd5d6d1b8a163",
     "marked": "film02_spare_key_final_marked.mp4",
-    "marked_sha256": "1afab60fff44dd9479c6389afe84485743a84981a6667ba249c41d3b40fbaad6",
-    "source_final_sha256": "43d2b2c06c48dd66f0323a8c23c411e84c403b27d3a181818e385cbd7e2287b4",
+    "marked_sha256": "1027f63a76b75e4d1bf0ecbc4cf30e8e99ac6043794370424083da9b5ae1c1e4",
+    "source_final_sha256": "fa83aa6983cf4511776c667d3ebe2b53cb2c1d85fbf26605777668011f7005bc",
     "metadata": true,
     "c2pa": true
   },
@@ -66,24 +66,24 @@
         "generation_id": "SC01_g1",
         "start_s": 0.2,
         "end_s": 2.7,
-        "anchor_x": 0.41,
-        "anchor_y": 0.42
+        "anchor_x": 0.386,
+        "anchor_y": 0.46
       },
       {
         "character": "MARCUS",
         "generation_id": "SC01_g1",
         "start_s": 2.7,
         "end_s": 4.9,
-        "anchor_x": 0.71,
-        "anchor_y": 0.3
+        "anchor_x": 0.736,
+        "anchor_y": 0.4
       },
       {
         "character": "ELENA",
         "generation_id": "SC01_g1",
         "start_s": 5.0,
         "end_s": 7.2,
-        "anchor_x": 0.3,
-        "anchor_y": 0.2
+        "anchor_x": 0.187,
+        "anchor_y": 0.231
       }
     ],
     "cards": [

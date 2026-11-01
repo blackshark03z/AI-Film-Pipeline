@@ -14,6 +14,7 @@ for every on-screen text: ``lead_s + chars / chars_per_s``, clamped.
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Literal
 
@@ -22,6 +23,7 @@ from pydantic import Field
 from ..core import ContractModel
 from .post import Overlay, SubtitleCue, identity_tag_png
 from .scene_bible import RuleIssue
+from .script import Script
 
 CarrierKind = Literal["DIALOGUE", "VISUAL", "TAG", "CARD"]
 
@@ -73,8 +75,10 @@ class IdentityTag(ContractModel):
     generation_id: str
     start_s: float                   # clip-relative
     end_s: float
-    anchor_x: float = Field(ge=0.0, le=1.0)   # tag centre, beside the face
-    anchor_y: float = Field(default=0.12, ge=0.0, le=1.0)   # tag top
+    # tag centre / tag top as frame fractions, beside the face; None:
+    # tag_layout.auto_place finds the face and fills them
+    anchor_x: float | None = Field(default=None, ge=0.0, le=1.0)
+    anchor_y: float | None = Field(default=None, ge=0.0, le=1.0)
 
 
 class ContextCard(ContractModel):
@@ -203,8 +207,67 @@ def tag_overlays(tags: list[IdentityTag], intros: list[CharacterIntro],
     out = []
     for k, t in enumerate(tags, 1):
         intro = by_char[t.character]
+        if t.anchor_x is None or t.anchor_y is None:
+            raise ValueError(f"{t.character} tag on {t.generation_id} has "
+                             "no anchor (run tag_layout.auto_place)")
         png = identity_tag_png(out_dir / f"tag_{k:02}.png", intro.label,
                                intro.relation, t.anchor_x, t.anchor_y)
         out.append(Overlay(generation_id=t.generation_id, start_s=t.start_s,
                            end_s=t.end_s, png=str(png)))
     return out
+
+
+# ------------------------------------------------------- script stage
+
+# kinship words -> root; a root heard in dialogue names a person the viewer
+# must be able to place (film02: "Mom" / "your mother", never on screen)
+KIN = {w: root for root, words in {
+    "mother": ["mother", "mom", "mum", "mama", "mommy"],
+    "father": ["father", "dad", "daddy", "papa"],
+    "brother": ["brother"], "sister": ["sister"],
+    "aunt": ["aunt", "auntie"], "uncle": ["uncle"],
+    "son": ["son"], "daughter": ["daughter"],
+    "wife": ["wife"], "husband": ["husband"],
+    "grandmother": ["grandmother", "grandma", "granny"],
+    "grandfather": ["grandfather", "grandpa"],
+    "cousin": ["cousin"], "niece": ["niece"], "nephew": ["nephew"],
+}.items() for w in words}
+
+
+def kin_roots(text: str) -> set[str]:
+    return {KIN[w] for w in re.findall(r"[a-z]+", text.lower()) if w in KIN}
+
+
+def lint_script(script: Script, intros: list[CharacterIntro],
+                facts: list[StoryFact] = ()) -> list[RuleIssue]:
+    """Script-stage check, before any generation: every speaker has an
+    intro, and every family member named in dialogue is placed for the
+    viewer by an intro relation or a declared fact. The hint quotes the
+    action line that described the character, which the viewer never
+    reads."""
+    known = set().union(*(kin_roots(i.relation) for i in intros),
+                        *(kin_roots(f.text) for f in facts))
+    declared = {i.character for i in intros}
+    issues: list[RuleIssue] = []
+    seen: set[str] = set()
+    for scene in script.scenes:
+        actions = [e.text for e in scene.elements if e.kind == "action"]
+        for e in scene.elements:
+            if e.kind != "dialogue":
+                continue
+            who = e.character
+            if who not in declared and who not in seen:
+                seen.add(who)
+                said = next((a for a in actions if who in a.upper()), "")
+                hint = f' (action line: "{said[:80]}")' if said else ""
+                issues.append(_issue(
+                    "IDENTITY_UNDECLARED",
+                    f"{who} speaks in {scene.scene_id} with no "
+                    f"CharacterIntro{hint}"))
+            for root in sorted(kin_roots(e.text) - known):
+                issues.append(_issue(
+                    "OFFSCREEN_PERSON",
+                    f"{who} names a {root} in {scene.scene_id} "
+                    f"({e.text!r}): declare who that is with a StoryFact "
+                    "and a carrier"))
+    return issues

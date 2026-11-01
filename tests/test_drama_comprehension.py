@@ -91,3 +91,40 @@ def test_card_reading_rules():
 def test_read_time_has_a_floor():
     assert read_time(["Later"]) == 2.0
     assert read_time(["After their mother's funeral"]) == 2.4
+
+
+# ------------------------------------------------------ script stage
+
+from pathlib import Path  # noqa: E402
+
+from film_pipeline.drama import parse_fountain  # noqa: E402
+from film_pipeline.drama.comprehension import kin_roots, lint_script  # noqa: E402
+
+FILM02 = parse_fountain(Path("docs/drama/film02_spare_key.fountain")
+                        .read_text(encoding="utf-8"))
+
+
+def test_kin_words_fold_to_roots():
+    assert kin_roots("Mom always liked you best.") == {"mother"}
+    assert kin_roots("Your mother changed the locks.") == {"mother"}
+    assert kin_roots("Keep it, Marcus.") == set()
+
+
+def test_film02_script_as_first_written_is_blocked():
+    # what the plan looked like before the Owner review: no intros, no facts
+    found = {(i.check, i.detail.split()[0]) for i in lint_script(FILM02, [])}
+    assert {("IDENTITY_UNDECLARED", "MARCUS"), ("IDENTITY_UNDECLARED", "ROSA"),
+            ("IDENTITY_UNDECLARED", "ELENA")} <= found
+    assert ("OFFSCREEN_PERSON", "MARCUS") in found      # "Mom ..."
+    hint = next(i.detail for i in lint_script(FILM02, [])
+                if "ROSA" in i.detail)
+    assert "AUNT ROSA" in hint
+
+
+def test_film02_script_with_intros_and_facts_passes():
+    dead = StoryFact(fact_id="mother_dead", text="their mother has just died",
+                     needed_by="SC01_g1")
+    assert lint_script(FILM02, [ROSA, ELENA, MARCUS], [dead]) == []
+    plain = ROSA.model_copy(update={"relation": "family friend"})
+    assert [i.check for i in lint_script(FILM02, [plain, ELENA, MARCUS])] \
+        == ["OFFSCREEN_PERSON"] * 2

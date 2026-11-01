@@ -3,8 +3,10 @@
 Same post chain as film01 (drama.post + drama.disclosure). Comprehension
 layer (drama.comprehension): an opening context card for the death the
 story starts from, identity tags beside each character on first
-appearance, and the "Earlier that morning" card before the flashback; the
-plan is checked with check_comprehension before rendering. Run from the repo root:
+appearance (placed by drama.tag_layout, preview sheet in post/), and the
+"Earlier that morning" card before the flashback; declarations live in
+drama_film02_story.py and are checked before rendering. Run from the repo
+root:
     PYTHONPATH=src uv run python tools/drama_film02_post.py
 """
 from __future__ import annotations
@@ -22,67 +24,22 @@ from film_pipeline.drama.disclosure import (  # noqa: E402
     default_dev_cert_dir, embed_metadata, read_c2pa, sha256_file,
     sign_c2pa, write_disclosure)
 from film_pipeline.drama.comprehension import (  # noqa: E402
-    Carrier, CharacterIntro, ContextCard, IdentityTag, StoryFact,
     check_comprehension, tag_overlays)
+from film_pipeline.drama.tag_layout import (  # noqa: E402
+    auto_place, reference_embeddings, tag_preview_sheet)
 from film_pipeline.drama.post import (  # noqa: E402
     PostManifest, SubtitleCue, absolute_cues, assemble, clamp_cues,
     context_card_clip, cue_offsets, normalize_loudness,
     probe_video_duration, write_srt)
 
+sys.path.insert(0, str(REPO / "tools"))
+from drama_film02_story import (CARDS, FACTS, IN_FRAME, INTROS,  # noqa: E402
+                                TAGS, TAKES_ORDER)
+
 DOCS = REPO / "docs/drama/film02"
 TAKES = DOCS / "takes"
 POST = DOCS / "post"
 TITLE_S, END_S = 3.0, 4.0
-TAKES_ORDER = ["SC01_g1", "SC01_g2", "SC02_g1", "SC02_g2", "SC03_g1",
-               "SC03_g2"]
-IN_FRAME = {"SC01_g1": ["ROSA", "ELENA", "MARCUS"],
-            "SC01_g2": ["ELENA", "MARCUS"], "SC02_g1": ["ROSA", "ELENA"],
-            "SC02_g2": ["ROSA", "ELENA"], "SC03_g1": ["ELENA"],
-            "SC03_g2": ["ROSA", "ELENA", "MARCUS"]}
-# film02 review: the older woman read as the mother, so "Your mother
-# changed the locks" read as the mother talking about herself
-INTROS = [
-    CharacterIntro(character="ROSA", label="ROSA",
-                   relation="their late mother's sister"),
-    CharacterIntro(character="ELENA", label="ELENA",
-                   relation="the elder daughter"),
-    CharacterIntro(character="MARCUS", label="MARCUS",
-                   relation="her younger brother"),
-]
-# Owner: everyone in the opening master is named there, one at a time.
-# MARCUS's tag sits over his first line, so the speaker is named as he
-# speaks. Anchors measured on the take: beside the face, never over one.
-TAGS = [
-    IdentityTag(character="ROSA", generation_id="SC01_g1", start_s=0.2,
-                end_s=2.7, anchor_x=0.41, anchor_y=0.42),
-    IdentityTag(character="MARCUS", generation_id="SC01_g1", start_s=2.7,
-                end_s=4.9, anchor_x=0.71, anchor_y=0.30),
-    IdentityTag(character="ELENA", generation_id="SC01_g1", start_s=5.0,
-                end_s=7.2, anchor_x=0.30, anchor_y=0.20),
-]
-CARDS = [ContextCard(card_id="OPEN_card", before="SC01_g1",
-                     lines=["After their mother's funeral"]),
-         ContextCard(card_id="FLASHBACK_card", before="SC02_g1",
-                     lines=["Earlier that morning"])]
-FACTS = [
-    StoryFact(fact_id="mother_dead", text="their mother has just died",
-              needed_by="SC01_g1",
-              carriers=[Carrier(kind="CARD", generation_id="SC01_g1")]),
-    StoryFact(fact_id="flashback", text="SC02 happens before SC01",
-              needed_by="SC02_g1",
-              carriers=[Carrier(kind="CARD", generation_id="SC02_g1"),
-                        Carrier(kind="VISUAL", generation_id="SC02_g1",
-                                detail="sunlight, no rain, MARCUS absent")]),
-    StoryFact(fact_id="back_to_night", text="SC03 continues SC01",
-              needed_by="SC03_g1",
-              carriers=[Carrier(kind="VISUAL", generation_id="SC03_g1",
-                                detail="night lamp, rain on the glass")]),
-    StoryFact(fact_id="brass_key_useless",
-              text="the brass key MARCUS took opens nothing",
-              needed_by="SC03_g2",
-              carriers=[Carrier(kind="DIALOGUE", generation_id="SC02_g1",
-                                detail="The brass one opens nothing.")]),
-]
 CLIPS = []
 for g in TAKES_ORDER:
     CLIPS += [c.card_id for c in CARDS if c.before == g] + [g]
@@ -145,8 +102,12 @@ def main() -> None:
     cues = clamp_cues([SubtitleCue(generation_id=c, start_s=a, end_s=b,
                                    text=t, speaker_window=(0.0, 8.0))
                        for c, a, b, t in CUES], notes)
-    issues = check_comprehension(TAKES_ORDER, IN_FRAME, INTROS, FACTS, TAGS,
-                                 CARDS, cues)
+    refs = reference_embeddings({c.character: DOCS / "stills_out" /
+                                 f"char_{c.character}.jpg" for c in INTROS})
+    takes = {g: TAKES / f"{g}.mp4" for g in TAKES_ORDER}
+    tags, issues = auto_place(TAGS, INTROS, takes, refs)
+    issues += check_comprehension(TAKES_ORDER, IN_FRAME, INTROS, FACTS, tags,
+                                  CARDS, cues)
     if any(i.severity == "BLOCK" for i in issues):
         raise SystemExit("comprehension: " + "; ".join(
             f"{i.check} {i.detail}" for i in issues))
@@ -160,7 +121,8 @@ def main() -> None:
         final = assemble(clips, POST / "film02_spare_key_final.mp4",
                          cues=cues, title_lines=TITLE, end_lines=END,
                          title_s=TITLE_S, end_s=END_S,
-                         overlays=tag_overlays(TAGS, INTROS, Path(tmp)))
+                         overlays=tag_overlays(tags, INTROS, Path(tmp)))
+    tag_preview_sheet(tags, INTROS, takes, POST / "tags_preview.jpg")
     stats = normalize_loudness(final)
     post = PostManifest(
         film="film02 The Spare Key", date="2026-11-01",
@@ -196,7 +158,7 @@ def main() -> None:
     record = post.model_dump()
     record["comprehension"] = {
         "intros": [i.model_dump() for i in INTROS],
-        "tags": [t.model_dump() for t in TAGS],
+        "tags": [t.model_dump() for t in tags],
         "cards": [{**c.model_dump(), "duration_s": c.duration()}
                   for c in CARDS],
         "facts": [f.model_dump() for f in FACTS],

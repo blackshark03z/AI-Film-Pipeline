@@ -80,6 +80,14 @@ Muse checks, by eye on every take:
 - Prompt budget on this route: **215 words**. All six prompts were 165–220
   words and followed their phase timing.
 - Stills are the QC gate before video credits: reject there, not on video.
+- Comprehension runs at two stages. Script stage (`lint_script`, in
+  `tools/drama_film02.py`): every speaker needs an intro, every family member
+  named in dialogue ("Mom", "your mother") needs an intro relation or a fact;
+  the film02 script as first written fails it. Post stage:
+  `tag_layout.auto_place` names faces by SFace against the character stills,
+  puts each tag beside its face (toward the frame centre, clear of every face,
+  the subtitle band and lamp/window glare) and writes `post/tags_preview.jpg`
+  for the human check. Declarations: `tools/drama_film02_story.py`.
 - Comprehension is planned with the script: dialogue first (free before
   generation), then picture; tags and cards (white on black, ≤ 2 lines,
   2–3 s from a 15 chars/s reading rule) are the post fallback.

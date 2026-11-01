@@ -170,21 +170,38 @@ def subtitle_png(path: Path, text: str, *, size: int = 34,
     return path
 
 
+TAG_MARGIN, TAG_LINE2 = 38, 38    # frame margin, relation line offset
+
+
+def _tag_fonts(fonts: Fonts):
+    from PIL import ImageFont
+    return ImageFont.truetype(fonts[1], 30), ImageFont.truetype(fonts[0], 24)
+
+
+def identity_tag_size(label: str, relation: str,
+                      fonts: Fonts = DEFAULT_FONTS) -> tuple[float, float]:
+    """(width, height) in px of the tag text block on the W x H frame."""
+    from PIL import Image, ImageDraw
+    d = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    fn, fr = _tag_fonts(fonts)
+    return (max(d.textlength(label, font=fn), d.textlength(relation, font=fr)),
+            TAG_LINE2 + 24 + 6)
+
+
 def identity_tag_png(path: Path, label: str, relation: str, anchor_x: float,
                      anchor_y: float = 0.12, *,
                      fonts: Fonts = DEFAULT_FONTS) -> Path:
     """Name (bold) over relation, no box (Owner: no black plate); a black
     stroke keeps it legible on light walls. Centred on ``anchor_x`` beside
     the character's face (never over it) and kept inside the frame."""
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    fn, fr = ImageFont.truetype(fonts[1], 30), ImageFont.truetype(fonts[0], 24)
-    w = max(d.textlength(label, font=fn), d.textlength(relation, font=fr))
-    pad, margin = 14, 24
-    x = min(max(anchor_x * W - w / 2, margin + pad), W - margin - pad - w)
+    fn, fr = _tag_fonts(fonts)
+    w, _ = identity_tag_size(label, relation, fonts)
+    x = min(max(anchor_x * W - w / 2, TAG_MARGIN), W - TAG_MARGIN - w)
     y = anchor_y * H
-    for text, f, dy in ((label, fn, 0), (relation, fr, 38)):
+    for text, f, dy in ((label, fn, 0), (relation, fr, TAG_LINE2)):
         d.text((x, y + dy), text, font=f, fill=(255, 255, 255, 255),
                stroke_width=2, stroke_fill=(0, 0, 0, 230))
     path.parent.mkdir(parents=True, exist_ok=True)
