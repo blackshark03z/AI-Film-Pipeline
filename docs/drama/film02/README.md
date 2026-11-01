@@ -69,8 +69,10 @@ Muse checks, by eye on every take:
   `CharacterIntro` (name + relation to the story) and every story fact a
   carrier (dialogue, picture, identity tag or context card) no later than the
   first generation that needs it; `check_comprehension` blocks otherwise.
-  Fixed at 0 credits: opening card, tags beside ROSA/ELENA (SC01_g1) and
-  MARCUS (SC01_g2), flashback card reworded to "Earlier that morning".
+  Fixed at 0 credits: opening card, tags beside all three in the opening
+  master (SC01_g1, one at a time, MARCUS named over his first line; plain
+  text with a black stroke, no plate), flashback card reworded to "Earlier
+  that morning".
 
 ## Decisions
 

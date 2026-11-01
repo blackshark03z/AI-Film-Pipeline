@@ -13,7 +13,7 @@
     "SC03_g2"
   ],
   "final": "film02_spare_key_final.mp4",
-  "sha256": "7307138d141d42bd2b1d2d28bcf98351ca43465590a1ad729f1c68c3b5755028",
+  "sha256": "43d2b2c06c48dd66f0323a8c23c411e84c403b27d3a181818e385cbd7e2287b4",
   "duration_s": 59.333333,
   "title_s": 3.0,
   "end_card_s": 4.0,
@@ -29,10 +29,10 @@
   "owner_review": "PENDING",
   "disclosure": {
     "json": "disclosure.json",
-    "json_sha256": "b5c2e871aaaac0c5b742329eaee088dbe3d129a080f7ddd997c44c02db61a6b5",
+    "json_sha256": "b87bd56596c7a03150fe7430b7c0e78cf751e6fde102adfd24cd0f760307ce53",
     "marked": "film02_spare_key_final_marked.mp4",
-    "marked_sha256": "b732bc9ef4192dc8a77d55458901f28a2fb8d46c7d6710ca8174ee5b96d98aab",
-    "source_final_sha256": "7307138d141d42bd2b1d2d28bcf98351ca43465590a1ad729f1c68c3b5755028",
+    "marked_sha256": "1afab60fff44dd9479c6389afe84485743a84981a6667ba249c41d3b40fbaad6",
+    "source_final_sha256": "43d2b2c06c48dd66f0323a8c23c411e84c403b27d3a181818e385cbd7e2287b4",
     "metadata": true,
     "c2pa": true
   },
@@ -56,7 +56,7 @@
         "character": "MARCUS",
         "label": "MARCUS",
         "relation": "her younger brother",
-        "needed_by": "SC01_g2",
+        "needed_by": "",
         "carriers": []
       }
     ],
@@ -70,20 +70,20 @@
         "anchor_y": 0.42
       },
       {
-        "character": "ELENA",
+        "character": "MARCUS",
         "generation_id": "SC01_g1",
-        "start_s": 4.4,
-        "end_s": 6.6,
-        "anchor_x": 0.3,
-        "anchor_y": 0.2
+        "start_s": 2.7,
+        "end_s": 4.9,
+        "anchor_x": 0.71,
+        "anchor_y": 0.3
       },
       {
-        "character": "MARCUS",
-        "generation_id": "SC01_g2",
-        "start_s": 0.3,
-        "end_s": 2.6,
-        "anchor_x": 0.84,
-        "anchor_y": 0.42
+        "character": "ELENA",
+        "generation_id": "SC01_g1",
+        "start_s": 5.0,
+        "end_s": 7.2,
+        "anchor_x": 0.3,
+        "anchor_y": 0.2
       }
     ],
     "cards": [
@@ -159,6 +159,12 @@
         ]
       }
     ],
-    "issues": []
+    "issues": [
+      {
+        "check": "TAG_OVER_DIALOGUE",
+        "severity": "WARN",
+        "detail": "MARCUS tag runs over 'So she left the house to you.'"
+      }
+    ]
   }
 }

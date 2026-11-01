@@ -46,18 +46,19 @@ INTROS = [
                    relation="their late mother's sister"),
     CharacterIntro(character="ELENA", label="ELENA",
                    relation="the elder daughter"),
-    # SC01_g2 is his close shot; his first line only needs "family"
     CharacterIntro(character="MARCUS", label="MARCUS",
-                   relation="her younger brother", needed_by="SC01_g2"),
+                   relation="her younger brother"),
 ]
-# anchors measured on the takes: tag beside the face, never over one
+# Owner: everyone in the opening master is named there, one at a time.
+# MARCUS's tag sits over his first line, so the speaker is named as he
+# speaks. Anchors measured on the take: beside the face, never over one.
 TAGS = [
     IdentityTag(character="ROSA", generation_id="SC01_g1", start_s=0.2,
                 end_s=2.7, anchor_x=0.41, anchor_y=0.42),
-    IdentityTag(character="ELENA", generation_id="SC01_g1", start_s=4.4,
-                end_s=6.6, anchor_x=0.30, anchor_y=0.20),
-    IdentityTag(character="MARCUS", generation_id="SC01_g2", start_s=0.3,
-                end_s=2.6, anchor_x=0.84, anchor_y=0.42),
+    IdentityTag(character="MARCUS", generation_id="SC01_g1", start_s=2.7,
+                end_s=4.9, anchor_x=0.71, anchor_y=0.30),
+    IdentityTag(character="ELENA", generation_id="SC01_g1", start_s=5.0,
+                end_s=7.2, anchor_x=0.30, anchor_y=0.20),
 ]
 CARDS = [ContextCard(card_id="OPEN_card", before="SC01_g1",
                      lines=["After their mother's funeral"]),
