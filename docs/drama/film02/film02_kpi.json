@@ -1,0 +1,73 @@
+{
+  "film_id": "film02_spare_key",
+  "generations_planned": 6,
+  "generations_sent": 7,
+  "generations_blocked": 1,
+  "generations_first_pass_accepted": 6,
+  "credits_total": 84.0,
+  "credits_investigation": 0.0,
+  "usable_seconds": 48.0,
+  "rerenders": 0,
+  "defects": [
+    {
+      "generation_id": "SC03_g1",
+      "category": "IDENTITY",
+      "stage_missed": "Start-frame still prompt (prop on an out-of-frame character drew a stranger)",
+      "fixed_by": "still_prompt drops props on unseen people, 'Only X in frame' for singles; caught on the 0-credit still"
+    },
+    {
+      "generation_id": "plates",
+      "category": "SET",
+      "stage_missed": "Plate generation (second time of day rendered as a different room)",
+      "fixed_by": "second plate rendered from the first plate attached"
+    },
+    {
+      "generation_id": "SC02_g2",
+      "category": "PROVIDER_BLOCK",
+      "stage_missed": "Provider (generic failure, no policy text)",
+      "fixed_by": "one retry; flow_send recovers the start slot the failed job left filled"
+    },
+    {
+      "generation_id": "preflight",
+      "category": "TIMING",
+      "stage_missed": "Scene bible (heading 'THAT MORNING (FLASHBACK)' not grouped; return from flashback compared with the flashback)",
+      "fixed_by": "_tod_group reads words in the heading; LINEAR cut anchors on the latest earlier story moment"
+    },
+    {
+      "generation_id": "prompt",
+      "category": "SHOT_SCALE",
+      "stage_missed": "Prompt compile (three-person master called a two-shot)",
+      "fixed_by": "coverage.describe: 'wide shot' for 3+ people"
+    },
+    {
+      "generation_id": "flow_send",
+      "category": "TOOLING",
+      "stage_missed": "Flow send step (image URLs not /asb/, gallery scrolls in a container, picker items below the fold)",
+      "fixed_by": "token regex covers flow-content images, scroll every container to top, scrollIntoView picker items"
+    }
+  ],
+  "notes": [
+    "route: 0-credit stills (3 characters, 2 plates, 6 start frames) -> 6 x 8 s start-frame videos",
+    "usable_seconds: 3 scenes x 16 s, all first-pass takes",
+    "prompt budget raised to 215 words on the start-frame route; all six followed their phase timing (speech inside the ACTION window)"
+  ],
+  "derived": {
+    "first_pass_usable_rate": 1.0,
+    "credits_per_usable_second": 1.75,
+    "rerenders_per_100s": 0.0
+  },
+  "vs_film01": {
+    "first_pass_usable_rate": {
+      "film01": 0.8,
+      "film02": 1.0
+    },
+    "credits_per_usable_second": {
+      "film01": 2.1,
+      "film02": 1.75
+    },
+    "rerenders_per_100s": {
+      "film01": 5.0,
+      "film02": 0.0
+    }
+  }
+}

@@ -69,7 +69,8 @@ class CoverageShot(ContractModel):
         if self.coverage == "MASTER":
             placed = ", ".join(f"{c} {s.lower()}"
                                for c, s in book.sides.items())
-            return f"wide two-shot, {placed}"
+            kind = "wide two-shot" if len(book.sides) <= 2 else "wide shot"
+            return f"{kind}, {placed}"
         if self.coverage == "TWO_SHOT":
             return "medium two-shot, profiles facing each other"
         if self.coverage == "OTS":

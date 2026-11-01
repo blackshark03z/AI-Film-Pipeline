@@ -160,7 +160,7 @@ WP4, credit cho WP5 / WP7, kịch bản film02.
 | WP6 | xong (d979e16) | `disclosure.py`: nhãn hiển thị + metadata + C2PA (dev signer) |
 | WP1b | xong | `tools/drama_flow_ui/flow_send.py`: bind output theo network, 6/6 PASSED |
 | WP5 | xong, 48 credit | `docs/drama/wp5/README.md`: route mặc định = ảnh khung đầu Flow (0 credit) + chế độ "Khung hình"; video ingredient bị loại; ngân sách prompt 170 từ |
-| WP7 | đang làm | film02 benchmark theo route WP5 |
+| WP7 | xong, 84 credit | `docs/drama/film02/README.md`: film02 "The Spare Key" 6/6 lần đầu dùng được, 1.75 credit/giây (film01 2.1), 0 rerender; chờ Owner duyệt sáng tạo |
 
 ## 6. Nguồn tham khảo bên ngoài
 

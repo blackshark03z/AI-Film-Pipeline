@@ -132,6 +132,9 @@ def test_interior_weather_needs_qualifier(sample, text, blocked):
     ("DAWN", "BÌNH MINH", False), ("", "NIGHT", False),
     # an inherited time cannot contradict the location (film01 SC03)
     ("LOBBY - CONTINUOUS", "MORNING", False), ("LATER", "NIGHT", False),
+    # extra words in the heading (film02 flashback)
+    ("THAT MORNING (FLASHBACK)", "DAY", False),
+    ("THAT MORNING (FLASHBACK)", "NIGHT", True),
 ])
 def test_time_of_day_mismatch(sample, scene_tod, loc_tod, blocked):
     _, scene, _ = sample
@@ -223,8 +226,29 @@ def test_linear_state_mismatch_blocks_per_key():
     assert [i.check for i in issues] == ["STATE"]
 
 
+def test_return_from_flashback_continues_the_scene_before_it():
+    # film02: night -> flashback (morning) -> night again
+    scenes = [_st("A", 1), _st("B", 0, "FLASHBACK", "title card"),
+              _st("C", 2)]
+    ends = {"A": _state({"key": "pocket"}), "B": _state({"key": "table"})}
+    assert check_temporal(scenes, ends, {"C": _state({"key": "pocket"})})         == []
+    issues = check_temporal(scenes, ends, {"C": _state({"key": "table"})})
+    assert [(i.check, i.detail.split(":")[0]) for i in issues] ==         [("STATE", "A->C")]
+
+
 def test_source_conflict_warns():
     issues = check_temporal([_st("A", 1, conflict="script says dusk")],
                             {}, {})
     assert [(i.check, i.severity) for i in issues] == \
         [("SOURCE_CONFLICT", "WARN")]
+
+
+def test_master_with_three_people_is_not_a_two_shot(sample):
+    # film02: a three-person master was compiled as "wide two-shot"
+    from film_pipeline.drama import AxisBook
+    _, _, unit = sample
+    master = unit.shots[0]
+    assert master.describe(unit.axis_book).startswith("wide two-shot")
+    book = AxisBook(scene_id="S", axis_pair=["MAI", "HÙNG"],
+                    sides={"MAI": "LEFT", "HÙNG": "RIGHT", "LAN": "LEFT"})
+    assert master.describe(book).startswith("wide shot, ")

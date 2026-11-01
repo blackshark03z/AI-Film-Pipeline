@@ -1,0 +1,64 @@
+{
+  "frames": [
+    {
+      "scene_id": "SC01",
+      "shot_id": "SC01_S1",
+      "image_path": "SC01_g1.png",
+      "sha256": "ffd00868a81259fc6de0bee7e46acf1fe9451505cf24d972e43f8449fc3d74f7",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T14:34:41+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC01",
+      "shot_id": "SC01_S2",
+      "image_path": "SC01_g2.png",
+      "sha256": "9bac999c63d2cce78e3043c00fe8f15f3c8aa6f64c4077e73d3e7c9a9fe7e119",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T14:34:41+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC02",
+      "shot_id": "SC02_S1",
+      "image_path": "SC02_g1.png",
+      "sha256": "ae5625fdebaba36eea960d5dc8bafc0a48b53fd3dca79502edec449ebb185e4e",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T14:34:41+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC02",
+      "shot_id": "SC02_S2",
+      "image_path": "SC02_g2.png",
+      "sha256": "6017053b5e7abfc1df1f264839aab31fd88b88ea2e0b6f13a4c6b8c04b5e4a58",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T14:34:41+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC03",
+      "shot_id": "SC03_S1",
+      "image_path": "SC03_g1.png",
+      "sha256": "2e90bac869c126f5a24a5e1fe95dd6b1a1306a3c605cd56aa9f60db4e95315ee",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T14:34:41+00:00",
+      "note": ""
+    },
+    {
+      "scene_id": "SC03",
+      "shot_id": "SC03_S2",
+      "image_path": "SC03_g2.png",
+      "sha256": "2c47c5fc4729e259495316c536e22e857beb4e17bc6d7e45996a05b37da359a7",
+      "status": "APPROVED",
+      "reviewer": "Tech Lead (Owner-delegated)",
+      "reviewed_at": "2026-11-01T14:34:41+00:00",
+      "note": ""
+    }
+  ]
+}

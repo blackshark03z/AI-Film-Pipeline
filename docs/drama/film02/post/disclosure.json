@@ -1,0 +1,47 @@
+{
+  "ai_generated": true,
+  "content_sha256": "bdaa1891aa36a36f9e140a8f153cb5eafc80e22352ac29138f97f9a3d729a69b",
+  "created": "2026-11-01",
+  "digital_source_type": "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia",
+  "film_id": "film02",
+  "generators": [
+    {
+      "model": "Omni 1.1 Flash",
+      "provider": "Google Flow",
+      "role": "video+audio",
+      "settings": "720p, 8 s generations from a start frame (Khung hình)"
+    },
+    {
+      "model": "Nano Banana 2.1",
+      "provider": "Google Flow",
+      "role": "image",
+      "settings": "character stills, set plates, start frames"
+    }
+  ],
+  "human_contribution": [
+    "script",
+    "storyboard",
+    "edit",
+    "subtitles",
+    "by the production team with AI assistance"
+  ],
+  "jurisdiction_notes": [
+    "EU AI Act Art. 50 (applies from 2026-08-02): deployer disclosure of AI-generated video; provider machine-readable marking.",
+    "The title, 'That morning' and end cards are plain graphics; the label runs over the whole body.",
+    "C2PA signer, if present, is a self-issued development certificate: validators report it as untrusted; the manifest still binds the content hash."
+  ],
+  "post_tools": [
+    "ffmpeg",
+    "Pillow"
+  ],
+  "synthetic_persons": true,
+  "synthetic_persons_note": "ELENA, MARCUS and ROSA are fictional; faces and voices are AI-generated.",
+  "title": "THE SPARE KEY",
+  "visible_label": {
+    "duration_s": 49.958333,
+    "start_s": 3.0,
+    "text": "AI-generated",
+    "watermark_always_on": true,
+    "watermark_text": "AI-generated (bottom-left, over the body); end card: Video, images and voices generated with AI."
+  }
+}

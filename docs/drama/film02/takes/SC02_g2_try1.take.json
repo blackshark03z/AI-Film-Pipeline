@@ -1,0 +1,18 @@
+{
+  "prompt_file": "docs/drama/film02/prompts/SC02_g2.txt",
+  "prompt_sha256": "21692c12c37a98a04600d0617f71f9c24ed1715b4f7f8ac2a4901b426fed8f7f",
+  "prompt_words": 200,
+  "attach": [],
+  "start": "tok:ff73968d76",
+  "upload": [],
+  "started": "2026-11-01T21:40:40",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 78,
+  "responses_seen": 21,
+  "result": "BLOCKED",
+  "page_hint": [
+    "Không thành công",
+    "Không tải được video."
+  ],
+  "finished": "2026-11-01T21:42:06"
+}

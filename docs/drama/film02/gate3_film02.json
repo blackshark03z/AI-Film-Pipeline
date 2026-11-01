@@ -1,0 +1,274 @@
+{
+  "feasibility": [],
+  "temporal": [],
+  "generations": {
+    "SC01_g1": {
+      "words": 217,
+      "verdict": "PASS",
+      "still_words": 123,
+      "issues": []
+    },
+    "SC01_g2": {
+      "words": 217,
+      "verdict": "PASS",
+      "still_words": 100,
+      "issues": []
+    },
+    "SC02_g1": {
+      "words": 198,
+      "verdict": "PASS",
+      "still_words": 109,
+      "issues": []
+    },
+    "SC02_g2": {
+      "words": 200,
+      "verdict": "PASS",
+      "still_words": 109,
+      "issues": []
+    },
+    "SC03_g1": {
+      "words": 165,
+      "verdict": "PASS",
+      "still_words": 76,
+      "issues": []
+    },
+    "SC03_g2": {
+      "words": 220,
+      "verdict": "PASS",
+      "still_words": 120,
+      "issues": []
+    }
+  },
+  "looks": {
+    "ELENA": {
+      "look_id": "elena_cardigan",
+      "character": "ELENA",
+      "text": "Latina woman, early forties, long dark ponytail, grey cardigan, white blouse",
+      "invariants": [
+        "long dark ponytail",
+        "grey cardigan",
+        "white blouse"
+      ],
+      "approved": true
+    },
+    "MARCUS": {
+      "look_id": "marcus_leather",
+      "character": "MARCUS",
+      "text": "Latino man, late thirties, short black hair, stubble, brown leather jacket",
+      "invariants": [
+        "short black hair",
+        "stubble",
+        "brown leather jacket"
+      ],
+      "approved": true
+    },
+    "ROSA": {
+      "look_id": "rosa_black_dress",
+      "character": "ROSA",
+      "text": "Latina woman, mid-sixties, silver bun, black dress, glasses on a chain",
+      "invariants": [
+        "silver bun",
+        "black dress",
+        "glasses on a chain"
+      ],
+      "approved": true
+    }
+  },
+  "locations": [
+    {
+      "look_id": "kitchen_night",
+      "location": "MOTHER'S KITCHEN",
+      "text": "Old kitchen: yellow lamp over a wooden table, floral wallpaper, window over the sink on the right wall, night, rain streaking the window glass outside",
+      "invariants": [
+        "yellow lamp over the table",
+        "wooden table",
+        "floral wallpaper",
+        "window over the sink on the right"
+      ],
+      "interior": true,
+      "time_of_day": "NIGHT",
+      "weather_outside": "rain",
+      "environment_rules": [
+        "room dry, rain only outside the glass"
+      ],
+      "approved": true
+    },
+    {
+      "look_id": "kitchen_morning",
+      "location": "MOTHER'S KITCHEN",
+      "text": "Old kitchen: yellow lamp over a wooden table, floral wallpaper, window over the sink on the right wall, morning, warm sunlight through the window, no rain",
+      "invariants": [
+        "yellow lamp over the table",
+        "wooden table",
+        "floral wallpaper",
+        "window over the sink on the right"
+      ],
+      "interior": true,
+      "time_of_day": "MORNING",
+      "weather_outside": "",
+      "environment_rules": [],
+      "approved": true
+    }
+  ],
+  "states": {
+    "SC01_g1": {
+      "positions": {
+        "ROSA": "seated at the table, frame-left",
+        "ELENA": "standing at the counter behind ROSA, frame-left",
+        "MARCUS": "standing in the doorway, frame-right"
+      },
+      "props": {
+        "the brass key:": "on a red ribbon, on the table"
+      },
+      "looks": {
+        "ROSA": "rosa_black_dress",
+        "ELENA": "elena_cardigan",
+        "MARCUS": "marcus_leather"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC01_g2": {
+      "positions": {
+        "ROSA": "seated at the table, frame-left",
+        "ELENA": "standing at the counter behind ROSA, frame-left",
+        "MARCUS": "standing at the table, frame-right"
+      },
+      "props": {
+        "the brass key:": "on a red ribbon, on the table"
+      },
+      "looks": {
+        "ROSA": "rosa_black_dress",
+        "ELENA": "elena_cardigan",
+        "MARCUS": "marcus_leather"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC01_end": {
+      "positions": {
+        "ROSA": "seated at the table, frame-left",
+        "ELENA": "standing at the counter behind ROSA, frame-left",
+        "MARCUS": "standing at the table, frame-right"
+      },
+      "props": {
+        "the brass key:": "in MARCUS's jacket pocket"
+      },
+      "looks": {
+        "ROSA": "rosa_black_dress",
+        "ELENA": "elena_cardigan",
+        "MARCUS": "marcus_leather"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC02_g1": {
+      "positions": {
+        "ROSA": "seated at the table, frame-left",
+        "ELENA": "seated across the table, frame-right"
+      },
+      "props": {
+        "the brass key:": "on a red ribbon, on the table",
+        "the iron key:": "in ROSA's hand"
+      },
+      "looks": {
+        "ROSA": "rosa_black_dress",
+        "ELENA": "elena_cardigan"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC02_g2": {
+      "positions": {
+        "ROSA": "seated at the table, frame-left",
+        "ELENA": "seated across the table, frame-right"
+      },
+      "props": {
+        "the brass key:": "on a red ribbon, on the table",
+        "the iron key:": "on the table in front of ELENA"
+      },
+      "looks": {
+        "ROSA": "rosa_black_dress",
+        "ELENA": "elena_cardigan"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC02_end": {
+      "positions": {
+        "ROSA": "seated at the table, frame-left",
+        "ELENA": "seated across the table, frame-right"
+      },
+      "props": {
+        "the brass key:": "on a red ribbon, on the table",
+        "the iron key:": "in ELENA's closed hand"
+      },
+      "looks": {
+        "ROSA": "rosa_black_dress",
+        "ELENA": "elena_cardigan"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC03_g1": {
+      "positions": {
+        "ROSA": "seated at the table, frame-left",
+        "ELENA": "standing at the counter behind ROSA, frame-left",
+        "MARCUS": "standing at the table, frame-right"
+      },
+      "props": {
+        "the brass key:": "in MARCUS's jacket pocket"
+      },
+      "looks": {
+        "ROSA": "rosa_black_dress",
+        "ELENA": "elena_cardigan",
+        "MARCUS": "marcus_leather"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC03_g2": {
+      "positions": {
+        "ROSA": "seated at the table, frame-left",
+        "ELENA": "standing at the counter behind ROSA, frame-left",
+        "MARCUS": "standing at the table, frame-right"
+      },
+      "props": {
+        "the brass key:": "in MARCUS's jacket pocket"
+      },
+      "looks": {
+        "ROSA": "rosa_black_dress",
+        "ELENA": "elena_cardigan",
+        "MARCUS": "marcus_leather"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC03_end": {
+      "positions": {
+        "ROSA": "seated at the table, frame-left",
+        "ELENA": "standing at the counter behind ROSA, frame-left",
+        "MARCUS": "standing at the table, frame-right"
+      },
+      "props": {
+        "the brass key:": "in MARCUS's jacket pocket"
+      },
+      "looks": {
+        "ROSA": "rosa_black_dress",
+        "ELENA": "elena_cardigan",
+        "MARCUS": "marcus_leather"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    }
+  }
+}

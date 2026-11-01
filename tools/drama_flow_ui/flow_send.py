@@ -32,6 +32,7 @@ from pathlib import Path
 CDP = "http://127.0.0.1:9333"
 TOKEN_RE = re.compile(r"/asb/([A-Za-z0-9_\-]{24,})")
 PLUS_XY = (358, 662)          # composer "+" (CSS px, 1280x720 viewport)
+START_XY = (379, 563)         # "Khung hình" start-frame slot
 MAX_BODIES = 400
 
 # videos show an /asb/ thumbnail; generated images a flow-content /image/ URL
@@ -55,7 +56,8 @@ JS_TILE_RECT = r"""(tok) => { const i = [...document.images].find(
 JS_PICKER_XY = r"""(t) => { const i = [...document.images].find(
     i => (i.currentSrc || i.src).includes(t)
         && i.getBoundingClientRect().width < 80);
-    if (!i) return null; const r = i.getBoundingClientRect();
+    if (!i) return null; i.scrollIntoView({block: 'center'});
+    const r = i.getBoundingClientRect();
     return [r.x + r.width / 2, r.y + r.height / 2] }"""
 
 JS_VIDEO_AT = r"""([x, y]) => { const v = [...document.querySelectorAll('video')]
@@ -176,15 +178,23 @@ async def run(args) -> dict:
             await page.wait_for_timeout(15000)
             await page.keyboard.press("Escape")
         if args.start:   # "Khung hình" mode: image into the start-frame slot
-            await page.get_by_text("Bắt đầu", exact=True).last.click()
-            await page.wait_for_timeout(1500)
-            xy = await page.evaluate(JS_PICKER_XY, args.start[4:])
+            # by position: after a failed job the slot still holds the old
+            # frame; the first click then only clears it, so click again
+            for _ in range(2):
+                await page.mouse.click(*START_XY)
+                await page.wait_for_timeout(1500)
+                xy = await page.evaluate(JS_PICKER_XY, args.start[4:])
+                if xy is not None:
+                    break
+            await page.wait_for_timeout(500)
             if xy is None:
                 rec["result"] = f"START_NOT_FOUND {args.start}"
                 return rec
             await page.mouse.click(*xy)
             await page.wait_for_timeout(800)
-            await page.get_by_text("Thêm vào câu lệnh", exact=True).click()
+            add = page.get_by_text("Thêm vào câu lệnh", exact=True)
+            if await add.count():   # some picker states fill the slot directly
+                await add.click()
             await page.wait_for_timeout(2000)
         for title in args.attach:
             await page.mouse.click(*PLUS_XY)
@@ -251,6 +261,7 @@ async def run(args) -> dict:
             rec["bound_tiles"] = len(bound)
             return rec
         rec["output_token_sha256"] = _sha(token)
+        rec["token_tail"] = token[-10:]   # media id tail for --attach/--start
         if args.image:   # image generations (0 credits): fetch the tile image
             data = bytes(await page.evaluate(
                 """async (t) => { const i = [...document.images].find(

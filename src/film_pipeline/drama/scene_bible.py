@@ -136,7 +136,7 @@ def check_temporal(scenes: list[StoryTime],
         issues.append(RuleIssue(check=check, severity=severity,  # type: ignore[arg-type]
                                 detail=detail))
 
-    for prev, cur in zip(scenes, scenes[1:]):
+    for index, (prev, cur) in enumerate(zip(scenes, scenes[1:])):
         sid = f"{prev.scene_id}->{cur.scene_id}"
         if cur.transition_in == "LINEAR":
             if cur.story_order <= prev.story_order:
@@ -148,8 +148,17 @@ def check_temporal(scenes: list[StoryTime],
             add("TEMPORAL_READABILITY", "BLOCK",
                 f"{sid}: {cur.transition_in} has no marker the audience "
                 "can read")
-        end = end_states.get(prev.scene_id)
         start = start_states.get(cur.scene_id)
+        end = end_states.get(prev.scene_id)
+        if cur.transition_in == "LINEAR":
+            # a linear cut continues the latest earlier story moment: after
+            # a flashback that is the scene before it, not the flashback
+            earlier = [s for s in scenes[:index + 1]
+                       if s.story_order < cur.story_order]
+            if earlier:
+                anchor = max(earlier, key=lambda s: s.story_order)
+                end = end_states.get(anchor.scene_id)
+                sid = f"{anchor.scene_id}->{cur.scene_id}"
         if end is None or start is None:
             continue
         if cur.transition_in == "LINEAR":
@@ -186,16 +195,20 @@ _NIGHT = {"NIGHT", "ĐÊM", "EVENING", "TỐI"}
 _INHERIT = ("CONTINUOUS", "LATER", "SAME", "LIÊN TỤC", "TIẾP THEO")
 
 
+_GROUPS = (("DAWN", {"DAWN", "BÌNH MINH"}), ("DUSK", {"DUSK", "HOÀNG HÔN"}),
+           ("DAY", _DAY), ("NIGHT", _NIGHT))
+
+
 def _tod_group(value: str) -> str:
+    """Group a heading time; extra words count too ("THAT MORNING
+    (FLASHBACK)" is DAY)."""
     v = value.strip().upper()
-    if v in _DAY:
-        return "DAY"
-    if v in _NIGHT:
-        return "NIGHT"
-    if v in {"DAWN", "BÌNH MINH"}:
-        return "DAWN"
-    if v in {"DUSK", "HOÀNG HÔN"}:
-        return "DUSK"
+    for group, names in _GROUPS:
+        if v in names:
+            return group
+    for group, names in _GROUPS:
+        if any(re.search(rf"(?<!\w){re.escape(n)}(?!\w)", v) for n in names):
+            return group
     return v
 
 

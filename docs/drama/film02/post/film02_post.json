@@ -1,0 +1,38 @@
+{
+  "film": "film02 The Spare Key",
+  "date": "2026-11-01",
+  "source": "docs/drama/film02/takes (first-pass takes, WP7)",
+  "clips": [
+    "SC01_g1",
+    "SC01_g2",
+    "FLASHBACK_card",
+    "SC02_g1",
+    "SC02_g2",
+    "SC03_g1",
+    "SC03_g2"
+  ],
+  "final": "film02_spare_key_final.mp4",
+  "sha256": "adb894b0313bcec5a501c2a84fa3af872b4322bbb04fddc714e345d613338727",
+  "duration_s": 56.958333,
+  "title_s": 3.0,
+  "end_card_s": 4.0,
+  "grade": "drama.post default grade",
+  "audio": "0.05/0.08 s edge fades per clip; loudnorm 2-pass + limiter -> -15.0 LUFS integrated, -1.6 dBFS peak (ebur128)",
+  "subtitles": {
+    "language": "en",
+    "burned_in": true,
+    "sidecar": "film02_spare_key.en.srt",
+    "timing": "silencedetect windows; text from the script"
+  },
+  "label": "AI-generated bottom-left over the body, plus end card",
+  "owner_review": "PENDING",
+  "disclosure": {
+    "json": "disclosure.json",
+    "json_sha256": "5b9dcef8429712eda6496eed9cc07b057b261bd6786759d26fee3add291d5872",
+    "marked": "film02_spare_key_final_marked.mp4",
+    "marked_sha256": "bdaa1891aa36a36f9e140a8f153cb5eafc80e22352ac29138f97f9a3d729a69b",
+    "source_final_sha256": "adb894b0313bcec5a501c2a84fa3af872b4322bbb04fddc714e345d613338727",
+    "metadata": true,
+    "c2pa": true
+  }
+}

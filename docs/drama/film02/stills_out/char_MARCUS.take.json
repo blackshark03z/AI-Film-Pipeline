@@ -1,0 +1,22 @@
+{
+  "prompt_file": "docs/drama/film02/stills/char_MARCUS.txt",
+  "prompt_sha256": "6066e954ee0d8a17e4701b7d2c3126b3ce5f12ad35d4a0011593935b2cd5787d",
+  "prompt_words": 35,
+  "attach": [],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-01T21:22:06",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 4,
+  "new_tiles": 2,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "884268a1612273d080a888d2a0730d5ef1ca269579228509798d447e41ab8902",
+  "result": "PASSED",
+  "file": "char_MARCUS.jpg",
+  "sha256": "6c27ac3df3a7fb23d76e632dbc20fb5344b724cffae0ccc97048585208b1fc35",
+  "bytes": 89637,
+  "finished": "2026-11-01T21:22:37",
+  "token_tail": "2c87458fde",
+  "token_tail_check": "in-page sha256 of the tile image == sha256"
+}

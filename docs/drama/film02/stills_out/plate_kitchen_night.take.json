@@ -1,0 +1,22 @@
+{
+  "prompt_file": "docs/drama/film02/stills/plate_kitchen_night.txt",
+  "prompt_sha256": "ce65ca90169934cec59f69a2a5f5b278338006cfd49413792a3f84ac4dfb3235",
+  "prompt_words": 43,
+  "attach": [],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-01T21:23:09",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 3,
+  "new_tiles": 1,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "38aad4513ec78f7ae7740d27a92fa58224bc7da109cb5d7393c44bed04a2b95b",
+  "result": "PASSED",
+  "file": "plate_kitchen_night.jpg",
+  "sha256": "c63bb839b15a1b1e49df2b01a32df4af407a5e7dfffbcb97f365224ea6a62819",
+  "bytes": 182281,
+  "finished": "2026-11-01T21:23:41",
+  "token_tail": "db04fb2234",
+  "token_tail_check": "in-page sha256 of the tile image == sha256"
+}

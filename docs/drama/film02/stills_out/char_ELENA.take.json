@@ -1,0 +1,22 @@
+{
+  "prompt_file": "docs/drama/film02/stills/char_ELENA.txt",
+  "prompt_sha256": "ad3633b95af06acd2b9e4465a6a2c6174b8517ac3f6b3a73ec3541bf884a0973",
+  "prompt_words": 35,
+  "attach": [],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-01T21:21:34",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 6,
+  "new_tiles": 4,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "299347dd0b8a4f6cb4e798708cd9881a41e811428b0401bd911a9e9a89dcc925",
+  "result": "PASSED",
+  "file": "char_ELENA.jpg",
+  "sha256": "85428121152ffd85c2df235a8275fbabb2183f437dc4a1e3f8b1d184eb135f41",
+  "bytes": 99517,
+  "finished": "2026-11-01T21:22:05",
+  "token_tail": "4059b6fc3e",
+  "token_tail_check": "in-page sha256 of the tile image == sha256"
+}

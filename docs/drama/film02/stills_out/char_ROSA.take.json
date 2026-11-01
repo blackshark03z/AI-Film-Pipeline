@@ -1,0 +1,22 @@
+{
+  "prompt_file": "docs/drama/film02/stills/char_ROSA.txt",
+  "prompt_sha256": "dfbfd87512084cf13f673f881c4a87dec31ff47e2ebb939546313e7fc81b8604",
+  "prompt_words": 35,
+  "attach": [],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-01T21:22:38",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 3,
+  "new_tiles": 1,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "25592787cb42d1245a876a6fd8a1824962f452ca3f22b9032882ca5f4773700f",
+  "result": "PASSED",
+  "file": "char_ROSA.jpg",
+  "sha256": "36cf9578cd07f8d4d249bee93302d063a49678ba6cb1253f45a1123d4107c083",
+  "bytes": 71527,
+  "finished": "2026-11-01T21:23:09",
+  "token_tail": "fe800e4286",
+  "token_tail_check": "in-page sha256 of the tile image == sha256"
+}

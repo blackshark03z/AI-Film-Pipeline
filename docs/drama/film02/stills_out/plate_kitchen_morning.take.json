@@ -1,0 +1,23 @@
+{
+  "prompt_file": "docs/drama/film02/stills/plate_kitchen_morning.txt",
+  "prompt_sha256": "4c082fb91a99b94c22e513c7feeaf4c46f65c9bfec5074c34aea7b15d4b0ad08",
+  "prompt_words": 39,
+  "attach": [
+    "tok:db04fb2234"
+  ],
+  "start": "",
+  "upload": [],
+  "started": "2026-11-01T21:26:15",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 28,
+  "responses_seen": 5,
+  "new_tiles": 1,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "598f119798972c185703cc730fb5934d230164f215f8a78e4754fbeb0c6da6d8",
+  "token_tail": "3c5842440b",
+  "result": "PASSED",
+  "file": "plate_kitchen_morning.jpg",
+  "sha256": "6e233260fc73d0be0e81cff1321de6732aa866fd91dfcb7dfa6acae8b2f0b58c",
+  "bytes": 223233,
+  "finished": "2026-11-01T21:26:51"
+}
