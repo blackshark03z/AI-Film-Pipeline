@@ -308,3 +308,4 @@ class PostManifest(ContractModel):
     subtitles: dict = Field(default_factory=dict)
     label: str = ""
     owner_review: str | dict = "PENDING"
+    disclosure: dict | None = None   # paths + sha256s, see disclosure.py

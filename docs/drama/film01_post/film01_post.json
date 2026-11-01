@@ -32,5 +32,15 @@
     "status": "APPROVED",
     "by": "Owner",
     "date": "2026-11-01"
+  },
+  "disclosure": {
+    "json": "disclosure.json",
+    "json_sha256": "ac09fd80da53342c3af2c70085f747baefb5a0d8d4e6d809105918133648666b",
+    "marked": "film01_first_day_final_marked.mp4",
+    "marked_sha256": "685fac0a79100c9d9c2a3be21937debd3954544184d85739a5f520a5dcacf43e",
+    "source_final_sha256": "1ee050dc32bf846ddafbb578f2946a3c4030af3bc3688fee43d501945a86ce7d",
+    "metadata": true,
+    "c2pa": true,
+    "c2pa_signer": "self-issued dev certificate (untrusted by validators)"
   }
 }
