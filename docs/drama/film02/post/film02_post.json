@@ -3,6 +3,7 @@
   "date": "2026-11-01",
   "source": "docs/drama/film02/takes (first-pass takes, WP7)",
   "clips": [
+    "OPEN_card",
     "SC01_g1",
     "SC01_g2",
     "FLASHBACK_card",
@@ -12,12 +13,12 @@
     "SC03_g2"
   ],
   "final": "film02_spare_key_final.mp4",
-  "sha256": "adb894b0313bcec5a501c2a84fa3af872b4322bbb04fddc714e345d613338727",
-  "duration_s": 56.958333,
+  "sha256": "7307138d141d42bd2b1d2d28bcf98351ca43465590a1ad729f1c68c3b5755028",
+  "duration_s": 59.333333,
   "title_s": 3.0,
   "end_card_s": 4.0,
   "grade": "drama.post default grade",
-  "audio": "0.05/0.08 s edge fades per clip; loudnorm 2-pass + limiter -> -15.0 LUFS integrated, -1.6 dBFS peak (ebur128)",
+  "audio": "0.05/0.08 s edge fades per clip; loudnorm 2-pass + limiter -> -15.0 LUFS integrated, -1.8 dBFS peak (ebur128)",
   "subtitles": {
     "language": "en",
     "burned_in": true,
@@ -28,11 +29,136 @@
   "owner_review": "PENDING",
   "disclosure": {
     "json": "disclosure.json",
-    "json_sha256": "5b9dcef8429712eda6496eed9cc07b057b261bd6786759d26fee3add291d5872",
+    "json_sha256": "b5c2e871aaaac0c5b742329eaee088dbe3d129a080f7ddd997c44c02db61a6b5",
     "marked": "film02_spare_key_final_marked.mp4",
-    "marked_sha256": "bdaa1891aa36a36f9e140a8f153cb5eafc80e22352ac29138f97f9a3d729a69b",
-    "source_final_sha256": "adb894b0313bcec5a501c2a84fa3af872b4322bbb04fddc714e345d613338727",
+    "marked_sha256": "b732bc9ef4192dc8a77d55458901f28a2fb8d46c7d6710ca8174ee5b96d98aab",
+    "source_final_sha256": "7307138d141d42bd2b1d2d28bcf98351ca43465590a1ad729f1c68c3b5755028",
     "metadata": true,
     "c2pa": true
+  },
+  "comprehension": {
+    "intros": [
+      {
+        "character": "ROSA",
+        "label": "ROSA",
+        "relation": "their late mother's sister",
+        "needed_by": "",
+        "carriers": []
+      },
+      {
+        "character": "ELENA",
+        "label": "ELENA",
+        "relation": "the elder daughter",
+        "needed_by": "",
+        "carriers": []
+      },
+      {
+        "character": "MARCUS",
+        "label": "MARCUS",
+        "relation": "her younger brother",
+        "needed_by": "SC01_g2",
+        "carriers": []
+      }
+    ],
+    "tags": [
+      {
+        "character": "ROSA",
+        "generation_id": "SC01_g1",
+        "start_s": 0.2,
+        "end_s": 2.7,
+        "anchor_x": 0.41,
+        "anchor_y": 0.42
+      },
+      {
+        "character": "ELENA",
+        "generation_id": "SC01_g1",
+        "start_s": 4.4,
+        "end_s": 6.6,
+        "anchor_x": 0.3,
+        "anchor_y": 0.2
+      },
+      {
+        "character": "MARCUS",
+        "generation_id": "SC01_g2",
+        "start_s": 0.3,
+        "end_s": 2.6,
+        "anchor_x": 0.84,
+        "anchor_y": 0.42
+      }
+    ],
+    "cards": [
+      {
+        "card_id": "OPEN_card",
+        "before": "SC01_g1",
+        "lines": [
+          "After their mother's funeral"
+        ],
+        "duration_s": 2.4
+      },
+      {
+        "card_id": "FLASHBACK_card",
+        "before": "SC02_g1",
+        "lines": [
+          "Earlier that morning"
+        ],
+        "duration_s": 2.0
+      }
+    ],
+    "facts": [
+      {
+        "fact_id": "mother_dead",
+        "text": "their mother has just died",
+        "needed_by": "SC01_g1",
+        "carriers": [
+          {
+            "kind": "CARD",
+            "generation_id": "SC01_g1",
+            "detail": ""
+          }
+        ]
+      },
+      {
+        "fact_id": "flashback",
+        "text": "SC02 happens before SC01",
+        "needed_by": "SC02_g1",
+        "carriers": [
+          {
+            "kind": "CARD",
+            "generation_id": "SC02_g1",
+            "detail": ""
+          },
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC02_g1",
+            "detail": "sunlight, no rain, MARCUS absent"
+          }
+        ]
+      },
+      {
+        "fact_id": "back_to_night",
+        "text": "SC03 continues SC01",
+        "needed_by": "SC03_g1",
+        "carriers": [
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC03_g1",
+            "detail": "night lamp, rain on the glass"
+          }
+        ]
+      },
+      {
+        "fact_id": "brass_key_useless",
+        "text": "the brass key MARCUS took opens nothing",
+        "needed_by": "SC03_g2",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC02_g1",
+            "detail": "The brass one opens nothing."
+          }
+        ]
+      }
+    ],
+    "issues": []
   }
 }

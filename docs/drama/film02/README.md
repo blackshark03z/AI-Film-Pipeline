@@ -1,6 +1,6 @@
 # film02 — "The Spare Key" (WP7 benchmark)
 
-3 scenes × 16 s, English, 57 s final with cards. Written to hit the Muse
+3 scenes × 16 s, English, 59 s final with cards and identity tags. Written to hit the Muse
 failure list: three people in one room, a prop handled exactly once, a sneer,
 rain outside the window, a flashback.
 
@@ -19,8 +19,9 @@ signer; `post/disclosure.json`). Unmarked cut, SRT and post manifest beside it.
    rejected and re-rendered (SC03_g1, see defects).
 3. Flow video, "Khung hình" with the start frame, 12 credits each
    (`takes/`, every take `NETWORK_PROMPT_MATCH` via `flow_send.py`).
-4. `tools/drama_film02_post.py` — cut, "That morning" card, subtitles,
-   loudness, AI label, disclosure, C2PA.
+4. `tools/drama_film02_post.py` — comprehension check, cut, context cards
+   ("After their mother's funeral", "Earlier that morning"), identity tags,
+   subtitles, loudness, AI label, disclosure, C2PA.
 5. `tools/drama_write_film02_kpi.py` → `film02_kpi.json`.
 
 ## Results vs film01
@@ -61,11 +62,24 @@ Muse checks, by eye on every take:
   video"); one retry passed. `flow_send.py` now recovers the start slot a
   failed job leaves filled.
 
+- **Owner review: the aunt read as the mother.** "AUNT ROSA" and the
+  mother's death lived only in action lines, so an older woman in the family
+  kitchen read as the mother and "Your mother changed the locks" made no
+  sense. New stage `drama.comprehension`: every on-screen character needs a
+  `CharacterIntro` (name + relation to the story) and every story fact a
+  carrier (dialogue, picture, identity tag or context card) no later than the
+  first generation that needs it; `check_comprehension` blocks otherwise.
+  Fixed at 0 credits: opening card, tags beside ROSA/ELENA (SC01_g1) and
+  MARCUS (SC01_g2), flashback card reworded to "Earlier that morning".
+
 ## Decisions
 
 - The start-frame route is the drama default (WP5 confirmed on a full film).
 - Prompt budget on this route: **215 words**. All six prompts were 165–220
   words and followed their phase timing.
 - Stills are the QC gate before video credits: reject there, not on video.
+- Comprehension is planned with the script: dialogue first (free before
+  generation), then picture; tags and cards (white on black, ≤ 2 lines,
+  2–3 s from a 15 chars/s reading rule) are the post fallback.
 - Open: identity across *films* (new cast per film); the end-frame slot is
   still unmeasured; the dev C2PA signer must be replaced for a real release.

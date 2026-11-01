@@ -67,6 +67,16 @@ from .scene_bible import (
     check_temporal,
 )
 from .storyboard import StoryboardGate, render_schematic_frame
+from .comprehension import (
+    Carrier,
+    CharacterIntro,
+    ContextCard,
+    IdentityTag,
+    ReadingLimits,
+    StoryFact,
+    check_comprehension,
+    read_time,
+)
 
 __all__ = [
     "AxisBook", "ShotAxisRecord", "axis_record", "check_axis",
@@ -90,4 +100,6 @@ __all__ = [
     "GenerationChoreography", "PerformanceCue", "Phase", "check_repetition",
     "LocationLook", "OccupancyEvent", "RuleIssue", "SceneOccupancy",
     "StoryTime", "check_environment", "check_temporal",
+    "Carrier", "CharacterIntro", "ContextCard", "IdentityTag",
+    "ReadingLimits", "StoryFact", "check_comprehension", "read_time",
 ]

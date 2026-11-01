@@ -42,6 +42,16 @@ class SubtitleCue(ContractModel):
     speaker_window: tuple[float, float] | None = None   # speaking shot
 
 
+class Overlay(ContractModel):
+    """A full-frame RGBA PNG shown over one clip (clip-relative window),
+    with a short alpha fade at both ends; identity tags use it."""
+    generation_id: str
+    start_s: float
+    end_s: float
+    png: str
+    fade_s: float = 0.25
+
+
 def clamp_cues(cues: list[SubtitleCue], notes: list[str] | None = None
                ) -> list[SubtitleCue]:
     """Clamp each cue into its speaker window; drop empty ones (a flag is
@@ -160,6 +170,46 @@ def subtitle_png(path: Path, text: str, *, size: int = 34,
     return path
 
 
+def identity_tag_png(path: Path, label: str, relation: str, anchor_x: float,
+                     anchor_y: float = 0.12, *,
+                     fonts: Fonts = DEFAULT_FONTS) -> Path:
+    """Name (bold) over relation in a translucent box, centred on
+    ``anchor_x`` beside the character's face (never over it) and kept
+    inside the frame."""
+    from PIL import Image, ImageDraw, ImageFont
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    fn, fr = ImageFont.truetype(fonts[1], 30), ImageFont.truetype(fonts[0], 24)
+    w = max(d.textlength(label, font=fn), d.textlength(relation, font=fr))
+    pad, margin = 14, 24
+    x = min(max(anchor_x * W - w / 2, margin + pad), W - margin - pad - w)
+    y = anchor_y * H
+    d.rectangle((x - pad, y - pad, x + w + pad, y + 30 + 8 + 24 + pad),
+                fill=(0, 0, 0, 150))
+    d.text((x, y), label, font=fn, fill=(255, 255, 255, 255))
+    d.text((x, y + 38), relation, font=fr, fill=(235, 235, 235, 255))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    img.save(path)
+    return path
+
+
+def context_card_clip(out: Path, lines: list[str], duration_s: float, *,
+                      size: int = 40, fonts: Fonts = DEFAULT_FONTS) -> Path:
+    """White-on-black card as a clip (silent stereo, same format as the
+    takes) to cut into the body: time jumps, facts the picture cannot
+    carry. Length comes from ``comprehension.read_time``."""
+    png = title_card(out.with_suffix(".png"), [(t, size) for t in lines],
+                     fonts)
+    subprocess.run(
+        ["ffmpeg", "-v", "error", "-y", "-loop", "1", "-t", f"{duration_s}",
+         "-r", str(FPS), "-i", str(png), "-f", "lavfi", "-t",
+         f"{duration_s}", "-i", "anullsrc=r=48000:cl=stereo",
+         "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac",
+         "-shortest", str(out)], check=True)
+    png.unlink()
+    return out
+
+
 # ---------------------------------------------------------------- assemble
 
 def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
@@ -167,14 +217,18 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
              end_lines: list[tuple[str, int]], title_s: float = 3.0,
              end_s: float = 4.0, grade: str = GRADE,
              label_text: str = "AI-generated",
-             fonts: Fonts = DEFAULT_FONTS) -> Path:
-    """title card + graded clips + end card, AI label over the body and
-    subtitle overlays for ``cues`` (clip-relative, matched to clips by
-    stem). Audio is edge-faded per clip but not loudness-normalised."""
+             fonts: Fonts = DEFAULT_FONTS,
+             overlays: list[Overlay] = ()) -> Path:
+    """title card + graded clips + end card, AI label over the body,
+    subtitle overlays for ``cues`` and faded ``overlays`` (both
+    clip-relative, matched to clips by stem). Audio is edge-faded per clip
+    but not loudness-normalised."""
     offs = cue_offsets(clips, title_s)
     durs = [probe_video_duration(c) for c in clips]
     body_end = title_s + sum(durs)
     abs_cues = absolute_cues(cues, offs)
+    abs_ovs = [(offs[o.generation_id] + o.start_s,
+                offs[o.generation_id] + o.end_s, o) for o in overlays]
     out.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         cards = Path(tmp)
@@ -196,7 +250,7 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
             inputs += ["-f", "lavfi", "-t", str(d), "-i",
                        "anullsrc=r=48000:cl=stereo"]
         a_title, a_end, ov0 = end_idx + 1, end_idx + 2, end_idx + 3
-        for png in [label, *subs]:
+        for png in [label, *subs, *(o.png for _, _, o in abs_ovs)]:
             inputs += ["-loop", "1", "-i", str(png)]
 
         fl = [f"[0:v]fps={FPS},format=yuv420p,"
@@ -221,6 +275,15 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
             fl.append(f"[{last}][{ov0 + k}:v]overlay=0:0:shortest=1:"
                       f"enable='between(t,{a:.3f},{b:.3f})'[o{k}]")
             last = f"o{k}"
+        base = ov0 + len(abs_cues) + 1
+        for j, (a, b, o) in enumerate(abs_ovs):
+            f = o.fade_s
+            fl.append(f"[{base + j}:v]format=rgba,"
+                      f"fade=t=in:st={a:.3f}:d={f}:alpha=1,"
+                      f"fade=t=out:st={b - f:.3f}:d={f}:alpha=1[t{j}]")
+            fl.append(f"[{last}][t{j}]overlay=0:0:shortest=1:"
+                      f"enable='between(t,{a:.3f},{b:.3f})'[p{j}]")
+            last = f"p{j}"
         subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs,
                         "-filter_complex", ";".join(fl),
                         "-map", f"[{last}]", "-map", "[aout]",

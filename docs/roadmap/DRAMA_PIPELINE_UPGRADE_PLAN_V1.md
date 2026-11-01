@@ -161,6 +161,7 @@ WP4, credit cho WP5 / WP7, kịch bản film02.
 | WP1b | xong | `tools/drama_flow_ui/flow_send.py`: bind output theo network, 6/6 PASSED |
 | WP5 | xong, 48 credit | `docs/drama/wp5/README.md`: route mặc định = ảnh khung đầu Flow (0 credit) + chế độ "Khung hình"; video ingredient bị loại; ngân sách prompt 170 từ |
 | WP7 | xong, 84 credit | `docs/drama/film02/README.md`: film02 "The Spare Key" 6/6 lần đầu dùng được, 1.75 credit/giây (film01 2.1), 0 rerender; chờ Owner duyệt sáng tạo |
+| WP8 | xong, 0 credit | `comprehension.py`: Owner xem film02 tưởng dì là mẹ → mỗi nhân vật cần danh tính + quan hệ, mỗi dữ kiện cần nơi truyền tải (thoại / hình / tag danh tính / thẻ ngữ cảnh) trước lúc cần; film02 dựng lại với thẻ mở đầu + tag |
 
 ## 6. Nguồn tham khảo bên ngoài
 
