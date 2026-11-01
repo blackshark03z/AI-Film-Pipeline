@@ -44,3 +44,6 @@ projects/flow_production_scale_007/master_package_007/continuity/
 projects/flow_production_scale_007/master_package_007/master_scale_v1.mp4
 projects/flow_production_scale_007/**/videos/
 projects/flow_production_scale_007/repair_scope/
+
+# Rebuilt film01 post output (drama_film01_post.py)
+docs/drama/film01_post/rebuild/

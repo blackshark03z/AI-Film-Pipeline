@@ -25,7 +25,17 @@ from .feasibility import (
     check_scene,
     check_script,
 )
+from .generation import GenerationPlan, GenerationSpec, split_unit
 from .preflight import PreflightLimits, PreflightReport, preflight_scene
+from .post import (
+    PostManifest,
+    SubtitleCue,
+    assemble,
+    clamp_cues,
+    cue_offsets,
+    normalize_loudness,
+    write_srt,
+)
 from .prompt import CharacterBrief, ScenePromptPlan, compile_scene_prompt
 from .qc import (
     HandoffCheck,
@@ -52,7 +62,10 @@ __all__ = [
     "CoveragePlanner", "CoverageShot", "SceneTiming", "SceneUnit",
     "FeasibilityIssue", "FeasibilityLimits", "FeasibilityReport",
     "check_cross_cut", "check_scene", "check_script",
+    "GenerationPlan", "GenerationSpec", "split_unit",
     "PreflightLimits", "PreflightReport", "preflight_scene",
+    "PostManifest", "SubtitleCue", "assemble", "clamp_cues", "cue_offsets",
+    "normalize_loudness", "write_srt",
     "CharacterBrief", "ScenePromptPlan", "compile_scene_prompt",
     "HandoffCheck", "HandoffQC", "character_sheet", "extract_frame",
     "handoff_sheet",
