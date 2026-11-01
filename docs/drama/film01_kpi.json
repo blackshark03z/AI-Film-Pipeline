@@ -1,0 +1,64 @@
+{
+  "film_id": "film01_first_day",
+  "generations_planned": 10,
+  "generations_sent": 14,
+  "generations_blocked": 6,
+  "generations_first_pass_accepted": 8,
+  "credits_total": 228.0,
+  "credits_investigation": 60.0,
+  "usable_seconds": 80.0,
+  "rerenders": 4,
+  "defects": [
+    {
+      "generation_id": "SC01_g2",
+      "category": "PROVIDER_BLOCK",
+      "stage_missed": "Provider route choice",
+      "fixed_by": "preflight TEXT_ONLY route; refs on that route BLOCK"
+    },
+    {
+      "generation_id": "SC03_g1",
+      "category": "IDENTITY",
+      "stage_missed": "Prompt compile (look re-described per scene)",
+      "fixed_by": "bible.CharacterLook locked text + preflight LOOK"
+    },
+    {
+      "generation_id": "SC03_g2",
+      "category": "PROP_LOGIC",
+      "stage_missed": "Script + generation split",
+      "fixed_by": "ContinuityState + check_cross_cut + HandoffQC gating"
+    },
+    {
+      "generation_id": "SC03_g2",
+      "category": "IDENTITY",
+      "stage_missed": "Prompt compile (start-state character had no look)",
+      "fixed_by": "preflight LOOK covers characters named by start state"
+    },
+    {
+      "generation_id": "film01_post",
+      "category": "SUBTITLE",
+      "stage_missed": "Post (cue timing from audio alone)",
+      "fixed_by": "cues clamped to the speaking shot of the plan"
+    },
+    {
+      "generation_id": "film01_post",
+      "category": "AUDIO",
+      "stage_missed": "Post (single-pass loudnorm)",
+      "fixed_by": "2-pass loudnorm + limiter"
+    },
+    {
+      "generation_id": "flow_send",
+      "category": "TOOLING",
+      "stage_missed": "Flow send step (overlay; stale tile downloaded)",
+      "fixed_by": "dismiss overlays, SEND_FAILED, take is new only if sha differs"
+    }
+  ],
+  "notes": [
+    "credits_total 228 = 60 investigation + 168 route (14 sends x 12)",
+    "usable_seconds: 5 scenes x 16 s of accepted clips"
+  ],
+  "derived": {
+    "first_pass_usable_rate": 0.8,
+    "credits_per_usable_second": 2.1,
+    "rerenders_per_100s": 5.0
+  }
+}

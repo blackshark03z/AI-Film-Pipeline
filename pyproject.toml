@@ -7,6 +7,7 @@ dependencies = ["pydantic>=2,<3", "jsonschema>=4,<5"]
 
 [project.optional-dependencies]
 flow = ["patchright>=1,<2", "playwright>=1,<2", "Pillow>=10,<13"]
+qc = ["opencv-python-headless>=4.9,<5", "numpy>=1.26"]
 
 [build-system]
 requires = ["setuptools>=68"]

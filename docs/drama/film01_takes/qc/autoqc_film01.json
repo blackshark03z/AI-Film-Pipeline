@@ -1,0 +1,715 @@
+{
+  "anchors": {
+    "clip": "SC01_g1.mp4",
+    "at_s": [
+      1.0,
+      2.5,
+      4.0
+    ],
+    "side_of": {
+      "NORA": "left",
+      "DOYLE": "right"
+    }
+  },
+  "thresholds": {
+    "identity_mean_min": 0.25,
+    "identity_min_min": 0.16,
+    "scale_bands_height_ratio": {
+      "ECU": 0.5,
+      "CU": 0.3,
+      "MCU": 0.18,
+      "MS": 0.09
+    },
+    "scale_tolerance_bands": 1,
+    "set_min_inliers": 4
+  },
+  "negative_controls": {
+    "SC01_g1": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 8,
+            "mean_similarity": 0.8108022349564845,
+            "min_similarity": 0.6537903504864593,
+            "variance": 0.010354316533394132,
+            "mean_head_similarity": 0.8485241359539941,
+            "min_head_similarity": 0.592252764312434
+          },
+          "DOYLE": {
+            "frames_seen": 8,
+            "mean_similarity": 0.7700397081947092,
+            "min_similarity": 0.6372637949973263,
+            "variance": 0.011478200979267394,
+            "mean_head_similarity": 0.8722419558434922,
+            "min_head_similarity": 0.7660879940522136
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 8.0,
+          "text": "wide two-shot, NORA left, DOYLE right.",
+          "planned": "MS",
+          "majority": "MS",
+          "per_frame": [
+            "MS",
+            "MS",
+            "MS",
+            "MS"
+          ],
+          "band_distance": 0,
+          "warn": false
+        }
+      ]
+    },
+    "SC01_g2": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 4,
+            "mean_similarity": 0.49188111769335824,
+            "min_similarity": 0.43251192471394445,
+            "variance": 0.0015018253559937985,
+            "mean_head_similarity": 0.5595167860738002,
+            "min_head_similarity": 0.5480559641146101
+          },
+          "DOYLE": {
+            "frames_seen": 4,
+            "mean_similarity": 0.42436492904940876,
+            "min_similarity": 0.36916086284655214,
+            "variance": 0.0020866781345145265,
+            "mean_head_similarity": 0.5569796523595869,
+            "min_head_similarity": 0.538440982447355
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 3.6,
+          "text": "over DOYLE's shoulder onto NORA.",
+          "planned": "MCU",
+          "majority": "MCU",
+          "per_frame": [
+            "MCU",
+            "MCU",
+            "MCU",
+            "MCU"
+          ],
+          "band_distance": 0,
+          "warn": false
+        },
+        {
+          "shot": 2,
+          "start": 3.6,
+          "end": 8.0,
+          "text": "silent close-up of DOYLE looking screen-left.",
+          "planned": "CU",
+          "majority": "CU",
+          "per_frame": [
+            "CU",
+            "ECU",
+            "CU",
+            "CU"
+          ],
+          "band_distance": 0,
+          "warn": false
+        }
+      ]
+    },
+    "SC02_g1": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 8,
+            "mean_similarity": 0.6354597030618415,
+            "min_similarity": 0.5159000454484458,
+            "variance": 0.0025976822584766208,
+            "mean_head_similarity": 0.6748486100423179,
+            "min_head_similarity": 0.6518450986186508
+          },
+          "DOYLE": {
+            "frames_seen": 8,
+            "mean_similarity": 0.5306438114321321,
+            "min_similarity": 0.3865232584999497,
+            "variance": 0.006061266399367533,
+            "mean_head_similarity": 0.7245922578622412,
+            "min_head_similarity": 0.692891201862949
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 8.0,
+          "text": "wide two-shot, NORA left, DOYLE right.",
+          "planned": "MS",
+          "majority": "MCU",
+          "per_frame": [
+            "MCU",
+            "MCU",
+            "MCU",
+            "MCU"
+          ],
+          "band_distance": 1,
+          "warn": false
+        }
+      ]
+    },
+    "SC02_g2": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 4,
+            "mean_similarity": 0.5057666505484829,
+            "min_similarity": 0.4947136491435891,
+            "variance": 8.637997050899558e-05,
+            "mean_head_similarity": 0.7222224154829746,
+            "min_head_similarity": 0.7040790514001856
+          },
+          "DOYLE": {
+            "frames_seen": 7,
+            "mean_similarity": 0.3364864476362523,
+            "min_similarity": 0.23673944469519592,
+            "variance": 0.0031556016047207653,
+            "mean_head_similarity": 0.5488600880240223,
+            "min_head_similarity": 0.43144947043037973
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 3.8,
+          "text": "over DOYLE's shoulder onto NORA.",
+          "planned": "MCU",
+          "majority": "MCU",
+          "per_frame": [
+            "MCU",
+            "MCU",
+            "MCU",
+            "MCU"
+          ],
+          "band_distance": 0,
+          "warn": false
+        },
+        {
+          "shot": 2,
+          "start": 3.8,
+          "end": 8.0,
+          "text": "silent close-up of DOYLE looking screen-left.",
+          "planned": "CU",
+          "majority": "ECU",
+          "per_frame": [
+            "CU",
+            "CU",
+            "ECU",
+            "ECU"
+          ],
+          "band_distance": 1,
+          "warn": false
+        }
+      ]
+    },
+    "SC03_g1": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 8,
+            "mean_similarity": 0.589028302431007,
+            "min_similarity": 0.4976452146591853,
+            "variance": 0.0016139398389258047,
+            "mean_head_similarity": 0.6069117007882596,
+            "min_head_similarity": 0.5749193668307271
+          },
+          "DOYLE": {
+            "frames_seen": 8,
+            "mean_similarity": 0.5207790972765833,
+            "min_similarity": 0.4425453072027553,
+            "variance": 0.003708886419353836,
+            "mean_head_similarity": 0.6849088460730854,
+            "min_head_similarity": 0.6758294245955767
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 8.0,
+          "text": "wide two-shot, NORA left, DOYLE right.",
+          "planned": "MS",
+          "majority": "MCU",
+          "per_frame": [
+            "MCU",
+            "MCU",
+            "MCU",
+            "MCU"
+          ],
+          "band_distance": 1,
+          "warn": false
+        }
+      ]
+    },
+    "SC03_g2": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 8,
+            "mean_similarity": 0.5147300730997798,
+            "min_similarity": 0.4691698661874373,
+            "variance": 0.0024211113439244433,
+            "mean_head_similarity": 0.5402084089600976,
+            "min_head_similarity": 0.50720833678497
+          },
+          "DOYLE": {
+            "frames_seen": 8,
+            "mean_similarity": 0.5771771881370413,
+            "min_similarity": 0.528563003253874,
+            "variance": 0.0008317371924889531,
+            "mean_head_similarity": 0.5495538137893163,
+            "min_head_similarity": 0.5303052028612001
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 8.0,
+          "text": "silent close-up of NORA looking screen-right.",
+          "planned": "CU",
+          "majority": "MCU",
+          "per_frame": [
+            "MCU",
+            "MCU",
+            "MCU",
+            "MCU"
+          ],
+          "band_distance": 1,
+          "warn": false
+        }
+      ]
+    },
+    "SC04_g1": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 8,
+            "mean_similarity": 0.6796791832554483,
+            "min_similarity": 0.611785749465259,
+            "variance": 0.001371962176366947,
+            "mean_head_similarity": 0.62162559808894,
+            "min_head_similarity": 0.6116628566232976
+          },
+          "DOYLE": {
+            "frames_seen": 8,
+            "mean_similarity": 0.5689189967896782,
+            "min_similarity": 0.46753566379287054,
+            "variance": 0.002267332418535258,
+            "mean_head_similarity": 0.6373785959585803,
+            "min_head_similarity": 0.6217280068085529
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 8.0,
+          "text": "wide two-shot, NORA left, DOYLE right.",
+          "planned": "MS",
+          "majority": "MCU",
+          "per_frame": [
+            "MCU",
+            "MCU",
+            "MCU",
+            "MCU"
+          ],
+          "band_distance": 1,
+          "warn": false
+        }
+      ]
+    },
+    "SC04_g2": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 3,
+            "mean_similarity": 0.4599939785208007,
+            "min_similarity": 0.44717590397689566,
+            "variance": 0.000241060742503136,
+            "mean_head_similarity": 0.6589188953803387,
+            "min_head_similarity": 0.6373960022028768
+          },
+          "DOYLE": {
+            "frames_seen": 8,
+            "mean_similarity": 0.441373243659155,
+            "min_similarity": 0.2988311513833089,
+            "variance": 0.00316797657919784,
+            "mean_head_similarity": 0.6870658949701465,
+            "min_head_similarity": 0.6550092414545361
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 3.4,
+          "text": "over DOYLE's shoulder onto NORA.",
+          "planned": "MCU",
+          "majority": "MCU",
+          "per_frame": [
+            "MCU",
+            "MCU",
+            "MCU",
+            "MCU"
+          ],
+          "band_distance": 0,
+          "warn": false
+        },
+        {
+          "shot": 2,
+          "start": 3.4,
+          "end": 8.0,
+          "text": "silent close-up of DOYLE looking screen-left.",
+          "planned": "CU",
+          "majority": "CU",
+          "per_frame": [
+            "CU",
+            "CU",
+            "CU",
+            "CU"
+          ],
+          "band_distance": 0,
+          "warn": false
+        }
+      ]
+    },
+    "SC05_g1": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 8,
+            "mean_similarity": 0.5508081329108246,
+            "min_similarity": 0.471276962961183,
+            "variance": 0.001830900524062701,
+            "mean_head_similarity": 0.6060789464318077,
+            "min_head_similarity": 0.5860573365789605
+          },
+          "DOYLE": {
+            "frames_seen": 8,
+            "mean_similarity": 0.5507428994835623,
+            "min_similarity": 0.4532039125011999,
+            "variance": 0.00172451479205535,
+            "mean_head_similarity": 0.601071269275053,
+            "min_head_similarity": 0.5573609453131212
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 8.0,
+          "text": "wide two-shot, NORA left, DOYLE right, REED right.",
+          "planned": "MS",
+          "majority": "MS",
+          "per_frame": [
+            "MS",
+            "MS",
+            "MS",
+            "MS"
+          ],
+          "band_distance": 0,
+          "warn": false
+        }
+      ]
+    },
+    "SC05_g2": {
+      "identity": {
+        "characters": {
+          "NORA": {
+            "frames_seen": 3,
+            "mean_similarity": 0.451606394419007,
+            "min_similarity": 0.38454770288854173,
+            "variance": 0.0032907209992649946,
+            "mean_head_similarity": 0.6602850735022608,
+            "min_head_similarity": 0.6576934188924497
+          },
+          "DOYLE": {
+            "frames_seen": 5,
+            "mean_similarity": 0.5259052404481095,
+            "min_similarity": 0.5101170040175775,
+            "variance": 0.00016377993672045822,
+            "mean_head_similarity": 0.6720745208061999,
+            "min_head_similarity": 0.6467804080457427
+          }
+        },
+        "warn": []
+      },
+      "scale": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 2.5,
+          "text": "silent close-up of DOYLE looking screen-left.",
+          "planned": "CU",
+          "majority": "CU",
+          "per_frame": [
+            "CU",
+            "CU",
+            "CU",
+            "CU"
+          ],
+          "band_distance": 0,
+          "warn": false
+        },
+        {
+          "shot": 2,
+          "start": 2.5,
+          "end": 5.5,
+          "text": "over DOYLE's shoulder onto NORA.",
+          "planned": "MCU",
+          "majority": "CU",
+          "per_frame": [
+            "CU",
+            "CU",
+            "CU",
+            "CU"
+          ],
+          "band_distance": 1,
+          "warn": false
+        },
+        {
+          "shot": 3,
+          "start": 5.5,
+          "end": 8.0,
+          "text": "close-up of DOYLE looking screen-left.",
+          "planned": "CU",
+          "majority": "CU",
+          "per_frame": [
+            "CU",
+            "CU",
+            "CU",
+            "CU"
+          ],
+          "band_distance": 0,
+          "warn": false
+        }
+      ]
+    }
+  },
+  "false_warns": {
+    "identity": [],
+    "shot_scale": [],
+    "note": "SC01_g1 supplies the anchors (self-match)"
+  },
+  "known_defects": {
+    "SC03_g1_rejected_hair": {
+      "check": "IDENTITY_DRIFT (NORA, face embedding)",
+      "characters": {
+        "NORA": {
+          "frames_seen": 8,
+          "mean_similarity": 0.6180196107867253,
+          "min_similarity": 0.5675115847389242,
+          "variance": 0.002279051431333592,
+          "mean_head_similarity": 0.5966374695253762,
+          "min_head_similarity": 0.5716707234241767
+        },
+        "DOYLE": {
+          "frames_seen": 8,
+          "mean_similarity": 0.6097408882377267,
+          "min_similarity": 0.5111575621984723,
+          "variance": 0.003390656738215066,
+          "mean_head_similarity": 0.5272296574094071,
+          "min_head_similarity": 0.5001961181551451
+        }
+      },
+      "warn": [],
+      "score": 0.6180196107867253,
+      "accepted_nora_mean_range": [
+        0.452,
+        0.68
+      ],
+      "caught": false,
+      "head_region": {
+        "score": 0.5966374695253762,
+        "accepted_nora_range": [
+          0.54,
+          0.722
+        ],
+        "separates": false
+      }
+    },
+    "SC03_g1_rejected_curly": {
+      "check": "IDENTITY_DRIFT (NORA, face embedding)",
+      "characters": {
+        "NORA": {
+          "frames_seen": 8,
+          "mean_similarity": 0.6581602943811043,
+          "min_similarity": 0.5918225182104365,
+          "variance": 0.0012326035651343981,
+          "mean_head_similarity": 0.6077205032561324,
+          "min_head_similarity": 0.5681560502853245
+        },
+        "DOYLE": {
+          "frames_seen": 8,
+          "mean_similarity": 0.5178674868967866,
+          "min_similarity": 0.42702631607377295,
+          "variance": 0.0022590837083861157,
+          "mean_head_similarity": 0.6472649911047483,
+          "min_head_similarity": 0.6200005387945566
+        }
+      },
+      "warn": [],
+      "score": 0.6581602943811043,
+      "accepted_nora_mean_range": [
+        0.452,
+        0.68
+      ],
+      "caught": false,
+      "head_region": {
+        "score": 0.6077205032561324,
+        "accepted_nora_range": [
+          0.54,
+          0.722
+        ],
+        "separates": false
+      }
+    },
+    "SC03_g2_rejected_wrong_doyle:identity": {
+      "check": "IDENTITY_DRIFT (DOYLE)",
+      "characters": {
+        "NORA": {
+          "frames_seen": 8,
+          "mean_similarity": 0.5461791655062624,
+          "min_similarity": 0.47609906634667265,
+          "variance": 0.004372183165845755,
+          "mean_head_similarity": 0.6088243020494701,
+          "min_head_similarity": 0.5077422685717465
+        },
+        "DOYLE": {
+          "frames_seen": 7,
+          "mean_similarity": 0.1468292694675513,
+          "min_similarity": 0.07928797976451317,
+          "variance": 0.0017944286663773492,
+          "mean_head_similarity": 0.4242405550363141,
+          "min_head_similarity": 0.3572730142623186
+        }
+      },
+      "warn": [
+        "DOYLE: mean 0.15 (min 0.25), lowest 0.08 (min 0.16) in SC03_g2_rejected_wrong_doyle.mp4"
+      ],
+      "score": 0.1468292694675513,
+      "accepted_doyle_mean_range": [
+        0.336,
+        0.577
+      ],
+      "caught": true
+    },
+    "SC03_g2_rejected_wrong_doyle:scale_planned_CU": {
+      "check": "SHOT_SCALE_MISMATCH",
+      "shots": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 8.0,
+          "text": "silent close-up of NORA looking screen-right.",
+          "planned": "CU",
+          "majority": "MCU",
+          "per_frame": [
+            "MCU",
+            "MCU",
+            "CU",
+            "MCU"
+          ],
+          "band_distance": 1,
+          "warn": false
+        }
+      ],
+      "caught": false,
+      "caught_if_tolerance_0": true
+    },
+    "SC03_g2:scale_planned_CU": {
+      "check": "SHOT_SCALE_MISMATCH",
+      "shots": [
+        {
+          "shot": 1,
+          "start": 0.0,
+          "end": 8.0,
+          "text": "silent close-up of NORA looking screen-right.",
+          "planned": "CU",
+          "majority": "MCU",
+          "per_frame": [
+            "MCU",
+            "MCU",
+            "MCU",
+            "MCU"
+          ],
+          "band_distance": 1,
+          "warn": false
+        }
+      ],
+      "caught": false,
+      "caught_if_tolerance_0": true
+    },
+    "SC03_handoff_set": {
+      "check": "SET_DRIFT",
+      "handoffs": {
+        "SC01_g1->g2": {
+          "orb_inlier_ratio": 0.3157894736842105,
+          "inliers": 6,
+          "good_matches": 19,
+          "hsv_correlation": 0.19501032629061615,
+          "warn": false
+        },
+        "SC02_g1->g2": {
+          "orb_inlier_ratio": 0.36666666666666664,
+          "inliers": 11,
+          "good_matches": 30,
+          "hsv_correlation": 0.604550738882888,
+          "warn": false
+        },
+        "SC03_g1->g2": {
+          "orb_inlier_ratio": 0.3333333333333333,
+          "inliers": 11,
+          "good_matches": 33,
+          "hsv_correlation": 0.2907413160879956,
+          "warn": false
+        },
+        "SC04_g1->g2": {
+          "orb_inlier_ratio": 0.3157894736842105,
+          "inliers": 6,
+          "good_matches": 19,
+          "hsv_correlation": 0.32299512263344055,
+          "warn": false
+        },
+        "SC05_g1->g2": {
+          "orb_inlier_ratio": 0.391304347826087,
+          "inliers": 9,
+          "good_matches": 23,
+          "hsv_correlation": 0.327762805769978,
+          "warn": false
+        }
+      },
+      "caught": false,
+      "stands_out": false
+    }
+  }
+}
