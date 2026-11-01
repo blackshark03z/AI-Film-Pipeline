@@ -57,3 +57,23 @@ FACTS = [
               carriers=[Carrier(kind="DIALOGUE", generation_id="SC02_g1",
                                 detail="The brass one opens nothing.")]),
 ]
+
+# Vietnamese sidecar: every on-screen and spoken English text of the cut
+VI = {
+    "THE SPARE KEY": "CHIẾC CHÌA DỰ PHÒNG",
+    "After their mother's funeral": "Sau đám tang của mẹ họ",
+    "Earlier that morning": "Sáng sớm hôm đó",
+    "their late mother's sister": "dì ruột, em gái của người mẹ đã mất",
+    "the elder daughter": "con gái lớn",
+    "her younger brother": "em trai của Elena",
+    "So she left the house to you.": "Vậy là mẹ để lại căn nhà cho chị.",
+    "Mom always liked you best.": "Mẹ lúc nào cũng thương chị nhất.",
+    "The brass one opens nothing.": "Chìa bằng đồng chẳng mở được gì đâu.",
+    "He'll take it anyway.": "Đằng nào nó cũng lấy thôi.",
+    "Keep it, Marcus.": "Cứ giữ lấy đi, Marcus.",
+    "Your mother changed the locks.": "Mẹ cháu đã thay ổ khóa rồi.",
+    "A short drama. All characters are fictional.":
+        "Phim ngắn. Mọi nhân vật đều là hư cấu.",
+    "Video, images and voices generated with AI.":
+        "Video, hình ảnh và giọng nói được tạo bằng AI.",
+}

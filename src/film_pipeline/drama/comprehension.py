@@ -200,6 +200,32 @@ def check_comprehension(timeline: list[str],
     return issues
 
 
+def screen_text_cues(offsets: dict[str, float], cards: list[ContextCard],
+                     tags: list[IdentityTag], intros: list[CharacterIntro],
+                     tr: dict[str, str] | None = None,
+                     limits: ReadingLimits = ReadingLimits()
+                     ) -> list[tuple[float, float, str]]:
+    """Cards and identity tags as sidecar cues on the final timeline
+    (``offsets`` from ``post.cue_offsets``; card clips are keyed by
+    card_id). ``tr`` translates every text; a missing entry raises, so no
+    untranslated line reaches a translated sidecar."""
+    def t(text: str) -> str:
+        if tr is None:
+            return text
+        if text not in tr:
+            raise KeyError(f"no translation for {text!r}")
+        return tr[text]
+    by_char = {i.character: i for i in intros}
+    out = [(offsets[c.card_id], offsets[c.card_id] + c.duration(limits),
+            "\n".join(t(line) for line in c.lines)) for c in cards]
+    for tag in tags:
+        intro = by_char[tag.character]
+        out.append((offsets[tag.generation_id] + tag.start_s,
+                    offsets[tag.generation_id] + tag.end_s,
+                    f"{intro.label} – {t(intro.relation)}"))
+    return out
+
+
 def tag_overlays(tags: list[IdentityTag], intros: list[CharacterIntro],
                  out_dir: Path) -> list[Overlay]:
     """Render one PNG per tag for ``post.assemble(overlays=...)``."""

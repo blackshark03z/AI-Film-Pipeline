@@ -7,6 +7,20 @@ rain outside the window, a flashback.
 Final: `post/film02_spare_key_final_marked.mp4` (metadata + C2PA, dev
 signer; `post/disclosure.json`). Unmarked cut, SRT and post manifest beside it.
 
+## Delivery (post/)
+
+| File | What |
+|---|---|
+| `film02_spare_key_final_marked.mp4` | the film: 59.3 s, 1280×720, −15 LUFS, English dialogue burned in, AI label, metadata + C2PA (dev signer) |
+| `film02_spare_key.en.srt` | full English sidecar: title, context cards, identity tags, dialogue, end card with the AI notice |
+| `film02_spare_key.vi.srt` | the same in Vietnamese (`VI` in `tools/drama_film02_story.py`) |
+| `disclosure.json` | AI disclosure (EU AI Act Art. 50 notes) |
+| `film02_post.json` | post manifest; `delivery` holds the sha256 of every file above |
+
+Sidecar cues never overlap (`post.merge_cues` stacks a tag over a line of
+dialogue into one two-line cue). Not for release until the dev C2PA signer
+is replaced by a trusted one.
+
 ## Route (from WP5)
 
 1. `tools/drama_film02.py` — script → per-generation plan (one shot per 8 s

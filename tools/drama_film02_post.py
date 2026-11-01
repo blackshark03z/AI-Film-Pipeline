@@ -24,17 +24,17 @@ from film_pipeline.drama.disclosure import (  # noqa: E402
     default_dev_cert_dir, embed_metadata, read_c2pa, sha256_file,
     sign_c2pa, write_disclosure)
 from film_pipeline.drama.comprehension import (  # noqa: E402
-    check_comprehension, tag_overlays)
+    check_comprehension, screen_text_cues, tag_overlays)
 from film_pipeline.drama.tag_layout import (  # noqa: E402
     auto_place, reference_embeddings, tag_preview_sheet)
 from film_pipeline.drama.post import (  # noqa: E402
     PostManifest, SubtitleCue, absolute_cues, assemble, clamp_cues,
     context_card_clip, cue_offsets, normalize_loudness,
-    probe_video_duration, write_srt)
+    merge_cues, probe_video_duration, write_srt)
 
 sys.path.insert(0, str(REPO / "tools"))
 from drama_film02_story import (CARDS, FACTS, IN_FRAME, INTROS,  # noqa: E402
-                                TAGS, TAKES_ORDER)
+                                TAGS, TAKES_ORDER, VI)
 
 DOCS = REPO / "docs/drama/film02"
 TAKES = DOCS / "takes"
@@ -96,6 +96,26 @@ def disclosure(post: PostManifest) -> Disclosure:
         ])
 
 
+def sidecars(offsets: dict[str, float], cues: list[SubtitleCue],
+             tags: list, duration_s: float) -> list[Path]:
+    """Full sidecars, English and Vietnamese: title, context cards,
+    identity tags, dialogue and the end card (with the AI notice), merged
+    so no two cues overlap. The picture burns in only the English
+    dialogue; a sidecar also serves muted / hard-of-hearing viewers."""
+    out = []
+    end_s = duration_s - END_S
+    for lang, tr in (("en", None), ("vi", VI)):
+        def t(text: str) -> str:
+            return text if tr is None else tr[text]
+        events = [(0.0, TITLE_S, t(TITLE[0][0])),
+                  (end_s, duration_s, "\n".join(t(x) for x, _ in END[1:]))]
+        events += screen_text_cues(offsets, CARDS, tags, INTROS, tr)
+        events += [(a, b, t(x)) for a, b, x in absolute_cues(cues, offsets)]
+        out.append(write_srt(merge_cues(events),
+                             POST / f"film02_spare_key.{lang}.srt"))
+    return out
+
+
 def main() -> None:
     POST.mkdir(parents=True, exist_ok=True)
     notes: list[str] = []
@@ -116,14 +136,14 @@ def main() -> None:
                                               c.lines, c.duration())
                  for c in CARDS}
         clips = [cards.get(c) or TAKES / f"{c}.mp4" for c in CLIPS]
-        srt = write_srt(absolute_cues(cues, cue_offsets(clips, TITLE_S)),
-                        POST / "film02_spare_key.en.srt")
+        offsets = cue_offsets(clips, TITLE_S)
         final = assemble(clips, POST / "film02_spare_key_final.mp4",
                          cues=cues, title_lines=TITLE, end_lines=END,
                          title_s=TITLE_S, end_s=END_S,
                          overlays=tag_overlays(tags, INTROS, Path(tmp)))
     tag_preview_sheet(tags, INTROS, takes, POST / "tags_preview.jpg")
     stats = normalize_loudness(final)
+    srts = sidecars(offsets, cues, tags, probe_video_duration(final))
     post = PostManifest(
         film="film02 The Spare Key", date="2026-11-01",
         source="docs/drama/film02/takes (first-pass takes, WP7)",
@@ -135,8 +155,10 @@ def main() -> None:
         audio="0.05/0.08 s edge fades per clip; loudnorm 2-pass + limiter "
               f"-> {stats['integrated_lufs']} LUFS integrated, "
               f"{stats['peak_dbfs']} dBFS peak (ebur128)",
-        subtitles={"language": "en", "burned_in": True,
-                   "sidecar": srt.name,
+        subtitles={"language": "en", "burned_in": "dialogue only",
+                   "sidecars": [p.name for p in srts],
+                   "sidecar_content": "title, context cards, identity tags, "
+                                      "dialogue, end card (AI notice)",
                    "timing": "silencedetect windows; text from the script"},
         label="AI-generated bottom-left over the body, plus end card")
 
@@ -169,6 +191,9 @@ def main() -> None:
         "marked": marked.name, "marked_sha256": done.content_sha256,
         "source_final_sha256": post.sha256, "metadata": True,
         "c2pa": c2pa_info is not None}
+    record["delivery"] = {
+        p.name: sha256_file(p) for p in
+        [marked, POST / "disclosure.json", *srts]}
     (POST / "film02_post.json").write_text(
         json.dumps(record, indent=2) + "\n", encoding="utf-8")
     print("\n".join(notes) or "no cue clamped")

@@ -92,6 +92,26 @@ def write_srt(cues_abs: list[tuple[float, float, str]], path: Path) -> Path:
     return path
 
 
+def merge_cues(cues_abs: list[tuple[float, float, str]]
+               ) -> list[tuple[float, float, str]]:
+    """Split overlapping cues into non-overlapping ones, stacking the text
+    of every cue active in a segment (earlier start on top). Some players
+    drop or garble overlapping SRT cues; an identity tag over a line of
+    dialogue is the common case."""
+    cuts = sorted({t for a, b, _ in cues_abs for t in (a, b)})
+    order = sorted(cues_abs, key=lambda c: c[0])
+    out: list[tuple[float, float, str]] = []
+    for a, b in zip(cuts, cuts[1:]):
+        text = "\n".join(t for s, e, t in order if s < b and a < e)
+        if not text:
+            continue
+        if out and out[-1][2] == text and abs(out[-1][1] - a) < 1e-6:
+            out[-1] = (out[-1][0], b, text)
+        else:
+            out.append((a, b, text))
+    return out
+
+
 def probe_video_duration(path: Path) -> float:
     out = subprocess.run(
         ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",

@@ -128,3 +128,35 @@ def test_film02_script_with_intros_and_facts_passes():
     plain = ROSA.model_copy(update={"relation": "family friend"})
     assert [i.check for i in lint_script(FILM02, [plain, ELENA, MARCUS])] \
         == ["OFFSCREEN_PERSON"] * 2
+
+
+# ---------------------------------------------------------- sidecars
+
+import pytest  # noqa: E402
+
+from film_pipeline.drama.comprehension import screen_text_cues  # noqa: E402
+from film_pipeline.drama.post import merge_cues  # noqa: E402
+
+
+def test_merge_cues_stacks_overlaps_without_overlapping_output():
+    got = merge_cues([(5.0, 7.2, "MARCUS – her younger brother"),
+                      (5.0, 6.5, "So she left the house to you."),
+                      (8.0, 9.0, "ELENA – the elder daughter")])
+    assert got == [(5.0, 6.5, "MARCUS – her younger brother\n"
+                               "So she left the house to you."),
+                   (6.5, 7.2, "MARCUS – her younger brother"),
+                   (8.0, 9.0, "ELENA – the elder daughter")]
+    assert all(a[1] <= b[0] for a, b in zip(got, got[1:]))
+
+
+def test_screen_text_cues_and_missing_translation():
+    card = ContextCard(card_id="OPEN_card", before="SC01_g1",
+                       lines=["After their mother's funeral"])
+    offs = {"OPEN_card": 3.0, "SC01_g1": 5.4}
+    got = [(round(a, 3), round(b, 3), t) for a, b, t in
+           screen_text_cues(offs, [card], TAGS[:1], [ROSA])]
+    assert got == [(3.0, 5.4, "After their mother's funeral"),
+                   (5.6, 8.1, "ROSA – their late mother's sister")]
+    with pytest.raises(KeyError):
+        screen_text_cues(offs, [card], TAGS[:1], [ROSA],
+                         {"After their mother's funeral": "Sau đám tang"})

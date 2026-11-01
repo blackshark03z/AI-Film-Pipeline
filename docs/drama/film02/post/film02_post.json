@@ -21,17 +21,21 @@
   "audio": "0.05/0.08 s edge fades per clip; loudnorm 2-pass + limiter -> -15.0 LUFS integrated, -1.8 dBFS peak (ebur128)",
   "subtitles": {
     "language": "en",
-    "burned_in": true,
-    "sidecar": "film02_spare_key.en.srt",
+    "burned_in": "dialogue only",
+    "sidecars": [
+      "film02_spare_key.en.srt",
+      "film02_spare_key.vi.srt"
+    ],
+    "sidecar_content": "title, context cards, identity tags, dialogue, end card (AI notice)",
     "timing": "silencedetect windows; text from the script"
   },
   "label": "AI-generated bottom-left over the body, plus end card",
   "owner_review": "PENDING",
   "disclosure": {
     "json": "disclosure.json",
-    "json_sha256": "71048f9b97fe2e82ad6ba7705121f132749c078f7526585ad60fd5d6d1b8a163",
+    "json_sha256": "206a48808811a9a5655d7b76fe03309ac04c5c625b8266d224a314490f838356",
     "marked": "film02_spare_key_final_marked.mp4",
-    "marked_sha256": "1027f63a76b75e4d1bf0ecbc4cf30e8e99ac6043794370424083da9b5ae1c1e4",
+    "marked_sha256": "152388dbd281eb101e6a7f1ca5efefec67c0f817f4a7bd7dc953304d3aa1790e",
     "source_final_sha256": "fa83aa6983cf4511776c667d3ebe2b53cb2c1d85fbf26605777668011f7005bc",
     "metadata": true,
     "c2pa": true
@@ -166,5 +170,11 @@
         "detail": "MARCUS tag runs over 'So she left the house to you.'"
       }
     ]
+  },
+  "delivery": {
+    "film02_spare_key_final_marked.mp4": "152388dbd281eb101e6a7f1ca5efefec67c0f817f4a7bd7dc953304d3aa1790e",
+    "disclosure.json": "206a48808811a9a5655d7b76fe03309ac04c5c625b8266d224a314490f838356",
+    "film02_spare_key.en.srt": "279cdade93f3413d14f7f99720d5512ccf6f7266df680cc9c58d3384f3015e70",
+    "film02_spare_key.vi.srt": "2c96704636833284fa663ebade52d9ac98fed140c5850335758c2bec7cbdf06c"
   }
 }
