@@ -3,7 +3,7 @@
 One 15-second generation = one prompt. Section order is fixed (Gate 3):
 
     characters + references -> setting -> continuity (start state)
-    -> shots by time mark -> dialogue (who says what, voice) -> sound
+    -> shots by time mark -> performance cues -> dialogue (who says what, voice) -> sound
     -> prohibitions
 
 A brief bound to a ``CharacterLook`` uses the look's locked text verbatim,
@@ -20,11 +20,13 @@ from pydantic import Field
 
 from ..core import ContractModel
 from .bible import CharacterLook, CharacterReferenceSet, attachment_plan
+from .choreography import GenerationChoreography
 from .continuity import ContinuityState
 from .coverage import SceneUnit
+from .scene_bible import LocationLook
 
-SECTION_ORDER = ("characters", "setting", "continuity", "shots", "dialogue",
-                 "sound", "prohibitions")
+SECTION_ORDER = ("characters", "setting", "continuity", "shots",
+                 "performance", "dialogue", "sound", "prohibitions")
 
 DEFAULT_PROHIBITIONS = (
     "No on-screen text, subtitles or logos.",
@@ -69,7 +71,9 @@ def compile_scene_prompt(unit: SceneUnit, *,
                          | None = None,
                          max_reference_images: int | None = None,
                          dialogue_language: str = "Vietnamese",
-                         start_state: ContinuityState | None = None
+                         start_state: ContinuityState | None = None,
+                         location: LocationLook | None = None,
+                         choreography: GenerationChoreography | None = None
                          ) -> ScenePromptPlan:
     attachments = attachment_plan(reference_sets or [],
                                   max_images=max_reference_images)
@@ -93,13 +97,34 @@ def compile_scene_prompt(unit: SceneUnit, *,
                 if line.character in voices else ""
             dialogue.append(f'{line.character} (shot {index}{voice}): '
                             f'"{line.text}"')
+    setting_text = setting.strip().rstrip(".") + "."
+    if location is not None:
+        # locked set text verbatim, then environment rules, then the rest
+        lt = location.text.strip()
+        parts = [lt if lt.endswith(".") else lt + "."]
+        if location.environment_rules:
+            parts.append("; ".join(location.environment_rules).rstrip(".")
+                         + ".")
+        if setting.strip():
+            parts.append(setting_text)
+        setting_text = " ".join(parts)
+    # cut marks only mean something when the generation holds several shots
+    framing = ("hard cuts at the marks" if len(shots) > 1
+               else "one continuous shot")
+    shots_text = (f"{unit.duration_s:g}s scene, 16:9, {framing}. "
+                  + " ".join(shots))
+    performance = ""
+    if choreography is not None:
+        shots_text += " " + choreography.timing_text()
+        performance = " ".join(c.prompt_text()
+                               for c in choreography.performance)
     sound = [s for s in [room_tone, *(sfx or [])] if s]
     sections = {
         "characters": " ".join(cast),
-        "setting": setting.strip().rstrip(".") + ".",
+        "setting": setting_text,
         "continuity": start_state.describe() if start_state else "",
-        "shots": (f"{unit.duration_s:g}s scene, 16:9, hard cuts at the "
-                  "marks. " + " ".join(shots)),
+        "shots": shots_text,
+        "performance": performance,
         "dialogue": (f"{dialogue_language} dialogue, lip-synced: "
                      + " ".join(dialogue)) if dialogue else "",
         "sound": ("Sound: " + "; ".join(sound) + ".") if sound else "",

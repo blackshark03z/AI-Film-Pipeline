@@ -24,6 +24,7 @@ class ContinuityState(ContractModel):
     looks: dict[str, str] = Field(default_factory=dict)      # NORA: look_id
     lighting: str = ""
     time_of_day: str = ""
+    location: str = ""     # LocationLook.look_id
 
     def as_dict(self) -> dict:
         return self.model_dump()

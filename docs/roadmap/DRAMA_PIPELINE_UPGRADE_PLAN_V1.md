@@ -110,6 +110,12 @@ thu bằng phim thật hoặc tái tạo được film01, không chỉ unit test
 - A/B 4 generation (SC03 hoặc cảnh mới): text-only vs plate bối cảnh vs
   first-frame. Đo: bị chặn hay không, độ giống bối cảnh, cỡ cảnh đúng (dùng WP4).
 - Ghi kết quả vào capability manifest của provider (đã đo / giả định).
+- Đo thêm ngân sách prompt (quyết định Tech Lead 2026-11-01, sau WP2/WP3):
+  khi thêm look bối cảnh, chia pha và diễn xuất, SC03_g1 lên 145 từ (đã bỏ phần
+  lặp hành động trong setting). Mặc định `max_prompt_words=120` giữ nguyên
+  (giả định từ thời Dola). Route Flow tạm cho phép 150 từ; A/B 120 vs 150 về độ
+  tuân thủ nằm trong WP5. Khi dùng choreography, hành động chỉ mô tả trong
+  timing, không lặp lại trong `setting`.
 
 ### WP6 — Tuân thủ nhãn AI (P1, 0 credit)
 - Nhãn ngay đầu phim cộng watermark suốt phim (đã làm tay ở film01). Thêm

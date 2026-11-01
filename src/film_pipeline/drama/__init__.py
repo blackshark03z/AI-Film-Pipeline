@@ -15,6 +15,11 @@ from .bible import (
     reference_strategy_for,
     register_reference,
 )
+from .choreography import (
+    GenerationChoreography,
+    PerformanceCue,
+    Phase,
+)
 from .continuity import ContinuityState, GenerationHandoff
 from .coverage import CoveragePlanner, CoverageShot, SceneTiming, SceneUnit
 from .feasibility import (
@@ -22,6 +27,7 @@ from .feasibility import (
     FeasibilityLimits,
     FeasibilityReport,
     check_cross_cut,
+    check_repetition,
     check_scene,
     check_script,
 )
@@ -51,6 +57,15 @@ from .script import (
     count_vi_syllables,
     parse_fountain,
 )
+from .scene_bible import (
+    LocationLook,
+    OccupancyEvent,
+    RuleIssue,
+    SceneOccupancy,
+    StoryTime,
+    check_environment,
+    check_temporal,
+)
 from .storyboard import StoryboardGate, render_schematic_frame
 
 __all__ = [
@@ -72,4 +87,7 @@ __all__ = [
     "Script", "ScriptElement", "ScriptScene", "count_vi_syllables",
     "parse_fountain",
     "StoryboardGate", "render_schematic_frame",
+    "GenerationChoreography", "PerformanceCue", "Phase", "check_repetition",
+    "LocationLook", "OccupancyEvent", "RuleIssue", "SceneOccupancy",
+    "StoryTime", "check_environment", "check_temporal",
 ]

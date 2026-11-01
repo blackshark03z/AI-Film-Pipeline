@@ -199,3 +199,17 @@ def check_cross_cut(*, scene_id: str, previous_action: str,
                     "deterministic, or verify the rendered end state (QC) "
                     "before generating the next")))
     return issues
+
+
+# Muse: the key was placed twice; "continues" prompts loop the action
+_UNCONTROLLED_REPEAT = _rx(
+    r"continu\w*", r"keeps?", r"repeatedly", r"again", r"over and over",
+    r"lặp lại", r"liên tục", r"tiếp tục")
+
+
+def check_repetition(text: str, scene_id: str = "-"
+                     ) -> list[FeasibilityIssue]:
+    return [FeasibilityIssue(
+        scene_id=scene_id, rule="UNCONTROLLED_REPEAT", severity="BLOCK",
+        detail=f"'{m.group(0)}' invites the action to loop: {text[:80]}")
+        for m in _UNCONTROLLED_REPEAT.finditer(normalize(text).lower())]

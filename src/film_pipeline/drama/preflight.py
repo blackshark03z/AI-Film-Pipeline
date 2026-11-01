@@ -21,8 +21,12 @@ from ..core import ContractModel
 from .bible import CharacterLook, CharacterReferenceSet
 from .continuity import ContinuityState, GenerationHandoff
 from .coverage import SceneTiming, SceneUnit
-from .feasibility import FeasibilityLimits, check_cross_cut, check_scene
+from .choreography import GenerationChoreography
+from .feasibility import (FeasibilityLimits, check_cross_cut, check_repetition,
+                          check_scene)
 from .prompt import SECTION_ORDER, ScenePromptPlan
+from .scene_bible import (LocationLook, SceneOccupancy,
+                          check_environment)
 from .script import ScriptScene
 from .storyboard import StoryboardGate
 
@@ -64,7 +68,10 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
                     reference_mode: Literal["IMAGE", "TEXT_ONLY"] = "IMAGE",
                     looks: list[CharacterLook] | None = None,
                     generation_index: int = 1,
-                    handoff: GenerationHandoff | None = None
+                    handoff: GenerationHandoff | None = None,
+                    location: LocationLook | None = None,
+                    occupancy: SceneOccupancy | None = None,
+                    choreography: GenerationChoreography | None = None
                     ) -> PreflightReport:
     limits = limits or PreflightLimits()
     report = PreflightReport(scene_id=scene.scene_id)
@@ -126,6 +133,37 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
             if reference_mode == "IMAGE" and ref_set is not None and                     ref_set.look_id != look.look_id:
                 add("LOOK", f"{name}: reference shows {ref_set.look_id}, "
                             f"look is {look.look_id}")
+    if location is not None:
+        setting_text = prompt.sections.get("setting", "")
+        for problem in location.problems():
+            add("LOCATION", problem)
+        if location.text not in setting_text:
+            add("LOCATION", f"prompt does not carry the locked location "
+                            f"text for {location.look_id}")
+        for issue in check_environment(scene, location, [setting_text]):
+            add(issue.check, issue.detail, issue.severity)
+        if isinstance(start_state, ContinuityState) and                 start_state.location and                 start_state.location != location.look_id:
+            add("LOCATION", f"start state is at {start_state.location!r}, "
+                            f"location is {location.look_id}")
+    if occupancy is not None:
+        here = occupancy.present_at(generation_index)
+        named = set(in_frame) | stated
+        for name in sorted(named - here):
+            where = "in frame" if name in in_frame else "named"
+            add("OCCUPANCY", f"{name} is {where} but not present in the "
+                             f"scene at generation {generation_index}")
+        for problem in occupancy.problems():
+            add("OCCUPANCY", problem)
+    if choreography is not None:
+        for issue in choreography.problems(unit.duration_s):
+            add(issue.check, issue.detail, issue.severity)
+        loop_text = " ".join([prompt.sections.get("shots", ""),
+                              prompt.sections.get("setting", "")])
+        for issue in check_repetition(loop_text, scene.scene_id):
+            add(f"FEASIBILITY:{issue.rule}", issue.detail, issue.severity)
+        for cue in choreography.performance:
+            if cue.character not in known_characters:
+                add("PERFORMANCE", f"{cue.character}: unknown character")
     for problem in storyboard.problems([unit]):
         add("STORYBOARD", problem)
     if prompt.word_count > limits.max_prompt_words:
@@ -166,4 +204,9 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
                     add("STATE", f"{key}: previous end "
                                  f"{previous_end_state.get(key)!r} != start "
                                  f"{start_state.get(key)!r}")
+            # location compared apart: dict states may omit the key
+            if (previous_end_state.get("location") or "") !=                     (start_state.get("location") or ""):
+                add("STATE", f"location: previous end "
+                             f"{previous_end_state.get('location')!r} != "
+                             f"start {start_state.get('location')!r}")
     return report
