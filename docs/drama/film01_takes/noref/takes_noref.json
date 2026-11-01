@@ -1,0 +1,105 @@
+{
+  "film": "film01_first_day",
+  "route": "text-only (no reference images)",
+  "decision": "Owner chose 'Bo ref, chi mo ta' on 2026-11-01 after reference faces + the police-mistreatment storyline were blocked (see ../flow_block_rootcause.json)",
+  "provider": "Google Flow, Omni 1.1 Flash, 16:9, 720p, 8s, x1 (12 credits each)",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "storyboard": "g1 = Gate-2 masters; g2 = Gate-2 coverage (OTS/close-ups, prompts from *_g2_closeup.txt)",
+  "generations": {
+    "SC01_g1": {
+      "file": "SC01_g1.mp4",
+      "sha256": "5a42668719548c79a3282a55cd9c126533471e805a2361db490cfbfd05a19240",
+      "prompt": "../../film01_prompts/noref/SC01_g1.txt"
+    },
+    "SC01_g2": {
+      "file": "SC01_g2.mp4",
+      "sha256": "55f569ed330e3bc3423414cd64488a62d71bfb36a9d04345347cb7103a01c6c5",
+      "prompt": "../../film01_prompts/noref/SC01_g2.txt"
+    },
+    "SC02_g1": {
+      "file": "SC02_g1.mp4",
+      "sha256": "256b11531b50e1e3821b510bc9237f12d584a711bfec90b85897bd8be004d32f",
+      "prompt": "../../film01_prompts/noref/SC02_g1.txt"
+    },
+    "SC02_g2": {
+      "file": "SC02_g2.mp4",
+      "sha256": "63e58da0597171439c5be506b77c65e8ff51c1f3b7d35ee746493c6f78110b07",
+      "prompt": "../../film01_prompts/noref/SC02_g2.txt"
+    },
+    "SC03_g1": {
+      "file": "SC03_g1.mp4",
+      "sha256": "d1708a11b5033c53864702ecfea9d5f5c0f1c5920fcc66ccce83e906fbee413a",
+      "prompt": "../../film01_prompts/noref/SC03_g1.txt",
+      "note": "re-rendered: Owner flagged NORA hair drift at 35s of the rough cut; prompt hair -> 'short tightly curled grey-streaked natural hair'; rejected take kept as SC03_g1_rejected_hair.mp4"
+    },
+    "SC03_g2": {
+      "file": "SC03_g2.mp4",
+      "sha256": "3835fbdefbbf4f00f43a953f615b448d8c249706cac606ce5a611f19a7024bf2",
+      "prompt": "../../film01_prompts/noref/SC03_g2.txt"
+    },
+    "SC04_g1": {
+      "file": "SC04_g1.mp4",
+      "sha256": "b11dbbfc38323c57adc28fd71b57778bb892c11acbf397cd1c2b61f6e78e064d",
+      "prompt": "../../film01_prompts/noref/SC04_g1.txt",
+      "note": "first attempt blocked, identical-prompt retry passed"
+    },
+    "SC04_g2": {
+      "file": "SC04_g2.mp4",
+      "sha256": "3f9a47429fc32f056457e1c5b5c853d1cd574daed4c57bb3dfee044cf232e754",
+      "prompt": "../../film01_prompts/noref/SC04_g2.txt"
+    },
+    "SC05_g1": {
+      "file": "SC05_g1.mp4",
+      "sha256": "c4620134b4a887b8ba6a6b694e56131d573ed49cf5a5739131ac1063be1f574c",
+      "prompt": "../../film01_prompts/noref/SC05_g1.txt"
+    },
+    "SC05_g2": {
+      "file": "SC05_g2.mp4",
+      "sha256": "4293c7dde160d3eac79ce188e8a9e5cd079ccdb259cf7d1ac89b2a137a727a9b",
+      "prompt": "../../film01_prompts/noref/SC05_g2.txt"
+    }
+  },
+  "detected_cuts_s": {
+    "SC01_g2": [
+      3.625
+    ],
+    "SC02_g2": [
+      3.792
+    ],
+    "SC04_g2": [
+      3.417
+    ],
+    "note": "planned 3.6 / 3.8 / 3.4; SC05_g2 cuts (2.5, 5.5) not caught by the 0.3 scene threshold but visible in frames"
+  },
+  "rough_cut": "film01_rough_noref.mp4 (10 clips concatenated, no grade/mix/subtitles)",
+  "identity_note": "no refs: DOYLE stays consistent; NORA's hair length and grey amount drift between generations",
+  "owner_review": {
+    "status": "APPROVED",
+    "by": "Owner",
+    "date": "2026-11-01",
+    "what": "film01_rough_noref.mp4 (80s) incl. SC03 v2"
+  },
+  "revisions": [
+    {
+      "date": "2026-11-01",
+      "scenes": [
+        "SC03_g1",
+        "SC03_g2"
+      ],
+      "why": "Owner: hair drift at 35s; torn pieces fell, then NORA picked different pieces off the floor",
+      "pipeline": "locked CharacterLook + ContinuityState + TEXT_ONLY preflight + HandoffQC (docs/drama/gate3_film01_sc03_v2.json, film01_takes/qc/)",
+      "sha256": {
+        "SC03_g1": "ec9d103defac1dfa732c1c1dc2191821e835cd93fbd44622b23c59c953996ac6",
+        "SC03_g2": "e975aaa8f5678bdeb3fe15c3057db2c08b6a54c9e15509007ed9c993903655e7"
+      },
+      "replaced": [
+        "SC03_g1_rejected_curly.mp4",
+        "SC03_g2_v1_floor.mp4",
+        "SC03_g2_rejected_wrong_doyle.mp4"
+      ],
+      "fixed_defect": "SC03_g2: officer behind the counter is not DOYLE (dark-haired, younger); start state named DOYLE without his look text; preflight now requires a locked look for every character named by the start state; re-rendered",
+      "residual": "SC03_g2: background differs slightly from g1 (no EXIT sign); framing is medium, not the planned close-up",
+      "credits": 36
+    }
+  ]
+}

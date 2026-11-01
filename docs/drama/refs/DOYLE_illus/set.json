@@ -1,0 +1,40 @@
+{
+  "set": {
+    "character_id": "DOYLE_illus",
+    "name": "DOYLE",
+    "synthetic_person": true,
+    "look_id": "doyle_patrol_uniform_illustrated",
+    "images": [
+      {
+        "angle": "FRONT",
+        "path": "DOYLE_illus/front.png",
+        "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T22:48:05+00:00"
+      },
+      {
+        "angle": "THREE_QUARTER",
+        "path": "DOYLE_illus/three_quarter.png",
+        "sha256": "b48115615ed2f6f090f1625e1463850b71d95bda6ceef0204c8ffc522de2ec73",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T22:48:05+00:00"
+      },
+      {
+        "angle": "PROFILE",
+        "path": "DOYLE_illus/profile.png",
+        "sha256": "eb0d9bb5504d0b07c54b134550175115346262aefac76b7a8bce162b782bf1fd",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T22:48:05+00:00"
+      }
+    ]
+  },
+  "source_sheet": {
+    "path": "raw/DOYLE_illus/B_1376x768.jpg",
+    "sha256": "b654121e927cc16c1077f07d6e554ef655e2616b338dd2a996b7f5a3fa8f4cce",
+    "provider": "Google Flow, Nano Banana 2.1",
+    "owner_choice": "B_1376x768"
+  }
+}

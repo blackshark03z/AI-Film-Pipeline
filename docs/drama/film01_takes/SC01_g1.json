@@ -1,0 +1,22 @@
+{
+  "scene_id": "SC01",
+  "generation": 1,
+  "file": "SC01_g1.mp4",
+  "sha256": "5e655320c8053ce1d0d53627e8f7f97cb2f10e1b49985728126b4fdefaeded26",
+  "prompt": "../film01_prompts/SC01_g1.txt",
+  "provider": "Google Flow, Omni 1.1 Flash, Video + Thanh phan (ingredients), 16:9, 720p, 8s, x1 (12 credits)",
+  "account": "Flow-Claude-Clean-Profile (PRO)",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "reference_images": "nora_illus_front, doyle_illus_front, nora_illus_three_quarter, doyle_illus_three_quarter",
+  "probe": {"duration_s": 7.964, "video": "1280x720 24fps", "audio": "present",
+            "mean_volume_db": -35.9, "max_volume_db": -10.8},
+  "planned_cuts_s": [],
+  "detected_cuts_s": [2.0, 2.667, 4.375, 5.875],
+  "observations": [
+    "prompt asked for one 8s wide two-shot; the model added its own coverage: wide (DOYLE boots on desk, NORA enters) -> OTS onto DOYLE standing and speaking ~2.7-4.4s -> wide two-shot to the end",
+    "speech-level audio ~2.1-2.7s, matches DOYLE's single line; wording and lip-sync not yet verified by ear",
+    "identity: NORA navy jacket, white top, short grey-streaked hair, frame-left; DOYLE heavy-set, navy patrol uniform, frame-right; axis held",
+    "small sparkle watermark bottom-right"
+  ],
+  "owner_review": {"status": "PENDING"}
+}

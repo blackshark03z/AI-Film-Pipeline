@@ -1,0 +1,38 @@
+{
+  "previous_generation_id": "SC03_g1",
+  "next_generation_id": "SC03_g2",
+  "sheet": "docs/drama/film01_takes/qc/SC03_g1_end.png",
+  "checks": [
+    {
+      "item": "position:NORA",
+      "expected": "standing at the counter, frame-left",
+      "status": "PASS",
+      "note": "standing at the counter, frame-left"
+    },
+    {
+      "item": "position:DOYLE",
+      "expected": "behind the counter, frame-right",
+      "status": "PASS",
+      "note": "frame-right, across the counter"
+    },
+    {
+      "item": "prop:the letter:",
+      "expected": "torn into four pieces, lying on the counter in front of NORA",
+      "status": "PASS",
+      "note": "torn pieces lie flat on the counter in front of NORA"
+    },
+    {
+      "item": "look:NORA",
+      "expected": "short grey-streaked hair, not curled, not shoulder-length; navy blazer; white top",
+      "status": "PASS",
+      "note": "short straight grey-streaked hair, matches SC02_g2/SC04_g1 (cast sheet SC03_g1_cast.png); navy blazer; white top"
+    },
+    {
+      "item": "look:DOYLE",
+      "expected": "heavy-set; sandy hair; ruddy clean-shaven face; navy patrol uniform",
+      "status": "PASS",
+      "note": "heavy-set, sandy hair, clean-shaven, navy patrol uniform"
+    }
+  ],
+  "reviewer": "Claude (Worker), pending Owner review"
+}

@@ -1,0 +1,505 @@
+{
+  "SC01_g1": {
+    "prompt": {
+      "scene_id": "SC01",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA walks in and stops mid-lobby; behind the counter DOYLE takes his boots off the desk and stands.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right.",
+        "dialogue": "English dialogue, lip-synced: DOYLE (shot 1, loud mocking voice): \"Help you, ma'am?\"",
+        "sound": "Sound: quiet lobby hum.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA walks in and stops mid-lobby; behind the counter DOYLE takes his boots off the desk and stands. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right. English dialogue, lip-synced: DOYLE (shot 1, loud mocking voice): \"Help you, ma'am?\" Sound: quiet lobby hum. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 107,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "FRONT",
+          "path": "DOYLE_illus/front.png",
+          "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+          "label": "@DOYLE"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "THREE_QUARTER",
+          "path": "DOYLE_illus/three_quarter.png",
+          "sha256": "b48115615ed2f6f090f1625e1463850b71d95bda6ceef0204c8ffc522de2ec73",
+          "label": "@DOYLE"
+        }
+      ],
+      "sha256": "d91b1bcfdf33ff9e55bda69e6cbcfc1c6e2a0e0b212c31aa9131a973fd955470"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  },
+  "SC01_g2": {
+    "prompt": {
+      "scene_id": "SC01",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA answers calmly; DOYLE gives one short loud laugh.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-3.6s): over DOYLE's shoulder onto NORA. Shot 2 (3.6-8s): silent close-up of DOYLE looking screen-left.",
+        "dialogue": "English dialogue, lip-synced: NORA (shot 1, calm female voice): \"Good morning, Sergeant. I'm here to report for duty.\"",
+        "sound": "Sound: quiet lobby hum.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA answers calmly; DOYLE gives one short loud laugh. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-3.6s): over DOYLE's shoulder onto NORA. Shot 2 (3.6-8s): silent close-up of DOYLE looking screen-left. English dialogue, lip-synced: NORA (shot 1, calm female voice): \"Good morning, Sergeant. I'm here to report for duty.\" Sound: quiet lobby hum. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 112,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "FRONT",
+          "path": "DOYLE_illus/front.png",
+          "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+          "label": "@DOYLE"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "THREE_QUARTER",
+          "path": "DOYLE_illus/three_quarter.png",
+          "sha256": "b48115615ed2f6f090f1625e1463850b71d95bda6ceef0204c8ffc522de2ec73",
+          "label": "@DOYLE"
+        }
+      ],
+      "sha256": "edc95017b3ec2cbc831fb8ca9464eef7abf1b8df7bb6c302168e9996b26537f6"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  },
+  "SC02_g1": {
+    "prompt": {
+      "scene_id": "SC02",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA lays a badge on the counter; DOYLE picks it up and drops it into the metal trash can.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right.",
+        "dialogue": "English dialogue, lip-synced: DOYLE (shot 1, loud mocking voice): \"Toy-store badge. Try again.\"",
+        "sound": "Sound: quiet lobby hum; loud metal clang.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA lays a badge on the counter; DOYLE picks it up and drops it into the metal trash can. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right. English dialogue, lip-synced: DOYLE (shot 1, loud mocking voice): \"Toy-store badge. Try again.\" Sound: quiet lobby hum; loud metal clang. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 112,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "FRONT",
+          "path": "DOYLE_illus/front.png",
+          "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+          "label": "@DOYLE"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "THREE_QUARTER",
+          "path": "DOYLE_illus/three_quarter.png",
+          "sha256": "b48115615ed2f6f090f1625e1463850b71d95bda6ceef0204c8ffc522de2ec73",
+          "label": "@DOYLE"
+        }
+      ],
+      "sha256": "b6ee9f9b159fd6a54cae5463a98175bac2331184396cc7df301f8bd5eb194dab"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  },
+  "SC02_g2": {
+    "prompt": {
+      "scene_id": "SC02",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA stands still and answers evenly; DOYLE smirks.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-3.8s): over DOYLE's shoulder onto NORA. Shot 2 (3.8-8s): silent close-up of DOYLE looking screen-left.",
+        "dialogue": "English dialogue, lip-synced: NORA (shot 1, calm female voice): \"My name is Nora Hale. Today is my first day.\"",
+        "sound": "Sound: quiet lobby hum.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA stands still and answers evenly; DOYLE smirks. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-3.8s): over DOYLE's shoulder onto NORA. Shot 2 (3.8-8s): silent close-up of DOYLE looking screen-left. English dialogue, lip-synced: NORA (shot 1, calm female voice): \"My name is Nora Hale. Today is my first day.\" Sound: quiet lobby hum. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 112,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "FRONT",
+          "path": "DOYLE_illus/front.png",
+          "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+          "label": "@DOYLE"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "THREE_QUARTER",
+          "path": "DOYLE_illus/three_quarter.png",
+          "sha256": "b48115615ed2f6f090f1625e1463850b71d95bda6ceef0204c8ffc522de2ec73",
+          "label": "@DOYLE"
+        }
+      ],
+      "sha256": "678b4f1071a38e1b2afac0a91e7422186bac2751879c8c7960563041f49c2e45"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  },
+  "SC03_g1": {
+    "prompt": {
+      "scene_id": "SC03",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA sets a folded letter on the counter; DOYLE unfolds it and tears it in half twice, the pieces fall at her feet.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right.",
+        "dialogue": "English dialogue, lip-synced: DOYLE (shot 1, loud mocking voice): \"Fake papers too. You people will try anything.\"",
+        "sound": "Sound: quiet lobby hum; paper tearing.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA sets a folded letter on the counter; DOYLE unfolds it and tears it in half twice, the pieces fall at her feet. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right. English dialogue, lip-synced: DOYLE (shot 1, loud mocking voice): \"Fake papers too. You people will try anything.\" Sound: quiet lobby hum; paper tearing. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 119,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "FRONT",
+          "path": "DOYLE_illus/front.png",
+          "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+          "label": "@DOYLE"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "THREE_QUARTER",
+          "path": "DOYLE_illus/three_quarter.png",
+          "sha256": "b48115615ed2f6f090f1625e1463850b71d95bda6ceef0204c8ffc522de2ec73",
+          "label": "@DOYLE"
+        }
+      ],
+      "sha256": "2b1dd32f8b0b656d4f305e7f05a0baa2b46f80e35dd04b6b08f8cfb9996b4896"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  },
+  "SC03_g2": {
+    "prompt": {
+      "scene_id": "SC03",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA bends slowly, gathers the paper pieces, puts them in her jacket pocket, straightens and looks at him patiently.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): silent close-up of NORA looking screen-right.",
+        "dialogue": "",
+        "sound": "Sound: quiet lobby hum.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA bends slowly, gathers the paper pieces, puts them in her jacket pocket, straightens and looks at him patiently. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): silent close-up of NORA looking screen-right. Sound: quiet lobby hum. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 83,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        },
+        {
+          "character": "NORA",
+          "angle": "PROFILE",
+          "path": "NORA_illus/profile.png",
+          "sha256": "d21106c197e594b18814dec648d2a52aa279a5bbb1261f9c0b7a9ecb16d0482d",
+          "label": "@NORA"
+        }
+      ],
+      "sha256": "3b63bcb45f886ab525830bfeb60ff9a2ce49418fbfc73bf934b523a917facf32"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  },
+  "SC04_g1": {
+    "prompt": {
+      "scene_id": "SC04",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. DOYLE unclips the handcuffs from his belt and holds them up between them.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right.",
+        "dialogue": "English dialogue, lip-synced: DOYLE (shot 1, loud mocking voice): \"Three seconds. Then you're under arrest.\"",
+        "sound": "Sound: quiet lobby hum.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. DOYLE unclips the handcuffs from his belt and holds them up between them. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right. English dialogue, lip-synced: DOYLE (shot 1, loud mocking voice): \"Three seconds. Then you're under arrest.\" Sound: quiet lobby hum. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 105,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "FRONT",
+          "path": "DOYLE_illus/front.png",
+          "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+          "label": "@DOYLE"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "THREE_QUARTER",
+          "path": "DOYLE_illus/three_quarter.png",
+          "sha256": "b48115615ed2f6f090f1625e1463850b71d95bda6ceef0204c8ffc522de2ec73",
+          "label": "@DOYLE"
+        }
+      ],
+      "sha256": "5c2daf1ff641d5391b57e572f73f087e4d0dd9eeac1436d50a36f55c74ab71a7"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  },
+  "SC04_g2": {
+    "prompt": {
+      "scene_id": "SC04",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA keeps her hands at her sides and answers; DOYLE holds the cuffs.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-3.4s): over DOYLE's shoulder onto NORA. Shot 2 (3.4-8s): silent close-up of DOYLE looking screen-left.",
+        "dialogue": "English dialogue, lip-synced: NORA (shot 1, calm female voice): \"Call Lieutenant Commander Reed. Right now.\"",
+        "sound": "Sound: quiet lobby hum.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. NORA keeps her hands at her sides and answers; DOYLE holds the cuffs. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-3.4s): over DOYLE's shoulder onto NORA. Shot 2 (3.4-8s): silent close-up of DOYLE looking screen-left. English dialogue, lip-synced: NORA (shot 1, calm female voice): \"Call Lieutenant Commander Reed. Right now.\" Sound: quiet lobby hum. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 113,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "FRONT",
+          "path": "DOYLE_illus/front.png",
+          "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+          "label": "@DOYLE"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "THREE_QUARTER",
+          "path": "DOYLE_illus/three_quarter.png",
+          "sha256": "b48115615ed2f6f090f1625e1463850b71d95bda6ceef0204c8ffc522de2ec73",
+          "label": "@DOYLE"
+        }
+      ],
+      "sha256": "835dea55855a676554f6e4d26e97c59e64630f69f59f689af826e39228549dbd"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  },
+  "SC05_g1": {
+    "prompt": {
+      "scene_id": "SC05",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. REED (see reference image): white police commander, late fifties, grey moustache, dress uniform, always frame-right.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. REED comes in from the hallway behind DOYLE, sees NORA and stops at attention.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right, REED right.",
+        "dialogue": "English dialogue, lip-synced: REED (shot 1, firm voice): \"Good morning, Chief Hale.\"",
+        "sound": "Sound: quiet lobby hum.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. REED (see reference image): white police commander, late fifties, grey moustache, dress uniform, always frame-right. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. REED comes in from the hallway behind DOYLE, sees NORA and stops at attention. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-8s): wide two-shot, NORA left, DOYLE right, REED right. English dialogue, lip-synced: REED (shot 1, firm voice): \"Good morning, Chief Hale.\" Sound: quiet lobby hum. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 120,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "FRONT",
+          "path": "DOYLE_illus/front.png",
+          "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+          "label": "@DOYLE"
+        },
+        {
+          "character": "REED",
+          "angle": "FRONT",
+          "path": "REED_illus/front.png",
+          "sha256": "5491bc4fae2c7850f29bf1fab9ed0bf77dbede31d1b68c701c210e967f17ed0c",
+          "label": "@REED"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        }
+      ],
+      "sha256": "2d000f07457d1140ead1d6d5b09fed2ae371d033091ea764e261d991c8364f6c"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  },
+  "SC05_g2": {
+    "prompt": {
+      "scene_id": "SC05",
+      "duration_s": 8.0,
+      "sections": {
+        "characters": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right.",
+        "setting": "Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. DOYLE freezes; NORA speaks quietly; DOYLE lays his badge on the counter.",
+        "shots": "8s scene, 16:9, hard cuts at the marks. Shot 1 (0-2.5s): silent close-up of DOYLE looking screen-left. Shot 2 (2.5-5.5s): over DOYLE's shoulder onto NORA. Shot 3 (5.5-8s): close-up of DOYLE looking screen-left.",
+        "dialogue": "English dialogue, lip-synced: NORA (shot 2, calm female voice): \"Sergeant. Your badge. On the counter.\"",
+        "sound": "Sound: quiet lobby hum.",
+        "prohibitions": "No on-screen text, subtitles or logos. No touching. Nobody looks into the lens."
+      },
+      "compiled_text": "NORA (see reference image): Black woman, fifties, short grey-streaked hair, navy jacket, always frame-left. DOYLE (see reference image): white police sergeant, forties, heavy-set, navy uniform, always frame-right. Police station lobby, grey morning light, tile floor, wooden front counter, framed portraits on the wall. DOYLE freezes; NORA speaks quietly; DOYLE lays his badge on the counter. 8s scene, 16:9, hard cuts at the marks. Shot 1 (0-2.5s): silent close-up of DOYLE looking screen-left. Shot 2 (2.5-5.5s): over DOYLE's shoulder onto NORA. Shot 3 (5.5-8s): close-up of DOYLE looking screen-left. English dialogue, lip-synced: NORA (shot 2, calm female voice): \"Sergeant. Your badge. On the counter.\" Sound: quiet lobby hum. No on-screen text, subtitles or logos. No touching. Nobody looks into the lens.",
+      "word_count": 120,
+      "reference_attachments": [
+        {
+          "character": "NORA",
+          "angle": "FRONT",
+          "path": "NORA_illus/front.png",
+          "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "FRONT",
+          "path": "DOYLE_illus/front.png",
+          "sha256": "df23dc79c7d3342ca509e849cb86572779ab18e110c2865567f9cf5ecaeccf6b",
+          "label": "@DOYLE"
+        },
+        {
+          "character": "NORA",
+          "angle": "THREE_QUARTER",
+          "path": "NORA_illus/three_quarter.png",
+          "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+          "label": "@NORA"
+        },
+        {
+          "character": "DOYLE",
+          "angle": "THREE_QUARTER",
+          "path": "DOYLE_illus/three_quarter.png",
+          "sha256": "b48115615ed2f6f090f1625e1463850b71d95bda6ceef0204c8ffc522de2ec73",
+          "label": "@DOYLE"
+        }
+      ],
+      "sha256": "361ab0d4a15c9a0b31bb0e555fd4ffb5c7316dffae59a9a48311e1a07e476d95"
+    },
+    "preflight": {
+      "verdict": "PASS",
+      "issues": []
+    }
+  }
+}

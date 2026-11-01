@@ -1,0 +1,77 @@
+{
+  "question": "Why does Flow block SC01_g2 ('reputational risk or misrepresenting current events')?",
+  "date": "2026-11-01",
+  "provider": "Google Flow, Omni 1.1 Flash, 720p, 8s, x1",
+  "probes": [
+    {
+      "id": "T0",
+      "prompt": "SC01_g1.txt",
+      "refs": "NORA front+3q, DOYLE front+3q",
+      "result": "PASSED",
+      "file": "SC01_g1_t2.mp4"
+    },
+    {
+      "id": "T1",
+      "prompt": "SC01_g2.txt",
+      "refs": "none",
+      "result": "PASSED",
+      "file": "SC01_g2_noref.mp4"
+    },
+    {
+      "id": "T3",
+      "prompt": "SC01_g2.txt",
+      "refs": "NORA front+3q",
+      "result": "BLOCKED in ~22s"
+    },
+    {
+      "id": "T4",
+      "prompt": "neutral park scene, NORA speaks one line, medium shot",
+      "refs": "NORA front+3q",
+      "result": "PASSED"
+    },
+    {
+      "id": "T5",
+      "prompt": "SC01_g2.txt without NORA's dialogue (OTS onto NORA + close-up DOYLE)",
+      "refs": "NORA front+3q",
+      "result": "BLOCKED in ~22s"
+    },
+    {
+      "id": "T6",
+      "prompt": "T5 with the shots replaced by one wide two-shot",
+      "refs": "NORA front+3q",
+      "result": "PASSED",
+      "file": "SC01_g2_wide_silent.mp4"
+    }
+  ],
+  "earlier_attempts": "4 blocks of SC01_g2 with all 4 refs (original, retry, laugh->smirks, new NORA line)",
+  "conclusion": [
+    "not an account flag and not random: the SC01_g1 control passes again (T0)",
+    "not the text alone: the same g2 prompt without refs passes (T1)",
+    "not 'a real-looking face speaking': NORA's ref face speaking in a neutral scene passes (T4)",
+    "not the dialogue or the laugh: removing NORA's line still blocks (T5), changing the line or the laugh still blocked",
+    "the switch is the framing: NORA's ref face + police-confrontation context + close coverage (OTS onto NORA / close-up) blocks; the same content as a wide two-shot passes (T5 vs T6)"
+  ],
+  "open": "not isolated whether the OTS onto NORA or the DOYLE close-up is the trigger; the pre-render check answers in ~22s, so it likely scores the prompt + refs, not the rendered video",
+  "impact": "SC02, SC03, SC04, SC05 all have OTS NORA or close coverage in generation 2; expect the same block while NORA's ref is attached",
+  "batch_wide_with_refs": {
+    "refs": "NORA front+3q, DOYLE front+3q (SC05_g1: NORA, DOYLE, REED fronts + NORA 3q)",
+    "framing": "every generation one wide two-shot",
+    "results": {
+      "SC01_g2": "BLOCKED",
+      "SC02_g1": "BLOCKED",
+      "SC02_g2": "BLOCKED",
+      "SC03_g1": "BLOCKED",
+      "SC03_g2": "BLOCKED",
+      "SC04_g1": "BLOCKED",
+      "SC04_g2": "BLOCKED",
+      "SC05_g1": "PASSED (SC05_g1.mp4)",
+      "SC05_g2": "BLOCKED (seen on screen; the probe's counter missed it)"
+    }
+  },
+  "conclusion_revised": [
+    "wide framing alone does not clear it: with NORA+DOYLE refs, wide shots of the badge/trash, torn letter, handcuffs and NORA's reply scenes are all blocked",
+    "only the low-conflict beats pass with refs: SC01_g1 (greeting), SC05_g1 (REED salutes), and T6 (NORA refs only, no dialogue)",
+    "the same conflict text with no refs passes (T1), so the filter scores reference faces combined with a police-mistreatment storyline",
+    "T5 vs T6 framing result holds only for NORA-refs-only, silent; it does not generalise"
+  ]
+}

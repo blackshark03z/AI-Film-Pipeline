@@ -1,0 +1,40 @@
+{
+  "set": {
+    "character_id": "NORA_illus",
+    "name": "NORA",
+    "synthetic_person": true,
+    "look_id": "nora_navy_jacket_illustrated",
+    "images": [
+      {
+        "angle": "FRONT",
+        "path": "NORA_illus/front.png",
+        "sha256": "1f467fe3cbde35dd65a502e515a389cdb6ac7657a3db832d20db2ca714abb966",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T22:48:05+00:00"
+      },
+      {
+        "angle": "THREE_QUARTER",
+        "path": "NORA_illus/three_quarter.png",
+        "sha256": "5c33e62e7979f08cca4cb42757aac8b32834b6821334fecddf4615eb82ff66c2",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T22:48:05+00:00"
+      },
+      {
+        "angle": "PROFILE",
+        "path": "NORA_illus/profile.png",
+        "sha256": "d21106c197e594b18814dec648d2a52aa279a5bbb1261f9c0b7a9ecb16d0482d",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T22:48:05+00:00"
+      }
+    ]
+  },
+  "source_sheet": {
+    "path": "raw/NORA_illus/B_1376x768.jpg",
+    "sha256": "e98dc371f2faa7eaeb191571d2168fd05ea396648c525bfa9432691179b39404",
+    "provider": "Google Flow, Nano Banana 2.1",
+    "owner_choice": "B_1376x768"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "set": {
+    "character_id": "REED_illus",
+    "name": "REED",
+    "synthetic_person": true,
+    "look_id": "reed_dress_uniform_illustrated",
+    "images": [
+      {
+        "angle": "FRONT",
+        "path": "REED_illus/front.png",
+        "sha256": "5491bc4fae2c7850f29bf1fab9ed0bf77dbede31d1b68c701c210e967f17ed0c",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T22:48:05+00:00"
+      },
+      {
+        "angle": "THREE_QUARTER",
+        "path": "REED_illus/three_quarter.png",
+        "sha256": "33d4dd429ca7ccace8ec6cad025317fcadbc4feb0a701cbe8ec29bc89211bc7d",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T22:48:05+00:00"
+      },
+      {
+        "angle": "PROFILE",
+        "path": "REED_illus/profile.png",
+        "sha256": "5a962f6a579082ee7a2c3933d5388c17b796fb2e4f29a83c6a38d7388aa8865f",
+        "approved": true,
+        "approved_by": "Owner",
+        "approved_at": "2026-10-31T22:48:05+00:00"
+      }
+    ]
+  },
+  "source_sheet": {
+    "path": "raw/REED_illus/A_1376x768.jpg",
+    "sha256": "5fe700c83cda84d0214f666b5be73d8eb889e27acab8e805e0ce37c79f7cbba9",
+    "provider": "Google Flow, Nano Banana 2.1",
+    "owner_choice": "A_1376x768"
+  }
+}

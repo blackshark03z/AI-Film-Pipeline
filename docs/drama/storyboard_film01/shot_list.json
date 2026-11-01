@@ -1,0 +1,200 @@
+{
+  "SC01": {
+    "shots": [
+      {
+        "shot_id": "SC01_S1",
+        "coverage": "MASTER",
+        "subject": "",
+        "start_s": 0.0,
+        "end_s": 8.0,
+        "describe": "wide two-shot, NORA left, DOYLE right",
+        "lines": [
+          "DOYLE: Help you, ma'am?"
+        ],
+        "generation": 1
+      },
+      {
+        "shot_id": "SC01_S2",
+        "coverage": "OTS",
+        "subject": "NORA",
+        "start_s": 8.0,
+        "end_s": 11.6,
+        "describe": "over DOYLE's shoulder onto NORA",
+        "lines": [
+          "NORA: Good morning, Sergeant. I'm here to report for duty."
+        ],
+        "generation": 2
+      },
+      {
+        "shot_id": "SC01_S3",
+        "coverage": "REACTION",
+        "subject": "DOYLE",
+        "start_s": 11.6,
+        "end_s": 16.0,
+        "describe": "silent close-up of DOYLE looking screen-left",
+        "lines": [],
+        "generation": 2
+      }
+    ],
+    "problems": [],
+    "shots_crossing_generation_boundary": []
+  },
+  "SC02": {
+    "shots": [
+      {
+        "shot_id": "SC02_S1",
+        "coverage": "MASTER",
+        "subject": "",
+        "start_s": 0.0,
+        "end_s": 8.0,
+        "describe": "wide two-shot, NORA left, DOYLE right",
+        "lines": [
+          "DOYLE: Toy-store badge. Try again."
+        ],
+        "generation": 1
+      },
+      {
+        "shot_id": "SC02_S2",
+        "coverage": "OTS",
+        "subject": "NORA",
+        "start_s": 8.0,
+        "end_s": 11.8,
+        "describe": "over DOYLE's shoulder onto NORA",
+        "lines": [
+          "NORA: My name is Nora Hale. Today is my first day."
+        ],
+        "generation": 2
+      },
+      {
+        "shot_id": "SC02_S3",
+        "coverage": "REACTION",
+        "subject": "DOYLE",
+        "start_s": 11.8,
+        "end_s": 16.0,
+        "describe": "silent close-up of DOYLE looking screen-left",
+        "lines": [],
+        "generation": 2
+      }
+    ],
+    "problems": [],
+    "shots_crossing_generation_boundary": []
+  },
+  "SC03": {
+    "shots": [
+      {
+        "shot_id": "SC03_S1",
+        "coverage": "MASTER",
+        "subject": "",
+        "start_s": 0.0,
+        "end_s": 8.0,
+        "describe": "wide two-shot, NORA left, DOYLE right",
+        "lines": [
+          "DOYLE: Fake papers too. You people will try anything."
+        ],
+        "generation": 1
+      },
+      {
+        "shot_id": "SC03_S2",
+        "coverage": "REACTION",
+        "subject": "NORA",
+        "start_s": 8.0,
+        "end_s": 16.0,
+        "describe": "silent close-up of NORA looking screen-right",
+        "lines": [],
+        "generation": 2
+      }
+    ],
+    "problems": [],
+    "shots_crossing_generation_boundary": []
+  },
+  "SC04": {
+    "shots": [
+      {
+        "shot_id": "SC04_S1",
+        "coverage": "MASTER",
+        "subject": "",
+        "start_s": 0.0,
+        "end_s": 8.0,
+        "describe": "wide two-shot, NORA left, DOYLE right",
+        "lines": [
+          "DOYLE: Three seconds. Then you're under arrest."
+        ],
+        "generation": 1
+      },
+      {
+        "shot_id": "SC04_S2",
+        "coverage": "OTS",
+        "subject": "NORA",
+        "start_s": 8.0,
+        "end_s": 11.4,
+        "describe": "over DOYLE's shoulder onto NORA",
+        "lines": [
+          "NORA: Call Lieutenant Commander Reed. Right now."
+        ],
+        "generation": 2
+      },
+      {
+        "shot_id": "SC04_S3",
+        "coverage": "REACTION",
+        "subject": "DOYLE",
+        "start_s": 11.4,
+        "end_s": 16.0,
+        "describe": "silent close-up of DOYLE looking screen-left",
+        "lines": [],
+        "generation": 2
+      }
+    ],
+    "problems": [],
+    "shots_crossing_generation_boundary": []
+  },
+  "SC05": {
+    "shots": [
+      {
+        "shot_id": "SC05_S1",
+        "coverage": "MASTER",
+        "subject": "",
+        "start_s": 0.0,
+        "end_s": 8.0,
+        "describe": "wide two-shot, NORA left, DOYLE right, REED right",
+        "lines": [
+          "REED: Good morning, Chief Hale."
+        ],
+        "generation": 1
+      },
+      {
+        "shot_id": "SC05_S2",
+        "coverage": "REACTION",
+        "subject": "DOYLE",
+        "start_s": 8.0,
+        "end_s": 10.5,
+        "describe": "silent close-up of DOYLE looking screen-left",
+        "lines": [],
+        "generation": 2
+      },
+      {
+        "shot_id": "SC05_S3",
+        "coverage": "OTS",
+        "subject": "NORA",
+        "start_s": 10.5,
+        "end_s": 13.5,
+        "describe": "over DOYLE's shoulder onto NORA",
+        "lines": [
+          "NORA: Sergeant. Your badge. On the counter."
+        ],
+        "generation": 2
+      },
+      {
+        "shot_id": "SC05_S4",
+        "coverage": "SINGLE",
+        "subject": "DOYLE",
+        "start_s": 13.5,
+        "end_s": 16.0,
+        "describe": "close-up of DOYLE looking screen-left",
+        "lines": [],
+        "generation": 2
+      }
+    ],
+    "problems": [],
+    "shots_crossing_generation_boundary": []
+  }
+}

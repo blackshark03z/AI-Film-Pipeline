@@ -1,0 +1,84 @@
+{
+  "SC03_g1": {
+    "words": 117,
+    "verdict": "PASS",
+    "issues": []
+  },
+  "SC03_g2": {
+    "words": 117,
+    "verdict": "PASS",
+    "issues": []
+  },
+  "states": {
+    "g1_start": {
+      "positions": {
+        "NORA": "standing at the counter, frame-left",
+        "DOYLE": "behind the counter, frame-right"
+      },
+      "props": {
+        "the letter:": "folded, in NORA's hand"
+      },
+      "looks": {
+        "NORA": "nora_navy_blazer_text",
+        "DOYLE": "doyle_patrol_text"
+      },
+      "lighting": "",
+      "time_of_day": ""
+    },
+    "g1_end": {
+      "positions": {
+        "NORA": "standing at the counter, frame-left",
+        "DOYLE": "behind the counter, frame-right"
+      },
+      "props": {
+        "the letter:": "torn into four pieces, lying on the counter in front of NORA"
+      },
+      "looks": {
+        "NORA": "nora_navy_blazer_text",
+        "DOYLE": "doyle_patrol_text"
+      },
+      "lighting": "",
+      "time_of_day": ""
+    },
+    "g2_end": {
+      "positions": {
+        "NORA": "standing at the counter, frame-left",
+        "DOYLE": "behind the counter, frame-right"
+      },
+      "props": {
+        "the letter:": "folded pieces, in NORA's jacket pocket"
+      },
+      "looks": {
+        "NORA": "nora_navy_blazer_text",
+        "DOYLE": "doyle_patrol_text"
+      },
+      "lighting": "",
+      "time_of_day": ""
+    }
+  },
+  "looks": {
+    "NORA": {
+      "look_id": "nora_navy_blazer_text",
+      "character": "NORA",
+      "text": "Black woman, mid-fifties, short grey-streaked hair, navy blazer, white top",
+      "invariants": [
+        "short grey-streaked hair, not curled, not shoulder-length",
+        "navy blazer",
+        "white top"
+      ],
+      "approved": true
+    },
+    "DOYLE": {
+      "look_id": "doyle_patrol_text",
+      "character": "DOYLE",
+      "text": "white police sergeant, mid-forties, heavy-set, sandy hair, ruddy face, navy patrol uniform",
+      "invariants": [
+        "heavy-set",
+        "sandy hair",
+        "ruddy clean-shaven face",
+        "navy patrol uniform"
+      ],
+      "approved": true
+    }
+  }
+}

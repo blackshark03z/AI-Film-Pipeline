@@ -1,0 +1,26 @@
+{
+  "scene_id": "SC01",
+  "generation": 2,
+  "status": "BLOCKED_BY_PROVIDER",
+  "provider_message_vi": "Khong the tao video co the gay rui ro ve danh tieng hoac xuyen tac cac su kien hien tai.",
+  "attempts": [
+    {
+      "prompt": "../film01_prompts/SC01_g2.txt",
+      "result": "blocked, refunded"
+    },
+    {
+      "prompt": "../film01_prompts/SC01_g2.txt",
+      "via": "retry button",
+      "result": "blocked, refunded"
+    },
+    {
+      "prompt": "SC01_g2.txt with 'DOYLE gives one short loud laugh' -> 'DOYLE smirks'",
+      "result": "blocked within 20s, refunded"
+    },
+    {
+      "prompt": "SC01_g2.txt with NORA's line -> \"Good morning, Sergeant. I start here today.\" (Owner chose option A)",
+      "result": "blocked, refunded"
+    }
+  ],
+  "note": "g1 (DOYLE speaks, NORA silent) passed with the same refs; all four g2 attempts (two line variants, two action variants) were blocked"
+}

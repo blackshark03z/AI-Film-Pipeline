@@ -1,0 +1,36 @@
+{
+  "film": "film01 First Day",
+  "date": "2026-11-01",
+  "source": "film01_takes/noref clips of the Owner-approved rough cut (2026-11-01)",
+  "clips": [
+    "SC01_g1",
+    "SC01_g2",
+    "SC02_g1",
+    "SC02_g2",
+    "SC03_g1",
+    "SC03_g2",
+    "SC04_g1",
+    "SC04_g2",
+    "SC05_g1",
+    "SC05_g2"
+  ],
+  "final": "film01_first_day_final.mp4",
+  "sha256": "1ee050dc32bf846ddafbb578f2946a3c4030af3bc3688fee43d501945a86ce7d",
+  "duration_s": 86.833333,
+  "title_s": 3.0,
+  "end_card_s": 4.0,
+  "grade": "eq contrast 1.04, saturation 0.92, gamma 0.98; slightly cool shadows",
+  "audio": "0.05/0.08 s edge fades per clip; loudnorm 2-pass + limiter -> -14.5 LUFS integrated, -0.5 dBFS peak (ebur128)",
+  "subtitles": {
+    "language": "en",
+    "burned_in": true,
+    "sidecar": "film01_first_day.en.srt",
+    "timing": "estimated from silencedetect; text from the script, not transcribed; each cue clamped to the speaking shot of the generation plan"
+  },
+  "label": "AI-generated bottom-left over the body, plus end card",
+  "owner_review": {
+    "status": "APPROVED",
+    "by": "Owner",
+    "date": "2026-11-01"
+  }
+}
