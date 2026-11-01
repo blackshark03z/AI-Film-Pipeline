@@ -1,0 +1,176 @@
+{
+  "A0": {
+    "clip": "docs/drama/film01_takes/noref/SC03_g2.mp4",
+    "identity": {
+      "NORA": {
+        "mean": 0.515,
+        "min": 0.469,
+        "head": 0.54,
+        "frames": 8
+      },
+      "DOYLE": {
+        "mean": 0.577,
+        "min": 0.529,
+        "head": 0.55,
+        "frames": 8
+      }
+    },
+    "self_identity": {
+      "NORA": 0.684,
+      "DOYLE": 0.836
+    },
+    "scale": "MCU",
+    "scale_per_frame": [
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU"
+    ],
+    "set_inliers": 11,
+    "set_hsv": 0.291,
+    "warnings": []
+  },
+  "F1": {
+    "clip": "docs/drama/wp5/takes/F1.mp4",
+    "identity": {
+      "NORA": {
+        "mean": 0.459,
+        "min": 0.343,
+        "head": 0.498,
+        "frames": 8
+      },
+      "DOYLE": {
+        "mean": 0.509,
+        "min": 0.447,
+        "head": 0.462,
+        "frames": 8
+      }
+    },
+    "self_identity": {
+      "NORA": 0.562,
+      "DOYLE": 0.844
+    },
+    "scale": "MCU",
+    "scale_per_frame": [
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU"
+    ],
+    "set_inliers": 5,
+    "set_hsv": 0.368,
+    "warnings": []
+  },
+  "P1": {
+    "clip": "docs/drama/wp5/takes/P1.mp4",
+    "identity": {
+      "NORA": {
+        "mean": 0.496,
+        "min": 0.466,
+        "head": 0.617,
+        "frames": 7
+      },
+      "DOYLE": {
+        "mean": 0.291,
+        "min": 0.291,
+        "head": 0.46,
+        "frames": 1
+      }
+    },
+    "self_identity": {
+      "NORA": 0.543,
+      "DOYLE": 0.417
+    },
+    "scale": "CU",
+    "scale_per_frame": [
+      "MCU",
+      "MCU",
+      "NO_FACE",
+      "CU",
+      "CU",
+      "CU",
+      "CU",
+      "CU"
+    ],
+    "set_inliers": 6,
+    "set_hsv": 0.437,
+    "warnings": []
+  },
+  "R1": {
+    "clip": "docs/drama/wp5/takes/R1.mp4",
+    "identity": {
+      "NORA": {
+        "mean": 0.478,
+        "min": 0.445,
+        "head": 0.692,
+        "frames": 8
+      },
+      "DOYLE": {
+        "mean": 0.535,
+        "min": 0.498,
+        "head": 0.571,
+        "frames": 8
+      }
+    },
+    "self_identity": {
+      "NORA": 0.893,
+      "DOYLE": 0.9
+    },
+    "scale": "CU",
+    "scale_per_frame": [
+      "CU",
+      "MCU",
+      "CU",
+      "CU",
+      "CU",
+      "CU",
+      "CU",
+      "CU"
+    ],
+    "set_inliers": 5,
+    "set_hsv": 0.208,
+    "warnings": []
+  },
+  "V1": {
+    "clip": "docs/drama/wp5/takes/V1.mp4",
+    "identity": {
+      "NORA": {
+        "mean": 0.483,
+        "min": 0.444,
+        "head": 0.703,
+        "frames": 8
+      },
+      "DOYLE": {
+        "mean": null,
+        "min": null,
+        "head": null,
+        "frames": 0
+      }
+    },
+    "self_identity": {
+      "NORA": 0.838
+    },
+    "scale": "MCU",
+    "scale_per_frame": [
+      "MCU",
+      "MCU",
+      "MCU",
+      "MCU",
+      "CU",
+      "MCU",
+      "CU",
+      "CU"
+    ],
+    "set_inliers": 8,
+    "set_hsv": 0.617,
+    "warnings": []
+  }
+}

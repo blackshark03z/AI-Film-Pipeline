@@ -182,6 +182,8 @@ _QUALIFIER = re.compile(
 
 _DAY = {"DAY", "NGÀY", "MORNING", "SÁNG", "AFTERNOON", "CHIỀU"}
 _NIGHT = {"NIGHT", "ĐÊM", "EVENING", "TỐI"}
+# headings that inherit the time of the previous scene (nothing to compare)
+_INHERIT = ("CONTINUOUS", "LATER", "SAME", "LIÊN TỤC", "TIẾP THEO")
 
 
 def _tod_group(value: str) -> str:
@@ -208,7 +210,8 @@ def check_environment(scene: ScriptScene, location: LocationLook,
                     check="ENVIRONMENT_CAUSALITY", severity="BLOCK",
                     detail=(f"'{match.group(0)}' in an interior without a "
                             f"window/outside qualifier: {text[:80]}")))
-    if scene.time_of_day and location.time_of_day and \
+    inherits = any(k in scene.time_of_day.upper() for k in _INHERIT)
+    if scene.time_of_day and location.time_of_day and not inherits and \
             _tod_group(scene.time_of_day) != _tod_group(location.time_of_day):
         issues.append(RuleIssue(
             check="TIME_OF_DAY", severity="BLOCK",

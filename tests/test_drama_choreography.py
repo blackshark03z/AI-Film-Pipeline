@@ -180,3 +180,14 @@ def test_preflight_blocks_bad_choreography_repeat_and_unknown_cue(tmp_path,
     assert "FEASIBILITY:UNCONTROLLED_REPEAT" in checks
     assert "PERFORMANCE" in checks
     assert report.verdict == "BLOCKED"
+
+
+def test_single_shot_framing_does_not_trip_the_repeat_rule(sample):
+    # film01 WP5: the compiler's own "one continuous shot" was flagged by
+    # UNCONTROLLED_REPEAT; single-shot framing must stay loop-neutral
+    _, _, unit = sample
+    one = unit.model_copy(update={"shots": unit.shots[:1]})
+    plan = compile_scene_prompt(one, characters=_briefs(), setting="Kitchen",
+                                choreography=_chor())
+    assert "a single shot, no cuts" in plan.sections["shots"]
+    assert not check_repetition(plan.sections["shots"])

@@ -1,0 +1,21 @@
+{
+  "prompt_file": "docs/drama/wp5/prompts/F1.txt",
+  "prompt_sha256": "122c936d2e1073e31deaecfb58c99c1cadabd93dba93ae5c86ddcc9e3965a84f",
+  "prompt_words": 134,
+  "attach": [],
+  "start": "tok:027d036a10",
+  "upload": [],
+  "started": "2026-11-01T17:15:32",
+  "project": "672d10f2-5b08-485e-a7c0-91c060c3a3d1",
+  "elapsed_s": 48,
+  "responses_seen": 12,
+  "new_tiles": 1,
+  "binding": "NETWORK_PROMPT_MATCH",
+  "output_token_sha256": "53d0ec6152d1c5995c64f3a28027e382c14aea670b39657e9bd153237bfdf589",
+  "result": "PASSED",
+  "file": "F1.mp4",
+  "sha256": "f68bdaed0806d07ed16c71636c309c25841d72574077f16da84be6b646be6b2e",
+  "bytes": 3011160,
+  "duration_s": 8.042667,
+  "finished": "2026-11-01T17:16:32"
+}

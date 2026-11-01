@@ -1,6 +1,7 @@
 # Drama pipeline — kế hoạch nâng cấp V1 (Tech Lead, 2026-11-01)
 
-Trạng thái: ĐỀ XUẤT, chờ Owner duyệt phạm vi và credit. Chưa có slice nào được mở.
+Trạng thái: ĐANG THỰC HIỆN. Owner xác nhận drama là mảng chính và giao toàn quyền
+cho Tech Lead (2026-11-01). Tiến độ ở Mục 7.
 Nhánh: `feature/drama-preprod-p0` @ ec8c1bb.
 
 Lưu ý canonical: `docs/operating/CURRENT_SLICE.md` / `IMPLEMENTATION_STATUS.md`
@@ -149,6 +150,17 @@ thu bằng phim thật hoặc tái tạo được film01, không chỉ unit test
 
 Owner cần duyệt: phạm vi (drama có phải focus active không), cài thư viện cho
 WP4, credit cho WP5 / WP7, kịch bản film02.
+
+## 7. Tiến độ (cập nhật 2026-11-01)
+
+| Gói | Trạng thái | Kết quả |
+|---|---|---|
+| WP1–WP3 | xong | schema / preflight / choreography trong `src/film_pipeline/drama/` |
+| WP4 | xong (a2f8f4f) | `autoqc.py`: identity, shot scale, set handoff (WARN) |
+| WP6 | xong (d979e16) | `disclosure.py`: nhãn hiển thị + metadata + C2PA (dev signer) |
+| WP1b | xong | `tools/drama_flow_ui/flow_send.py`: bind output theo network, 6/6 PASSED |
+| WP5 | xong, 48 credit | `docs/drama/wp5/README.md`: route mặc định = ảnh khung đầu Flow (0 credit) + chế độ "Khung hình"; video ingredient bị loại; ngân sách prompt 170 từ |
+| WP7 | đang làm | film02 benchmark theo route WP5 |
 
 ## 6. Nguồn tham khảo bên ngoài
 

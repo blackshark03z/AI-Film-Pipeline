@@ -1,0 +1,38 @@
+{
+  "base_prompt": "docs/drama/film01_prompts/noref/SC03_g2.txt",
+  "location": {
+    "look_id": "station_lobby_v1",
+    "location": "police station lobby",
+    "text": "Police station lobby: long wooden counter, blue-grey walls, red EXIT sign over the back door, framed portraits and a wall clock behind, grey morning light",
+    "invariants": [
+      "red EXIT sign above the back door",
+      "wooden front counter",
+      "framed portraits on the back wall",
+      "round wall clock"
+    ],
+    "interior": true,
+    "time_of_day": "morning",
+    "weather_outside": "",
+    "environment_rules": [],
+    "approved": true
+  },
+  "arms": {
+    "V1": {
+      "words": 132
+    },
+    "I1": {
+      "words": 139
+    },
+    "P1": {
+      "words": 137
+    },
+    "F1": {
+      "words": 134
+    },
+    "R1": {
+      "words": 165,
+      "verdict": "PASS",
+      "issues": []
+    }
+  }
+}

@@ -108,9 +108,10 @@ def compile_scene_prompt(unit: SceneUnit, *,
         if setting.strip():
             parts.append(setting_text)
         setting_text = " ".join(parts)
-    # cut marks only mean something when the generation holds several shots
+    # cut marks only mean something when the generation holds several shots;
+    # never "continuous", which invites a loop (feasibility UNCONTROLLED_REPEAT)
     framing = ("hard cuts at the marks" if len(shots) > 1
-               else "one continuous shot")
+               else "a single shot, no cuts")
     shots_text = (f"{unit.duration_s:g}s scene, 16:9, {framing}. "
                   + " ".join(shots))
     performance = ""

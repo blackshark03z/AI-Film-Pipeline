@@ -130,6 +130,8 @@ def test_interior_weather_needs_qualifier(sample, text, blocked):
     ("ĐÊM", "NIGHT", False), ("NIGHT", "MORNING", True),
     ("SÁNG", "DAY", False), ("DUSK", "NIGHT", True),
     ("DAWN", "BÌNH MINH", False), ("", "NIGHT", False),
+    # an inherited time cannot contradict the location (film01 SC03)
+    ("LOBBY - CONTINUOUS", "MORNING", False), ("LATER", "NIGHT", False),
 ])
 def test_time_of_day_mismatch(sample, scene_tod, loc_tod, blocked):
     _, scene, _ = sample
