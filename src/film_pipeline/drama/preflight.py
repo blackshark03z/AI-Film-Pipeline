@@ -3,6 +3,12 @@
 Aggregates the P0 checks; any BLOCK means the scene is not dispatched.
 Rules come from the 2026-10-31 handoff (section 5); ``(*)`` limits are
 assumptions to re-measure on the first test scene.
+
+``reference_mode="TEXT_ONLY"`` is the no-reference route (a provider that
+blocks reference faces): reference checks are skipped, and every character
+in frame must instead carry an approved ``CharacterLook`` whose text is in
+the prompt. ``generation_index`` > 1 requires a ``GenerationHandoff`` from
+the previous generation of the same scene.
 """
 from __future__ import annotations
 
@@ -12,15 +18,16 @@ from typing import Literal
 from pydantic import Field
 
 from ..core import ContractModel
-from .bible import CharacterReferenceSet
+from .bible import CharacterLook, CharacterReferenceSet
+from .continuity import ContinuityState, GenerationHandoff
 from .coverage import SceneTiming, SceneUnit
-from .feasibility import FeasibilityLimits, check_scene
+from .feasibility import FeasibilityLimits, check_cross_cut, check_scene
 from .prompt import SECTION_ORDER, ScenePromptPlan
 from .script import ScriptScene
 from .storyboard import StoryboardGate
 
 # scene state carried across the cut between two scenes
-CONTINUITY_KEYS = ("positions", "props", "lighting", "time_of_day")
+CONTINUITY_KEYS = ("positions", "props", "looks", "lighting", "time_of_day")
 
 
 class PreflightLimits(ContractModel):
@@ -51,9 +58,13 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
                     reference_root: Path,
                     storyboard: StoryboardGate,
                     known_characters: list[str],
-                    previous_end_state: dict | None = None,
-                    start_state: dict | None = None,
-                    limits: PreflightLimits | None = None
+                    previous_end_state: dict | ContinuityState | None = None,
+                    start_state: dict | ContinuityState | None = None,
+                    limits: PreflightLimits | None = None,
+                    reference_mode: Literal["IMAGE", "TEXT_ONLY"] = "IMAGE",
+                    looks: list[CharacterLook] | None = None,
+                    generation_index: int = 1,
+                    handoff: GenerationHandoff | None = None
                     ) -> PreflightReport:
     limits = limits or PreflightLimits()
     report = PreflightReport(scene_id=scene.scene_id)
@@ -72,19 +83,49 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
         add("AXIS", problem)
     for problem in unit.timing_problems(limits.timing):
         add("TIMING", problem)
-    # every character in frame needs an approved, hash-verified reference
     by_name = {r.name: r for r in reference_sets}
     in_frame = {c for s in unit.shots for c in s.axis.visible}
-    for name in sorted(in_frame):
-        ref_set = by_name.get(name)
-        if ref_set is None:
-            add("REFERENCE", f"{name}: no reference set")
-            continue
-        for problem in ref_set.problems(reference_root):
-            add("REFERENCE", problem)
-    attached = {a["character"] for a in prompt.reference_attachments}
-    for name in sorted(in_frame - attached):
-        add("REFERENCE", f"{name}: reference not attached to the prompt")
+    if reference_mode == "IMAGE":
+        # every character in frame needs an approved, hash-verified reference
+        for name in sorted(in_frame):
+            ref_set = by_name.get(name)
+            if ref_set is None:
+                add("REFERENCE", f"{name}: no reference set")
+                continue
+            for problem in ref_set.problems(reference_root):
+                add("REFERENCE", problem)
+        attached = {a["character"] for a in prompt.reference_attachments}
+        for name in sorted(in_frame - attached):
+            add("REFERENCE", f"{name}: reference not attached to the prompt")
+    elif prompt.reference_attachments:
+        add("REFERENCE", "TEXT_ONLY route but the prompt attaches references")
+    # locked looks: required on the text-only route, checked when given.
+    # A character named by the start state is described to the model even
+    # when the storyboard keeps them out of frame, so they need a look too
+    # (film01 SC03_g2: an unnamed officer replaced DOYLE).
+    look_by_name = {lk.character: lk for lk in looks or []}
+    stated = set()
+    if isinstance(start_state, ContinuityState):
+        stated = set(start_state.positions) | set(start_state.looks)
+    elif isinstance(start_state, dict):
+        stated = set(start_state.get("positions") or {}) | \
+            set(start_state.get("looks") or {})
+    if looks is not None or reference_mode == "TEXT_ONLY":
+        cast_text = prompt.sections.get("characters", "")
+        for name in sorted(in_frame | stated):
+            look = look_by_name.get(name)
+            if look is None:
+                add("LOOK", f"{name}: no locked look")
+                continue
+            for problem in look.problems():
+                add("LOOK", problem)
+            if look.text not in cast_text:
+                add("LOOK", f"{name}: prompt does not carry the locked look "
+                            f"text for {look.look_id}")
+            ref_set = by_name.get(name)
+            if reference_mode == "IMAGE" and ref_set is not None and                     ref_set.look_id != look.look_id:
+                add("LOOK", f"{name}: reference shows {ref_set.look_id}, "
+                            f"look is {look.look_id}")
     for problem in storyboard.problems([unit]):
         add("STORYBOARD", problem)
     if prompt.word_count > limits.max_prompt_words:
@@ -97,6 +138,24 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
     for required in ("characters", "setting", "shots", "prohibitions"):
         if required not in present:
             add("PROMPT_SECTION", f"empty section: {required}")
+    if generation_index > 1 and handoff is None and             previous_end_state is None:
+        add("STATE", f"generation {generation_index} has no handoff from "
+                     "the previous generation")
+    if handoff is not None:
+        previous_end_state = handoff.previous_end
+        for issue in check_cross_cut(
+                scene_id=scene.scene_id,
+                previous_action=handoff.previous_action,
+                previous_start=handoff.previous_start,
+                previous_end=handoff.previous_end,
+                end_state_verified=handoff.end_state_verified):
+            add(f"FEASIBILITY:{issue.rule}", issue.detail, issue.severity)
+    if isinstance(previous_end_state, ContinuityState):
+        previous_end_state = previous_end_state.as_dict()
+    if isinstance(start_state, ContinuityState):
+        if start_state.describe() and not prompt.sections.get("continuity"):
+            add("STATE", "start state is not compiled into the prompt")
+        start_state = start_state.as_dict()
     if previous_end_state is not None:
         if start_state is None:
             add("STATE", "previous scene declares an end state; this scene "

@@ -5,6 +5,10 @@ generation is spent: physical contact/fights, three or more speakers,
 crowded frames, readable on-screen text and dialogue that cannot fit the
 15-second scene with room for reactions.
 
+``check_cross_cut`` guards the cut between two generations of one scene: a
+prop that only reaches its next position through uncontrolled physics
+(falling, scattering, tearing) cannot be assumed by the next generation.
+
 Values marked ``(*)`` in ``FeasibilityLimits`` are assumptions from the
 2026-10-31 gap analysis; re-measure them on the first test scene.
 """
@@ -16,6 +20,7 @@ from typing import Literal
 from pydantic import Field
 
 from ..core import ContractModel
+from .continuity import ContinuityState
 from .script import Script, ScriptScene, normalize
 
 Severity = Literal["BLOCK", "WARN"]
@@ -159,3 +164,38 @@ def check_script(script: Script, *,
         report.issues.extend(issues)
         report.scene_metrics[scene.scene_id] = metrics
     return report
+
+
+# outcomes the provider does not control: where things land is random
+_UNCONTROLLED_OUTCOME = _rx(
+    r"fall\w*", r"fell", r"drop\w*", r"scatter\w*", r"spill\w*",
+    r"roll\w*", r"throw\w*", r"thrown", r"flutter\w*", r"land\w*",
+    r"tear\w*", r"tore", r"torn", r"rơi", r"văng", r"vương vãi", r"đổ",
+    r"ném", r"xé")
+
+
+def check_cross_cut(*, scene_id: str, previous_action: str,
+                    previous_start: ContinuityState,
+                    previous_end: ContinuityState,
+                    end_state_verified: bool = False
+                    ) -> list[FeasibilityIssue]:
+    """BLOCK when the next generation depends on a prop position the
+    previous generation reaches only by an uncontrolled outcome, unless the
+    rendered end state was verified by post-render QC."""
+    if end_state_verified:
+        return []
+    match = _UNCONTROLLED_OUTCOME.search(normalize(previous_action).lower())
+    if not match:
+        return []
+    issues = []
+    for prop, where in previous_end.props.items():
+        if previous_start.props.get(prop) == where:
+            continue
+        issues.append(FeasibilityIssue(
+            scene_id=scene_id, rule="CROSS_CUT_DEPENDENCY", severity="BLOCK",
+            detail=(f"'{prop}' must end {where!r}, but gets there by "
+                    f"'{match.group(0)}' in the previous generation; keep "
+                    "cause and effect in one generation, make the outcome "
+                    "deterministic, or verify the rendered end state (QC) "
+                    "before generating the next")))
+    return issues

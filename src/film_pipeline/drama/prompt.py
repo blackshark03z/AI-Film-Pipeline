@@ -2,8 +2,12 @@
 
 One 15-second generation = one prompt. Section order is fixed (Gate 3):
 
-    characters + references -> setting -> shots by time mark
-    -> dialogue (who says what, voice) -> sound -> prohibitions
+    characters + references -> setting -> continuity (start state)
+    -> shots by time mark -> dialogue (who says what, voice) -> sound
+    -> prohibitions
+
+A brief bound to a ``CharacterLook`` uses the look's locked text verbatim,
+never a per-script description.
 
 Dialogue stays in Vietnamese exactly as written in the script; the rest of
 the prompt is English, which the provider follows more reliably.
@@ -15,11 +19,12 @@ import hashlib
 from pydantic import Field
 
 from ..core import ContractModel
-from .bible import CharacterReferenceSet, attachment_plan
+from .bible import CharacterLook, CharacterReferenceSet, attachment_plan
+from .continuity import ContinuityState
 from .coverage import SceneUnit
 
-SECTION_ORDER = ("characters", "setting", "shots", "dialogue", "sound",
-                 "prohibitions")
+SECTION_ORDER = ("characters", "setting", "continuity", "shots", "dialogue",
+                 "sound", "prohibitions")
 
 DEFAULT_PROHIBITIONS = (
     "No on-screen text, subtitles or logos.",
@@ -30,8 +35,13 @@ DEFAULT_PROHIBITIONS = (
 
 class CharacterBrief(ContractModel):
     name: str
-    appearance: str            # identity + scene look, one clause
+    appearance: str = ""       # identity + scene look, one clause
     voice: str = ""            # e.g. "low, tired male voice, Hanoi accent"
+    look: CharacterLook | None = None   # locked look; wins over appearance
+
+    @property
+    def appearance_text(self) -> str:
+        return self.look.text if self.look else self.appearance
 
 
 class ScenePromptPlan(ContractModel):
@@ -57,7 +67,9 @@ def compile_scene_prompt(unit: SceneUnit, *,
                          prohibitions: tuple[str, ...] = DEFAULT_PROHIBITIONS,
                          reference_sets: list[CharacterReferenceSet]
                          | None = None,
-                         max_reference_images: int | None = None
+                         max_reference_images: int | None = None,
+                         dialogue_language: str = "Vietnamese",
+                         start_state: ContinuityState | None = None
                          ) -> ScenePromptPlan:
     attachments = attachment_plan(reference_sets or [],
                                   max_images=max_reference_images)
@@ -68,7 +80,7 @@ def compile_scene_prompt(unit: SceneUnit, *,
         side = book.sides.get(brief.name)
         ref = " (see reference image)" if brief.name in referenced else ""
         where = f", always frame-{side.lower()}" if side else ""
-        cast.append(f"{brief.name}{ref}: {brief.appearance}{where}.")
+        cast.append(f"{brief.name}{ref}: {brief.appearance_text}{where}.")
     shots = []
     for index, shot in enumerate(unit.shots, start=1):
         shots.append(f"Shot {index} ({shot.start_s:g}-{shot.end_s:g}s): "
@@ -85,9 +97,10 @@ def compile_scene_prompt(unit: SceneUnit, *,
     sections = {
         "characters": " ".join(cast),
         "setting": setting.strip().rstrip(".") + ".",
+        "continuity": start_state.describe() if start_state else "",
         "shots": (f"{unit.duration_s:g}s scene, 16:9, hard cuts at the "
                   "marks. " + " ".join(shots)),
-        "dialogue": ("Vietnamese dialogue, lip-synced: "
+        "dialogue": (f"{dialogue_language} dialogue, lip-synced: "
                      + " ".join(dialogue)) if dialogue else "",
         "sound": ("Sound: " + "; ".join(sound) + ".") if sound else "",
         "prohibitions": " ".join(prohibitions),

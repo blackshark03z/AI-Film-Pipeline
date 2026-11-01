@@ -338,6 +338,17 @@ def test_scene_prompt_orders_sections_and_keeps_vietnamese(tmp_path,
     assert "always frame-left" in text
     assert len(plan.reference_attachments) == 6
     assert plan.word_count == len(text.split())
+    assert "Vietnamese dialogue, lip-synced:" in text
+
+
+def test_scene_prompt_dialogue_language_is_configurable(sample):
+    _, _, _, unit = sample
+    plan = compile_scene_prompt(
+        unit, characters=[CharacterBrief(name="MAI", appearance="woman"),
+                          CharacterBrief(name="HÙNG", appearance="man")],
+        setting="Old kitchen at night", dialogue_language="English")
+    assert "English dialogue, lip-synced:" in plan.compiled_text
+    assert "Vietnamese" not in plan.compiled_text
 
 
 def test_shot_truth_audio_is_optional_and_backward_compatible():

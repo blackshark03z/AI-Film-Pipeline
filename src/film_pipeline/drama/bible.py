@@ -75,6 +75,30 @@ class CharacterReferenceSet(ContractModel):
         return found
 
 
+class CharacterLook(ContractModel):
+    """Locked text for one character look. The prompt compiler copies
+    ``text`` verbatim into every generation, so a look cannot be
+    re-described per script (the film01 hair drift). ``invariants`` are the
+    facts QC checks on every rendered generation."""
+    look_id: str
+    character: str
+    text: str                        # e.g. "short tightly curled grey hair"
+    invariants: list[str] = Field(default_factory=list)
+    approved: bool = False
+
+    def problems(self) -> list[str]:
+        found: list[str] = []
+        if not self.text.strip():
+            found.append(f"{self.character}: look {self.look_id} has no text")
+        if not self.invariants:
+            found.append(f"{self.character}: look {self.look_id} lists no "
+                         "invariants for QC")
+        if not self.approved:
+            found.append(f"{self.character}: look {self.look_id} not "
+                         "approved")
+        return found
+
+
 def register_reference(root: Path, *, angle: RefAngle,
                        relative_path: str) -> ReferenceImage:
     """Hash a file on disk; approval is a separate Owner action."""
