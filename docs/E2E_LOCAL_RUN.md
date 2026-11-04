@@ -42,6 +42,14 @@ Resume locks the reviewed shot plan as soon as every shot has a human-written vi
 
 Add references after creative-plan lock with `--references`. Shared references can cover a list of shot IDs; each requested shot must have a valid reference before its dispatch. The optional existing-profile hook is explicit: `--flow-profile D:\path\to\profile --shot SHOT_01 --shot SHOT_02`. Without both flags, resume only reconciles and never submits. Check current Flow authentication and quota before a submission; the CLI never purchases credits or switches accounts.
 
+For an Owner-rejected clip, `resume --review` returns its `repair_decision_id`. A changed request uses a separate JSON file, for example:
+
+```json
+{"shot_id":"SHOT_08","spec_version":2,"repair_decision_id":"<stored repair ID>","reference_sha256":"<downloaded image SHA-256>","framing":"WS","video_prompt":"<changed action direction>"}
+```
+
+Run `resume --project ... --project-id ... --flow-profile ... --shot SHOT_08 --repair repair.json`. The new image must already have an explicit receipt covering that shot. The original plan and attempt remain immutable. Each new version needs its exact resolved Flow predecessor and explicit Owner rejection; an ambiguous job cannot authorize repair. Duplicate/resumed versions retain the same job, the total cap stays 14, and no take is approved automatically. Use at most two repair versions per shot; reassess the approach after repeated failure instead of replaying it.
+
 ## Finish
 
 ```powershell

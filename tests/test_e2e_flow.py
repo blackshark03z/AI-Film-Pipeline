@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
+from test_flow_r2v_runtime import runtime_env, _offline_flow_catalog
 
 from film_pipeline.providers import flow_rpc_contract as c
 from film_pipeline.providers.flow_media import bind_media_bytes, parse_media_resource
@@ -114,3 +115,57 @@ def test_same_shot_id_cannot_substitute_different_creative_intent():
     _require_planned_shot(spec, planned)
     with pytest.raises(ValueError, match='locked creative plan'):
         _require_planned_shot(spec, {**planned, 'video_prompt': 'Drop badge'})
+
+
+def test_repair_is_changed_version_of_resolved_owner_rejection_not_a_replay(tmp_path, runtime_env, monkeypatch):
+    from test_flow_r2v_runtime import (reserve, release_request, own_output, mp4_fixture,
+        media_payload, FixtureAcquisitionTransport, flow_capabilities)
+    from film_pipeline.qc import QCStore, technical_evidence, evidence, human_decision
+    env = runtime_env
+    reserve(env)
+    release_request(env)
+    output_id, row = own_output(env)
+    data = mp4_fixture(tmp_path / 'repair_fixture.mp4')
+    asset = env.runtime.acquire(env.frozen, transport=FixtureAcquisitionTransport(data),
+        destination_dir=tmp_path / 'acquired', media_payload=media_payload(env, output_id, data))
+    rows, _ = technical_evidence(env.shot, asset)
+    for gate in ('visual', 'continuity', 'editorial'):
+        rows.append(evidence(asset=asset, evaluator_type='temporal_heuristic', evaluator_version='fixture',
+            gate=gate, criterion='unassessed', observation='Offline fixture only', verdict='uncertain'))
+    human = human_decision(asset=asset, reviewer_id='fixture_owner', source='owner_explicit_review',
+        action='REJECT', visual_pass=False, failure_codes=['PERFORMANCE_ACTION_UNCLEAR'],
+        failure_observations={'PERFORMANCE_ACTION_UNCLEAR': 'Offline fixture action is unclear'})
+    _, repair = QCStore(env.store).save(asset, rows, human)
+    changed = env.shot.model_copy(update={'spec_version': 2,
+        'blocking': env.shot.blocking.model_copy(update={'action_beats': ['One clear step then hold']})})
+    original_lineage = env.store.read_runtime_lineage
+    with monkeypatch.context() as patch:
+        def foreign_route(*args):
+            lineage = list(original_lineage(*args))
+            lineage[2] = lineage[2].model_copy(update={'provider_id': 'other_provider'})
+            return tuple(lineage)
+        patch.setattr(env.store, 'read_runtime_lineage', foreign_route)
+        with pytest.raises(Exception, match='PREDECESSOR_UNQUALIFIED'):
+            env.runtime.repair_parent(changed, repair['repair_decision_id'])
+    kwargs = dict(reference_asset=env.asset, reference_media_id=REMOTE,
+        reference_filename='reference.png', catalog_source=env.catalog_source)
+    with pytest.raises(Exception, match='REPAIR_DECISION_REQUIRED'):
+        env.runtime.freeze(changed, flow_capabilities(), **kwargs)
+    env.session._offline_rows.append(row)
+    frozen = env.runtime.freeze(changed, flow_capabilities(),
+        repair_decision_id=repair['repair_decision_id'], **kwargs)
+    assert frozen.job.provider_job_id != env.frozen.job.provider_job_id
+    assert frozen.job.dispatch_count == 0
+    assert env.store.read_provider_job(env.frozen.job.provider_job_id).dispatch_count == 1
+    resumed = env.runtime.freeze(changed, flow_capabilities(),
+        repair_decision_id=repair['repair_decision_id'], **kwargs)
+    assert resumed.job.provider_job_id == frozen.job.provider_job_id
+    assert env.runtime.reserve(frozen, attestation=env.attestation,
+        evidence_dir=env.attestation_dir).dispatch_count == 1
+    with pytest.raises(Exception, match='CONSUMED|consumed'):
+        env.runtime.reserve(frozen, attestation=env.attestation, evidence_dir=env.attestation_dir)
+    # Resuming the original version also retains the original job after repair.
+    assert env.runtime.freeze(env.shot, flow_capabilities(), **kwargs).job.provider_job_id == env.frozen.job.provider_job_id
+    with pytest.raises(Exception, match='PREDECESSOR_UNQUALIFIED'):
+        env.runtime.freeze(changed.model_copy(update={'spec_version': 3}), flow_capabilities(),
+            repair_decision_id=repair['repair_decision_id'], **kwargs)

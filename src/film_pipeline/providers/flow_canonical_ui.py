@@ -151,8 +151,16 @@ def prepare_inputs(session, records, *, media_id, prompt, profile=DEFAULT_NATIVE
         # verification below is unchanged and remains mandatory.
         page.locator('button.chip-container img.chip-image, '
                      'button.detail-add-to-prompt-btn').first.wait_for(timeout=15000)
-        if page.locator('button.detail-add-to-prompt-btn').count():
-            page.locator('button.detail-add-to-prompt-btn').click()
+        detail = page.locator('button.detail-add-to-prompt-btn')
+        if detail.is_visible():
+            from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+            try:
+                detail.click(timeout=3000)
+            except PlaywrightTimeoutError:
+                # Quick-add may finish while the detail view is detaching.
+                # Only the independently verified reference chip can resolve it.
+                if not page.locator('button.chip-container img.chip-image').is_visible():
+                    raise
         page.locator('button.chip-container img.chip-image').wait_for(timeout=10000)
         verify_chip(page, media_id)
     verify_settings(page)

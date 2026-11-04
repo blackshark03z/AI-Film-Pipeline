@@ -277,6 +277,34 @@ class QCStore:
     def __init__(self, runtime: SQLiteStore):
         self.runtime = runtime
 
+    def repair_source(self, repair_decision_id: str):
+        """Read the exact acquired Asset and explicit rejection behind a repair."""
+        connection = self.runtime._connect()
+        try:
+            row = connection.execute('SELECT payload,report_id FROM repair_decisions WHERE id=?',
+                                     (repair_decision_id,)).fetchone()
+            if row is None:
+                raise ValueError('repair decision is absent')
+            repair, report_id = json.loads(row[0]), row[1]
+            source = connection.execute('SELECT a.payload FROM assets a JOIN qc_reports q '
+                'ON a.id=q.asset_id WHERE q.id=?', (report_id,)).fetchone()
+            if source is None:
+                raise ValueError('repair source is absent')
+            asset = Asset.model_validate(json.loads(source[0]))
+            parent, _, route, _, job, _ = self.runtime.read_runtime_lineage(
+                repair['from_attempt_id'], asset.provider_job_id)
+            report, disposition = self.read(asset, report_id)
+            human_row = connection.execute('SELECT payload FROM human_qc_decisions WHERE id=?',
+                                           (report.human_decision_id,)).fetchone()
+        finally:
+            connection.close()
+        human = json.loads(human_row[0]) if human_row else {}
+        if (disposition != repair or asset.source_attempt_id != repair['from_attempt_id']
+                or repair['shot_id'] != parent.shot_id or report.report['decision'] != 'fail'
+                or human.get('source') != 'owner_explicit_review' or human.get('action') != 'REJECT'):
+            raise ValueError('repair needs its exact explicit Owner rejection')
+        return parent, route, job, asset, repair
+
     def initialize(self) -> None:
         self.runtime.initialize()
         c = self.runtime._connect()

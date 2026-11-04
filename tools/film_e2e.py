@@ -33,6 +33,7 @@ def main() -> None:
     run.add_argument("--review", type=Path, help="Owner review manifest exported by status and filled after playback")
     run.add_argument("--flow-profile", type=Path, help="existing Flow browser profile directory; enables explicit shots")
     run.add_argument("--shot", action="append", help="one shot ID to dispatch; repeat, requires --flow-profile")
+    run.add_argument('--repair', type=Path, help='changed intent JSON bound to an exact Owner-rejected shot')
     deliver = actions.add_parser("finish", help="render human-selected, QC-approved Flow takes")
     deliver.add_argument("--project", required=True, type=Path)
     deliver.add_argument("--db", type=Path, help="defaults to <project>/runtime.sqlite")
@@ -50,7 +51,7 @@ def main() -> None:
     elif args.action == "resume":
         db = args.db or args.project / "runtime.sqlite"
         result = resume(args.project, db, args.project_id, args.references, args.review,
-                        args.flow_profile, args.shot)
+                        args.flow_profile, args.shot, args.repair)
     else:
         offsets = {}
         for value in args.trim:

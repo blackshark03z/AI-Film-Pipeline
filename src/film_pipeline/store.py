@@ -288,7 +288,28 @@ class SQLiteStore:
                 "AND json_extract(attempts.payload,'$.shot_id')=?", (shot_id,)
             ).fetchone()[0]
             if used:
-                raise RuntimeError("single dispatch budget already consumed")
+                repair_id = job.correlation_evidence.get('repair_decision_id')
+                if not repair_id:
+                    raise RuntimeError("single dispatch budget already consumed")
+                # A new version is not a replay: independently verify its
+                # resolved Owner-rejected parent before reserving atomically.
+                from .qc import QCStore
+                shot, _, _, _ = self.read_path(job.generation_attempt_id)
+                parent, route, old_job, _, _ = QCStore(self).repair_source(repair_id)
+                if (parent.shot_id != shot_id or shot.spec_version != parent.spec_version + 1
+                        or old_job.provider_id != job.provider_id or route.provider_id != job.provider_id
+                        or old_job.project_binding_id != job.project_binding_id
+                        or old_job.status != 'SUCCEEDED' or old_job.dispatch_count != 1
+                        or sha256(parent) == sha256(shot)):
+                    raise RuntimeError('repair predecessor does not authorize this changed version')
+                version_used = connection.execute(
+                    "SELECT COUNT(*) FROM provider_jobs AS jobs JOIN generation_attempts AS attempts "
+                    "ON attempts.id=jobs.generation_attempt_id WHERE jobs.dispatch_count=1 "
+                    "AND json_extract(attempts.payload,'$.shot_id')=? "
+                    "AND json_extract(attempts.payload,'$.shot_spec_version')=?",
+                    (shot_id, shot.spec_version)).fetchone()[0]
+                if version_used:
+                    raise RuntimeError("single dispatch budget already consumed")
             reserved = job.model_copy(update={
                 "dispatch_count": 1,
                 "submission_state": "SUBMISSION_RESERVED",

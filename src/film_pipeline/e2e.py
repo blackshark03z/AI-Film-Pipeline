@@ -242,8 +242,32 @@ def prepare(audio: Path, srt: Path, start_s: float, end_s: float, output: Path) 
             "runtime_database": str(output / "runtime.sqlite")}
 
 
-def _require_planned_shot(frozen, planned):
-    from .e2e_flow import shot_spec
+def _require_planned_shot(frozen, planned, store=None, project_id=None):
+    from .e2e_flow import shot_spec, ACCOUNT_ALIAS
+    if frozen.spec_version > 1:
+        if store is None or project_id is None:
+            raise ValueError('repair must bind to its rejected predecessor')
+        from .flow_r2v_runtime import FlowR2VShotRuntime
+        connection = store._connect()
+        try:
+            jobs = connection.execute('SELECT p.id FROM provider_jobs p JOIN generation_attempts a '
+                'ON a.id=p.generation_attempt_id WHERE a.shot_spec_hash=?', (sha256(frozen),)).fetchall()
+        finally:
+            connection.close()
+        if len(jobs) != 1:
+            raise ValueError('repair job is absent or ambiguous')
+        job = store.read_provider_job(jobs[0][0])
+        repair_id = job.correlation_evidence.get('repair_decision_id')
+        if not repair_id:
+            raise ValueError('repair has no stored rejection')
+        parent = FlowR2VShotRuntime(store, project_id=project_id, account_id=ACCOUNT_ALIAS).repair_parent(
+            frozen, repair_id)
+        _require_planned_shot(parent, planned, store, project_id)
+        restored = frozen.model_copy(update={'spec_version': parent.spec_version,
+            'references': parent.references, 'blocking': parent.blocking, 'camera': parent.camera})
+        if restored != parent:
+            raise ValueError('repair changed the locked story goal')
+        return
     refs = frozen.references.other_asset_ids if frozen.references else []
     if len(refs) != 1 or frozen != shot_spec(planned, refs[0]):
         raise ValueError("runtime ShotSpec differs from the locked creative plan")
@@ -288,7 +312,7 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
         asset = Asset.model_validate(json.loads(asset_payload))
         shot, _, route, attempt, job, assets = store.read_runtime_lineage(
             take.generation_attempt_id, asset.provider_job_id)
-        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id))
+        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id)
         if (shot.shot_id != take.shot_id or take.asset_id != asset.asset_id or
                 asset not in assets or job.project_binding_id != sha256(project_id) or
                 job.provider_id != "flow_veo" or route.provider_id != "flow_veo"):
@@ -320,7 +344,7 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
                 job.project_binding_id != sha256(project_id) or asset not in lineage_assets or
                 job.status != "SUCCEEDED" or job.dispatch_count != 1):
             continue
-        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id))
+        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id)
         try:
             qc._exact_asset(asset)
         except ValueError:
@@ -330,6 +354,7 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
                 json.loads(prior[2]).get("report", {}).get("decision") != "needs_human_review")):
             continue
         review_items.append({"shot_id": shot.shot_id, "project_id": project_id,
+            "spec_version": shot.spec_version,
             "asset_id": asset.asset_id, "asset_sha256": asset.sha256,
             "source_attempt_id": asset.source_attempt_id, "provider_job_id": asset.provider_job_id,
             "provider_asset_id": asset.provider_asset_id, "asset_path": asset.uri_or_path,
@@ -401,7 +426,7 @@ def _apply_reviews(root: Path, db_path: Path, project_id: str, review_manifest: 
         validate_review_entry(review, asset)
         shot, _, route, _, job, assets = store.read_runtime_lineage(
             asset.source_attempt_id, asset.provider_job_id)
-        _require_planned_shot(shot, by_shot[shot_id])
+        _require_planned_shot(shot, by_shot[shot_id], store, project_id)
         if (shot.shot_id != shot_id or shot_id != review["shot_id"] or asset not in assets
                 or route.provider_id != "flow_veo" or job.provider_id != "flow_veo"
                 or job.project_binding_id != sha256(project_id) or job.status != "SUCCEEDED"
@@ -456,6 +481,8 @@ def _apply_reviews(root: Path, db_path: Path, project_id: str, review_manifest: 
         output.append({"shot_id": shot_id, "asset_id": asset.asset_id,
                        "qc_report_id": record.report["qc_report_id"],
                        "decision": record.report["decision"],
+                       "repair_decision_id": disposition.get('repair_decision_id')
+                           if isinstance(disposition, dict) else None,
                        "selected_take_id": disposition.selected_take_id
                            if isinstance(disposition, SelectedTake) else None})
     return output
@@ -465,7 +492,7 @@ def resume(root: Path, db_path: Path, provider_project_id: str,
            reference_manifest: Path | None = None,
            review_manifest: Path | None = None,
            flow_profile: Path | None = None,
-           shot_ids: list[str] | None = None) -> dict:
+           shot_ids: list[str] | None = None, repair_path: Path | None = None) -> dict:
     meta, plan = _project(root)
     if not provider_project_id.strip():
         raise ValueError("exact Flow project ID required")
@@ -524,13 +551,15 @@ def resume(root: Path, db_path: Path, provider_project_id: str,
         raise ValueError("--shot requires --flow-profile; no generation is dispatched otherwise")
     if flow_profile is not None and not selected_shots:
         raise ValueError("--flow-profile requires at least one explicit --shot")
+    if repair_path is not None and (flow_profile is None or len(selected_shots) != 1):
+        raise ValueError('--repair requires exactly one explicit Flow shot')
     if flow_profile is not None:
         from .e2e_flow import run_shot
         for shot_id in selected_shots:
             if not references_for_shot(root, shot_id):
                 raise ValueError(f"exact ChatGPT reference required before dispatch: {shot_id}")
             flow_results.append(run_shot(root.resolve(), db_path.resolve(), provider_project_id,
-                                         flow_profile.resolve(), shot_id, poll_seconds=300))
+                                         flow_profile.resolve(), shot_id, poll_seconds=300, repair_path=repair_path))
     result = status(root, db_path, provider_project_id)
     result["human_reviews"] = reviews
     result["flow_results"] = flow_results
@@ -562,7 +591,7 @@ def _selected_sources(root: Path, db_path: Path, project_id: str,
                     asset = Asset.model_validate(json.loads(asset_payload))
                     frozen_shot, _, route, _, job, assets = store.read_runtime_lineage(
                         take.generation_attempt_id, asset.provider_job_id)
-                    _require_planned_shot(frozen_shot, shot)
+                    _require_planned_shot(frozen_shot, shot, store, project_id)
                     if (frozen_shot.shot_id != take.shot_id or asset not in assets or
                             job.project_binding_id != sha256(project_id) or
                             job.provider_id != "flow_veo" or route.provider_id != "flow_veo"):

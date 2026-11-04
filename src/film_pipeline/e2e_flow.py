@@ -27,11 +27,11 @@ ACCOUNT_ALIAS = "clean-pro-qualified"
 def shot_spec(shot: dict, reference_id: str) -> ShotSpec:
     """The reviewed prompt is never shortened or silently rewritten here."""
     return ShotSpec.model_validate({
-        "schema_version": "1.0.0", "spec_version": 1,
+        "schema_version": "1.0.0", "spec_version": shot.get('spec_version', 1),
         "shot_id": shot["shot_id"], "scene_id": "E2E",
         "dramatic_purpose": shot["visual_intent"], "duration_target_s": 8,
         "shot_type": "action", "characters": [],
-        "camera": {"framing": "MS", "height": "eye_level", "lens_intent": "normal",
+        "camera": {"framing": shot.get('framing', 'MS'), "height": "eye_level", "lens_intent": "normal",
                    "movement": {"type": "locked"}},
         "environment": {},
         "blocking": {"start": "reference pose", "action_beats": [shot["video_prompt"]],
@@ -81,7 +81,7 @@ def _ingredients_mode(page):
 
 
 def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
-             shot_id: str, poll_seconds: int = 300) -> dict:
+             shot_id: str, poll_seconds: int = 300, repair_path: Path | None = None) -> dict:
     """Resume one exact job; acquisition stops at machine QC pending a person."""
     root, profile = Path(root).resolve(), Path(profile).resolve()
     meta, plan = _project(root)
@@ -93,9 +93,23 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
     if len(matches) != 1:
         raise ValueError("one planned shot ID required")
     shot = matches[0]
+    repair = None
+    if repair_path is not None:
+        repair = json.loads(Path(repair_path).read_text(encoding='utf-8'))
+        if (repair.get('shot_id') != shot_id or type(repair.get('spec_version')) is not int
+                or repair['spec_version'] not in (2, 3)
+                or not isinstance(repair.get('video_prompt'), str) or not repair['video_prompt'].strip()
+                or repair['video_prompt'] == shot['video_prompt']
+                or not re.fullmatch('[a-f0-9]{64}', repair.get('reference_sha256', ''))
+                or not isinstance(repair.get('repair_decision_id'), str)):
+            raise ValueError('repair needs this shot, changed direction, exact reference and a stored rejection')
+        shot = {**shot, 'spec_version': repair['spec_version'],
+                'video_prompt': repair['video_prompt'], 'framing': repair.get('framing', 'MS')}
     if shot["timeline_out_s"] - shot["timeline_in_s"] > 8:
         raise ValueError("planned shot exceeds the qualified eight-second Veo clip")
     refs = references_for_shot(root, shot_id)
+    if repair:
+        refs = [ref for ref in refs if ref['sha256'] == repair['reference_sha256']]
     if len(refs) != 1:
         raise ValueError("one exact ChatGPT reference receipt required for this shot")
     from PIL import Image
@@ -116,6 +130,10 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
         provider_id="flow_veo", transport_type="other", supports_image_input=True,
         supports_duration_control=True)
     runtime = FlowR2VShotRuntime(store, project_id=project_id, account_id=ACCOUNT_ALIAS)
+    if repair:
+        parent = runtime.repair_parent(shot_spec(shot, reference.asset_id), repair['repair_decision_id'])
+        from .e2e import _require_planned_shot
+        _require_planned_shot(parent, matches[0], store, project_id)
     evidence_dir = root / "flow" / shot_id
     evidence_dir.mkdir(parents=True, exist_ok=True)
     with FlowReferenceRpcSession(profile_path=profile, project_id=project_id, native_ui=True) as session:
@@ -148,7 +166,8 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
         spec = shot_spec(shot, reference.asset_id)
         frozen = runtime.freeze(spec, capabilities, reference_asset=reference,
             reference_media_id=reference_receipt["media_id"],
-            catalog_source=qualify_flow_catalog_source(session))
+            catalog_source=qualify_flow_catalog_source(session),
+            repair_decision_id=repair['repair_decision_id'] if repair else None)
         job_id = frozen.job.provider_job_id
         job = store.read_provider_job(job_id)
         prompt = job.correlation_evidence["prompt"]
