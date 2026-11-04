@@ -139,4 +139,3 @@ def test_resume_locks_plan_early_and_appends_partial_shared_references(tmp_path)
     plan_path.write_text("{}", encoding="utf-8")
     with pytest.raises(ValueError, match="changed"):
         status(root)
-
