@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from film_pipeline.e2e import finish, prepare, resume, status  # noqa: E402
+from film_pipeline.e2e import finish, prepare, resume, status, verify_package  # noqa: E402
 
 
 def main() -> None:
@@ -22,7 +22,9 @@ def main() -> None:
     new.add_argument("--end", required=True, type=float, help="source-audio end time in seconds")
     new.add_argument("--out", required=True, type=Path)
     inspect = actions.add_parser("status", help="show review and selected-take gaps")
-    inspect.add_argument("--project", required=True, type=Path)
+    targets = inspect.add_mutually_exclusive_group(required=True)
+    targets.add_argument("--project", type=Path)
+    targets.add_argument('--package', type=Path, help='verify a relocated delivery directory without the runtime')
     inspect.add_argument("--db", type=Path)
     inspect.add_argument("--project-id", help="exact Flow project ID")
     run = actions.add_parser("resume", help="lock the reviewed plan and reconcile runtime evidence")
@@ -44,10 +46,12 @@ def main() -> None:
     if args.action == "prepare":
         result = prepare(args.audio, args.srt, args.start, args.end, args.out)
     elif args.action == "status":
-        if args.db and not args.project_id:
-            parser.error("--db requires --project-id")
-        result = status(args.project, args.db or args.project / "runtime.sqlite",
-                        args.project_id) if args.project_id else status(args.project)
+        if args.package:
+            if args.db or args.project_id:
+                parser.error('--package does not use a database or Flow project ID')
+            result = verify_package(args.package)
+        else:
+            result = status(args.project, args.db, args.project_id)
     elif args.action == "resume":
         db = args.db or args.project / "runtime.sqlite"
         result = resume(args.project, db, args.project_id, args.references, args.review,
@@ -64,6 +68,8 @@ def main() -> None:
                 parser.error('--trim must be SHOT_ID=SECONDS')
         result = finish(args.project, args.db or args.project / "runtime.sqlite", args.project_id, offsets)
     print(json.dumps(result, ensure_ascii=False, indent=2))
+    if result.get('result') == 'FAIL':
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

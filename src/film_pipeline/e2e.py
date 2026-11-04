@@ -12,6 +12,7 @@ from pathlib import Path
 
 from .core import sha256
 from .editorial import EditClip, EditManifest, EditorialStore, make_edit_manifest
+from .delivery import DeliveryEntry, DeliveryManifest, finalize, verify
 from .live_runtime import Asset, ProviderJob, file_sha256
 from .narrative.narrative import parse_srt
 from .qc import (QCStore, QCEvidence, SelectedTake, evidence as make_evidence,
@@ -147,7 +148,8 @@ def _project(root: Path) -> tuple[dict, dict]:
         shot_id = shot.get("shot_id")
         start, end = shot.get("timeline_in_s"), shot.get("timeline_out_s")
         if (not isinstance(shot_id, str) or shot_id in seen or
-                not isinstance(start, (int, float)) or not isinstance(end, (int, float)) or
+                type(start) not in (int, float) or type(end) not in (int, float) or
+                not math.isfinite(start) or not math.isfinite(end) or
                 abs(start - cursor) > 0.002 or end <= start):
             raise ValueError("shot IDs must be unique and timeline windows contiguous")
         seen.add(shot_id)
@@ -160,6 +162,15 @@ def _project(root: Path) -> tuple[dict, dict]:
         if not path.is_file() or _sha(path) != expected:
             raise ValueError(f"locked {name} source is missing or changed")
     return meta, plan
+
+
+def _source_windows(root: Path, meta: dict, plan: dict) -> dict[str, str]:
+    cues = parse_srt((root / meta['srt_path']).read_text(encoding='utf-8-sig'))
+    start = meta['audio_start_s']
+    return {shot['shot_id']: '\n'.join(dict.fromkeys(cue['text'].strip() for cue in cues
+        if cue['end_s'] > start + shot['timeline_in_s']
+        and cue['start_s'] < start + shot['timeline_out_s'] and cue['text'].strip()))
+        for shot in plan['shots']}
 
 
 def references_for_shot(root: Path, shot_id: str) -> list[dict]:
@@ -274,7 +285,15 @@ def _require_planned_shot(frozen, planned, store=None, project_id=None):
 
 
 def status(root: Path, db_path: Path | None = None, project_id: str | None = None) -> dict:
+    root = root.resolve()
     meta, plan = _project(root)
+    project_id = project_id or meta.get('flow_project_id')
+    if meta.get('flow_project_id') and project_id != meta['flow_project_id']:
+        raise ValueError('Flow project binding mismatch')
+    if db_path is not None and not project_id:
+        raise ValueError('exact Flow project ID required for an unbound runtime')
+    if db_path is None and project_id:
+        db_path = root / 'runtime.sqlite'
     if not isinstance(plan.get("shots"), list) or len(plan["shots"]) != meta["shot_count"]:
         raise ValueError("shot plan count changed; prepare a reviewed plan")
     missing_intent = [s["shot_id"] for s in plan["shots"] if not all(
@@ -282,18 +301,22 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
     reference_coverage = {s["shot_id"]: len(references_for_shot(root, s["shot_id"]))
                           for s in plan["shots"]}
     reference_missing = [shot for shot, count in reference_coverage.items() if count == 0]
+    windows = _source_windows(root, meta, plan)
     report = {"project_id": meta["project_id"], "status": meta["status"],
               "duration_s": meta["film_duration_s"], "shot_count": len(plan["shots"]),
               "plan_review_required": bool(missing_intent), "missing_shot_plans": missing_intent,
               "reference_coverage": reference_coverage, "missing_reference_images": reference_missing,
               "selected_shots": [], "missing_selected_shots": [s["shot_id"] for s in plan["shots"]],
               "next_action": "lock the creative shot plan; attach one ChatGPT reference receipt before each Flow dispatch"}
+    report['source_window_mismatches'] = [shot['shot_id'] for shot in plan['shots']
+        if shot.get('source_text') != windows[shot['shot_id']]]
     if not db_path:
         return report
     db_path = db_path.resolve()
     if not db_path.is_file():
         raise ValueError("Flow runtime database is missing")
-    store, qc = _runtime(db_path)
+    store = SQLiteStore(db_path)
+    qc = QCStore(store)
     connection = store._connect()
     try:
         rows = connection.execute("SELECT st.id,st.payload,a.payload FROM selected_takes st "
@@ -498,6 +521,12 @@ def resume(root: Path, db_path: Path, provider_project_id: str,
         raise ValueError("exact Flow project ID required")
     if not db_path.resolve().is_file():
         raise ValueError("Flow runtime database is missing")
+    if not meta['locked_plan_sha256']:
+        windows = _source_windows(root.resolve(), meta, plan)
+        if any(shot.get('source_text') != windows[shot['shot_id']] for shot in plan['shots']):
+            for shot in plan['shots']:
+                shot['source_text'] = windows[shot['shot_id']]
+            _write_plan(root.resolve() / 'shots.json', plan)
     report = status(root, db_path, provider_project_id)
     prompts_missing = report["missing_shot_plans"]
     if reference_manifest is not None:
@@ -672,7 +701,7 @@ def finish(root: Path, db_path: Path, provider_project_id: str,
                                  "-f", "null", "-"], capture_output=True, timeout=300, check=False)
         if verify.returncode:
             raise ValueError("existing master no longer decodes fully")
-        return old
+        return _handoff_package(root, old, manifest)
     captions = _clipped_srt(srt, start, duration)
     if caption_path.exists():
         if not caption_path.is_file() or caption_path.read_text(encoding="utf-8") != captions:
@@ -712,4 +741,53 @@ def finish(root: Path, db_path: Path, provider_project_id: str,
             "duration_s": duration, "shots": [c.shot_id for c in clips],
             "video_codec": "h264", "audio_codec": "aac", "full_decode": True}
     _write_once(receipt, data)
-    return data
+    return _handoff_package(root, data, manifest)
+
+
+def verify_package(directory: Path) -> dict:
+    """Portable integrity readback; no browser, original workspace or credentials."""
+    directory = directory.resolve()
+    manifest = DeliveryManifest.model_validate(_json(directory / 'manifest.json'))
+    if {entry.role for entry in manifest.entries} != {'master', 'caption_srt', 'provenance'}:
+        raise ValueError('handoff needs master, captions and provenance')
+    for entry in manifest.entries:
+        if directory not in (directory / entry.path).resolve().parents:
+            raise ValueError('handoff path escapes its directory')
+    result = verify(manifest, directory)
+    return {**result, 'delivery_id': manifest.delivery_id, 'directory': str(directory)}
+
+
+def _handoff_package(root: Path, receipt: dict, edit_manifest: EditManifest) -> dict:
+    directory = root / 'delivery'
+    directory.mkdir(exist_ok=True)
+    files = [('master', 'master.mp4', receipt['master_path'], receipt['master_sha256']),
+             ('caption_srt', 'captions.srt', receipt['captions_path'], receipt['captions_sha256'])]
+    for _, name, source_name, expected in files:
+        source, target = (root / source_name).resolve(), directory / name
+        if root not in source.parents or _sha(source) != expected:
+            raise ValueError('handoff source is outside this project or changed')
+        if target.exists():
+            if _sha(target) != expected:
+                raise ValueError('existing handoff file changed; refusing overwrite')
+            continue
+        temporary = target.with_name(name + '.partial')
+        if temporary.exists():
+            raise ValueError('unresolved handoff staging file')
+        try:
+            shutil.copy2(source, temporary)
+            os.link(temporary, target)
+        finally:
+            temporary.unlink(missing_ok=True)
+    _write_once(directory / 'provenance.json', {'export': receipt,
+        'edit_manifest': edit_manifest.model_dump(mode='json')})
+    roles = [('master', 'master.mp4'), ('caption_srt', 'captions.srt'), ('provenance', 'provenance.json')]
+    entries = [DeliveryEntry(role=role, path=name, sha256=_sha(directory / name),
+        bytes=(directory / name).stat().st_size,
+        media_type={'master': 'video/mp4', 'caption_srt': 'application/x-subrip',
+                    'provenance': 'application/json'}[role], source_lineage=edit_manifest.edit_manifest_id)
+        for role, name in roles]
+    package = finalize(DeliveryManifest(film_id=receipt['project_id'], entries=entries), directory)
+    _write_once(directory / 'manifest.json', package.model_dump(mode='json'))
+    if verify_package(directory)['result'] != 'PASS':
+        raise ValueError('handoff readback failed')
+    return {**receipt, 'package_path': str(directory.relative_to(root)), 'delivery_id': package.delivery_id}

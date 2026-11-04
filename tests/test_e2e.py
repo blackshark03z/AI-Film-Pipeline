@@ -3,6 +3,8 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+import shutil
+import sys
 from pathlib import Path
 
 import pytest
@@ -31,6 +33,23 @@ def test_finish_real_mux_readback_and_changed_source_are_not_false_success(tmp_p
     # Existing runtime/editorial fixtures prove selection custody; this test
     # isolates the new real FFmpeg mux, receipt and stale-file behavior.
     monkeypatch.setattr(e2e, '_selected_sources', lambda *args: (meta, {}, [clip]))
+    stale = tmp_path / 'renders' / 'master.mp4'
+    stale.parent.mkdir(exist_ok=True)
+    stale.write_bytes(b'unreceipted old master')
+    with pytest.raises(ValueError, match='stale master'):
+        e2e.finish(tmp_path, runtime.path, 'offline-project')
+    assert not (tmp_path / 'delivery.json').exists()
+    stale.unlink()
+    original_run = subprocess.run
+    with monkeypatch.context() as patch:
+        def failed_mux(command, **kwargs):
+            if str(command[-1]).endswith('master.partial.mp4'):
+                return subprocess.CompletedProcess(command, 1, '', 'fixture mux failure')
+            return original_run(command, **kwargs)
+        patch.setattr(subprocess, 'run', failed_mux)
+        with pytest.raises(ValueError, match='FFmpeg export failed'):
+            e2e.finish(tmp_path, runtime.path, 'offline-project')
+    assert not (tmp_path / 'delivery.json').exists() and not stale.exists()
     result = e2e.finish(tmp_path, runtime.path, 'offline-project')
     master = tmp_path / result['master_path']
     assert file_sha256(master) == result['master_sha256']
@@ -38,6 +57,14 @@ def test_finish_real_mux_readback_and_changed_source_are_not_false_success(tmp_p
         '-of', 'json', str(master)]))['streams']
     assert {s['codec_name'] for s in streams} == {'h264', 'aac', 'mov_text'}
     assert e2e.finish(tmp_path, runtime.path, 'offline-project') == result
+    relocated = tmp_path / 'relocated'
+    shutil.copytree(tmp_path / result['package_path'], relocated)
+    assert e2e.verify_package(relocated)['result'] == 'PASS'
+    (relocated / 'master.mp4').write_bytes(b'changed')
+    assert e2e.verify_package(relocated)['result'] == 'FAIL'
+    check = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[1] / 'tools/film_e2e.py'),
+        'status', '--package', str(relocated)], capture_output=True, text=True)
+    assert check.returncode == 1 and json.loads(check.stdout)['bad_checksum'] == ['master.mp4']
     audio.write_bytes(audio.read_bytes() + b'changed')
     with pytest.raises(ValueError, match='source bytes changed'):
         e2e.finish(tmp_path, runtime.path, 'offline-project')
@@ -70,6 +97,8 @@ def test_prepare_preserves_overlapping_caption_windows_and_locks_sources(tmp_pat
         connection.close()
     state = status(tmp_path / "film")
     assert state["plan_review_required"] is True
+    with pytest.raises(ValueError, match='exact Flow project ID'):
+        status(tmp_path / 'film', Path(result['runtime_database']))
     assert state["missing_selected_shots"] == [f"SHOT_{n:02d}" for n in range(1, 9)]
     plan = json.loads((tmp_path / "film" / "shots.json").read_text(encoding="utf-8"))
     assert any("She enters." in shot["source_text"] for shot in plan["shots"])
@@ -116,6 +145,9 @@ def test_resume_locks_plan_early_and_appends_partial_shared_references(tmp_path)
         shot.update(visual_intent="Visible story beat from the source text",
                     image_prompt="Police station, same adult characters",
                     video_prompt="Animate only the action described in source text")
+    # Move the first boundary beyond the overlapping cues before locking.
+    plan['shots'][0]['timeline_out_s'] = 7
+    plan['shots'][1]['timeline_in_s'] = 7
     plan_path.write_text(json.dumps(plan, indent=2), encoding="utf-8")
     reference = tmp_path / "ref.png"
     reference.write_bytes(b"image test bytes")
@@ -126,6 +158,13 @@ def test_resume_locks_plan_early_and_appends_partial_shared_references(tmp_path)
                     "chat_url": "https://chatgpt.com/c/example"}]}), encoding="utf-8")
     state = resume(root, database, "flow-project")
     assert state["status"] == "PLAN_LOCKED_AWAITING_FLOW_MEDIA"
+    refreshed = json.loads(plan_path.read_text(encoding='utf-8'))
+    assert refreshed['shots'][1]['source_text'] == ''
+    assert refreshed['shots'][1]['video_prompt'] == plan['shots'][1]['video_prompt']
+    assert state['source_window_mismatches'] == []
+    before = file_sha256(database)
+    assert status(root, database)['missing_selected_shots'] == state['missing_selected_shots']
+    assert file_sha256(database) == before
     frozen = json.loads((root / "project.json").read_text(encoding="utf-8"))["locked_plan_sha256"]
     assert frozen == hashlib.sha256(plan_path.read_bytes()).hexdigest()
     state = resume(root, database, "flow-project", receipt)
@@ -138,4 +177,19 @@ def test_resume_locks_plan_early_and_appends_partial_shared_references(tmp_path)
     assert json.loads((root / "project.json").read_text(encoding="utf-8"))["locked_plan_sha256"] == frozen
     plan_path.write_text("{}", encoding="utf-8")
     with pytest.raises(ValueError, match="changed"):
+        status(root)
+
+
+@pytest.mark.parametrize('invalid', [True, float('nan'), float('inf')])
+def test_shot_windows_reject_nonfinite_and_boolean_times(tmp_path, invalid):
+    audio, srt = tmp_path / 'audio.mp3', tmp_path / 'source.srt'
+    media(audio)
+    source_srt(srt)
+    root = tmp_path / 'film'
+    prepare(audio, srt, 18, 55, root)
+    path = root / 'shots.json'
+    plan = json.loads(path.read_text(encoding='utf-8'))
+    plan['shots'][0]['timeline_out_s'] = invalid
+    path.write_text(json.dumps(plan), encoding='utf-8')
+    with pytest.raises(ValueError, match='timeline windows'):
         status(root)
