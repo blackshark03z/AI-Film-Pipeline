@@ -97,7 +97,7 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
     if repair_path is not None:
         repair = json.loads(Path(repair_path).read_text(encoding='utf-8'))
         if (repair.get('shot_id') != shot_id or type(repair.get('spec_version')) is not int
-                or repair['spec_version'] not in (2, 3)
+                or repair['spec_version'] not in (2, 3, 4)
                 or not isinstance(repair.get('video_prompt'), str) or not repair['video_prompt'].strip()
                 or repair['video_prompt'] == shot['video_prompt']
                 or not re.fullmatch('[a-f0-9]{64}', repair.get('reference_sha256', ''))

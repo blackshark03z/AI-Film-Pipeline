@@ -169,3 +169,23 @@ def test_repair_is_changed_version_of_resolved_owner_rejection_not_a_replay(tmp_
     with pytest.raises(Exception, match='PREDECESSOR_UNQUALIFIED'):
         env.runtime.freeze(changed.model_copy(update={'spec_version': 3}), flow_capabilities(),
             repair_decision_id=repair['repair_decision_id'], **kwargs)
+
+
+def test_owner_extended_v4_still_requires_resolved_consecutive_predecessor(runtime_env, monkeypatch):
+    from film_pipeline.qc import QCStore
+    env = runtime_env
+    parent = env.shot.model_copy(update={'spec_version': 3})
+    job = env.frozen.job.model_copy(update={'status': 'SUCCEEDED', 'dispatch_count': 1})
+    route = env.store.read_runtime_lineage(env.frozen.attempt.generation_attempt_id,
+                                         env.frozen.job.provider_job_id)[2]
+    # Isolate the changed version boundary; the preceding test proves rejection custody.
+    monkeypatch.setattr(QCStore, 'repair_source', lambda self, key:
+        (parent, route, job, None, {'shot_id': parent.shot_id}))
+    changed = parent.model_copy(update={'spec_version': 4})
+    assert env.runtime.repair_parent(changed, 'fixture-rejection') == parent
+    for version in (3, 5):
+        with pytest.raises(Exception, match='PREDECESSOR_UNQUALIFIED'):
+            env.runtime.repair_parent(changed.model_copy(update={'spec_version': version}), 'fixture-rejection')
+    job = job.model_copy(update={'status': 'INCONCLUSIVE'})
+    with pytest.raises(Exception, match='PREDECESSOR_UNQUALIFIED'):
+        env.runtime.repair_parent(changed, 'fixture-rejection')

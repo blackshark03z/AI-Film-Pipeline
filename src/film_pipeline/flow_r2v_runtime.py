@@ -416,7 +416,7 @@ class FlowR2VShotRuntime:
         if (repair['shot_id'] != shot.shot_id or job.project_binding_id != self.project_binding_id
                 or job.provider_id != 'flow_veo' or route.provider_id != 'flow_veo'
                 or job.status != 'SUCCEEDED' or job.dispatch_count != 1
-                or shot.spec_version != parent.spec_version + 1 or shot.spec_version > 3
+                or shot.spec_version != parent.spec_version + 1 or shot.spec_version > 4
                 or shot.shot_id != parent.shot_id or sha256(shot) == sha256(parent)):
             raise OwnerAmbiguityGate('FLOW_REPAIR_PREDECESSOR_UNQUALIFIED')
         return parent
