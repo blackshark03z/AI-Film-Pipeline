@@ -170,7 +170,8 @@ def qualified_catalog_snapshot(records, *, project_id: str,
     authority entry point: ordinary callers reach it only through
     ``freeze``'s runtime-owned capture, never with their own record lists.
     """
-    if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+    if (fingerprint not in contract.QUALIFIED_CATALOG_FINGERPRINTS
+            or fingerprint != contract.catalog_fingerprint(records)):
         raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
     try:
         validated = contract._validate_catalog_rows(records, project_id)
@@ -233,7 +234,8 @@ class QualifiedFlowCatalogCapability:
         """
         records = FlowReferenceRpcSession.catalog(self.session)
         fingerprint = getattr(self.session, 'catalog_fingerprint', None)
-        if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+        if (fingerprint not in contract.QUALIFIED_CATALOG_FINGERPRINTS
+                or fingerprint != contract.catalog_fingerprint(records)):
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
         if self.session.project_id != self._minted_project:
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_PROJECT_MISMATCH')
@@ -360,7 +362,7 @@ class FlowR2VShotRuntime:
         snapshot identity, so tampered snapshots fail closed.
         """
         snapshot = job.pre_dispatch_snapshot
-        if snapshot.get('catalog_fingerprint') != contract.QUALIFIED_BASELINE_FINGERPRINT:
+        if snapshot.get('catalog_fingerprint') not in contract.QUALIFIED_CATALOG_FINGERPRINTS:
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
         if snapshot.get('project_id') != self.project_id:
             raise OwnerAmbiguityGate('FLOW_R2V_BASELINE_PROJECT_MISMATCH')
@@ -737,7 +739,8 @@ class FlowR2VShotRuntime:
         try:
             records = FlowReferenceRpcSession.catalog(session)
             fingerprint = getattr(session, 'catalog_fingerprint', None)
-            if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+            if (fingerprint not in contract.QUALIFIED_CATALOG_FINGERPRINTS
+                    or fingerprint != contract.catalog_fingerprint(records)):
                 raise FlowReferenceRpcDrift('FLOW_R2V_CATALOG_BASELINE_DRIFT')
             if session.project_id != self.project_id:
                 raise FlowReferenceRpcDrift('FLOW_R2V_RENDER_SOURCE_PROJECT_MISMATCH')

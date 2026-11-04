@@ -165,7 +165,7 @@ def json_loads(text):
 
 
 def adopt_existing_reference(store, session, *, account_id: str, media_id: str,
-                             reference_dir) -> tuple:
+                             reference_dir, attestation_dir=None) -> tuple:
     """Adopt one existing project media as a canonical Film reference.
 
     Read-only provider access: one attested readback of the exact media id in
@@ -186,6 +186,13 @@ def adopt_existing_reference(store, session, *, account_id: str, media_id: str,
     directory.mkdir(parents=True, exist_ok=True)
     suffix = '.png' if media.evidence['mime_type'] == 'image/png' else '.jpg'
     local_path = directory / (media.evidence['sha256'] + suffix)
+    asset_id = 'asset_' + sha256({'origin': 'reference',
+        'provider': 'flow_veo', 'project': session.project_id,
+        'media_id': media_id, 'sha256': media.evidence['sha256']})
+    try:
+        local_path = Path(store.read_reference_asset(asset_id).uri_or_path)
+    except KeyError:
+        pass
     if local_path.exists():
         if local_path.read_bytes() != media.data:
             raise OwnerAmbiguityGate('REFERENCE_ADOPTION_BYTES_CONFLICT')
@@ -194,9 +201,7 @@ def adopt_existing_reference(store, session, *, account_id: str, media_id: str,
             stream.write(media.data)
             stream.flush()
             os.fsync(stream.fileno())
-    asset = Asset(asset_id='asset_' + sha256({'origin': 'reference',
-                      'provider': 'flow_veo', 'project': session.project_id,
-                      'media_id': media_id, 'sha256': media.evidence['sha256']}),
+    asset = Asset(asset_id=asset_id,
         origin='reference', asset_type='image', uri_or_path=str(local_path),
         sha256=media.evidence['sha256'], mime_type=media.evidence['mime_type'],
         width=media.evidence['width'], height=media.evidence['height'],
@@ -211,7 +216,7 @@ def adopt_existing_reference(store, session, *, account_id: str, media_id: str,
         provider_media_sha256=media.evidence['sha256'])
     attestation = reference_attestation(asset, receipt, media,
         project_id=session.project_id, media_id=media_id)
-    evidence_dir = directory / 'attestation'
+    evidence_dir = Path(attestation_dir) if attestation_dir is not None else directory / 'attestation'
     evidence_dir.mkdir(parents=True, exist_ok=True)
     resource_path = evidence_dir / (media.evidence['sha256'] + '.jpg')
     if resource_path.exists():

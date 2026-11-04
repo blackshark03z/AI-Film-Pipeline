@@ -140,6 +140,7 @@ def prepare_inputs(session, records, *, media_id, prompt, profile=DEFAULT_NATIVE
         page.locator('button.add-menu-trigger').click()
         image = page.locator('img[src="https://flow.google.com' + path + '=s1600-rw"]')
         option = page.locator('button.asset-item').filter(has=image)
+        option.first.wait_for(state='visible', timeout=10000)
         if option.count() != 1:
             raise OwnerAmbiguityGate('UI_REFERENCE_OPTION_NOT_UNIQUE')
         option.click()

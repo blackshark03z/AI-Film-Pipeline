@@ -48,8 +48,11 @@ def parse_media_resource(payload, *, media_id, project_id, kind):
     _uuid(project_id, 'PROJECT_ID_INVALID')
     if kind not in {'image', 'video'}:
         raise ContractError('MEDIA_KIND_INVALID')
+    from .flow_rpc_contract import uploaded_image_record, materialized_video_record
     if (not isinstance(payload, list) or len(payload) != (7 if kind == 'image' else 8)
-            or payload[0] != media_id or payload[1] != project_id or payload[3] != 'CAE'):
+            or payload[0] != media_id or payload[1] != project_id
+            or (payload[3] != 'CAE' and not (kind == 'image' and uploaded_image_record(payload))
+                and not (kind == 'video' and materialized_video_record(payload)))):
         raise ContractError('MEDIA_RESPONSE_IDENTITY_MISMATCH')
     try:
         size = payload[5][13]

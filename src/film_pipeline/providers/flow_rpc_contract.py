@@ -34,6 +34,8 @@ QUALIFIED_VEO_3_1_MODELS = {
 QUALIFIED_BASELINE_FINGERPRINT = (
     "78ca7a1c3048b2c86802981696ca7e196752a661a027d3f11b8b5edece84e049"
 )
+NULL_MEDIA_CATALOG_FINGERPRINT = '9b1ed58ef570dbd3a9842e34ce440ef0f6e74d08fc4c9fa6dc7418667d3dc788'
+QUALIFIED_CATALOG_FINGERPRINTS = {QUALIFIED_BASELINE_FINGERPRINT, NULL_MEDIA_CATALOG_FINGERPRINT}
 RPC_UPLOAD = "maseQ"
 RPC_VIDEO = "MZZa6b"
 RPC_CATALOG = "Zzl0ze"
@@ -355,6 +357,48 @@ def catalog_records_v2026_10_01(text: str, project_id: str) -> list[list[Any]]:
     return _validate_catalog_rows(payload[2], project_id)
 
 
+def materialized_video_record(node):
+    """Nullable status is not readiness; recognize only the observed full video shape.
+
+    Catalog thumbnails do not prove downloadable bytes. as29s still has to
+    resolve the exact ID/project to an independently verified video resource.
+    """
+    try:
+        return (isinstance(node, list) and len(node) == 8 and node[3] is None
+                and isinstance(node[5], list) and len(node[5]) == 14
+                and type(node[5][13]) is int and 0 < node[5][13] <= 256 * 1024 * 1024
+                and isinstance(node[7], list) and len(node[7]) == 6
+                and isinstance(node[7][0], list) and len(node[7][0]) == 17
+                and node[7][0][12] in QUALIFIED_VEO_3_1_MODELS
+                and isinstance(node[7][0][7], str) and bool(node[7][0][7])
+                and isinstance(node[7][0][8], str) and node[7][0][8].startswith('https://')
+                and node[7][2] == [node[0]] and node[7][3:5] == [None, None])
+    except (IndexError, TypeError):
+        return False
+
+
+def catalog_fingerprint(records):
+    return (NULL_MEDIA_CATALOG_FINGERPRINT if any(row[3] is None for row in records)
+            else QUALIFIED_BASELINE_FINGERPRINT)
+
+
+def uploaded_image_record(node):
+    """2026-11-04 uploaded images have null status, unlike generated videos.
+
+    This recognizes the observed upload metadata, not media readiness. Exact
+    resource readback and source-byte comparison still gate reference use.
+    """
+    try:
+        return (isinstance(node, list) and len(node) == 7 and node[3] is None
+                and isinstance(node[2], str) and UUID_RE.fullmatch(node[2]) is not None
+                and isinstance(node[5], list) and len(node[5]) == 14
+                and type(node[5][9]) is int and node[5][9] == 1
+                and node[6][1][6] in {'image/jpeg', 'image/png', 'image/webp'}
+                and isinstance(node[6][2], list) and len(node[6][2]) == 2)
+    except (IndexError, TypeError):
+        return False
+
+
 def _validate_catalog_rows(records, project_id):
     project = _uuid(project_id, "PROJECT_ID_INVALID").lower()
     ids: set[str] = set()
@@ -366,7 +410,8 @@ def _validate_catalog_rows(records, project_id):
         identity = _uuid(node[0], "CATALOG_RECORD_ID_INVALID").lower()
         if not isinstance(node[1], str) or node[1].lower() != project:
             raise ContractError("CATALOG_RECORD_PROJECT_MISMATCH")
-        if not isinstance(node[3], str):
+        if (not isinstance(node[3], str) and not uploaded_image_record(node)
+                and not materialized_video_record(node)):
             raise ContractError("CATALOG_RECORD_STATUS_INVALID")
         if identity in ids:
             raise ContractError("CATALOG_RECORD_IDENTITY_COLLISION")
@@ -517,7 +562,7 @@ def match_r2v_output_v2026_10_01(
         raise ContractError("OUTPUT_REFERENCE_NOT_DISTINCT")
     if len(row) != 8:
         raise ContractError("OUTPUT_VIDEO_SHAPE_UNQUALIFIED")
-    if row[3] != "CAE":
+    if row[3] != "CAE" and not materialized_video_record(row):
         raise ContractError("OUTPUT_STATUS_UNQUALIFIED")
 
     try:
@@ -581,7 +626,7 @@ def validate_catalog_baseline(meta, records, project_id):
     fingerprint = hashlib.sha256(json.dumps(shape, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     if fingerprint != QUALIFIED_BASELINE_FINGERPRINT:
         raise ContractError("CATALOG_BASELINE_DRIFT")
-    return fingerprint
+    return catalog_fingerprint(records)
 
 
 def sanitize_session(meta: dict[str, Any], project_id: str, *, contract_version: str = CONTRACT_VERSION) -> dict[str, Any]:
