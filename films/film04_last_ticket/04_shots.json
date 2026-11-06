@@ -1,0 +1,917 @@
+{
+  "generations": [
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "coverage": "MASTER",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC01_g1",
+      "end_state": "SC01_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC01_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA stands behind the counter, her hand on the shutter cord"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "she pulls the shutter halfway down"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "she glances at the wall clock reading 10:31"
+          }
+        ],
+        "once_actions": [
+          "pulls the shutter halfway down"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "routine, unhurried closing",
+            "visible_cues": [
+              "steady hands",
+              "a glance at the clock"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anxiety"
+          }
+        ]
+      },
+      "sfx": [
+        "shutter rolling down"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole office"
+      }
+    },
+    {
+      "generation_id": "SC01_g2",
+      "scene_id": "SC01",
+      "coverage": "OTS",
+      "subject": "THEO",
+      "foreground": "MARA",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC01_g2",
+      "end_state": "SC01_end",
+      "previous_generation_id": "SC01_g1",
+      "choreography": {
+        "generation_id": "SC01_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "THEO pushes through the glass door out of the rain"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 5.0,
+            "description": "THEO crosses to the window with the jar and speaks"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "he waits, breathing hard"
+          }
+        ],
+        "once_actions": [
+          "speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "urgent plea",
+            "visible_cues": [
+              "wet hair",
+              "breathing hard",
+              "eyes on MARA"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [
+        "door opening"
+      ],
+      "dialogue": [
+        15
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over MARA's shoulder onto THEO at the window"
+      }
+    },
+    {
+      "generation_id": "SC02_g1",
+      "scene_id": "SC02",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC02_g1",
+      "end_state": "SC02_g2",
+      "previous_generation_id": "SC01_g2",
+      "choreography": {
+        "generation_id": "SC02_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA looks at the clock, then at him over her glasses"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "she speaks without lifting the shutter"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "she holds a level look"
+          }
+        ],
+        "once_actions": [
+          "speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "firm, not unkind",
+            "visible_cues": [
+              "level gaze over her glasses",
+              "mouth set"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "contempt"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        22
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "single on MARA"
+      }
+    },
+    {
+      "generation_id": "SC02_g2",
+      "scene_id": "SC02",
+      "coverage": "SINGLE",
+      "subject": "THEO",
+      "foreground": "",
+      "visible": [
+        "THEO"
+      ],
+      "start_state": "SC02_g2",
+      "end_state": "SC02_end",
+      "previous_generation_id": "SC02_g1",
+      "choreography": {
+        "generation_id": "SC02_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "THEO glances at the platform door behind him, then back at the window"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "he speaks, the jar held against his chest"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "he swallows and waits for an answer"
+          }
+        ],
+        "once_actions": [
+          "speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "pleading, controlled",
+            "visible_cues": [
+              "glance over his shoulder",
+              "jar held tight"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        27
+      ],
+      "design_refs": [
+        "THEO_look@1",
+        "THEO_costume@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "close single on THEO"
+      }
+    },
+    {
+      "generation_id": "SC03_g1",
+      "scene_id": "SC03",
+      "coverage": "MASTER",
+      "subject": "THEO",
+      "foreground": "",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC03_g1",
+      "end_state": "SC03_g2",
+      "previous_generation_id": "SC02_g2",
+      "choreography": {
+        "generation_id": "SC03_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "THEO stands at the window, the jar held to his chest"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "he sets the jar on the counter and speaks, hands flat"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "MARA stays still behind the counter"
+          }
+        ],
+        "once_actions": [
+          "sets the jar on the counter"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "tired honesty",
+            "visible_cues": [
+              "shoulders down"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [
+        "glass jar set on wood"
+      ],
+      "dialogue": [
+        34
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole office"
+      }
+    },
+    {
+      "generation_id": "SC03_g2",
+      "scene_id": "SC03",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC03_g2",
+      "end_state": "SC03_end",
+      "previous_generation_id": "SC03_g1",
+      "choreography": {
+        "generation_id": "SC03_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA looks down at the jar of coins"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "she looks up at the clock and speaks"
+          },
+          {
+            "kind": "REACTION",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "she looks back at THEO and weighs it"
+          }
+        ],
+        "once_actions": [
+          "looks up at the clock"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "weighing a decision",
+            "visible_cues": [
+              "eyes from the jar to the clock to him",
+              "jaw tight then softening"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "contempt"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        39
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "close single on MARA"
+      }
+    },
+    {
+      "generation_id": "SC04_g1",
+      "scene_id": "SC04",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC04_g1",
+      "end_state": "SC04_g2",
+      "previous_generation_id": "SC03_g2",
+      "choreography": {
+        "generation_id": "SC04_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA looks at THEO, then past him"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 4.0,
+            "description": "she takes off her glasses and lets them hang on their chain"
+          },
+          {
+            "kind": "REACTION",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "her eyes go to the suitcase behind her, then back to THEO"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "she holds still, decided"
+          }
+        ],
+        "once_actions": [
+          "takes off her glasses"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "quiet decision",
+            "visible_cues": [
+              "glasses off",
+              "a glance back at the suitcase",
+              "a small breath out"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "close single on MARA"
+      }
+    },
+    {
+      "generation_id": "SC04_g2",
+      "scene_id": "SC04",
+      "coverage": "TWO_SHOT",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC04_g2",
+      "end_state": "SC04_end",
+      "previous_generation_id": "SC04_g1",
+      "choreography": {
+        "generation_id": "SC04_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA eyes the jar"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 4.0,
+            "description": "she pushes the shutter up and speaks"
+          },
+          {
+            "kind": "CONSEQUENCE",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "THEO tips the jar; the coins pour into the tray"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "the coins settle"
+          }
+        ],
+        "once_actions": [
+          "pushes the shutter up"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "brisk kindness",
+            "visible_cues": [
+              "a nod toward the counter"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "pity"
+          }
+        ]
+      },
+      "sfx": [
+        "shutter rolling up"
+      ],
+      "dialogue": [
+        48
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1",
+        "prop_coins@1"
+      ],
+      "camera": {
+        "size": "MEDIUM",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "two-shot across the counter"
+      }
+    },
+    {
+      "generation_id": "SC05_g1",
+      "scene_id": "SC05",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC05_g1",
+      "end_state": "SC05_g2",
+      "previous_generation_id": "SC04_g2",
+      "choreography": {
+        "generation_id": "SC05_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA sorts the coins into small stacks with quick fingers"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "she counts the coins aloud and speaks"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "she squares the last stack and takes the ticket"
+          }
+        ],
+        "once_actions": [
+          "counts the coins"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "practised focus",
+            "visible_cues": [
+              "quick sure fingers",
+              "lips moving as she counts"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "worry"
+          }
+        ]
+      },
+      "sfx": [
+        "coins clinking"
+      ],
+      "dialogue": [
+        57
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1",
+        "prop_coins@1",
+        "prop_ticket@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "single on MARA at the counter"
+      }
+    },
+    {
+      "generation_id": "SC05_g2",
+      "scene_id": "SC05",
+      "coverage": "OTS",
+      "subject": "MARA",
+      "foreground": "THEO",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC05_g2",
+      "end_state": "SC05_end",
+      "previous_generation_id": "SC05_g1",
+      "choreography": {
+        "generation_id": "SC05_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA lifts the date stamp over the ticket"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 4.0,
+            "description": "she stamps the ticket and lays it on the counter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 4.0,
+            "end_s": 7.0,
+            "description": "THEO takes it and speaks"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 7.0,
+            "end_s": 8.0,
+            "description": "he holds it"
+          }
+        ],
+        "once_actions": [
+          "stamps the ticket"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "relief",
+            "visible_cues": [
+              "eyes on the ticket"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "joy"
+          }
+        ]
+      },
+      "sfx": [
+        "stamp thump"
+      ],
+      "dialogue": [
+        62
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1",
+        "prop_coins@1",
+        "prop_ticket@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over THEO's shoulder onto MARA"
+      }
+    },
+    {
+      "generation_id": "SC06_g1",
+      "scene_id": "SC06",
+      "coverage": "MASTER",
+      "subject": "THEO",
+      "foreground": "",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC06_g1",
+      "end_state": "SC06_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC06_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "the headlights of the last train sweep the wet platform"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "MARA walks out of the office behind THEO, the suitcase at her side"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "THEO turns and speaks"
+          }
+        ],
+        "once_actions": [
+          "turns and speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "surprise",
+            "visible_cues": [
+              "head turning",
+              "eyebrows lifting"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [
+        "train approaching"
+      ],
+      "dialogue": [
+        71
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_platform_night@1",
+        "prop_ticket@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole platform"
+      }
+    },
+    {
+      "generation_id": "SC06_g2",
+      "scene_id": "SC06",
+      "coverage": "TWO_SHOT",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC06_g2",
+      "end_state": "SC06_end",
+      "previous_generation_id": "SC06_g1",
+      "choreography": {
+        "generation_id": "SC06_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "THEO and MARA stand side by side as the train doors slide open"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "MARA speaks, eyes on the train"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "the train light falls across both of them"
+          }
+        ],
+        "once_actions": [
+          "speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "quiet contentment",
+            "visible_cues": [
+              "eyes on the train",
+              "a small smile"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "sadness"
+          }
+        ]
+      },
+      "sfx": [
+        "train doors sliding open"
+      ],
+      "dialogue": [
+        76
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_platform_night@1",
+        "prop_ticket@1"
+      ],
+      "camera": {
+        "size": "MEDIUM",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "two-shot side by side facing the train"
+      }
+    }
+  ]
+}

@@ -1,0 +1,834 @@
+{
+  "feasibility": {
+    "max_speakers": 2,
+    "max_in_frame": 3,
+    "max_dialogue_syllables": 28,
+    "scene_duration_s": 16.0,
+    "min_silence_s": 3.0,
+    "syllables_per_second": 2.5
+  },
+  "preflight": {
+    "max_prompt_words": 215,
+    "timing": {
+      "duration_s": 8.0,
+      "max_shots": 1,
+      "min_shot_s": 2.0,
+      "syllables_per_second": 2.5,
+      "establish_s": 1.5,
+      "reaction_s": 3.0
+    },
+    "feasibility": {
+      "max_speakers": 2,
+      "max_in_frame": 3,
+      "max_dialogue_syllables": 28,
+      "scene_duration_s": 16.0,
+      "min_silence_s": 3.0,
+      "syllables_per_second": 2.5
+    }
+  },
+  "characters": {
+    "MARA": {
+      "look": {
+        "look_id": "mara_cardigan",
+        "character": "MARA",
+        "text": "woman in her sixties, grey hair in a low bun, round glasses on a chain, mustard cardigan",
+        "invariants": [
+          "grey hair in a low bun",
+          "round glasses on a chain",
+          "mustard cardigan"
+        ],
+        "approved": true
+      },
+      "video_text": "woman in her sixties, grey hair in a low bun, round glasses on a chain, mustard cardigan",
+      "voice": "warm dry low female voice"
+    },
+    "THEO": {
+      "look": {
+        "look_id": "theo_rain_jacket",
+        "character": "THEO",
+        "text": "young man, early twenties, short dark wet hair, olive green rain jacket, grey backpack",
+        "invariants": [
+          "short dark wet hair",
+          "olive green rain jacket",
+          "grey backpack"
+        ],
+        "approved": true
+      },
+      "video_text": "young man, early twenties, short dark wet hair, olive green rain jacket, grey backpack",
+      "voice": "breathless young male voice"
+    }
+  },
+  "locations": {
+    "ticket_office_night": {
+      "look": {
+        "look_id": "ticket_office_night",
+        "location": "HOLLOWAY STATION TICKET OFFICE",
+        "text": "Ticket office at night: wooden counter with a felt coin tray, shuttered window on the right, wall clock, glass door on the left, suitcase behind the counter",
+        "invariants": [
+          "wooden counter with a brass-framed ticket window",
+          "roll-down shutter above the window",
+          "round wall clock",
+          "green-shaded desk lamp",
+          "glass entrance door on the left",
+          "worn brown suitcase behind the counter"
+        ],
+        "interior": true,
+        "time_of_day": "NIGHT",
+        "weather_outside": "light rain",
+        "environment_rules": [
+          "rain only at the glass door"
+        ],
+        "approved": true
+      },
+      "room_tone": "rain on glass"
+    },
+    "platform_night": {
+      "look": {
+        "look_id": "platform_night",
+        "location": "HOLLOWAY STATION PLATFORM",
+        "text": "Station platform at night in light rain: one lamp post, a wooden bench, a timetable board, wet rails, the ticket office door on the left",
+        "invariants": [
+          "single lamp post",
+          "painted wooden bench",
+          "timetable board",
+          "wet rails",
+          "ticket office door on the left"
+        ],
+        "interior": false,
+        "time_of_day": "NIGHT",
+        "weather_outside": "light rain",
+        "environment_rules": [
+          "light rain on the platform"
+        ],
+        "approved": true
+      },
+      "room_tone": "light rain, distant train"
+    }
+  },
+  "scenes": {
+    "SC01": {
+      "location": "ticket_office_night",
+      "axis": {
+        "scene_id": "SC01",
+        "axis_pair": [
+          "THEO",
+          "MARA"
+        ],
+        "sides": {
+          "THEO": "LEFT",
+          "MARA": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC01",
+        "initial": [
+          "MARA"
+        ],
+        "events": [
+          {
+            "generation_index": 1,
+            "character": "THEO",
+            "kind": "ENTER"
+          }
+        ]
+      },
+      "story_time": {
+        "scene_id": "SC01",
+        "story_order": 1.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_RIGHT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "HIGH",
+        "motivation": "a green-shaded desk lamp on the counter and cold light from the rain-wet door",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "green-shaded desk lamp on the counter"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "glass door on the left, cold night"
+          }
+        ]
+      }
+    },
+    "SC02": {
+      "location": "ticket_office_night",
+      "axis": {
+        "scene_id": "SC02",
+        "axis_pair": [
+          "THEO",
+          "MARA"
+        ],
+        "sides": {
+          "THEO": "LEFT",
+          "MARA": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC02",
+        "initial": [
+          "MARA",
+          "THEO"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC02",
+        "story_order": 2.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_RIGHT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "HIGH",
+        "motivation": "a green-shaded desk lamp on the counter and cold light from the rain-wet door",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "green-shaded desk lamp on the counter"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "glass door on the left, cold night"
+          }
+        ]
+      }
+    },
+    "SC03": {
+      "location": "ticket_office_night",
+      "axis": {
+        "scene_id": "SC03",
+        "axis_pair": [
+          "THEO",
+          "MARA"
+        ],
+        "sides": {
+          "THEO": "LEFT",
+          "MARA": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC03",
+        "initial": [
+          "MARA",
+          "THEO"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC03",
+        "story_order": 3.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_RIGHT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "HIGH",
+        "motivation": "a green-shaded desk lamp on the counter and cold light from the rain-wet door",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "green-shaded desk lamp on the counter"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "glass door on the left, cold night"
+          }
+        ]
+      }
+    },
+    "SC04": {
+      "location": "ticket_office_night",
+      "axis": {
+        "scene_id": "SC04",
+        "axis_pair": [
+          "THEO",
+          "MARA"
+        ],
+        "sides": {
+          "THEO": "LEFT",
+          "MARA": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC04",
+        "initial": [
+          "MARA",
+          "THEO"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC04",
+        "story_order": 4.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_RIGHT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "HIGH",
+        "motivation": "a green-shaded desk lamp on the counter and cold light from the rain-wet door",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "green-shaded desk lamp on the counter"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "glass door on the left, cold night"
+          }
+        ]
+      }
+    },
+    "SC05": {
+      "location": "ticket_office_night",
+      "axis": {
+        "scene_id": "SC05",
+        "axis_pair": [
+          "THEO",
+          "MARA"
+        ],
+        "sides": {
+          "THEO": "LEFT",
+          "MARA": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC05",
+        "initial": [
+          "MARA",
+          "THEO"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC05",
+        "story_order": 5.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_RIGHT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "HIGH",
+        "motivation": "a green-shaded desk lamp on the counter and cold light from the rain-wet door",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "green-shaded desk lamp on the counter"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "glass door on the left, cold night"
+          }
+        ]
+      }
+    },
+    "SC06": {
+      "location": "platform_night",
+      "axis": {
+        "scene_id": "SC06",
+        "axis_pair": [
+          "THEO",
+          "MARA"
+        ],
+        "sides": {
+          "THEO": "LEFT",
+          "MARA": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC06",
+        "initial": [
+          "MARA",
+          "THEO"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC06",
+        "story_order": 6.0,
+        "transition_in": "ELLIPSIS",
+        "marker": "context card \"10:50 p.m.\"; platform",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "TOP",
+        "quality": "HARD",
+        "colour_temp_k": 4000,
+        "contrast": "HIGH",
+        "motivation": "a single lamp post over the platform and the approaching train's headlights",
+        "practicals": [
+          {
+            "kind": "STREET",
+            "note": "single lamp post"
+          },
+          {
+            "kind": "OTHER",
+            "note": "train headlights sweeping the platform"
+          }
+        ]
+      }
+    }
+  },
+  "states": {
+    "SC01_g1": {
+      "positions": {
+        "MARA": "behind the counter, frame-right"
+      },
+      "props": {
+        "the shutter:": "up, window open"
+      },
+      "looks": {
+        "MARA": "mara_cardigan"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC01_g2": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "outside the glass door, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC01_end": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down",
+        "the jar:": "in THEO's hands"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC02_g1": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down",
+        "the jar:": "in THEO's hands"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC02_g2": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down",
+        "the jar:": "in THEO's hands"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC02_end": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down",
+        "the jar:": "in THEO's hands"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC03_g1": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down",
+        "the jar:": "in THEO's hands"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC03_g2": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down",
+        "the jar:": "on the counter, full of coins"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC03_end": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down",
+        "the jar:": "on the counter, full of coins"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC04_g1": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down",
+        "the jar:": "on the counter, full of coins"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC04_g2": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "halfway down",
+        "the jar:": "on the counter, full of coins"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC04_end": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "up",
+        "the jar:": "empty",
+        "the coins:": "in a heap in the tray"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC05_g1": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "up",
+        "the jar:": "empty",
+        "the coins:": "in a heap in the tray"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC05_g2": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "up",
+        "the jar:": "empty",
+        "the coins:": "in stacks in the tray",
+        "the ticket:": "blank, in MARA's hand"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC05_end": {
+      "positions": {
+        "MARA": "behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "up",
+        "the jar:": "empty",
+        "the coins:": "in stacks in the tray",
+        "the ticket:": "in THEO's hand"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC06_g1": {
+      "positions": {
+        "THEO": "on the platform, frame-left",
+        "MARA": "at the ticket office door, frame-right"
+      },
+      "props": {
+        "the ticket:": "in THEO's hand"
+      },
+      "looks": {
+        "THEO": "theo_rain_jacket",
+        "MARA": "mara_cardigan"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC06_g2": {
+      "positions": {
+        "THEO": "on the platform, frame-left",
+        "MARA": "beside him on the platform, frame-right"
+      },
+      "props": {
+        "the ticket:": "in THEO's hand"
+      },
+      "looks": {
+        "THEO": "theo_rain_jacket",
+        "MARA": "mara_cardigan"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    },
+    "SC06_end": {
+      "positions": {
+        "THEO": "on the platform, frame-left",
+        "MARA": "beside him on the platform, frame-right"
+      },
+      "props": {
+        "the ticket:": "in THEO's hand"
+      },
+      "looks": {
+        "THEO": "theo_rain_jacket",
+        "MARA": "mara_cardigan"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": ""
+    }
+  },
+  "still_templates": {
+    "framing": {
+      "MASTER": "wide shot of the whole room",
+      "OTS": "medium over-the-shoulder shot",
+      "SINGLE": "medium close-up",
+      "TWO_SHOT": "medium two-shot of both people side by side"
+    },
+    "character": "Photoreal character reference portrait, 16:9, plain warm grey studio backdrop, head and shoulders, front view, neutral expression, soft even light: {text}. No text, no logos.",
+    "plate": "Photoreal empty set plate, 16:9, eye-level wide view, nobody in the room: {text}. No people, no text, no logos."
+  },
+  "accepted_overlong": {},
+  "designs": {
+    "MARA_look": {
+      "kind": "look",
+      "version": 1,
+      "owner": "MARA",
+      "note": "locked CharacterLook text"
+    },
+    "MARA_costume": {
+      "kind": "costume",
+      "version": 1,
+      "owner": "MARA",
+      "note": "mustard cardigan over a white blouse"
+    },
+    "THEO_look": {
+      "kind": "look",
+      "version": 1,
+      "owner": "THEO",
+      "note": "locked CharacterLook text"
+    },
+    "THEO_costume": {
+      "kind": "costume",
+      "version": 1,
+      "owner": "THEO",
+      "note": "olive green rain jacket, grey backpack"
+    },
+    "MARA_hair": {
+      "kind": "hair_makeup",
+      "version": 1,
+      "owner": "MARA",
+      "note": "grey hair in a low bun"
+    },
+    "loc_ticket_office_night": {
+      "kind": "location",
+      "version": 1,
+      "owner": "ticket_office_night"
+    },
+    "loc_platform_night": {
+      "kind": "location",
+      "version": 1,
+      "owner": "platform_night"
+    },
+    "prop_jar": {
+      "kind": "prop",
+      "version": 1,
+      "prop": "the jar"
+    },
+    "prop_ticket": {
+      "kind": "prop",
+      "version": 1,
+      "prop": "the ticket"
+    },
+    "prop_coins": {
+      "kind": "prop",
+      "version": 1,
+      "prop": "the coins"
+    },
+    "prop_shutter": {
+      "kind": "prop",
+      "version": 1,
+      "prop": "the shutter"
+    }
+  },
+  "rights": [
+    {
+      "subject": "MARA",
+      "kind": "character",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional character, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "THEO",
+      "kind": "character",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional character, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "ticket_office_night",
+      "kind": "location",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional set, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "platform_night",
+      "kind": "location",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional set, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "none (room tone and SFX are generated)",
+      "kind": "music",
+      "status": "original",
+      "evidence": "films/film04_last_ticket has no music stage",
+      "note": "no music track in the film"
+    },
+    {
+      "subject": "script.fountain",
+      "kind": "source",
+      "status": "pending",
+      "evidence": "",
+      "note": "original script, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "none (no real person's likeness)",
+      "kind": "likeness",
+      "status": "pending",
+      "evidence": "",
+      "note": "faces are generated, not modelled on a real person; Owner to confirm"
+    }
+  ],
+  "risk_fallbacks": {
+    "SC01_g1": "if the cord pull does not render, reshoot as an insert on the shutter already halfway down; MARA's hand stays out of frame",
+    "SC01_g2": "if the door push does not render, start with THEO already inside and the door closing at the frame edge",
+    "SC04_g2": "if the shutter push does not render, show the shutter already raised; the push happens off-screen",
+    "SC05_g2": "the ticket lies on the counter between them and THEO picks it up himself; no hand-to-hand pass"
+  }
+}

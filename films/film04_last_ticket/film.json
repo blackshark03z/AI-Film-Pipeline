@@ -1,0 +1,22 @@
+{
+  "film_id": "film04_last_ticket",
+  "title": "Last Ticket",
+  "profile": "drama",
+  "language": "en",
+  "aspect": "16:9",
+  "fps": 24,
+  "resolution": "1280x720",
+  "generation_s": 8,
+  "budget": {
+    "credits_estimate": null,
+    "cap_factor": 1.5
+  },
+  "gates": {
+    "1": "NOT_RUN",
+    "2": "NOT_RUN",
+    "3": "NOT_RUN",
+    "4": "NOT_RUN",
+    "5": "NOT_RUN",
+    "6": "NOT_RUN"
+  }
+}

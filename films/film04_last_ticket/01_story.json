@@ -1,0 +1,162 @@
+{
+  "concept": "A ticket clerk on her last shift has to choose between the closing rule she has kept for forty years and a young man with a jar of coins and four minutes to catch the last train.",
+  "theme": "A rule is kept for people; when it stops serving the person in front of you, the kind act is to count the coins.",
+  "genre": "Quiet night drama (short, contained, one station, ten minutes)",
+  "audience": {
+    "who": "General online audience watching short dramas in English; no knowledge of railways needed.",
+    "expectation": "A small human decision they can see coming one beat early and still enjoy, with a warm rather than sentimental payoff."
+  },
+  "premise": "At 10:31 p.m. Mara Voss is closing the Holloway station ticket window for the last time when a drenched young man, Theo Keane, arrives with a jar of coins and asks for one ticket on the 10:50, the last train.",
+  "central_conflict": "Mara wants to close on the minute, as she always has; Theo needs a ticket the platform machine will not sell him, and only the closed window can.",
+  "logline": {
+    "text": "On her last night at the station, ticket clerk Mara Voss must decide whether to reopen her closed window for a young man whose card is declined and whose only money is a jar of coins.",
+    "protagonist": "MARA",
+    "goal": "reopen her closed window for the young man",
+    "obstacle": "the closing rule and a jar of coins the machine will not take"
+  },
+  "structure": [
+    {
+      "id": "ACT1",
+      "name": "Closing",
+      "beats": [
+        {
+          "id": "B1",
+          "function": "SETUP",
+          "scene_ids": [
+            "SC01"
+          ],
+          "summary": "Mara lowers the shutter at 10:31; Theo bursts in with a jar of coins and asks for a ticket to Halden."
+        },
+        {
+          "id": "B2",
+          "function": "INCITING",
+          "scene_ids": [
+            "SC02"
+          ],
+          "summary": "Mara refuses: the window closed at half past ten. Theo answers that the machine only takes cards."
+        }
+      ]
+    },
+    {
+      "id": "ACT2",
+      "name": "The jar",
+      "beats": [
+        {
+          "id": "B3",
+          "function": "ESCALATION",
+          "scene_ids": [
+            "SC03"
+          ],
+          "summary": "Theo sets the jar on the counter: his card is declined, this is all he has. Mara reads the clock: the last train is at ten-fifty."
+        },
+        {
+          "id": "B4",
+          "function": "CRISIS",
+          "scene_ids": [
+            "SC04"
+          ],
+          "summary": "Mara takes off her glasses, glances at the suitcase behind her, and pushes the shutter all the way up."
+        }
+      ]
+    },
+    {
+      "id": "ACT3",
+      "name": "The last train",
+      "beats": [
+        {
+          "id": "B5",
+          "function": "CLIMAX",
+          "scene_ids": [
+            "SC05"
+          ],
+          "summary": "She counts the coins to the exact fare, stamps the ticket and lays it on the counter."
+        },
+        {
+          "id": "B6",
+          "function": "RESOLUTION",
+          "scene_ids": [
+            "SC06"
+          ],
+          "summary": "On the platform Theo sees her suitcase; it is her last shift too, and they board the last train together."
+        }
+      ]
+    }
+  ],
+  "plot": "Mara closes the window (SC01). She refuses the late traveller by the book (SC02). He puts his only money on the counter (SC03). She looks at her own suitcase and reopens the window (SC04). She counts the coins and stamps the ticket (SC05). On the platform her suitcase explains why this was her last shift too (SC06).",
+  "subplots": [],
+  "characters": {
+    "MARA": {
+      "id": "MARA",
+      "name": "Mara Voss",
+      "role": "protagonist",
+      "want": "To close on the minute and leave on the last train, her last shift done by the book.",
+      "need": "To let the person in front of her count for more than the rule.",
+      "flaw": "Forty years of keeping the rule makes her slow to bend it.",
+      "arc_change": "From lowering the shutter to pushing it all the way up.",
+      "change_scene_id": "SC04"
+    },
+    "THEO": {
+      "id": "THEO",
+      "name": "Theo Keane",
+      "role": "supporting",
+      "want": "One ticket to Halden on the last train tonight.",
+      "need": "To ask a person for help instead of a machine.",
+      "flaw": "He arrives with no card that works and no time.",
+      "arc_change": "From pleading at the glass to being served at the counter.",
+      "change_scene_id": "SC05"
+    }
+  },
+  "scenes": {
+    "SC01": {
+      "purpose": "Establish the office, the clock and the closing routine.",
+      "conflict": "Mara is closing; Theo needs the window open.",
+      "outcome": "Theo asks for one ticket to Halden.",
+      "value": "kindness",
+      "shift": "-"
+    },
+    "SC02": {
+      "purpose": "State the rule and the obstacle.",
+      "conflict": "Mara refuses; Theo says the machine takes only cards.",
+      "outcome": "The shutter stays down.",
+      "value": "kindness",
+      "shift": "-"
+    },
+    "SC03": {
+      "purpose": "Show what Theo has and how little time is left.",
+      "conflict": "A jar of coins against a clock at 10:44.",
+      "outcome": "Mara states the train time and says nothing more.",
+      "value": "kindness",
+      "shift": "-"
+    },
+    "SC04": {
+      "purpose": "Turn the film: the decision, wordless until the shutter moves.",
+      "conflict": "Mara weighs the rule against the person and her own departure.",
+      "outcome": "The shutter goes all the way up.",
+      "value": "kindness",
+      "shift": "+"
+    },
+    "SC05": {
+      "purpose": "Pay off the decision with a practical act.",
+      "conflict": "Counting coins takes minutes the train does not have.",
+      "outcome": "The exact fare is counted and the ticket stamped.",
+      "value": "kindness",
+      "shift": "+"
+    },
+    "SC06": {
+      "purpose": "Reveal why the suitcase was there and close the film on the platform.",
+      "conflict": "The train arrives; Theo learns Mara is leaving too.",
+      "outcome": "They board the last train together.",
+      "value": "kindness",
+      "shift": "+"
+    }
+  },
+  "source_note": "Original script written for this film on a common motif only (a clerk bends a rule for a traveller); names, places, events and dialogue are new.",
+  "rewrite_log": [
+    {
+      "version": 1,
+      "date": "2026-11-07",
+      "reason": "First draft, written from DIRECTOR_PLAYBOOK.md only (loop item P8-01); merged two platform headings into one scene to hold the film at six scenes.",
+      "changed": "films/film04_last_ticket/script.fountain"
+    }
+  ]
+}

@@ -1,0 +1,514 @@
+{
+  "vision": {
+    "tone": "Quiet, warm, unhurried: kindness shown by a small practical act, never by a speech.",
+    "references": [
+      "a single lamp-lit counter at night seen at eye level",
+      "a low-key humane drama in warm lamp light and cold rain"
+    ]
+  },
+  "visual_rules": [
+    {
+      "rule": "Eye-level camera, no dutch angles, no handheld shake.",
+      "why": "The turn should come from a person, not from camera tricks."
+    },
+    {
+      "rule": "Keep Theo screen-left (visitor side) and Mara screen-right (behind the counter) in every shot of the office and the platform.",
+      "why": "The distance between them stays readable and closes only when the shutter goes up."
+    },
+    {
+      "rule": "Hold on the reaction after a line lands; do not cut away to the speaker.",
+      "why": "The drama is in how Mara takes Theo's words."
+    },
+    {
+      "rule": "One shot per 8 s generation, one dominant action per shot.",
+      "why": "Matches the generator's reliable unit and keeps comprehension simple."
+    }
+  ],
+  "reveals": [
+    {
+      "fact_id": "mara_is_leaving",
+      "scene_id": "SC04"
+    }
+  ],
+  "coverage_plan": {
+    "B1": [
+      "MASTER",
+      "OTS"
+    ],
+    "B2": [
+      "SINGLE"
+    ],
+    "B3": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B4": [
+      "SINGLE",
+      "TWO_SHOT"
+    ],
+    "B5": [
+      "SINGLE",
+      "OTS"
+    ],
+    "B6": [
+      "MASTER",
+      "TWO_SHOT"
+    ]
+  },
+  "scenes": {
+    "SC01": {
+      "pov": {
+        "whose": "THEO",
+        "audience_knows": [
+          "last_train_1050"
+        ],
+        "characters_know": {
+          "THEO": [
+            "last_train_1050"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "MARA": {
+          "start": 1,
+          "end": 2
+        },
+        "THEO": {
+          "start": 3,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC01_g2",
+            "seconds": 2.0,
+            "why": "hold on Theo's plea before Mara answers"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "opening card, then a hard cut into the office"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the ticket office"
+      }
+    },
+    "SC02": {
+      "pov": {
+        "whose": "MARA",
+        "audience_knows": [
+          "last_train_1050",
+          "window_closed",
+          "machine_cards_only"
+        ],
+        "characters_know": {
+          "THEO": [
+            "last_train_1050"
+          ],
+          "MARA": [
+            "window_closed"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "MARA": {
+          "start": 2,
+          "end": 2
+        },
+        "THEO": {
+          "start": 3,
+          "end": 4
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC02_g1",
+            "seconds": 2.0,
+            "why": "hold on Mara's level look after the refusal"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the ticket office"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the ticket office"
+      }
+    },
+    "SC03": {
+      "pov": {
+        "whose": "THEO",
+        "audience_knows": [
+          "last_train_1050",
+          "window_closed",
+          "machine_cards_only",
+          "coins_only"
+        ],
+        "characters_know": {
+          "THEO": [
+            "coins_only"
+          ],
+          "MARA": [
+            "window_closed",
+            "coins_only"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Mara looks from the jar to the clock",
+          "device": "reaction",
+          "generation_id": "SC03_g2",
+          "fact_id": null
+        }
+      ],
+      "curve": {
+        "MARA": {
+          "start": 2,
+          "end": 3
+        },
+        "THEO": {
+          "start": 4,
+          "end": 4
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC03_g2",
+            "seconds": 3.0,
+            "why": "hold on Mara weighing the jar against the clock"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the ticket office"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the ticket office"
+      }
+    },
+    "SC04": {
+      "pov": {
+        "whose": "MARA",
+        "audience_knows": [
+          "last_train_1050",
+          "coins_only",
+          "mara_is_leaving"
+        ],
+        "characters_know": {
+          "MARA": [
+            "mara_is_leaving",
+            "coins_only"
+          ],
+          "THEO": [
+            "coins_only"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Mara takes off her glasses and glances at the suitcase behind her",
+          "device": "reaction",
+          "generation_id": "SC04_g1",
+          "fact_id": "mara_is_leaving"
+        }
+      ],
+      "curve": {
+        "MARA": {
+          "start": 3,
+          "end": 4
+        },
+        "THEO": {
+          "start": 4,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC04_g1",
+            "seconds": 4.0,
+            "why": "wordless hold on Mara's decision"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the ticket office"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the ticket office"
+      }
+    },
+    "SC05": {
+      "pov": {
+        "whose": "THEO",
+        "audience_knows": [
+          "last_train_1050",
+          "mara_is_leaving"
+        ],
+        "characters_know": {
+          "MARA": [
+            "mara_is_leaving"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "the date stamp comes down on the ticket",
+          "device": "insert",
+          "generation_id": "SC05_g2",
+          "fact_id": null
+        }
+      ],
+      "curve": {
+        "MARA": {
+          "start": 4,
+          "end": 2
+        },
+        "THEO": {
+          "start": 3,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC05_g2",
+            "seconds": 2.0,
+            "why": "hold on the stamped ticket on the counter"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the ticket office"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "card and a change of place: office to platform"
+      }
+    },
+    "SC06": {
+      "pov": {
+        "whose": "THEO",
+        "audience_knows": [
+          "last_train_1050",
+          "mara_is_leaving",
+          "time_jump"
+        ],
+        "characters_know": {
+          "THEO": [
+            "mara_is_leaving"
+          ],
+          "MARA": [
+            "mara_is_leaving"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "MARA": {
+          "start": 2,
+          "end": 1
+        },
+        "THEO": {
+          "start": 2,
+          "end": 1
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC06_g2",
+            "seconds": 3.0,
+            "why": "hold as the train light falls across both of them"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "context card, then a hard cut to the platform"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "end of film, then the credits card"
+      }
+    }
+  },
+  "comprehension": {
+    "intros": [
+      {
+        "character": "THEO",
+        "label": "THEO KEANE",
+        "relation": "a traveller with no ticket",
+        "needed_by": "SC01_g2",
+        "carriers": []
+      },
+      {
+        "character": "MARA",
+        "label": "MARA VOSS",
+        "relation": "the station's ticket clerk",
+        "needed_by": "SC02_g1",
+        "carriers": []
+      }
+    ],
+    "facts": [
+      {
+        "fact_id": "last_train_1050",
+        "text": "the last train leaves at 10:50",
+        "needed_by": "SC01_g1",
+        "carriers": [
+          {
+            "kind": "CARD",
+            "generation_id": "SC01_g1",
+            "detail": ""
+          }
+        ]
+      },
+      {
+        "fact_id": "window_closed",
+        "text": "the ticket window closed at half past ten",
+        "needed_by": "SC02_g2",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC02_g1",
+            "detail": "We closed at half past ten."
+          }
+        ]
+      },
+      {
+        "fact_id": "machine_cards_only",
+        "text": "the platform machine takes only cards",
+        "needed_by": "SC03_g1",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC02_g2",
+            "detail": "The machine only takes cards."
+          }
+        ]
+      },
+      {
+        "fact_id": "coins_only",
+        "text": "Theo's card is declined and a jar of coins is all he has",
+        "needed_by": "SC04_g1",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC03_g1",
+            "detail": "Mine's declined. This is all I have."
+          }
+        ]
+      },
+      {
+        "fact_id": "mara_is_leaving",
+        "text": "Mara is leaving on the last train: this is her last shift",
+        "needed_by": "SC06_g1",
+        "carriers": [
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC04_g1",
+            "detail": "the suitcase behind the counter and her glance at it"
+          },
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC06_g1",
+            "detail": "she walks onto the platform with the suitcase"
+          }
+        ]
+      },
+      {
+        "fact_id": "time_jump",
+        "text": "ten-fifty, on the platform",
+        "needed_by": "SC06_g1",
+        "carriers": [
+          {
+            "kind": "CARD",
+            "generation_id": "SC06_g1",
+            "detail": ""
+          },
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC06_g1",
+            "detail": "the headlights of the train on the wet platform"
+          }
+        ]
+      }
+    ],
+    "tags": [
+      {
+        "character": "THEO",
+        "generation_id": "SC01_g2",
+        "start_s": 0.2,
+        "end_s": 3.2,
+        "anchor_x": null,
+        "anchor_y": null
+      },
+      {
+        "character": "MARA",
+        "generation_id": "SC02_g1",
+        "start_s": 0.2,
+        "end_s": 3.2,
+        "anchor_x": null,
+        "anchor_y": null
+      }
+    ],
+    "cards": [
+      {
+        "card_id": "OPEN_card",
+        "before": "SC01_g1",
+        "lines": [
+          "The last train leaves at 10:50"
+        ],
+        "duration_s": null
+      },
+      {
+        "card_id": "PLATFORM_card",
+        "before": "SC06_g1",
+        "lines": [
+          "10:50 p.m."
+        ],
+        "duration_s": null
+      }
+    ]
+  },
+  "translations": {
+    "LAST TICKET": "VÉ CUỐI CÙNG",
+    "The last train leaves at 10:50": "Chuyến tàu cuối rời ga lúc 10:50",
+    "10:50 p.m.": "10:50 tối",
+    "a traveller with no ticket": "hành khách chưa có vé",
+    "the station's ticket clerk": "nhân viên bán vé của ga",
+    "One ticket to Halden. Please.": "Cho tôi một vé đi Halden. Làm ơn.",
+    "We closed at half past ten.": "Quầy đã đóng lúc mười giờ rưỡi.",
+    "The machine only takes cards.": "Máy chỉ nhận thẻ.",
+    "Mine's declined. This is all I have.": "Thẻ của tôi bị từ chối. Tôi chỉ có thế này.",
+    "Last train's ten-fifty.": "Chuyến cuối mười giờ năm mươi.",
+    "Pour it out. We'll count it.": "Đổ ra đi. Mình đếm.",
+    "Fourteen eighty. Exactly the fare.": "Mười bốn tám mươi. Đúng giá vé.",
+    "Thank you.": "Cảm ơn bà.",
+    "You're coming too?": "Bà cũng đi sao?",
+    "Last train. Last shift.": "Chuyến cuối. Ca cuối.",
+    "A short drama. All characters are fictional.": "Phim ngắn. Mọi nhân vật đều là hư cấu.",
+    "Video, images and voices generated with AI.": "Video, hình ảnh và giọng nói được tạo bằng AI."
+  }
+}
