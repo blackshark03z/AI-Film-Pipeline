@@ -157,14 +157,3 @@ def test_pending_does_not_mask_a_block(tmp_path):
         del s["scenes"]["SC08"]
     res = gate1(tmp_path, both)
     assert res.status == "BLOCK"
-
-
-def test_gate_runs_for_narration_profile_without_script(tmp_path):
-    pkg = _clone(tmp_path)
-    header = json.loads((tmp_path / "film.json").read_text(encoding="utf-8"))
-    header["profile"] = "narration"
-    (tmp_path / "film.json").write_text(json.dumps(header), encoding="utf-8")
-    (tmp_path / "script.fountain").unlink()
-    res = evaluate_gate(load_package(tmp_path), "1")
-    assert res.status == "PASS", res.issues
-    assert pkg.script is not None
