@@ -132,6 +132,12 @@ def main(argv: list[str] | None = None) -> int:
     ct.add_argument("--out", type=Path, help="output mp4 (default <film>/media/cut/rough_cut.mp4)")
     ct.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
     ct.add_argument("--accepted-only", action="store_true", help="a take nobody accepted blocks instead of warning")
+    ct.add_argument("--color", action="store_true", help="apply the colour match and look of color/color.json (film.py grade)")
+    gr = actions.add_parser("grade", help="colour matching: per-scene reference, per-shot gains, before/after deviation; --render writes the matched cut")
+    gr.add_argument("--film", required=True, type=Path)
+    gr.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
+    gr.add_argument("--render", action="store_true", help="also render the cut with the corrections and the look")
+    gr.add_argument("--out", type=Path, help="matched cut (default <film>/media/cut/graded_cut.mp4)")
     lk = actions.add_parser("lock", help="picture lock: status and dirty post/delivery items; --lock freezes the cut")
     lk.add_argument("--film", required=True, type=Path)
     lk.add_argument("--lock", action="store_true", help="freeze the cut (every take accepted, no BLOCK at a cut)")
@@ -273,6 +279,32 @@ def main(argv: list[str] | None = None) -> int:
             dirty = lk_mod.dirty_items(pkg) if status["locked"] else {"dirty": [], "clean": []}
             _emit({"status": status, **dirty})
             return 0 if status["fresh"] and not dirty["dirty"] else 1
+        if args.action == "grade":
+            from film_pipeline.production import color as col_mod
+            from film_pipeline.production import edit as ed_mod
+            from film_pipeline.production.mix import stamp_post_item
+            try:
+                report = col_mod.match(pkg, clips_dir=args.clips)
+            except ValueError as exc:
+                _emit({"error": str(exc)})
+                return 1
+            col_mod.write_report(pkg, report)
+            stamp_post_item(pkg, "color", {"report": "color/color.json", "ok": report["ok"], "summary": report["summary"]})
+            if args.render and report["ok"]:
+                section = pkg.typed.get("edit")
+                if section is None:
+                    _emit({"error": "grade --render needs a valid 05_edit.json"})
+                    return 2
+                try:
+                    rendered = ed_mod.render_cut(pkg, section, args.out or pkg.root / "media" / "cut" / "graded_cut.mp4",
+                                                 clips_dir=args.clips, corrections=col_mod.corrections_of(report),
+                                                 look=report["plan"]["look"] or None)
+                except ValueError as exc:
+                    _emit({"error": str(exc)})
+                    return 1
+                report["render"] = {k: rendered[k] for k in ("output", "output_sha256", "total_s", "path")}
+            _emit(report)
+            return 0 if report["ok"] else 1
         if args.action == "sounds":
             from film_pipeline.production import sound_rights as sr_mod
             if args.record:
@@ -323,7 +355,15 @@ def main(argv: list[str] | None = None) -> int:
             if args.render:
                 out = args.out or pkg.root / "media" / "cut" / "rough_cut.mp4"
                 try:
-                    _emit(ed_mod.render_cut(pkg, section, out, clips_dir=args.clips, require_accepted=args.accepted_only))
+                    extra = {}
+                    if args.color:
+                        from film_pipeline.production import color as col_mod
+                        found = col_mod.load_report(pkg.root)
+                        if found is None:
+                            raise ValueError("--color needs color/color.json (run film.py grade first)")
+                        extra = {"corrections": col_mod.corrections_of(found), "look": found["plan"]["look"] or None}
+                    _emit(ed_mod.render_cut(pkg, section, out, clips_dir=args.clips, require_accepted=args.accepted_only,
+                                            **extra))
                 except ValueError as exc:
                     _emit({"error": str(exc)})
                     return 1

@@ -112,6 +112,14 @@ Sound rights rule of thumb (`production/sound_rights.py`): every music file in `
 missing source blocks `film.py validate`. `film.py sounds` also prints the cue sheet: per scene IN/HOLD/DUCK/OUT/NONE from
 the emotional curve with the reason, and warnings for planned cues without a `why`. Nothing is downloaded by the tools.
 
+Colour rule of thumb (`production/color.py`, `film.py grade`): shots of one scene should read as one light. `grade` measures
+the mean R/G/B of each used take, picks a per-scene reference (the shot named in `color/color_plan.json` `references`, else the
+per-channel median), and computes channel gains clamped to +-`max_gain` (0.25) so a deliberate light change is never flattened;
+list such shots in `skip`. The report (`color/color.json`) gives per shot the deviation before/after, exposure in stops and the
+white-balance shift, and `OUT_OF_RANGE` warns where the clamp left a shot far from the reference (re-shoot or `skip` it). The
+gains are applied at render (`film.py grade --render`, `cut --render --color`), ahead of the global look (`post.GRADE` or the
+plan's `look`); take files are never changed. The result is the post item `color`, stamped with the picture lock.
+
 Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
 ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly
 where the previous one ended (a scene cut only warns).

@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 42 · PARTIAL 91 · GAP 9 · N/A 26 · total 168
+**Summary:** HAVE 45 · PARTIAL 90 · GAP 7 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -152,9 +152,9 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 120 | Compositing | Not needed unless a shot demands it; watermark/artifact handling manual | N/A | - |
 | 121 | CGI integration | Not needed unless a shot demands it; watermark/artifact handling manual | N/A | - |
 | 122 | Motion graphics | `post.title_card`, `context_card_clip`, `identity_tag_png` | HAVE | - |
-| 123 | Color correction | `post.GRADE` global eq only | PARTIAL | P5-03 |
-| 124 | Color matching | No shot matching | GAP | P5-03 |
-| 125 | Color grading | `post.GRADE` fixed look | PARTIAL | P5-03 |
+| 123 | Color correction | `color.match` per-shot channel gains (exposure + white balance) applied in `edit.render_cut(corrections=)` | HAVE | - |
+| 124 | Color matching | `color.match`: scene reference (plan shot or median), clamped gains, before/after deviation report, `film.py grade` | HAVE | - |
+| 125 | Color grading | `post.GRADE` default look, replaceable per film via `color_plan.json` `look` | HAVE | - |
 | 126 | Reframing | No reframe/stabilise | GAP | P5-04 |
 | 127 | Retiming | No retime tool (and Owner rejects retime as proof) | N/A | - |
 | 128 | Titles & credits | Title + end card in `post.assemble`; no credits builder | PARTIAL | P5-04 |
@@ -177,7 +177,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 140 | Sequence QC | No temporal/sequence QC beyond `sequence.validate_shot_sequence` (plan) | PARTIAL | P6-01 |
 | 141 | Audio QC | Loudness measured; no clipping/silence/sync checks | PARTIAL | P6-01 |
 | 142 | Sync QC | Loudness measured; no clipping/silence/sync checks | PARTIAL | P6-01 |
-| 143 | Color QC | No colour QC | GAP | P5-03 |
+| 143 | Color QC | `color.match` deviation per shot + `OUT_OF_RANGE` WARN; no clipping/banding detector | PARTIAL | P6-01 |
 | 144 | Technical QC | `rough_cut._full_decode`, `editorial.probe_media`; no black/freeze detect | PARTIAL | P6-01 |
 | 145 | Compliance QC | `disclosure.check_release`; no rights/platform compliance | PARTIAL | P5-02 |
 | 146 | Delivery QC | `delivery.verify`, `e2e status --package` | PARTIAL | P6-03 |
