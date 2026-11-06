@@ -35,7 +35,7 @@ Subcommands `new <film_id> --profile drama|narration` (scaffold package with emp
 `status --film DIR` (stages present, gates, counts). Pattern: `tools/film_e2e.py`. Tests: subprocess `new` then
 `validate` on the scaffold → exit 1 with "story missing" style issues, not a crash.
 
-### P0-04 Port film03 declarations into a package — READY
+### P0-04 Port film03 declarations into a package — DONE (dba8082: sections.py typed 02/03/04; 7 parity tests; focused suite 279 passed, 1 skipped)
 Move the data in `tools/drama_film03.py` + `tools/drama_film03_story.py` (looks, locations, axis books, positions,
 prop states, occupancy, story time, shots, choreography, SFX, voices, cards, facts, tags) into
 `films/film03_front_desk/` JSON (03_preprod.json / 04_shots.json / 02_direction.json as fits; extend schema in
@@ -43,7 +43,7 @@ prop states, occupancy, story time, shots, choreography, SFX, voices, cards, fac
 `docs/drama/film03/`.
 Done when `load_package` loads it with zero schema errors.
 
-### P0-05 Generic `plan` stage reproduces film03 — READY (after P0-04)
+### P0-05 Generic `plan` stage reproduces film03 — READY
 `production/plan.py` + `film.py plan --film DIR --out DIR`: generalise what `tools/drama_film03.py` does (feasibility,
 preflight per generation, handoffs, compile prompts via `drama.prompt.compile_scene_prompt`, still prompts,
 schematic storyboard, gate3 json) driven only by package data.
