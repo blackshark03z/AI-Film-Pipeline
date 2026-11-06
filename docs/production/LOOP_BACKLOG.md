@@ -11,7 +11,7 @@ Category IDs refer to the Owner's 168-item list; tick them in `CATEGORY_COVERAGE
 
 ## P0 — Foundation
 
-### P0-01 Coverage matrix on this branch — READY
+### P0-01 Coverage matrix on this branch — DONE (3109bf1: 168 rows; HAVE 14 / PARTIAL 79 / GAP 49 / N/A 26; every GAP mapped to a backlog item)
 Create `docs/production/CATEGORY_COVERAGE_168.md`: one row per category 1–168 (keep Owner's numbering/names), columns
 `ID | Category | Responsibility (code path / package field / operator receipt / N/A+reason) | Status (HAVE/PARTIAL/GAP/N/A) | Backlog item`.
 Seed from root `D:/AI FILM MAKER/AI-Film-Pipeline/docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (read-only;
@@ -19,7 +19,7 @@ its B01–B08 = modules now on this branch) and from `src/film_pipeline/drama/*`
 `rough_cut.py`, `delivery.py`, `qc.py`. Map every GAP to a backlog item ID below (or add a new item at the end).
 Done: 168 rows, no row without status, summary counts at top. Docs only, no tests.
 
-### P0-02 Production package schema + loader — READY (after P0-01)
+### P0-02 Production package schema + loader — READY
 New package `src/film_pipeline/production/` with `package.py`: pydantic models for `film.json` (film_id, title,
 profile `drama|narration`, language, aspect, fps, resolution, generation_s=8, budget {credits_estimate, cap_factor=1.5},
 gates {1..6: PASS|BLOCK|OWNER_PENDING|NOT_RUN}), and **stage files as optional sections** `01_story.json` …
