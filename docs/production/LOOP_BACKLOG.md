@@ -175,7 +175,7 @@ Lock = hash of EDL + source take hashes. Any change after lock marks dependent p
 
 ## P5 — Sound & finishing (107–130)
 
-### P5-01 Audio stems + mix — DONE (pending hash)
+### P5-01 Audio stems + mix — DONE (d07e898; mix.py, film.py mix: 4 stems, sidechain ducking depth measured, -14 LUFS/-1 dBTP, 9 tests; sfx/music assets recorded with sha256 for P5-02)
 Separate stems: dialogue (from takes), ambience/room tone per location, SFX cues (from 04_shots `sfx`), music.
 Mix with ducking under dialogue, J/L crossfades, loudness target −14 LUFS / −1 dBTP (reuse
 `drama.post.normalize_loudness`, `measure_ebur128`). Sources: generated tones/noise beds offline, or CC0 libraries
