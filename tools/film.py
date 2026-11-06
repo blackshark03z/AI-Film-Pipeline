@@ -113,6 +113,14 @@ def main(argv: list[str] | None = None) -> int:
     rv.add_argument("--film", required=True, type=Path)
     rv.add_argument("--ingest", type=Path, help="filled review sheet (or bare TakeQc) JSON")
     rv.add_argument("--clips", type=Path, help="directory holding the take mp4s (enables autoqc warnings)")
+    gn = actions.add_parser("generate", help="send payload + intent receipt for one generation (--dry-run: nothing is sent)")
+    gn.add_argument("--film", required=True, type=Path)
+    gn.add_argument("--gid", required=True, metavar="GENERATION_ID")
+    gn.add_argument("--dry-run", action="store_true")
+    gn.add_argument("--plan-out", type=Path, help="where the plan is (re)written (default <film>/media/plan)")
+    gn.add_argument("--stills", type=Path, help="directory of approved start stills start_<gid>.png")
+    gn.add_argument("--start-token", help="tok:<tail> of the start still uploaded to Flow (live only)")
+    gn.add_argument("--backlog", type=Path, help="file holding the OWNER_GO_LIVE line (default: the loop backlog)")
     rt = actions.add_parser("retake", help="retake/pickup policy over the take log; --pickup GID starts a new shot version")
     rt.add_argument("--film", required=True, type=Path)
     rt.add_argument("--pickup", metavar="GENERATION_ID")
@@ -213,6 +221,18 @@ def main(argv: list[str] | None = None) -> int:
             log = tk_mod.load_log(pkg.root, pkg.header.film_id)
             _emit({"film_id": log.film_id, "takes": [t.model_dump(mode="json") for t in log.takes]})
             return 0
+        if args.action == "generate":
+            from film_pipeline.production.generate import generate
+            try:
+                done = generate(pkg, args.gid, dry_run=args.dry_run, plan_out=args.plan_out, stills_dir=args.stills,
+                                start_token=args.start_token, backlog=args.backlog)
+            except ValueError as exc:
+                _emit({"error": str(exc)})
+                return 2
+            _emit(done)
+            if args.dry_run:
+                return 0
+            return 0 if done["sent"] and done.get("manifest_result") == "PASSED" else 1
         if args.action == "retake":
             from film_pipeline.production import retake as rt_mod
             from film_pipeline.production import takes as tk_mod

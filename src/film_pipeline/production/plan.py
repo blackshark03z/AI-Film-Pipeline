@@ -30,7 +30,7 @@ START_PREFIX = "Starts on the given frame; same room, people and places. "
 
 class _Plan:
     def __init__(self, pkg: FilmPackage, takes_dir: Path | None, reference_root: Path | None,
-                 attestations: Path | None = None) -> None:
+                 attestations: Path | None = None, verified_handoffs: frozenset[str] = frozenset()) -> None:
         missing = [k for k in ("direction", "preprod", "shots") if k not in pkg.typed]
         if missing or pkg.script is None:
             raise PackageError(f"plan needs typed sections {missing or ''} and script.fountain")
@@ -48,6 +48,7 @@ class _Plan:
         self.gen_s = float(pkg.header.generation_s)
         self.by_id = {g.generation_id: g for g in self.shots.generations}
         self.takes_dir = takes_dir
+        self.verified_handoffs = verified_handoffs  # generations whose accepted take verifies their end state
         self.attestations = load_attestations(attestations if attestations is not None
                                               else pkg.root / "handoff_attestations.json")
         self.reference_root = reference_root or pkg.root / "refs"
@@ -96,7 +97,8 @@ class _Plan:
         if decl.previous_generation_id is None:
             return None
         prev = self.by_id[decl.previous_generation_id]
-        verified = end_state_verified(self.takes_dir, prev.generation_id, decl.generation_id, self.attestations)
+        verified = (prev.generation_id in self.verified_handoffs
+                    or end_state_verified(self.takes_dir, prev.generation_id, decl.generation_id, self.attestations))
         return GenerationHandoff(
             previous_generation_id=prev.generation_id, previous_action=self.action_text(prev),
             previous_start=self.state(prev.start_state),
@@ -200,14 +202,15 @@ class PlanResult:
 
 def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | None = None,
                  reference_root: str | Path | None = None, storyboard: bool = True,
-                 approve_storyboard: str | None = None, attestations: str | Path | None = None) -> PlanResult:
+                 approve_storyboard: str | None = None, attestations: str | Path | None = None,
+                 verified_handoffs: frozenset[str] = frozenset()) -> PlanResult:
     """Write all plan artefacts under `out`.
 
     Storyboard frames are rendered and registered PENDING. They count as reviewed only when the caller passes
     `approve_storyboard=<reviewer name>` — the plan never invents an approval.
     """
     p = _Plan(pkg, Path(takes_dir) if takes_dir else None, Path(reference_root) if reference_root else None,
-              Path(attestations) if attestations else None)
+              Path(attestations) if attestations else None, verified_handoffs)
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     feas = check_script(p.script, limits=p.pre.feasibility)

@@ -109,7 +109,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 82 | Rehearsal | No crew/rehearsal on AI route; animatic is the rehearsal analogue | N/A | P2-04 |
 | 83 | Take management | `production/takes.py` take log `takes/index.json`: take id per generation, prompt/start-frame/output hashes, route, model, credits, status from review | HAVE | - |
 | 84 | Script supervision | `drama/qc.py` post-render gating + `sequence` | PARTIAL | P3-02 |
-| 85 | Live monitoring | `tools/drama_flow_ui/flow_send.py` network-bound output capture | PARTIAL | P3-04 |
+| 85 | Live monitoring | `flow_send.py` network-bound output capture; `film.py generate` payload + intent receipt written before any send, take registered after (live path untested until P3-05) | PARTIAL | P3-05 |
 | 86 | Production sound | AI-generated sound; no separate capture. N/A | N/A | - |
 | 87 | Data management | Take log hashes + `<gid>_t<N>` ids; no archive/restore yet | PARTIAL | P6-02 |
 | 88 | Dailies review | `film.py review`: template per new take (shot questions + 16-group QC) and `--ingest` bound to the take's hash | HAVE | - |

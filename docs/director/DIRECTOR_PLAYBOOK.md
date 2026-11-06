@@ -47,6 +47,7 @@ python tools/film.py qc         --record <take_qc.json>   # validate a take QC r
 python tools/film.py takes      --film films/<film_id> --register <gid> --clip <mp4> --prompt <sent prompt.txt> --model <m> --credits <n> [--start-frame <png>]
 python tools/film.py review     --film films/<film_id> [--clips <dir>]    # dailies sheet per new take; autoqc WARNs when models exist
 python tools/film.py review     --film films/<film_id> --ingest <filled.json>   # sets the take ACCEPTED / REJECTED / INCOMPLETE
+python tools/film.py generate   --film films/<film_id> --gid <gid> --dry-run [--stills <dir>] [--start-token tok:<tail>]   # exact send payload + intent receipt, sends nothing
 python tools/film.py retake     --film films/<film_id>    # per-generation decision after rejections; exit 1 while pickups are open
 python tools/film.py retake     --film films/<film_id> --pickup <gid> --reason "<why>" --edits <changes.json>   # shot version N+1
 python tools/film.py plan     --film films/<film_id> --out <dir> --takes <takes_dir> --approve-storyboard "<reviewer>"
@@ -57,6 +58,12 @@ FULL_MOTION < CUT) and reviewer. An `auto:` tool can only WARN on content groups
 cannot pass them; a human PASS needs the group's minimum level (motion/action: the whole clip). Any P0 FAIL rejects the
 take for good; a P1 FAIL rejects until a human waives it with a written reason; an untouched group keeps the take
 INCOMPLETE, never accepted.
+
+Generate rule of thumb (`production/generate.py`): a payload is built from the package as it is now (it re-plans, using
+the storyboard approval recorded in `media/plan` by `film.py plan --approve-storyboard`). It lists blockers: package
+problems for this shot, a chained shot whose previous shot has no ACCEPTED take, a missing start still, and for a real
+send also no start token, no `budget.credits_estimate`, or credits past the cap. A real send (no `--dry-run`) is refused
+unless the backlog header says `OWNER_GO_LIVE: YES` and nothing blocks; the receipt in `takes/intents/` is written first.
 
 Retake rule of thumb (`production/retake.py`): when you reject a take, name the cause in the review (`cause`: PROMPT,
 START_FRAME, PROVIDER_LIMIT, STAGING). The first failure gets the cheap fix for that cause; the same cause twice means

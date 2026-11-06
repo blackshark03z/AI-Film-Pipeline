@@ -149,7 +149,7 @@ After a FAIL: classify cause (prompt, start frame, provider limit, staging). Sam
 approach (re-stage, split into two shots, insert/reaction coverage, different start frame) instead of retry;
 pickup list feeds back into 04_shots as new shot versions with `repair_of`. Tests on synthetic take logs.
 
-### P3-04 Generate stage via package (offline mock) — READY (after P3-02)
+### P3-04 Generate stage via package (offline mock) — IN_PROGRESS
 `film.py generate --film DIR --shot ID --dry-run` builds the exact send payload for `tools/drama_flow_ui/flow_send.py`
 (start frame + "Khung hình" route) and records an intent receipt; without `--dry-run` it refuses unless
 `OWNER_GO_LIVE: YES` is in this backlog **and** film budget allows. Mock-session test only.
