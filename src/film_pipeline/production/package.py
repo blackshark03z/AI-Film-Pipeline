@@ -13,6 +13,7 @@ from pydantic import Field, ValidationError, field_validator
 
 from film_pipeline.core import ContractModel
 from film_pipeline.drama.script import Script, parse_fountain
+from film_pipeline.production.narration import NARRATION_SECTIONS
 from film_pipeline.production.sections import TYPED_SECTIONS, check_references
 
 Profile = Literal["drama", "narration"]
@@ -121,6 +122,7 @@ def load_package(path: str | Path) -> FilmPackage:
     except ValidationError as exc:
         raise PackageError(f"film.json: {exc}") from exc
 
+    sections = NARRATION_SECTIONS if header.profile == "narration" else TYPED_SECTIONS
     stages: dict[str, dict[str, Any]] = {}
     typed: dict[str, Any] = {}
     missing: list[str] = []
@@ -139,7 +141,7 @@ def load_package(path: str | Path) -> FilmPackage:
             issues.append(f"{name}: expected a JSON object")
             continue
         stages[key] = data
-        section = TYPED_SECTIONS.get(key)
+        section = sections.get(key)
         if section is not None and data:  # an empty scaffold stage is reported by the gates, not here
             try:
                 typed[key] = section.model_validate(data)

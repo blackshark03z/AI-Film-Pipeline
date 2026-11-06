@@ -35,6 +35,37 @@ def scaffold(film_id: str, profile: str, root: Path, title: str | None) -> Path:
     return target
 
 
+def _narration(args, rest: list[str], parser) -> int:
+    from film_pipeline.production.narration import build_package, status_report
+    if args.verb in ("prepare", "resume", "finish"):  # thin wrappers: same arguments as tools/film_e2e.py
+        sys.path.insert(0, str(ROOT / "tools"))
+        import film_e2e
+        forwarded = [args.verb, *rest]
+        for flag, value in (("--db", args.db), ("--project-id", args.project_id), ("--project", args.project),
+                            ("--out", args.out)):
+            if value is not None:
+                forwarded += [flag, str(value)]
+        sys.argv = ["film_e2e.py", *forwarded]
+        film_e2e.main()
+        return 0
+    if rest:
+        parser.error(f"unrecognized arguments: {' '.join(rest)}")
+    if args.verb == "import":
+        if not args.project or not args.out:
+            parser.error("narration import needs --project and --out")
+        _emit(build_package(args.project, args.out, film_id=args.film_id, title=args.title,
+                            language=args.language, refresh=args.refresh))
+        return 0
+    if not args.film:
+        parser.error("narration status needs --film")
+    pkg = load_package(args.film)
+    if pkg.header.profile != "narration":
+        raise PackageError(f"{args.film} is a {pkg.header.profile} package, not narration")
+    report = status_report(pkg, args.db, args.project_id)
+    _emit(report)
+    return 1 if report["package"]["blocked"] or report.get("error") else 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_subparsers(dest="action", required=True)
@@ -54,9 +85,24 @@ def main(argv: list[str] | None = None) -> int:
     plan.add_argument("--no-storyboard", action="store_true")
     plan.add_argument("--approve-storyboard", metavar="REVIEWER",
                       help="mark every rendered storyboard frame APPROVED by this reviewer (explicit; default PENDING)")
-    args = parser.parse_args(argv)
+    narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
+    narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
+    narr.add_argument("--project", type=Path, help="E2E project directory (import)")
+    narr.add_argument("--out", type=Path, help="package directory to write (import)")
+    narr.add_argument("--film-id")
+    narr.add_argument("--title")
+    narr.add_argument("--language", default="en")
+    narr.add_argument("--refresh", action="store_true", help="rewrite story + shots of an existing package")
+    narr.add_argument("--film", type=Path, help="narration package (status)")
+    narr.add_argument("--db", type=Path)
+    narr.add_argument("--project-id", help="exact Flow project ID")
+    args, rest = parser.parse_known_args(argv)
+    if args.action != "narration" and rest:
+        parser.error(f"unrecognized arguments: {' '.join(rest)}")
 
     try:
+        if args.action == "narration":
+            return _narration(args, rest, parser)
         if args.action == "new":
             target = scaffold(args.film_id, args.profile, args.root, args.title)
             _emit({"created": str(target), "profile": args.profile})

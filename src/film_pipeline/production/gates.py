@@ -12,6 +12,7 @@ from typing import Any
 from film_pipeline.core import ContractModel
 from film_pipeline.production.package import GATE_NAMES, SCRIPT_FILE, STAGE_FILES, FilmPackage, GateState
 from film_pipeline.production.direction import direction_issues
+from film_pipeline.production.narration import narration_direction_issues, narration_pending, narration_story_issues
 from film_pipeline.production.story import story_issues, story_pending
 
 # gate id -> stage keys that must have content before the gate can be evaluated
@@ -26,9 +27,18 @@ GATE_STAGES: dict[str, tuple[str, ...]] = {
 
 Validator = Callable[[FilmPackage], list[str]]
 _VALIDATORS: dict[str, Validator] = {}  # overrides (tests, experiments); built-ins below are not cleared with them
-_BUILTIN: dict[str, Validator] = {"1": story_issues, "2": direction_issues}
+
+
+def _by_profile(drama: Validator, narration: Validator) -> Validator:
+    return lambda pkg: narration(pkg) if pkg.header.profile == "narration" else drama(pkg)
+
+
+_BUILTIN: dict[str, Validator] = {
+    "1": _by_profile(story_issues, narration_story_issues),
+    "2": _by_profile(direction_issues, narration_direction_issues),
+}
 # gate id -> reasons the Owner must decide even though the validator found no defect (-> OWNER_PENDING, never PASS)
-_PENDING: dict[str, Validator] = {"1": story_pending}
+_PENDING: dict[str, Validator] = {"1": _by_profile(story_pending, narration_pending)}
 
 
 def register_validator(gate_id: str, fn: Validator) -> None:
@@ -43,9 +53,16 @@ class GateResult(ContractModel):
     issues: list[str]
 
 
+def _gate_stages(pkg: FilmPackage, gate_id: str) -> tuple[str, ...]:
+    # a narration film's director-level plan is its shot list (the E2E plan), not a 02_direction.json
+    if pkg.header.profile == "narration" and gate_id == "2":
+        return ("shots",)
+    return GATE_STAGES[gate_id]
+
+
 def _stage_issues(pkg: FilmPackage, gate_id: str) -> list[str]:
     out: list[str] = []
-    for key in GATE_STAGES[gate_id]:
+    for key in _gate_stages(pkg, gate_id):
         if key in pkg.missing_stages:
             out.append(f"{key} missing")
         elif not pkg.stages.get(key):
@@ -55,7 +72,7 @@ def _stage_issues(pkg: FilmPackage, gate_id: str) -> list[str]:
 
 def evaluate_gate(pkg: FilmPackage, gate_id: str) -> GateResult:
     issues = _stage_issues(pkg, gate_id)
-    prefixes = tuple(STAGE_FILES[k] for k in GATE_STAGES[gate_id])
+    prefixes = tuple(STAGE_FILES[k] for k in _gate_stages(pkg, gate_id))
     if gate_id == "1":
         prefixes += (SCRIPT_FILE,)
         if pkg.header.profile == "drama" and pkg.script is not None and not pkg.script.scenes:
