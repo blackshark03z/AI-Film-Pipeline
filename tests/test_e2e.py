@@ -200,3 +200,44 @@ def test_shot_windows_reject_nonfinite_and_boolean_times(tmp_path, invalid):
     path.write_text(json.dumps(plan), encoding='utf-8')
     with pytest.raises(ValueError, match='timeline windows'):
         status(root)
+
+
+def test_project_identity_defaults_and_custom_binding(tmp_path):
+    audio, srt = tmp_path / "source.mp3", tmp_path / "source.srt"
+    media(audio)
+    source_srt(srt)
+    prepare(audio, srt, 18, 55, tmp_path / "default")
+    meta = json.loads((tmp_path / "default" / "project.json").read_text(encoding="utf-8"))
+    assert not {"image_profile", "image_tab_index", "flow_account_alias"} & set(meta)
+    assert status(tmp_path / "default")["identity"] == {"image_profile": "nethaolabycss222@gmail.com",
+        "image_tab_index": 2, "flow_account_alias": "clean-pro-qualified"}
+    root = tmp_path / "custom"
+    prepare(audio, srt, 18, 55, root, image_profile="other@example.com", image_tab_index=3,
+            flow_account_alias="wang-flow")
+    assert status(root)["identity"] == {"image_profile": "other@example.com",
+        "image_tab_index": 3, "flow_account_alias": "wang-flow"}
+    reference = root / "references" / "ref.png"
+    reference.parent.mkdir()
+    reference.write_bytes(b"image test bytes")
+    receipt = {"shot_ids": ["SHOT_01"], "path": "references/ref.png",
+               "sha256": hashlib.sha256(reference.read_bytes()).hexdigest(),
+               "provider": "ChatGPT web", "chat_url": "https://chatgpt.com/c/example"}
+    target = root / "reference_receipts" / "r.json"
+    target.parent.mkdir()
+    target.write_text(json.dumps({**receipt, "profile_email": "nethaolabycss222@gmail.com", "tab_index": 2}),
+                      encoding="utf-8")
+    with pytest.raises(ValueError, match="unexpected GPM profile"):
+        references_for_shot(root, "SHOT_01")
+    target.write_text(json.dumps({**receipt, "profile_email": "other@example.com", "tab_index": 3}),
+                      encoding="utf-8")
+    assert len(references_for_shot(root, "SHOT_01")) == 1
+
+
+@pytest.mark.parametrize("options", [{"image_profile": ""}, {"image_tab_index": True},
+                                     {"flow_account_alias": "has space"}])
+def test_project_identity_rejects_invalid_values(tmp_path, options):
+    audio, srt = tmp_path / "source.mp3", tmp_path / "source.srt"
+    media(audio)
+    source_srt(srt)
+    with pytest.raises(ValueError):
+        prepare(audio, srt, 18, 55, tmp_path / "film", **options)

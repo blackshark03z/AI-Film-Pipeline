@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from .core import Blocking, ProviderCapabilities, ShotSpec, sha256
-from .e2e import _project, _cues, _direction_issues, references_for_shot
+from .e2e import ACCOUNT_ALIAS, _identity, _project, _cues, _direction_issues, references_for_shot  # noqa: F401
 from .live_runtime import Asset, file_sha256
 from .providers import flow_rpc_contract as contract
 from .providers.flow_canonical_ui import prepare_inputs, verify_chip
@@ -18,7 +18,6 @@ from .qc import QCStore, evidence, technical_evidence
 from .store import SQLiteStore
 
 MAX_SUBMISSIONS = 14  # Ten initial shots plus four Owner-authorized repairs.
-ACCOUNT_ALIAS = "clean-pro-qualified"
 GENERATION_S = 8
 
 
@@ -133,6 +132,7 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
                 'video_prompt': repair['video_prompt'], 'framing': repair.get('framing', 'MS')}
     if shot["timeline_out_s"] - shot["timeline_in_s"] > 8:
         raise ValueError("planned shot exceeds the qualified eight-second Veo clip")
+    _, tab_index, account_id = _identity(meta)
     refs = references_for_shot(root, shot_id)
     if repair:
         refs = [ref for ref in refs if ref['sha256'] == repair['reference_sha256']]
@@ -147,7 +147,7 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
         uri_or_path=str(image_path), sha256=refs[0]["sha256"], mime_type=mime_type,
         width=width, height=height, file_size=image_path.stat().st_size,
         rights_metadata={"source_kind": "chatgpt_web", "chat_url": refs[0]["chat_url"],
-                         "profile_email": refs[0]["profile_email"], "tab_index": 2})
+                         "profile_email": refs[0]["profile_email"], "tab_index": tab_index})
     store = SQLiteStore(db_path)
     store.initialize()
     QCStore(store).initialize()
@@ -155,11 +155,12 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
     capabilities = ProviderCapabilities(profile_version="flow-native-r2v-20261003-v2",
         provider_id="flow_veo", transport_type="other", supports_image_input=True,
         supports_duration_control=True)
-    runtime = FlowR2VShotRuntime(store, project_id=project_id, account_id=ACCOUNT_ALIAS)
+    runtime = FlowR2VShotRuntime(store, project_id=project_id, account_id=account_id)
     if repair:
         parent = runtime.repair_parent(shot_spec(shot, reference.asset_id, plan_version=plan['version']), repair['repair_decision_id'])
         from .e2e import _require_planned_shot
-        _require_planned_shot(parent, matches[0], store, project_id, plan_version=plan['version'])
+        _require_planned_shot(parent, matches[0], store, project_id, plan_version=plan['version'],
+                              account_id=account_id)
     evidence_dir = root / "flow" / shot_id
     evidence_dir.mkdir(parents=True, exist_ok=True)
     with FlowReferenceRpcSession(profile_path=profile, project_id=project_id, native_ui=True) as session:
@@ -168,24 +169,24 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
         # the film runtime rather than migrating or weakening old journals.
         original_uploads = ReferenceUploadStore(db_path)
         original_uploads.initialize()
-        key = _key('flow_veo', project_id, ACCOUNT_ALIAS, reference)
+        key = _key('flow_veo', project_id, account_id, reference)
         use_original = original_uploads.read_progress(key) is not None
         upload_db = (db_path if use_original else
                      root / 'flow' / 'reference_uploads' / reference.sha256 / 'upload.sqlite')
         upload_db.parent.mkdir(parents=True, exist_ok=True)
         uploads = ReferenceUploadStore(upload_db)
         uploads.initialize()
-        reference_receipt = FlowReferenceTransport(uploads, session, account_id=ACCOUNT_ALIAS,
+        reference_receipt = FlowReferenceTransport(uploads, session, account_id=account_id,
             evidence_dir=evidence_dir / "upload").ensure_verified(reference)
         if use_original:
             attestation_dir = evidence_dir / "attestation"
             attestation = attest_existing_reference(store, reference, session,
-                account_id=ACCOUNT_ALIAS, media_id=reference_receipt["media_id"], evidence_dir=attestation_dir)
+                account_id=account_id, media_id=reference_receipt["media_id"], evidence_dir=attestation_dir)
         else:
             reference_dir = root / 'readbacks' / reference.sha256[:16]
             attestation_dir = evidence_dir / 'attestation'
             reference, attestation = adopt_existing_reference(store, session,
-                account_id=ACCOUNT_ALIAS, media_id=reference_receipt['media_id'],
+                account_id=account_id, media_id=reference_receipt['media_id'],
                 reference_dir=reference_dir, attestation_dir=attestation_dir)
             if attestation['readback']['sha256'] != reference_receipt['provider_media_sha256']:
                 raise ValueError('verified upload and adopted reference bytes differ')

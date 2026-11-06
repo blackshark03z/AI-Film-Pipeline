@@ -21,6 +21,11 @@ def main() -> None:
     new.add_argument("--start", required=True, type=float, help="source-audio start time in seconds")
     new.add_argument("--end", required=True, type=float, help="source-audio end time in seconds")
     new.add_argument("--out", required=True, type=Path)
+    new.add_argument("--image-profile", help="GPM profile email that produced the ChatGPT reference images")
+    new.add_argument("--image-tab", type=int, help="1-based browser tab holding the ChatGPT image chat")
+    new.add_argument("--flow-account-alias", help="local label for the Flow account, set once at prepare; "
+                     "use a new one when the project moves to a different Flow account so uploads/media "
+                     "from another account are never reused")
     inspect = actions.add_parser("status", help="show review and selected-take gaps")
     targets = inspect.add_mutually_exclusive_group(required=True)
     targets.add_argument("--project", type=Path)
@@ -44,7 +49,9 @@ def main() -> None:
                          help='source start offset; repeat to preserve the useful action within each shot')
     args = parser.parse_args()
     if args.action == "prepare":
-        result = prepare(args.audio, args.srt, args.start, args.end, args.out)
+        result = prepare(args.audio, args.srt, args.start, args.end, args.out,
+                         image_profile=args.image_profile, image_tab_index=args.image_tab,
+                         flow_account_alias=args.flow_account_alias)
     elif args.action == "status":
         if args.package:
             if args.db or args.project_id:

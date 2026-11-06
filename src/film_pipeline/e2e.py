@@ -23,6 +23,22 @@ from .store import SQLiteStore
 PLAN_VERSION = 2
 DELIVERY_VERSION = 1
 GPM_PROFILE = "nethaolabycss222@gmail.com"
+ACCOUNT_ALIAS = "clean-pro-qualified"
+IMAGE_TAB_INDEX = 2
+
+
+def _identity(meta: dict) -> tuple[str, int, str]:
+    """Per-project (image profile, image tab, Flow account alias); defaults are the legacy constants."""
+    profile = meta.get("image_profile", GPM_PROFILE)
+    tab = meta.get("image_tab_index", IMAGE_TAB_INDEX)
+    alias = meta.get("flow_account_alias", ACCOUNT_ALIAS)
+    if not isinstance(profile, str) or not profile.strip():
+        raise ValueError("image profile must be a non-empty string")
+    if type(tab) is not int or tab < 1:
+        raise ValueError("image tab index must be an integer of at least 1")
+    if not isinstance(alias, str) or not alias or re.search(r"\s", alias):
+        raise ValueError("Flow account alias must be a non-empty string without whitespace")
+    return profile, tab, alias
 
 
 def _json(path: Path) -> dict:
@@ -261,7 +277,8 @@ def _source_windows(root: Path, meta: dict, plan: dict) -> dict[str, str]:
 
 
 def references_for_shot(root: Path, shot_id: str) -> list[dict]:
-    _, plan = _project(root)
+    meta, plan = _project(root)
+    profile, tab, _ = _identity(meta)
     if shot_id not in {s["shot_id"] for s in plan["shots"]}:
         raise ValueError(f"unknown shot ID: {shot_id}")
     base = Path(root).resolve()
@@ -271,7 +288,7 @@ def references_for_shot(root: Path, shot_id: str) -> list[dict]:
         return matches
     for receipt_path in sorted(receipts_dir.glob("*.json")):
         receipt = _json(receipt_path)
-        if receipt.get("profile_email") != GPM_PROFILE or receipt.get("tab_index") != 2:
+        if receipt.get("profile_email") != profile or receipt.get("tab_index") != tab:
             raise ValueError("reference receipt has an unexpected GPM profile or tab")
         if shot_id not in receipt.get("shot_ids", []):
             continue
@@ -282,7 +299,13 @@ def references_for_shot(root: Path, shot_id: str) -> list[dict]:
     return matches
 
 
-def prepare(audio: Path, srt: Path, start_s: float, end_s: float, output: Path) -> dict:
+def prepare(audio: Path, srt: Path, start_s: float, end_s: float, output: Path, *,
+            image_profile: str | None = None, image_tab_index: int | None = None,
+            flow_account_alias: str | None = None) -> dict:
+    identity = {key: value for key, value in (("image_profile", image_profile),
+        ("image_tab_index", image_tab_index), ("flow_account_alias", flow_account_alias))
+        if value is not None}
+    _identity(identity)
     audio, srt, output = audio.resolve(), srt.resolve(), output.resolve()
     if not audio.is_file() or not srt.is_file():
         raise ValueError("audio and SRT files must exist")
@@ -333,7 +356,7 @@ def prepare(audio: Path, srt: Path, start_s: float, end_s: float, output: Path) 
             "audio_duration_s": info["duration_s"], "audio_sample_rate": info["sample_rate"],
             "audio_channels": info["channels"], "audio_start_s": round(start_s, 3),
             "audio_end_s": round(end_s, 3), "film_duration_s": round(duration, 3),
-            "shot_count": shot_count, "locked_plan_sha256": None}
+            "shot_count": shot_count, "locked_plan_sha256": None, **identity}
     plan = {"version": PLAN_VERSION, "shots": shots}
     _write_once(output / "project.json", meta)
     _write_once(output / "shots.json", plan)
@@ -344,8 +367,9 @@ def prepare(audio: Path, srt: Path, start_s: float, end_s: float, output: Path) 
             "runtime_database": str(output / "runtime.sqlite")}
 
 
-def _require_planned_shot(frozen, planned, store=None, project_id=None, *, plan_version=1):
-    from .e2e_flow import shot_spec, ACCOUNT_ALIAS
+def _require_planned_shot(frozen, planned, store=None, project_id=None, *, plan_version=1,
+                          account_id: str = ACCOUNT_ALIAS):
+    from .e2e_flow import shot_spec
     if frozen.spec_version > 1:
         if store is None or project_id is None:
             raise ValueError('repair must bind to its rejected predecessor')
@@ -362,9 +386,10 @@ def _require_planned_shot(frozen, planned, store=None, project_id=None, *, plan_
         repair_id = job.correlation_evidence.get('repair_decision_id')
         if not repair_id:
             raise ValueError('repair has no stored rejection')
-        parent = FlowR2VShotRuntime(store, project_id=project_id, account_id=ACCOUNT_ALIAS).repair_parent(
+        parent = FlowR2VShotRuntime(store, project_id=project_id, account_id=account_id).repair_parent(
             frozen, repair_id)
-        _require_planned_shot(parent, planned, store, project_id, plan_version=plan_version)
+        _require_planned_shot(parent, planned, store, project_id, plan_version=plan_version,
+                              account_id=account_id)
         restored = frozen.model_copy(update={'spec_version': parent.spec_version,
             'references': parent.references, 'blocking': parent.blocking, 'camera': parent.camera})
         if restored != parent:
@@ -403,6 +428,7 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
               "legacy_direction_unassessed": plan["version"] == 1,
               "reference_coverage": reference_coverage, "missing_reference_images": reference_missing,
               "selected_shots": [], "missing_selected_shots": [s["shot_id"] for s in plan["shots"]],
+              "identity": dict(zip(("image_profile", "image_tab_index", "flow_account_alias"), _identity(meta))),
               "next_action": "lock the creative shot plan; attach one ChatGPT reference receipt before each Flow dispatch"}
     report['source_window_mismatches'] = [shot['shot_id'] for shot in plan['shots']
         if shot.get('source_text') != windows[shot['shot_id']]]
@@ -433,7 +459,7 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
         asset = Asset.model_validate(json.loads(asset_payload))
         shot, _, route, attempt, job, assets = store.read_runtime_lineage(
             take.generation_attempt_id, asset.provider_job_id)
-        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id, plan_version=plan['version'])
+        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id, plan_version=plan['version'], account_id=_identity(meta)[2])
         if (shot.shot_id != take.shot_id or take.asset_id != asset.asset_id or
                 asset not in assets or job.project_binding_id != sha256(project_id) or
                 job.provider_id != "flow_veo" or route.provider_id != "flow_veo"):
@@ -465,7 +491,7 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
                 job.project_binding_id != sha256(project_id) or asset not in lineage_assets or
                 job.status != "SUCCEEDED" or job.dispatch_count != 1):
             continue
-        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id, plan_version=plan['version'])
+        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id, plan_version=plan['version'], account_id=_identity(meta)[2])
         try:
             qc._exact_asset(asset)
         except ValueError:
@@ -563,7 +589,7 @@ def _apply_reviews(root: Path, db_path: Path, project_id: str, review_manifest: 
         validate_review_entry(review, asset)
         shot, _, route, _, job, assets = store.read_runtime_lineage(
             asset.source_attempt_id, asset.provider_job_id)
-        _require_planned_shot(shot, by_shot[shot_id], store, project_id, plan_version=plan['version'])
+        _require_planned_shot(shot, by_shot[shot_id], store, project_id, plan_version=plan['version'], account_id=_identity(meta)[2])
         if (shot.shot_id != shot_id or shot_id != review["shot_id"] or asset not in assets
                 or route.provider_id != "flow_veo" or job.provider_id != "flow_veo"
                 or job.project_binding_id != sha256(project_id) or job.status != "SUCCEEDED"
@@ -647,7 +673,7 @@ def resume(root: Path, db_path: Path, provider_project_id: str,
     prompts_missing = report["missing_shot_plans"]
     if reference_manifest is not None:
         refs = _json(reference_manifest.resolve())
-        if refs.get("profile_email") != GPM_PROFILE or refs.get("tab_index") != 2:
+        if refs.get("profile_email") != _identity(meta)[0] or refs.get("tab_index") != _identity(meta)[1]:
             raise ValueError("reference receipts must identify the selected GPM profile and second tab")
         by_id = {s["shot_id"]: s for s in plan["shots"]}
         for item in refs.get("images", []):
@@ -736,7 +762,7 @@ def _selected_sources(root: Path, db_path: Path, project_id: str,
                     asset = Asset.model_validate(json.loads(asset_payload))
                     frozen_shot, _, route, _, job, assets = store.read_runtime_lineage(
                         take.generation_attempt_id, asset.provider_job_id)
-                    _require_planned_shot(frozen_shot, shot, store, project_id, plan_version=plan['version'])
+                    _require_planned_shot(frozen_shot, shot, store, project_id, plan_version=plan['version'], account_id=_identity(meta)[2])
                     if (frozen_shot.shot_id != take.shot_id or asset not in assets or
                             job.project_binding_id != sha256(project_id) or
                             job.provider_id != "flow_veo" or route.provider_id != "flow_veo"):
