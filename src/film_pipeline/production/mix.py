@@ -51,7 +51,8 @@ class MusicCue(ContractModel):
     gain_db: float = -18.0
     fade_in_s: float = Field(default=1.0, ge=0)
     fade_out_s: float = Field(default=2.0, ge=0)
-    why: str = ""
+    why: str = ""                    # why the music starts and stops here
+    scene_id: str = ""               # the scene it belongs to (cue sheet check)
 
 
 class MixPlan(ContractModel):

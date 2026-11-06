@@ -104,6 +104,14 @@ stems to `audio/stems` (dialogue = the cut's own sound; ambience = a generated b
 The mix is recorded in `06_post.json` as item `mix` with `locked_against` = the fresh picture lock (empty, so UNSTAMPED,
 until the picture is locked). Rights of sfx/music assets are recorded in P5-02.
 
+Sound rights rule of thumb (`production/sound_rights.py`): every music file in `audio/mix_plan.json` and every
+`audio/sfx/<slug>.wav` that matches a shot's `sfx` needs a cleared record in `audio/assets.json`
+(`film.py sounds --record audio/music/x.wav --kind music --license CC0-1.0 --source-url URL --usage 0:20`; it records
+`pending`, only a human passes `--status cleared`). Licenses: CC0-1.0, CC-BY (attribution text required), ROYALTY_FREE
+(source URL), ORIGINAL, GENERATED_OFFLINE, OWNER_LICENSED. A changed file, a cue outside the recorded usage range or a
+missing source blocks `film.py validate`. `film.py sounds` also prints the cue sheet: per scene IN/HOLD/DUCK/OUT/NONE from
+the emotional curve with the reason, and warnings for planned cues without a `why`. Nothing is downloaded by the tools.
+
 Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
 ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly
 where the previous one ended (a scene cut only warns).

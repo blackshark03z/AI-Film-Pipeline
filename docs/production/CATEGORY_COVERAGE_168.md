@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 42 · PARTIAL 89 · GAP 11 · N/A 26 · total 168
+**Summary:** HAVE 42 · PARTIAL 91 · GAP 9 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -139,13 +139,13 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 107 | Dialogue editing | `mix.build_stems`: dialogue stem = the cut's own sound (J/L cuts included); no editing beyond the EDL | PARTIAL | - |
 | 108 | Dialogue cleanup | Dialogue is generated with the clip; loudness normalised; no denoise/cleanup tool | PARTIAL | - |
 | 109 | ADR / dubbing | N/A for current route (no ADR) | N/A | - |
-| 110 | Foley | Generated room tone only; no stems or SFX cues | GAP | P5-01 |
-| 111 | Sound effects | `mix`: effects declared in 04_shots `sfx` are placed at their event when `audio/sfx/<slug>.wav` exists, else reported `SFX_UNSOURCED` (the take's own sound stays); no sound library yet | PARTIAL | P5-02 |
+| 110 | Foley | No Foley recording; effects only from licensed assets placed by `mix` (see 111) | GAP | - |
+| 111 | Sound effects | `mix` places declared `sfx` from `audio/sfx/<slug>.wav`; `sound_rights` blocks `validate` until each used file has a cleared record (source, license, sha256, usage); no sound library yet, assets are put in place by a human | PARTIAL | - |
 | 112 | Ambience | `mix`: one generated, calibrated (`ambience_lufs`) noise bed per scene span coloured by the location's `room_tone`, cross-faded at the edges | HAVE | - |
 | 113 | Room tone | `mix`: room tone per location from `room_tone` text; silent over title/end cards | HAVE | - |
 | 114 | Sound perspective | Generated room tone only; no stems or SFX cues | GAP | P5-01 |
-| 115 | Music scoring | No music pipeline | GAP | P5-02 |
-| 116 | Music editing | No music pipeline | GAP | P5-02 |
+| 115 | Music scoring | `mix_plan.json` music cues (asset, range, gain, fades, why, scene) mixed under dialogue; `sound_rights.cue_sheet` advises IN/HOLD/DUCK/OUT per scene from the emotional curve; no score is composed or sourced automatically | PARTIAL | - |
+| 116 | Music editing | Cue start/end/fades/gain in the plan, ducking by `mix`; no waveform editing | PARTIAL | - |
 | 117 | Sound mixing | `production/mix.py`: four stems, side-chain ducking of ambience+music under dialogue (depth measured), sum, -14 LUFS / -1 dBTP master; `film.py mix` | HAVE | - |
 | 118 | Audio mastering | `drama/post.normalize_loudness` EBU R128, applied by `mix.mix_cut` with the measured result checked | HAVE | - |
 | 119 | VFX cleanup | Not needed unless a shot demands it; watermark/artifact handling manual | N/A | - |

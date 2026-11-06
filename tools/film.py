@@ -143,6 +143,16 @@ def main(argv: list[str] | None = None) -> int:
     mx.add_argument("--cut", type=Path, help="rendered cut mp4 with its .cut.json (default <film>/media/cut/rough_cut.mp4)")
     mx.add_argument("--out", type=Path, help="mixed mp4 (default <film>/media/cut/mixed.mp4)")
     mx.add_argument("--stems", type=Path, help="stem directory (default <film>/audio/stems)")
+    sn = actions.add_parser("sounds", help="rights check of the sound assets the mix uses + music cue sheet; --record registers an asset")
+    sn.add_argument("--film", required=True, type=Path)
+    sn.add_argument("--record", metavar="ASSET", help="path under the film, e.g. audio/music/theme.wav (hash is taken from the file)")
+    sn.add_argument("--kind", choices=["music", "sfx"])
+    sn.add_argument("--license", dest="license_id")
+    sn.add_argument("--source-url", default="")
+    sn.add_argument("--status", default="pending", choices=["cleared", "pending", "restricted", "unknown"])
+    sn.add_argument("--attribution", default="")
+    sn.add_argument("--note", default="")
+    sn.add_argument("--usage", action="append", default=[], metavar="START:END", help="usage range in seconds, END may be empty")
     qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
     qcp.add_argument("--record", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
@@ -263,6 +273,30 @@ def main(argv: list[str] | None = None) -> int:
             dirty = lk_mod.dirty_items(pkg) if status["locked"] else {"dirty": [], "clean": []}
             _emit({"status": status, **dirty})
             return 0 if status["fresh"] and not dirty["dirty"] else 1
+        if args.action == "sounds":
+            from film_pipeline.production import sound_rights as sr_mod
+            if args.record:
+                try:
+                    ranges = []
+                    for spec in args.usage:
+                        a, _, b = spec.partition(":")
+                        ranges.append(sr_mod.UsageRange(start_s=float(a or 0), end_s=float(b) if b else None))
+                    if not (args.kind and args.license_id):
+                        raise ValueError("--record needs --kind and --license")
+                    rec = sr_mod.record_asset(pkg, args.record, args.kind, args.license_id, source_url=args.source_url,
+                                              status=args.status, attribution=args.attribution, note=args.note, usage=ranges)
+                except ValueError as exc:
+                    _emit({"error": str(exc)})
+                    return 1
+                _emit({"recorded": rec.model_dump(mode="json")})
+                return 0
+            checked = sr_mod.check_assets(pkg)
+            try:
+                sheet = sr_mod.cue_sheet(pkg)
+            except ValueError as exc:
+                sheet = {"error": str(exc)}
+            _emit({"ok": not checked["issues"], **checked, "attributions": sr_mod.attributions(pkg), "cue_sheet": sheet})
+            return 1 if checked["issues"] else 0
         if args.action == "mix":
             from film_pipeline.production import mix as mix_mod
             section = pkg.typed.get("edit")

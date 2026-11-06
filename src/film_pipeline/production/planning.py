@@ -173,7 +173,8 @@ def planning_issues(pkg: Any) -> list[str]:
                 if ("character", c) not in covered]
         out += [f"RIGHTS_MISSING location {k}: no entry in 03_preprod.rights" for k in pre.locations
                 if ("location", k) not in covered]
-    return out
+    from film_pipeline.production.sound_rights import sound_rights_issues
+    return out + sound_rights_issues(pkg)
 
 
 def planning_report(pkg: Any) -> dict[str, Any]:
