@@ -11,12 +11,13 @@ import json
 from pathlib import Path
 from typing import Any
 
-from film_pipeline.drama import (CharacterBrief, ContinuityState, GenerationHandoff, StoryboardGate, check_temporal,
+from film_pipeline.drama import (CharacterBrief, ContinuityState, GenerationHandoff, StoryboardGate,
                                  compile_scene_prompt, preflight_scene, render_schematic_frame)
 from film_pipeline.drama.axis import axis_record
 from film_pipeline.drama.comprehension import check_comprehension, lint_script
 from film_pipeline.drama.coverage import _SIZE, CoverageShot, SceneUnit, SpokenLine
 from film_pipeline.drama.feasibility import check_script
+from film_pipeline.production.continuity import continuity_issues, temporal_issues
 from film_pipeline.production.evidence import end_state_verified, load_attestations
 from film_pipeline.production.package import FilmPackage, PackageError
 from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection
@@ -169,13 +170,10 @@ class _Plan:
                 if v["words"] > limit and gid not in self.pre.accepted_overlong]
 
     def temporal(self) -> list[Any]:
-        order = list(self.pre.scenes)
-        first = {g.scene_id: g for g in reversed(self.shots.generations)}  # earliest generation per scene
-        last = {g.scene_id: g for g in self.shots.generations}  # latest generation per scene
-        return check_temporal(
-            [self.pre.scenes[s].story_time for s in order],
-            {s: self.state(last[s].end_state) for s in order if s in last},
-            {s: self.state(first[s].start_state) for s in order if s in first})
+        return temporal_issues(self.pre, self.shots)
+
+    def continuity(self) -> list[Any]:
+        return continuity_issues(self.pre, self.shots, include_temporal=False)
 
 
 def _write(path: Path, text: str, root: Path) -> None:
@@ -232,6 +230,9 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
 
     record: dict[str, Any] = {"feasibility": [i.model_dump() for i in feas.issues],
                               "temporal": [i.model_dump() for i in temporal], "generations": {}}
+    continuity = p.continuity()
+    if continuity:  # only recorded when there is something to say, so a clean film keeps its golden gate3.json
+        record["continuity"] = [i.model_dump() for i in continuity]
     for decl in p.shots.generations:
         gid = decl.generation_id
         unit, plan, report = p.build(decl, gate)
@@ -252,8 +253,8 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     record["locations"] = [v.look.model_dump() for v in p.pre.locations.values()]
     record["states"] = {k: v.model_dump() for k, v in p.pre.states.items()}
     _write(out / "gate3.json", json.dumps(record, ensure_ascii=False, indent=2), out)
-    problems = [f"{k.upper()} {i['check']}: {i['detail']}" for k in ("feasibility", "temporal", "comprehension")
-                for i in record[k] if i["severity"] == "BLOCK"]
+    problems = [f"{k.upper()} {i['check']}: {i['detail']}" for k in ("feasibility", "temporal", "continuity", "comprehension")
+                for i in record.get(k, []) if i["severity"] == "BLOCK"]
     problems += [f"{g} preflight {v['verdict']}" for g, v in record["generations"].items() if v["verdict"] != "PASS"]
     problems += p.dialogue_problems() + p.overlong_problems(record)
     if not p.shots.generations:

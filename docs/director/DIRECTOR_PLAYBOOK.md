@@ -39,8 +39,13 @@ Commands (from the repo root):
 python tools/film.py new <film_id> --profile drama
 python tools/film.py validate --film films/<film_id>      # gates 1–6 + package issues, exit 1 if anything blocks
 python tools/film.py status   --film films/<film_id>
+python tools/film.py continuity --film films/<film_id>    # action/spatial/object/temporal/visual/emotional; BLOCKs also fail `plan`
 python tools/film.py plan     --film films/<film_id> --out <dir> --takes <takes_dir> --approve-storyboard "<reviewer>"
 ```
+
+Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
+ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly
+where the previous one ended (a scene cut only warns).
 
 Never mark a gate PASS by hand. A stage that exists but has no validator reports `NOT_RUN`, which is not a pass.
 

@@ -110,7 +110,7 @@ Character look, costume, hair/makeup, prop and location entries carry `version`;
 `production/impact.py`: `affected_by(change) -> shots, stills, takes, edit ranges, post items` (G13).
 Test: bump film03 Nora costume version → exactly the shots where Nora is in frame are listed; others untouched.
 
-### P2-02 Prop/object state machine + 6 continuity types — READY
+### P2-02 Prop/object state machine + 6 continuity types — DONE (see git log)
 Continuity bible: per generation start/end state across action, spatial, object, temporal, visual (lighting, time of
 day), emotional. Object changes need a causing action in an ACTION phase. Reuse `drama.continuity`,
 `scene_bible`, `sequence.validate_shot_sequence`. Test: letter moves pocket → bin without an action → BLOCK.

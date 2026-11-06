@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 22 · PARTIAL 88 · GAP 32 · N/A 26 · total 168
+**Summary:** HAVE 25 · PARTIAL 86 · GAP 31 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -40,7 +40,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 23 | Staging | `scene_bible` occupancy + `Blocking`; layering not modelled | PARTIAL | P2-03 |
 | 24 | Screen direction | `drama/axis.py` AxisBook 180-degree | HAVE | - |
 | 25 | Spatial geography | `drama/storyboard.py` schematic frames + `scene_bible` | PARTIAL | P2-03 |
-| 26 | Temporal continuity | `drama/continuity.py` + `scene_bible.StoryTime` | PARTIAL | P2-02 |
+| 26 | Temporal continuity | `production/continuity.py` (TEMPORAL: story-time order + one time of day per scene) + `scene_bible.check_temporal` | HAVE | - |
 | 27 | Performance direction | `choreography.PerformanceCue` visible cues + prohibited misread | PARTIAL | P1-02 |
 | 28 | Emotional direction | `SceneDirection.curve` 0-5 per character; Gate 2 blocks jumps > 2 without a cause beat | HAVE | P1-02 |
 | 29 | Rhythm & pacing | `Pacing` target + holds on shots of the scene; choreography phase lengths; no measured-rhythm check | PARTIAL | P4-02 |
@@ -59,8 +59,8 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 37 | Location scouting | `scene_bible.LocationLook` text + `approved` flag; no image identity or hash | PARTIAL | P2-01 |
 | 38 | Production design | `scene_bible` location look; no set geometry/palette record | PARTIAL | P2-03 |
 | 39 | Set design | `scene_bible` location look; no set geometry/palette record | PARTIAL | P2-03 |
-| 40 | Set dressing | `scene_bible`/`continuity` prop positions; no version or ownership | PARTIAL | P2-02 |
-| 41 | Props | `scene_bible`/`continuity` prop positions; no version or ownership | PARTIAL | P2-02 |
+| 40 | Set dressing | `production/continuity.py` OBJECT: prop state machine, changes need a causing ACTION phase; no ownership/version of dressing | PARTIAL | P2-03 |
+| 41 | Props | `production/continuity.py` OBJECT (cause rule, hand-off equality) + versioned `prop_*` designs (`impact.py`) | HAVE | - |
 | 42 | Costume design | `designs` kind costume with version; shots pin it; no story-day wardrobe state yet | PARTIAL | P2-01 |
 | 43 | Hair & makeup | `designs` kind hair_makeup with version; shots pin it; no story-day state yet | PARTIAL | P2-01 |
 | 44 | Cinematography planning | No camera/lighting plan beyond `scene_bible.lighting` string | GAP | P2-03 |
@@ -69,7 +69,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 47 | Previsualization | Still storyboard only; no timed animatic | GAP | P2-04 |
 | 48 | Blocking diagram | `storyboard.render_schematic_frame` + AxisBook | PARTIAL | P2-03 |
 | 49 | Shot planning | `generation.py` split into 8 s units + `coverage` shot list | PARTIAL | P2-05 |
-| 50 | Continuity planning | `drama/continuity.py` + `sequence.validate_shot_sequence` | PARTIAL | P2-02 |
+| 50 | Continuity planning | `production/continuity.py`: six kinds over per-generation start/end states, `film.py continuity`, hooked into `plan` | HAVE | - |
 | 51 | Sound planning | Prompt carries room tone/SFX strings (`prompt.py`); no sound plan | PARTIAL | P5-01 |
 | 52 | Technical planning | `production/package.FilmHeader` records aspect/fps/resolution/generation_s; `plan` supports 16:9 only (refuses others) + `PreflightLimits` | PARTIAL | P6-02 |
 | 53 | Production scheduling | No schedule/order record | GAP | P2-05 |
@@ -100,7 +100,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 73 | Body language | `choreography.PerformanceCue` visible cues + prohibited misread | PARTIAL | P1-02 |
 | 74 | Dialogue delivery | `SpokenLine` + prompt dialogue; delivery unchecked | PARTIAL | P3-02 |
 | 75 | Reaction timing | `choreography.PerformanceCue` visible cues + prohibited misread | PARTIAL | P1-02 |
-| 76 | Emotional continuity | No emotional continuity check | GAP | P4-02 |
+| 76 | Emotional continuity | `continuity.py` EMOTIONAL: intensity leap of 2 between chained generations is a WARN; no cut-level check | PARTIAL | P4-02 |
 | 77 | Interaction | `choreography` ACTION phases + `action_meaning` | PARTIAL | P3-02 |
 | 78 | Background performance | `occupancy`/`EXTRAS` strings in film tools | PARTIAL | P2-03 |
 | 79 | Action timing | Phase timings in `GenerationChoreography` | PARTIAL | P4-02 |

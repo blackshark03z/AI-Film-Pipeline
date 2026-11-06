@@ -88,6 +88,8 @@ def main(argv: list[str] | None = None) -> int:
     imp = actions.add_parser("impact", help="what to redo when a versioned design changes")
     imp.add_argument("--film", required=True, type=Path)
     imp.add_argument("--design", required=True)
+    cont = actions.add_parser("continuity", help="continuity bible: action/spatial/object/temporal/visual/emotional")
+    cont.add_argument("--film", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
     narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
     narr.add_argument("--project", type=Path, help="E2E project directory (import)")
@@ -119,6 +121,15 @@ def main(argv: list[str] | None = None) -> int:
                 _emit({"error": str(exc)})
                 return 2
             return 0
+        if args.action == "continuity":
+            from film_pipeline.production.continuity import continuity_report
+            pre, shots = pkg.typed.get("preprod"), pkg.typed.get("shots")
+            if pre is None or shots is None:
+                _emit({"error": "continuity needs a valid 03_preprod.json and 04_shots.json"})
+                return 2
+            report = continuity_report(pre, shots)
+            _emit(report)
+            return 0 if report["ok"] else 1
         if args.action == "plan":
             result = plan_package(pkg, args.out, takes_dir=args.takes, storyboard=not args.no_storyboard,
                                   approve_storyboard=args.approve_storyboard)
