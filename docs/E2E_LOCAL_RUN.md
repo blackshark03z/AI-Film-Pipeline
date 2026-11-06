@@ -26,6 +26,8 @@ New projects use plan version 2. Fill `blocking.start`, `blocking.end` and the e
 
 Write what **each participant** does before, during and after contact. For a shove, the initiator extends the arm, transfers force, then withdraws the hand; the receiver displaces, contacts the obstacle, absorbs the stop and steadies. A hand left pushing is a different relationship from a completed shove. For an object transfer, track giver → receiver → final location, including the now-empty hand. Quiet dialogue still needs clear gaze, spacing and end state.
 
+Optionally add `choreography` (drama WP3): 2–4 contiguous `phases` (`SETUP`/`ACTION`/`REACTION`/`CONSEQUENCE`/`HOLD`) covering the 8 s generation, plus `once_actions` that must happen exactly once. Lock is refused when the phases do not cover 0–8 s or a once-action is outside an ACTION phase; the timing line is appended to the prompt beats. Follow the Owner SRT rule: setup → contact → reaction → aftermath, nothing the sentence does not state.
+
 Use short, consistent state keys across cuts, for example `hand_contact: false`, `badge_holder: "bin"`, `receiver_pose: "braced"`. Reuse the same key when a relation persists: the existing sequence validator compares explicit shared keys; it does not infer that differently named keys mean the same thing or detect facts you omitted. Include both actors, props and important spatial relations. Avoid a generic `hold` end when a release or recovery must occur.
 
 ```json

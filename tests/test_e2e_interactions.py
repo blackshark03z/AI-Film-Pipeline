@@ -95,6 +95,38 @@ def test_release_and_receiver_recovery_reach_real_compact_prompt():
     assert sha256(changed) != sha256(spec)
 
 
+SHOVE_PHASES = {'phases': [
+    {'kind': 'SETUP', 'start_s': 0, 'end_s': 2, 'description': 'tense standoff'},
+    {'kind': 'ACTION', 'start_s': 2, 'end_s': 3, 'description': 'Brennan shoves once'},
+    {'kind': 'REACTION', 'start_s': 3, 'end_s': 8, 'description': 'Irene staggers back'}],
+    'once_actions': ['shoves once']}
+
+
+def test_drama_choreography_blocks_lock_when_phases_do_not_cover_generation(directed_project):
+    root, plan = directed_project
+    plan['shots'][0]['choreography'] = {**SHOVE_PHASES, 'phases': SHOVE_PHASES['phases'][:2]}
+    save_plan(root, plan)
+    issues = status(root)['direction_issues']
+    assert any('last phase ends at 3s, not 8s' in issue for issue in issues)
+    with pytest.raises(ValueError, match='interaction direction incomplete'):
+        resume(root, root / 'runtime.sqlite', 'offline-project')
+
+
+def test_drama_choreography_timing_reaches_shot_spec():
+    planned = {'shot_id': 'SHOVE', 'visual_intent': 'Shove and stagger',
+        'video_prompt': 'Brennan shoves Irene; she staggers back.',
+        'blocking': {'start': 'Facing each other', 'end': 'Apart, both standing'},
+        'continuity': {'screen_direction': None, 'eyeline': None,
+            'start_state': {'hand_contact': False}, 'end_state': {'hand_contact': False}},
+        'choreography': SHOVE_PHASES}
+    beats = shot_spec(planned, 'reference', plan_version=2).blocking.action_beats
+    assert beats[0] == planned['video_prompt']
+    assert '2-3s action: Brennan shoves once' in beats[1]
+    assert 'Happens exactly once: shoves once' in beats[1]
+    legacy = shot_spec(planned, 'reference', plan_version=1).blocking.action_beats
+    assert legacy == [planned['video_prompt']]
+
+
 @pytest.mark.parametrize('metadata', ['absent', 'populated', 'partial'])
 def test_legacy_locked_plan_reopens_without_identity_or_file_change(directed_project, metadata):
     root, plan = directed_project

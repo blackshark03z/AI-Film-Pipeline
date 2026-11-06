@@ -166,7 +166,7 @@ def _project(root: Path) -> tuple[dict, dict]:
 
 def _direction_issues(plan: dict) -> list[str]:
     """Check declared choreography/state structure, never infer video quality."""
-    from .e2e_flow import shot_spec
+    from .e2e_flow import GENERATION_S, choreography, shot_spec
     from .sequence import validate_shot_sequence
     shots = plan["shots"]
     if plan["version"] == 1:
@@ -180,6 +180,13 @@ def _direction_issues(plan: dict) -> list[str]:
         if not isinstance(continuity, dict) or not all(
                 isinstance(continuity.get(k), dict) and continuity[k] for k in ("start_state", "end_state")):
             issues.append(f"{shot['shot_id']}: declare continuity start_state and end_state")
+        try:
+            phases = choreography(shot)
+        except ValueError as exc:
+            issues.append(f"{shot['shot_id']}: invalid choreography: {exc}")
+            continue
+        if phases:
+            issues += [i.detail for i in phases.problems(GENERATION_S) if i.severity == "BLOCK"]
     if issues:
         return issues
     if any(not s.get("visual_intent") or not s.get("video_prompt") for s in shots):

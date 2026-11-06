@@ -19,6 +19,18 @@ from .store import SQLiteStore
 
 MAX_SUBMISSIONS = 14  # Ten initial shots plus four Owner-authorized repairs.
 ACCOUNT_ALIAS = "clean-pro-qualified"
+GENERATION_S = 8
+
+
+def choreography(shot: dict):
+    """Optional drama WP3 phases for one generation; None when undeclared."""
+    from .drama.choreography import GenerationChoreography
+    declared = shot.get("choreography")
+    if not declared:
+        return None
+    if not isinstance(declared, dict):
+        raise ValueError("choreography must be an object")
+    return GenerationChoreography.model_validate({"generation_id": shot["shot_id"], **declared})
 
 
 def shot_spec(shot: dict, reference_id: str, *, plan_version: int = 1) -> ShotSpec:
@@ -28,11 +40,15 @@ def shot_spec(shot: dict, reference_id: str, *, plan_version: int = 1) -> ShotSp
         raise ValueError("blocking must be an object")
     blocking = Blocking.model_validate({"start": "reference pose", "end": "hold",
         "action_beats": [], **direction}).model_dump(exclude_unset=True)
-    blocking["action_beats"] = list(dict.fromkeys([shot["video_prompt"], *blocking["action_beats"]]))
+    beats = [shot["video_prompt"], *blocking["action_beats"]]
+    phases = choreography(shot) if plan_version >= 2 else None
+    if phases:
+        beats += [phases.timing_text(), *(cue.prompt_text() for cue in phases.performance)]
+    blocking["action_beats"] = list(dict.fromkeys(beats))
     return ShotSpec.model_validate({
         "schema_version": "1.0.0", "spec_version": shot.get('spec_version', 1),
         "shot_id": shot["shot_id"], "scene_id": "E2E",
-        "dramatic_purpose": shot["visual_intent"], "duration_target_s": 8,
+        "dramatic_purpose": shot["visual_intent"], "duration_target_s": GENERATION_S,
         "shot_type": "action", "characters": [],
         "camera": {"framing": shot.get('framing', 'MS'), "height": "eye_level", "lens_intent": "normal",
                    "movement": {"type": "locked"}},
