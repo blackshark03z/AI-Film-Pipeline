@@ -179,8 +179,23 @@ def probe_duration(path: Path) -> float:
     return probe_video_duration(path)
 
 
+def probe_audio_duration(path: Path) -> float:
+    """Seconds of the first audio stream; 0.0 when the clip has no sound (an L-cut then has no handle)."""
+    out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries", "stream=duration",
+                          "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True)
+    text = (out.stdout.strip().splitlines() or [""])[0].strip()
+    return float(text) if text and text != "N/A" else 0.0
+
+
 def resolve_clip(root: Path, output_file: str, clips_dir: Path | None = None) -> Path:
     return Path(clips_dir) / output_file if clips_dir else Path(root) / "media" / "takes" / output_file
+
+
+def resolved_cards(pkg: Any, section: EditSection) -> tuple[list[tuple[str, int]], list[tuple[str, int]]]:
+    """The title and end card lines as rendered (an empty list in the EDL falls back to the film title)."""
+    title = [(l.text, l.size) for l in section.title] or [(pkg.header.title, 96)]
+    end = [(l.text, l.size) for l in section.end] or [(pkg.header.title, 64), ("All characters are fictional.", 30)]
+    return title, end
 
 
 def _sha256(path: Path) -> str:
@@ -192,10 +207,12 @@ def _sha256(path: Path) -> str:
 
 
 def edit_problems(pkg: Any, section: EditSection, *, clips_dir: Path | None = None, require_accepted: bool = False,
-                  probe: Callable[[Path], float] | None = None) -> tuple[list[dict[str, str]], dict[str, float]]:
+                  probe: Callable[[Path], float] | None = None,
+                  audio_probe: Callable[[Path], float] | None = None) -> tuple[list[dict[str, str]], dict[str, float]]:
     """(problems, durations). Each problem: {code, severity BLOCK|WARN, event_id, detail}. ``durations`` has every take
     that could be probed. ``require_accepted`` (a fine cut / picture lock) turns an unreviewed take from WARN to BLOCK."""
     from film_pipeline.production.takes import load_log
+    audio_probe = audio_probe or (probe_audio_duration if probe is None else probe)
     probe = probe or probe_duration
     root = Path(pkg.root)
     log = load_log(root, pkg.header.film_id)
@@ -204,6 +221,7 @@ def edit_problems(pkg: Any, section: EditSection, *, clips_dir: Path | None = No
     versions = {g.generation_id: g.version for g in shots.generations} if shots is not None else {}
     problems: list[dict[str, str]] = []
     durations: dict[str, float] = {}
+    clips_by_take: dict[str, Path] = {}
 
     def add(code: str, severity: str, event_id: str, detail: str) -> None:
         problems.append({"code": code, "severity": severity, "event_id": event_id, "detail": detail})
@@ -239,6 +257,7 @@ def edit_problems(pkg: Any, section: EditSection, *, clips_dir: Path | None = No
             add("CLIP_UNREADABLE", "BLOCK", event.event_id, f"{clip.name}: {exc}")
             continue
         durations[event.take_id] = length
+        clips_by_take[event.take_id] = clip
         if event.src_out_s is not None and event.src_out_s > length + FRAME_S / 2:
             add("TRIM_OUTSIDE_SOURCE", "BLOCK", event.event_id, f"src_out_s {event.src_out_s} > clip length {length:.3f}")
         if event.src_in_s >= length:
@@ -279,8 +298,13 @@ def edit_problems(pkg: Any, section: EditSection, *, clips_dir: Path | None = No
         if j and prev.event_id in lengths and j >= lengths[prev.event_id]:
             add("JCUT_TOO_LONG", "BLOCK", event.event_id, f"J-cut of {j}s is longer than {prev.event_id}")
         if l:
-            clip_s = durations.get(prev.take_id)
-            if prev.kind != "TAKE" or clip_s is None or prev.src_out_s is None or prev.src_out_s + l > clip_s + FRAME_S / 2:
+            clip_s = None
+            if prev.kind == "TAKE" and prev.take_id in clips_by_take:   # the sound handle, not the picture length
+                try:
+                    clip_s = audio_probe(clips_by_take[prev.take_id])
+                except (subprocess.CalledProcessError, OSError, ValueError):
+                    clip_s = None
+            if prev.kind != "TAKE" or clip_s is None or prev.src_out_s is None or prev.src_out_s + l > clip_s + FRAME_S:
                 add("LCUT_NO_HANDLE", "BLOCK", event.event_id,
                     f"L-cut of {l}s needs {l}s of {prev.event_id} sound after its src_out_s (set src_out_s earlier)")
             if event.event_id in lengths and l >= lengths[event.event_id]:
@@ -329,17 +353,19 @@ def fine_graph(section: EditSection, starts: list[float], lengths: list[float], 
     fl: list[str] = []
     for i in range(n):
         a, b = in_points[i], in_points[i] + lengths[i]
-        fl.append(f"[{i}:v]fps={FPS},scale={w}:{h},setsar=1,{grade},format=yuv420p,"
+        fl.append(f"[{i}:v]fps={FPS},settb=1/{FPS},scale={w}:{h},setsar=1,{grade},format=yuv420p,"
                   f"trim=start={a:.6f}:end={b:.6f},setpts=PTS-STARTPTS[v{i}]")
     acc = "v0"
     for i in range(1, n):
         t = events[i].transition
         label = "vout" if i == n - 1 else f"x{i}"
         if t.type in _HARD:
-            fl.append(f"[{acc}][v{i}]concat=n=2:v=1:a=0[{label}]")
+            # concat leaves a 1/1000000 time base; xfade wants both inputs on the same one
+            fl.append(f"[{acc}][v{i}]concat=n=2:v=1:a=0,fps={FPS},settb=1/{FPS}[{label}]")
         else:
             kind = "fade" if t.type == "DISSOLVE" else "fadeblack"
-            fl.append(f"[{acc}][v{i}]xfade=transition={kind}:duration={t.duration_s:.6f}:offset={starts[i]:.6f}[{label}]")
+            fl.append(f"[{acc}][v{i}]xfade=transition={kind}:duration={t.duration_s:.6f}:offset={starts[i]:.6f},"
+                      f"fps={FPS},settb=1/{FPS}[{label}]")
         acc = label
     if n == 1:
         fl.append("[v0]null[vout]")
@@ -350,10 +376,13 @@ def fine_graph(section: EditSection, starts: list[float], lengths: list[float], 
         d_in = events[i].transition.duration_s if i else 0.0
         d_out = events[i + 1].transition.duration_s if i + 1 < n else 0.0
         a0, a1 = in_points[i] - j, in_points[i] + lengths[i] + l_next
+        place = starts[i] - j                      # body second the sound starts at; before 0 means it is cut off
+        if place < 0:
+            a0 -= place                           # drop the part that would play before the film starts
         span = a1 - a0
         fade_in = d_in if d_in else (min(j, 0.3) if j else 0.05)
         fade_out = d_out if d_out else (min(l_next, 0.3) if l_next else 0.08)
-        ms = max(0, round((starts[i] - j) * 1000))
+        ms = max(0, round(place * 1000))
         fl.append(f"[{i}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=start={a0:.6f}:end={a1:.6f},"
                   f"asetpts=PTS-STARTPTS,afade=t=in:d={fade_in:.3f},afade=t=out:st={max(0.0, span - fade_out):.3f}:"
                   f"d={fade_out:.3f},adelay={ms}|{ms}[a{i}]")
@@ -375,9 +404,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
         raise ValueError("; ".join(f"{p['code']} {p['event_id']}: {p['detail']}" for p in blocks))
     root = Path(pkg.root)
     entries = {t.take_id: t for t in load_log(root, pkg.header.film_id).takes}
-    title = [(l.text, l.size) for l in section.title] or [(pkg.header.title, 96)]
-    end = [(l.text, l.size) for l in section.end] or [(pkg.header.title, 64),
-                                                      ("All characters are fictional.", 30)]
+    title, end = resolved_cards(pkg, section)
     fine = _is_fine(section)
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)

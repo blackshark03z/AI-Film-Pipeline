@@ -168,7 +168,8 @@ def test_frame_or_structure_changes_affect_the_right_events(film):
     assert L.lock_status(reload(root))["changed_events"] == ["c"]                    # removed at the end
     write_edl(root, EditSection(events=[events[0], ev("d", "SC02_g1", transition=Transition(type="DISSOLVE", duration_s=0.5)),
                                         *events[1:]]))
-    assert L.lock_status(reload(root))["changed_events"] == ["d", "b", "c"]          # inserted in the middle
+    # inserted in the middle; the dissolve into d also overlaps the tail of a
+    assert L.lock_status(reload(root))["changed_events"] == ["a", "d", "b", "c"]
 
 
 @needs_ffmpeg
@@ -187,3 +188,63 @@ def test_cli_lock_status_and_lock(film):
     assert done.returncode == 0 and json.loads(done.stdout)["locked"]["locked_by"] == "Owner"
     again = run()
     assert again.returncode == 0 and json.loads(again.stdout)["status"]["fresh"]
+
+
+# ------------------------------------------------------------------ Codex review fixes
+
+
+@needs_ffmpeg
+def test_replacing_or_deleting_a_locked_clip_breaks_the_lock(film):
+    root, clips = film
+    L.lock_picture(reload(root), "Owner", clips_dir=clips)
+    assert L.lock_status(reload(root))["fresh"]          # the lock remembers where its clips were
+    gate = lambda: evaluate_gate(reload(root), "5")  # noqa: E731
+    assert gate().status == "PASS"
+    victim = clips / "SC01_g2.mp4"
+    keep = victim.read_bytes()
+    make_clip(victim, 3.0, 777)                          # same name, new bytes, take index untouched
+    status = L.lock_status(reload(root))
+    assert not status["fresh"] and "CLIP_CHANGED b" in status["reason"] and gate().status == "BLOCK"
+    victim.write_bytes(keep)
+    assert L.lock_status(reload(root))["fresh"]
+    victim.unlink()
+    assert "CLIP_MISSING b" in L.lock_status(reload(root))["reason"]
+
+
+@needs_ffmpeg
+def test_a_new_shot_version_breaks_the_lock_even_though_the_edl_is_unchanged(film):
+    root, clips = film
+    L.lock_picture(reload(root), "Owner", clips_dir=clips)
+    shots = json.loads((root / "04_shots.json").read_text(encoding="utf-8"))
+    next(g for g in shots["generations"] if g["generation_id"] == "SC01_g2")["version"] = 2
+    (root / "04_shots.json").write_text(json.dumps(shots), encoding="utf-8")
+    status = L.lock_status(reload(root))
+    assert not status["fresh"] and "TAKE_SUPERSEDED b" in status["reason"]
+    assert evaluate_gate(reload(root), "5").status == "BLOCK"
+
+
+@needs_ffmpeg
+def test_a_j_cut_added_to_an_event_dirties_the_event_in_front_of_it(film):
+    root, clips = film
+    lock = L.lock_picture(reload(root), "Owner", clips_dir=clips)
+    write_post(root, {"mix_a": {"locked_against": lock["edl_sha256"], "events": ["a"]},
+                      "mix_c": {"locked_against": lock["edl_sha256"], "events": ["c"]}})
+    write_edl(root, EditSection(events=[ev("a", "SC01_g1"), ev("b", "SC01_g2", src_in_s=1.0, audio={"j_cut_s": 0.5}),
+                                        ev("c", "SC02_g1")]))
+    assert L.lock_status(reload(root))["changed_events"] == ["a", "b", "c"]
+    report = L.dirty_items(reload(root))
+    assert {d["item"] for d in report["dirty"]} == {"mix_a", "mix_c"}
+    # without any reach-back the neighbour stays clean
+    write_edl(root, EditSection(events=[ev("a", "SC01_g1"), ev("b", "SC01_g2", src_in_s=1.0), ev("c", "SC02_g1")]))
+    assert L.lock_status(reload(root))["changed_events"] == ["b", "c"]
+
+
+@needs_ffmpeg
+def test_renaming_the_film_changes_the_default_cards_and_the_lock(film):
+    root, clips = film
+    L.lock_picture(reload(root), "Owner", clips_dir=clips)
+    header = json.loads((root / "film.json").read_text(encoding="utf-8"))
+    header["title"] = "A different title"
+    (root / "film.json").write_text(json.dumps(header), encoding="utf-8")
+    status = L.lock_status(reload(root))
+    assert not status["fresh"] and status["changed_events"] == ["a", "b", "c"]

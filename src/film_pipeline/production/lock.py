@@ -27,7 +27,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from film_pipeline.production.edit import cut_continuity, edit_problems
+from film_pipeline.production.edit import cut_continuity, edit_problems, resolved_cards
 
 LOCK_DIR = "lock"
 LOCK_FILE = "picture.lock.json"
@@ -58,10 +58,14 @@ def snapshot(pkg: Any) -> dict[str, Any]:
         entry = log.get(event.take_id) if event.kind == "TAKE" else None
         source = {"sha256": entry.output_sha256, "accepted": entry.status == "ACCEPTED"} if entry else (
             {"missing": True} if event.kind == "TAKE" else {})
-        events.append({"event_id": event.event_id,
+        # a dissolve overlaps the picture before it and a J-cut starts its sound before it: such an event also moves
+        # the tail of the event in front of it
+        reach_back = event.transition.duration_s > 0 or event.audio.j_cut_s > 0
+        events.append({"event_id": event.event_id, "reach_back": reach_back,
                        "sha256": _hash({"event": event.model_dump(mode="json"), "tags": tags.get(event.event_id, []),
                                         "source": source})})
-    frame = {k: section.model_dump(mode="json")[k] for k in ("title", "end", "title_s", "end_s")}
+    title, end = resolved_cards(pkg, section)
+    frame = {"title": title, "end": end, "title_s": section.title_s, "end_s": section.end_s}
     return {"edl_sha256": _hash(section.model_dump(mode="json")), "frame_sha256": _hash(frame), "events": events,
             "sources": {e.take_id: log[e.take_id].output_sha256 for e in section.events
                         if e.kind == "TAKE" and e.take_id in log}}
@@ -73,12 +77,15 @@ def affected_events(old: dict[str, Any], new: dict[str, Any]) -> list[str]:
         return [e["event_id"] for e in new["events"]] + [e["event_id"] for e in old["events"]
                                                          if e["event_id"] not in {x["event_id"] for x in new["events"]}]
     a, b = old["events"], new["events"]
-    first = next((i for i in range(min(len(a), len(b))) if a[i] != b[i]), None)
+    key = lambda e: (e["event_id"], e["sha256"])  # noqa: E731  (older records carry no reach_back)
+    first = next((i for i in range(min(len(a), len(b))) if key(a[i]) != key(b[i])), None)
     if first is None:
         if len(a) == len(b):
             return []
         first = min(len(a), len(b))
     out: list[str] = []
+    if first > 0 and any(e.get("reach_back") for e in (a[first:first + 1] + b[first:first + 1])):
+        out.append(b[first - 1]["event_id"])
     for e in b[first:] + a[first:]:
         if e["event_id"] not in out:
             out.append(e["event_id"])
@@ -95,6 +102,16 @@ def load_recorded(root: Path, edl_sha256: str) -> dict[str, Any] | None:
     return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
 
 
+def lock_blocks(pkg: Any, section: Any, clips_dir: Path | None = None) -> list[str]:
+    """Everything that stops this cut from being (or staying) locked: edit validation with every take accepted and its
+    media bytes checked against the take log, plus BLOCK findings at the cuts."""
+    problems, durations = edit_problems(pkg, section, clips_dir=clips_dir, require_accepted=True)
+    blocks = [f"{p['code']} {p['event_id']}: {p['detail']}" for p in problems if p["severity"] == "BLOCK"]
+    blocks += [f"{i['code']} {'/'.join(i['between'])}: {i['detail']}"
+               for i in cut_continuity(pkg, section, durations)["issues"] if i["severity"] == "BLOCK"]
+    return blocks
+
+
 def lock_picture(pkg: Any, locked_by: str, reason: str = "", clips_dir: Path | None = None) -> dict[str, Any]:
     """Freeze the cut. Raises ValueError listing what stops it: an invalid EDL, a take nobody accepted, changed bytes,
     a BLOCK finding at a cut."""
@@ -105,10 +122,7 @@ def lock_picture(pkg: Any, locked_by: str, reason: str = "", clips_dir: Path | N
         raise ValueError("there is no valid 05_edit.json to lock")
     if not section.events:
         raise ValueError("an empty cut cannot be locked")
-    problems, durations = edit_problems(pkg, section, clips_dir=clips_dir, require_accepted=True)
-    blocks = [f"{p['code']} {p['event_id']}: {p['detail']}" for p in problems if p["severity"] == "BLOCK"]
-    blocks += [f"{i['code']} {'/'.join(i['between'])}: {i['detail']}"
-               for i in cut_continuity(pkg, section, durations)["issues"] if i["severity"] == "BLOCK"]
+    blocks = lock_blocks(pkg, section, clips_dir)
     if blocks:
         raise ValueError("cannot lock: " + "; ".join(blocks))
     root = Path(pkg.root)
@@ -116,6 +130,7 @@ def lock_picture(pkg: Any, locked_by: str, reason: str = "", clips_dir: Path | N
     previous = load_lock(root)
     record = {"film_id": pkg.header.film_id, "locked_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "locked_by": locked_by.strip(), "reason": reason, **snap,
+              **({"clips_dir": str(clips_dir)} if clips_dir else {}),
               "supersedes": previous["edl_sha256"] if previous and previous["edl_sha256"] != snap["edl_sha256"] else "",
               "changed_events": affected_events(previous, snap) if previous else []}
     history = lock_dir(root) / "history"
@@ -126,7 +141,7 @@ def lock_picture(pkg: Any, locked_by: str, reason: str = "", clips_dir: Path | N
     return record
 
 
-def lock_status(pkg: Any) -> dict[str, Any]:
+def lock_status(pkg: Any, clips_dir: Path | None = None) -> dict[str, Any]:
     root = Path(pkg.root)
     lock = load_lock(root)
     if lock is None:
@@ -138,9 +153,15 @@ def lock_status(pkg: Any) -> dict[str, Any]:
                 "reason": str(exc)}
     changed = affected_events(lock, now)
     fresh = lock["edl_sha256"] == now["edl_sha256"] and not changed and lock["sources"] == now["sources"]
+    reason = "" if fresh else "the cut changed after the lock"
+    if fresh:   # the cut is the same on paper: the media on disk and the shot versions must still support it
+        used = clips_dir or (Path(lock["clips_dir"]) if lock.get("clips_dir") else None)
+        blocks = lock_blocks(pkg, pkg.typed["edit"], used)
+        if blocks:
+            fresh, reason = False, "the locked cut no longer holds up: " + "; ".join(blocks[:4])
     return {"locked": True, "fresh": fresh, "locked_by": lock["locked_by"], "locked_at": lock["locked_at"],
             "lock_edl_sha256": lock["edl_sha256"], "current_edl_sha256": now["edl_sha256"], "changed_events": changed,
-            "reason": "" if fresh else "the cut changed after the lock"}
+            "reason": reason}
 
 
 def items(pkg: Any) -> list[tuple[str, str, dict[str, Any]]]:

@@ -40,7 +40,8 @@ FLOW_SEND = ROOT / "tools" / "drama_flow_ui" / "flow_send.py"
 ROUTE = "start_frame+Khung hinh"
 MODEL = "Omni Flash 360p"
 PLACEHOLDER_TOKEN = "tok:<TAIL_OF_UPLOADED_START_FRAME>"
-_GO = re.compile(r"^OWNER_GO_LIVE:\s*(YES|NO)\b", re.MULTILINE)
+_GO = re.compile(r"^OWNER_GO_LIVE: (YES|NO)[ \t\r]*$", re.MULTILINE)
+_RECEIPT_NUMBER = re.compile(r"_t(\d+)$")
 
 Runner = Callable[[list[str], Path], dict[str, Any]]
 
@@ -49,16 +50,19 @@ def owner_go_live(backlog: Path | None = None) -> bool:
     """True only if the backlog header carries a literal `OWNER_GO_LIVE: YES`; a missing file or line means NO."""
     path = Path(backlog) if backlog else BACKLOG
     try:
-        found = _GO.search(path.read_text(encoding="utf-8"))
+        found = _GO.findall(path.read_text(encoding="utf-8"))
     except OSError:
         return False
-    return bool(found and found.group(1) == "YES")
+    return found == ["YES"]   # exactly one header line, and it says YES
 
 
 def default_runner(argv: list[str], out: Path) -> dict[str, Any]:  # pragma: no cover - spends credits; P3-05 only
-    subprocess.run(argv, check=False)
+    """Run the sender and return its manifest plus `returncode`; `generate` refuses a manifest that does not belong to
+    this send (the output must not exist before the send, so an old manifest cannot be mistaken for a new one)."""
+    done = subprocess.run(argv, check=False)
     manifest = out.with_suffix(".take.json")
-    return json.loads(manifest.read_text(encoding="utf-8")) if manifest.is_file() else {"result": "NO_MANIFEST"}
+    body = json.loads(manifest.read_text(encoding="utf-8")) if manifest.is_file() else {"result": "NO_MANIFEST"}
+    return {**body, "returncode": done.returncode}
 
 
 def _blocker(code: str, detail: str, live_only: bool = False) -> dict[str, Any]:
@@ -106,10 +110,22 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     if not still.is_file():
         blockers.append(_blocker("START_FRAME_MISSING", f"{still} not found (prompt in plan stills/start_{generation_id}.txt)"))
 
-    number = len(log.for_generation(generation_id)) + 1
+    sent = _sent_receipts(root, pkg.header.film_id)
+    logged = {t.take_id for t in log.takes}
+    # a send that did not end in a registered take still used its number (and probably its credits): never reuse it
+    used = [len(log.for_generation(generation_id))] + [
+        int(m.group(1)) for tid in sent if tid.startswith(f"{generation_id}_t") and (m := _RECEIPT_NUMBER.search(tid))]
+    number = max(used) + 1
     take_id = f"{generation_id}_t{number}"
     out = root / "media" / "takes" / f"{take_id}.mp4"
-    spent = sum(t.credits for t in log.takes)
+    spent = sum(t.credits for t in log.takes) + sum(r["expected_credits"] for tid, r in sent.items() if tid not in logged)
+    pending = [tid for tid, r in sent.items() if r.get("result") == "PENDING" and tid.startswith(f"{generation_id}_t")]
+    if pending:
+        blockers.append(_blocker("SEND_PENDING", f"{', '.join(pending)} was sent and never reported back; check Flow for the "
+                                 f"clip and register or discard it by hand before another send", live_only=True))
+    if out.exists() or out.with_suffix(".take.json").exists():
+        blockers.append(_blocker("OUTPUT_EXISTS", f"{out} (or its manifest) already exists; it is evidence and is not "
+                                 f"overwritten", live_only=True))
     cap = pkg.header.budget.credits_cap
     if not start_token:
         blockers.append(_blocker("START_TOKEN_MISSING", "pass --start-token tok:<tail> of the start still uploaded to Flow",
@@ -132,6 +148,24 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
                               "the start still is uploaded to the Flow gallery (its tail is --start-token)",
                               "GPM / Flow browser stays open; no cookies or captchas touched"],
             "blockers": blockers}
+
+
+def _sent_receipts(root: Path, film_id: str) -> dict[str, dict[str, Any]]:
+    """Intent receipts of real sends (take id -> receipt). An unreadable receipt counts as a pending send."""
+    out: dict[str, dict[str, Any]] = {}
+    folder = takes_dir(root) / "intents"
+    if not folder.is_dir():
+        return out
+    for path in sorted(folder.glob("*.intent.json")):
+        take_id = path.name[:-len(".intent.json")]
+        try:
+            body = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            out[take_id] = {"sent": True, "result": "PENDING", "expected_credits": CREDITS_PER_GENERATION}
+            continue
+        if body.get("sent") and body.get("film_id", film_id) == film_id:
+            out[take_id] = {**body, "expected_credits": float(body.get("expected_credits") or CREDITS_PER_GENERATION)}
+    return out
 
 
 def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
@@ -168,15 +202,26 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
         return {"sent": False, "dry_run": False, "refused": refusals, "payload": payload, "receipt": str(receipt)}
     receipt = _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
     out = Path(payload["output"])
-    manifest = (runner or default_runner)(payload["argv"], out)
+    try:
+        manifest = (runner or default_runner)(payload["argv"], out)
+    except BaseException:
+        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING",
+                       note="the sender raised before reporting; check Flow before resending")
+        raise
     result: dict[str, Any] = {"sent": True, "dry_run": False, "payload": payload, "manifest_result": manifest.get("result"),
                               "receipt": str(receipt)}
-    if manifest.get("result") == "PASSED" and out.is_file():
+    outcome = str(manifest.get("result"))
+    if outcome == "PASSED" and manifest.get("returncode", 0) != 0:
+        outcome = f"SENDER_EXIT_{manifest.get('returncode')}"
+    elif outcome == "PASSED" and manifest.get("sha256") and out.is_file() and manifest["sha256"] != sha256_file(out):
+        outcome = "MANIFEST_HASH_MISMATCH"
+    if outcome == "PASSED" and out.is_file():
         entry, _ = register_take(root, pkg.header.film_id, generation_id, out,
                                  prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
                                  route=ROUTE, model=MODEL, credits=CREDITS_PER_GENERATION,
                                  start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"])
         result["take"] = entry.model_dump(mode="json")
-    _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True,
-                   result=str(manifest.get("result")), take_registered=bool(result.get("take")))
+    result["manifest_result"] = outcome
+    _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=outcome,
+                   take_registered=bool(result.get("take")))
     return result

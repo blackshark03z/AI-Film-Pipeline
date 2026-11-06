@@ -195,11 +195,10 @@ def test_render_matches_the_planned_timeline_within_a_frame_per_event(tmp_path):
     report = render_cut(load_package(root), sec, out, clips_dir=clips)
     planned = report["planned"]
     assert out.is_file() and Path(report["report"]).is_file()
+    # the file itself is as long as planned (event boundaries are measured on solid colours in the tests below);
+    # the trim is real: the last take contributes 2 s, not its 3 s
     assert abs(report["total_s"] - planned["total_s"]) <= E.FRAME_S * len(sec.events)
-    for got, want in zip(report["rendered_events"], planned["events"]):
-        assert abs(got["start_s"] - want["start_s"]) <= E.FRAME_S * 2, got["event_id"]
-    # the trim is real: the second take contributes 2 s, not its 3 s
-    assert abs(report["rendered_events"][2]["duration_s"] - 2.0) <= E.FRAME_S * 2
+    assert abs(planned["events"][2]["duration_s"] - 2.0) <= E.FRAME_S * 2
     assert json.loads(Path(report["report"]).read_text(encoding="utf-8"))["output_sha256"] == report["output_sha256"]
 
 
@@ -477,3 +476,64 @@ def test_film03_rendered_cut_has_the_legacy_final_duration(tmp_path):
     post = json.loads((LEGACY / "post" / "film03_post.json").read_text(encoding="utf-8"))
     assert abs(report["total_s"] - post["duration_s"]) <= E.FRAME_S * 18
     assert [e["event_id"] for e in report["rendered_events"]] == post["clips"]
+
+
+# --------------------------------------------------------------- Codex review fixes
+
+def colour_at(video: Path, at_s: float) -> str:
+    r, g, b = frame_rgb(video, at_s)
+    return "red" if r > 120 > max(g, b) else "green" if g > 80 > max(r, b) else "blue" if b > 120 > max(r, g) else         f"mixed{(r, g, b)}"
+
+
+@needs_ffmpeg
+def test_hard_cut_boundaries_are_where_the_colours_change(tmp_path):
+    root, clips = make_solid_film(tmp_path, {"SC01_g1": ("red", 2.0, 300), "SC01_g2": ("green", 3.0, 400),
+                                             "SC02_g1": ("blue", 2.0, 500)})
+    sec = EditSection(events=[take("a", "SC01_g1"), take("b", "SC01_g2", src_in_s=0.5, src_out_s=2.5), take("c", "SC02_g1")])
+    out = tmp_path / "hard.mp4"
+    report = render_cut(load_package(root), sec, out, clips_dir=clips)
+    assert report["path"] == "hard"
+    for at, want in ((4.85, "red"), (5.15, "green"), (6.85, "green"), (7.15, "blue")):   # title 3 s, then 2 s, 2 s
+        assert colour_at(out, at) == want, at
+
+
+@needs_ffmpeg
+def test_two_hard_cuts_then_a_dissolve_render_on_the_right_clock(tmp_path):
+    root, clips = make_solid_film(tmp_path, {"SC01_g1": ("red", 3.0, 300), "SC01_g2": ("green", 3.0, 400),
+                                             "SC02_g1": ("blue", 3.0, 500)})
+    sec = EditSection(events=[take("a", "SC01_g1"), take("b", "SC01_g2"),
+                              take("c", "SC02_g1", transition=Transition(type="DISSOLVE", duration_s=1.0))])
+    out = tmp_path / "cut_cut_dissolve.mp4"
+    report = render_cut(load_package(root), sec, out, clips_dir=clips)   # the concat time base used to break xfade
+    assert report["path"] == "fine" and abs(report["total_s"] - 15.0) <= E.FRAME_S * 3
+    for at, want in ((5.85, "red"), (6.15, "green"), (7.8, "green"), (9.3, "blue")):
+        assert colour_at(out, at) == want, at
+    assert colour_at(out, 8.5).startswith("mixed")                       # halfway through the dissolve
+
+
+def test_a_j_cut_longer_than_the_dissolve_overlap_trims_the_sound_instead_of_shifting_it():
+    sec = EditSection(events=[take("a", "SC01_g1"),
+                              take("b", "SC01_g2", src_in_s=2.0, audio=AudioCut(j_cut_s=1.9),
+                                   transition=Transition(type="DISSOLVE", duration_s=1.5))])
+    graph = E.fine_graph(sec, starts=[0.0, 0.5], lengths=[2.0, 4.0], in_points=[0.0, 2.0], body_s=4.5, grade="null",
+                         w=640, h=360)
+    chain = next(line for line in graph if line.startswith("[1:a]"))
+    # b's sound would start 1.4 s before the film: drop that much of it (source 0.1 -> 1.5) and place it at 0
+    assert "atrim=start=1.500000" in chain and "adelay=0|0" in chain
+
+
+@needs_ffmpeg
+def test_an_l_cut_needs_sound_after_the_trim_not_just_picture(tmp_path):
+    root, clips = make_film(tmp_path, {"SC01_g1": 8.0, "SC01_g2": 3.0})
+    short_audio = clips / "SC01_g1.mp4"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc2=size=640x360:rate=24:duration=8",
+                    "-f", "lavfi", "-i", "sine=frequency=330:duration=6:sample_rate=48000", "-c:v", "libx264",
+                    "-pix_fmt", "yuv420p", "-c:a", "aac", str(short_audio)], check=True)
+    log = T.load_log(root, "film03_front_desk")
+    log.takes[0] = log.takes[0].model_copy(update={"output_sha256": T.sha256_file(short_audio)})
+    T.save_log(root, log)
+    sec = EditSection(events=[take("a", "SC01_g1", src_out_s=6.0), take("b", "SC01_g2", audio=AudioCut(l_cut_s=1.0))])
+    problems, _ = edit_problems(load_package(root), sec, clips_dir=clips)
+    assert "LCUT_NO_HANDLE" in codes(problems, "BLOCK")
+    fine = EditSection(events=[take("a", "SC01_g1", src_out_s=4.5), take("b", "SC01_g2", audio=AudioCut(l_cut_s=1.0))])
+    assert "LCUT_NO_HANDLE" not in codes(edit_problems(load_package(root), fine, clips_dir=clips)[0])

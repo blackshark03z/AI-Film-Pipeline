@@ -234,3 +234,99 @@ def test_other_shots_waiting_on_their_predecessor_do_not_block_this_one(tmp_path
     done = G.generate(film(tmp_path, 100), "SC01_g1", dry_run=True, stills_dir=still(tmp_path), start_token="tok:abc",
                       backlog=backlog(tmp_path))
     assert done["payload"]["blockers"] == []  # SC03_g1's own preflight is BLOCKED until SC02_g2 is accepted
+
+
+# ------------------------------------------------------------------ Codex review fixes
+
+
+def test_go_live_needs_one_exact_line(tmp_path):
+    for text in ("OWNER_GO_LIVE:\nYES\n", "OWNER_GO_LIVE: YES, but not yet\n", "OWNER_GO_LIVE:  YES\n",
+                 "OWNER_GO_LIVE: YES\nOWNER_GO_LIVE: NO\n", "OWNER_GO_LIVE: YESTERDAY\n", "  OWNER_GO_LIVE: YES\n"):
+        path = tmp_path / "b.md"
+        path.write_text(text, encoding="utf-8")
+        assert not G.owner_go_live(path), text
+    path = tmp_path / "ok.md"
+    path.write_bytes(b"# x\r\nOWNER_GO_LIVE: YES \r\n")
+    assert G.owner_go_live(path)
+
+
+GO = "OWNER_GO_LIVE: YES"
+
+
+def live(pkg, tmp_path, runner, **kw):
+    return G.generate(pkg, "SC01_g1", dry_run=False, stills_dir=still(tmp_path), start_token="tok:abc",
+                      backlog=backlog(tmp_path, GO), runner=runner, **kw)
+
+
+def test_a_failed_send_keeps_its_take_number_and_its_credits(tmp_path):
+    pkg = film(tmp_path, 20)   # cap 30: two 12-credit sends fit, three do not
+    first = live(pkg, tmp_path, FakeRunner("TIMEOUT"))
+    assert first["sent"] and first["payload"]["take_id"] == "SC01_g1_t1"
+    second = live(pkg, tmp_path, FakeRunner("TIMEOUT"))
+    assert second["payload"]["take_id"] == "SC01_g1_t2" and second["payload"]["credits_spent"] == 12
+    assert (Path(first["receipt"]).parent / "SC01_g1_t1.intent.json").is_file()   # evidence of t1 is not overwritten
+    third = live(pkg, tmp_path, FakeRunner())
+    assert not third["sent"] and [r["code"] for r in third["refused"]] == ["BUDGET_EXCEEDED"]
+    assert third["payload"]["credits_spent"] == 24
+
+
+def test_an_interrupted_send_blocks_the_next_one(tmp_path):
+    pkg = film(tmp_path, 100)
+
+    class Dies:
+        calls = 0
+
+        def __call__(self, argv, out):
+            self.calls += 1
+            raise RuntimeError("process died")
+
+    with pytest.raises(RuntimeError):
+        live(pkg, tmp_path, Dies())
+    receipt = json.loads((T.takes_dir(pkg.root) / "intents" / "SC01_g1_t1.intent.json").read_text(encoding="utf-8"))
+    assert receipt["sent"] and receipt["result"] == "PENDING"
+    runner = FakeRunner()
+    again = live(pkg, tmp_path, runner)
+    assert not again["sent"] and not runner.calls
+    assert [r["code"] for r in again["refused"]] == ["SEND_PENDING"] and again["payload"]["take_id"] == "SC01_g1_t2"
+
+
+def test_a_pending_receipt_on_disk_blocks_even_without_an_exception(tmp_path):
+    pkg = film(tmp_path, 100)
+    folder = T.takes_dir(pkg.root) / "intents"
+    folder.mkdir(parents=True)
+    (folder / "SC01_g1_t1.intent.json").write_text("{not json", encoding="utf-8")   # killed mid-write
+    again = live(pkg, tmp_path, FakeRunner())
+    assert [r["code"] for r in again["refused"]] == ["SEND_PENDING"]
+
+
+def test_a_failing_sender_does_not_register_an_old_clip(tmp_path):
+    pkg = film(tmp_path, 100)
+
+    class Crashes:
+        def __call__(self, argv, out):
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_bytes(b"old-bytes")
+            return {"result": "PASSED", "returncode": 1}
+
+    done = live(pkg, tmp_path, Crashes())
+    assert done["manifest_result"] == "SENDER_EXIT_1" and "take" not in done
+    assert T.load_log(pkg.root, pkg.header.film_id).takes == []
+
+    class WrongHash:
+        def __call__(self, argv, out):
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_bytes(b"new-bytes")
+            return {"result": "PASSED", "returncode": 0, "sha256": "0" * 64}
+
+    other = live(pkg, tmp_path, WrongHash())
+    assert other["manifest_result"] == "MANIFEST_HASH_MISMATCH" and "take" not in other
+
+
+def test_an_existing_output_is_never_overwritten(tmp_path):
+    pkg = film(tmp_path, 100)
+    out = pkg.root / "media" / "takes" / "SC01_g1_t1.mp4"
+    out.parent.mkdir(parents=True)
+    out.write_bytes(b"evidence")
+    runner = FakeRunner()
+    done = live(pkg, tmp_path, runner)
+    assert [r["code"] for r in done["refused"]] == ["OUTPUT_EXISTS"] and not runner.calls and out.read_bytes() == b"evidence"
