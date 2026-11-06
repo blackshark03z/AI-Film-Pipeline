@@ -41,6 +41,7 @@ python tools/film.py validate --film films/<film_id>      # gates 1–6 + packag
 python tools/film.py status   --film films/<film_id>
 python tools/film.py continuity --film films/<film_id>    # action/spatial/object/temporal/visual/emotional; BLOCKs also fail `plan`
 python tools/film.py camera     --film films/<film_id>    # camera & lighting plan (scenes[].lighting, generations[].camera)
+python tools/film.py animatic   --film films/<film_id> [--stills <dir>] [--audio <dir>]   # media/animatic.mp4 + srt + timing report, 0 credits
 python tools/film.py plan     --film films/<film_id> --out <dir> --takes <takes_dir> --approve-storyboard "<reviewer>"
 ```
 
@@ -51,6 +52,9 @@ where the previous one ended (a scene cut only warns).
 Camera & lighting: declare `lighting` on every scene and `camera` on every shot, or on none. Only the shot size reaches
 the prompt (derived from the coverage type); angle, movement, lens and light are planning data the Flow route cannot
 obey. Three identical sizes in one scene BLOCK unless each repeat carries `declared_repeat`.
+
+Animatic: review `media/animatic_report.json` before Generate - `DIALOGUE_TOO_FAST` means the line cannot be spoken in
+its 8 s window (more than 3.5 words/s); fix the script or split the generation. Approved stills replace schematic frames.
 
 Never mark a gate PASS by hand. A stage that exists but has no validator reports `NOT_RUN`, which is not a pass.
 

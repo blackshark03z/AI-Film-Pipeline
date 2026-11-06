@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 26 · PARTIAL 87 · GAP 29 · N/A 26 · total 168
+**Summary:** HAVE 27 · PARTIAL 87 · GAP 28 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -66,7 +66,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 44 | Cinematography planning | `production/camera.py`: per-shot camera setup + per-scene lighting plan, all-or-nothing rule, `film.py camera`, `plan` BLOCKs | HAVE | - |
 | 45 | Lighting design | `camera.LightingPlan` (key direction/quality/colour temp/motivation/practicals, LIGHT_JUMP warn); not compiled into prompts | PARTIAL | - |
 | 46 | Storyboarding | `drama/storyboard.py` schematic board + Gate 2 | HAVE | - |
-| 47 | Previsualization | Still storyboard only; no timed animatic | GAP | P2-04 |
+| 47 || `production/animatic.py`: timed storyboard/still frames + captions + optional temp audio -> mp4/srt/timing report (`film.py animatic`) | HAVE | - |
 | 48 | Blocking diagram | `storyboard.render_schematic_frame` + AxisBook | PARTIAL | P2-03 |
 | 49 | Shot planning | `generation.py` split into 8 s units + `coverage` shot list | PARTIAL | P2-05 |
 | 50 | Continuity planning | `production/continuity.py`: six kinds over per-generation start/end states, `film.py continuity`, hooked into `plan` | HAVE | - |

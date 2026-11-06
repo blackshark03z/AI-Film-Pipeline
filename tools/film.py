@@ -92,6 +92,12 @@ def main(argv: list[str] | None = None) -> int:
     cont.add_argument("--film", required=True, type=Path)
     cam = actions.add_parser("camera", help="camera & lighting plan: sizes, axis side, size runs, light consistency")
     cam.add_argument("--film", required=True, type=Path)
+    ani = actions.add_parser("animatic", help="timed storyboard animatic (mp4 + srt + timing report), 0 credits")
+    ani.add_argument("--film", required=True, type=Path)
+    ani.add_argument("--out", type=Path, help="output directory (default: <film>/media)")
+    ani.add_argument("--stills", type=Path, help="directory of approved start stills <gid>.png")
+    ani.add_argument("--storyboard", type=Path, help="directory of plan storyboard frames <gid>.png")
+    ani.add_argument("--audio", type=Path, help="directory of temp dialogue tracks <gid>.wav (silence if absent)")
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
     narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
     narr.add_argument("--project", type=Path, help="E2E project directory (import)")
@@ -140,6 +146,13 @@ def main(argv: list[str] | None = None) -> int:
                 return 2
             report = camera_report(pre, shots)
             _emit(report)
+            return 0 if report["ok"] else 1
+        if args.action == "animatic":
+            from film_pipeline.production.animatic import build_animatic
+            report = build_animatic(pkg, args.out, stills_dir=args.stills, storyboard_dir=args.storyboard,
+                                    audio_dir=args.audio)
+            _emit({k: report[k] for k in ("video", "subtitles", "planned_duration_s", "actual_duration_s", "ok",
+                                          "findings")})
             return 0 if report["ok"] else 1
         if args.action == "plan":
             result = plan_package(pkg, args.out, takes_dir=args.takes, storyboard=not args.no_storyboard,
