@@ -150,6 +150,12 @@ def main(argv: list[str] | None = None) -> int:
     mq.add_argument("--film", required=True, type=Path)
     mq.add_argument("--video", type=Path, help="the master (default <film>/media/cut/mixed.mp4)")
     mq.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
+    vs = actions.add_parser("versions", help="9:16 version of the master, thumbnail candidates, metadata draft with AI disclosure -> versions/ (nothing is published)")
+    vs.add_argument("--film", required=True, type=Path)
+    vs.add_argument("--video", type=Path, help="the 16:9 master (default <film>/media/cut/mixed.mp4)")
+    vs.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
+    vs.add_argument("--portrait-source", type=Path, help="clean cut (no burned-in cues) with the master's clock and sound, cropped instead of the master")
+    vs.add_argument("--generators", default="", help="generator line of the AI disclosure, e.g. 'Google Flow Omni 1.1 Flash'")
     lk = actions.add_parser("lock", help="picture lock: status and dirty post/delivery items; --lock freezes the cut")
     lk.add_argument("--film", required=True, type=Path)
     lk.add_argument("--lock", action="store_true", help="freeze the cut (every take accepted, no BLOCK at a cut)")
@@ -335,6 +341,26 @@ def main(argv: list[str] | None = None) -> int:
                    "checks": {c.group: c.result for c in record.checks},
                    "findings": [f.model_dump(mode="json") for f in record.findings]})
             return 0 if record.ok else 1
+        if args.action == "versions":
+            from film_pipeline.production import versions as vs_mod
+            from film_pipeline.production.mix import stamp_post_item
+            video = args.video or pkg.root / "media" / "cut" / "mixed.mp4"
+            if not video.is_file():
+                _emit({"error": f"{video} not found (render and mix the cut first)"})
+                return 2
+            report_path = args.cut_report or next((p for p in (video.with_suffix(".cut.json"), pkg.root / "media" / "cut" / "rough_cut.cut.json")
+                                                   if p.is_file()), None)
+            if report_path is None:
+                _emit({"error": "versions needs the .cut.json of the master (--cut-report)"})
+                return 2
+            try:
+                report = vs_mod.build(pkg, video, report_path, portrait_source=args.portrait_source, generators=args.generators)
+            except (ValueError, KeyError) as exc:
+                _emit({"error": str(exc)})
+                return 1
+            stamp_post_item(pkg, "versions", {"report": "versions/versions.json", "ok": report["ok"], "summary": report["summary"]})
+            _emit(report)
+            return 0 if report["ok"] else 1
         if args.action == "titles":
             from film_pipeline.production import edit as ed_mod
             from film_pipeline.production import titles as ti_mod

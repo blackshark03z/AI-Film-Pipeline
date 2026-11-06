@@ -130,6 +130,15 @@ warning means a human checks that cue; real takes carry room tone, so expect to 
 text with no translation blocks that language. A reframe is a box in `titles/reframe.json` (`w == h`, fractions of the frame);
 under half the frame it warns about softness, and an event with identity tags warns that the face moves under the tag.
 
+Versions rule of thumb (`production/versions.py`, `film.py versions`): after the master QC, `versions` writes `versions/` with a
+9:16 cut of the master, thumbnail candidates and `metadata.json` (status always `DRAFT_NOT_PUBLISHED`; nothing is uploaded). The
+9:16 window follows the identity-tag anchor of each shot, else the centre of its reframe box, else the middle of the frame
+(`PORTRAIT_FOCUS_UNKNOWN`: put a tag or a reframe box on any shot whose subject is off-centre); title, end card and CARD events
+are fitted to the width on black. The master burns its dialogue cues across the 16:9 frame, so the crop loses some of them
+(`PORTRAIT_BURNED_TEXT`): pass `--portrait-source` with a clean cut on the same clock, or ship the sidecar SRTs. Thumbnails come
+from the emphasis moments (reveal first, then hold / push / reaction / insert) at a moment with no tag or cue over it. Pass
+`--generators` so the AI disclosure names the tools. The platform's own AI-content label is the Owner's to set at upload.
+
 Master QC rule of thumb (`production/master_qc.py`, `film.py mastercheck`): run it on the mixed master (default
 `media/cut/mixed.mp4`, with `--cut-report` pointing at the `.cut.json` that holds the planned clock). It checks streams,
 1280x720 / 24 fps / h264 / yuv420p, duration against the plan, black frames (BLOCK from 0.5 s), frozen picture (WARN from 2 s,
