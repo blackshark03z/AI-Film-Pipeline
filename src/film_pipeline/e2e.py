@@ -164,7 +164,52 @@ def _project(root: Path) -> tuple[dict, dict]:
     return meta, plan
 
 
-def _direction_issues(plan: dict) -> list[str]:
+def _action_meaning(shot: dict):
+    """Optional operator-declared SRT meaning; None when undeclared."""
+    from .drama.action_meaning import ActionMeaning
+    declared = shot.get("action_meaning")
+    if not declared:
+        return None
+    if not isinstance(declared, dict):
+        raise ValueError("action_meaning must be an object")
+    return ActionMeaning.model_validate(declared)
+
+
+def _directed_text(shot: dict) -> str:
+    blocking = shot.get("blocking") if isinstance(shot.get("blocking"), dict) else {}
+    phases = (shot.get("choreography") or {}).get("phases", [])
+    return " ".join([shot.get("video_prompt", ""), str(blocking.get("start", "")),
+        str(blocking.get("end", "")), *map(str, blocking.get("action_beats", [])),
+        *(str(p.get("description", "")) for p in phases if isinstance(p, dict))])
+
+
+def _cues(root: Path, meta: dict) -> list[dict]:
+    return parse_srt((root / meta['srt_path']).read_text(encoding='utf-8-sig'))
+
+
+def _action_warnings(plan: dict, cues: list[dict]) -> dict[str, list[str]]:
+    """Escalations the direction adds beyond the source sentence (warn only)."""
+    warnings = {}
+    for shot in plan["shots"] if plan["version"] >= 2 else []:
+        try:
+            meaning = _action_meaning(shot)
+        except ValueError:
+            continue  # Reported as a direction issue.
+        added = meaning.escalations(cues, _directed_text(shot)) if meaning else []
+        if added:
+            warnings[shot["shot_id"]] = [f"direction adds {w!r}, which the source does not state"
+                                         for w in added]
+    return warnings
+
+
+def _qc_questions(plan: dict, shot_id: str) -> list[str]:
+    shot = next((s for s in plan["shots"] if s["shot_id"] == shot_id), {})
+    meaning = _action_meaning(shot) if plan["version"] >= 2 else None
+    return meaning.qc_questions() if meaning else []
+
+
+def _direction_issues(plan: dict, cues: list[dict] | None = None,
+                      audio_start_s: float = 0.0) -> list[str]:
     """Check declared choreography/state structure, never infer video quality."""
     from .e2e_flow import GENERATION_S, choreography, shot_spec
     from .sequence import validate_shot_sequence
@@ -187,6 +232,14 @@ def _direction_issues(plan: dict) -> list[str]:
             continue
         if phases:
             issues += [i.detail for i in phases.problems(GENERATION_S) if i.severity == "BLOCK"]
+        try:
+            meaning = _action_meaning(shot)
+        except ValueError as exc:
+            issues.append(f"{shot['shot_id']}: invalid action_meaning: {exc}")
+            continue
+        if meaning and cues is not None:
+            window = (audio_start_s + shot["timeline_in_s"], audio_start_s + shot["timeline_out_s"])
+            issues += [i.detail for i in meaning.problems(shot["shot_id"], cues, window, phases)]
     if issues:
         return issues
     if any(not s.get("visual_intent") or not s.get("video_prompt") for s in shots):
@@ -199,7 +252,7 @@ def _direction_issues(plan: dict) -> list[str]:
 
 
 def _source_windows(root: Path, meta: dict, plan: dict) -> dict[str, str]:
-    cues = parse_srt((root / meta['srt_path']).read_text(encoding='utf-8-sig'))
+    cues = _cues(root, meta)
     start = meta['audio_start_s']
     return {shot['shot_id']: '\n'.join(dict.fromkeys(cue['text'].strip() for cue in cues
         if cue['end_s'] > start + shot['timeline_in_s']
@@ -336,7 +389,8 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
         raise ValueError("shot plan count changed; prepare a reviewed plan")
     missing_intent = [s["shot_id"] for s in plan["shots"] if not all(
         isinstance(s.get(k), str) and s[k].strip() for k in ("visual_intent", "image_prompt", "video_prompt"))]
-    direction_issues = _direction_issues(plan)
+    cues = _cues(root, meta)
+    direction_issues = _direction_issues(plan, cues, meta['audio_start_s'])
     reference_coverage = {s["shot_id"]: len(references_for_shot(root, s["shot_id"]))
                           for s in plan["shots"]}
     reference_missing = [shot for shot, count in reference_coverage.items() if count == 0]
@@ -345,6 +399,7 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
               "duration_s": meta["film_duration_s"], "shot_count": len(plan["shots"]),
               "plan_review_required": bool(missing_intent or direction_issues),
               "missing_shot_plans": missing_intent, "direction_issues": direction_issues,
+              "action_warnings": _action_warnings(plan, cues),
               "legacy_direction_unassessed": plan["version"] == 1,
               "reference_coverage": reference_coverage, "missing_reference_images": reference_missing,
               "selected_shots": [], "missing_selected_shots": [s["shot_id"] for s in plan["shots"]],
@@ -433,7 +488,8 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
                     if a["shot_id"] == shot.shot_id), None),
                 "next_start_state": next((b.get("continuity", {}).get("start_state", {})
                     for a, b in zip(plan["shots"], plan["shots"][1:])
-                    if a["shot_id"] == shot.shot_id), {})},
+                    if a["shot_id"] == shot.shot_id), {}),
+                "qc_questions": _qc_questions(plan, shot.shot_id)},
             "reviewer_id": "", "visual_pass": None, "continuity_pass": None,
             "editorial_pass": None, "notes": [], "failure_observations": {}})
     report["review_template"] = {"project_id": project_id,

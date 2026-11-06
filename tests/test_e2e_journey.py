@@ -100,6 +100,7 @@ def test_offline_prepare_resume_review_finish_and_relocated_package(tmp_path, _o
     assert direction['end'] == 'Arms at sides'
     assert direction['end_state'] == {'hand_contact': False}
     assert direction['next_shot_id'] == 'SHOT_02'
+    assert direction['qc_questions'] == []  # No action_meaning declared.
     review = pending['review_template']
     for entry in review['reviews']:
         entry.update(reviewer_id='offline_fixture_operator', visual_pass=True,

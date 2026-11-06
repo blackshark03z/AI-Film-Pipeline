@@ -127,6 +127,25 @@ def test_drama_choreography_timing_reaches_shot_spec():
     assert legacy == [planned['video_prompt']]
 
 
+def test_action_meaning_gates_lock_and_warns_on_escalation(directed_project):
+    root, plan = directed_project
+    shot = plan['shots'][0]
+    shot['choreography'] = SHOVE_PHASES
+    shot['action_meaning'] = {'source_cues': [1], 'initiator': 'She', 'action': 'walks'}
+    save_plan(root, plan)
+    issues = status(root)['direction_issues']
+    assert any("action 'walks' is not in the source sentence" in issue for issue in issues)
+    with pytest.raises(ValueError, match='interaction direction incomplete'):
+        resume(root, root / 'runtime.sqlite', 'offline-project')
+    shot['action_meaning']['action'] = 'enters'
+    shot['video_prompt'] = 'She enters and slams the door'
+    save_plan(root, plan)
+    report = status(root)
+    assert report['direction_issues'] == []
+    assert any("'slam'" in w for w in report['action_warnings'][shot['shot_id']])
+    assert report['plan_review_required'] is False
+
+
 @pytest.mark.parametrize('metadata', ['absent', 'populated', 'partial'])
 def test_legacy_locked_plan_reopens_without_identity_or_file_change(directed_project, metadata):
     root, plan = directed_project

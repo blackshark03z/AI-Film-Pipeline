@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from .core import Blocking, ProviderCapabilities, ShotSpec, sha256
-from .e2e import _project, _direction_issues, references_for_shot
+from .e2e import _project, _cues, _direction_issues, references_for_shot
 from .live_runtime import Asset, file_sha256
 from .providers import flow_rpc_contract as contract
 from .providers.flow_canonical_ui import prepare_inputs, verify_chip
@@ -108,7 +108,7 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
 
     root, profile = Path(root).resolve(), Path(profile).resolve()
     meta, plan = _project(root)
-    issues = _direction_issues(plan)
+    issues = _direction_issues(plan, _cues(root, meta), meta['audio_start_s'])
     if issues:
         raise ValueError("interaction direction incomplete or conflicting: " + "; ".join(issues))
     if not meta.get("locked_plan_sha256") or meta.get("flow_project_id") != project_id:

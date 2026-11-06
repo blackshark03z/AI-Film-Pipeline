@@ -28,6 +28,8 @@ Write what **each participant** does before, during and after contact. For a sho
 
 Optionally add `choreography` (drama WP3): 2–4 contiguous `phases` (`SETUP`/`ACTION`/`REACTION`/`CONSEQUENCE`/`HOLD`) covering the 8 s generation, plus `once_actions` that must happen exactly once. Lock is refused when the phases do not cover 0–8 s or a once-action is outside an ACTION phase; the timing line is appended to the prompt beats. Follow the Owner SRT rule: setup → contact → reaction → aftermath, nothing the sentence does not state.
 
+Optionally add `action_meaning` (Owner rule SRT → faithful action): `source_cues` (cue indexes of the whole sentence, including every cue it spans), `initiator`, `action`, and optionally `receiver`, `direction`, `consequence`, each copied verbatim from the SRT words. It needs `choreography` with `once_actions` and, when a `consequence` is declared, a `REACTION`/`CONSEQUENCE` phase after the `ACTION`. Lock is refused when a word is not in the source sentence, a cue is unknown or the sentence is only partly declared. Escalation words in the direction that the source never states (for example "backbend") are warnings only, listed in `status.action_warnings`; `qc_questions` derived from the declaration appear in each `direction_to_review` of the review template.
+
 Use short, consistent state keys across cuts, for example `hand_contact: false`, `badge_holder: "bin"`, `receiver_pose: "braced"`. Reuse the same key when a relation persists: the existing sequence validator compares explicit shared keys; it does not infer that differently named keys mean the same thing or detect facts you omitted. Include both actors, props and important spatial relations. Avoid a generic `hold` end when a release or recovery must occur.
 
 ```json
