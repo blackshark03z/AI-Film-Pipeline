@@ -81,7 +81,7 @@ each protagonist arc has a change scene that exists; logline names protagonist +
 `rights_status != cleared` → OWNER_PENDING (not PASS). Fill film03's story file from its Fountain/README.
 Tests with good/bad fixtures.
 
-### P1-02 Director's treatment + per-scene direction — READY
+### P1-02 Director's treatment + per-scene direction — DONE (091786f: direction.py, Gate 2 built-in, film03 02_direction.json; 18 tests; production+drama suite 281 passed)
 Typed `02_direction.json`: vision (tone, references as words), visual language rules (list of rule + why),
 per scene: POV (whose, what audience knows vs characters — tie to `comprehension` facts), dramatic emphasis
 (moment, device: insert/push/hold/reaction), emotional curve (start/end intensity 0–5 per character), pacing
