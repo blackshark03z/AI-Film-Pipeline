@@ -47,3 +47,7 @@ projects/flow_production_scale_007/repair_scope/
 
 # Rebuilt film01 post output (drama_film01_post.py)
 docs/drama/film01_post/rebuild/
+
+# Local evidence media (never commit; see docs/production/LOOP_PROTOCOL.md)
+docs/drama/film03/takes_rejected/
+docs/drama/refs/raw/
