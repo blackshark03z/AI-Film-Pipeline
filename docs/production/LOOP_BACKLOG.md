@@ -215,7 +215,7 @@ verifies every hash and reports missing dependencies.
 `film.py status` covers: gates, stage completeness, credits spent vs estimate, usable seconds, retake rate, open
 P0/P1, dirty items, rights blockers, next action. `ledger.json` learnings (observation vs replicated) per film.
 
-### P7-02 Re-run film03 end-to-end through the package — READY (after P7-01)
+### P7-02 Re-run film03 end-to-end through the package — DONE 77a9276 (tools/film03_to_package.py imports 16 shipped takes as INCOMPLETE, EDL + cue timing from the shipped cut; cut → grade → titles → mix → mastercheck → versions → deliver run; diff in docs/drama/film03/PACKAGE_RERUN.md; 7 tests)
 Using existing film03 takes (no generation): plan → review (import existing gate/QC data) → cut → post v2 (with
 ambience/music/colour match) → QC → deliver. Report diffs vs the shipped final. Phase end: full suite, push, status.
 

@@ -32,7 +32,7 @@ def legacy():
 
 def test_loads_with_zero_schema_errors(pkg):
     assert pkg.issues == []
-    assert set(pkg.typed) == {"story", "direction", "preprod", "shots"}
+    assert set(pkg.typed) == {"story", "direction", "preprod", "shots", "edit"}  # edit: added by the P7-02 re-run
     assert pkg.script is not None and len(pkg.script.scenes) == 8
     assert pkg.header.profile == "drama" and pkg.header.generation_s == 8
 
