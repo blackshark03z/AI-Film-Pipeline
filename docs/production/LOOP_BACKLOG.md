@@ -71,7 +71,7 @@ Remaining (do all three; no weakening of film03 parity):
    the four shipped prompts as an explicit, documented exception in the golden test (they are accepted, shipped footage)
    rather than changing their bytes. Report to Owner if the limit itself should move.
 
-### P1-01 Story bible model + Gate 1 — READY
+### P1-01 Story bible model + Gate 1 — DONE (4d92f24: story.py, gates built-in + OWNER_PENDING, film03 01_story.json; 22 tests; production+drama suite 263 passed)
 Typed `01_story.json`: concept, theme, genre, audience (who/expectation), premise + central conflict, logline,
 structure (acts with beats: id, function SETUP/INCITING/ESCALATION/MIDPOINT/CRISIS/CLIMAX/RESOLUTION, scene ids),
 plot + subplots, characters (want, need, flaw, arc_change, change_scene_id), scenes (purpose, conflict, outcome,
@@ -81,7 +81,7 @@ each protagonist arc has a change scene that exists; logline names protagonist +
 `rights_status != cleared` → OWNER_PENDING (not PASS). Fill film03's story file from its Fountain/README.
 Tests with good/bad fixtures.
 
-### P1-02 Director's treatment + per-scene direction — READY (after P1-01)
+### P1-02 Director's treatment + per-scene direction — READY
 Typed `02_direction.json`: vision (tone, references as words), visual language rules (list of rule + why),
 per scene: POV (whose, what audience knows vs characters — tie to `comprehension` facts), dramatic emphasis
 (moment, device: insert/push/hold/reaction), emotional curve (start/end intensity 0–5 per character), pacing
