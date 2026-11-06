@@ -1,0 +1,201 @@
+{
+  "film_id": "film03_front_desk",
+  "cut": "films\\film03_front_desk\\media\\cut\\titled_cut.mp4",
+  "cut_sha256": "d3cd19da256f5b2e986d2c5442cbf3347f85a680fef609074323e9434663d13b",
+  "output": "films\\film03_front_desk\\media\\cut\\mixed.mp4",
+  "output_sha256": "3aaf232739f907f700d01ee6723e159b78fda860c3b9925b496f83c940c31dfa",
+  "total_s": 139.124998,
+  "plan": {
+    "ambience_lufs": -40.0,
+    "sfx_gain_db": -6.0,
+    "duck_threshold_db": -50.0,
+    "duck_ratio": 8.0,
+    "duck_attack_ms": 20.0,
+    "duck_release_ms": 400.0,
+    "min_duck_depth_db": 6.0,
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "lufs_tolerance": 1.0,
+    "music": []
+  },
+  "stems": {
+    "dialogue": "films\\film03_front_desk\\audio\\stems\\dialogue.wav",
+    "ambience": "films\\film03_front_desk\\audio\\stems\\ambience.wav",
+    "sfx": "films\\film03_front_desk\\audio\\stems\\sfx.wav",
+    "music": "films\\film03_front_desk\\audio\\stems\\music.wav"
+  },
+  "ambience": [
+    {
+      "scene_id": "SC01",
+      "location": "lobby_morning",
+      "room_tone": "fluorescent hum, distant phones",
+      "start_s": 5.375,
+      "end_s": 21.291666,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC02",
+      "location": "lobby_morning",
+      "room_tone": "fluorescent hum, distant phones",
+      "start_s": 21.291666,
+      "end_s": 37.249999,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC03",
+      "location": "lobby_morning",
+      "room_tone": "fluorescent hum, distant phones",
+      "start_s": 37.249999,
+      "end_s": 53.249999,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC04",
+      "location": "lobby_morning",
+      "room_tone": "fluorescent hum, distant phones",
+      "start_s": 53.249999,
+      "end_s": 69.208332,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC05",
+      "location": "lobby_morning",
+      "room_tone": "fluorescent hum, distant phones",
+      "start_s": 69.208332,
+      "end_s": 85.208332,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC06",
+      "location": "lobby_morning",
+      "room_tone": "fluorescent hum, distant phones",
+      "start_s": 85.208332,
+      "end_s": 101.124998,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC07",
+      "location": "briefing_morning",
+      "room_tone": "quiet room, chairs creaking",
+      "start_s": 103.124998,
+      "end_s": 119.124998,
+      "tone": [
+        "brown",
+        400,
+        0
+      ]
+    },
+    {
+      "scene_id": "SC08",
+      "location": "briefing_morning",
+      "room_tone": "quiet room, chairs creaking",
+      "start_s": 119.124998,
+      "end_s": 135.124998,
+      "tone": [
+        "brown",
+        400,
+        0
+      ]
+    }
+  ],
+  "sfx": [
+    {
+      "event_id": "SC02_g1",
+      "text": "paper unfolding",
+      "slug": "paper_unfolding",
+      "at_s": 21.291666,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC02_g2",
+      "text": "paper crumpling",
+      "slug": "paper_crumpling",
+      "at_s": 29.291666,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC04_g2",
+      "text": "paper being smoothed",
+      "slug": "paper_being_smoothed",
+      "at_s": 61.249999,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC05_g1",
+      "text": "desk phone ringing",
+      "slug": "desk_phone_ringing",
+      "at_s": 69.208332,
+      "asset": "",
+      "sha256": ""
+    }
+  ],
+  "music": [],
+  "duck": {
+    "frames": 175,
+    "depth_db": 22.15,
+    "wanted_db": 6.0
+  },
+  "loudness": {
+    "before": {
+      "integrated_lufs": -32.0,
+      "peak_dbfs": -9.6
+    },
+    "after": {
+      "integrated_lufs": -14.6,
+      "peak_dbfs": -1.1
+    },
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "ok": true
+  },
+  "problems": [
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC02_g1: 'paper unfolding' has no asset audio/sfx/paper_unfolding.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC02_g2: 'paper crumpling' has no asset audio/sfx/paper_crumpling.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC04_g2: 'paper being smoothed' has no asset audio/sfx/paper_being_smoothed.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC05_g1: 'desk phone ringing' has no asset audio/sfx/desk_phone_ringing.wav; the take's own sound stays"
+    }
+  ],
+  "ok": true
+}

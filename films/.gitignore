@@ -1,1 +1,7 @@
 */media/
+# derived media of the post chain (rebuilt from the package; hashes live in 06_post.json / 07_delivery.json)
+*/audio/stems/
+*/delivery/
+*/delivery.staging/
+*/delivery.superseded-*/
+*/versions/*.mp4

@@ -315,6 +315,12 @@ Package: `films/film03_front_desk/`.
 - **Proof it works.** `plan` reproduces the shipped prompts and stills byte for byte; Gates 1–2 `PASS`, Gate 3 needs a
   named storyboard reviewer. The film has **not** been accepted by the Owner (creative review pending), and the C2PA
   signer is a dev signer.
+- **Re-run through the package (P7-02).** The shipped takes were imported (`tools/film03_to_package.py`, hash-bound, not
+  accepted: INCOMPLETE until a human reviews them), then `cut → grade → titles --render --color → mix → mastercheck →
+  versions → deliver` produced a 139.125 s master, a 9:16 version and a 33-file archive. What it lost against the shipped
+  final (always-on AI label, generator roles, C2PA) is listed in [PACKAGE_RERUN](../drama/film03/PACKAGE_RERUN.md).
+  A legacy film joins the package the same way: register takes with the real prompt, judge only what a machine can,
+  write the EDL from the shipped order, and report every difference.
 
 ## 11. Red flags — stop and re-plan
 

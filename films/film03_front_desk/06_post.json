@@ -1,0 +1,52 @@
+{
+  "titles": {
+    "report": "titles/titles.json",
+    "ok": true,
+    "summary": {
+      "cues": 16,
+      "languages": [
+        "en",
+        "vi"
+      ],
+      "reframed": 0,
+      "blocks": 0,
+      "warnings": 8
+    },
+    "locked_against": ""
+  },
+  "mix": {
+    "output_sha256": "3aaf232739f907f700d01ee6723e159b78fda860c3b9925b496f83c940c31dfa",
+    "cut_sha256": "d3cd19da256f5b2e986d2c5442cbf3347f85a680fef609074323e9434663d13b",
+    "report": "audio/mix.json",
+    "ok": true,
+    "locked_against": ""
+  },
+  "master_qc": {
+    "report": "qc/master_qc.json",
+    "sha256": "3aaf232739f907f700d01ee6723e159b78fda860c3b9925b496f83c940c31dfa",
+    "ok": true,
+    "locked_against": ""
+  },
+  "versions": {
+    "report": "versions/versions.json",
+    "ok": true,
+    "summary": {
+      "portrait_segments": 20,
+      "thumbnails": 6,
+      "blocks": 0,
+      "warnings": 14
+    },
+    "locked_against": ""
+  },
+  "color": {
+    "report": "color/color.json",
+    "ok": true,
+    "summary": {
+      "shots": 16,
+      "corrected": 16,
+      "worst_before": 17.509,
+      "worst_after": 6.756
+    },
+    "locked_against": ""
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "film_id": "film03_front_desk",
+  "status": "DRAFT_NOT_PUBLISHED",
+  "source_language": "en",
+  "title": {
+    "source": "The Front Desk",
+    "vi": "QUẦY TRỰC BAN"
+  },
+  "description": "On her first morning, Captain Nora Bell has to get past a desk sergeant who throws her credentials in the trash because she does not look like his idea of a captain.",
+  "description_note": "drafted from the logline; the Owner writes the final copy",
+  "tags": [
+    "AI film",
+    "AI generated",
+    "short film",
+    "Workplace drama (short, contained, single morning)",
+    "Authority shown by checking before judging; assumptions about who belongs are what fail the test."
+  ],
+  "ai_disclosure": {
+    "ai_generated": true,
+    "digital_source_type": "trainedAlgorithmicMedia",
+    "synthetic_persons": true,
+    "generators": "Google Flow Omni 1.1 Flash",
+    "text": {
+      "en": "Generated with AI: Google Flow Omni 1.1 Flash Synthetic characters: faces and voices are AI-generated.",
+      "vi": "Tạo bằng AI: Google Flow Omni 1.1 Flash Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra."
+    }
+  },
+  "credits": {
+    "characters": [
+      "NORA",
+      "KESSLER",
+      "ORTIZ"
+    ],
+    "sound_attributions": [],
+    "fiction_line": "A work of fiction. All characters are fictional."
+  },
+  "runtime_s": 139.124998,
+  "versions": [
+    {
+      "name": "master_16x9",
+      "file": "films\\film03_front_desk\\media\\cut\\mixed.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": 24.0,
+      "sha256": "3aaf232739f907f700d01ee6723e159b78fda860c3b9925b496f83c940c31dfa"
+    },
+    {
+      "name": "portrait_9x16",
+      "file": "versions/film03_front_desk_9x16.mp4",
+      "width": 720,
+      "height": 1280,
+      "fps": 24.0,
+      "sha256": "e236db9e17e1341be7a3d5b1dc521cd0b156d84aa416ad1e5bbf94b23dd7b105",
+      "upscale": 1.78
+    }
+  ],
+  "platform_note": "set the platform's own AI / synthetic-content label at upload; nothing was published",
+  "thumbnails": [
+    "versions/thumbs/thumb_01.jpg",
+    "versions/thumbs/thumb_02.jpg",
+    "versions/thumbs/thumb_03.jpg",
+    "versions/thumbs/thumb_04.jpg",
+    "versions/thumbs/thumb_05.jpg",
+    "versions/thumbs/thumb_06.jpg"
+  ]
+}

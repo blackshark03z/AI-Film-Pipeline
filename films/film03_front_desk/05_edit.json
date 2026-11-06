@@ -1,0 +1,395 @@
+{
+  "events": [
+    {
+      "event_id": "OPEN_card",
+      "kind": "CARD",
+      "take_id": "",
+      "generation_id": "",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [
+        "The new captain arrives early"
+      ],
+      "card_duration_s": 2.4,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC01_g1",
+      "kind": "TAKE",
+      "take_id": "SC01_g1_t1",
+      "generation_id": "SC01_g1",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC01_g2",
+      "kind": "TAKE",
+      "take_id": "SC01_g2_t1",
+      "generation_id": "SC01_g2",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC02_g1",
+      "kind": "TAKE",
+      "take_id": "SC02_g1_t1",
+      "generation_id": "SC02_g1",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC02_g2",
+      "kind": "TAKE",
+      "take_id": "SC02_g2_t1",
+      "generation_id": "SC02_g2",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC03_g1",
+      "kind": "TAKE",
+      "take_id": "SC03_g1_t1",
+      "generation_id": "SC03_g1",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC03_g2",
+      "kind": "TAKE",
+      "take_id": "SC03_g2_t1",
+      "generation_id": "SC03_g2",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC04_g1",
+      "kind": "TAKE",
+      "take_id": "SC04_g1_t1",
+      "generation_id": "SC04_g1",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC04_g2",
+      "kind": "TAKE",
+      "take_id": "SC04_g2_t1",
+      "generation_id": "SC04_g2",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC05_g1",
+      "kind": "TAKE",
+      "take_id": "SC05_g1_t1",
+      "generation_id": "SC05_g1",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC05_g2",
+      "kind": "TAKE",
+      "take_id": "SC05_g2_t1",
+      "generation_id": "SC05_g2",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC06_g1",
+      "kind": "TAKE",
+      "take_id": "SC06_g1_t1",
+      "generation_id": "SC06_g1",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC06_g2",
+      "kind": "TAKE",
+      "take_id": "SC06_g2_t1",
+      "generation_id": "SC06_g2",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "ROLLCALL_card",
+      "kind": "CARD",
+      "take_id": "",
+      "generation_id": "",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [
+        "Roll call, 8 a.m."
+      ],
+      "card_duration_s": 2.0,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC07_g1",
+      "kind": "TAKE",
+      "take_id": "SC07_g1_t1",
+      "generation_id": "SC07_g1",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC07_g2",
+      "kind": "TAKE",
+      "take_id": "SC07_g2_t1",
+      "generation_id": "SC07_g2",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC08_g1",
+      "kind": "TAKE",
+      "take_id": "SC08_g1_t1",
+      "generation_id": "SC08_g1",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    },
+    {
+      "event_id": "SC08_g2",
+      "kind": "TAKE",
+      "take_id": "SC08_g2_t1",
+      "generation_id": "SC08_g2",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [],
+      "card_duration_s": null,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": ""
+    }
+  ],
+  "tags": [
+    {
+      "event_id": "SC01_g2",
+      "character": "NORA",
+      "label": "NORA BELL",
+      "relation": "the precinct's new captain",
+      "start_s": 0.2,
+      "end_s": 3.3,
+      "anchor_x": 0.498,
+      "anchor_y": 0.163
+    },
+    {
+      "event_id": "SC02_g1",
+      "character": "KESSLER",
+      "label": "SGT. KESSLER",
+      "relation": "the desk sergeant",
+      "start_s": 0.2,
+      "end_s": 3.2,
+      "anchor_x": 0.583,
+      "anchor_y": 0.269
+    },
+    {
+      "event_id": "SC03_g1",
+      "character": "ORTIZ",
+      "label": "OFFICER ORTIZ",
+      "relation": "a rookie",
+      "start_s": 0.1,
+      "end_s": 2.4,
+      "anchor_x": 0.601,
+      "anchor_y": 0.457
+    }
+  ],
+  "title": [
+    {
+      "text": "THE FRONT DESK",
+      "size": 96
+    },
+    {
+      "text": "Generated with AI",
+      "size": 28
+    }
+  ],
+  "end": [],
+  "title_s": 3.0,
+  "end_s": 4.0
+}

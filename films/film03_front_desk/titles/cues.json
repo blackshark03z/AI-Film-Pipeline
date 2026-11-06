@@ -1,0 +1,100 @@
+{
+  "cues": [
+    {
+      "event_id": "SC01_g1",
+      "line_no": 14,
+      "start_s": 2.4,
+      "end_s": 3.8
+    },
+    {
+      "event_id": "SC01_g2",
+      "line_no": 19,
+      "start_s": 3.4,
+      "end_s": 4.4
+    },
+    {
+      "event_id": "SC02_g1",
+      "line_no": 26,
+      "start_s": 3.3,
+      "end_s": 6.0
+    },
+    {
+      "event_id": "SC02_g2",
+      "line_no": 31,
+      "start_s": 0.9,
+      "end_s": 2.8
+    },
+    {
+      "event_id": "SC03_g1",
+      "line_no": 38,
+      "start_s": 2.5,
+      "end_s": 5.3
+    },
+    {
+      "event_id": "SC03_g2",
+      "line_no": 43,
+      "start_s": 2.6,
+      "end_s": 5.0
+    },
+    {
+      "event_id": "SC04_g1",
+      "line_no": 50,
+      "start_s": 2.5,
+      "end_s": 3.5
+    },
+    {
+      "event_id": "SC04_g2",
+      "line_no": 55,
+      "start_s": 4.3,
+      "end_s": 4.9
+    },
+    {
+      "event_id": "SC05_g1",
+      "line_no": 62,
+      "start_s": 2.8,
+      "end_s": 5.9
+    },
+    {
+      "event_id": "SC05_g2",
+      "line_no": 67,
+      "start_s": 2.7,
+      "end_s": 4.3
+    },
+    {
+      "event_id": "SC06_g1",
+      "line_no": 74,
+      "start_s": 2.2,
+      "end_s": 3.7
+    },
+    {
+      "event_id": "SC06_g2",
+      "line_no": 79,
+      "start_s": 2.6,
+      "end_s": 3.4
+    },
+    {
+      "event_id": "SC07_g1",
+      "line_no": 88,
+      "start_s": 2.4,
+      "end_s": 5.4
+    },
+    {
+      "event_id": "SC07_g2",
+      "line_no": 93,
+      "start_s": 2.4,
+      "end_s": 4.4
+    },
+    {
+      "event_id": "SC08_g1",
+      "line_no": 100,
+      "start_s": 2.3,
+      "end_s": 2.9
+    },
+    {
+      "event_id": "SC08_g2",
+      "line_no": 105,
+      "start_s": 3.3,
+      "end_s": 4.8
+    }
+  ]
+}

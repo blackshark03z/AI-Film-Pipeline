@@ -1,0 +1,248 @@
+{
+  "film_id": "film03_front_desk",
+  "ok": true,
+  "sidecars": {
+    "en": "films\\film03_front_desk\\titles\\film03_front_desk.en.srt",
+    "vi": "films\\film03_front_desk\\titles\\film03_front_desk.vi.srt"
+  },
+  "credits": "titles/credits.json",
+  "cues": [
+    {
+      "event_id": "SC01_g1",
+      "line_no": 14,
+      "character": "KESSLER",
+      "text": "Complaints window opens at nine.",
+      "start_s": 2.4,
+      "end_s": 3.8,
+      "source": "override",
+      "abs_start_s": 7.8,
+      "abs_end_s": 9.2
+    },
+    {
+      "event_id": "SC01_g2",
+      "line_no": 19,
+      "character": "NORA",
+      "text": "I'm not here to complain.",
+      "start_s": 3.4,
+      "end_s": 4.4,
+      "source": "override",
+      "abs_start_s": 16.758,
+      "abs_end_s": 17.758
+    },
+    {
+      "event_id": "SC02_g1",
+      "line_no": 26,
+      "character": "KESSLER",
+      "text": "Captain? Captains here don't look like you.",
+      "start_s": 3.3,
+      "end_s": 6.0,
+      "source": "override",
+      "abs_start_s": 24.617,
+      "abs_end_s": 27.317
+    },
+    {
+      "event_id": "SC02_g2",
+      "line_no": 31,
+      "character": "KESSLER",
+      "text": "Nice try. Next.",
+      "start_s": 0.9,
+      "end_s": 2.8,
+      "source": "override",
+      "abs_start_s": 30.217,
+      "abs_end_s": 32.117
+    },
+    {
+      "event_id": "SC03_g1",
+      "line_no": 38,
+      "character": "ORTIZ",
+      "text": "Sarge, maybe we call upstairs?",
+      "start_s": 2.5,
+      "end_s": 5.3,
+      "source": "override",
+      "abs_start_s": 39.775,
+      "abs_end_s": 42.575
+    },
+    {
+      "event_id": "SC03_g2",
+      "line_no": 43,
+      "character": "KESSLER",
+      "text": "Maybe you go file something.",
+      "start_s": 2.6,
+      "end_s": 5.0,
+      "source": "override",
+      "abs_start_s": 47.875,
+      "abs_end_s": 50.275
+    },
+    {
+      "event_id": "SC04_g1",
+      "line_no": 50,
+      "character": "NORA",
+      "text": "What's your name, officer?",
+      "start_s": 2.5,
+      "end_s": 3.5,
+      "source": "override",
+      "abs_start_s": 55.775,
+      "abs_end_s": 56.775
+    },
+    {
+      "event_id": "SC04_g2",
+      "line_no": 55,
+      "character": "ORTIZ",
+      "text": "Ortiz, ma'am.",
+      "start_s": 4.3,
+      "end_s": 4.9,
+      "source": "override",
+      "abs_start_s": 65.575,
+      "abs_end_s": 66.175
+    },
+    {
+      "event_id": "SC05_g1",
+      "line_no": 62,
+      "character": "KESSLER",
+      "text": "Desk. Yes, Lieutenant. The new captain?",
+      "start_s": 2.8,
+      "end_s": 5.9,
+      "source": "override",
+      "abs_start_s": 72.033,
+      "abs_end_s": 75.133
+    },
+    {
+      "event_id": "SC05_g2",
+      "line_no": 67,
+      "character": "ORTIZ",
+      "text": "Captain Nora Bell.",
+      "start_s": 2.7,
+      "end_s": 4.3,
+      "source": "override",
+      "abs_start_s": 79.933,
+      "abs_end_s": 81.533
+    },
+    {
+      "event_id": "SC06_g1",
+      "line_no": 74,
+      "character": "NORA",
+      "text": "Roll call is at eight, Sergeant.",
+      "start_s": 2.2,
+      "end_s": 3.7,
+      "source": "override",
+      "abs_start_s": 87.433,
+      "abs_end_s": 88.933
+    },
+    {
+      "event_id": "SC06_g2",
+      "line_no": 79,
+      "character": "KESSLER",
+      "text": "Yes... Captain.",
+      "start_s": 2.6,
+      "end_s": 3.4,
+      "source": "override",
+      "abs_start_s": 95.792,
+      "abs_end_s": 96.592
+    },
+    {
+      "event_id": "SC07_g1",
+      "line_no": 88,
+      "character": "NORA",
+      "text": "We check before we judge. Every time.",
+      "start_s": 2.4,
+      "end_s": 5.4,
+      "source": "override",
+      "abs_start_s": 105.55,
+      "abs_end_s": 108.55
+    },
+    {
+      "event_id": "SC07_g2",
+      "line_no": 93,
+      "character": "NORA",
+      "text": "Officer Ortiz rides with me today.",
+      "start_s": 2.4,
+      "end_s": 4.4,
+      "source": "override",
+      "abs_start_s": 113.55,
+      "abs_end_s": 115.55
+    },
+    {
+      "event_id": "SC08_g1",
+      "line_no": 100,
+      "character": "ORTIZ",
+      "text": "Yes, ma'am.",
+      "start_s": 2.3,
+      "end_s": 2.9,
+      "source": "override",
+      "abs_start_s": 121.45,
+      "abs_end_s": 122.05
+    },
+    {
+      "event_id": "SC08_g2",
+      "line_no": 105,
+      "character": "NORA",
+      "text": "Sergeant Kessler keeps the desk.",
+      "start_s": 3.3,
+      "end_s": 4.8,
+      "source": "override",
+      "abs_start_s": 130.45,
+      "abs_end_s": 131.95
+    }
+  ],
+  "reframed": [],
+  "problems": [
+    {
+      "code": "CUE_TOO_FAST",
+      "severity": "WARN",
+      "event_id": "SC01_g1",
+      "detail": "line 14: 23 characters/s (> 20)"
+    },
+    {
+      "code": "CUE_TOO_FAST",
+      "severity": "WARN",
+      "event_id": "SC01_g2",
+      "detail": "line 19: 25 characters/s (> 20)"
+    },
+    {
+      "code": "CUE_TOO_FAST",
+      "severity": "WARN",
+      "event_id": "SC04_g1",
+      "detail": "line 50: 26 characters/s (> 20)"
+    },
+    {
+      "code": "CUE_TOO_SHORT",
+      "severity": "WARN",
+      "event_id": "SC04_g2",
+      "detail": "line 55 shows for 0.60 s (< 0.7)"
+    },
+    {
+      "code": "CUE_TOO_FAST",
+      "severity": "WARN",
+      "event_id": "SC04_g2",
+      "detail": "line 55: 22 characters/s (> 20)"
+    },
+    {
+      "code": "CUE_TOO_FAST",
+      "severity": "WARN",
+      "event_id": "SC06_g1",
+      "detail": "line 74: 21 characters/s (> 20)"
+    },
+    {
+      "code": "CUE_TOO_SHORT",
+      "severity": "WARN",
+      "event_id": "SC08_g1",
+      "detail": "line 100 shows for 0.60 s (< 0.7)"
+    },
+    {
+      "code": "CUE_TOO_FAST",
+      "severity": "WARN",
+      "event_id": "SC08_g2",
+      "detail": "line 105: 21 characters/s (> 20)"
+    }
+  ],
+  "summary": {
+    "cues": 16,
+    "languages": [
+      "en",
+      "vi"
+    ],
+    "reframed": 0,
+    "blocks": 0,
+    "warnings": 8
+  }
+}

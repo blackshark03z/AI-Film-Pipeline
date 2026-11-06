@@ -1,0 +1,408 @@
+{
+  "film_id": "film03_front_desk",
+  "ok": true,
+  "versions": [
+    {
+      "name": "master_16x9",
+      "file": "films\\film03_front_desk\\media\\cut\\mixed.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": 24.0,
+      "sha256": "3aaf232739f907f700d01ee6723e159b78fda860c3b9925b496f83c940c31dfa"
+    },
+    {
+      "name": "portrait_9x16",
+      "file": "versions/film03_front_desk_9x16.mp4",
+      "width": 720,
+      "height": 1280,
+      "fps": 24.0,
+      "sha256": "e236db9e17e1341be7a3d5b1dc521cd0b156d84aa416ad1e5bbf94b23dd7b105",
+      "upscale": 1.78,
+      "segments": [
+        {
+          "event_id": "title",
+          "mode": "fit",
+          "start_frame": 0,
+          "end_frame": 72,
+          "start_s": 0.0,
+          "end_s": 3.0
+        },
+        {
+          "event_id": "OPEN_card",
+          "mode": "fit",
+          "start_frame": 72,
+          "end_frame": 129,
+          "start_s": 3.0,
+          "end_s": 5.375
+        },
+        {
+          "event_id": "SC01_g1",
+          "mode": "crop",
+          "start_frame": 129,
+          "end_frame": 320,
+          "start_s": 5.375,
+          "end_s": 13.333,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC01_g2",
+          "mode": "crop",
+          "start_frame": 320,
+          "end_frame": 511,
+          "start_s": 13.333,
+          "end_s": 21.292,
+          "focus": 0.498,
+          "focus_source": "tag",
+          "crop_x": 434,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC02_g1",
+          "mode": "crop",
+          "start_frame": 511,
+          "end_frame": 703,
+          "start_s": 21.292,
+          "end_s": 29.292,
+          "focus": 0.583,
+          "focus_source": "tag",
+          "crop_x": 544,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC02_g2",
+          "mode": "crop",
+          "start_frame": 703,
+          "end_frame": 894,
+          "start_s": 29.292,
+          "end_s": 37.25,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC03_g1",
+          "mode": "crop",
+          "start_frame": 894,
+          "end_frame": 1086,
+          "start_s": 37.25,
+          "end_s": 45.25,
+          "focus": 0.601,
+          "focus_source": "tag",
+          "crop_x": 566,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC03_g2",
+          "mode": "crop",
+          "start_frame": 1086,
+          "end_frame": 1278,
+          "start_s": 45.25,
+          "end_s": 53.25,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC04_g1",
+          "mode": "crop",
+          "start_frame": 1278,
+          "end_frame": 1470,
+          "start_s": 53.25,
+          "end_s": 61.25,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC04_g2",
+          "mode": "crop",
+          "start_frame": 1470,
+          "end_frame": 1661,
+          "start_s": 61.25,
+          "end_s": 69.208,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC05_g1",
+          "mode": "crop",
+          "start_frame": 1661,
+          "end_frame": 1853,
+          "start_s": 69.208,
+          "end_s": 77.208,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC05_g2",
+          "mode": "crop",
+          "start_frame": 1853,
+          "end_frame": 2045,
+          "start_s": 77.208,
+          "end_s": 85.208,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC06_g1",
+          "mode": "crop",
+          "start_frame": 2045,
+          "end_frame": 2236,
+          "start_s": 85.208,
+          "end_s": 93.167,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC06_g2",
+          "mode": "crop",
+          "start_frame": 2236,
+          "end_frame": 2427,
+          "start_s": 93.167,
+          "end_s": 101.125,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "ROLLCALL_card",
+          "mode": "fit",
+          "start_frame": 2427,
+          "end_frame": 2475,
+          "start_s": 101.125,
+          "end_s": 103.125
+        },
+        {
+          "event_id": "SC07_g1",
+          "mode": "crop",
+          "start_frame": 2475,
+          "end_frame": 2667,
+          "start_s": 103.125,
+          "end_s": 111.125,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC07_g2",
+          "mode": "crop",
+          "start_frame": 2667,
+          "end_frame": 2859,
+          "start_s": 111.125,
+          "end_s": 119.125,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC08_g1",
+          "mode": "crop",
+          "start_frame": 2859,
+          "end_frame": 3051,
+          "start_s": 119.125,
+          "end_s": 127.125,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC08_g2",
+          "mode": "crop",
+          "start_frame": 3051,
+          "end_frame": 3243,
+          "start_s": 127.125,
+          "end_s": 135.125,
+          "focus": 0.5,
+          "focus_source": "center",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "end",
+          "mode": "fit",
+          "start_frame": 3243,
+          "end_frame": 3339,
+          "start_s": 135.125,
+          "end_s": 139.125
+        }
+      ]
+    }
+  ],
+  "thumbnails": [
+    {
+      "file": "versions/thumbs/thumb_01.jpg",
+      "at_s": 27.692,
+      "event_id": "SC02_g1",
+      "scene": "SC02",
+      "moment": "Kessler reads the letter and sneers at the word captain",
+      "device": "hold",
+      "fact_id": "letter_is_appointment",
+      "luma": 65.9,
+      "contrast": 68.5,
+      "burned_text": false,
+      "sha256": "0a5fe190e86418df3cd887483bd4e9665a372311cee9178e6909a9d7b05fa38b"
+    },
+    {
+      "file": "versions/thumbs/thumb_02.jpg",
+      "at_s": 72.008,
+      "event_id": "SC05_g1",
+      "scene": "SC05",
+      "moment": "Kessler hears 'the new captain' on his own phone",
+      "device": "reaction",
+      "fact_id": "lieutenant_confirms",
+      "luma": 84.9,
+      "contrast": 65.7,
+      "burned_text": false,
+      "sha256": "dc45260ad0aa64c0a19802f9241594cbfe7c68fbdd17adab77b716f10206d524"
+    },
+    {
+      "file": "versions/thumbs/thumb_03.jpg",
+      "at_s": 97.146,
+      "event_id": "SC06_g2",
+      "scene": "SC06",
+      "moment": "The smirk drops as he says Captain",
+      "device": "hold",
+      "fact_id": null,
+      "luma": 82.2,
+      "contrast": 62.3,
+      "burned_text": false,
+      "sha256": "a2ed71ca050fe7161058ad5a66f16f1ccb0e13532764b6b3e37b86d6adff5717"
+    },
+    {
+      "file": "versions/thumbs/thumb_04.jpg",
+      "at_s": 129.925,
+      "event_id": "SC08_g2",
+      "scene": "SC08",
+      "moment": "Kessler lowers his eyes and keeps the desk",
+      "device": "hold",
+      "fact_id": null,
+      "luma": 81.5,
+      "contrast": 58.8,
+      "burned_text": false,
+      "sha256": "941c97fd53d1429e980570c4fe6cc27002f826e7b482102c8a8d43dc13ee4f57"
+    },
+    {
+      "file": "versions/thumbs/thumb_05.jpg",
+      "at_s": 65.229,
+      "event_id": "SC04_g2",
+      "scene": "SC04",
+      "moment": "Ortiz takes the crumpled letter out of the bin",
+      "device": "push",
+      "fact_id": null,
+      "luma": 85.3,
+      "contrast": 60.0,
+      "burned_text": false,
+      "sha256": "0833bfe83a51ecc2d42cbdd4ad5ee00affb3845e8fc510d6031db01714569943"
+    },
+    {
+      "file": "versions/thumbs/thumb_06.jpg",
+      "at_s": 116.325,
+      "event_id": "SC07_g2",
+      "scene": "SC07",
+      "moment": "Nora states the rule to the whole room",
+      "device": "push",
+      "fact_id": null,
+      "luma": 88.4,
+      "contrast": 62.1,
+      "burned_text": false,
+      "sha256": "938e41bdabcb07f5fe12231fb788db1a1703fbcbd920a77f88fa0b6750ade829"
+    }
+  ],
+  "metadata": "versions/metadata.json",
+  "problems": [
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC01_g1: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC02_g2: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC03_g2: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC04_g1: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC04_g2: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC05_g1: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC05_g2: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC06_g1: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC06_g2: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC07_g1: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC07_g2: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC08_g1: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_FOCUS_UNKNOWN",
+      "severity": "WARN",
+      "detail": "SC08_g2: no tag or reframe says where the subject is; the crop is centred, check it"
+    },
+    {
+      "code": "PORTRAIT_BURNED_TEXT",
+      "severity": "WARN",
+      "detail": "the master carries burned-in dialogue cues across the 16:9 frame; the 9:16 crop loses part of them (use --portrait-source with a clean cut or ship the sidecar SRTs)"
+    }
+  ],
+  "summary": {
+    "portrait_segments": 20,
+    "thumbnails": 6,
+    "blocks": 0,
+    "warnings": 14
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "film_id": "film03_front_desk",
+  "video": "films\\film03_front_desk\\media\\cut\\mixed.mp4",
+  "sha256": "3aaf232739f907f700d01ee6723e159b78fda860c3b9925b496f83c940c31dfa",
+  "spec": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24.0,
+    "vcodec": "h264",
+    "acodec": "aac",
+    "pix_fmt": "yuv420p",
+    "target_lufs": -14.0,
+    "lufs_tol": 1.5,
+    "true_peak_max": -1.0,
+    "duration_tol_s": 0.25,
+    "av_tol_s": 0.15,
+    "black_luma": 12.0,
+    "max_black_s": 0.5,
+    "warn_black_s": 0.2,
+    "freeze_diff": 0.08,
+    "freeze_warn_s": 2.0,
+    "freeze_fail_s": 4.0,
+    "dup_ratio_warn": 0.05,
+    "silence_noise_db": -50.0,
+    "silence_warn_s": 3.0,
+    "clip_level": 32700,
+    "clip_run": 3,
+    "sync_max_offset_s": 0.3,
+    "active_db": -45.0,
+    "exposure_low": 20.0,
+    "exposure_high": 235.0,
+    "exposure_share_warn": 0.05
+  },
+  "metrics": {
+    "duration_s": 139.125,
+    "fps": 24.0,
+    "size": "1280x720",
+    "planned_s": 139.124998,
+    "frames": 3339,
+    "duplicate_ratio": 0.0734,
+    "exposure_off_share": 0.0,
+    "body_luma_mean": 82.49,
+    "colour_worst_after": 6.756,
+    "integrated_lufs": -14.6,
+    "peak_dbfs": -1.1,
+    "clipped_passages": 0,
+    "cues_checked": 16,
+    "median_offset_s": 0.0
+  },
+  "findings": [
+    {
+      "group": "technical",
+      "code": "DUPLICATED_FRAMES",
+      "severity": "WARN",
+      "detail": "7.3% of the body frames repeat the previous one (> 5%)",
+      "at_s": null
+    },
+    {
+      "group": "color",
+      "code": "COLOR_MATCH",
+      "severity": "WARN",
+      "detail": "film.py grade left a shot 6.756 levels from its reference",
+      "at_s": null
+    },
+    {
+      "group": "sync",
+      "code": "CUE_NO_SPEECH",
+      "severity": "WARN",
+      "detail": "no clear speech under the cue at 39.77 s",
+      "at_s": 39.775
+    },
+    {
+      "group": "sync",
+      "code": "CUE_NO_SPEECH",
+      "severity": "WARN",
+      "detail": "no clear speech under the cue at 72.03 s",
+      "at_s": 72.033
+    }
+  ],
+  "checks": [
+    {
+      "group": "technical",
+      "result": "WARN",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "DUPLICATED_FRAMES: 7.3% of the body frames repeat the previous one (> 5%)",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "WARN",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "CUE_NO_SPEECH: no clear speech under the cue at 39.77 s; CUE_NO_SPEECH: no clear speech under the cue at 72.03 s",
+      "waiver": null
+    },
+    {
+      "group": "color",
+      "result": "WARN",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "COLOR_MATCH: film.py grade left a shot 6.756 levels from its reference",
+      "waiver": null
+    },
+    {
+      "group": "delivery",
+      "result": "PASS",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "",
+      "waiver": null
+    }
+  ]
+}

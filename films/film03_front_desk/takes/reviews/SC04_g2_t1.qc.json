@@ -1,0 +1,119 @@
+{
+  "take_id": "SC04_g2_t1",
+  "generation_id": "SC04_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "ffprobe SC04_g2.mp4: 1280x720, 7.96 s; legacy bind NETWORK_PROMPT_MATCH",
+      "reviewer": "auto:ffprobe",
+      "note": "",
+      "waiver": null
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "output_sha256": "5203788394caa6725ebddc49af15f91b1d35504406e9526dcee791164e6abe95"
+}
