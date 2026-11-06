@@ -41,6 +41,18 @@ _BUILTIN: dict[str, Validator] = {
 _PENDING: dict[str, Validator] = {"1": _by_profile(story_pending, narration_pending)}
 
 
+def _picture_lock(pkg: FilmPackage) -> list[str]:
+    from film_pipeline.production.lock import picture_lock_issues
+    return picture_lock_issues(pkg)
+
+
+def _builtin(pkg: FilmPackage, gate_id: str) -> Validator | None:
+    """Built-in validator for a gate; gate 5 (picture lock) exists for the drama profile only."""
+    if gate_id == "5":
+        return _picture_lock if pkg.header.profile == "drama" else None
+    return _BUILTIN.get(gate_id)
+
+
 def register_validator(gate_id: str, fn: Validator) -> None:
     """A registered validator returns issue strings; no issues -> PASS (it must really check)."""
     _VALIDATORS[gate_id] = fn
@@ -81,8 +93,8 @@ def evaluate_gate(pkg: FilmPackage, gate_id: str) -> GateResult:
     status: GateState
     if issues:
         status = "BLOCK"
-    elif gate_id in _VALIDATORS or gate_id in _BUILTIN:
-        issues = (_VALIDATORS.get(gate_id) or _BUILTIN[gate_id])(pkg)
+    elif gate_id in _VALIDATORS or _builtin(pkg, gate_id) is not None:
+        issues = (_VALIDATORS.get(gate_id) or _builtin(pkg, gate_id))(pkg)
         status = "BLOCK" if issues else "PASS"
         if status == "PASS" and gate_id in _PENDING and gate_id not in _VALIDATORS:
             issues = _PENDING[gate_id](pkg)

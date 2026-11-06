@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 38 · PARTIAL 88 · GAP 16 · N/A 26 · total 168
+**Summary:** HAVE 39 · PARTIAL 88 · GAP 15 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -134,7 +134,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 102 | Transition design | CUT / MATCH_CUT / DISSOLVE / DIP_TO_BLACK and J/L cuts declared per event and rendered (xfade); the direction's planned `transition_in/out` is not yet compared with the EDL | PARTIAL | - |
 | 103 | Montage | Not needed for current dramas; add only if a script needs it | N/A | - |
 | 104 | Fine cut | Per-event `src_in_s`/`src_out_s` trims (frame-accurate in the filter), dissolves, dips, J/L cuts rendered; `film.py cut` checks and reports | HAVE | - |
-| 105 | Picture lock | No picture lock | GAP | P4-03 |
+| 105 | Picture lock | `production/lock.py`: `film.py lock --lock --by NAME` freezes EDL hash + per-event fingerprints (take bytes, accepted flag, tags) and keeps every lock; `dirty_items` flags post/delivery items built on a different cut; Gate 5 (drama) passes only for a fresh lock | HAVE | - |
 | 106 | Online conform | N/A (generated sources are the final quality) | N/A | - |
 | 107 | Dialogue editing | Dialogue is generated with the clip; loudness only | PARTIAL | P5-01 |
 | 108 | Dialogue cleanup | Dialogue is generated with the clip; loudness only | PARTIAL | P5-01 |

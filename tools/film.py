@@ -132,6 +132,12 @@ def main(argv: list[str] | None = None) -> int:
     ct.add_argument("--out", type=Path, help="output mp4 (default <film>/media/cut/rough_cut.mp4)")
     ct.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
     ct.add_argument("--accepted-only", action="store_true", help="a take nobody accepted blocks instead of warning")
+    lk = actions.add_parser("lock", help="picture lock: status and dirty post/delivery items; --lock freezes the cut")
+    lk.add_argument("--film", required=True, type=Path)
+    lk.add_argument("--lock", action="store_true", help="freeze the cut (every take accepted, no BLOCK at a cut)")
+    lk.add_argument("--by", help="who locks the picture (required with --lock)")
+    lk.add_argument("--reason", default="")
+    lk.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
     qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
     qcp.add_argument("--record", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
@@ -239,6 +245,19 @@ def main(argv: list[str] | None = None) -> int:
             if args.dry_run:
                 return 0
             return 0 if done["sent"] and done.get("manifest_result") == "PASSED" else 1
+        if args.action == "lock":
+            from film_pipeline.production import lock as lk_mod
+            if args.lock:
+                try:
+                    _emit({"locked": lk_mod.lock_picture(pkg, args.by or "", args.reason, args.clips)})
+                except ValueError as exc:
+                    _emit({"error": str(exc)})
+                    return 1
+                return 0
+            status = lk_mod.lock_status(pkg)
+            dirty = lk_mod.dirty_items(pkg) if status["locked"] else {"dirty": [], "clean": []}
+            _emit({"status": status, **dirty})
+            return 0 if status["fresh"] and not dirty["dirty"] else 1
         if args.action == "cut":
             from film_pipeline.production import edit as ed_mod
             section = pkg.typed.get("edit")

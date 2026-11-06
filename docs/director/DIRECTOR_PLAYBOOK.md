@@ -52,6 +52,8 @@ python tools/film.py retake     --film films/<film_id>    # per-generation decis
 python tools/film.py retake     --film films/<film_id> --pickup <gid> --reason "<why>" --edits <changes.json>   # shot version N+1
 python tools/film.py cut        --film films/<film_id> [--clips <dir>] [--accepted-only]   # check 05_edit.json against the take log, print the timeline (exit 1 on BLOCK)
 python tools/film.py cut        --film films/<film_id> --render [--out <mp4>]   # assembly (hard cuts, dissolves, J/L) -> media/cut/rough_cut.mp4 + .cut.json report
+python tools/film.py lock       --film films/<film_id>    # lock status + post/delivery items that no longer match the cut (exit 1 if stale or dirty)
+python tools/film.py lock       --film films/<film_id> --lock --by "<name>" [--reason "<why>"] [--clips <dir>]   # freeze the cut
 python tools/film.py plan     --film films/<film_id> --out <dir> --takes <takes_dir> --approve-storyboard "<reviewer>"
 ```
 
@@ -85,6 +87,14 @@ rhythm report (scene average vs `target_avg_shot_s` within 30%; a declared hold 
 a shot over 1.5 x target with no hold is an unplanned hold) and the cut-continuity findings (chained handoff states,
 trimmed chained cuts that cannot be proven, line crossings with flipped eyelines, jump-cut risk). Rhythm and axis
 findings are advice for the human at CUT level, not gates. Loudness, subtitles and credits are P5.
+
+Picture lock rule of thumb (`production/lock.py`): lock only a cut whose takes a human accepted and that has no BLOCK
+at any cut; the lock names who locked it. Everything built on the picture (subtitles, mix, colour, titles, master QC,
+packaging) is an item of `06_post.json` / `07_delivery.json` and carries `"locked_against": "<edl_sha256 of the lock>"`
+(+ `"events": [...]` if it covers only part of the film). After any change to the EDL, to a take's bytes or to its
+review, `film.py lock` lists the items to redo: everything at or after the first changed event is affected (a change moves
+the clock), a title/end change affects every event. Relock after review; old locks stay in `lock/history/` so stamps from
+older cuts remain comparable. Gate 5 passes only while the lock is fresh.
 
 Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
 ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly
