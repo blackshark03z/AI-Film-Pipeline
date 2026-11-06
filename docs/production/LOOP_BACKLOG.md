@@ -19,7 +19,7 @@ its B01–B08 = modules now on this branch) and from `src/film_pipeline/drama/*`
 `rough_cut.py`, `delivery.py`, `qc.py`. Map every GAP to a backlog item ID below (or add a new item at the end).
 Done: 168 rows, no row without status, summary counts at top. Docs only, no tests.
 
-### P0-02 Production package schema + loader — IN_PROGRESS
+### P0-02 Production package schema + loader — DONE (c87ac17: 8 tests; focused suite 267 passed, 1 skipped)
 New package `src/film_pipeline/production/` with `package.py`: pydantic models for `film.json` (film_id, title,
 profile `drama|narration`, language, aspect, fps, resolution, generation_s=8, budget {credits_estimate, cap_factor=1.5},
 gates {1..6: PASS|BLOCK|OWNER_PENDING|NOT_RUN}), and **stage files as optional sections** `01_story.json` …
@@ -29,7 +29,7 @@ replace them with typed models). `load_package(path) -> FilmPackage` validates J
 Tests `tests/test_production_package.py`: round-trip, missing film.json error, unknown profile rejected, missing
 stage reported not raised. Done when tests pass.
 
-### P0-03 `tools/film.py` CLI skeleton — READY (after P0-02)
+### P0-03 `tools/film.py` CLI skeleton — READY
 Subcommands `new <film_id> --profile drama|narration` (scaffold package with empty stage files),
 `validate --film DIR` (runs all available gates, prints JSON {gate: status, issues[]}, exit 1 on BLOCK),
 `status --film DIR` (stages present, gates, counts). Pattern: `tools/film_e2e.py`. Tests: subprocess `new` then
