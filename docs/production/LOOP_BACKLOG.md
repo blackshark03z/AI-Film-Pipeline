@@ -98,7 +98,7 @@ WP5 route, Owner SRT faithful-action rule (`docs/sot/film/05_PROMPT_COMPILER.md`
 Include a worked example (film03) and "red flags" list. Also `.claude/skills/film-director/SKILL.md` pointing to it
 (name, description, when to use). No code.
 
-### P1-04 Narration profile adapter — READY (after P1-02)
+### P1-04 Narration profile adapter — DONE (1150361: production/narration.py, gates by profile, film.py narration; 12 tests; full suite 1476 passed)
 For profile `narration`, `film.py` wraps `e2e.py` (prepare/status/resume/finish) so a narration film is a package too:
 story beats come from SRT sentences (`drama.action_meaning.sentences`), shots carry `action_meaning`. Test: package
 built from the E2E test fixture validates and `status` matches `e2e.status` fields.
