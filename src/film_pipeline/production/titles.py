@@ -365,8 +365,11 @@ def write_outputs(pkg: Any, prepared: dict[str, Any], out_dir: Path | None = Non
     (out / "credits.json").write_text(json.dumps({lang: [{"text": t, "size": s} for t, s in lines]
                                                   for lang, lines in prepared["credits"].items()},
                                                  ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    start = {e["event_id"]: e["start_s"] for e in prepared["plan"]["events"]}
+    timed = [{**r, "abs_start_s": round(start[r["event_id"]] + r["start_s"], 3),
+              "abs_end_s": round(start[r["event_id"]] + r["end_s"], 3)} for r in prepared["rows"]]
     report = {"film_id": prepared["film_id"], "ok": prepared["ok"], "sidecars": srts, "credits": "titles/credits.json",
-              "cues": prepared["rows"], "reframed": sorted(prepared["reframes"]), "problems": prepared["problems"],
+              "cues": timed, "reframed": sorted(prepared["reframes"]), "problems": prepared["problems"],
               "summary": {"cues": len(prepared["rows"]), "languages": sorted(srts), "reframed": len(prepared["reframes"]),
                           "blocks": sum(p["severity"] == "BLOCK" for p in prepared["problems"]),
                           "warnings": sum(p["severity"] == "WARN" for p in prepared["problems"])}}

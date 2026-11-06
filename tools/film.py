@@ -146,6 +146,10 @@ def main(argv: list[str] | None = None) -> int:
     tt.add_argument("--render", action="store_true", help="also render the cut with credits, burned-in cues and reframes")
     tt.add_argument("--out", type=Path, help="titled cut (default <film>/media/cut/titled_cut.mp4)")
     tt.add_argument("--color", action="store_true", help="also apply the colour match of color/color.json")
+    mq = actions.add_parser("mastercheck", help="technical QC of a rendered master (black/freeze/duplicate frames, format, loudness, clipping, sync, colour, faststart) -> qc/master_qc.json")
+    mq.add_argument("--film", required=True, type=Path)
+    mq.add_argument("--video", type=Path, help="the master (default <film>/media/cut/mixed.mp4)")
+    mq.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
     lk = actions.add_parser("lock", help="picture lock: status and dirty post/delivery items; --lock freezes the cut")
     lk.add_argument("--film", required=True, type=Path)
     lk.add_argument("--lock", action="store_true", help="freeze the cut (every take accepted, no BLOCK at a cut)")
@@ -313,6 +317,24 @@ def main(argv: list[str] | None = None) -> int:
                 report["render"] = {k: rendered[k] for k in ("output", "output_sha256", "total_s", "path")}
             _emit(report)
             return 0 if report["ok"] else 1
+        if args.action == "mastercheck":
+            from film_pipeline.production import master_qc as mq_mod
+            from film_pipeline.production.mix import stamp_post_item
+            video = args.video or pkg.root / "media" / "cut" / "mixed.mp4"
+            if not video.is_file():
+                _emit({"error": f"{video} not found (render and mix the cut first)"})
+                return 2
+            report_path = args.cut_report
+            if report_path is None:
+                report_path = next((p for p in (video.with_suffix(".cut.json"), pkg.root / "media" / "cut" / "rough_cut.cut.json")
+                                    if p.is_file()), None)
+            record = mq_mod.check_master(video, pkg=pkg, cut_report=report_path)
+            path = mq_mod.write_record(pkg, record)
+            stamp_post_item(pkg, "master_qc", {"report": "qc/master_qc.json", "sha256": record.sha256, "ok": record.ok})
+            _emit({"ok": record.ok, "record": str(path), "metrics": record.metrics,
+                   "checks": {c.group: c.result for c in record.checks},
+                   "findings": [f.model_dump(mode="json") for f in record.findings]})
+            return 0 if record.ok else 1
         if args.action == "titles":
             from film_pipeline.production import edit as ed_mod
             from film_pipeline.production import titles as ti_mod

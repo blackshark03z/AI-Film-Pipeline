@@ -195,7 +195,7 @@ cards (reuse `drama.post`); reframe/stabilise options per event (crop box) for 9
 
 ## P6 — Final QC & delivery (141–156)
 
-### P6-01 Master technical QC — READY (after P5-01)
+### P6-01 Master technical QC — DONE (master_qc.py, film.py mastercheck: format/black/freeze/duplicate/loudness/clipping/silence/sync/colour/faststart, CUT-level record qc/master_qc.json, 16 tests)
 Black frames, freeze frames, duplicated frames, fps/codec/resolution, audio clipping/silence gaps, subtitle sync
 offsets, loudness compliance (ffmpeg blackdetect/freezedetect/silencedetect/ebur128). Record in QC model level CUT.
 

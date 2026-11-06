@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 47 · PARTIAL 89 · GAP 6 · N/A 26 · total 168
+**Summary:** HAVE 49 · PARTIAL 87 · GAP 6 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -173,12 +173,12 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 136 | Motion QC | `qc_model` motion group: human FULL_MOTION review only, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
 | 137 | Camera QC | `autoqc.shot_scale` WARN against the planned size in dailies | PARTIAL | P6-01 |
 | 138 | Visual QC | `qc_model` visual group: human SAMPLED review, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
-| 139 | Temporal QC | No temporal/sequence QC beyond `sequence.validate_shot_sequence` (plan) | PARTIAL | P6-01 |
+| 139 | Temporal QC | `master_qc`: black frames, frozen frames, duplicated-frame share on the master (title/end/card windows exempt); take-level temporal stays human | PARTIAL | - |
 | 140 | Sequence QC | No temporal/sequence QC beyond `sequence.validate_shot_sequence` (plan) | PARTIAL | P6-01 |
-| 141 | Audio QC | Loudness measured; no clipping/silence/sync checks | PARTIAL | P6-01 |
-| 142 | Sync QC | Loudness measured; no clipping/silence/sync checks | PARTIAL | P6-01 |
-| 143 | Color QC | `color.match` deviation per shot + `OUT_OF_RANGE` WARN; no clipping/banding detector | PARTIAL | P6-01 |
-| 144 | Technical QC | `rough_cut._full_decode`, `editorial.probe_media`; no black/freeze detect | PARTIAL | P6-01 |
+| 141 | Audio QC | `master_qc`: codec, -14 LUFS +-1.5, true peak <= -1 dBTP, clipping runs, silent gaps > 3 s | HAVE | - |
+| 142 | Sync QC | `master_qc`: A/V length agreement; dialogue cues vs `audio/stems/dialogue.wav` activity (offset > 0.3 s blocks); UNASSESSED without stem or timed cues | PARTIAL | - |
+| 143 | Color QC | `color.match` deviation per shot + `OUT_OF_RANGE` WARN; `master_qc` crushed/blown-out frame share; no banding detector | PARTIAL | - |
+| 144 | Technical QC | `master_qc`: streams, resolution/fps/codec/pix_fmt, duration vs planned clock, black/freeze/duplicate frames, faststart; record `qc/master_qc.json` at level CUT | HAVE | - |
 | 145 | Compliance QC | `disclosure.check_release`; no rights/platform compliance | PARTIAL | P5-02 |
 | 146 | Delivery QC | `delivery.verify`, `e2e status --package` | PARTIAL | P6-03 |
 

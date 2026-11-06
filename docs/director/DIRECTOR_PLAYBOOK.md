@@ -130,6 +130,15 @@ warning means a human checks that cue; real takes carry room tone, so expect to 
 text with no translation blocks that language. A reframe is a box in `titles/reframe.json` (`w == h`, fractions of the frame);
 under half the frame it warns about softness, and an event with identity tags warns that the face moves under the tag.
 
+Master QC rule of thumb (`production/master_qc.py`, `film.py mastercheck`): run it on the mixed master (default
+`media/cut/mixed.mp4`, with `--cut-report` pointing at the `.cut.json` that holds the planned clock). It checks streams,
+1280x720 / 24 fps / h264 / yuv420p, duration against the plan, black frames (BLOCK from 0.5 s), frozen picture (WARN from 2 s,
+BLOCK from 4 s), the share of duplicated frames, loudness -14 LUFS +-1.5 and true peak <= -1 dBTP, clipping, silent gaps over
+3 s, A/V length, dialogue cues against the dialogue stem (offset over 0.3 s blocks) and faststart. The title card, end card, CARD
+events and EDL dips to black are exempt from black/freeze/silence. Results go to `qc/master_qc.json` as CUT-level group checks
+(technical, audio, sync, color, delivery); a group it could not assess (no dialogue stem, no timed cues) stays UNASSESSED. It is
+technical evidence only: it never says the film is good.
+
 Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
 ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly
 where the previous one ended (a scene cut only warns).
