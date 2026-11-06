@@ -3,6 +3,13 @@
 OWNER_GO_LIVE: NO
 <!-- Owner flips to YES to allow LIVE items (real Flow/ChatGPT generation). Tech Lead never flips it. -->
 
+## Loop outcome (2026-11-07)
+
+No READY item remains. Remaining items are LIVE or blocked on the Owner: **P3-05**, **P8-02** (need `OWNER_GO_LIVE: YES`), and the
+Owner decisions listed in `docs/drama/film03/PACKAGE_RERUN.md` and `films/film04_last_ticket/README.md` (storyboard approval,
+originality/rights, credits estimate, 215-word limit, always-on AI label, trusted C2PA signer, creative review of film02/03/04,
+117 MiB history cleanup). Not yet done: Codex review of P5–P7.
+
 Status values: READY · IN_PROGRESS · DONE (commit, result) · BLOCKED (cause) · LIVE (needs OWNER_GO_LIVE: YES).
 Protocol: [LOOP_PROTOCOL.md](LOOP_PROTOCOL.md). Plan: [E2E_PRODUCTION_PLAN.md](E2E_PRODUCTION_PLAN.md).
 Category IDs refer to the Owner's 168-item list; tick them in `CATEGORY_COVERAGE_168.md` when closed.
@@ -232,7 +239,7 @@ Generate per plan within budget, dailies review, retake/pickup policy, cut, post
 
 ## P9 — Found by the loop
 
-### P9-01 `test_dispatch_recovery` F0/F1 needs `film_pipeline` importable in its subprocess — READY
+### P9-01 `test_dispatch_recovery` F0/F1 needs `film_pipeline` importable in its subprocess — DONE 07defac
 Evidence (2026-11-06, full suite): `tests/test_dispatch_recovery.py::test_F0_requires_fresh_authority_and_F1_real_process_exit_is_durable`
 runs `python -c "from film_pipeline..."` as a subprocess and gets `ModuleNotFoundError` (returncode 1, expected 72) because
 `pythonpath = ["src"]` only applies to the pytest process. Fix: pass `env` with `PYTHONPATH=<repo>/src` (or `cwd`/`-I` aware)
