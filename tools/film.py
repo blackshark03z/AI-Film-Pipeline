@@ -23,8 +23,8 @@ def _emit(payload: dict) -> None:
 
 def scaffold(film_id: str, profile: str, root: Path, title: str | None) -> Path:
     target = root / film_id
-    if (target / "film.json").exists():
-        raise PackageError(f"{target} already has a film.json; refusing to overwrite")
+    if target.exists() and any(target.iterdir()):
+        raise PackageError(f"{target} is not empty; refusing to overwrite")
     header = FilmHeader(film_id=film_id, title=title or film_id, profile=profile)
     save_header(target, header)
     for name in STAGE_FILES.values():
@@ -52,6 +52,8 @@ def main(argv: list[str] | None = None) -> int:
     plan.add_argument("--out", required=True, type=Path)
     plan.add_argument("--takes", type=Path, help="directory of reviewed <gid>.mp4 takes (marks end states verified)")
     plan.add_argument("--no-storyboard", action="store_true")
+    plan.add_argument("--approve-storyboard", metavar="REVIEWER",
+                      help="mark every rendered storyboard frame APPROVED by this reviewer (explicit; default PENDING)")
     args = parser.parse_args(argv)
 
     try:
@@ -61,16 +63,18 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         pkg = load_package(args.film)
         if args.action == "plan":
-            record = plan_package(pkg, args.out, takes_dir=args.takes, storyboard=not args.no_storyboard)
-            _emit({"out": str(args.out),
+            result = plan_package(pkg, args.out, takes_dir=args.takes, storyboard=not args.no_storyboard,
+                                  approve_storyboard=args.approve_storyboard)
+            record = result.record
+            _emit({"out": str(args.out), "ok": result.ok, "problems": result.problems,
                    "generations": {g: {"verdict": v["verdict"], "words": v["words"]}
-                                   for g, v in record["generations"].items()},
-                   "comprehension_issues": len(record["comprehension"]),
-                   "feasibility_issues": len(record["feasibility"]), "temporal_issues": len(record["temporal"])})
-            return 1 if any(v["verdict"] != "PASS" for v in record["generations"].values()) else 0
+                                   for g, v in record["generations"].items()}})
+            return 0 if result.ok else 1
         results = evaluate_gates(pkg)
         report = summary(results)
         if args.action == "validate":
+            report["package_issues"] = pkg.issues
+            report["blocked"] = report["blocked"] or bool(pkg.issues)
             _emit(report)
             return 1 if report["blocked"] else 0
         _emit({

@@ -22,12 +22,15 @@ def norm(path: Path) -> str:
     return path.read_bytes().decode("utf-8").replace("\r\n", "\n")
 
 
+PKG = ROOT / "films" / "film03_front_desk"
+
+
 @pytest.fixture(scope="module")
 def planned(tmp_path_factory):
+    """Text artefacts only: no rendering, so these comparisons never depend on Pillow."""
     out = tmp_path_factory.mktemp("film03_plan")
-    record = plan_package(load_package(ROOT / "films" / "film03_front_desk"), out,
-                          takes_dir=LEGACY / "takes")
-    return out, record
+    plan_package(load_package(PKG), out, takes_dir=LEGACY / "takes", storyboard=False)
+    return out, None
 
 
 def test_prompt_files_byte_identical(planned):
@@ -51,8 +54,11 @@ def test_every_legacy_tool_output_is_covered():
     assert legacy - {f"{g}.txt" for g in GIDS} == {n for n in legacy if n.endswith(".soft.txt")}
 
 
-def test_gate3_record_identical(planned):
-    out, _ = planned
-    if not (LEGACY / "takes").is_dir():
-        pytest.skip("film03 takes not present; end_state_verified would differ")
-    assert json.loads(norm(out / "gate3.json")) == json.loads(norm(LEGACY / "gate3_film03.json"))
+def test_gate3_record_identical(tmp_path):
+    """Needs the storyboard renderer (Pillow); the legacy record was produced with APPROVED frames."""
+    pytest.importorskip("PIL")
+    result = plan_package(load_package(PKG), tmp_path, takes_dir=LEGACY / "takes",
+                          approve_storyboard="Tech Lead (Owner-delegated)")
+    assert result.ok, result.problems
+    assert json.loads(norm(tmp_path / "gate3.json")) == json.loads(norm(LEGACY / "gate3_film03.json"))
+

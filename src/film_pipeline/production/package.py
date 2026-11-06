@@ -13,6 +13,7 @@ from pydantic import Field, ValidationError, field_validator
 
 from film_pipeline.core import ContractModel
 from film_pipeline.drama.script import Script, parse_fountain
+from film_pipeline.production.sections import TYPED_SECTIONS, check_references
 
 Profile = Literal["drama", "narration"]
 GateState = Literal["PASS", "BLOCK", "OWNER_PENDING", "NOT_RUN"]
@@ -106,11 +107,6 @@ def _read_json(path: Path) -> Any:
         raise PackageError(f"{path.name}: invalid JSON ({exc})") from exc
 
 
-def _typed_section(key: str):
-    from film_pipeline.production.sections import TYPED_SECTIONS  # local: sections import drama models
-    return TYPED_SECTIONS.get(key)
-
-
 def load_package(path: str | Path) -> FilmPackage:
     """Load `films/<id>/`. Missing stages are reported, not raised; a bad `film.json` raises `PackageError`."""
     root = Path(path)
@@ -143,13 +139,14 @@ def load_package(path: str | Path) -> FilmPackage:
             issues.append(f"{name}: expected a JSON object")
             continue
         stages[key] = data
-        section = _typed_section(key)
+        section = TYPED_SECTIONS.get(key)
         if section is not None and data:  # an empty scaffold stage is reported by the gates, not here
             try:
                 typed[key] = section.model_validate(data)
             except ValidationError as exc:
                 issues.append(f"{name}: {exc}")
 
+    issues += check_references(typed)
     script: Script | None = None
     script_path = root / SCRIPT_FILE
     if header.profile == "drama":

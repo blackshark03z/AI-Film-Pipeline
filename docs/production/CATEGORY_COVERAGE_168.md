@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 15 · PARTIAL 78 · GAP 49 · N/A 26 · total 168
+**Summary:** HAVE 14 · PARTIAL 79 · GAP 49 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -32,9 +32,9 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 15 | Directorial vision | No treatment/visual-rule record; film README only | GAP | P1-02 |
 | 16 | Visual language | No treatment/visual-rule record; film README only | GAP | P1-02 |
 | 17 | Mise-en-scène | `drama/scene_bible.py` occupancy + location look | PARTIAL | P2-03 |
-| 18 | Shot composition | `coverage.CoverageShot` size/angle fields; no composition check | PARTIAL | P2-03 |
+| 18 | Shot composition | `coverage.CoverageShot.shot_size` only (no angle or composition field) | PARTIAL | P2-03 |
 | 19 | Shot size | `coverage._SIZE` + `autoqc.shot_scale_from_ratio` (WARN) | HAVE | - |
-| 20 | Camera angle | `coverage.CoverageShot` size/angle fields; no composition check | PARTIAL | P2-03 |
+| 20 | Camera angle | No angle field in `CoverageShot` (size and coverage kind only) | PARTIAL | P2-03 |
 | 21 | Camera movement | ShotSpec camera.movement (locked default); no movement plan | PARTIAL | P2-03 |
 | 22 | Blocking | `choreography.GenerationChoreography` phases + `core.Blocking` | HAVE | - |
 | 23 | Staging | `scene_bible` occupancy + `Blocking`; layering not modelled | PARTIAL | P2-03 |
@@ -56,7 +56,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 |---|---|---|---|---|
 | 35 | Casting | `drama/bible.py` approved reference images (CharacterBrief) | PARTIAL | P2-01 |
 | 36 | Character design | `drama/bible.py` CharacterLook + reference binding per generation | PARTIAL | P2-01 |
-| 37 | Location scouting | `scene_bible.LocationLook` (AI-only: approved location image) | PARTIAL | P2-01 |
+| 37 | Location scouting | `scene_bible.LocationLook` text + `approved` flag; no image identity or hash | PARTIAL | P2-01 |
 | 38 | Production design | `scene_bible` location look; no set geometry/palette record | PARTIAL | P2-03 |
 | 39 | Set design | `scene_bible` location look; no set geometry/palette record | PARTIAL | P2-03 |
 | 40 | Set dressing | `scene_bible`/`continuity` prop positions; no version or ownership | PARTIAL | P2-02 |
@@ -71,7 +71,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 49 | Shot planning | `generation.py` split into 8 s units + `coverage` shot list | PARTIAL | P2-05 |
 | 50 | Continuity planning | `drama/continuity.py` + `sequence.validate_shot_sequence` | PARTIAL | P2-02 |
 | 51 | Sound planning | Prompt carries room tone/SFX strings (`prompt.py`); no sound plan | PARTIAL | P5-01 |
-| 52 | Technical planning | `production/package.FilmHeader` (aspect, fps, resolution, generation_s) + `PreflightLimits` | HAVE | - |
+| 52 | Technical planning | `production/package.FilmHeader` records aspect/fps/resolution/generation_s; `plan` supports 16:9 only (refuses others) + `PreflightLimits` | PARTIAL | P6-02 |
 | 53 | Production scheduling | No schedule/order record | GAP | P2-05 |
 | 54 | Budgeting | `drama/kpi.py` actuals only; no estimate | PARTIAL | P2-05 |
 | 55 | Risk & safety | Moderation notes in memory only; no risk record | GAP | P2-05 |

@@ -21,6 +21,7 @@ from film_pipeline.production.package import FilmPackage, PackageError
 from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection
 
 _LANGUAGE = {"en": "English", "vi": "Vietnamese"}
+SUPPORTED_ASPECT = "16:9"  # prompt compiler and schematic renderer are landscape-only
 START_PREFIX = "Starts on the given frame; same room, people and places. "
 
 
@@ -29,12 +30,17 @@ class _Plan:
         missing = [k for k in ("direction", "preprod", "shots") if k not in pkg.typed]
         if missing or pkg.script is None:
             raise PackageError(f"plan needs typed sections {missing or ''} and script.fountain")
+        if pkg.header.aspect != SUPPORTED_ASPECT:
+            raise PackageError(f"plan supports aspect {SUPPORTED_ASPECT} only, film.json has {pkg.header.aspect!r}")
         self.pkg = pkg
         self.pre: PreprodSection = pkg.typed["preprod"]
         self.shots: ShotsSection = pkg.typed["shots"]
         self.direction: DirectionSection = pkg.typed["direction"]
         self.script = pkg.script
         self.scenes = {s.scene_id: s for s in pkg.script.scenes}
+        absent = sorted({g.scene_id for g in self.shots.generations} - set(self.scenes))
+        if absent:
+            raise PackageError(f"04_shots.json references scenes missing from script.fountain: {absent}")
         self.gen_s = float(pkg.header.generation_s)
         self.by_id = {g.generation_id: g for g in self.shots.generations}
         self.takes_dir = takes_dir
@@ -131,6 +137,18 @@ class _Plan:
                 "Faces and clothes exactly as in the attached character images. Natural, restrained "
                 "expressions. No text, no logos.")
 
+    def dialogue_problems(self) -> list[str]:
+        """Every scripted dialogue line must be spoken by some generation (generation k speaks the k-th line)."""
+        gens: dict[str, int] = {}
+        for g in self.shots.generations:
+            gens[g.scene_id] = gens.get(g.scene_id, 0) + 1
+        out = []
+        for sid, scene in self.scenes.items():
+            lines = sum(1 for e in scene.elements if e.kind == "dialogue")
+            if lines > gens.get(sid, 0):
+                out.append(f"DIALOGUE_UNASSIGNED {sid}: {lines} dialogue lines but {gens.get(sid, 0)} generations")
+        return out
+
     def temporal(self) -> list[Any]:
         order = list(self.pre.scenes)
         first = {g.scene_id: g for g in reversed(self.shots.generations)}  # earliest generation per scene
@@ -141,15 +159,32 @@ class _Plan:
             {s: self.state(first[s].start_state) for s in order if s in first})
 
 
-def _write(path: Path, text: str) -> None:
+def _write(path: Path, text: str, root: Path) -> None:
+    if not path.resolve().is_relative_to(root.resolve()):
+        raise PackageError(f"refusing to write outside the output directory: {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8", newline="\n")
 
 
+class PlanResult:
+    """`record` = the gate3 json; `problems` = every BLOCK found (empty = the plan is clean)."""
+
+    def __init__(self, record: dict[str, Any], problems: list[str]) -> None:
+        self.record, self.problems = record, problems
+
+    @property
+    def ok(self) -> bool:
+        return not self.problems
+
+
 def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | None = None,
                  reference_root: str | Path | None = None, storyboard: bool = True,
-                 reviewer: str = "Tech Lead (Owner-delegated)") -> dict[str, Any]:
-    """Write all plan artefacts under `out`; returns the gate3 record."""
+                 approve_storyboard: str | None = None) -> PlanResult:
+    """Write all plan artefacts under `out`.
+
+    Storyboard frames are rendered and registered PENDING. They count as reviewed only when the caller passes
+    `approve_storyboard=<reviewer name>` — the plan never invents an approval.
+    """
     p = _Plan(pkg, Path(takes_dir) if takes_dir else None, Path(reference_root) if reference_root else None)
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
@@ -164,15 +199,16 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
             rel = f"{decl.generation_id}.png"
             render_schematic_frame(unit, shot, out / "storyboard" / rel, width=640)
             gate.register(unit.scene_id, shot.shot_id, rel)
-            gate.review(shot.shot_id, status="APPROVED", reviewer=reviewer)
+            if approve_storyboard:
+                gate.review(shot.shot_id, status="APPROVED", reviewer=approve_storyboard)
         gate.save()
 
     for name, spec in p.pre.characters.items():
         _write(out / "stills" / f"char_{name}.txt",
-               p.pre.still_templates.character.format(text=spec.look.text) + "\n")
+               p.pre.still_templates.character.format(text=spec.look.text) + "\n", out)
     for look_id, loc in p.pre.locations.items():
         _write(out / "stills" / f"plate_{look_id}.txt",
-               p.pre.still_templates.plate.format(text=loc.look.text) + "\n")
+               p.pre.still_templates.plate.format(text=loc.look.text) + "\n", out)
 
     record: dict[str, Any] = {"feasibility": [i.model_dump() for i in feas.issues],
                               "temporal": [i.model_dump() for i in temporal], "generations": {}}
@@ -180,9 +216,9 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         gid = decl.generation_id
         unit, plan, report = p.build(decl, gate)
         text = START_PREFIX + plan.compiled_text
-        _write(out / "prompts" / f"{gid}.txt", text + "\n")
+        _write(out / "prompts" / f"{gid}.txt", text + "\n", out)
         still = p.still_prompt(decl, unit)
-        _write(out / "stills" / f"start_{gid}.txt", still + "\n")
+        _write(out / "stills" / f"start_{gid}.txt", still + "\n", out)
         record["generations"][gid] = {
             "words": len(text.split()), "verdict": report.verdict, "still_words": len(still.split()),
             "issues": [i.model_dump() for i in report.issues]}
@@ -195,5 +231,11 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     record["looks"] = {k: v.look.model_dump() for k, v in p.pre.characters.items()}
     record["locations"] = [v.look.model_dump() for v in p.pre.locations.values()]
     record["states"] = {k: v.model_dump() for k, v in p.pre.states.items()}
-    _write(out / "gate3.json", json.dumps(record, ensure_ascii=False, indent=2))
-    return record
+    _write(out / "gate3.json", json.dumps(record, ensure_ascii=False, indent=2), out)
+    problems = [f"{k.upper()} {i['check']}: {i['detail']}" for k in ("feasibility", "temporal", "comprehension")
+                for i in record[k] if i["severity"] == "BLOCK"]
+    problems += [f"{g} preflight {v['verdict']}" for g, v in record["generations"].items() if v["verdict"] != "PASS"]
+    problems += p.dialogue_problems()
+    if not p.shots.generations:
+        problems.append("no generations in 04_shots.json")
+    return PlanResult(record, problems)

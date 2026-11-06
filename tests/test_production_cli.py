@@ -33,6 +33,11 @@ def test_new_refuses_overwrite_and_narration_has_no_script(tmp_path):
     assert not (tmp_path / "n1" / "script.fountain").exists()
     again = run("new", "n1", "--profile", "narration", "--root", str(tmp_path))
     assert again.returncode == 2 and "refusing to overwrite" in again.stdout
+    (tmp_path / "partial").mkdir()
+    (tmp_path / "partial" / "script.fountain").write_text("INT. A - DAY", encoding="utf-8")
+    clobber = run("new", "partial", "--profile", "drama", "--root", str(tmp_path))
+    assert clobber.returncode == 2
+    assert (tmp_path / "partial" / "script.fountain").read_text(encoding="utf-8") == "INT. A - DAY"
 
 
 def test_status_and_missing_film(tmp_path):
@@ -70,7 +75,11 @@ def test_plan_command_on_film03(tmp_path):
     # without reviewed takes the handoffs are unverified, so preflight blocks (by design)
     blocked = run("plan", "--film", str(film), "--out", str(tmp_path / "ob"))
     assert blocked.returncode == 1 and '"BLOCKED"' in blocked.stdout
-    out = run("plan", "--film", str(film), "--out", str(tmp_path / "o"), "--takes", str(takes))
+    # frames are PENDING unless a reviewer is named explicitly, so takes alone are not enough
+    pending = run("plan", "--film", str(film), "--out", str(tmp_path / "op"), "--takes", str(takes))
+    assert pending.returncode == 1 and "BLOCKED" in pending.stdout
+    out = run("plan", "--film", str(film), "--out", str(tmp_path / "o"), "--takes", str(takes),
+              "--approve-storyboard", "Test Reviewer")
     assert out.returncode == 0, out.stdout + out.stderr
     report = json.loads(out.stdout)
     assert len(report["generations"]) == 16 and all(v["verdict"] == "PASS" for v in report["generations"].values())

@@ -56,6 +56,21 @@ Phase end: full suite, push, IMPLEMENTATION_STATUS row.
 
 ## P1 — Story & Direction (categories 1–34)
 
+### P1-00 Review follow-ups for P0 (Codex gpt-6.1-sol review, 2026-11-06) — READY
+Run before P1-01. Fixed already in this review pass: storyboard approval is opt-in (`--approve-storyboard`), `plan` exit code
+aggregates every BLOCK, cross-reference/id/predecessor validation, path-escape guard, aspect refusal, `new` never overwrites,
+`validate` fails on package issues, golden text comparisons independent of Pillow, matrix rows 18/20/37/52, media untracked.
+Remaining (do all three; no weakening of film03 parity):
+1. **Explicit dialogue per generation.** Replace "generation k speaks the k-th line" with `ShotDecl.dialogue: list[int]`
+   (script line numbers, `[]` for silent shots) and a check that every scripted dialogue line is assigned exactly once.
+   Port film03 so prompts stay byte-identical. Today only a count check exists (`DIALOGUE_UNASSIGNED`).
+2. **`end_state_verified` from QC evidence, not file existence.** Derive it from a take record (`<gid>.take.json` /
+   `HandoffQC`) bound to the take's sha256 and the expected end state; a bare or empty `.mp4` must not verify.
+3. **Word limit on the emitted text.** Preflight checks `compiled_text`, but `plan` writes `START_PREFIX + compiled_text`
+   (film03: SC02_g2 212 -> 222 words vs limit 215; 3 more prompts over). Measure the emitted text; for film03 record
+   the four shipped prompts as an explicit, documented exception in the golden test (they are accepted, shipped footage)
+   rather than changing their bytes. Report to Owner if the limit itself should move.
+
 ### P1-01 Story bible model + Gate 1 — READY
 Typed `01_story.json`: concept, theme, genre, audience (who/expectation), premise + central conflict, logline,
 structure (acts with beats: id, function SETUP/INCITING/ESCALATION/MIDPOINT/CRISIS/CLIMAX/RESOLUTION, scene ids),

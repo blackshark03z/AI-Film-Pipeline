@@ -6,15 +6,30 @@ Stages not listed here stay permissive dicts in `package.py` until their phase t
 """
 from __future__ import annotations
 
-from pydantic import Field, model_validator
+import re
+from typing import Annotated
+
+from pydantic import Field, StringConstraints, model_validator
 
 from film_pipeline.core import ContractModel
 from film_pipeline.drama import (AxisBook, CharacterLook, ContinuityState, LocationLook, SceneOccupancy,
                                  StoryTime)
 from film_pipeline.drama.choreography import GenerationChoreography
+from film_pipeline.drama.coverage import Coverage
 from film_pipeline.drama.comprehension import ContextCard, CharacterIntro, IdentityTag, StoryFact
 from film_pipeline.drama.feasibility import FeasibilityLimits
 from film_pipeline.drama.preflight import PreflightLimits
+
+
+# ids become file names (prompts/<id>.txt) and dict keys: no separators, dots or spaces
+Ident = Annotated[str, StringConstraints(pattern=r"^[A-Za-z0-9][A-Za-z0-9_-]*$")]
+_IDENT = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
+
+
+def _bad_keys(label: str, keys) -> None:
+    bad = [k for k in keys if not _IDENT.match(k)]
+    if bad:
+        raise ValueError(f"{label}: invalid ids {bad} (letters, digits, - and _ only)")
 
 
 class ComprehensionSpec(ContractModel):
@@ -71,6 +86,9 @@ class PreprodSection(ContractModel):
 
     @model_validator(mode="after")
     def _references_resolve(self) -> "PreprodSection":
+        for label, keys in (("characters", self.characters), ("locations", self.locations),
+                            ("scenes", self.scenes), ("states", self.states)):
+            _bad_keys(label, keys)
         for sid, scene in self.scenes.items():
             if scene.location not in self.locations:
                 raise ValueError(f"scene {sid}: unknown location {scene.location!r}")
@@ -80,15 +98,15 @@ class PreprodSection(ContractModel):
 class ShotDecl(ContractModel):
     """One generation = one 8 s shot rendered from a start frame."""
 
-    generation_id: str
-    scene_id: str
-    coverage: str  # MASTER | OTS | SINGLE
+    generation_id: Ident
+    scene_id: Ident
+    coverage: Coverage
     subject: str = ""
     foreground: str = ""
     visible: list[str]
-    start_state: str
-    end_state: str  # state the next generation starts from
-    previous_generation_id: str | None = None  # None = no handoff (opening of a continuous chain)
+    start_state: Ident
+    end_state: Ident  # state the next generation starts from
+    previous_generation_id: Ident | None = None  # None = no handoff (opening of a continuous chain)
     choreography: GenerationChoreography
     sfx: list[str] = Field(default_factory=list)
 
@@ -103,12 +121,32 @@ class ShotsSection(ContractModel):
         ids = [g.generation_id for g in self.generations]
         if len(set(ids)) != len(ids):
             raise ValueError("duplicate generation_id")
-        for g in self.generations:
-            if g.previous_generation_id is not None and g.previous_generation_id not in ids:
-                raise ValueError(f"{g.generation_id}: unknown previous_generation_id {g.previous_generation_id!r}")
+        for index, g in enumerate(self.generations):
+            prev = g.previous_generation_id
+            if prev is not None and (prev not in ids or ids.index(prev) >= index):
+                raise ValueError(f"{g.generation_id}: previous_generation_id {prev!r} must be an earlier generation")
             if g.choreography.generation_id != g.generation_id:
                 raise ValueError(f"{g.generation_id}: choreography belongs to {g.choreography.generation_id!r}")
         return self
+
+
+def check_references(typed: dict) -> list[str]:
+    """Cross-section references between 03_preprod and 04_shots; returns issue strings (empty = consistent)."""
+    pre, shots = typed.get("preprod"), typed.get("shots")
+    if pre is None or shots is None:
+        return []
+    out: list[str] = []
+    for g in shots.generations:
+        gid = g.generation_id
+        if g.scene_id not in pre.scenes:
+            out.append(f"04_shots.json: {gid}: unknown scene_id {g.scene_id!r}")
+        for field in ("start_state", "end_state"):
+            if getattr(g, field) not in pre.states:
+                out.append(f"04_shots.json: {gid}: unknown {field} {getattr(g, field)!r}")
+        for who in (*g.visible, *(c for c in (g.subject, g.foreground) if c)):
+            if who not in pre.characters:
+                out.append(f"04_shots.json: {gid}: unknown character {who!r}")
+    return out
 
 
 TYPED_SECTIONS: dict[str, type[ContractModel]] = {
