@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 14 · PARTIAL 79 · GAP 49 · N/A 26 · total 168
+**Summary:** HAVE 22 · PARTIAL 86 · GAP 34 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -10,27 +10,27 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 
 | ID | Category | Responsibility (code path / package field / operator receipt / N/A) | Status | Backlog |
 |---|---|---|---|---|
-| 1 | Concept | No field; operator/model decision recorded in package 01_story.json | GAP | P1-01 |
-| 2 | Audience | No field; operator/model decision recorded in package 01_story.json | GAP | P1-01 |
-| 3 | Premise | `comprehension.StoryFact` covers facts only; no premise/conflict model | PARTIAL | P1-01 |
-| 4 | Logline | No field; operator/model decision recorded in package 01_story.json | GAP | P1-01 |
-| 5 | Story structure | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
-| 6 | Plot & subplot | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
-| 7 | Character arcs | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
-| 8 | Dramatic beats | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
-| 9 | Scene design | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
+| 1 | Concept | `production/story.py` `StorySection.concept` (required; presence only) | PARTIAL | P1-01 |
+| 2 | Audience | `StorySection.audience` who + expectation (required; presence only) | PARTIAL | P1-01 |
+| 3 | Premise | `StorySection.premise` + `central_conflict` (required; presence only) | PARTIAL | P1-01 |
+| 4 | Logline | `StorySection.logline` with protagonist/goal/obstacle; Gate 1 checks the text carries them | HAVE | P1-01 |
+| 5 | Story structure | `StorySection.structure` acts/beats; Gate 1: function order, required beats, every scene in a beat | HAVE | P1-01 |
+| 6 | Plot & subplot | `StorySection.plot` (text) + `subplots` with scene refs checked | PARTIAL | P1-01 |
+| 7 | Character arcs | `StoryCharacter` want/need/flaw/arc; Gate 1: protagonist arc needs an existing change scene | HAVE | P1-01 |
+| 8 | Dramatic beats | `Beat` function/scenes/summary, ordered and covering all scenes (Gate 1) | HAVE | P1-01 |
+| 9 | Scene design | `StoryScene` purpose/conflict/outcome/value shift required per scene; scenes match script.fountain (Gate 1) | HAVE | P1-01 |
 | 10 | Screenplay | `drama/script.py` Fountain intake; `production.load_package` parses `script.fountain`; version/approval tracked by Gate 1 (P1-01) | PARTIAL | P1-01 |
 | 11 | Dialogue | `drama/coverage.SpokenLine` + `feasibility` syllable limits | HAVE | - |
-| 12 | Rewrite | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
+| 12 | Rewrite | `StorySection.rewrite_log` records versions; no diff against the script | PARTIAL | P1-01 |
 | 13 | Script breakdown | `drama/feasibility.py` + `scene_bible` occupancy; heuristic breakdown | PARTIAL | P2-05 |
-| 14 | Adaptation | `e2e` source SRT hash lock; rights status not modelled | PARTIAL | P1-01 |
+| 14 | Adaptation | `StorySection.adaptation` rights_status (drama) and `NarrationStory.rights_status` (narration); not cleared -> OWNER_PENDING | HAVE | P1-01 |
 
 ## II. Creative direction
 
 | ID | Category | Responsibility (code path / package field / operator receipt / N/A) | Status | Backlog |
 |---|---|---|---|---|
-| 15 | Directorial vision | No treatment/visual-rule record; film README only | GAP | P1-02 |
-| 16 | Visual language | No treatment/visual-rule record; film README only | GAP | P1-02 |
+| 15 | Directorial vision | `production/direction.py` `Vision` (tone, references as words); required by Gate 2, not enforced against shots | PARTIAL | P1-02 |
+| 16 | Visual language | `DirectionPlan.visual_rules` rule + why; required by Gate 2, not enforced against shots | PARTIAL | P1-02 |
 | 17 | Mise-en-scène | `drama/scene_bible.py` occupancy + location look | PARTIAL | P2-03 |
 | 18 | Shot composition | `coverage.CoverageShot.shot_size` only (no angle or composition field) | PARTIAL | P2-03 |
 | 19 | Shot size | `coverage._SIZE` + `autoqc.shot_scale_from_ratio` (WARN) | HAVE | - |
@@ -42,13 +42,13 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 25 | Spatial geography | `drama/storyboard.py` schematic frames + `scene_bible` | PARTIAL | P2-03 |
 | 26 | Temporal continuity | `drama/continuity.py` + `scene_bible.StoryTime` | PARTIAL | P2-02 |
 | 27 | Performance direction | `choreography.PerformanceCue` visible cues + prohibited misread | PARTIAL | P1-02 |
-| 28 | Emotional direction | No emotional curve model | GAP | P1-02 |
-| 29 | Rhythm & pacing | Phase lengths in choreography; no pacing plan or hold check | PARTIAL | P4-02 |
+| 28 | Emotional direction | `SceneDirection.curve` 0-5 per character; Gate 2 blocks jumps > 2 without a cause beat | HAVE | P1-02 |
+| 29 | Rhythm & pacing | `Pacing` target + holds on shots of the scene; choreography phase lengths; no measured-rhythm check | PARTIAL | P4-02 |
 | 30 | Coverage strategy | `drama/coverage.CoveragePlanner` master/OTS/single/reaction | PARTIAL | P1-02 |
-| 31 | Transitions | No transition intent record | GAP | P1-02 |
+| 31 | Transitions | `Transition` kind + reason per scene boundary; recorded, not yet applied by an edit stage | PARTIAL | P1-02 |
 | 32 | Visual storytelling | `action_meaning` + choreography once_actions (must-show) | PARTIAL | P1-02 |
-| 33 | Point of view | No POV model | GAP | P1-02 |
-| 34 | Dramatic emphasis | No emphasis/reveal model | GAP | P1-02 |
+| 33 | Point of view | `SceneDirection.pov`: whose view, facts the audience/characters know (ids checked against comprehension) | PARTIAL | P1-02 |
+| 34 | Dramatic emphasis | `Emphasis` device per moment; `reveals` must have an emphasis device on a scene shot (Gate 2) | HAVE | P1-02 |
 
 ## III. Pre-production
 
