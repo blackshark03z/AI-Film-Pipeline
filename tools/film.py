@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from film_pipeline.production.gates import evaluate_gates, summary  # noqa: E402
+from film_pipeline.production.plan import plan_package  # noqa: E402
 from film_pipeline.production.package import (  # noqa: E402
     SCRIPT_FILE, STAGE_FILES, FilmHeader, PackageError, load_package, save_header,
 )
@@ -46,6 +47,11 @@ def main(argv: list[str] | None = None) -> int:
                        ("status", "stages present, gates, counts")):
         sub = actions.add_parser(name, help=text)
         sub.add_argument("--film", required=True, type=Path)
+    plan = actions.add_parser("plan", help="write prompts, start-frame still prompts, storyboard and gate3.json")
+    plan.add_argument("--film", required=True, type=Path)
+    plan.add_argument("--out", required=True, type=Path)
+    plan.add_argument("--takes", type=Path, help="directory of reviewed <gid>.mp4 takes (marks end states verified)")
+    plan.add_argument("--no-storyboard", action="store_true")
     args = parser.parse_args(argv)
 
     try:
@@ -54,6 +60,14 @@ def main(argv: list[str] | None = None) -> int:
             _emit({"created": str(target), "profile": args.profile})
             return 0
         pkg = load_package(args.film)
+        if args.action == "plan":
+            record = plan_package(pkg, args.out, takes_dir=args.takes, storyboard=not args.no_storyboard)
+            _emit({"out": str(args.out),
+                   "generations": {g: {"verdict": v["verdict"], "words": v["words"]}
+                                   for g, v in record["generations"].items()},
+                   "comprehension_issues": len(record["comprehension"]),
+                   "feasibility_issues": len(record["feasibility"]), "temporal_issues": len(record["temporal"])})
+            return 1 if any(v["verdict"] != "PASS" for v in record["generations"].values()) else 0
         results = evaluate_gates(pkg)
         report = summary(results)
         if args.action == "validate":

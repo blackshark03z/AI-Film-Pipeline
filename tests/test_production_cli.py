@@ -62,3 +62,20 @@ def test_registered_validator_decides(tmp_path):
         assert first.status == "BLOCK" and first.issues == ["logline missing"]
     finally:
         gates_mod._VALIDATORS.clear()
+
+
+def test_plan_command_on_film03(tmp_path):
+    film = Path(__file__).resolve().parents[1] / "films" / "film03_front_desk"
+    takes = film.parents[1] / "docs" / "drama" / "film03" / "takes"
+    # without reviewed takes the handoffs are unverified, so preflight blocks (by design)
+    blocked = run("plan", "--film", str(film), "--out", str(tmp_path / "ob"))
+    assert blocked.returncode == 1 and '"BLOCKED"' in blocked.stdout
+    out = run("plan", "--film", str(film), "--out", str(tmp_path / "o"), "--takes", str(takes))
+    assert out.returncode == 0, out.stdout + out.stderr
+    report = json.loads(out.stdout)
+    assert len(report["generations"]) == 16 and all(v["verdict"] == "PASS" for v in report["generations"].values())
+    assert (tmp_path / "o" / "prompts" / "SC01_g1.txt").is_file()
+    # a package without the typed sections cannot be planned
+    run("new", "n9", "--profile", "drama", "--root", str(tmp_path))
+    bad = run("plan", "--film", str(tmp_path / "n9"), "--out", str(tmp_path / "o2"))
+    assert bad.returncode == 2 and "plan needs" in bad.stdout
