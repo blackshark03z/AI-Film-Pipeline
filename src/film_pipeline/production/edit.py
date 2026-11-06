@@ -336,13 +336,41 @@ def gain_filter(gains: tuple[float, float, float] | None) -> str:
     return "" if gains is None else f"colorchannelmixer=rr={gains[0]:.5f}:gg={gains[1]:.5f}:bb={gains[2]:.5f}"
 
 
+class Reframe(ContractModel):
+    """A crop box inside the frame (fractions of its width/height) that is scaled back up, plus optional stabilising.
+    Kept outside ``05_edit.json`` (``titles/reframe.json``) so the EDL bytes and the picture lock do not move."""
+
+    x: float = Field(default=0.0, ge=0.0, le=1.0)
+    y: float = Field(default=0.0, ge=0.0, le=1.0)
+    w: float = Field(default=1.0, gt=0.0, le=1.0)
+    h: float = Field(default=1.0, gt=0.0, le=1.0)
+    stabilize: bool = False
+
+    @model_validator(mode="after")
+    def _inside(self) -> "Reframe":
+        if self.x + self.w > 1.0 + 1e-6 or self.y + self.h > 1.0 + 1e-6:
+            raise ValueError("the crop box leaves the frame")
+        return self
+
+
+def reframe_filter(r: Reframe | None) -> str:
+    """ffmpeg filters for a reframe (deshake first, then the crop with even sides); empty for none/identity."""
+    if r is None:
+        return ""
+    parts = ["deshake"] if r.stabilize else []
+    if (r.x, r.y, r.w, r.h) != (0.0, 0.0, 1.0, 1.0):
+        parts.append(f"crop=trunc(iw*{r.w:.6f}/2)*2:trunc(ih*{r.h:.6f}/2)*2:iw*{r.x:.6f}:ih*{r.y:.6f}")
+    return ",".join(parts)
+
+
 def _trim(src: Path, dst: Path, start: float, end: float | None,
-          gains: tuple[float, float, float] | None = None) -> Path:
+          gains: tuple[float, float, float] | None = None, reframe: Reframe | None = None) -> Path:
     cmd = ["ffmpeg", "-v", "error", "-y", "-ss", f"{start:.6f}", "-i", str(src)]
     if end is not None:
         cmd += ["-t", f"{end - start:.6f}"]
-    if gains is not None:
-        cmd += ["-vf", gain_filter(gains)]
+    vf = ",".join(f for f in (reframe_filter(reframe), gain_filter(gains)) if f)
+    if vf:
+        cmd += ["-vf", vf]
     cmd += ["-r", str(FPS), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", "-ar", "48000", str(dst)]
     subprocess.run(cmd, check=True)
     return dst
@@ -354,7 +382,8 @@ def _is_fine(section: EditSection) -> bool:
 
 def fine_graph(section: EditSection, starts: list[float], lengths: list[float], in_points: list[float],
                body_s: float, grade: str, w: int, h: int,
-               gains: list[tuple[float, float, float] | None] | None = None) -> list[str]:
+               gains: list[tuple[float, float, float] | None] | None = None,
+               reframes: list[Reframe | None] | None = None) -> list[str]:
     """FFmpeg filter graph of the body: inputs 0..n-1 are the event sources, input n is a silent bed of ``body_s``.
     ``starts`` are body-relative picture starts (a dissolve already overlaps), ``lengths`` the used picture seconds,
     ``in_points`` the source second each event's picture starts at. Outputs: [vout] and [aout]."""
@@ -363,7 +392,9 @@ def fine_graph(section: EditSection, starts: list[float], lengths: list[float], 
     for i in range(n):
         a, b = in_points[i], in_points[i] + lengths[i]
         match = gain_filter(gains[i]) if gains else ""
-        fl.append(f"[{i}:v]fps={FPS},settb=1/{FPS},scale={w}:{h},setsar=1,{match + ',' if match else ''}{grade},format=yuv420p,"
+        frame = reframe_filter(reframes[i]) if reframes else ""
+        fl.append(f"[{i}:v]fps={FPS},settb=1/{FPS},{frame + ',' if frame else ''}scale={w}:{h},setsar=1,"
+                  f"{match + ',' if match else ''}{grade},format=yuv420p,"
                   f"trim=start={a:.6f}:end={b:.6f},setpts=PTS-STARTPTS[v{i}]")
     acc = "v0"
     for i in range(1, n):
@@ -403,16 +434,20 @@ def fine_graph(section: EditSection, starts: list[float], lengths: list[float], 
 
 def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | None = None,
                require_accepted: bool = False, cues: list | None = None,
-               corrections: dict[str, tuple[float, float, float]] | None = None, look: str | None = None) -> dict[str, Any]:
+               corrections: dict[str, tuple[float, float, float]] | None = None, look: str | None = None,
+               reframes: dict[str, Reframe] | None = None, title_lines: list[tuple[str, int]] | None = None,
+               end_lines: list[tuple[str, int]] | None = None) -> dict[str, Any]:
     """Render the EDL to ``out`` and return the report. Raises ValueError listing BLOCK problems. Cues, if given, are
     SubtitleCue keyed by event_id with times in seconds of the used part of that event. ``corrections`` maps a take id
-    to the per-channel gains of its colour match (production/color.py); ``look`` replaces the global grade."""
+    to the per-channel gains of its colour match (production/color.py); ``look`` replaces the global grade; ``reframes``
+    maps an event id to its crop box (production/titles.py); ``title_lines`` / ``end_lines`` replace the cards."""
     from film_pipeline.drama.post import (GRADE as DEFAULT_GRADE, H, W, Overlay, assemble, context_card_clip,
                                           identity_tag_png, probe_video_duration)
     from film_pipeline.production.takes import load_log
     GRADE = look or DEFAULT_GRADE
     corrections = corrections or {}
     gains = [corrections.get(e.take_id) if e.kind == "TAKE" else None for e in section.events]
+    boxes = [(reframes or {}).get(e.event_id) if e.kind == "TAKE" else None for e in section.events]
     problems, durations = edit_problems(pkg, section, clips_dir=clips_dir, require_accepted=require_accepted)
     blocks = [p for p in problems if p["severity"] == "BLOCK"]
     if blocks:
@@ -420,6 +455,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
     root = Path(pkg.root)
     entries = {t.take_id: t for t in load_log(root, pkg.header.film_id).takes}
     title, end = resolved_cards(pkg, section)
+    title, end = title_lines or title, end_lines or end
     fine = _is_fine(section)
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -447,7 +483,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
             body_s = plan["body_end_s"] - section.title_s
             body = work / "body.mp4"
             graph = fine_graph(section, starts, [lengths[e.event_id] for e in section.events],
-                               [e.src_in_s for e in section.events], body_s, GRADE, W, H, gains)
+                               [e.src_in_s for e in section.events], body_s, GRADE, W, H, gains, boxes)
             cmd = ["ffmpeg", "-v", "error", "-y"]
             for src in sources:
                 cmd += ["-i", str(src)]
@@ -466,15 +502,15 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
                      end_s=section.end_s, overlays=overlays, grade="null")
         else:
             clips: list[Path] = []
-            for event, src, gain in zip(section.events, sources, gains):
+            for event, src, gain, box in zip(section.events, sources, gains, boxes):
                 if event.kind == "CARD":
                     clips.append(src)
                     continue
                 dst = work / f"{event.event_id}.mp4"
-                if event.src_in_s == 0 and event.src_out_s is None and gain is None:
+                if event.src_in_s == 0 and event.src_out_s is None and gain is None and not reframe_filter(box):
                     shutil.copyfile(src, dst)
                 else:
-                    _trim(src, dst, event.src_in_s, event.src_out_s, gain)
+                    _trim(src, dst, event.src_in_s, event.src_out_s, gain, box)
                 clips.append(dst)
             overlays = [Overlay(generation_id=t.event_id, start_s=t.start_s, end_s=t.end_s, png=tag_png(i, t))
                         for i, t in enumerate(section.tags, 1)]

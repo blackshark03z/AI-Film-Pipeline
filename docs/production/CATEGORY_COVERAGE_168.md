@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 45 · PARTIAL 90 · GAP 7 · N/A 26 · total 168
+**Summary:** HAVE 47 · PARTIAL 89 · GAP 6 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -155,11 +155,11 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 123 | Color correction | `color.match` per-shot channel gains (exposure + white balance) applied in `edit.render_cut(corrections=)` | HAVE | - |
 | 124 | Color matching | `color.match`: scene reference (plan shot or median), clamped gains, before/after deviation report, `film.py grade` | HAVE | - |
 | 125 | Color grading | `post.GRADE` default look, replaceable per film via `color_plan.json` `look` | HAVE | - |
-| 126 | Reframing | No reframe/stabilise | GAP | P5-04 |
+| 126 | Reframing | `titles/reframe.json` crop box per event (aspect-checked) applied by `edit.render_cut(reframes=)`; `stabilize` = ffmpeg `deshake` (quality not judged); 9:16 not built | HAVE | - |
 | 127 | Retiming | No retime tool (and Owner rejects retime as proof) | N/A | - |
-| 128 | Titles & credits | Title + end card in `post.assemble`; no credits builder | PARTIAL | P5-04 |
-| 129 | Subtitles & captions | `post.write_srt`, `clamp_cues`, EN/VI sidecars | HAVE | - |
-| 130 | Final compositing | `post.assemble` single pass | PARTIAL | P5-04 |
+| 128 | Titles & credits | `titles.credits_lines` end card from the package: cast, AI disclosure, sound attributions, fiction line (EN/VI, fitted or BLOCK) | HAVE | - |
+| 129 | Subtitles & captions | `titles.prepare`: cues from script + speech windows (or `titles/cues.json`), burned source language, EN/VI sidecar SRTs, `TRANSLATION_MISSING` blocks | HAVE | - |
+| 130 | Final compositing | `post.assemble` single pass (cards, look, tags, cues, credits); mastered mix and packaging in P6 | PARTIAL | P6-02 |
 
 ## VI. Finishing & QC
 

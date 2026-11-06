@@ -189,7 +189,7 @@ cleared license. Music cue sheet from 02_direction emotional curve (where music 
 Per-shot normalisation (exposure/white balance from frame stats) toward the scene reference, then the global look
 grade (`drama.post.GRADE` as default). Report before/after deltas per shot. Test on synthetic coloured clips.
 
-### P5-04 Titles, credits, subtitles, reframe — READY (after P4-01)
+### P5-04 Titles, credits, subtitles, reframe — DONE (titles.py, film.py titles, render_cut reframes/title_lines/end_lines: credits from package, speech-window cues, EN/VI sidecars, reframe box, 15 tests)
 Credits card from package (cast = characters, AI disclosure line, rights credits); subtitles EN/VI from dialogue +
 cards (reuse `drama.post`); reframe/stabilise options per event (crop box) for 9:16 later.
 

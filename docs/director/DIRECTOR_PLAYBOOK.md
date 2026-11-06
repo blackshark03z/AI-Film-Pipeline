@@ -120,6 +120,16 @@ white-balance shift, and `OUT_OF_RANGE` warns where the clamp left a shot far fr
 gains are applied at render (`film.py grade --render`, `cut --render --color`), ahead of the global look (`post.GRADE` or the
 plan's `look`); take files are never changed. The result is the post item `color`, stamped with the picture lock.
 
+Titles, credits, subtitles, reframe (`production/titles.py`, `film.py titles`): the end card is built from the package -
+characters of `03_preprod.json`, the AI disclosure line (`--generators "Google Flow Omni 1.1 Flash"`), the attributions of the
+cleared sound assets and the fiction line; it is fitted to the frame or `CREDITS_OVERFLOW` blocks. Dialogue text comes from the
+script lines a shot declares; timing is the speech `silencedetect` finds in the used part of the take, or an explicit entry in
+`titles/cues.json` (seconds into the used part of the event). A `DIALOGUE_UNALIGNED` / `DIALOGUE_NO_SPEECH` / `CUE_TOO_FAST`
+warning means a human checks that cue; real takes carry room tone, so expect to write `cues.json` for noisy shots. Sidecar SRTs
+(title, cards, tags, dialogue, credits) are written for the film language and, from `direction.translations`, Vietnamese; a
+text with no translation blocks that language. A reframe is a box in `titles/reframe.json` (`w == h`, fractions of the frame);
+under half the frame it warns about softness, and an event with identity tags warns that the face moves under the tag.
+
 Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
 ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly
 where the previous one ended (a scene cut only warns).

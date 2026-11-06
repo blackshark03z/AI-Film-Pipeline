@@ -138,6 +138,14 @@ def main(argv: list[str] | None = None) -> int:
     gr.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
     gr.add_argument("--render", action="store_true", help="also render the cut with the corrections and the look")
     gr.add_argument("--out", type=Path, help="matched cut (default <film>/media/cut/graded_cut.mp4)")
+    tt = actions.add_parser("titles", help="credits card, dialogue cues, EN/VI sidecar SRTs, reframe check; --render writes the cut with them")
+    tt.add_argument("--film", required=True, type=Path)
+    tt.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
+    tt.add_argument("--langs", default="en,vi", help="sidecar languages (default en,vi)")
+    tt.add_argument("--generators", default="", help="generator line of the AI credit, e.g. 'Google Flow Omni 1.1 Flash'")
+    tt.add_argument("--render", action="store_true", help="also render the cut with credits, burned-in cues and reframes")
+    tt.add_argument("--out", type=Path, help="titled cut (default <film>/media/cut/titled_cut.mp4)")
+    tt.add_argument("--color", action="store_true", help="also apply the colour match of color/color.json")
     lk = actions.add_parser("lock", help="picture lock: status and dirty post/delivery items; --lock freezes the cut")
     lk.add_argument("--film", required=True, type=Path)
     lk.add_argument("--lock", action="store_true", help="freeze the cut (every take accepted, no BLOCK at a cut)")
@@ -300,6 +308,37 @@ def main(argv: list[str] | None = None) -> int:
                                                  clips_dir=args.clips, corrections=col_mod.corrections_of(report),
                                                  look=report["plan"]["look"] or None)
                 except ValueError as exc:
+                    _emit({"error": str(exc)})
+                    return 1
+                report["render"] = {k: rendered[k] for k in ("output", "output_sha256", "total_s", "path")}
+            _emit(report)
+            return 0 if report["ok"] else 1
+        if args.action == "titles":
+            from film_pipeline.production import edit as ed_mod
+            from film_pipeline.production import titles as ti_mod
+            from film_pipeline.production.mix import stamp_post_item
+            try:
+                prepared = ti_mod.prepare(pkg, clips_dir=args.clips, generators=args.generators,
+                                          langs=tuple(x for x in args.langs.split(",") if x))
+            except ValueError as exc:
+                _emit({"error": str(exc)})
+                return 1
+            report = ti_mod.write_outputs(pkg, prepared)
+            stamp_post_item(pkg, "titles", {"report": "titles/titles.json", "ok": report["ok"], "summary": report["summary"]})
+            if args.render and report["ok"]:
+                extra = {}
+                if args.color:
+                    from film_pipeline.production import color as col_mod
+                    found = col_mod.load_report(pkg.root)
+                    if found is None:
+                        _emit({"error": "--color needs color/color.json (run film.py grade first)"})
+                        return 1
+                    extra = {"corrections": col_mod.corrections_of(found), "look": found["plan"]["look"] or None}
+                try:
+                    rendered = ed_mod.render_cut(pkg, pkg.typed["edit"], args.out or pkg.root / "media" / "cut" / "titled_cut.mp4",
+                                                 clips_dir=args.clips, cues=prepared["cues"], reframes=prepared["reframes"],
+                                                 end_lines=prepared["credits"][pkg.header.language], **extra)
+                except (ValueError, KeyError) as exc:
                     _emit({"error": str(exc)})
                     return 1
                 report["render"] = {k: rendered[k] for k in ("output", "output_sha256", "total_s", "path")}
