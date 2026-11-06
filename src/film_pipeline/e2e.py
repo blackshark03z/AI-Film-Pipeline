@@ -20,7 +20,7 @@ from .qc import (QCStore, QCEvidence, SelectedTake, evidence as make_evidence,
 from .rough_cut import persist_render, read_render, render_sources
 from .store import SQLiteStore
 
-PLAN_VERSION = 1
+PLAN_VERSION = 2
 DELIVERY_VERSION = 1
 GPM_PROFILE = "nethaolabycss222@gmail.com"
 
@@ -137,7 +137,7 @@ def _project(root: Path) -> tuple[dict, dict]:
     meta, plan = _json(meta_path), _json(plan_path)
     if meta.get("locked_plan_sha256") and _sha(plan_path) != meta["locked_plan_sha256"]:
         raise ValueError("locked shot plan changed; resume refused")
-    if meta.get("version") != PLAN_VERSION or plan.get("version") != PLAN_VERSION:
+    if meta.get("version") not in (1, PLAN_VERSION) or plan.get("version") != meta["version"]:
         raise ValueError("unsupported E2E project version")
     shots = plan.get("shots")
     if not isinstance(shots, list) or len(shots) != meta["shot_count"]:
@@ -162,6 +162,33 @@ def _project(root: Path) -> tuple[dict, dict]:
         if not path.is_file() or _sha(path) != expected:
             raise ValueError(f"locked {name} source is missing or changed")
     return meta, plan
+
+
+def _direction_issues(plan: dict) -> list[str]:
+    """Check declared choreography/state structure, never infer video quality."""
+    from .e2e_flow import shot_spec
+    from .sequence import validate_shot_sequence
+    shots = plan["shots"]
+    if plan["version"] == 1:
+        return []  # Historical locked plans keep their exact ShotSpec identity.
+    issues = []
+    for shot in shots:
+        blocking, continuity = shot.get("blocking"), shot.get("continuity")
+        if not isinstance(blocking, dict) or not all(
+                isinstance(blocking.get(k), str) and blocking[k].strip() for k in ("start", "end")):
+            issues.append(f"{shot['shot_id']}: describe blocking start and end for all participants")
+        if not isinstance(continuity, dict) or not all(
+                isinstance(continuity.get(k), dict) and continuity[k] for k in ("start_state", "end_state")):
+            issues.append(f"{shot['shot_id']}: declare continuity start_state and end_state")
+    if issues:
+        return issues
+    if any(not s.get("visual_intent") or not s.get("video_prompt") for s in shots):
+        return []  # The existing missing_shot_plans report covers these fields.
+    try:
+        validate_shot_sequence([shot_spec(s, "direction-review", plan_version=plan['version']) for s in shots])
+    except ValueError as exc:
+        issues.append(str(exc))
+    return issues
 
 
 def _source_windows(root: Path, meta: dict, plan: dict) -> dict[str, str]:
@@ -235,7 +262,11 @@ def prepare(audio: Path, srt: Path, start_s: float, end_s: float, output: Path) 
         text = "\n".join(dict.fromkeys(c["text"].strip() for c in cues if c["text"].strip()))
         shots.append({"shot_id": f"SHOT_{index + 1:02d}", "timeline_in_s": round(t0, 3),
                       "timeline_out_s": round(t1, 3), "source_text": text,
-                      "visual_intent": "", "image_prompt": "", "video_prompt": ""})
+                      "visual_intent": "", "image_prompt": "", "video_prompt": "",
+                      "blocking": {"start": "", "end": ""},
+                      "continuity": {"screen_direction": None, "eyeline": None,
+                          "previous_shot_id": f"SHOT_{index:02d}" if index else None,
+                          "start_state": {}, "end_state": {}, "critical_invariants": []}})
     meta = {"version": PLAN_VERSION, "project_id": output.name, "status": "PLAN_REVIEW_REQUIRED",
             "audio_path": "source/" + audio_target.name, "audio_sha256": _sha(audio_target),
             "srt_path": "source/captions.srt", "srt_sha256": _sha(srt_target),
@@ -253,7 +284,7 @@ def prepare(audio: Path, srt: Path, start_s: float, end_s: float, output: Path) 
             "runtime_database": str(output / "runtime.sqlite")}
 
 
-def _require_planned_shot(frozen, planned, store=None, project_id=None):
+def _require_planned_shot(frozen, planned, store=None, project_id=None, *, plan_version=1):
     from .e2e_flow import shot_spec, ACCOUNT_ALIAS
     if frozen.spec_version > 1:
         if store is None or project_id is None:
@@ -273,14 +304,14 @@ def _require_planned_shot(frozen, planned, store=None, project_id=None):
             raise ValueError('repair has no stored rejection')
         parent = FlowR2VShotRuntime(store, project_id=project_id, account_id=ACCOUNT_ALIAS).repair_parent(
             frozen, repair_id)
-        _require_planned_shot(parent, planned, store, project_id)
+        _require_planned_shot(parent, planned, store, project_id, plan_version=plan_version)
         restored = frozen.model_copy(update={'spec_version': parent.spec_version,
             'references': parent.references, 'blocking': parent.blocking, 'camera': parent.camera})
         if restored != parent:
             raise ValueError('repair changed the locked story goal')
         return
     refs = frozen.references.other_asset_ids if frozen.references else []
-    if len(refs) != 1 or frozen != shot_spec(planned, refs[0]):
+    if len(refs) != 1 or frozen != shot_spec(planned, refs[0], plan_version=plan_version):
         raise ValueError("runtime ShotSpec differs from the locked creative plan")
 
 
@@ -298,19 +329,24 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
         raise ValueError("shot plan count changed; prepare a reviewed plan")
     missing_intent = [s["shot_id"] for s in plan["shots"] if not all(
         isinstance(s.get(k), str) and s[k].strip() for k in ("visual_intent", "image_prompt", "video_prompt"))]
+    direction_issues = _direction_issues(plan)
     reference_coverage = {s["shot_id"]: len(references_for_shot(root, s["shot_id"]))
                           for s in plan["shots"]}
     reference_missing = [shot for shot, count in reference_coverage.items() if count == 0]
     windows = _source_windows(root, meta, plan)
     report = {"project_id": meta["project_id"], "status": meta["status"],
               "duration_s": meta["film_duration_s"], "shot_count": len(plan["shots"]),
-              "plan_review_required": bool(missing_intent), "missing_shot_plans": missing_intent,
+              "plan_review_required": bool(missing_intent or direction_issues),
+              "missing_shot_plans": missing_intent, "direction_issues": direction_issues,
+              "legacy_direction_unassessed": plan["version"] == 1,
               "reference_coverage": reference_coverage, "missing_reference_images": reference_missing,
               "selected_shots": [], "missing_selected_shots": [s["shot_id"] for s in plan["shots"]],
               "next_action": "lock the creative shot plan; attach one ChatGPT reference receipt before each Flow dispatch"}
     report['source_window_mismatches'] = [shot['shot_id'] for shot in plan['shots']
         if shot.get('source_text') != windows[shot['shot_id']]]
     if not db_path:
+        if direction_issues:
+            report['next_action'] = 'complete interaction start/action/end states before locking'
         return report
     db_path = db_path.resolve()
     if not db_path.is_file():
@@ -335,7 +371,7 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
         asset = Asset.model_validate(json.loads(asset_payload))
         shot, _, route, attempt, job, assets = store.read_runtime_lineage(
             take.generation_attempt_id, asset.provider_job_id)
-        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id)
+        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id, plan_version=plan['version'])
         if (shot.shot_id != take.shot_id or take.asset_id != asset.asset_id or
                 asset not in assets or job.project_binding_id != sha256(project_id) or
                 job.provider_id != "flow_veo" or route.provider_id != "flow_veo"):
@@ -367,7 +403,7 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
                 job.project_binding_id != sha256(project_id) or asset not in lineage_assets or
                 job.status != "SUCCEEDED" or job.dispatch_count != 1):
             continue
-        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id)
+        _require_planned_shot(shot, next(s for s in plan['shots'] if s['shot_id'] == shot.shot_id), store, project_id, plan_version=plan['version'])
         try:
             qc._exact_asset(asset)
         except ValueError:
@@ -382,9 +418,22 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
             "source_attempt_id": asset.source_attempt_id, "provider_job_id": asset.provider_job_id,
             "provider_asset_id": asset.provider_asset_id, "asset_path": asset.uri_or_path,
             "prior_report_id": json.loads(prior[2])["report"]["qc_report_id"] if prior else None,
+            "direction_to_review": {"start": shot.blocking.start,
+                "action_beats": shot.blocking.action_beats, "end": shot.blocking.end,
+                "previous_shot_id": shot.continuity.previous_shot_id,
+                "start_state": shot.continuity.start_state, "end_state": shot.continuity.end_state,
+                "next_shot_id": next((b["shot_id"] for a, b in zip(plan["shots"], plan["shots"][1:])
+                    if a["shot_id"] == shot.shot_id), None),
+                "next_start_state": next((b.get("continuity", {}).get("start_state", {})
+                    for a, b in zip(plan["shots"], plan["shots"][1:])
+                    if a["shot_id"] == shot.shot_id), {})},
             "reviewer_id": "", "visual_pass": None, "continuity_pass": None,
             "editorial_pass": None, "notes": [], "failure_observations": {}})
-    report["review_template"] = {"project_id": project_id, "reviews": review_items}
+    report["review_template"] = {"project_id": project_id,
+        "instructions": "Watch the whole action: initiator, receiver/prop response, release/recovery, "
+            "and handoff to the next shot. Assess these under continuity_pass/editorial_pass; "
+            "filled direction fields do not prove the video matches.",
+        "reviews": review_items}
     if review_items:
         report['next_action'] = 'watch the acquired clips and submit their exact review_template with resume --review'
     elif not report['missing_selected_shots']:
@@ -392,6 +441,8 @@ def status(root: Path, db_path: Path | None = None, project_id: str | None = Non
         report['next_action'] = 'run finish to export the approved complete timeline'
     elif meta.get('locked_plan_sha256'):
         report['next_action'] = 'attach missing reference receipts and resume the remaining explicit shot IDs'
+    if direction_issues:
+        report['next_action'] = 'complete interaction start/action/end states and resolve adjacent-shot conflicts before locking'
     return report
 
 
@@ -449,7 +500,7 @@ def _apply_reviews(root: Path, db_path: Path, project_id: str, review_manifest: 
         validate_review_entry(review, asset)
         shot, _, route, _, job, assets = store.read_runtime_lineage(
             asset.source_attempt_id, asset.provider_job_id)
-        _require_planned_shot(shot, by_shot[shot_id], store, project_id)
+        _require_planned_shot(shot, by_shot[shot_id], store, project_id, plan_version=plan['version'])
         if (shot.shot_id != shot_id or shot_id != review["shot_id"] or asset not in assets
                 or route.provider_id != "flow_veo" or job.provider_id != "flow_veo"
                 or job.project_binding_id != sha256(project_id) or job.status != "SUCCEEDED"
@@ -528,6 +579,8 @@ def resume(root: Path, db_path: Path, provider_project_id: str,
                 shot['source_text'] = windows[shot['shot_id']]
             _write_plan(root.resolve() / 'shots.json', plan)
     report = status(root, db_path, provider_project_id)
+    if report["direction_issues"]:
+        raise ValueError("interaction direction incomplete or conflicting: " + "; ".join(report["direction_issues"]))
     prompts_missing = report["missing_shot_plans"]
     if reference_manifest is not None:
         refs = _json(reference_manifest.resolve())
@@ -620,7 +673,7 @@ def _selected_sources(root: Path, db_path: Path, project_id: str,
                     asset = Asset.model_validate(json.loads(asset_payload))
                     frozen_shot, _, route, _, job, assets = store.read_runtime_lineage(
                         take.generation_attempt_id, asset.provider_job_id)
-                    _require_planned_shot(frozen_shot, shot, store, project_id)
+                    _require_planned_shot(frozen_shot, shot, store, project_id, plan_version=plan['version'])
                     if (frozen_shot.shot_id != take.shot_id or asset not in assets or
                             job.project_binding_id != sha256(project_id) or
                             job.provider_id != "flow_veo" or route.provider_id != "flow_veo"):

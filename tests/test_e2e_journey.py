@@ -22,7 +22,7 @@ from film_pipeline.qc import QCStore, evidence, technical_evidence
 from film_pipeline.store import SQLiteStore
 from film_pipeline.live_runtime import file_sha256
 from test_canonical_reference_binding import bound
-from test_e2e import media, source_srt
+from test_e2e import media, source_srt, fixture_direction
 from test_flow_r2v_runtime import (
     _offline_flow_catalog, offline_flow_session, flow_capabilities,
     reserve, release_request, own_output, mp4_fixture, media_payload,
@@ -43,6 +43,7 @@ def test_offline_prepare_resume_review_finish_and_relocated_package(tmp_path, _o
         shot.update(visual_intent='Synthetic fixture: visible action',
                     image_prompt='Synthetic fixture reference',
                     video_prompt='One step forward, then hold')
+        fixture_direction(shot)
     plan_path.write_text(json.dumps(plan), encoding='utf-8')
     reference, uploads, session, transport, _ = setup(root)
     receipt = root / 'offline-reference.json'
@@ -68,7 +69,7 @@ def test_offline_prepare_resume_review_finish_and_relocated_package(tmp_path, _o
     data = mp4_fixture(root / 'synthetic-source.mp4')
     jobs = []
     for planned in plan['shots']:
-        spec = shot_spec(planned, reference.asset_id)
+        spec = shot_spec(planned, reference.asset_id, plan_version=plan['version'])
         kwargs = dict(reference_asset=reference, reference_media_id=REMOTE,
                       reference_filename='reference.png', catalog_source=capability)
         frozen = runtime.freeze(spec, flow_capabilities(), **kwargs)
@@ -95,6 +96,10 @@ def test_offline_prepare_resume_review_finish_and_relocated_package(tmp_path, _o
     pending = status(root)  # Infers the bound Flow project and local runtime.
     assert file_sha256(database) == before
     assert len(pending['missing_selected_shots']) == len(pending['review_template']['reviews']) == 8
+    direction = pending['review_template']['reviews'][0]['direction_to_review']
+    assert direction['end'] == 'Arms at sides'
+    assert direction['end_state'] == {'hand_contact': False}
+    assert direction['next_shot_id'] == 'SHOT_02'
     review = pending['review_template']
     for entry in review['reviews']:
         entry.update(reviewer_id='offline_fixture_operator', visual_pass=True,

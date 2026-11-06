@@ -83,6 +83,12 @@ def source_srt(path: Path) -> None:
                     "3\n00:00:34,000 --> 00:00:38,000\nShe stands her ground.\n", encoding="utf-8")
 
 
+def fixture_direction(shot):
+    shot['blocking'] = {'start': 'Arms at sides', 'end': 'Arms at sides'}
+    shot['continuity']['start_state'] = {'hand_contact': False}
+    shot['continuity']['end_state'] = {'hand_contact': False}
+
+
 def test_prepare_preserves_overlapping_caption_windows_and_locks_sources(tmp_path):
     audio, srt = tmp_path / "source.mp3", tmp_path / "source.srt"
     media(audio)
@@ -145,6 +151,7 @@ def test_resume_locks_plan_early_and_appends_partial_shared_references(tmp_path)
         shot.update(visual_intent="Visible story beat from the source text",
                     image_prompt="Police station, same adult characters",
                     video_prompt="Animate only the action described in source text")
+        fixture_direction(shot)
     # Move the first boundary beyond the overlapping cues before locking.
     plan['shots'][0]['timeline_out_s'] = 7
     plan['shots'][1]['timeline_in_s'] = 7

@@ -7,15 +7,12 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from .core import ProviderCapabilities, ShotSpec, sha256
-from .e2e import _project, references_for_shot
-from .flow_r2v_runtime import FlowR2VShotRuntime, qualify_flow_catalog_source
+from .core import Blocking, ProviderCapabilities, ShotSpec, sha256
+from .e2e import _project, _direction_issues, references_for_shot
 from .live_runtime import Asset, file_sha256
 from .providers import flow_rpc_contract as contract
 from .providers.flow_canonical_ui import prepare_inputs, verify_chip
-from .providers.flow_reference_binding import attest_existing_reference, adopt_existing_reference
 from .providers.flow_reference_rpc import FlowReferenceRpcSession, FlowReferenceRpcDrift
-from .providers.flow_reference_transport import FlowReferenceTransport
 from .providers.flow_reference_upload import ReferenceUploadStore, _key
 from .qc import QCStore, evidence, technical_evidence
 from .store import SQLiteStore
@@ -24,8 +21,14 @@ MAX_SUBMISSIONS = 14  # Ten initial shots plus four Owner-authorized repairs.
 ACCOUNT_ALIAS = "clean-pro-qualified"
 
 
-def shot_spec(shot: dict, reference_id: str) -> ShotSpec:
-    """The reviewed prompt is never shortened or silently rewritten here."""
+def shot_spec(shot: dict, reference_id: str, *, plan_version: int = 1) -> ShotSpec:
+    """Preserve operator direction, including both actors' final state."""
+    direction = shot.get("blocking", {}) if plan_version >= 2 else {}
+    if not isinstance(direction, dict):
+        raise ValueError("blocking must be an object")
+    blocking = Blocking.model_validate({"start": "reference pose", "end": "hold",
+        "action_beats": [], **direction}).model_dump(exclude_unset=True)
+    blocking["action_beats"] = list(dict.fromkeys([shot["video_prompt"], *blocking["action_beats"]]))
     return ShotSpec.model_validate({
         "schema_version": "1.0.0", "spec_version": shot.get('spec_version', 1),
         "shot_id": shot["shot_id"], "scene_id": "E2E",
@@ -34,10 +37,10 @@ def shot_spec(shot: dict, reference_id: str) -> ShotSpec:
         "camera": {"framing": shot.get('framing', 'MS'), "height": "eye_level", "lens_intent": "normal",
                    "movement": {"type": "locked"}},
         "environment": {},
-        "blocking": {"start": "reference pose", "action_beats": [shot["video_prompt"]],
-                     "end": "hold"},
-        "continuity": {"screen_direction": None, "eyeline": None,
-                       "start_state": {}, "end_state": {}, "critical_invariants": []},
+        "blocking": blocking,
+        "continuity": (shot["continuity"] if plan_version >= 2 else {
+            "screen_direction": None, "eyeline": None,
+            "start_state": {}, "end_state": {}, "critical_invariants": []}),
         "references": {"other_asset_ids": [reference_id]},
     })
 
@@ -83,8 +86,15 @@ def _ingredients_mode(page):
 def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
              shot_id: str, poll_seconds: int = 300, repair_path: Path | None = None) -> dict:
     """Resume one exact job; acquisition stops at machine QC pending a person."""
+    from .flow_r2v_runtime import FlowR2VShotRuntime, qualify_flow_catalog_source
+    from .providers.flow_reference_binding import attest_existing_reference, adopt_existing_reference
+    from .providers.flow_reference_transport import FlowReferenceTransport
+
     root, profile = Path(root).resolve(), Path(profile).resolve()
     meta, plan = _project(root)
+    issues = _direction_issues(plan)
+    if issues:
+        raise ValueError("interaction direction incomplete or conflicting: " + "; ".join(issues))
     if not meta.get("locked_plan_sha256") or meta.get("flow_project_id") != project_id:
         raise ValueError("reviewed plan must be locked to this exact Flow project")
     if not profile.is_dir() or not 1 <= poll_seconds <= 1800:
@@ -131,9 +141,9 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
         supports_duration_control=True)
     runtime = FlowR2VShotRuntime(store, project_id=project_id, account_id=ACCOUNT_ALIAS)
     if repair:
-        parent = runtime.repair_parent(shot_spec(shot, reference.asset_id), repair['repair_decision_id'])
+        parent = runtime.repair_parent(shot_spec(shot, reference.asset_id, plan_version=plan['version']), repair['repair_decision_id'])
         from .e2e import _require_planned_shot
-        _require_planned_shot(parent, matches[0], store, project_id)
+        _require_planned_shot(parent, matches[0], store, project_id, plan_version=plan['version'])
     evidence_dir = root / "flow" / shot_id
     evidence_dir.mkdir(parents=True, exist_ok=True)
     with FlowReferenceRpcSession(profile_path=profile, project_id=project_id, native_ui=True) as session:
@@ -163,7 +173,7 @@ def run_shot(root: Path, db_path: Path, project_id: str, profile: Path,
                 reference_dir=reference_dir, attestation_dir=attestation_dir)
             if attestation['readback']['sha256'] != reference_receipt['provider_media_sha256']:
                 raise ValueError('verified upload and adopted reference bytes differ')
-        spec = shot_spec(shot, reference.asset_id)
+        spec = shot_spec(shot, reference.asset_id, plan_version=plan['version'])
         frozen = runtime.freeze(spec, capabilities, reference_asset=reference,
             reference_media_id=reference_receipt["media_id"],
             catalog_source=qualify_flow_catalog_source(session),

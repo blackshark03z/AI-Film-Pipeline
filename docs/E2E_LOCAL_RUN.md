@@ -1,3 +1,11 @@
+# Current continuation — 2026-11-06
+
+For the currently authorized task, follow [E2E_NEW_CHAT_HANDOFF_20261106.md](E2E_NEW_CHAT_HANDOFF_20261106.md) and the canonical root operating files at D:/AI FILM MAKER/AI-Film-Pipeline/docs/operating/. The Goal is the production system with enough real media proof, not full-film shipment. The dated no-Generate statements below describe earlier packaging/qualification work; they do not cancel the later bounded I2 motion canary.
+
+Video scope is GPM `wanglin08ma`; ChatGPT image scope remains `nethaolabycss222@gmail.com`/tab2. The native Frames canary is not a qualification of this guide's generic Ingredients/R2V CLI on the new account. Keep the existing locked plan/database and old account-bound IDs intact. Update2026-11-06: Owner-approved GPM API/CDP recovered access. One I2 canary in wanglin08ma@gmail.com, project e44c1f2a-856a-4bde-b88b-e18baead096a, produced output5c8e38b1-1cf3-4fb7-bb28-c63907a00e6f. Exact acquisition/full decode PASS; physical backward recoil FAIL. Balance1050→950;7.93s generated,0selected. See projects/e2e_badge_20261104/PUSH_I2_WANG_20261106_RESULT.json and REVIEW.json. No automatic retry; original runtime and Owner acceptance unchanged.
+
+---
+
 # Local narration film runner
 
 `tools/film_e2e.py` prepares a human-reviewed, resumable local project. It keeps the original audio and SRT, uses the existing Flow runtime SQLite evidence for selected shots, and refuses incomplete or changed sources.
@@ -11,6 +19,38 @@ python tools/film_e2e.py prepare --audio D:\media\audio.mp3 --srt D:\media\capti
 ```
 
 The source interval must be 30–60 seconds. The command copies and hashes both source files and creates the project runtime database. It drafts eight to twelve timeline windows with their overlapping SRT text. Edit contiguous shot boundaries in `shots.json` to follow the narrated actions, and fill `visual_intent`, `image_prompt`, and `video_prompt` for every shot. Before first lock, `resume` refreshes `source_text` from the exact SRT and edited boundaries without changing your prompts. Locked plans remain immutable; `status` only reports any source-window mismatch. The text windows help editing; they do not claim semantic interpretation or visual coverage.
+
+New projects use plan version 2. Fill `blocking.start`, `blocking.end` and the existing `continuity.start_state` / `end_state` dictionaries for each shot. `video_prompt` remains the main action; optional `blocking.action_beats` add ordered detail rather than replacing it. `previous_shot_id` is drafted in timeline order. Resume refuses blank direction or explicit adjacent-state conflicts before locking or generating. Version 1 projects remain readable with their exact historical ShotSpec identity; `legacy_direction_unassessed` flags missing direction without rewriting their locked plans or receipts.
+
+### Direct the whole interaction
+
+Write what **each participant** does before, during and after contact. For a shove, the initiator extends the arm, transfers force, then withdraws the hand; the receiver displaces, contacts the obstacle, absorbs the stop and steadies. A hand left pushing is a different relationship from a completed shove. For an object transfer, track giver → receiver → final location, including the now-empty hand. Quiet dialogue still needs clear gaze, spacing and end state.
+
+Use short, consistent state keys across cuts, for example `hand_contact: false`, `badge_holder: "bin"`, `receiver_pose: "braced"`. Reuse the same key when a relation persists: the existing sequence validator compares explicit shared keys; it does not infer that differently named keys mean the same thing or detect facts you omitted. Include both actors, props and important spatial relations. Avoid a generic `hold` end when a release or recovery must occur.
+
+```json
+{
+  "video_prompt": "A shoves once, then withdraws his hand. B hits the counter and steadies.",
+  "blocking": {
+    "start": "Both apart, B beside counter",
+    "end": "A arm at side; B braced at counter"
+  },
+  "continuity": {
+    "screen_direction": "A right, B left",
+    "eyeline": "at each other",
+    "previous_shot_id": null,
+    "start_state": {"hand_contact": false, "receiver_pose": "upright"},
+    "end_state": {"hand_contact": false, "receiver_pose": "braced"},
+    "critical_invariants": []
+  }
+}
+```
+
+The next shot must start from the same released contact and braced pose, then perform its own recovery. Audit the neighboring shots before spending another attempt. Keep the provider prompt within its existing 500-character / 75-word creative-body limit; shorten repeated styling before dropping an essential release or reaction. Do not enlarge the limit or silently truncate direction.
+
+Make the first reference show the pre-action state. If operating native first/last frames, the last reference must show the **completed** interaction (hand withdrawn, receiver settled), not the peak contact pose. Otherwise the endpoint itself orders the model to keep pushing. These native manual artifacts are not automatically integrated into the generic R2V runtime.
+
+Review the actual video from anticipation through recovery and across the cut. `status` supplies `direction_to_review`, including intended end state and the next shot's start state, beside each exact acquired Asset. Mark a held hand, lost object ownership, unexplained side switch or mismatched recovery under the existing continuity/editorial gates. Filled state fields and structural validation are planning proof only; no code here understands whether a rendered hand actually withdraws. Keep narration facts separate from Owner-directed staging and from unreviewed suggestions. A review rejection never becomes PASS because export/decode works.
 
 Create a ChatGPT reference image in the selected GPM profile (`nethaolabycss222@gmail.com`, second tab). A reference can cover several shots when it is intentionally shared. Record its downloaded-file SHA-256, ChatGPT chat URL and shot IDs in a UTF-8 JSON file:
 
