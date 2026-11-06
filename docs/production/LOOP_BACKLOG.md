@@ -29,13 +29,13 @@ replace them with typed models). `load_package(path) -> FilmPackage` validates J
 Tests `tests/test_production_package.py`: round-trip, missing film.json error, unknown profile rejected, missing
 stage reported not raised. Done when tests pass.
 
-### P0-03 `tools/film.py` CLI skeleton — READY
+### P0-03 `tools/film.py` CLI skeleton — DONE (9dccb51: 5 CLI tests; focused suite 272 passed, 1 skipped)
 Subcommands `new <film_id> --profile drama|narration` (scaffold package with empty stage files),
 `validate --film DIR` (runs all available gates, prints JSON {gate: status, issues[]}, exit 1 on BLOCK),
 `status --film DIR` (stages present, gates, counts). Pattern: `tools/film_e2e.py`. Tests: subprocess `new` then
 `validate` on the scaffold → exit 1 with "story missing" style issues, not a crash.
 
-### P0-04 Port film03 declarations into a package — READY (after P0-03)
+### P0-04 Port film03 declarations into a package — READY
 Move the data in `tools/drama_film03.py` + `tools/drama_film03_story.py` (looks, locations, axis books, positions,
 prop states, occupancy, story time, shots, choreography, SFX, voices, cards, facts, tags) into
 `films/film03_front_desk/` JSON (03_preprod.json / 04_shots.json / 02_direction.json as fits; extend schema in
