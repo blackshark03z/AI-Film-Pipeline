@@ -169,7 +169,7 @@ reproduce the existing final timeline duration within 1 frame per event.
 Dissolve/match cut/J-L cut rendering; rhythm report (shot lengths vs 02_direction pacing, holds > plan flagged);
 continuity-edit check across cuts (end/start states, axis side, eyeline) reusing P2-02.
 
-### P4-03 Picture lock + invalidation — IN_PROGRESS
+### P4-03 Picture lock + invalidation — DONE (cca2c49)
 Lock = hash of EDL + source take hashes. Any change after lock marks dependent post/QC/delivery items dirty
 (`impact.py`). Test: change one src_out after lock → subtitles, mix, master QC flagged dirty.
 
