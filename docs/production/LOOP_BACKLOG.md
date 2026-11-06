@@ -132,7 +132,7 @@ coverage plan), legal: character/location/music/source rights entries. `validate
 
 ## P3 — Production (57–90, 131–140 shot level)
 
-### P3-01 QC taxonomy P0/P1/P2 — READY (after P0-05)
+### P3-01 QC taxonomy P0/P1/P2 — IN_PROGRESS
 `production/qc_model.py`: QC record per take with the 16 groups 131–146, each `PASS/FAIL/UNASSESSED`, severity
 P0/P1/P2, level `STILL|SAMPLED|FULL_MOTION|CUT`, evidence path, reviewer (`human:<id>` or `auto:<tool>`).
 Rule: auto tools may only produce WARN/UNASSESSED for content groups; only a human review can PASS

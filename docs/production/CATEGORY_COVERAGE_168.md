@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 29 · PARTIAL 89 · GAP 24 · N/A 26 · total 168
+**Summary:** HAVE 29 · PARTIAL 91 · GAP 22 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -165,14 +165,14 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 
 | ID | Category | Responsibility (code path / package field / operator receipt / N/A) | Status | Backlog |
 |---|---|---|---|---|
-| 131 | Narrative QC | `comprehension.check_comprehension` on the plan; footage unchecked | PARTIAL | P3-01 |
+| 131 | Narrative QC | `comprehension.check_comprehension` on the plan; `qc_model` records a human narrative verdict per take (auto cannot PASS) | PARTIAL | P3-02 |
 | 132 | Coverage QC | `CoveragePlanner` plan-level only | PARTIAL | P1-02 |
 | 133 | Character QC | `drama/autoqc` identity (YuNet/SFace) WARN-only | PARTIAL | P3-02 |
 | 134 | Spatial QC | `autoqc` side/handoff set (WARN); `AxisBook` | PARTIAL | P3-02 |
 | 135 | Action QC | Human review only; `action_meaning.qc_questions` template | PARTIAL | P3-02 |
-| 136 | Motion QC | No automated motion/visual artifact detector (human review) | GAP | P3-01 |
+| 136 | Motion QC | `qc_model` motion group: human FULL_MOTION review only, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
 | 137 | Camera QC | `autoqc.shot_scale` WARN | PARTIAL | P3-02 |
-| 138 | Visual QC | No automated motion/visual artifact detector (human review) | GAP | P3-01 |
+| 138 | Visual QC | `qc_model` visual group: human SAMPLED review, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
 | 139 | Temporal QC | No temporal/sequence QC beyond `sequence.validate_shot_sequence` (plan) | PARTIAL | P6-01 |
 | 140 | Sequence QC | No temporal/sequence QC beyond `sequence.validate_shot_sequence` (plan) | PARTIAL | P6-01 |
 | 141 | Audio QC | Loudness measured; no clipping/silence/sync checks | PARTIAL | P6-01 |
@@ -208,7 +208,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 161 | Version control | `designs` versions + `design_refs` pins; takes/stills keep hashes; no version id for shots or assets | PARTIAL | P2-01 |
 | 162 | Dependency management | `production/impact.py` `affected_by`: shots, stills, takes (+handoff cascade), edit/post items for one design; design dependencies only | PARTIAL | P2-01 |
 | 163 | Change management | Stale-pin issues + `film.py impact` list what to redo; no approval/ledger workflow for a change | PARTIAL | P2-01 |
-| 164 | Quality management | `qc` evidence + Owner gate; no P0/P1/P2 model | PARTIAL | P3-01 |
+| 164 | Quality management | `qc_model` P0/P1/P2 take verdicts + waivers (`film.py qc`); Owner gate | PARTIAL | P3-02 |
 | 165 | Risk management | `planning.risks` register at plan level; no mitigation tracking over the run | PARTIAL | P3-03 |
 | 166 | Rights management | No rights ledger | GAP | P5-02 |
 | 167 | Data integrity | SHA-256 in manifests; `delivery.verify` | HAVE | - |

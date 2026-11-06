@@ -100,6 +100,8 @@ def main(argv: list[str] | None = None) -> int:
     ani.add_argument("--audio", type=Path, help="directory of temp dialogue tracks <gid>.wav (silence if absent)")
     pln = actions.add_parser("planning", help="budget, schedule, risk register and rights ledger")
     pln.add_argument("--film", required=True, type=Path)
+    qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
+    qcp.add_argument("--record", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
     narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
     narr.add_argument("--project", type=Path, help="E2E project directory (import)")
@@ -118,6 +120,19 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.action == "narration":
             return _narration(args, rest, parser)
+        if args.action == "qc":
+            from pydantic import ValidationError
+
+            from film_pipeline.production.qc_model import TakeQc, verdict_report
+            raw = json.loads(args.record.read_text(encoding="utf-8"))
+            try:
+                takes = [TakeQc.model_validate(item) for item in (raw if isinstance(raw, list) else [raw])]
+            except ValidationError as exc:
+                _emit({"ok": False, "error": [e["msg"] for e in exc.errors()]})
+                return 2
+            reports = [verdict_report(t) for t in takes]
+            _emit({"ok": all(r["status"] == "ACCEPTED" for r in reports), "takes": reports})
+            return 0 if all(r["status"] != "REJECTED" for r in reports) else 1
         if args.action == "new":
             target = scaffold(args.film_id, args.profile, args.root, args.title)
             _emit({"created": str(target), "profile": args.profile})

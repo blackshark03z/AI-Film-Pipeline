@@ -43,8 +43,15 @@ python tools/film.py continuity --film films/<film_id>    # action/spatial/objec
 python tools/film.py camera     --film films/<film_id>    # camera & lighting plan (scenes[].lighting, generations[].camera)
 python tools/film.py animatic   --film films/<film_id> [--stills <dir>] [--audio <dir>]   # media/animatic.mp4 + srt + timing report, 0 credits
 python tools/film.py planning   --film films/<film_id>    # budget, schedule, risk register, rights ledger (validate shows a summary)
+python tools/film.py qc         --record <take_qc.json>   # validate a take QC record (16 groups 131–146) → ACCEPTED / REJECTED / INCOMPLETE
 python tools/film.py plan     --film films/<film_id> --out <dir> --takes <takes_dir> --approve-storyboard "<reviewer>"
 ```
+
+QC record rule of thumb (`production/qc_model.py`): every check names its evidence, review level (STILL < SAMPLED <
+FULL_MOTION < CUT) and reviewer. An `auto:` tool can only WARN on content groups (story, action, motion, look...) — it
+cannot pass them; a human PASS needs the group's minimum level (motion/action: the whole clip). Any P0 FAIL rejects the
+take for good; a P1 FAIL rejects until a human waives it with a written reason; an untouched group keeps the take
+INCOMPLETE, never accepted.
 
 Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
 ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly
