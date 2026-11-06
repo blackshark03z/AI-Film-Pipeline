@@ -44,6 +44,9 @@ python tools/film.py camera     --film films/<film_id>    # camera & lighting pl
 python tools/film.py animatic   --film films/<film_id> [--stills <dir>] [--audio <dir>]   # media/animatic.mp4 + srt + timing report, 0 credits
 python tools/film.py planning   --film films/<film_id>    # budget, schedule, risk register, rights ledger (validate shows a summary)
 python tools/film.py qc         --record <take_qc.json>   # validate a take QC record (16 groups 131–146) → ACCEPTED / REJECTED / INCOMPLETE
+python tools/film.py takes      --film films/<film_id> --register <gid> --clip <mp4> --prompt <sent prompt.txt> --model <m> --credits <n> [--start-frame <png>]
+python tools/film.py review     --film films/<film_id> [--clips <dir>]    # dailies sheet per new take; autoqc WARNs when models exist
+python tools/film.py review     --film films/<film_id> --ingest <filled.json>   # sets the take ACCEPTED / REJECTED / INCOMPLETE
 python tools/film.py plan     --film films/<film_id> --out <dir> --takes <takes_dir> --approve-storyboard "<reviewer>"
 ```
 

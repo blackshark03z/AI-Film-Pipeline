@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 29 · PARTIAL 91 · GAP 22 · N/A 26 · total 168
+**Summary:** HAVE 31 · PARTIAL 89 · GAP 22 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -107,12 +107,12 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 80 | Set operation | No crew/rehearsal on AI route; animatic is the rehearsal analogue | N/A | P2-04 |
 | 81 | Assistant directing | No crew/rehearsal on AI route; animatic is the rehearsal analogue | N/A | P2-04 |
 | 82 | Rehearsal | No crew/rehearsal on AI route; animatic is the rehearsal analogue | N/A | P2-04 |
-| 83 | Take management | `SelectedTake`/`qc` lineage in runtime; drama takes only in file names | PARTIAL | P3-02 |
+| 83 | Take management | `production/takes.py` take log `takes/index.json`: take id per generation, prompt/start-frame/output hashes, route, model, credits, status from review | HAVE | - |
 | 84 | Script supervision | `drama/qc.py` post-render gating + `sequence` | PARTIAL | P3-02 |
 | 85 | Live monitoring | `tools/drama_flow_ui/flow_send.py` network-bound output capture | PARTIAL | P3-04 |
 | 86 | Production sound | AI-generated sound; no separate capture. N/A | N/A | - |
-| 87 | Data management | `drama/disclosure.sha256_file`, runtime hashes; no naming/metadata convention | PARTIAL | P3-02 |
-| 88 | Dailies review | `e2e` review template; no drama dailies review | PARTIAL | P3-02 |
+| 87 | Data management | Take log hashes + `<gid>_t<N>` ids; no archive/restore yet | PARTIAL | P6-02 |
+| 88 | Dailies review | `film.py review`: template per new take (shot questions + 16-group QC) and `--ingest` bound to the take's hash | HAVE | - |
 | 89 | Pickup / reshoot | No pickup plan; repair path exists in `e2e` runtime only | PARTIAL | P3-03 |
 | 90 | Safety management | N/A for AI generation | N/A | - |
 
@@ -121,7 +121,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | ID | Category | Responsibility (code path / package field / operator receipt / N/A) | Status | Backlog |
 |---|---|---|---|---|
 | 91 | Media ingest | `editorial.probe_media`, `validate_source` | HAVE | - |
-| 92 | Logging | `qc.py` evidence + selected take records | PARTIAL | P3-02 |
+| 92 | Logging | Take log + stored reviews (`takes/reviews/`); no unified shot/sound log | PARTIAL | P7-01 |
 | 93 | Synchronization | Audio in generated clips; `post.cue_offsets` for subtitles | PARTIAL | P4-01 |
 | 94 | Selects | `qc.SelectedTake` | HAVE | - |
 | 95 | Assembly cut | `drama/post.assemble` + `rough_cut` FFmpeg | PARTIAL | P4-01 |
@@ -167,11 +167,11 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 |---|---|---|---|---|
 | 131 | Narrative QC | `comprehension.check_comprehension` on the plan; `qc_model` records a human narrative verdict per take (auto cannot PASS) | PARTIAL | P3-02 |
 | 132 | Coverage QC | `CoveragePlanner` plan-level only | PARTIAL | P1-02 |
-| 133 | Character QC | `drama/autoqc` identity (YuNet/SFace) WARN-only | PARTIAL | P3-02 |
-| 134 | Spatial QC | `autoqc` side/handoff set (WARN); `AxisBook` | PARTIAL | P3-02 |
-| 135 | Action QC | Human review only; `action_meaning.qc_questions` template | PARTIAL | P3-02 |
+| 133 | Character QC | `autoqc` identity WARN-only; dailies pre-fill WARNs but need anchors (not wired); human PASS in `qc_model` | PARTIAL | P6-01 |
+| 134 | Spatial QC | `autoqc` SET_DRIFT as a dailies WARN; start/end-state questions per take; `AxisBook` | PARTIAL | P6-01 |
+| 135 | Action QC | Dailies questions generated from every choreography phase/once-action; human FULL_MOTION review only | PARTIAL | P3-03 |
 | 136 | Motion QC | `qc_model` motion group: human FULL_MOTION review only, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
-| 137 | Camera QC | `autoqc.shot_scale` WARN | PARTIAL | P3-02 |
+| 137 | Camera QC | `autoqc.shot_scale` WARN against the planned size in dailies | PARTIAL | P6-01 |
 | 138 | Visual QC | `qc_model` visual group: human SAMPLED review, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
 | 139 | Temporal QC | No temporal/sequence QC beyond `sequence.validate_shot_sequence` (plan) | PARTIAL | P6-01 |
 | 140 | Sequence QC | No temporal/sequence QC beyond `sequence.validate_shot_sequence` (plan) | PARTIAL | P6-01 |

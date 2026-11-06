@@ -100,6 +100,19 @@ def main(argv: list[str] | None = None) -> int:
     ani.add_argument("--audio", type=Path, help="directory of temp dialogue tracks <gid>.wav (silence if absent)")
     pln = actions.add_parser("planning", help="budget, schedule, risk register and rights ledger")
     pln.add_argument("--film", required=True, type=Path)
+    tk = actions.add_parser("takes", help="take log: --register a rendered clip, or list the log")
+    tk.add_argument("--film", required=True, type=Path)
+    tk.add_argument("--register", metavar="GENERATION_ID")
+    tk.add_argument("--clip", type=Path)
+    tk.add_argument("--prompt", type=Path, help="the exact prompt text that was sent")
+    tk.add_argument("--start-frame", type=Path)
+    tk.add_argument("--route", default="start_frame+Khung hinh")
+    tk.add_argument("--model", default="")
+    tk.add_argument("--credits", type=float)
+    rv = actions.add_parser("review", help="write dailies templates for new takes, or --ingest a filled review")
+    rv.add_argument("--film", required=True, type=Path)
+    rv.add_argument("--ingest", type=Path, help="filled review sheet (or bare TakeQc) JSON")
+    rv.add_argument("--clips", type=Path, help="directory holding the take mp4s (enables autoqc warnings)")
     qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
     qcp.add_argument("--record", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
@@ -171,6 +184,46 @@ def main(argv: list[str] | None = None) -> int:
             _emit({k: report[k] for k in ("video", "subtitles", "planned_duration_s", "actual_duration_s", "ok",
                                           "findings")})
             return 0 if report["ok"] else 1
+        if args.action == "takes":
+            from film_pipeline.production import takes as tk_mod
+            if args.register:
+                missing = [f for f, v in (("--clip", args.clip), ("--prompt", args.prompt), ("--model", args.model),
+                                          ("--credits", args.credits)) if v in (None, "")]
+                if missing:
+                    _emit({"error": f"--register needs {', '.join(missing)}"})
+                    return 2
+                known = {g.generation_id for g in pkg.typed["shots"].generations} if "shots" in pkg.typed else None
+                try:
+                    entry, created = tk_mod.register_take(
+                        pkg.root, pkg.header.film_id, args.register, args.clip,
+                        prompt_text=args.prompt.read_text(encoding="utf-8"), route=args.route, model=args.model,
+                        credits=args.credits, start_frame=args.start_frame, known_generations=known)
+                except (ValueError, OSError) as exc:
+                    _emit({"error": str(exc)})
+                    return 2
+                _emit({"created": created, "take": entry.model_dump(mode="json")})
+                return 0
+            log = tk_mod.load_log(pkg.root, pkg.header.film_id)
+            _emit({"film_id": log.film_id, "takes": [t.model_dump(mode="json") for t in log.takes]})
+            return 0
+        if args.action == "review":
+            from film_pipeline.production import takes as tk_mod
+            if args.ingest:
+                from pydantic import ValidationError
+                try:
+                    _emit(tk_mod.ingest_review(pkg.root, pkg.header.film_id,
+                                               json.loads(args.ingest.read_text(encoding="utf-8"))))
+                except ValidationError as exc:
+                    _emit({"error": [e["msg"] for e in exc.errors()]})
+                    return 2
+                except (ValueError, KeyError) as exc:
+                    _emit({"error": str(exc.args[0] if exc.args else exc)})
+                    return 2
+                return 0
+            written = tk_mod.write_dailies(pkg, pkg.root, clips_dir=args.clips)
+            _emit({"written": written, "pending": [t.take_id for t in tk_mod.load_log(pkg.root, pkg.header.film_id).takes
+                                                   if t.status in ("GENERATED", "INCOMPLETE")]})
+            return 0
         if args.action == "planning":
             from film_pipeline.production.planning import planning_report
             if "shots" not in pkg.typed:
