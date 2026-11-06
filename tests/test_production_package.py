@@ -50,10 +50,10 @@ def test_invalid_json_is_error(tmp_path):
 
 def test_missing_stages_reported_not_raised(tmp_path):
     _film(tmp_path, profile="narration")
-    (tmp_path / "01_story.json").write_text(json.dumps({"concept": "c"}))
+    (tmp_path / "05_edit.json").write_text(json.dumps({"concept": "c"}))
     pkg = load_package(tmp_path)
-    assert pkg.stage("story") == {"concept": "c"}
-    assert set(pkg.missing_stages) == set(STAGE_FILES) - {"story"}
+    assert pkg.stage("edit") == {"concept": "c"}
+    assert set(pkg.missing_stages) == set(STAGE_FILES) - {"edit"}
     assert pkg.issues == []
 
 

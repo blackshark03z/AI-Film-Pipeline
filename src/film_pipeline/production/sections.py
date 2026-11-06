@@ -19,6 +19,7 @@ from film_pipeline.drama.coverage import Coverage
 from film_pipeline.drama.comprehension import ContextCard, CharacterIntro, IdentityTag, StoryFact
 from film_pipeline.drama.feasibility import FeasibilityLimits
 from film_pipeline.drama.preflight import PreflightLimits
+from film_pipeline.production.story import StorySection
 
 
 # ids become file names (prompts/<id>.txt) and dict keys: no separators, dots or spaces
@@ -154,6 +155,7 @@ def check_references(typed: dict) -> list[str]:
 
 
 TYPED_SECTIONS: dict[str, type[ContractModel]] = {
+    "story": StorySection,
     "direction": DirectionSection,
     "preprod": PreprodSection,
     "shots": ShotsSection,

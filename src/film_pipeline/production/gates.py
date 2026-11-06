@@ -11,6 +11,7 @@ from typing import Any
 
 from film_pipeline.core import ContractModel
 from film_pipeline.production.package import GATE_NAMES, SCRIPT_FILE, STAGE_FILES, FilmPackage, GateState
+from film_pipeline.production.story import story_issues, story_pending
 
 # gate id -> stage keys that must have content before the gate can be evaluated
 GATE_STAGES: dict[str, tuple[str, ...]] = {
@@ -23,7 +24,10 @@ GATE_STAGES: dict[str, tuple[str, ...]] = {
 }
 
 Validator = Callable[[FilmPackage], list[str]]
-_VALIDATORS: dict[str, Validator] = {}
+_VALIDATORS: dict[str, Validator] = {}  # overrides (tests, experiments); built-ins below are not cleared with them
+_BUILTIN: dict[str, Validator] = {"1": story_issues}
+# gate id -> reasons the Owner must decide even though the validator found no defect (-> OWNER_PENDING, never PASS)
+_PENDING: dict[str, Validator] = {"1": story_pending}
 
 
 def register_validator(gate_id: str, fn: Validator) -> None:
@@ -59,9 +63,12 @@ def evaluate_gate(pkg: FilmPackage, gate_id: str) -> GateResult:
     status: GateState
     if issues:
         status = "BLOCK"
-    elif gate_id in _VALIDATORS:
-        issues = _VALIDATORS[gate_id](pkg)
+    elif gate_id in _VALIDATORS or gate_id in _BUILTIN:
+        issues = (_VALIDATORS.get(gate_id) or _BUILTIN[gate_id])(pkg)
         status = "BLOCK" if issues else "PASS"
+        if status == "PASS" and gate_id in _PENDING and gate_id not in _VALIDATORS:
+            issues = _PENDING[gate_id](pkg)
+            status = "OWNER_PENDING" if issues else "PASS"
     else:
         status = "NOT_RUN"
         issues = ["no validator registered; stage present but unchecked"]

@@ -32,15 +32,15 @@ def legacy():
 
 def test_loads_with_zero_schema_errors(pkg):
     assert pkg.issues == []
-    assert set(pkg.typed) == {"direction", "preprod", "shots"}
+    assert set(pkg.typed) == {"story", "direction", "preprod", "shots"}
     assert pkg.script is not None and len(pkg.script.scenes) == 8
     assert pkg.header.profile == "drama" and pkg.header.generation_s == 8
 
 
-def test_gates_report_only_missing_later_stages(pkg):
+def test_gates_report_only_unvalidated_and_missing_stages(pkg):
     res = {r.gate: r for r in evaluate_gates(pkg)}
     assert res["2"].status == res["3"].status == res["4"].status == "NOT_RUN"  # present, no validator yet
-    assert res["1"].status == "BLOCK" and "story missing" in res["1"].issues
+    assert res["1"].status == "PASS" and res["1"].issues == []  # real checks: 01_story.json + script scenes
 
 
 def test_shots_match_legacy(pkg, legacy):

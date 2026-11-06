@@ -51,20 +51,20 @@ def test_status_and_missing_film(tmp_path):
 
 def test_present_stage_without_validator_is_not_pass(tmp_path):
     run("new", "t3", "--profile", "narration", "--root", str(tmp_path))
-    (tmp_path / "t3" / "01_story.json").write_text('{"concept": "c"}')
+    (tmp_path / "t3" / "05_edit.json").write_text('{"cuts": []}')
     res = {r.gate: r for r in evaluate_gates(load_package(tmp_path / "t3"))}
-    assert res["1"].status == "NOT_RUN"
+    assert res["5"].status == "NOT_RUN"
 
 
 def test_registered_validator_decides(tmp_path):
     run("new", "t4", "--profile", "narration", "--root", str(tmp_path))
-    (tmp_path / "t4" / "01_story.json").write_text('{"concept": "c"}')
+    (tmp_path / "t4" / "05_edit.json").write_text('{"cuts": []}')
     try:
-        register_validator("1", lambda pkg: [])
-        assert evaluate_gates(load_package(tmp_path / "t4"))[0].status == "PASS"
-        register_validator("1", lambda pkg: ["logline missing"])
-        first = evaluate_gates(load_package(tmp_path / "t4"))[0]
-        assert first.status == "BLOCK" and first.issues == ["logline missing"]
+        register_validator("5", lambda pkg: [])
+        assert evaluate_gates(load_package(tmp_path / "t4"))[4].status == "PASS"
+        register_validator("5", lambda pkg: ["cut missing"])
+        fifth = evaluate_gates(load_package(tmp_path / "t4"))[4]
+        assert fifth.status == "BLOCK" and fifth.issues == ["cut missing"]
     finally:
         gates_mod._VALIDATORS.clear()
 

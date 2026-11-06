@@ -1,0 +1,85 @@
+{
+  "concept": "A new captain is mistaken for a visitor at her own precinct's front desk, and answers disrespect with procedure instead of anger.",
+  "theme": "Authority shown by checking before judging; assumptions about who belongs are what fail the test.",
+  "genre": "Workplace drama (short, contained, single morning)",
+  "audience": {
+    "who": "General online audience watching short dramas in English; no knowledge of police procedure needed.",
+    "expectation": "A clear reversal they can see coming one beat early and still enjoy, with a restrained rather than vengeful payoff."
+  },
+  "premise": "Captain Nora Bell arrives for her first morning at the Eastgate precinct. The desk sergeant has never met her and treats her credentials as a nuisance.",
+  "central_conflict": "Nora needs to be recognised as the commanding officer; Sergeant Kessler's assumption about who a captain looks like keeps him from reading what is in front of him.",
+  "logline": {
+    "text": "On her first morning, Captain Nora Bell has to get past a desk sergeant who throws her credentials in the trash because she does not look like his idea of a captain.",
+    "protagonist": "NORA",
+    "goal": "recognised as the new captain on her first morning",
+    "obstacle": "a desk sergeant throws her credentials in the trash because she does not look like a captain"
+  },
+  "structure": [
+    {
+      "id": "ACT1", "name": "Arrival",
+      "beats": [
+        {"id": "B1", "function": "SETUP", "scene_ids": ["SC01"], "summary": "Nora enters the lobby unannounced; Kessler tells her the complaints window opens at nine."},
+        {"id": "B2", "function": "INCITING", "scene_ids": ["SC02"], "summary": "Kessler reads her letter, sneers, crumples it and drops it in the bin."}
+      ]
+    },
+    {
+      "id": "ACT2", "name": "Dismissal",
+      "beats": [
+        {"id": "B3", "function": "ESCALATION", "scene_ids": ["SC03"], "summary": "Ortiz doubts the call; Kessler shuts him down and sends him to file."},
+        {"id": "B4", "function": "MIDPOINT", "scene_ids": ["SC04"], "summary": "Nora asks Ortiz's name; he takes the letter out of the bin and smooths it flat."},
+        {"id": "B5", "function": "CRISIS", "scene_ids": ["SC05"], "summary": "Kessler's own phone call announces the new captain while Ortiz reads her name aloud."}
+      ]
+    },
+    {
+      "id": "ACT3", "name": "Order",
+      "beats": [
+        {"id": "B6", "function": "CLIMAX", "scene_ids": ["SC06"], "summary": "Nora tells Kessler roll call is at eight; the smirk goes."},
+        {"id": "B7", "function": "RESOLUTION", "scene_ids": ["SC07", "SC08"], "summary": "At roll call Nora states the rule, takes Ortiz with her and leaves Kessler the desk."}
+      ]
+    }
+  ],
+  "plot": "Nora walks in and is turned away (SC01). Her letter is destroyed (SC02). Ortiz doubts it but is silenced (SC03), then quietly recovers the letter when Nora asks his name (SC04). A phone call and the letter confirm who she is (SC05). She does not shout: she names the next meeting (SC06), states the rule in front of everyone (SC07) and sets consequences by assignment, not by punishment (SC08).",
+  "subplots": [
+    {"id": "ORTIZ", "summary": "The rookie moves from uneasy bystander to the one who recovers the letter and is chosen to ride with the captain.", "scene_ids": ["SC03", "SC04", "SC05", "SC07", "SC08"]}
+  ],
+  "characters": {
+    "NORA": {
+      "id": "NORA", "name": "Captain Nora Bell", "role": "protagonist",
+      "want": "To be recognised as the commanding officer without a fight on day one.",
+      "need": "To establish her standard (check before judging) in front of the whole precinct.",
+      "flaw": "Patience that can read as passivity; she lets the insult stand before she acts.",
+      "arc_change": "From waiting to be seen to stating the rule aloud in front of the officers.",
+      "change_scene_id": "SC07"
+    },
+    "KESSLER": {
+      "id": "KESSLER", "name": "Sergeant Wade Kessler", "role": "antagonist",
+      "want": "To keep the desk running the way he always has.",
+      "need": "To learn that appearance is not authority.",
+      "flaw": "Contempt for anyone who does not match his idea of rank.",
+      "arc_change": "The smirk is gone; he accepts the desk and the correction.",
+      "change_scene_id": "SC06"
+    },
+    "ORTIZ": {
+      "id": "ORTIZ", "name": "Officer Luis Ortiz", "role": "supporting",
+      "want": "To avoid trouble with the sergeant.",
+      "need": "To act on his doubt.",
+      "flaw": "Deference to rank.",
+      "arc_change": "Retrieves the letter and answers the captain by name.",
+      "change_scene_id": "SC04"
+    }
+  },
+  "scenes": {
+    "SC01": {"purpose": "Establish the lobby, the three people and the status gap.", "conflict": "Nora is treated as a complaint visitor.", "outcome": "Nora states she is not here to complain.", "value": "recognition", "shift": "-"},
+    "SC02": {"purpose": "Create the injury: the credentials are destroyed.", "conflict": "Kessler reads the letter and rejects her on appearance.", "outcome": "The letter is crumpled into the bin.", "value": "recognition", "shift": "-"},
+    "SC03": {"purpose": "Show the lobby has a conscience that is silenced.", "conflict": "Ortiz suggests calling upstairs; Kessler overrules him.", "outcome": "Ortiz is sent away to file.", "value": "recognition", "shift": "-"},
+    "SC04": {"purpose": "Turn the scene: a witness acts.", "conflict": "Nora asks Ortiz's name while the letter is still in the bin.", "outcome": "Ortiz recovers and smooths the letter.", "value": "recognition", "shift": "+"},
+    "SC05": {"purpose": "Deliver the reveal through two independent confirmations.", "conflict": "Kessler is on the phone with the Lieutenant while Ortiz reads the name.", "outcome": "Everyone in the lobby knows who she is.", "value": "recognition", "shift": "+"},
+    "SC06": {"purpose": "Climax: the status reverses without raised voices.", "conflict": "Nora addresses Kessler directly; he has no answer.", "outcome": "Kessler's smirk is gone and he says Captain.", "value": "recognition", "shift": "+"},
+    "SC07": {"purpose": "State the theme in a new place and with witnesses.", "conflict": "Kessler stands alone at the back of a full room.", "outcome": "Nora says 'We check before we judge' and picks Ortiz.", "value": "recognition", "shift": "+"},
+    "SC08": {"purpose": "Close with consequence by assignment.", "conflict": "Kessler must accept a correction in public.", "outcome": "Kessler keeps the desk; Ortiz rides with the captain.", "value": "recognition", "shift": "+"}
+  },
+  "source_note": "Original script written on a common motif only (a new commander doubted at her own station). The third-party SRT used as the brief supplied no names, events or dialogue.",
+  "rewrite_log": [
+    {"version": 1, "date": "2026-11-02", "reason": "First draft approved as Gate 1 by the Tech Lead under Owner-delegated authority.", "changed": "docs/drama/film03_front_desk.fountain"}
+  ]
+}
