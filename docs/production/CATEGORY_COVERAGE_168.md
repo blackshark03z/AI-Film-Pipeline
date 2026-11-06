@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 32 · PARTIAL 88 · GAP 22 · N/A 26 · total 168
+**Summary:** HAVE 34 · PARTIAL 86 · GAP 22 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -122,10 +122,10 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 |---|---|---|---|---|
 | 91 | Media ingest | `editorial.probe_media`, `validate_source` | HAVE | - |
 | 92 | Logging | Take log + stored reviews (`takes/reviews/`); no unified shot/sound log | PARTIAL | P7-01 |
-| 93 | Synchronization | Audio in generated clips; `post.cue_offsets` for subtitles | PARTIAL | P4-01 |
+| 93 | Synchronization | `production/edit.py` EDL: per-event J/L audio split and transition declared, timeline math keeps picture and sound clocks apart; sync of subtitles still via `post.cue_offsets` (P5-04) | PARTIAL | P4-02, P5-01 |
 | 94 | Selects | `qc.SelectedTake` | HAVE | - |
-| 95 | Assembly cut | `drama/post.assemble` + `rough_cut` FFmpeg | PARTIAL | P4-01 |
-| 96 | Rough cut | `drama/post.assemble` + `rough_cut` FFmpeg | PARTIAL | P4-01 |
+| 95 | Assembly cut | `05_edit.json` EDL of take_ids from the take log; `film.py cut` checks it (unknown/rejected/superseded/changed takes block) and `--render` assembles via `drama.post.assemble`; film03 golden within 1 frame per event | HAVE | - |
+| 96 | Rough cut | `film.py cut --render`: rough cut from selects (title, graded clips, cards, identity tags, end card) with a `.cut.json` report; unreviewed takes warn, `--accepted-only` blocks | HAVE | - |
 | 97 | Structural editing | Order fixed by plan; no structural/continuity/performance edit tool | GAP | P4-02 |
 | 98 | Continuity editing | Order fixed by plan; no structural/continuity/performance edit tool | GAP | P4-02 |
 | 99 | Performance editing | Order fixed by plan; no structural/continuity/performance edit tool | GAP | P4-02 |
@@ -133,7 +133,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 101 | Rhythm editing | Hard cuts only; no transition/rhythm tooling | GAP | P4-02 |
 | 102 | Transition design | Hard cuts only; no transition/rhythm tooling | GAP | P4-02 |
 | 103 | Montage | Not needed for current dramas; add only if a script needs it | N/A | - |
-| 104 | Fine cut | No per-event in/out tool beyond `film_e2e finish --trim` | PARTIAL | P4-01 |
+| 104 | Fine cut | Per-event `src_in_s`/`src_out_s` trims validated against the clip and rendered; dissolve/match/J-L rendering and rhythm report come with P4-02 | PARTIAL | P4-02 |
 | 105 | Picture lock | No picture lock | GAP | P4-03 |
 | 106 | Online conform | N/A (generated sources are the final quality) | N/A | - |
 | 107 | Dialogue editing | Dialogue is generated with the clip; loudness only | PARTIAL | P5-01 |

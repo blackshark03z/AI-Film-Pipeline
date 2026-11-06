@@ -126,6 +126,12 @@ def main(argv: list[str] | None = None) -> int:
     rt.add_argument("--pickup", metavar="GENERATION_ID")
     rt.add_argument("--reason")
     rt.add_argument("--edits", type=Path, help="JSON object of ShotDecl fields to change in the new version")
+    ct = actions.add_parser("cut", help="check the EDL (05_edit.json) against the take log; --render writes the hard-cut assembly")
+    ct.add_argument("--film", required=True, type=Path)
+    ct.add_argument("--render", action="store_true", help="render with ffmpeg (default: check and print the timeline)")
+    ct.add_argument("--out", type=Path, help="output mp4 (default <film>/media/cut/rough_cut.mp4)")
+    ct.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
+    ct.add_argument("--accepted-only", action="store_true", help="a take nobody accepted blocks instead of warning")
     qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
     qcp.add_argument("--record", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
@@ -233,6 +239,26 @@ def main(argv: list[str] | None = None) -> int:
             if args.dry_run:
                 return 0
             return 0 if done["sent"] and done.get("manifest_result") == "PASSED" else 1
+        if args.action == "cut":
+            from film_pipeline.production import edit as ed_mod
+            section = pkg.typed.get("edit")
+            if section is None:
+                _emit({"error": "cut needs a valid 05_edit.json"})
+                return 2
+            if args.render:
+                out = args.out or pkg.root / "media" / "cut" / "rough_cut.mp4"
+                try:
+                    _emit(ed_mod.render_cut(pkg, section, out, clips_dir=args.clips, require_accepted=args.accepted_only))
+                except (ValueError, NotImplementedError) as exc:
+                    _emit({"error": str(exc)})
+                    return 1
+                return 0
+            problems, durations = ed_mod.edit_problems(pkg, section, clips_dir=args.clips,
+                                                       require_accepted=args.accepted_only)
+            blocked = [p for p in problems if p["severity"] == "BLOCK"]
+            plan = None if blocked else ed_mod.timeline(section, durations)
+            _emit({"ok": not blocked, "problems": problems, "timeline": plan})
+            return 1 if blocked else 0
         if args.action == "retake":
             from film_pipeline.production import retake as rt_mod
             from film_pipeline.production import takes as tk_mod

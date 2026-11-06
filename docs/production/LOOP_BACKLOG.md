@@ -160,7 +160,7 @@ template. Stop after one attempt; report.
 
 ## P4 — Editorial (91–106)
 
-### P4-01 EDL model + assembly from selects — READY (after P3-02)
+### P4-01 EDL model + assembly from selects — IN_PROGRESS
 `05_edit.json`: ordered events {take_id, src_in, src_out, transition {type, duration}, audio {j_cut_s, l_cut_s}},
 cards/tags as events. `film.py cut` renders via FFmpeg (reuse `drama.post`, `rough_cut`). Golden: film03 events
 reproduce the existing final timeline duration within 1 frame per event.

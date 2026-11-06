@@ -21,6 +21,7 @@ from film_pipeline.drama.feasibility import FeasibilityLimits
 from film_pipeline.drama.preflight import PreflightLimits
 from film_pipeline.production.camera import CameraSetup, LightingPlan
 from film_pipeline.production.direction import DirectionPlan
+from film_pipeline.production.edit import EditSection
 from film_pipeline.production.planning import RightsEntry
 from film_pipeline.production.story import StorySection
 
@@ -240,4 +241,5 @@ TYPED_SECTIONS: dict[str, type[ContractModel]] = {
     "direction": DirectionSection,
     "preprod": PreprodSection,
     "shots": ShotsSection,
+    "edit": EditSection,
 }

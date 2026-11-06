@@ -50,6 +50,8 @@ python tools/film.py review     --film films/<film_id> --ingest <filled.json>   
 python tools/film.py generate   --film films/<film_id> --gid <gid> --dry-run [--stills <dir>] [--start-token tok:<tail>]   # exact send payload + intent receipt, sends nothing
 python tools/film.py retake     --film films/<film_id>    # per-generation decision after rejections; exit 1 while pickups are open
 python tools/film.py retake     --film films/<film_id> --pickup <gid> --reason "<why>" --edits <changes.json>   # shot version N+1
+python tools/film.py cut        --film films/<film_id> [--clips <dir>] [--accepted-only]   # check 05_edit.json against the take log, print the timeline (exit 1 on BLOCK)
+python tools/film.py cut        --film films/<film_id> --render [--out <mp4>]   # hard-cut assembly -> media/cut/rough_cut.mp4 + .cut.json report
 python tools/film.py plan     --film films/<film_id> --out <dir> --takes <takes_dir> --approve-storyboard "<reviewer>"
 ```
 
@@ -70,6 +72,14 @@ START_FRAME, PROVIDER_LIMIT, STAGING). The first failure gets the cheap fix for 
 change the shot (split it, re-stage it, cover with an insert/reaction, new start frame), not another identical render;
 three rejections in one version go to the Owner. A pickup replaces the shot in place as version N+1 (old version kept in
 `history`), so a later review of a new take counts from zero.
+
+Cut rule of thumb (`production/edit.py`): `05_edit.json` lists events in order; a TAKE event names a take id
+(`<gid>_t<N>`) of the take log and optionally the used range `src_in_s`..`src_out_s`; a CARD event is a context card;
+identity tags sit on a TAKE event in seconds of its used part. Each event carries the transition into it (the first is a
+CUT) and the J/L split. A take of a superseded shot version, a rejected take, a clip whose bytes changed since logging,
+a trim outside the clip or a transition longer than its neighbours blocks the cut; an unreviewed take only warns until
+`--accepted-only` (use it for the fine cut and picture lock). `--render` does hard cuts only: a dissolve or J/L cut
+raises until P4-02 renders them. Loudness, subtitles and credits are P5.
 
 Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
 ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly
