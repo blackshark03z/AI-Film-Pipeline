@@ -115,7 +115,7 @@ Continuity bible: per generation start/end state across action, spatial, object,
 day), emotional. Object changes need a causing action in an ACTION phase. Reuse `drama.continuity`,
 `scene_bible`, `sequence.validate_shot_sequence`. Test: letter moves pocket → bin without an action → BLOCK.
 
-### P2-03 Camera & lighting plan — DONE (see git log)
+### P2-03 Camera & lighting plan — DONE (f1c015c)
 Per scene: key light direction/quality/colour temp, practicals; per shot: size, angle, height, movement, lens intent,
 composition note. Check against axis book (camera side) and shot-size variety (no 3 identical sizes in a row unless
 declared). Compiled into prompts only where the route supports it (document which fields reach the prompt).
