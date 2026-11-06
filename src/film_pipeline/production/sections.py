@@ -19,6 +19,7 @@ from film_pipeline.drama.coverage import Coverage
 from film_pipeline.drama.comprehension import ContextCard, CharacterIntro, IdentityTag, StoryFact
 from film_pipeline.drama.feasibility import FeasibilityLimits
 from film_pipeline.drama.preflight import PreflightLimits
+from film_pipeline.production.camera import CameraSetup, LightingPlan
 from film_pipeline.production.direction import DirectionPlan
 from film_pipeline.production.story import StorySection
 
@@ -67,6 +68,7 @@ class SceneSpec(ContractModel):
     occupancy: SceneOccupancy
     story_time: StoryTime
     extras: str = ""  # unnamed people present (never in positions)
+    lighting: LightingPlan | None = None  # camera.py: key light plan for the scene (all scenes or none)
 
 
 class StillTemplates(ContractModel):
@@ -144,6 +146,7 @@ class ShotDecl(ContractModel):
     sfx: list[str] = Field(default_factory=list)
     design_refs: list[Annotated[str, StringConstraints(pattern=_PIN.pattern)]] = Field(default_factory=list)
     # `id@version` of the designs this shot was planned against (checked against 03_preprod.designs)
+    camera: CameraSetup | None = None  # camera.py: size/angle/height/movement/lens (all shots or none)
 
 
 class ShotsSection(ContractModel):

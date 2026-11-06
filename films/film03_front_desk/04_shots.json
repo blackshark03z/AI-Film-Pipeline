@@ -68,7 +68,15 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole room"
+      }
     },
     {
       "generation_id": "SC01_g2",
@@ -136,7 +144,15 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "ots on NORA"
+      }
     },
     {
       "generation_id": "SC02_g1",
@@ -205,7 +221,15 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "ots on KESSLER"
+      }
     },
     {
       "generation_id": "SC02_g2",
@@ -278,7 +302,15 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole room"
+      }
     },
     {
       "generation_id": "SC03_g1",
@@ -341,7 +373,15 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "single on ORTIZ"
+      }
     },
     {
       "generation_id": "SC03_g2",
@@ -411,7 +451,15 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole room"
+      }
     },
     {
       "generation_id": "SC04_g1",
@@ -475,7 +523,15 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "single on NORA"
+      }
     },
     {
       "generation_id": "SC04_g2",
@@ -546,7 +602,15 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole room"
+      }
     },
     {
       "generation_id": "SC05_g1",
@@ -611,7 +675,15 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "single on KESSLER"
+      }
     },
     {
       "generation_id": "SC05_g2",
@@ -674,7 +746,16 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "single on ORTIZ",
+        "declared_repeat": "shot / reverse-shot singles through the confrontation"
+      }
     },
     {
       "generation_id": "SC06_g1",
@@ -738,7 +819,16 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "single on NORA",
+        "declared_repeat": "shot / reverse-shot singles through the confrontation"
+      }
     },
     {
       "generation_id": "SC06_g2",
@@ -801,7 +891,16 @@
         "loc_lobby_morning@1",
         "prop_letter@1",
         "prop_desk_phone@1"
-      ]
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "single on KESSLER",
+        "declared_repeat": "shot / reverse-shot singles through the confrontation"
+      }
     },
     {
       "generation_id": "SC07_g1",
@@ -869,7 +968,15 @@
         "ORTIZ_costume@1",
         "NORA_hair@1",
         "loc_briefing_morning@1"
-      ]
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole room"
+      }
     },
     {
       "generation_id": "SC07_g2",
@@ -931,7 +1038,15 @@
         "NORA_costume@1",
         "NORA_hair@1",
         "loc_briefing_morning@1"
-      ]
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "single on NORA"
+      }
     },
     {
       "generation_id": "SC08_g1",
@@ -992,7 +1107,16 @@
         "ORTIZ_look@1",
         "ORTIZ_costume@1",
         "loc_briefing_morning@1"
-      ]
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "single on ORTIZ",
+        "declared_repeat": "shot / reverse-shot singles through the confrontation"
+      }
     },
     {
       "generation_id": "SC08_g2",
@@ -1060,7 +1184,15 @@
         "ORTIZ_costume@1",
         "NORA_hair@1",
         "loc_briefing_morning@1"
-      ]
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole room"
+      }
     }
   ]
 }

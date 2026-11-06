@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 25 · PARTIAL 86 · GAP 31 · N/A 26 · total 168
+**Summary:** HAVE 26 · PARTIAL 87 · GAP 29 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -32,10 +32,10 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 15 | Directorial vision | `production/direction.py` `Vision` (tone, references as words); required by Gate 2, not enforced against shots | PARTIAL | P1-02 |
 | 16 | Visual language | `DirectionPlan.visual_rules` rule + why; required by Gate 2, not enforced against shots | PARTIAL | P1-02 |
 | 17 | Mise-en-scène | `drama/scene_bible.py` occupancy + location look | PARTIAL | P2-03 |
-| 18 | Shot composition | `coverage.CoverageShot.shot_size` only (no angle or composition field) | PARTIAL | P2-03 |
+| 18 | Shot composition | `production/camera.py` `CameraSetup.composition` note + size/coverage check; note is free text and not compiled into the prompt | PARTIAL | P3-02 |
 | 19 | Shot size | `coverage._SIZE` + `autoqc.shot_scale_from_ratio` (WARN) | HAVE | - |
-| 20 | Camera angle | No angle field in `CoverageShot` (size and coverage kind only) | PARTIAL | P2-03 |
-| 21 | Camera movement | ShotSpec camera.movement (locked default); no movement plan | PARTIAL | P2-03 |
+| 20 | Camera angle | `camera.CameraSetup.angle/height` declared and reviewed; the Flow route cannot take angle in a prompt | PARTIAL | - |
+| 21 | Camera movement | `camera.CameraSetup.movement` declared; Flow route generates static camera only | PARTIAL | - |
 | 22 | Blocking | `choreography.GenerationChoreography` phases + `core.Blocking` | HAVE | - |
 | 23 | Staging | `scene_bible` occupancy + `Blocking`; layering not modelled | PARTIAL | P2-03 |
 | 24 | Screen direction | `drama/axis.py` AxisBook 180-degree | HAVE | - |
@@ -63,8 +63,8 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 41 | Props | `production/continuity.py` OBJECT (cause rule, hand-off equality) + versioned `prop_*` designs (`impact.py`) | HAVE | - |
 | 42 | Costume design | `designs` kind costume with version; shots pin it; no story-day wardrobe state yet | PARTIAL | P2-01 |
 | 43 | Hair & makeup | `designs` kind hair_makeup with version; shots pin it; no story-day state yet | PARTIAL | P2-01 |
-| 44 | Cinematography planning | No camera/lighting plan beyond `scene_bible.lighting` string | GAP | P2-03 |
-| 45 | Lighting design | No camera/lighting plan beyond `scene_bible.lighting` string | GAP | P2-03 |
+| 44 | Cinematography planning | `production/camera.py`: per-shot camera setup + per-scene lighting plan, all-or-nothing rule, `film.py camera`, `plan` BLOCKs | HAVE | - |
+| 45 | Lighting design | `camera.LightingPlan` (key direction/quality/colour temp/motivation/practicals, LIGHT_JUMP warn); not compiled into prompts | PARTIAL | - |
 | 46 | Storyboarding | `drama/storyboard.py` schematic board + Gate 2 | HAVE | - |
 | 47 | Previsualization | Still storyboard only; no timed animatic | GAP | P2-04 |
 | 48 | Blocking diagram | `storyboard.render_schematic_frame` + AxisBook | PARTIAL | P2-03 |

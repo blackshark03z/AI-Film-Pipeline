@@ -90,6 +90,8 @@ def main(argv: list[str] | None = None) -> int:
     imp.add_argument("--design", required=True)
     cont = actions.add_parser("continuity", help="continuity bible: action/spatial/object/temporal/visual/emotional")
     cont.add_argument("--film", required=True, type=Path)
+    cam = actions.add_parser("camera", help="camera & lighting plan: sizes, axis side, size runs, light consistency")
+    cam.add_argument("--film", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
     narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
     narr.add_argument("--project", type=Path, help="E2E project directory (import)")
@@ -128,6 +130,15 @@ def main(argv: list[str] | None = None) -> int:
                 _emit({"error": "continuity needs a valid 03_preprod.json and 04_shots.json"})
                 return 2
             report = continuity_report(pre, shots)
+            _emit(report)
+            return 0 if report["ok"] else 1
+        if args.action == "camera":
+            from film_pipeline.production.camera import camera_report
+            pre, shots = pkg.typed.get("preprod"), pkg.typed.get("shots")
+            if pre is None or shots is None:
+                _emit({"error": "camera needs a valid 03_preprod.json and 04_shots.json"})
+                return 2
+            report = camera_report(pre, shots)
             _emit(report)
             return 0 if report["ok"] else 1
         if args.action == "plan":

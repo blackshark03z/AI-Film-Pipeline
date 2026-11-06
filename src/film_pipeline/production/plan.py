@@ -17,6 +17,7 @@ from film_pipeline.drama.axis import axis_record
 from film_pipeline.drama.comprehension import check_comprehension, lint_script
 from film_pipeline.drama.coverage import _SIZE, CoverageShot, SceneUnit, SpokenLine
 from film_pipeline.drama.feasibility import check_script
+from film_pipeline.production.camera import camera_issues
 from film_pipeline.production.continuity import continuity_issues, temporal_issues
 from film_pipeline.production.evidence import end_state_verified, load_attestations
 from film_pipeline.production.package import FilmPackage, PackageError
@@ -172,6 +173,9 @@ class _Plan:
     def temporal(self) -> list[Any]:
         return temporal_issues(self.pre, self.shots)
 
+    def camera(self) -> list[Any]:
+        return camera_issues(self.pre, self.shots)
+
     def continuity(self) -> list[Any]:
         return continuity_issues(self.pre, self.shots, include_temporal=False)
 
@@ -233,6 +237,9 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     continuity = p.continuity()
     if continuity:  # only recorded when there is something to say, so a clean film keeps its golden gate3.json
         record["continuity"] = [i.model_dump() for i in continuity]
+    camera = p.camera()
+    if camera:  # likewise: a film with no camera findings keeps its golden gate3.json
+        record["camera"] = [i.model_dump() for i in camera]
     for decl in p.shots.generations:
         gid = decl.generation_id
         unit, plan, report = p.build(decl, gate)
@@ -253,7 +260,7 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     record["locations"] = [v.look.model_dump() for v in p.pre.locations.values()]
     record["states"] = {k: v.model_dump() for k, v in p.pre.states.items()}
     _write(out / "gate3.json", json.dumps(record, ensure_ascii=False, indent=2), out)
-    problems = [f"{k.upper()} {i['check']}: {i['detail']}" for k in ("feasibility", "temporal", "continuity", "comprehension")
+    problems = [f"{k.upper()} {i['check']}: {i['detail']}" for k in ("feasibility", "temporal", "continuity", "camera", "comprehension")
                 for i in record.get(k, []) if i["severity"] == "BLOCK"]
     problems += [f"{g} preflight {v['verdict']}" for g, v in record["generations"].items() if v["verdict"] != "PASS"]
     problems += p.dialogue_problems() + p.overlong_problems(record)

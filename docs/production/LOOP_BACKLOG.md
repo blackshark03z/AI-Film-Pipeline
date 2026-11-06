@@ -115,12 +115,12 @@ Continuity bible: per generation start/end state across action, spatial, object,
 day), emotional. Object changes need a causing action in an ACTION phase. Reuse `drama.continuity`,
 `scene_bible`, `sequence.validate_shot_sequence`. Test: letter moves pocket → bin without an action → BLOCK.
 
-### P2-03 Camera & lighting plan — READY
+### P2-03 Camera & lighting plan — DONE (see git log)
 Per scene: key light direction/quality/colour temp, practicals; per shot: size, angle, height, movement, lens intent,
 composition note. Check against axis book (camera side) and shot-size variety (no 3 identical sizes in a row unless
 declared). Compiled into prompts only where the route supports it (document which fields reach the prompt).
 
-### P2-04 Animatic — READY (after P2-03)
+### P2-04 Animatic — READY
 `film.py animatic`: storyboard frames (schematic or approved stills) timed to the planned durations with temp
 dialogue/narration audio when available (TTS optional, offline-only libs; otherwise silence + subtitles), FFmpeg mp4
 under `films/<id>/media/animatic.mp4`, plus timing report. Gate 3 input. 0 credits. Test with tiny fixtures.

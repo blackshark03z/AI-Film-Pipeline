@@ -146,7 +146,24 @@
         "marker": "",
         "source_conflict": ""
       },
-      "extras": ""
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 5600,
+        "contrast": "MEDIUM",
+        "motivation": "morning daylight through the glass doors on the left, mixed with ceiling fluorescents",
+        "practicals": [
+          {
+            "kind": "WINDOW",
+            "note": "glass doors on the left"
+          },
+          {
+            "kind": "OVERHEAD",
+            "note": "ceiling fluorescents, slightly green"
+          }
+        ]
+      }
     },
     "SC02": {
       "location": "lobby_morning",
@@ -178,7 +195,24 @@
         "marker": "",
         "source_conflict": ""
       },
-      "extras": ""
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 5600,
+        "contrast": "MEDIUM",
+        "motivation": "morning daylight through the glass doors on the left, mixed with ceiling fluorescents",
+        "practicals": [
+          {
+            "kind": "WINDOW",
+            "note": "glass doors on the left"
+          },
+          {
+            "kind": "OVERHEAD",
+            "note": "ceiling fluorescents, slightly green"
+          }
+        ]
+      }
     },
     "SC03": {
       "location": "lobby_morning",
@@ -210,7 +244,24 @@
         "marker": "",
         "source_conflict": ""
       },
-      "extras": ""
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 5600,
+        "contrast": "MEDIUM",
+        "motivation": "morning daylight through the glass doors on the left, mixed with ceiling fluorescents",
+        "practicals": [
+          {
+            "kind": "WINDOW",
+            "note": "glass doors on the left"
+          },
+          {
+            "kind": "OVERHEAD",
+            "note": "ceiling fluorescents, slightly green"
+          }
+        ]
+      }
     },
     "SC04": {
       "location": "lobby_morning",
@@ -242,7 +293,24 @@
         "marker": "",
         "source_conflict": ""
       },
-      "extras": ""
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 5600,
+        "contrast": "MEDIUM",
+        "motivation": "morning daylight through the glass doors on the left, mixed with ceiling fluorescents",
+        "practicals": [
+          {
+            "kind": "WINDOW",
+            "note": "glass doors on the left"
+          },
+          {
+            "kind": "OVERHEAD",
+            "note": "ceiling fluorescents, slightly green"
+          }
+        ]
+      }
     },
     "SC05": {
       "location": "lobby_morning",
@@ -274,7 +342,24 @@
         "marker": "",
         "source_conflict": ""
       },
-      "extras": ""
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 5600,
+        "contrast": "MEDIUM",
+        "motivation": "morning daylight through the glass doors on the left, mixed with ceiling fluorescents",
+        "practicals": [
+          {
+            "kind": "WINDOW",
+            "note": "glass doors on the left"
+          },
+          {
+            "kind": "OVERHEAD",
+            "note": "ceiling fluorescents, slightly green"
+          }
+        ]
+      }
     },
     "SC06": {
       "location": "lobby_morning",
@@ -306,7 +391,24 @@
         "marker": "",
         "source_conflict": ""
       },
-      "extras": ""
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 5600,
+        "contrast": "MEDIUM",
+        "motivation": "morning daylight through the glass doors on the left, mixed with ceiling fluorescents",
+        "practicals": [
+          {
+            "kind": "WINDOW",
+            "note": "glass doors on the left"
+          },
+          {
+            "kind": "OVERHEAD",
+            "note": "ceiling fluorescents, slightly green"
+          }
+        ]
+      }
     },
     "SC07": {
       "location": "briefing_morning",
@@ -338,7 +440,20 @@
         "marker": "context card \"Roll call, 8 a.m.\"; briefing room",
         "source_conflict": ""
       },
-      "extras": "five other uniformed officers sit in the rows, seen from behind or in profile"
+      "extras": "five other uniformed officers sit in the rows, seen from behind or in profile",
+      "lighting": {
+        "key_direction": "SIDE_RIGHT",
+        "quality": "SOFT",
+        "colour_temp_k": 5200,
+        "contrast": "LOW",
+        "motivation": "morning light through the window blinds",
+        "practicals": [
+          {
+            "kind": "WINDOW",
+            "note": "window with blinds, striped light"
+          }
+        ]
+      }
     },
     "SC08": {
       "location": "briefing_morning",
@@ -370,7 +485,20 @@
         "marker": "",
         "source_conflict": ""
       },
-      "extras": "five other uniformed officers sit in the rows, seen from behind or in profile"
+      "extras": "five other uniformed officers sit in the rows, seen from behind or in profile",
+      "lighting": {
+        "key_direction": "SIDE_RIGHT",
+        "quality": "SOFT",
+        "colour_temp_k": 5200,
+        "contrast": "LOW",
+        "motivation": "morning light through the window blinds",
+        "practicals": [
+          {
+            "kind": "WINDOW",
+            "note": "window with blinds, striped light"
+          }
+        ]
+      }
     }
   },
   "states": {
