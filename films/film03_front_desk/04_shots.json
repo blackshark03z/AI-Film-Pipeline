@@ -1,0 +1,875 @@
+{
+  "generations": [
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "coverage": "MASTER",
+      "subject": "",
+      "foreground": "",
+      "visible": [
+        "NORA",
+        "KESSLER",
+        "ORTIZ"
+      ],
+      "start_state": "SC01_g1",
+      "end_state": "SC01_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC01_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "NORA steps in through the glass doors"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "KESSLER speaks without looking up"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "NORA walks toward the desk"
+          }
+        ],
+        "once_actions": [
+          "KESSLER speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "KESSLER",
+            "emotion_intent": "bored dismissal",
+            "visible_cues": [
+              "eyes on his paperwork",
+              "flat mouth"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "friendly smile"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC01_g2",
+      "scene_id": "SC01",
+      "coverage": "OTS",
+      "subject": "NORA",
+      "foreground": "KESSLER",
+      "visible": [
+        "KESSLER",
+        "NORA"
+      ],
+      "start_state": "SC01_g2",
+      "end_state": "SC01_end",
+      "previous_generation_id": "SC01_g1",
+      "choreography": {
+        "generation_id": "SC01_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "NORA stops in front of the desk"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "NORA speaks, calm"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "she lays a folded letter on the desk"
+          }
+        ],
+        "once_actions": [
+          "NORA speaks",
+          "lays a folded letter on the desk"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "NORA",
+            "emotion_intent": "quiet composure",
+            "visible_cues": [
+              "level gaze",
+              "still hands"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger or a smile"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC02_g1",
+      "scene_id": "SC02",
+      "coverage": "OTS",
+      "subject": "KESSLER",
+      "foreground": "NORA",
+      "visible": [
+        "NORA",
+        "KESSLER"
+      ],
+      "start_state": "SC02_g1",
+      "end_state": "SC02_g2",
+      "previous_generation_id": "SC01_g2",
+      "choreography": {
+        "generation_id": "SC02_g1",
+        "phases": [
+          {
+            "kind": "ACTION",
+            "start_s": 0.0,
+            "end_s": 3.0,
+            "description": "KESSLER picks up the letter, unfolds it, reads"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 3.0,
+            "end_s": 7.0,
+            "description": "he looks NORA up and down and speaks"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 7.0,
+            "end_s": 8.0,
+            "description": "he holds a thin smirk"
+          }
+        ],
+        "once_actions": [
+          "picks up the letter"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "KESSLER",
+            "emotion_intent": "contempt",
+            "visible_cues": [
+              "one corner of the mouth lifted",
+              "eyes travel up and down"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "laughing out loud"
+          }
+        ]
+      },
+      "sfx": [
+        "paper unfolding"
+      ]
+    },
+    {
+      "generation_id": "SC02_g2",
+      "scene_id": "SC02",
+      "coverage": "MASTER",
+      "subject": "",
+      "foreground": "",
+      "visible": [
+        "NORA",
+        "KESSLER",
+        "ORTIZ"
+      ],
+      "start_state": "SC02_g2",
+      "end_state": "SC02_end",
+      "previous_generation_id": "SC02_g1",
+      "choreography": {
+        "generation_id": "SC02_g2",
+        "phases": [
+          {
+            "kind": "ACTION",
+            "start_s": 0.0,
+            "end_s": 4.0,
+            "description": "KESSLER crumples the letter, drops it in the trash bin"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "he speaks"
+          },
+          {
+            "kind": "REACTION",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "ORTIZ glances over"
+          }
+        ],
+        "once_actions": [
+          "crumples the letter",
+          "drops it in the trash bin"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "KESSLER",
+            "emotion_intent": "smug dismissal",
+            "visible_cues": [
+              "leans back",
+              "half smile"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "shouting"
+          }
+        ]
+      },
+      "sfx": [
+        "paper crumpling"
+      ]
+    },
+    {
+      "generation_id": "SC03_g1",
+      "scene_id": "SC03",
+      "coverage": "SINGLE",
+      "subject": "ORTIZ",
+      "foreground": "",
+      "visible": [
+        "ORTIZ"
+      ],
+      "start_state": "SC03_g1",
+      "end_state": "SC03_g2",
+      "previous_generation_id": "SC02_g2",
+      "choreography": {
+        "generation_id": "SC03_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "ORTIZ looks from NORA to the bin, folder in hand"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "ORTIZ speaks, hesitant"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "he waits"
+          }
+        ],
+        "once_actions": [
+          "ORTIZ speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "ORTIZ",
+            "emotion_intent": "uneasy doubt",
+            "visible_cues": [
+              "glance to the bin",
+              "tight shoulders"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "confident smirk"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC03_g2",
+      "scene_id": "SC03",
+      "coverage": "MASTER",
+      "subject": "",
+      "foreground": "",
+      "visible": [
+        "NORA",
+        "KESSLER",
+        "ORTIZ"
+      ],
+      "start_state": "SC03_g2",
+      "end_state": "SC03_end",
+      "previous_generation_id": "SC03_g1",
+      "choreography": {
+        "generation_id": "SC03_g2",
+        "phases": [
+          {
+            "kind": "ACTION",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "KESSLER turns his head back toward ORTIZ"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "KESSLER speaks"
+          },
+          {
+            "kind": "REACTION",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "ORTIZ lowers his eyes"
+          }
+        ],
+        "once_actions": [
+          "KESSLER turns his head"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "KESSLER",
+            "emotion_intent": "irritation",
+            "visible_cues": [
+              "sharp head turn",
+              "narrowed eyes"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "laughing"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC04_g1",
+      "scene_id": "SC04",
+      "coverage": "SINGLE",
+      "subject": "NORA",
+      "foreground": "",
+      "visible": [
+        "NORA"
+      ],
+      "start_state": "SC04_g1",
+      "end_state": "SC04_g2",
+      "previous_generation_id": "SC03_g2",
+      "choreography": {
+        "generation_id": "SC04_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "NORA looks past KESSLER toward ORTIZ"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "NORA speaks, unhurried"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "she waits"
+          }
+        ],
+        "once_actions": [
+          "NORA speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "NORA",
+            "emotion_intent": "patient authority",
+            "visible_cues": [
+              "slight head tilt",
+              "steady gaze"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "smile or anger"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC04_g2",
+      "scene_id": "SC04",
+      "coverage": "MASTER",
+      "subject": "",
+      "foreground": "",
+      "visible": [
+        "NORA",
+        "KESSLER",
+        "ORTIZ"
+      ],
+      "start_state": "SC04_g2",
+      "end_state": "SC04_end",
+      "previous_generation_id": "SC04_g1",
+      "choreography": {
+        "generation_id": "SC04_g2",
+        "phases": [
+          {
+            "kind": "ACTION",
+            "start_s": 0.0,
+            "end_s": 4.0,
+            "description": "ORTIZ takes the crumpled letter from the bin and smooths it flat"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "ORTIZ speaks"
+          },
+          {
+            "kind": "REACTION",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "KESSLER stares"
+          }
+        ],
+        "once_actions": [
+          "takes the crumpled letter from the bin"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "ORTIZ",
+            "emotion_intent": "quiet resolve",
+            "visible_cues": [
+              "careful hands"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "smile"
+          }
+        ]
+      },
+      "sfx": [
+        "paper being smoothed"
+      ]
+    },
+    {
+      "generation_id": "SC05_g1",
+      "scene_id": "SC05",
+      "coverage": "SINGLE",
+      "subject": "KESSLER",
+      "foreground": "",
+      "visible": [
+        "KESSLER"
+      ],
+      "start_state": "SC05_g1",
+      "end_state": "SC05_g2",
+      "previous_generation_id": "SC04_g2",
+      "choreography": {
+        "generation_id": "SC05_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "the desk phone rings"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 7.0,
+            "description": "KESSLER lifts the receiver to his ear and speaks"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 7.0,
+            "end_s": 8.0,
+            "description": "he listens, frozen"
+          }
+        ],
+        "once_actions": [
+          "lifts the receiver"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "KESSLER",
+            "emotion_intent": "dawning dread",
+            "visible_cues": [
+              "smirk fading",
+              "eyes widen a little"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "laughing or crying"
+          }
+        ]
+      },
+      "sfx": [
+        "desk phone ringing"
+      ]
+    },
+    {
+      "generation_id": "SC05_g2",
+      "scene_id": "SC05",
+      "coverage": "SINGLE",
+      "subject": "ORTIZ",
+      "foreground": "",
+      "visible": [
+        "ORTIZ"
+      ],
+      "start_state": "SC05_g2",
+      "end_state": "SC05_end",
+      "previous_generation_id": "SC05_g1",
+      "choreography": {
+        "generation_id": "SC05_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "ORTIZ holds the smoothed letter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "ORTIZ reads out loud"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "he looks up from the letter toward NORA"
+          }
+        ],
+        "once_actions": [
+          "ORTIZ reads"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "ORTIZ",
+            "emotion_intent": "awe",
+            "visible_cues": [
+              "eyebrows up",
+              "lips parted"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "smirk"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC06_g1",
+      "scene_id": "SC06",
+      "coverage": "SINGLE",
+      "subject": "NORA",
+      "foreground": "",
+      "visible": [
+        "NORA"
+      ],
+      "start_state": "SC06_g1",
+      "end_state": "SC06_g2",
+      "previous_generation_id": "SC05_g2",
+      "choreography": {
+        "generation_id": "SC06_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "NORA looks at KESSLER"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "NORA speaks, level, not unkind"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "she holds his gaze"
+          }
+        ],
+        "once_actions": [
+          "NORA speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "NORA",
+            "emotion_intent": "firm calm",
+            "visible_cues": [
+              "level gaze",
+              "relaxed mouth"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "triumphant smile"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC06_g2",
+      "scene_id": "SC06",
+      "coverage": "SINGLE",
+      "subject": "KESSLER",
+      "foreground": "",
+      "visible": [
+        "KESSLER"
+      ],
+      "start_state": "SC06_g2",
+      "end_state": "SC06_end",
+      "previous_generation_id": "SC06_g1",
+      "choreography": {
+        "generation_id": "SC06_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "KESSLER, receiver still at his ear, swallows"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "KESSLER speaks, quiet"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "he sits frozen"
+          }
+        ],
+        "once_actions": [
+          "KESSLER speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "KESSLER",
+            "emotion_intent": "deflated shame",
+            "visible_cues": [
+              "smirk gone",
+              "eyes drop"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "tears or anger"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC07_g1",
+      "scene_id": "SC07",
+      "coverage": "MASTER",
+      "subject": "",
+      "foreground": "",
+      "visible": [
+        "NORA",
+        "KESSLER",
+        "ORTIZ"
+      ],
+      "start_state": "SC07_g1",
+      "end_state": "SC07_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC07_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "the room settles"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "NORA speaks from the lectern"
+          },
+          {
+            "kind": "REACTION",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "KESSLER at the back wall stands still"
+          }
+        ],
+        "once_actions": [
+          "NORA speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "NORA",
+            "emotion_intent": "steady command",
+            "visible_cues": [
+              "upright posture",
+              "even gaze over the room"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "shouting"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC07_g2",
+      "scene_id": "SC07",
+      "coverage": "SINGLE",
+      "subject": "NORA",
+      "foreground": "",
+      "visible": [
+        "NORA"
+      ],
+      "start_state": "SC07_g2",
+      "end_state": "SC07_end",
+      "previous_generation_id": "SC07_g1",
+      "choreography": {
+        "generation_id": "SC07_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "NORA turns her eyes to ORTIZ"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "NORA speaks"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "a small nod"
+          }
+        ],
+        "once_actions": [
+          "NORA speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "NORA",
+            "emotion_intent": "quiet approval",
+            "visible_cues": [
+              "slight nod",
+              "soft eyes"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "big grin"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC08_g1",
+      "scene_id": "SC08",
+      "coverage": "SINGLE",
+      "subject": "ORTIZ",
+      "foreground": "",
+      "visible": [
+        "ORTIZ"
+      ],
+      "start_state": "SC08_g1",
+      "end_state": "SC08_g2",
+      "previous_generation_id": "SC07_g2",
+      "choreography": {
+        "generation_id": "SC08_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "ORTIZ sits up straight, surprised"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "ORTIZ nods and speaks"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "a small proud breath"
+          }
+        ],
+        "once_actions": [
+          "ORTIZ nods"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "ORTIZ",
+            "emotion_intent": "surprised pride",
+            "visible_cues": [
+              "straightens up",
+              "small smile"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "laughing"
+          }
+        ]
+      },
+      "sfx": []
+    },
+    {
+      "generation_id": "SC08_g2",
+      "scene_id": "SC08",
+      "coverage": "MASTER",
+      "subject": "",
+      "foreground": "",
+      "visible": [
+        "NORA",
+        "KESSLER",
+        "ORTIZ"
+      ],
+      "start_state": "SC08_g2",
+      "end_state": "SC08_end",
+      "previous_generation_id": "SC08_g1",
+      "choreography": {
+        "generation_id": "SC08_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "NORA looks over the room to the back wall"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "NORA speaks"
+          },
+          {
+            "kind": "REACTION",
+            "start_s": 5.0,
+            "end_s": 8.0,
+            "description": "KESSLER at the back wall lowers his eyes"
+          }
+        ],
+        "once_actions": [
+          "NORA speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "KESSLER",
+            "emotion_intent": "humbled",
+            "visible_cues": [
+              "eyes down",
+              "shoulders sink"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger or tears"
+          }
+        ]
+      },
+      "sfx": []
+    }
+  ]
+}

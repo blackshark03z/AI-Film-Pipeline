@@ -88,6 +88,7 @@ class FilmPackage(ContractModel):
     header: FilmHeader
     stages: dict[str, dict[str, Any]] = Field(default_factory=dict)
     script: Script | None = None
+    typed: dict[str, Any] = Field(default_factory=dict)  # stage key -> validated section model
     missing_stages: list[str] = Field(default_factory=list)
     issues: list[str] = Field(default_factory=list)
 
@@ -105,6 +106,11 @@ def _read_json(path: Path) -> Any:
         raise PackageError(f"{path.name}: invalid JSON ({exc})") from exc
 
 
+def _typed_section(key: str):
+    from film_pipeline.production.sections import TYPED_SECTIONS  # local: sections import drama models
+    return TYPED_SECTIONS.get(key)
+
+
 def load_package(path: str | Path) -> FilmPackage:
     """Load `films/<id>/`. Missing stages are reported, not raised; a bad `film.json` raises `PackageError`."""
     root = Path(path)
@@ -120,6 +126,7 @@ def load_package(path: str | Path) -> FilmPackage:
         raise PackageError(f"film.json: {exc}") from exc
 
     stages: dict[str, dict[str, Any]] = {}
+    typed: dict[str, Any] = {}
     missing: list[str] = []
     issues: list[str] = []
     for key, name in STAGE_FILES.items():
@@ -136,6 +143,12 @@ def load_package(path: str | Path) -> FilmPackage:
             issues.append(f"{name}: expected a JSON object")
             continue
         stages[key] = data
+        section = _typed_section(key)
+        if section is not None and data:  # an empty scaffold stage is reported by the gates, not here
+            try:
+                typed[key] = section.model_validate(data)
+            except ValidationError as exc:
+                issues.append(f"{name}: {exc}")
 
     script: Script | None = None
     script_path = root / SCRIPT_FILE
@@ -147,7 +160,7 @@ def load_package(path: str | Path) -> FilmPackage:
                 issues.append(f"{SCRIPT_FILE}: {exc}")
         else:
             issues.append(f"{SCRIPT_FILE} missing (required for profile drama)")
-    return FilmPackage(root=root, header=header, stages=stages, script=script,
+    return FilmPackage(root=root, header=header, stages=stages, typed=typed, script=script,
                        missing_stages=missing, issues=issues)
 
 

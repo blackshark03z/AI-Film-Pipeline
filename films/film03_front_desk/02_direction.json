@@ -1,0 +1,157 @@
+{
+  "comprehension": {
+    "intros": [
+      {
+        "character": "NORA",
+        "label": "NORA BELL",
+        "relation": "the precinct's new captain",
+        "needed_by": "SC01_g2",
+        "carriers": []
+      },
+      {
+        "character": "KESSLER",
+        "label": "SGT. KESSLER",
+        "relation": "the desk sergeant",
+        "needed_by": "SC02_g1",
+        "carriers": []
+      },
+      {
+        "character": "ORTIZ",
+        "label": "OFFICER ORTIZ",
+        "relation": "a rookie",
+        "needed_by": "SC03_g1",
+        "carriers": []
+      }
+    ],
+    "facts": [
+      {
+        "fact_id": "nora_is_captain",
+        "text": "NORA is the new captain; the desk has never met her",
+        "needed_by": "SC01_g1",
+        "carriers": [
+          {
+            "kind": "CARD",
+            "generation_id": "SC01_g1",
+            "detail": ""
+          }
+        ]
+      },
+      {
+        "fact_id": "letter_is_appointment",
+        "text": "the letter names her captain",
+        "needed_by": "SC02_g2",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC02_g1",
+            "detail": "Captain? Captains here don't look like you."
+          }
+        ]
+      },
+      {
+        "fact_id": "lieutenant_confirms",
+        "text": "the call from upstairs is about the new captain",
+        "needed_by": "SC06_g1",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC05_g1",
+            "detail": "Desk. Yes, Lieutenant. The new captain?"
+          },
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC05_g2",
+            "detail": "Captain Nora Bell."
+          }
+        ]
+      },
+      {
+        "fact_id": "time_jump",
+        "text": "roll call, later that morning",
+        "needed_by": "SC07_g1",
+        "carriers": [
+          {
+            "kind": "CARD",
+            "generation_id": "SC07_g1",
+            "detail": ""
+          },
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC07_g1",
+            "detail": "briefing room, officers seated"
+          }
+        ]
+      }
+    ],
+    "tags": [
+      {
+        "character": "NORA",
+        "generation_id": "SC01_g2",
+        "start_s": 0.2,
+        "end_s": 3.3,
+        "anchor_x": null,
+        "anchor_y": null
+      },
+      {
+        "character": "KESSLER",
+        "generation_id": "SC02_g1",
+        "start_s": 0.2,
+        "end_s": 3.2,
+        "anchor_x": null,
+        "anchor_y": null
+      },
+      {
+        "character": "ORTIZ",
+        "generation_id": "SC03_g1",
+        "start_s": 0.1,
+        "end_s": 2.4,
+        "anchor_x": null,
+        "anchor_y": null
+      }
+    ],
+    "cards": [
+      {
+        "card_id": "OPEN_card",
+        "before": "SC01_g1",
+        "lines": [
+          "The new captain arrives early"
+        ],
+        "duration_s": null
+      },
+      {
+        "card_id": "ROLLCALL_card",
+        "before": "SC07_g1",
+        "lines": [
+          "Roll call, 8 a.m."
+        ],
+        "duration_s": null
+      }
+    ]
+  },
+  "translations": {
+    "THE FRONT DESK": "QUẦY TRỰC BAN",
+    "The new captain arrives early": "Tân đại úy đến sớm",
+    "Roll call, 8 a.m.": "Điểm danh, 8 giờ sáng",
+    "the precinct's new captain": "tân chỉ huy của đồn",
+    "the desk sergeant": "trung sĩ trực ban",
+    "a rookie": "cảnh sát mới vào nghề",
+    "Complaints window opens at nine.": "Quầy tiếp nhận khiếu nại mở lúc chín giờ.",
+    "I'm not here to complain.": "Tôi không đến để khiếu nại.",
+    "Captain? Captains here don't look like you.": "Đại úy à? Đại úy ở đây đâu có trông như bà.",
+    "Nice try. Next.": "Diễn hay đấy. Người tiếp theo.",
+    "Sarge, maybe we call upstairs?": "Trung sĩ, hay ta gọi lên tầng trên hỏi thử?",
+    "Maybe you go file something.": "Hay cậu đi mà xếp hồ sơ.",
+    "What's your name, officer?": "Cậu tên gì, anh cảnh sát?",
+    "Ortiz, ma'am.": "Ortiz, thưa bà.",
+    "Desk. Yes, Lieutenant. The new captain?": "Trực ban nghe. Vâng, thưa trung úy. Tân đại úy ạ?",
+    "Captain Nora Bell.": "Đại úy Nora Bell.",
+    "Roll call is at eight, Sergeant.": "Tám giờ điểm danh, trung sĩ.",
+    "Yes... Captain.": "Vâng... thưa đại úy.",
+    "We check before we judge. Every time.": "Ta kiểm tra trước khi phán xét. Lần nào cũng vậy.",
+    "Officer Ortiz rides with me today.": "Hôm nay cảnh sát Ortiz đi tuần cùng tôi.",
+    "Yes, ma'am.": "Vâng, thưa bà.",
+    "Sergeant Kessler keeps the desk.": "Trung sĩ Kessler tiếp tục ngồi quầy trực.",
+    "A short drama. All characters are fictional.": "Phim ngắn. Mọi nhân vật đều là hư cấu.",
+    "Video, images and voices generated with AI.": "Video, hình ảnh và giọng nói được tạo bằng AI."
+  }
+}
