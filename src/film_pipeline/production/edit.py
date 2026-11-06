@@ -11,9 +11,13 @@ never the picture clock.
 
 ``edit_problems`` checks an EDL against the package and the take log (unknown/superseded/rejected takes, a take whose
 bytes no longer match the log, trims outside the source, transitions longer than the events around them, tags on
-nothing). ``render_cut`` renders hard cuts through `drama.post.assemble` (title card, graded clips, end card, AI label,
-tags); a dissolve or a J/L cut is declared in the EDL but rendered by P4-02, so asking for one here is an error rather
-than a silent hard cut. Loudness, subtitles and credits belong to P5.
+nothing, J/L cuts without source handles). ``render_cut`` renders through `drama.post.assemble` (title card, graded
+clips, end card, AI label, tags). An EDL of hard cuts goes straight through it, byte-for-byte the legacy path. An EDL with
+a dissolve, a dip to black or a J/L cut first builds the body in one FFmpeg graph (xfade for the picture, per-event audio
+slices placed on the clock with their J/L handles, overlapping slices cross-faded) and hands that body to the same
+assembly. ``rhythm_report`` sets the used shot lengths against the direction's pacing and flags holds longer than
+planned; ``cut_continuity`` checks every cut between two takes (end/start state, axis side, eyeline, jump cut).
+Loudness, subtitles and credits belong to P5.
 """
 from __future__ import annotations
 
@@ -142,13 +146,17 @@ def source_length(event: EditEvent, source_s: float | None) -> float:
     return float((event.src_out_s if event.src_out_s is not None else source_s) - event.src_in_s)
 
 
-def timeline(section: EditSection, durations: dict[str, float]) -> dict[str, Any]:
-    """Place the events on the final clock. ``durations`` maps take_id -> clip seconds (cards need none). All times are
+def timeline(section: EditSection, durations: dict[str, float],
+             lengths: dict[str, float] | None = None) -> dict[str, Any]:
+    """Place the events on the final clock. ``durations`` maps take_id -> clip seconds (cards need none); ``lengths``
+    (event_id -> used seconds) overrides what the declaration implies, e.g. with probed card clips. All times are
     seconds from the start of the film, title card included."""
     placed: list[dict[str, Any]] = []
     cursor = section.title_s
     for index, event in enumerate(section.events):
-        length = source_length(event, durations.get(event.take_id))
+        length = (lengths or {}).get(event.event_id)
+        if length is None:
+            length = source_length(event, durations.get(event.take_id))
         overlap = event.transition.duration_s if index else 0.0
         start = cursor - overlap
         placed.append({"event_id": event.event_id, "kind": event.kind, "take_id": event.take_id,
@@ -257,10 +265,26 @@ def edit_problems(pkg: Any, section: EditSection, *, clips_dir: Path | None = No
                     d + nxt.transition.duration_s >= lengths[event.event_id]:
                 add("TRANSITION_OVERLAP", "BLOCK", event.event_id,
                     f"the transitions into and out of {event.event_id} overlap each other")
-    for event in section.events:
-        if event.audio.j_cut_s or event.audio.l_cut_s:
-            if event is section.events[0]:
-                add("AUDIO_CUT_ON_FIRST", "BLOCK", event.event_id, "the first event has no previous sound to split with")
+    for index, event in enumerate(section.events):
+        j, l = event.audio.j_cut_s, event.audio.l_cut_s
+        if not (j or l):
+            continue
+        if index == 0:
+            add("AUDIO_CUT_ON_FIRST", "BLOCK", event.event_id, "the first event has no previous sound to split with")
+            continue
+        prev = section.events[index - 1]
+        if j and (event.kind != "TAKE" or event.src_in_s + FRAME_S / 2 < j):
+            add("JCUT_NO_HANDLE", "BLOCK", event.event_id,
+                f"J-cut of {j}s needs {j}s of source before src_in_s ({event.src_in_s}s) of a take")
+        if j and prev.event_id in lengths and j >= lengths[prev.event_id]:
+            add("JCUT_TOO_LONG", "BLOCK", event.event_id, f"J-cut of {j}s is longer than {prev.event_id}")
+        if l:
+            clip_s = durations.get(prev.take_id)
+            if prev.kind != "TAKE" or clip_s is None or prev.src_out_s is None or prev.src_out_s + l > clip_s + FRAME_S / 2:
+                add("LCUT_NO_HANDLE", "BLOCK", event.event_id,
+                    f"L-cut of {l}s needs {l}s of {prev.event_id} sound after its src_out_s (set src_out_s earlier)")
+            if event.event_id in lengths and l >= lengths[event.event_id]:
+                add("LCUT_TOO_LONG", "BLOCK", event.event_id, f"L-cut of {l}s is longer than {event.event_id}")
 
     for tag in section.tags:
         target = by_event.get(tag.event_id)
@@ -292,59 +316,261 @@ def _trim(src: Path, dst: Path, start: float, end: float | None) -> Path:
     return dst
 
 
+def _is_fine(section: EditSection) -> bool:
+    return any(e.transition.type not in _HARD or e.audio.j_cut_s or e.audio.l_cut_s for e in section.events)
+
+
+def fine_graph(section: EditSection, starts: list[float], lengths: list[float], in_points: list[float],
+               body_s: float, grade: str, w: int, h: int) -> list[str]:
+    """FFmpeg filter graph of the body: inputs 0..n-1 are the event sources, input n is a silent bed of ``body_s``.
+    ``starts`` are body-relative picture starts (a dissolve already overlaps), ``lengths`` the used picture seconds,
+    ``in_points`` the source second each event's picture starts at. Outputs: [vout] and [aout]."""
+    events, n = section.events, len(section.events)
+    fl: list[str] = []
+    for i in range(n):
+        a, b = in_points[i], in_points[i] + lengths[i]
+        fl.append(f"[{i}:v]fps={FPS},scale={w}:{h},setsar=1,{grade},format=yuv420p,"
+                  f"trim=start={a:.6f}:end={b:.6f},setpts=PTS-STARTPTS[v{i}]")
+    acc = "v0"
+    for i in range(1, n):
+        t = events[i].transition
+        label = "vout" if i == n - 1 else f"x{i}"
+        if t.type in _HARD:
+            fl.append(f"[{acc}][v{i}]concat=n=2:v=1:a=0[{label}]")
+        else:
+            kind = "fade" if t.type == "DISSOLVE" else "fadeblack"
+            fl.append(f"[{acc}][v{i}]xfade=transition={kind}:duration={t.duration_s:.6f}:offset={starts[i]:.6f}[{label}]")
+        acc = label
+    if n == 1:
+        fl.append("[v0]null[vout]")
+    labels = []
+    for i in range(n):
+        j = events[i].audio.j_cut_s
+        l_next = events[i + 1].audio.l_cut_s if i + 1 < n else 0.0
+        d_in = events[i].transition.duration_s if i else 0.0
+        d_out = events[i + 1].transition.duration_s if i + 1 < n else 0.0
+        a0, a1 = in_points[i] - j, in_points[i] + lengths[i] + l_next
+        span = a1 - a0
+        fade_in = d_in if d_in else (min(j, 0.3) if j else 0.05)
+        fade_out = d_out if d_out else (min(l_next, 0.3) if l_next else 0.08)
+        ms = max(0, round((starts[i] - j) * 1000))
+        fl.append(f"[{i}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=start={a0:.6f}:end={a1:.6f},"
+                  f"asetpts=PTS-STARTPTS,afade=t=in:d={fade_in:.3f},afade=t=out:st={max(0.0, span - fade_out):.3f}:"
+                  f"d={fade_out:.3f},adelay={ms}|{ms}[a{i}]")
+        labels.append(f"[a{i}]")
+    fl.append(f"[{n}:a]{''.join(labels)}amix=inputs={n + 1}:normalize=0:duration=first,atrim=0:{body_s:.6f}[aout]")
+    return fl
+
+
 def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | None = None,
                require_accepted: bool = False, cues: list | None = None) -> dict[str, Any]:
-    """Render the EDL (hard cuts only) to ``out`` and return the report. Raises ValueError listing BLOCK problems, or
-    NotImplementedError for a transition/J-L cut that P4-02 renders. Cues, if given, are SubtitleCue keyed by event_id."""
-    from film_pipeline.drama.post import (Overlay, assemble, context_card_clip, identity_tag_png,
+    """Render the EDL to ``out`` and return the report. Raises ValueError listing BLOCK problems. Cues, if given, are
+    SubtitleCue keyed by event_id with times in seconds of the used part of that event."""
+    from film_pipeline.drama.post import (GRADE, H, W, Overlay, assemble, context_card_clip, identity_tag_png,
                                           probe_video_duration)
     from film_pipeline.production.takes import load_log
     problems, durations = edit_problems(pkg, section, clips_dir=clips_dir, require_accepted=require_accepted)
     blocks = [p for p in problems if p["severity"] == "BLOCK"]
     if blocks:
         raise ValueError("; ".join(f"{p['code']} {p['event_id']}: {p['detail']}" for p in blocks))
-    later = [e.event_id for e in section.events
-             if e.transition.type not in _HARD or e.audio.j_cut_s or e.audio.l_cut_s]
-    if later:
-        raise NotImplementedError(f"dissolves and J/L cuts are rendered by P4-02 (events {later})")
     root = Path(pkg.root)
-    log = load_log(root, pkg.header.film_id)
-    entries = {t.take_id: t for t in log.takes}
+    entries = {t.take_id: t for t in load_log(root, pkg.header.film_id).takes}
     title = [(l.text, l.size) for l in section.title] or [(pkg.header.title, 96)]
     end = [(l.text, l.size) for l in section.end] or [(pkg.header.title, 64),
                                                       ("All characters are fictional.", 30)]
+    fine = _is_fine(section)
     out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         work = Path(tmp)
-        clips: list[Path] = []
+        sources: list[Path] = []
+        lengths: dict[str, float] = {}
         for event in section.events:
-            dst = work / f"{event.event_id}.mp4"
             if event.kind == "CARD":
-                context_card_clip(dst, list(event.card_lines), float(event.card_duration_s))
+                src = context_card_clip(work / f"{event.event_id}.mp4", list(event.card_lines),
+                                        float(event.card_duration_s))
+                lengths[event.event_id] = probe_video_duration(src)
             else:
                 src = resolve_clip(root, entries[event.take_id].output_file, clips_dir)
+                lengths[event.event_id] = source_length(event, durations[event.take_id])
+            sources.append(src)
+        plan = timeline(section, durations, lengths)
+        sub_cues = list(cues or [])
+
+        def tag_png(index: int, t: TagEvent) -> str:
+            return str(identity_tag_png(work / f"tag_{index:02}.png", t.label, t.relation, t.anchor_x, t.anchor_y))
+
+        if fine:
+            starts = [e["start_s"] - section.title_s for e in plan["events"]]
+            body_s = plan["body_end_s"] - section.title_s
+            body = work / "body.mp4"
+            graph = fine_graph(section, starts, [lengths[e.event_id] for e in section.events],
+                               [e.src_in_s for e in section.events], body_s, GRADE, W, H)
+            cmd = ["ffmpeg", "-v", "error", "-y"]
+            for src in sources:
+                cmd += ["-i", str(src)]
+            cmd += ["-f", "lavfi", "-t", f"{body_s:.6f}", "-i", "anullsrc=r=48000:cl=stereo",
+                    "-filter_complex", ";".join(graph), "-map", "[vout]", "-map", "[aout]", "-t", f"{body_s:.6f}",
+                    "-r", str(FPS), "-c:v", "libx264", "-crf", "14", "-preset", "fast", "-pix_fmt", "yuv420p",
+                    "-c:a", "aac", "-b:a", "256k", str(body)]
+            subprocess.run(cmd, check=True)
+            at = {e.event_id: starts[i] for i, e in enumerate(section.events)}
+            overlays = [Overlay(generation_id="body", start_s=at[t.event_id] + t.start_s,
+                                end_s=at[t.event_id] + t.end_s, png=tag_png(i, t))
+                        for i, t in enumerate(section.tags, 1)]
+            sub_cues = [c.model_copy(update={"generation_id": "body", "start_s": at[c.generation_id] + c.start_s,
+                                             "end_s": at[c.generation_id] + c.end_s}) for c in sub_cues]
+            assemble([body], out, cues=sub_cues, title_lines=title, end_lines=end, title_s=section.title_s,
+                     end_s=section.end_s, overlays=overlays, grade="null")
+        else:
+            clips: list[Path] = []
+            for event, src in zip(section.events, sources):
+                if event.kind == "CARD":
+                    clips.append(src)
+                    continue
+                dst = work / f"{event.event_id}.mp4"
                 if event.src_in_s == 0 and event.src_out_s is None:
                     shutil.copyfile(src, dst)
                 else:
                     _trim(src, dst, event.src_in_s, event.src_out_s)
-            clips.append(dst)
-        overlays = [Overlay(generation_id=t.event_id, start_s=t.start_s, end_s=t.end_s,
-                            png=str(identity_tag_png(work / f"tag_{i:02}.png", t.label, t.relation, t.anchor_x,
-                                                     t.anchor_y)))
-                    for i, t in enumerate(section.tags, 1)]
-        assemble(clips, out, cues=cues or [], title_lines=title, end_lines=end, title_s=section.title_s,
-                 end_s=section.end_s, overlays=overlays)
-        actual = {e.event_id: probe_video_duration(c) for e, c in zip(section.events, clips)}
-    cursor = section.title_s
-    placed = []
-    for event in section.events:
-        placed.append({"event_id": event.event_id, "start_s": round(cursor, 6), "duration_s": round(actual[event.event_id], 6)})
-        cursor += actual[event.event_id]
+                clips.append(dst)
+            overlays = [Overlay(generation_id=t.event_id, start_s=t.start_s, end_s=t.end_s, png=tag_png(i, t))
+                        for i, t in enumerate(section.tags, 1)]
+            assemble(clips, out, cues=sub_cues, title_lines=title, end_lines=end, title_s=section.title_s,
+                     end_s=section.end_s, overlays=overlays)
+            lengths = {e.event_id: probe_video_duration(c) for e, c in zip(section.events, clips)}
+            plan = timeline(section, durations, lengths)
     total = probe_video_duration(out)
     report = {"film_id": pkg.header.film_id, "output": str(out), "output_sha256": _sha256(out),
-              "total_s": round(total, 6), "planned": timeline(section, durations), "rendered_events": placed,
+              "path": "fine" if fine else "hard", "total_s": round(total, 6), "planned": plan,
+              "rendered_events": [{"event_id": e["event_id"], "start_s": e["start_s"], "duration_s": e["duration_s"]}
+                                  for e in plan["events"]],
               "problems": problems}
     report_path = out.with_suffix(".cut.json")
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     report["report"] = str(report_path)
     return report
+
+
+# ------------------------------------------------------------------ rhythm and continuity across cuts
+
+PACE_TOLERANCE = 0.30  # a scene's average used shot length may differ from the target by this fraction
+UNPLANNED_HOLD_FACTOR = 1.5  # a shot longer than this x target, with no declared hold, is an unplanned hold
+
+
+def used_lengths(section: EditSection, durations: dict[str, float]) -> dict[str, float]:
+    """event_id -> used picture seconds for the events whose length is known."""
+    out: dict[str, float] = {}
+    for event in section.events:
+        try:
+            out[event.event_id] = source_length(event, durations.get(event.take_id))
+        except ValueError:
+            pass
+    return out
+
+
+def rhythm_report(pkg: Any, section: EditSection, durations: dict[str, float]) -> dict[str, Any]:
+    """Used shot lengths per scene against `02_direction` pacing; advisory (WARN only). A scene whose average shot is
+    30% off its target is flagged; a declared hold buys its seconds over the target for that shot, so a held shot longer
+    than target + hold is over plan, and a shot over 1.5 x target with no hold is an unplanned hold."""
+    direction, shots = pkg.typed.get("direction"), pkg.typed.get("shots")
+    if direction is None or shots is None:
+        return {"scenes": [], "issues": [], "skipped": "needs valid 02_direction.json and 04_shots.json"}
+    scene_of = {g.generation_id: g.scene_id for g in shots.generations}
+    lengths = used_lengths(section, durations)
+    takes = [e for e in section.events if e.kind == "TAKE" and e.event_id in lengths]
+    issues: list[dict[str, str]] = []
+    rows: list[dict[str, Any]] = []
+
+    def add(code: str, scene: str, detail: str) -> None:
+        issues.append({"code": code, "severity": "WARN", "scene_id": scene, "detail": detail})
+
+    for scene_id, sd in direction.scenes.items():
+        inside = [e for e in takes if scene_of.get(e.generation_id) == scene_id]
+        if not inside:
+            continue
+        target = sd.pacing.target_avg_shot_s
+        secs = [lengths[e.event_id] for e in inside]
+        avg = sum(secs) / len(secs)
+        rows.append({"scene_id": scene_id, "shots": len(inside), "total_s": round(sum(secs), 3),
+                     "avg_s": round(avg, 3), "target_avg_shot_s": target, "ratio": round(avg / target, 3)})
+        if avg > target * (1 + PACE_TOLERANCE):
+            add("SCENE_PACE_SLOW", scene_id, f"average shot {avg:.1f}s vs target {target:g}s")
+        elif avg < target * (1 - PACE_TOLERANCE):
+            add("SCENE_PACE_FAST", scene_id, f"average shot {avg:.1f}s vs target {target:g}s")
+        holds = {h.generation_id: h for h in sd.pacing.holds}
+        for gid, hold in holds.items():
+            events = [e for e in inside if e.generation_id == gid]
+            if not events:
+                add("HOLD_NOT_IN_CUT", scene_id, f"planned hold on {gid} ({hold.seconds:g}s) has no event in the cut")
+            for e in events:
+                if lengths[e.event_id] > target + hold.seconds + FRAME_S:  # a hold buys time over the average shot
+                    add("HOLD_OVER_PLAN", scene_id,
+                        f"{e.event_id} runs {lengths[e.event_id]:.1f}s; target {target:g}s + planned hold "
+                        f"{hold.seconds:g}s allows {target + hold.seconds:g}s ({hold.why})")
+        for e in inside:
+            if e.generation_id not in holds and lengths[e.event_id] > target * UNPLANNED_HOLD_FACTOR:
+                add("LONG_SHOT_UNPLANNED", scene_id,
+                    f"{e.event_id} runs {lengths[e.event_id]:.1f}s (> {UNPLANNED_HOLD_FACTOR:g} x target {target:g}s) "
+                    "with no declared hold")
+    return {"scenes": rows, "issues": issues}
+
+
+def cut_continuity(pkg: Any, section: EditSection, durations: dict[str, float]) -> dict[str, Any]:
+    """Checks at every cut between two takes (a card between them is a deliberate break and is skipped):
+
+    * end/start state, through `continuity._handoff`; only a take chained to the previous one (`previous_generation_id`)
+      has to match exactly, and only when the cut keeps the ends of both clips - at a trimmed point the state is unknown;
+    * axis side: a REVERSE camera against an ESTABLISHED one in the same scene crosses the line, which flips the
+      eyelines (`AxisBook.eyeline_toward_partner`);
+    * jump cut: same scene, same size/angle on the same subject.
+    A BLOCK finding means a chained handoff that cannot work; everything else is for the human at CUT review."""
+    from film_pipeline.production import continuity as C
+    pre, shots = pkg.typed.get("preprod"), pkg.typed.get("shots")
+    if pre is None or shots is None:
+        return {"cuts": 0, "issues": [], "skipped": "needs valid 03_preprod.json and 04_shots.json"}
+    by_id = {g.generation_id: g for g in shots.generations}
+    issues: list[dict[str, Any]] = []
+    checked = 0
+
+    def add(code: str, severity: str, a: EditEvent, b: EditEvent, detail: str) -> None:
+        issues.append({"code": code, "severity": severity, "between": [a.event_id, b.event_id], "detail": detail})
+
+    for a, b in zip(section.events, section.events[1:]):
+        if a.kind != "TAKE" or b.kind != "TAKE" or a.generation_id not in by_id or b.generation_id not in by_id:
+            continue
+        ga, gb = by_id[a.generation_id], by_id[b.generation_id]
+        checked += 1
+        same_scene = ga.scene_id == gb.scene_id
+        clip_a = durations.get(a.take_id)
+        tail_kept = a.src_out_s is None or (clip_a is not None and a.src_out_s >= clip_a - FRAME_S)
+        head_kept = b.src_in_s <= FRAME_S
+        chained = gb.previous_generation_id == ga.generation_id
+        if chained and not (tail_kept and head_kept):
+            add("TRIMMED_HANDOFF", "WARN", a, b,
+                f"{gb.generation_id} continues {ga.generation_id} but the cut is not at the clip ends: the shared "
+                "state cannot be proven, check it at CUT level")
+        elif tail_kept and head_kept and ga.end_state in pre.states and gb.start_state in pre.states:
+            found: list[Any] = []
+            C._handoff(gb.generation_id, ga.generation_id, same_scene and chained, pre.states[ga.end_state],
+                       pre.states[gb.start_state], found)
+            for f in found:
+                add(f.check, f.severity, a, b, f.detail)
+        if not same_scene:
+            continue
+        ca, cb = ga.camera, gb.camera
+        if ca is not None and cb is not None and ca.side != cb.side:
+            book = pre.scenes[ga.scene_id].axis if ga.scene_id in pre.scenes else None
+            eyes = ""
+            if book is not None and len(book.axis_pair) >= 2:
+                shared = [c for c in book.axis_pair if c in ga.visible and c in gb.visible]
+                eyes = "; eyelines flip for " + ", ".join(
+                    f"{c} ({book.eyeline_toward_partner(c)} -> {'screen-left' if book.eyeline_toward_partner(c) == 'screen-right' else 'screen-right'})"
+                    for c in shared) if shared else ""
+            add("AXIS_SIDE_CHANGE", "WARN", a, b,
+                f"camera goes {ca.side} -> {cb.side} inside {ga.scene_id}: the cut crosses the line of action{eyes}")
+        if ca is not None and cb is not None and not chained and ca.size == cb.size and ca.angle == cb.angle \
+                and ga.subject and ga.subject == gb.subject and ca.side == cb.side:
+            add("JUMP_CUT_RISK", "WARN", a, b,
+                f"same scene, same {ca.size} {ca.angle} on {ga.subject}: reads as a jump cut unless the action bridges it")
+    return {"cuts": checked, "issues": issues}

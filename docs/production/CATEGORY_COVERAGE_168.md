@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 34 · PARTIAL 86 · GAP 22 · N/A 26 · total 168
+**Summary:** HAVE 38 · PARTIAL 88 · GAP 16 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -43,7 +43,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 26 | Temporal continuity | `production/continuity.py` (TEMPORAL: story-time order + one time of day per scene) + `scene_bible.check_temporal` | HAVE | - |
 | 27 | Performance direction | `choreography.PerformanceCue` visible cues + prohibited misread | PARTIAL | P1-02 |
 | 28 | Emotional direction | `SceneDirection.curve` 0-5 per character; Gate 2 blocks jumps > 2 without a cause beat | HAVE | P1-02 |
-| 29 | Rhythm & pacing | `Pacing` target + holds on shots of the scene; choreography phase lengths; no measured-rhythm check | PARTIAL | P4-02 |
+| 29 | Rhythm & pacing | `Pacing` target + holds, now measured: `edit.rhythm_report` sets used shot lengths per scene against the target (30% band), flags holds over target + planned hold and unplanned long shots | HAVE | - |
 | 30 | Coverage strategy | `drama/coverage.CoveragePlanner` master/OTS/single/reaction | PARTIAL | P1-02 |
 | 31 | Transitions | `Transition` kind + reason per scene boundary; recorded, not yet applied by an edit stage | PARTIAL | P1-02 |
 | 32 | Visual storytelling | `action_meaning` + choreography once_actions (must-show) | PARTIAL | P1-02 |
@@ -122,18 +122,18 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 |---|---|---|---|---|
 | 91 | Media ingest | `editorial.probe_media`, `validate_source` | HAVE | - |
 | 92 | Logging | Take log + stored reviews (`takes/reviews/`); no unified shot/sound log | PARTIAL | P7-01 |
-| 93 | Synchronization | `production/edit.py` EDL: per-event J/L audio split and transition declared, timeline math keeps picture and sound clocks apart; sync of subtitles still via `post.cue_offsets` (P5-04) | PARTIAL | P4-02, P5-01 |
+| 93 | Synchronization | `production/edit.py`: per-event J/L audio split rendered (source handles checked), picture clock independent of sound; subtitle sync still via `post.cue_offsets` (P5-04); stems/mix in P5-01 | PARTIAL | P5-01 |
 | 94 | Selects | `qc.SelectedTake` | HAVE | - |
 | 95 | Assembly cut | `05_edit.json` EDL of take_ids from the take log; `film.py cut` checks it (unknown/rejected/superseded/changed takes block) and `--render` assembles via `drama.post.assemble`; film03 golden within 1 frame per event | HAVE | - |
 | 96 | Rough cut | `film.py cut --render`: rough cut from selects (title, graded clips, cards, identity tags, end card) with a `.cut.json` report; unreviewed takes warn, `--accepted-only` blocks | HAVE | - |
-| 97 | Structural editing | Order fixed by plan; no structural/continuity/performance edit tool | GAP | P4-02 |
-| 98 | Continuity editing | Order fixed by plan; no structural/continuity/performance edit tool | GAP | P4-02 |
-| 99 | Performance editing | Order fixed by plan; no structural/continuity/performance edit tool | GAP | P4-02 |
-| 100 | Narrative editing | Hard cuts only; no transition/rhythm tooling | GAP | P4-02 |
-| 101 | Rhythm editing | Hard cuts only; no transition/rhythm tooling | GAP | P4-02 |
-| 102 | Transition design | Hard cuts only; no transition/rhythm tooling | GAP | P4-02 |
+| 97 | Structural editing | EDL order and trims decide structure; `rhythm_report` and `cut_continuity` give the review; no automatic structural judgement | PARTIAL | - |
+| 98 | Continuity editing | `edit.cut_continuity`: end/start state at each cut via `continuity._handoff` (BLOCK only for chained, untrimmed handoffs), trimmed chained cuts flagged, axis side/eyeline flip, jump-cut risk | HAVE | - |
+| 99 | Performance editing | Per-event take choice and `src_in_s`/`src_out_s` trims; no automatic performance judgement (human at CUT level) | PARTIAL | - |
+| 100 | Narrative editing | Reorder events, insert context cards, drop or reuse takes (`SHOT_NOT_IN_CUT`, `TAKE_REUSED` warnings); narrative judgement stays human | PARTIAL | - |
+| 101 | Rhythm editing | `edit.rhythm_report` + per-event trims and holds; advisory WARNs, never BLOCK | HAVE | - |
+| 102 | Transition design | CUT / MATCH_CUT / DISSOLVE / DIP_TO_BLACK and J/L cuts declared per event and rendered (xfade); the direction's planned `transition_in/out` is not yet compared with the EDL | PARTIAL | - |
 | 103 | Montage | Not needed for current dramas; add only if a script needs it | N/A | - |
-| 104 | Fine cut | Per-event `src_in_s`/`src_out_s` trims validated against the clip and rendered; dissolve/match/J-L rendering and rhythm report come with P4-02 | PARTIAL | P4-02 |
+| 104 | Fine cut | Per-event `src_in_s`/`src_out_s` trims (frame-accurate in the filter), dissolves, dips, J/L cuts rendered; `film.py cut` checks and reports | HAVE | - |
 | 105 | Picture lock | No picture lock | GAP | P4-03 |
 | 106 | Online conform | N/A (generated sources are the final quality) | N/A | - |
 | 107 | Dialogue editing | Dialogue is generated with the clip; loudness only | PARTIAL | P5-01 |

@@ -165,7 +165,7 @@ template. Stop after one attempt; report.
 cards/tags as events. `film.py cut` renders via FFmpeg (reuse `drama.post`, `rough_cut`). Golden: film03 events
 reproduce the existing final timeline duration within 1 frame per event.
 
-### P4-02 Fine cut tools — READY (after P4-01)
+### P4-02 Fine cut tools — IN_PROGRESS
 Dissolve/match cut/J-L cut rendering; rhythm report (shot lengths vs 02_direction pacing, holds > plan flagged);
 continuity-edit check across cuts (end/start states, axis side, eyeline) reusing P2-02.
 
