@@ -344,14 +344,14 @@ def mix_cut(pkg: Any, section: Any, cut: Path, out: Path, *, stems_dir: Path | N
     return report
 
 
-def stamp_post_item(pkg: Any, name: str, item: dict[str, Any]) -> str:
+def stamp_post_item(pkg: Any, name: str, item: dict[str, Any], *, filename: str = "06_post.json") -> str:
     """Record ``item`` as the post item ``name`` in 06_post.json, stamped with the fresh picture lock it was built on
     (empty stamp when the picture is not locked: the item is then reported UNSTAMPED by ``film.py lock``)."""
     from film_pipeline.production.lock import lock_status
     root = Path(pkg.root)
     status = lock_status(pkg)
     stamp = status["lock_edl_sha256"] if status.get("locked") and status.get("fresh") else ""
-    path = root / "06_post.json"
+    path = root / filename
     data = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
     data[name] = {**item, "locked_against": stamp}
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -130,6 +130,14 @@ warning means a human checks that cue; real takes carry room tone, so expect to 
 text with no translation blocks that language. A reframe is a box in `titles/reframe.json` (`w == h`, fractions of the frame);
 under half the frame it warns about softness, and an event with identity tags warns that the face moves under the tag.
 
+Delivery rule of thumb (`production/deliver.py`, `film.py deliver`, `film.py status --package`): after `mastercheck` and `versions`,
+`deliver --generators "<tool and model>"` builds `delivery/` (marked masters, sidecars, thumbnails, metadata, QC, rights, package
+JSON, `MANIFEST.json` with hashes). It refuses (nothing is written, an earlier `delivery/` stays) when the opening title card has no
+line naming AI (add one to `title` in `05_edit.json`, e.g. "Generated with AI"), when no generator is named, when `qc/master_qc.json`
+is missing, stale or failing, when the 9:16 version is missing, or when the disclosure fails `check_release`. Open rights and an
+unlocked picture only warn and keep `release_ready` false. Take clips are not archived: the manifest lists them by hash. To prove a
+copy is whole, run `film.py status --package <copy of delivery/>` anywhere; it must pass with the working tree gone.
+
 Versions rule of thumb (`production/versions.py`, `film.py versions`): after the master QC, `versions` writes `versions/` with a
 9:16 cut of the master, thumbnail candidates and `metadata.json` (status always `DRAFT_NOT_PUBLISHED`; nothing is uploaded). The
 9:16 window follows the identity-tag anchor of each shot, else the centre of its reframe box, else the middle of the frame

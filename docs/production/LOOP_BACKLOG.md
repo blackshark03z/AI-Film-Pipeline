@@ -204,7 +204,7 @@ offsets, loudness compliance (ffmpeg blackdetect/freezedetect/silencedetect/ebur
 thumbnail candidates (frames from emphasis moments), metadata draft (title, description, tags, AI disclosure,
 credits). No publishing.
 
-### P6-03 Archive + restore test — READY (after P6-02)
+### P6-03 Archive + restore test — DONE (deliver.py, film.py deliver + status --package: marked masters, MANIFEST with hashes, compliance gate, restore check, 8 tests)
 `film.py deliver` writes `delivery/` (masters, sidecars, disclosure/C2PA via `drama.disclosure`, manifests with
 hashes, rights ledger, QC records, package JSON). Restore test: copy to a new temp dir, `film.py status --package`
 verifies every hash and reports missing dependencies.

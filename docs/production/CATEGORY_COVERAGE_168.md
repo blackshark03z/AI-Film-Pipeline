@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 53 · PARTIAL 86 · GAP 3 · N/A 26 · total 168
+**Summary:** HAVE 55 · PARTIAL 84 · GAP 3 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -75,7 +75,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 53 | Production scheduling | `production/planning.py` schedule: hand-off chains, waves, stills before videos (`film.py planning`) | HAVE | - |
 | 54 | Budgeting | `planning.budget`: generations x 12 credits x retake factor from the film01-03 KPI ledgers; Owner estimate checked against it, shown by `validate` | HAVE | - |
 | 55 | Risk & safety | `planning.risks`: CONTACT/HANDOVER HIGH need a fallback plan (BLOCK), prop/crowd/depth reported; failures feed `retake` (PROVIDER_LIMIT cause); no provider-moderation risk model | PARTIAL | P7-01 |
-| 56 | Legal clearance | `03_preprod.rights` ledger, unresolved entries listed as Owner decisions; final compliance check is P6 | PARTIAL | P6-03 |
+| 56 | Legal clearance | `03_preprod.rights` + sound asset ledger + attributions go into `delivery/rights/rights.json`; open entries are WARN and keep `release_ready` false; Owner confirmations still pending | PARTIAL | - |
 
 ## IV. Production
 
@@ -111,7 +111,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 84 | Script supervision | `drama/qc.py` post-render gating + `sequence` | PARTIAL | P3-02 |
 | 85 | Live monitoring | `flow_send.py` network-bound output capture; `film.py generate` payload + intent receipt written before any send, take registered after (live path untested until P3-05) | PARTIAL | P3-05 |
 | 86 | Production sound | AI-generated sound; no separate capture. N/A | N/A | - |
-| 87 | Data management | Take log hashes + `<gid>_t<N>` ids; no archive/restore yet | PARTIAL | P6-03 |
+| 87 | Data management | `film.py deliver` archive with MANIFEST (size + sha256 per file, take dependencies by hash) and `film.py status --package` restore check; take clips are not archived | HAVE | - |
 | 88 | Dailies review | `film.py review`: template per new take (shot questions + 16-group QC) and `--ingest` bound to the take's hash | HAVE | - |
 | 89 | Pickup / reshoot | `production/retake.py`: cause-based RETRY / CHANGE_APPROACH / ESCALATE per generation; `film.py retake --pickup` writes shot version N+1 with `repair_of` + history | HAVE | - |
 | 90 | Safety management | N/A for AI generation | N/A | - |
@@ -190,9 +190,9 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 148 | Encoding | H.264/AAC 16:9 master and 9:16 version (`versions`, 720x1280, sound copied), faststart | HAVE | - |
 | 149 | Versioning | `versions`: 16:9 master + 9:16 reframe (focus from tags / reframe boxes, cards fitted); language versions are sidecar SRTs only | PARTIAL | - |
 | 150 | Localization | EN/VI subtitle sidecars | PARTIAL | P5-04 |
-| 151 | Packaging | `versions`: thumbnail candidates from emphasis moments + metadata draft; archive package is P6-03 | PARTIAL | P6-03 |
+| 151 | Packaging | `delivery/`: marked masters, sidecars, thumbnails, metadata, QC, rights, package JSON, MANIFEST | HAVE | - |
 | 152 | Metadata | `versions/metadata.json`: title (source/vi), logline description, tags, AI disclosure, credits, hashes; DRAFT_NOT_PUBLISHED | HAVE | - |
-| 153 | Platform compliance | `disclosure.check_release` AI label rules | PARTIAL | P6-03 |
+| 153 | Platform compliance | `deliver` runs `disclosure.check_release` on both masters (tags, hash-bound record, visible AI label burned in the opening title); C2PA only with a supplied cert (dev signer is untrusted); platform-specific rules are the Owner's at upload | PARTIAL | - |
 | 154 | Publishing | Publishing prohibited unless Owner asks | N/A | - |
 | 155 | Analytics | Post-release; out of scope until a film is published | N/A | - |
 | 156 | Archive | `delivery.finalize/verify`; no restore rehearsal | PARTIAL | P6-03 |

@@ -77,7 +77,9 @@ def main(argv: list[str] | None = None) -> int:
     for name, text in (("validate", "evaluate gates; exit 1 if any gate BLOCKs"),
                        ("status", "stages present, gates, counts")):
         sub = actions.add_parser(name, help=text)
-        sub.add_argument("--film", required=True, type=Path)
+        sub.add_argument("--film", required=name != "status", type=Path)
+        if name == "status":
+            sub.add_argument("--package", type=Path, help="restore check of a delivery/ archive, wherever it was copied to: every hash, the package, the disclosure, missing dependencies")
     plan = actions.add_parser("plan", help="write prompts, start-frame still prompts, storyboard and gate3.json")
     plan.add_argument("--film", required=True, type=Path)
     plan.add_argument("--out", required=True, type=Path)
@@ -156,6 +158,13 @@ def main(argv: list[str] | None = None) -> int:
     vs.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
     vs.add_argument("--portrait-source", type=Path, help="clean cut (no burned-in cues) with the master's clock and sound, cropped instead of the master")
     vs.add_argument("--generators", default="", help="generator line of the AI disclosure, e.g. 'Google Flow Omni 1.1 Flash'")
+    dv = actions.add_parser("deliver", help="delivery archive: marked masters (AI disclosure, optional C2PA), sidecars, thumbnails, metadata, QC, rights, package JSON, MANIFEST with hashes -> delivery/")
+    dv.add_argument("--film", required=True, type=Path)
+    dv.add_argument("--video", type=Path, help="the 16:9 master (default <film>/media/cut/mixed.mp4)")
+    dv.add_argument("--cut-report", type=Path, help="the .cut.json of the master (default: next to the video, else media/cut/rough_cut.cut.json)")
+    dv.add_argument("--generators", default="", help="generator line of the disclosure, e.g. 'Google Flow Omni 1.1 Flash' (';' between several)")
+    dv.add_argument("--c2pa-cert", type=Path, help="PEM certificate chain for C2PA signing (with --c2pa-key)")
+    dv.add_argument("--c2pa-key", type=Path, help="PEM private key for C2PA signing")
     lk = actions.add_parser("lock", help="picture lock: status and dirty post/delivery items; --lock freezes the cut")
     lk.add_argument("--film", required=True, type=Path)
     lk.add_argument("--lock", action="store_true", help="freeze the cut (every take accepted, no BLOCK at a cut)")
@@ -210,6 +219,14 @@ def main(argv: list[str] | None = None) -> int:
             reports = [verdict_report(t) for t in takes]
             _emit({"ok": all(r["status"] == "ACCEPTED" for r in reports), "takes": reports})
             return 0 if all(r["status"] != "REJECTED" for r in reports) else 1
+        if args.action == "status" and args.package:
+            from film_pipeline.production import deliver as dl_mod
+            report = dl_mod.verify_archive(args.package)
+            _emit(report)
+            return 0 if report["ok"] else 1
+        if args.action == "status" and not args.film:
+            _emit({"error": "status needs --film DIR or --package DIR"})
+            return 2
         if args.action == "new":
             target = scaffold(args.film_id, args.profile, args.root, args.title)
             _emit({"created": str(target), "profile": args.profile})
@@ -341,6 +358,28 @@ def main(argv: list[str] | None = None) -> int:
                    "checks": {c.group: c.result for c in record.checks},
                    "findings": [f.model_dump(mode="json") for f in record.findings]})
             return 0 if record.ok else 1
+        if args.action == "deliver":
+            from film_pipeline.production import deliver as dl_mod
+            video = args.video or pkg.root / "media" / "cut" / "mixed.mp4"
+            if not video.is_file():
+                _emit({"error": f"{video} not found (render and mix the cut first)"})
+                return 2
+            report_path = args.cut_report or next((p for p in (video.with_suffix(".cut.json"), pkg.root / "media" / "cut" / "rough_cut.cut.json")
+                                                   if p.is_file()), None)
+            if report_path is None:
+                _emit({"error": "deliver needs the .cut.json of the master (--cut-report)"})
+                return 2
+            if bool(args.c2pa_cert) != bool(args.c2pa_key):
+                _emit({"error": "--c2pa-cert and --c2pa-key go together"})
+                return 2
+            try:
+                report = dl_mod.deliver(pkg, video, report_path, generators=args.generators,
+                                        c2pa=(args.c2pa_cert, args.c2pa_key) if args.c2pa_cert else None)
+            except (ValueError, KeyError) as exc:
+                _emit({"error": str(exc)})
+                return 1
+            _emit(report)
+            return 0 if report["ok"] else 1
         if args.action == "versions":
             from film_pipeline.production import versions as vs_mod
             from film_pipeline.production.mix import stamp_post_item
