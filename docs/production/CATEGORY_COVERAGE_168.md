@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 22 · PARTIAL 86 · GAP 34 · N/A 26 · total 168
+**Summary:** HAVE 22 · PARTIAL 88 · GAP 32 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -55,14 +55,14 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | ID | Category | Responsibility (code path / package field / operator receipt / N/A) | Status | Backlog |
 |---|---|---|---|---|
 | 35 | Casting | `drama/bible.py` approved reference images (CharacterBrief) | PARTIAL | P2-01 |
-| 36 | Character design | `drama/bible.py` CharacterLook + reference binding per generation | PARTIAL | P2-01 |
+| 36 | Character design | `CharacterLook` + versioned `designs` (look) pinned by shots as `id@version`; stale pin = package issue | PARTIAL | P2-01 |
 | 37 | Location scouting | `scene_bible.LocationLook` text + `approved` flag; no image identity or hash | PARTIAL | P2-01 |
 | 38 | Production design | `scene_bible` location look; no set geometry/palette record | PARTIAL | P2-03 |
 | 39 | Set design | `scene_bible` location look; no set geometry/palette record | PARTIAL | P2-03 |
 | 40 | Set dressing | `scene_bible`/`continuity` prop positions; no version or ownership | PARTIAL | P2-02 |
 | 41 | Props | `scene_bible`/`continuity` prop positions; no version or ownership | PARTIAL | P2-02 |
-| 42 | Costume design | `CharacterLook.text` wardrobe/hair; no version or story-day state | PARTIAL | P2-01 |
-| 43 | Hair & makeup | `CharacterLook.text` wardrobe/hair; no version or story-day state | PARTIAL | P2-01 |
+| 42 | Costume design | `designs` kind costume with version; shots pin it; no story-day wardrobe state yet | PARTIAL | P2-01 |
+| 43 | Hair & makeup | `designs` kind hair_makeup with version; shots pin it; no story-day state yet | PARTIAL | P2-01 |
 | 44 | Cinematography planning | No camera/lighting plan beyond `scene_bible.lighting` string | GAP | P2-03 |
 | 45 | Lighting design | No camera/lighting plan beyond `scene_bible.lighting` string | GAP | P2-03 |
 | 46 | Storyboarding | `drama/storyboard.py` schematic board + Gate 2 | HAVE | - |
@@ -205,9 +205,9 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 158 | Resource management | Operating docs + this backlog; no per-film tracker | PARTIAL | P7-01 |
 | 159 | Asset management | `ReferenceUploadStore`, runtime assets, hashes; no unified asset index | PARTIAL | P2-01 |
 | 160 | Cost management | `drama/kpi.FilmKPI` credits per usable second | HAVE | - |
-| 161 | Version control | Git + hashes; no shot/asset version ids | PARTIAL | P2-01 |
-| 162 | Dependency management | No dependency/change-impact index | GAP | P2-01 |
-| 163 | Change management | No dependency/change-impact index | GAP | P2-01 |
+| 161 | Version control | `designs` versions + `design_refs` pins; takes/stills keep hashes; no version id for shots or assets | PARTIAL | P2-01 |
+| 162 | Dependency management | `production/impact.py` `affected_by`: shots, stills, takes (+handoff cascade), edit/post items for one design; design dependencies only | PARTIAL | P2-01 |
+| 163 | Change management | Stale-pin issues + `film.py impact` list what to redo; no approval/ledger workflow for a change | PARTIAL | P2-01 |
 | 164 | Quality management | `qc` evidence + Owner gate; no P0/P1/P2 model | PARTIAL | P3-01 |
 | 165 | Risk management | No risk register | GAP | P2-05 |
 | 166 | Rights management | No rights ledger | GAP | P5-02 |

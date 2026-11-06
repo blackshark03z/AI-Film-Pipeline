@@ -7,7 +7,7 @@ Stages not listed here stay permissive dicts in `package.py` until their phase t
 from __future__ import annotations
 
 import re
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import Field, StringConstraints, model_validator
 
@@ -75,6 +75,25 @@ class StillTemplates(ContractModel):
     plate: str  # contains {text}
 
 
+DesignKind = Literal["look", "costume", "hair_makeup", "prop", "location"]
+_CHARACTER_KINDS = ("look", "costume", "hair_makeup")
+_PIN = re.compile(r"^([A-Za-z0-9][A-Za-z0-9_-]*)@([1-9][0-9]*)$")
+
+
+class DesignEntry(ContractModel):
+    """A versioned design decision. Shots pin `id@version`; bumping the version makes every dependent pin stale."""
+
+    kind: DesignKind
+    version: int = Field(ge=1)
+    owner: Ident | None = None  # character id (look/costume/hair_makeup) or location id (location)
+    prop: str = ""  # kind prop: the name used in continuity-state props, e.g. "the letter"
+    note: str = ""
+
+
+def _prop_key(name: str) -> str:
+    return name.strip().rstrip(":").strip().lower()
+
+
 class PreprodSection(ContractModel):
     """`03_preprod.json`."""
 
@@ -87,13 +106,21 @@ class PreprodSection(ContractModel):
     still_templates: StillTemplates
     # generation_id -> reason: prompts known to exceed preflight.max_prompt_words once the start prefix is added
     accepted_overlong: dict[str, str] = Field(default_factory=dict)
+    designs: dict[str, DesignEntry] = Field(default_factory=dict)  # design id -> versioned entry
 
     @model_validator(mode="after")
     def _references_resolve(self) -> "PreprodSection":
         for label, keys in (("characters", self.characters), ("locations", self.locations),
                             ("scenes", self.scenes), ("states", self.states),
-                            ("accepted_overlong", self.accepted_overlong)):
+                            ("accepted_overlong", self.accepted_overlong), ("designs", self.designs)):
             _bad_keys(label, keys)
+        for did, d in self.designs.items():
+            if d.kind in _CHARACTER_KINDS and d.owner not in self.characters:
+                raise ValueError(f"design {did}: {d.kind} needs a character owner (got {d.owner!r})")
+            if d.kind == "location" and d.owner not in self.locations:
+                raise ValueError(f"design {did}: location needs a location owner (got {d.owner!r})")
+            if d.kind == "prop" and not d.prop.strip():
+                raise ValueError(f"design {did}: prop needs the prop name used in continuity states")
         for sid, scene in self.scenes.items():
             if scene.location not in self.locations:
                 raise ValueError(f"scene {sid}: unknown location {scene.location!r}")
@@ -115,6 +142,8 @@ class ShotDecl(ContractModel):
     previous_generation_id: Ident | None = None  # None = no handoff (opening of a continuous chain)
     choreography: GenerationChoreography
     sfx: list[str] = Field(default_factory=list)
+    design_refs: list[Annotated[str, StringConstraints(pattern=_PIN.pattern)]] = Field(default_factory=list)
+    # `id@version` of the designs this shot was planned against (checked against 03_preprod.designs)
 
 
 class ShotsSection(ContractModel):
@@ -136,6 +165,21 @@ class ShotsSection(ContractModel):
         return self
 
 
+def shot_design_ids(pre: PreprodSection, decl: ShotDecl) -> list[str]:
+    """Design ids a shot depends on: owners in frame, its location, props named in its start/end states."""
+    people = {*decl.visible, *(c for c in (decl.subject, decl.foreground) if c)}
+    scene = pre.scenes.get(decl.scene_id)
+    props = {_prop_key(k) for name in (decl.start_state, decl.end_state) if name in pre.states
+             for k in pre.states[name].props}
+    found = []
+    for did, d in pre.designs.items():
+        if ((d.kind in _CHARACTER_KINDS and d.owner in people)
+                or (d.kind == "location" and scene is not None and scene.location == d.owner)
+                or (d.kind == "prop" and _prop_key(d.prop) in props)):
+            found.append(did)
+    return found
+
+
 def check_references(typed: dict) -> list[str]:
     """Cross-section references between 03_preprod and 04_shots; returns issue strings (empty = consistent)."""
     pre, shots = typed.get("preprod"), typed.get("shots")
@@ -152,6 +196,28 @@ def check_references(typed: dict) -> list[str]:
         for who in (*g.visible, *(c for c in (g.subject, g.foreground) if c)):
             if who not in pre.characters:
                 out.append(f"04_shots.json: {gid}: unknown character {who!r}")
+        if pre.designs:
+            out += _pin_issues(pre, g)
+    return out
+
+
+def _pin_issues(pre: PreprodSection, g: ShotDecl) -> list[str]:
+    out: list[str] = []
+    pins: dict[str, int] = {}
+    for ref in g.design_refs:
+        did, version = _PIN.match(ref).groups()
+        if did in pins:
+            out.append(f"04_shots.json: {g.generation_id}: design {did} pinned twice")
+        pins[did] = int(version)
+        if did not in pre.designs:
+            out.append(f"04_shots.json: {g.generation_id}: pins unknown design {did!r}")
+    for did in shot_design_ids(pre, g):
+        current = pre.designs[did].version
+        if did not in pins:
+            out.append(f"04_shots.json: {g.generation_id}: design {did} is not pinned (pin {did}@{current})")
+        elif pins[did] != current:
+            out.append(f"04_shots.json: {g.generation_id}: pinned {did}@{pins[did]} but current is "
+                       f"{did}@{current} (re-plan and re-render this shot)")
     return out
 
 

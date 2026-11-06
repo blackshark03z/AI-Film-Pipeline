@@ -56,6 +56,18 @@
       "sfx": [],
       "dialogue": [
         14
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "ORTIZ_look@1",
+        "ORTIZ_costume@1",
+        "NORA_hair@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -114,6 +126,16 @@
       "sfx": [],
       "dialogue": [
         19
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "NORA_hair@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -173,6 +195,16 @@
       ],
       "dialogue": [
         26
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "NORA_hair@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -234,6 +266,18 @@
       ],
       "dialogue": [
         31
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "ORTIZ_look@1",
+        "ORTIZ_costume@1",
+        "NORA_hair@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -290,6 +334,13 @@
       "sfx": [],
       "dialogue": [
         38
+      ],
+      "design_refs": [
+        "ORTIZ_look@1",
+        "ORTIZ_costume@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -348,6 +399,18 @@
       "sfx": [],
       "dialogue": [
         43
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "ORTIZ_look@1",
+        "ORTIZ_costume@1",
+        "NORA_hair@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -404,6 +467,14 @@
       "sfx": [],
       "dialogue": [
         50
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "NORA_hair@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -463,6 +534,18 @@
       ],
       "dialogue": [
         55
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "ORTIZ_look@1",
+        "ORTIZ_costume@1",
+        "NORA_hair@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -521,6 +604,13 @@
       ],
       "dialogue": [
         62
+      ],
+      "design_refs": [
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -577,6 +667,13 @@
       "sfx": [],
       "dialogue": [
         67
+      ],
+      "design_refs": [
+        "ORTIZ_look@1",
+        "ORTIZ_costume@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -633,6 +730,14 @@
       "sfx": [],
       "dialogue": [
         74
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "NORA_hair@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -689,6 +794,13 @@
       "sfx": [],
       "dialogue": [
         79
+      ],
+      "design_refs": [
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "loc_lobby_morning@1",
+        "prop_letter@1",
+        "prop_desk_phone@1"
       ]
     },
     {
@@ -747,6 +859,16 @@
       "sfx": [],
       "dialogue": [
         88
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "ORTIZ_look@1",
+        "ORTIZ_costume@1",
+        "NORA_hair@1",
+        "loc_briefing_morning@1"
       ]
     },
     {
@@ -803,6 +925,12 @@
       "sfx": [],
       "dialogue": [
         93
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "NORA_hair@1",
+        "loc_briefing_morning@1"
       ]
     },
     {
@@ -859,6 +987,11 @@
       "sfx": [],
       "dialogue": [
         100
+      ],
+      "design_refs": [
+        "ORTIZ_look@1",
+        "ORTIZ_costume@1",
+        "loc_briefing_morning@1"
       ]
     },
     {
@@ -917,6 +1050,16 @@
       "sfx": [],
       "dialogue": [
         105
+      ],
+      "design_refs": [
+        "NORA_look@1",
+        "NORA_costume@1",
+        "KESSLER_look@1",
+        "KESSLER_costume@1",
+        "ORTIZ_look@1",
+        "ORTIZ_costume@1",
+        "NORA_hair@1",
+        "loc_briefing_morning@1"
       ]
     }
   ]

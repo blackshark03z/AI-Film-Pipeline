@@ -85,6 +85,9 @@ def main(argv: list[str] | None = None) -> int:
     plan.add_argument("--no-storyboard", action="store_true")
     plan.add_argument("--approve-storyboard", metavar="REVIEWER",
                       help="mark every rendered storyboard frame APPROVED by this reviewer (explicit; default PENDING)")
+    imp = actions.add_parser("impact", help="what to redo when a versioned design changes")
+    imp.add_argument("--film", required=True, type=Path)
+    imp.add_argument("--design", required=True)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
     narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
     narr.add_argument("--project", type=Path, help="E2E project directory (import)")
@@ -108,6 +111,14 @@ def main(argv: list[str] | None = None) -> int:
             _emit({"created": str(target), "profile": args.profile})
             return 0
         pkg = load_package(args.film)
+        if args.action == "impact":
+            from film_pipeline.production.impact import affected_by
+            try:
+                _emit(affected_by(pkg, args.design).model_dump(mode="json"))
+            except ValueError as exc:
+                _emit({"error": str(exc)})
+                return 2
+            return 0
         if args.action == "plan":
             result = plan_package(pkg, args.out, takes_dir=args.takes, storyboard=not args.no_storyboard,
                                   approve_storyboard=args.approve_storyboard)

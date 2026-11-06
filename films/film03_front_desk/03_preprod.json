@@ -827,5 +827,69 @@
     "SC02_g2": "emitted prompt (with the start prefix) exceeds preflight.max_prompt_words; shipped in film03 TECHNICAL PASS, bytes frozen, Owner review pending",
     "SC03_g2": "emitted prompt (with the start prefix) exceeds preflight.max_prompt_words; shipped in film03 TECHNICAL PASS, bytes frozen, Owner review pending",
     "SC04_g2": "emitted prompt (with the start prefix) exceeds preflight.max_prompt_words; shipped in film03 TECHNICAL PASS, bytes frozen, Owner review pending"
+  },
+  "designs": {
+    "NORA_look": {
+      "kind": "look",
+      "version": 1,
+      "owner": "NORA",
+      "note": "locked CharacterLook text"
+    },
+    "NORA_costume": {
+      "kind": "costume",
+      "version": 1,
+      "owner": "NORA",
+      "note": "navy wool coat over a grey turtleneck"
+    },
+    "KESSLER_look": {
+      "kind": "look",
+      "version": 1,
+      "owner": "KESSLER",
+      "note": "locked CharacterLook text"
+    },
+    "KESSLER_costume": {
+      "kind": "costume",
+      "version": 1,
+      "owner": "KESSLER",
+      "note": "navy police uniform shirt"
+    },
+    "ORTIZ_look": {
+      "kind": "look",
+      "version": 1,
+      "owner": "ORTIZ",
+      "note": "locked CharacterLook text"
+    },
+    "ORTIZ_costume": {
+      "kind": "costume",
+      "version": 1,
+      "owner": "ORTIZ",
+      "note": "navy police uniform shirt"
+    },
+    "NORA_hair": {
+      "kind": "hair_makeup",
+      "version": 1,
+      "owner": "NORA",
+      "note": "short natural hair"
+    },
+    "loc_lobby_morning": {
+      "kind": "location",
+      "version": 1,
+      "owner": "lobby_morning"
+    },
+    "loc_briefing_morning": {
+      "kind": "location",
+      "version": 1,
+      "owner": "briefing_morning"
+    },
+    "prop_letter": {
+      "kind": "prop",
+      "version": 1,
+      "prop": "the letter"
+    },
+    "prop_desk_phone": {
+      "kind": "prop",
+      "version": 1,
+      "prop": "the desk phone"
+    }
   }
 }
