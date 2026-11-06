@@ -83,11 +83,14 @@ class PreprodSection(ContractModel):
     scenes: dict[str, SceneSpec]
     states: dict[str, ContinuityState]  # key = state id (e.g. SC02_g1, SC02_end)
     still_templates: StillTemplates
+    # generation_id -> reason: prompts known to exceed preflight.max_prompt_words once the start prefix is added
+    accepted_overlong: dict[str, str] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def _references_resolve(self) -> "PreprodSection":
         for label, keys in (("characters", self.characters), ("locations", self.locations),
-                            ("scenes", self.scenes), ("states", self.states)):
+                            ("scenes", self.scenes), ("states", self.states),
+                            ("accepted_overlong", self.accepted_overlong)):
             _bad_keys(label, keys)
         for sid, scene in self.scenes.items():
             if scene.location not in self.locations:
@@ -104,6 +107,7 @@ class ShotDecl(ContractModel):
     subject: str = ""
     foreground: str = ""
     visible: list[str]
+    dialogue: list[int]  # script line numbers of the dialogue spoken in this shot; [] = silent
     start_state: Ident
     end_state: Ident  # state the next generation starts from
     previous_generation_id: Ident | None = None  # None = no handoff (opening of a continuous chain)

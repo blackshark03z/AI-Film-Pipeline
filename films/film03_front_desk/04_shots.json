@@ -53,7 +53,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        14
+      ]
     },
     {
       "generation_id": "SC01_g2",
@@ -108,7 +111,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        19
+      ]
     },
     {
       "generation_id": "SC02_g1",
@@ -164,6 +170,9 @@
       },
       "sfx": [
         "paper unfolding"
+      ],
+      "dialogue": [
+        26
       ]
     },
     {
@@ -222,6 +231,9 @@
       },
       "sfx": [
         "paper crumpling"
+      ],
+      "dialogue": [
+        31
       ]
     },
     {
@@ -275,7 +287,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        38
+      ]
     },
     {
       "generation_id": "SC03_g2",
@@ -330,7 +345,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        43
+      ]
     },
     {
       "generation_id": "SC04_g1",
@@ -383,7 +401,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        50
+      ]
     },
     {
       "generation_id": "SC04_g2",
@@ -439,6 +460,9 @@
       },
       "sfx": [
         "paper being smoothed"
+      ],
+      "dialogue": [
+        55
       ]
     },
     {
@@ -494,6 +518,9 @@
       },
       "sfx": [
         "desk phone ringing"
+      ],
+      "dialogue": [
+        62
       ]
     },
     {
@@ -547,7 +574,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        67
+      ]
     },
     {
       "generation_id": "SC06_g1",
@@ -600,7 +630,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        74
+      ]
     },
     {
       "generation_id": "SC06_g2",
@@ -653,7 +686,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        79
+      ]
     },
     {
       "generation_id": "SC07_g1",
@@ -708,7 +744,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        88
+      ]
     },
     {
       "generation_id": "SC07_g2",
@@ -761,7 +800,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        93
+      ]
     },
     {
       "generation_id": "SC08_g1",
@@ -814,7 +856,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        100
+      ]
     },
     {
       "generation_id": "SC08_g2",
@@ -869,7 +914,10 @@
           }
         ]
       },
-      "sfx": []
+      "sfx": [],
+      "dialogue": [
+        105
+      ]
     }
   ]
 }

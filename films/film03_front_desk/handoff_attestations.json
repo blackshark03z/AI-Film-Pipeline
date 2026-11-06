@@ -1,0 +1,22 @@
+{
+  "basis": "Legacy film03 process (tools/drama_film03.py): a take kept in takes/ was checked by eye, end state included. Pinned to the sha256 of each kept take; no new review was performed when this record was written.",
+  "attested_by": "Tech Lead (Owner-delegated), legacy film03 process",
+  "takes": {
+    "SC01_g1": "78cd9745230606b026f141188fac1f2646d7d4abc41db0f955dd2f0e5dfd70f2",
+    "SC01_g2": "334dd8111a79da4804c53481f21d32ca138c092503fdac57667ab392ac90758a",
+    "SC02_g1": "107e1f8494b8eeda2f59f3cf620facc8806f5d6f7486e001f60bade8dc1cdae8",
+    "SC02_g2": "9e92f049bbbc3f4f10d69e0b75e7088d9702ca4ffc8059a52e98d21319ae5c1b",
+    "SC03_g1": "78e0ea21b85c5b98f18677b74c202b8bbc1e23d566828bdc006409a97b60b4f4",
+    "SC03_g2": "938937cdab9869d38d78d0715fd3616c6544a924db1a448794a54c5586b07af9",
+    "SC04_g1": "18bbadcc2dd2df8c0ba297d084b3e2617cef772fcbd6214d1bf0f7aa5302ae24",
+    "SC04_g2": "5203788394caa6725ebddc49af15f91b1d35504406e9526dcee791164e6abe95",
+    "SC05_g1": "e9002f1c798cdd170e266d405792eb4b10ea830df78a97642c2d4b523bf99fe6",
+    "SC05_g2": "8afabaad17f7bdfd1677766acab8420af46755985ed11959145ace62052f569e",
+    "SC06_g1": "53b0505f2de32dad82b31ad8ae144849ce3473d83b36d1e15a9e15a3235d493c",
+    "SC06_g2": "364100cfbc915edd95aa9db163e576b1e470be6f00d287ed10de3860b21a1466",
+    "SC07_g1": "7952af44e2be20c7129be77a36d2c6f781572e1b258b2a9ef0826291e4e746eb",
+    "SC07_g2": "761b6f98c8de6396a3251b6636736bfda604f313bcb869d909ca2539c38e128b",
+    "SC08_g1": "e1b82afb1c50e65fd5e4b6b6abf206d5f3f0c5bcb8aec8e5cd87e3be8780f1c9",
+    "SC08_g2": "37d57427e45153fa4a254b3de75f8278e92efddbbca5b2986304754040f78beb"
+  }
+}

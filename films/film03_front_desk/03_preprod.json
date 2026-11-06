@@ -821,5 +821,11 @@
     },
     "character": "Photoreal character reference portrait, 16:9, plain warm grey studio backdrop, head and shoulders, front view, neutral expression, soft even light: {text}. No text, no logos.",
     "plate": "Photoreal empty set plate, 16:9, eye-level wide view, nobody in the room: {text}. No people, no text, no logos."
+  },
+  "accepted_overlong": {
+    "SC01_g1": "emitted prompt (with the start prefix) exceeds preflight.max_prompt_words; shipped in film03 TECHNICAL PASS, bytes frozen, Owner review pending",
+    "SC02_g2": "emitted prompt (with the start prefix) exceeds preflight.max_prompt_words; shipped in film03 TECHNICAL PASS, bytes frozen, Owner review pending",
+    "SC03_g2": "emitted prompt (with the start prefix) exceeds preflight.max_prompt_words; shipped in film03 TECHNICAL PASS, bytes frozen, Owner review pending",
+    "SC04_g2": "emitted prompt (with the start prefix) exceeds preflight.max_prompt_words; shipped in film03 TECHNICAL PASS, bytes frozen, Owner review pending"
   }
 }

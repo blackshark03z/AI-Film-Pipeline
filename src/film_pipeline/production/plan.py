@@ -17,6 +17,7 @@ from film_pipeline.drama.axis import axis_record
 from film_pipeline.drama.comprehension import check_comprehension, lint_script
 from film_pipeline.drama.coverage import _SIZE, CoverageShot, SceneUnit, SpokenLine
 from film_pipeline.drama.feasibility import check_script
+from film_pipeline.production.evidence import end_state_verified, load_attestations
 from film_pipeline.production.package import FilmPackage, PackageError
 from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection
 
@@ -26,7 +27,8 @@ START_PREFIX = "Starts on the given frame; same room, people and places. "
 
 
 class _Plan:
-    def __init__(self, pkg: FilmPackage, takes_dir: Path | None, reference_root: Path | None) -> None:
+    def __init__(self, pkg: FilmPackage, takes_dir: Path | None, reference_root: Path | None,
+                 attestations: Path | None = None) -> None:
         missing = [k for k in ("direction", "preprod", "shots") if k not in pkg.typed]
         if missing or pkg.script is None:
             raise PackageError(f"plan needs typed sections {missing or ''} and script.fountain")
@@ -44,6 +46,8 @@ class _Plan:
         self.gen_s = float(pkg.header.generation_s)
         self.by_id = {g.generation_id: g for g in self.shots.generations}
         self.takes_dir = takes_dir
+        self.attestations = load_attestations(attestations if attestations is not None
+                                              else pkg.root / "handoff_attestations.json")
         self.reference_root = reference_root or pkg.root / "refs"
         self.language = _LANGUAGE.get(pkg.header.language, pkg.header.language)
         self.video_looks = {n: c.look.model_copy(update={"text": c.video_text})
@@ -71,10 +75,10 @@ class _Plan:
         return " ".join(p.description for p in decl.choreography.phases if p.kind == "ACTION")
 
     def lines_for(self, decl: ShotDecl) -> list[SpokenLine]:
-        spoken = [SpokenLine(character=e.character, text=e.text, syllables=e.syllables, line_no=e.line_no)
-                  for e in self.scenes[decl.scene_id].elements if e.kind == "dialogue"]
-        k = self.gen_index[decl.generation_id]
-        return spoken[k - 1:k]
+        """Dialogue named by `decl.dialogue` (script line numbers), in the order listed."""
+        by_no = {e.line_no: e for e in self.scenes[decl.scene_id].elements if e.kind == "dialogue"}
+        return [SpokenLine(character=by_no[n].character, text=by_no[n].text, syllables=by_no[n].syllables,
+                           line_no=n) for n in decl.dialogue if n in by_no]
 
     def unit_for(self, decl: ShotDecl) -> SceneUnit:
         sid, k = decl.scene_id, self.gen_index[decl.generation_id]
@@ -90,7 +94,7 @@ class _Plan:
         if decl.previous_generation_id is None:
             return None
         prev = self.by_id[decl.previous_generation_id]
-        verified = bool(self.takes_dir and (self.takes_dir / f"{prev.generation_id}.mp4").is_file())
+        verified = end_state_verified(self.takes_dir, prev.generation_id, decl.generation_id, self.attestations)
         return GenerationHandoff(
             previous_generation_id=prev.generation_id, previous_action=self.action_text(prev),
             previous_start=self.state(prev.start_state),
@@ -138,16 +142,31 @@ class _Plan:
                 "expressions. No text, no logos.")
 
     def dialogue_problems(self) -> list[str]:
-        """Every scripted dialogue line must be spoken by some generation (generation k speaks the k-th line)."""
-        gens: dict[str, int] = {}
+        """Each scripted dialogue line is spoken by exactly one generation of its scene; references must exist."""
+        out: list[str] = []
+        used: dict[tuple[str, int], str] = {}
         for g in self.shots.generations:
-            gens[g.scene_id] = gens.get(g.scene_id, 0) + 1
-        out = []
+            scripted = {e.line_no for e in self.scenes[g.scene_id].elements if e.kind == "dialogue"}
+            for n in g.dialogue:
+                if n not in scripted:
+                    out.append(f"DIALOGUE_UNKNOWN {g.generation_id}: line {n} is not a dialogue line of {g.scene_id}")
+                elif (g.scene_id, n) in used:
+                    out.append(f"DIALOGUE_DUPLICATE {g.generation_id}: line {n} already spoken in {used[(g.scene_id, n)]}")
+                else:
+                    used[(g.scene_id, n)] = g.generation_id
         for sid, scene in self.scenes.items():
-            lines = sum(1 for e in scene.elements if e.kind == "dialogue")
-            if lines > gens.get(sid, 0):
-                out.append(f"DIALOGUE_UNASSIGNED {sid}: {lines} dialogue lines but {gens.get(sid, 0)} generations")
+            for e in scene.elements:
+                if e.kind == "dialogue" and (sid, e.line_no) not in used:
+                    out.append(f"DIALOGUE_UNASSIGNED {sid}: line {e.line_no} ({e.character}) is spoken in no generation")
         return out
+
+    def overlong_problems(self, record: dict[str, Any]) -> list[str]:
+        """Limit applies to the text actually written (start prefix included); exceptions must carry a reason."""
+        limit = self.pre.preflight.max_prompt_words
+        return [f"PROMPT_TOO_LONG {gid}: {v['words']} words > {limit} (emitted text); add a reason to "
+                "03_preprod.json accepted_overlong or shorten the shot"
+                for gid, v in record["generations"].items()
+                if v["words"] > limit and gid not in self.pre.accepted_overlong]
 
     def temporal(self) -> list[Any]:
         order = list(self.pre.scenes)
@@ -179,13 +198,14 @@ class PlanResult:
 
 def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | None = None,
                  reference_root: str | Path | None = None, storyboard: bool = True,
-                 approve_storyboard: str | None = None) -> PlanResult:
+                 approve_storyboard: str | None = None, attestations: str | Path | None = None) -> PlanResult:
     """Write all plan artefacts under `out`.
 
     Storyboard frames are rendered and registered PENDING. They count as reviewed only when the caller passes
     `approve_storyboard=<reviewer name>` — the plan never invents an approval.
     """
-    p = _Plan(pkg, Path(takes_dir) if takes_dir else None, Path(reference_root) if reference_root else None)
+    p = _Plan(pkg, Path(takes_dir) if takes_dir else None, Path(reference_root) if reference_root else None,
+              Path(attestations) if attestations else None)
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     feas = check_script(p.script, limits=p.pre.feasibility)
@@ -235,7 +255,7 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     problems = [f"{k.upper()} {i['check']}: {i['detail']}" for k in ("feasibility", "temporal", "comprehension")
                 for i in record[k] if i["severity"] == "BLOCK"]
     problems += [f"{g} preflight {v['verdict']}" for g, v in record["generations"].items() if v["verdict"] != "PASS"]
-    problems += p.dialogue_problems()
+    problems += p.dialogue_problems() + p.overlong_problems(record)
     if not p.shots.generations:
         problems.append("no generations in 04_shots.json")
     return PlanResult(record, problems)
