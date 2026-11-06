@@ -138,6 +138,11 @@ def main(argv: list[str] | None = None) -> int:
     lk.add_argument("--by", help="who locks the picture (required with --lock)")
     lk.add_argument("--reason", default="")
     lk.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
+    mx = actions.add_parser("mix", help="audio stems (dialogue, ambience, sfx, music), ducked mix, -14 LUFS / -1 dBTP master of a rendered cut")
+    mx.add_argument("--film", required=True, type=Path)
+    mx.add_argument("--cut", type=Path, help="rendered cut mp4 with its .cut.json (default <film>/media/cut/rough_cut.mp4)")
+    mx.add_argument("--out", type=Path, help="mixed mp4 (default <film>/media/cut/mixed.mp4)")
+    mx.add_argument("--stems", type=Path, help="stem directory (default <film>/audio/stems)")
     qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
     qcp.add_argument("--record", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
@@ -258,6 +263,23 @@ def main(argv: list[str] | None = None) -> int:
             dirty = lk_mod.dirty_items(pkg) if status["locked"] else {"dirty": [], "clean": []}
             _emit({"status": status, **dirty})
             return 0 if status["fresh"] and not dirty["dirty"] else 1
+        if args.action == "mix":
+            from film_pipeline.production import mix as mix_mod
+            section = pkg.typed.get("edit")
+            if section is None:
+                _emit({"error": "mix needs a valid 05_edit.json"})
+                return 2
+            cut_path = args.cut or pkg.root / "media" / "cut" / "rough_cut.mp4"
+            try:
+                report = mix_mod.mix_cut(pkg, section, cut_path, args.out or pkg.root / "media" / "cut" / "mixed.mp4",
+                                         stems_dir=args.stems)
+            except ValueError as exc:
+                _emit({"error": str(exc)})
+                return 1
+            mix_mod.stamp_post_item(pkg, "mix", {"output_sha256": report["output_sha256"], "cut_sha256": report["cut_sha256"],
+                                                 "report": "audio/mix.json", "ok": report["ok"]})
+            _emit(report)
+            return 0 if report["ok"] else 1
         if args.action == "cut":
             from film_pipeline.production import edit as ed_mod
             section = pkg.typed.get("edit")

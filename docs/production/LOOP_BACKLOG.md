@@ -175,7 +175,7 @@ Lock = hash of EDL + source take hashes. Any change after lock marks dependent p
 
 ## P5 — Sound & finishing (107–130)
 
-### P5-01 Audio stems + mix — READY (after P4-01)
+### P5-01 Audio stems + mix — DONE (pending hash)
 Separate stems: dialogue (from takes), ambience/room tone per location, SFX cues (from 04_shots `sfx`), music.
 Mix with ducking under dialogue, J/L crossfades, loudness target −14 LUFS / −1 dBTP (reuse
 `drama.post.normalize_loudness`, `measure_ebur128`). Sources: generated tones/noise beds offline, or CC0 libraries

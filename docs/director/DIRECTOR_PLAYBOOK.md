@@ -96,6 +96,14 @@ review, `film.py lock` lists the items to redo: everything at or after the first
 the clock), a title/end change affects every event. Relock after review; old locks stay in `lock/history/` so stamps from
 older cuts remain comparable. Gate 5 passes only while the lock is fresh.
 
+Mix rule of thumb (`production/mix.py`): render the cut first, then `film.py mix --film films/<id>` writes four
+stems to `audio/stems` (dialogue = the cut's own sound; ambience = a generated bed per scene from the location's
+`room_tone`; sfx; music from `audio/mix_plan.json`), ducks ambience + music under the dialogue, and masters the result to
+-14 LUFS / -1 dBTP (`media/cut/mixed.mp4`, report `audio/mix.json`). A shot's `sfx` text is placed only if
+`audio/sfx/<slug>.wav` exists (else `SFX_UNSOURCED`, the take's own sound stays); a music cue whose asset is missing blocks.
+The mix is recorded in `06_post.json` as item `mix` with `locked_against` = the fresh picture lock (empty, so UNSTAMPED,
+until the picture is locked). Rights of sfx/music assets are recorded in P5-02.
+
 Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
 ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly
 where the previous one ended (a scene cut only warns).
