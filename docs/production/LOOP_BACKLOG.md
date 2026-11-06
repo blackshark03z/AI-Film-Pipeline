@@ -185,7 +185,7 @@ recorded in the rights ledger (no untrusted downloads). Test with synthetic stem
 Rights ledger entries (source, license, hash, usage range). `validate` blocks delivery when any used asset lacks a
 cleared license. Music cue sheet from 02_direction emotional curve (where music starts/stops and why).
 
-### P5-03 Colour matching + grade — DONE (color.py, film.py grade / cut --color, render_cut corrections+look: scene reference, clamped gains, before/after report, 9 tests)
+### P5-03 Colour matching + grade — DONE (9a0ca25; color.py, film.py grade / cut --color, render_cut corrections+look: scene reference, clamped gains, before/after report, 9 tests)
 Per-shot normalisation (exposure/white balance from frame stats) toward the scene reference, then the global look
 grade (`drama.post.GRADE` as default). Report before/after deltas per shot. Test on synthetic coloured clips.
 
