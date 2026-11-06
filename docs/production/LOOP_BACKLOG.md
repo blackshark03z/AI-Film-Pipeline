@@ -199,7 +199,7 @@ cards (reuse `drama.post`); reframe/stabilise options per event (crop box) for 9
 Black frames, freeze frames, duplicated frames, fps/codec/resolution, audio clipping/silence gaps, subtitle sync
 offsets, loudness compliance (ffmpeg blackdetect/freezedetect/silencedetect/ebur128). Record in QC model level CUT.
 
-### P6-02 Versions, metadata, packaging — DONE (versions.py, film.py versions: 9:16 crop by tag/reframe focus, emphasis-moment thumbnails, metadata draft with AI disclosure, 10 tests)
+### P6-02 Versions, metadata, packaging — DONE 10c88a4 (versions.py, film.py versions: 9:16 crop by tag/reframe focus, emphasis-moment thumbnails, metadata draft with AI disclosure, 10 tests)
 16:9 master + 9:16 reframe (crop boxes from P5-04, face-aware via `drama.tag_layout` detection when available),
 thumbnail candidates (frames from emphasis moments), metadata draft (title, description, tags, AI disclosure,
 credits). No publishing.
