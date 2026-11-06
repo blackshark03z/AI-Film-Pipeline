@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 14 · PARTIAL 79 · GAP 49 · N/A 26 · total 168
+**Summary:** HAVE 15 · PARTIAL 78 · GAP 49 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -19,7 +19,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 7 | Character arcs | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
 | 8 | Dramatic beats | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
 | 9 | Scene design | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
-| 10 | Screenplay | `drama/script.py` Fountain intake (Vietnamese-first); version/approval not tracked | PARTIAL | P0-02 |
+| 10 | Screenplay | `drama/script.py` Fountain intake; `production.load_package` parses `script.fountain`; version/approval tracked by Gate 1 (P1-01) | PARTIAL | P1-01 |
 | 11 | Dialogue | `drama/coverage.SpokenLine` + `feasibility` syllable limits | HAVE | - |
 | 12 | Rewrite | `drama.script` scene/character parse only; no structure/arc/beat model | GAP | P1-01 |
 | 13 | Script breakdown | `drama/feasibility.py` + `scene_bible` occupancy; heuristic breakdown | PARTIAL | P2-05 |
@@ -71,7 +71,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 49 | Shot planning | `generation.py` split into 8 s units + `coverage` shot list | PARTIAL | P2-05 |
 | 50 | Continuity planning | `drama/continuity.py` + `sequence.validate_shot_sequence` | PARTIAL | P2-02 |
 | 51 | Sound planning | Prompt carries room tone/SFX strings (`prompt.py`); no sound plan | PARTIAL | P5-01 |
-| 52 | Technical planning | `PreflightLimits`, 1280x720/24 fps fixed in post; no spec record | PARTIAL | P0-02 |
+| 52 | Technical planning | `production/package.FilmHeader` (aspect, fps, resolution, generation_s) + `PreflightLimits` | HAVE | - |
 | 53 | Production scheduling | No schedule/order record | GAP | P2-05 |
 | 54 | Budgeting | `drama/kpi.py` actuals only; no estimate | PARTIAL | P2-05 |
 | 55 | Risk & safety | Moderation notes in memory only; no risk record | GAP | P2-05 |

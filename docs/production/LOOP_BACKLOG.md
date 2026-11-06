@@ -19,7 +19,7 @@ its B01–B08 = modules now on this branch) and from `src/film_pipeline/drama/*`
 `rough_cut.py`, `delivery.py`, `qc.py`. Map every GAP to a backlog item ID below (or add a new item at the end).
 Done: 168 rows, no row without status, summary counts at top. Docs only, no tests.
 
-### P0-02 Production package schema + loader — READY
+### P0-02 Production package schema + loader — IN_PROGRESS
 New package `src/film_pipeline/production/` with `package.py`: pydantic models for `film.json` (film_id, title,
 profile `drama|narration`, language, aspect, fps, resolution, generation_s=8, budget {credits_estimate, cap_factor=1.5},
 gates {1..6: PASS|BLOCK|OWNER_PENDING|NOT_RUN}), and **stage files as optional sections** `01_story.json` …
