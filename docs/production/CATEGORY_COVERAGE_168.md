@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 31 · PARTIAL 89 · GAP 22 · N/A 26 · total 168
+**Summary:** HAVE 32 · PARTIAL 88 · GAP 22 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -74,7 +74,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 52 | Technical planning | `production/package.FilmHeader` records aspect/fps/resolution/generation_s; `plan` supports 16:9 only (refuses others) + `PreflightLimits` | PARTIAL | P6-02 |
 | 53 | Production scheduling | `production/planning.py` schedule: hand-off chains, waves, stills before videos (`film.py planning`) | HAVE | - |
 | 54 | Budgeting | `planning.budget`: generations x 12 credits x retake factor from the film01-03 KPI ledgers; Owner estimate checked against it, shown by `validate` | HAVE | - |
-| 55 | Risk & safety | `planning.risks`: CONTACT/HANDOVER HIGH need a fallback plan (BLOCK), prop/crowd/depth reported; no provider-moderation risk model | PARTIAL | P3-03 |
+| 55 | Risk & safety | `planning.risks`: CONTACT/HANDOVER HIGH need a fallback plan (BLOCK), prop/crowd/depth reported; failures feed `retake` (PROVIDER_LIMIT cause); no provider-moderation risk model | PARTIAL | P7-01 |
 | 56 | Legal clearance | `03_preprod.rights` ledger, unresolved entries listed as Owner decisions; final compliance check is P6 | PARTIAL | P6-02 |
 
 ## IV. Production
@@ -113,7 +113,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 86 | Production sound | AI-generated sound; no separate capture. N/A | N/A | - |
 | 87 | Data management | Take log hashes + `<gid>_t<N>` ids; no archive/restore yet | PARTIAL | P6-02 |
 | 88 | Dailies review | `film.py review`: template per new take (shot questions + 16-group QC) and `--ingest` bound to the take's hash | HAVE | - |
-| 89 | Pickup / reshoot | No pickup plan; repair path exists in `e2e` runtime only | PARTIAL | P3-03 |
+| 89 | Pickup / reshoot | `production/retake.py`: cause-based RETRY / CHANGE_APPROACH / ESCALATE per generation; `film.py retake --pickup` writes shot version N+1 with `repair_of` + history | HAVE | - |
 | 90 | Safety management | N/A for AI generation | N/A | - |
 
 ## V. Post-production
@@ -169,7 +169,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 132 | Coverage QC | `CoveragePlanner` plan-level only | PARTIAL | P1-02 |
 | 133 | Character QC | `autoqc` identity WARN-only; dailies pre-fill WARNs but need anchors (not wired); human PASS in `qc_model` | PARTIAL | P6-01 |
 | 134 | Spatial QC | `autoqc` SET_DRIFT as a dailies WARN; start/end-state questions per take; `AxisBook` | PARTIAL | P6-01 |
-| 135 | Action QC | Dailies questions generated from every choreography phase/once-action; human FULL_MOTION review only | PARTIAL | P3-03 |
+| 135 | Action QC | Dailies questions generated from every choreography phase/once-action; human FULL_MOTION review only; rejected action takes route to `retake` | PARTIAL | P6-01 |
 | 136 | Motion QC | `qc_model` motion group: human FULL_MOTION review only, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
 | 137 | Camera QC | `autoqc.shot_scale` WARN against the planned size in dailies | PARTIAL | P6-01 |
 | 138 | Visual QC | `qc_model` visual group: human SAMPLED review, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
@@ -209,7 +209,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 162 | Dependency management | `production/impact.py` `affected_by`: shots, stills, takes (+handoff cascade), edit/post items for one design; design dependencies only | PARTIAL | P2-01 |
 | 163 | Change management | Stale-pin issues + `film.py impact` list what to redo; no approval/ledger workflow for a change | PARTIAL | P2-01 |
 | 164 | Quality management | `qc_model` P0/P1/P2 take verdicts + waivers (`film.py qc`); Owner gate | PARTIAL | P3-02 |
-| 165 | Risk management | `planning.risks` register at plan level; no mitigation tracking over the run | PARTIAL | P3-03 |
+| 165 | Risk management | `planning.risks` register + `retake` credits-spent / escalation per shot; no run-wide mitigation log | PARTIAL | P7-01 |
 | 166 | Rights management | No rights ledger | GAP | P5-02 |
 | 167 | Data integrity | SHA-256 in manifests; `delivery.verify` | HAVE | - |
 | 168 | Production reporting | KPI ledger, `e2e status`; no cross-film report | PARTIAL | P7-01 |

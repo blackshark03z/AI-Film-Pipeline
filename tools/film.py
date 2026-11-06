@@ -113,6 +113,11 @@ def main(argv: list[str] | None = None) -> int:
     rv.add_argument("--film", required=True, type=Path)
     rv.add_argument("--ingest", type=Path, help="filled review sheet (or bare TakeQc) JSON")
     rv.add_argument("--clips", type=Path, help="directory holding the take mp4s (enables autoqc warnings)")
+    rt = actions.add_parser("retake", help="retake/pickup policy over the take log; --pickup GID starts a new shot version")
+    rt.add_argument("--film", required=True, type=Path)
+    rt.add_argument("--pickup", metavar="GENERATION_ID")
+    rt.add_argument("--reason")
+    rt.add_argument("--edits", type=Path, help="JSON object of ShotDecl fields to change in the new version")
     qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
     qcp.add_argument("--record", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
@@ -197,7 +202,9 @@ def main(argv: list[str] | None = None) -> int:
                     entry, created = tk_mod.register_take(
                         pkg.root, pkg.header.film_id, args.register, args.clip,
                         prompt_text=args.prompt.read_text(encoding="utf-8"), route=args.route, model=args.model,
-                        credits=args.credits, start_frame=args.start_frame, known_generations=known)
+                        credits=args.credits, start_frame=args.start_frame, known_generations=known,
+                        shot_version=next((g.version for g in pkg.typed["shots"].generations
+                                           if g.generation_id == args.register), 1) if "shots" in pkg.typed else 1)
                 except (ValueError, OSError) as exc:
                     _emit({"error": str(exc)})
                     return 2
@@ -206,6 +213,26 @@ def main(argv: list[str] | None = None) -> int:
             log = tk_mod.load_log(pkg.root, pkg.header.film_id)
             _emit({"film_id": log.film_id, "takes": [t.model_dump(mode="json") for t in log.takes]})
             return 0
+        if args.action == "retake":
+            from film_pipeline.production import retake as rt_mod
+            from film_pipeline.production import takes as tk_mod
+            if "shots" not in pkg.typed:
+                _emit({"error": "retake needs a valid 04_shots.json"})
+                return 2
+            if args.pickup:
+                if not (args.reason and args.edits):
+                    _emit({"error": "--pickup needs --reason and --edits"})
+                    return 2
+                try:
+                    _emit(rt_mod.apply_pickup(pkg.root, pkg.header.film_id, args.pickup, args.reason,
+                                              json.loads(args.edits.read_text(encoding="utf-8"))))
+                except ValueError as exc:
+                    _emit({"error": str(exc)})
+                    return 2
+                return 0
+            report = rt_mod.retake_report(tk_mod.load_log(pkg.root, pkg.header.film_id), pkg.typed["shots"])
+            _emit(report)
+            return 0 if report["ok"] else 1
         if args.action == "review":
             from film_pipeline.production import takes as tk_mod
             if args.ingest:

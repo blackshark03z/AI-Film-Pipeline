@@ -45,6 +45,8 @@ class TakeEntry(ContractModel):
     output_file: str = Field(min_length=1)
     output_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     status: TakeStatus = "GENERATED"
+    shot_version: int = Field(default=1, ge=1)  # ShotDecl.version the take was rendered from
+    cause: str = ""  # failure cause from the review of a REJECTED take (qc_model.Cause)
     registered_at: str = ""
     review_file: str = ""  # relative to the takes directory once a template or review exists
 
@@ -101,8 +103,8 @@ def save_log(film_root: Path, log: TakeLog) -> Path:
 
 
 def register_take(film_root: Path, film_id: str, generation_id: str, clip: Path, *, prompt_text: str, route: str,
-                  model: str, credits: float, start_frame: Path | None = None, known_generations: set[str] | None = None
-                  ) -> tuple[TakeEntry, bool]:
+                  model: str, credits: float, start_frame: Path | None = None, known_generations: set[str] | None = None,
+                  shot_version: int = 1) -> tuple[TakeEntry, bool]:
     """Add a rendered clip to the log. Returns (entry, created); the same bytes registered twice is not a new take."""
     if known_generations is not None and generation_id not in known_generations:
         raise ValueError(f"unknown generation {generation_id!r}")
@@ -124,7 +126,7 @@ def register_take(film_root: Path, film_id: str, generation_id: str, clip: Path,
         take_id=f"{generation_id}_t{len(log.for_generation(generation_id)) + 1}", generation_id=generation_id,
         prompt_sha256=sha256_text(prompt_text), start_frame_sha256=sha256_file(start_frame) if start_frame else "",
         route=route, model=model, credits=credits, output_file=clip.name, output_sha256=digest,
-        registered_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
+        shot_version=shot_version, registered_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     log.takes.append(entry)
     save_log(film_root, log)
     return entry, True
@@ -258,6 +260,7 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any]) -> dict
         raise ValueError(f"review is not bound to this take's bytes (expected output_sha256 {entry.output_sha256[:12]}…)")
     verdict = take.verdict()
     entry.status = _STATUS_OF[verdict.status]  # type: ignore[assignment]
+    entry.cause = take.cause or ""
     rel = f"reviews/{take.take_id}.qc.json"
     path = takes_dir(film_root) / rel
     path.parent.mkdir(parents=True, exist_ok=True)

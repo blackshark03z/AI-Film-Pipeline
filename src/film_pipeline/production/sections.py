@@ -150,18 +150,26 @@ class ShotDecl(ContractModel):
     design_refs: list[Annotated[str, StringConstraints(pattern=_PIN.pattern)]] = Field(default_factory=list)
     # `id@version` of the designs this shot was planned against (checked against 03_preprod.designs)
     camera: CameraSetup | None = None  # camera.py: size/angle/height/movement/lens (all shots or none)
+    version: int = Field(default=1, ge=1)  # retake.py: bumped when a pickup replaces this shot's design
+    repair_of: str = ""  # "<generation_id>@v<N>": the version this one replaces
+    repair_reason: str = ""
 
 
 class ShotsSection(ContractModel):
     """`04_shots.json` — generations in production order."""
 
     generations: list[ShotDecl]
+    history: list[ShotDecl] = Field(default_factory=list)  # superseded versions, kept verbatim (never rendered)
 
     @model_validator(mode="after")
     def _ids_unique_and_chained(self) -> "ShotsSection":
         ids = [g.generation_id for g in self.generations]
         if len(set(ids)) != len(ids):
             raise ValueError("duplicate generation_id")
+        current = {g.generation_id: g.version for g in self.generations}
+        for old in self.history:
+            if old.generation_id not in current or old.version >= current[old.generation_id]:
+                raise ValueError(f"history {old.generation_id}@v{old.version}: not older than the current version")
         for index, g in enumerate(self.generations):
             prev = g.previous_generation_id
             if prev is not None and (prev not in ids or ids.index(prev) >= index):

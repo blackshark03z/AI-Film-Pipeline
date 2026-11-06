@@ -144,7 +144,7 @@ narrative/action/motion/performance. Shot accepted iff no P0 FAIL and P1 FAILs e
 action_meaning, choreography timing, expected start/end state) and ingests a filled one. Integrate
 `drama.autoqc` as WARN evidence when models are available (skip cleanly when not).
 
-### P3-03 Retake / pickup policy — READY (after P3-02)
+### P3-03 Retake / pickup policy — IN_PROGRESS
 After a FAIL: classify cause (prompt, start frame, provider limit, staging). Same cause twice → propose change of
 approach (re-stage, split into two shots, insert/reaction coverage, different start frame) instead of retry;
 pickup list feeds back into 04_shots as new shot versions with `repair_of`. Tests on synthetic take logs.

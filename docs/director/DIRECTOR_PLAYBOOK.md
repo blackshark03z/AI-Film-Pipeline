@@ -47,6 +47,8 @@ python tools/film.py qc         --record <take_qc.json>   # validate a take QC r
 python tools/film.py takes      --film films/<film_id> --register <gid> --clip <mp4> --prompt <sent prompt.txt> --model <m> --credits <n> [--start-frame <png>]
 python tools/film.py review     --film films/<film_id> [--clips <dir>]    # dailies sheet per new take; autoqc WARNs when models exist
 python tools/film.py review     --film films/<film_id> --ingest <filled.json>   # sets the take ACCEPTED / REJECTED / INCOMPLETE
+python tools/film.py retake     --film films/<film_id>    # per-generation decision after rejections; exit 1 while pickups are open
+python tools/film.py retake     --film films/<film_id> --pickup <gid> --reason "<why>" --edits <changes.json>   # shot version N+1
 python tools/film.py plan     --film films/<film_id> --out <dir> --takes <takes_dir> --approve-storyboard "<reviewer>"
 ```
 
@@ -55,6 +57,12 @@ FULL_MOTION < CUT) and reviewer. An `auto:` tool can only WARN on content groups
 cannot pass them; a human PASS needs the group's minimum level (motion/action: the whole clip). Any P0 FAIL rejects the
 take for good; a P1 FAIL rejects until a human waives it with a written reason; an untouched group keeps the take
 INCOMPLETE, never accepted.
+
+Retake rule of thumb (`production/retake.py`): when you reject a take, name the cause in the review (`cause`: PROMPT,
+START_FRAME, PROVIDER_LIMIT, STAGING). The first failure gets the cheap fix for that cause; the same cause twice means
+change the shot (split it, re-stage it, cover with an insert/reaction, new start frame), not another identical render;
+three rejections in one version go to the Owner. A pickup replaces the shot in place as version N+1 (old version kept in
+`history`), so a later review of a new take counts from zero.
 
 Continuity rule of thumb: any prop, position or look that differs between a generation's start and end state needs an
 ACTION/CONSEQUENCE phase that names it ("she drops the letter in the bin"); a chained generation must start exactly

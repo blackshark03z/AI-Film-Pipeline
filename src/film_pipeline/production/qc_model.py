@@ -34,6 +34,7 @@ Result = Literal["PASS", "FAIL", "WARN", "UNASSESSED"]
 Severity = Literal["P0", "P1", "P2"]
 Level = Literal["STILL", "SAMPLED", "FULL_MOTION", "CUT"]
 Status = Literal["ACCEPTED", "REJECTED", "INCOMPLETE"]
+Cause = Literal["PROMPT", "START_FRAME", "PROVIDER_LIMIT", "STAGING"]  # what to change before trying again
 
 GROUP_NUMBERS: dict[str, int] = {g: 131 + i for i, g in enumerate((
     "narrative", "coverage", "character", "spatial", "action", "motion", "camera", "visual", "temporal", "sequence",
@@ -114,6 +115,8 @@ class TakeQc(ContractModel):
     take_id: str = Field(min_length=1)
     generation_id: str = Field(min_length=1)
     checks: list[GroupCheck] = Field(default_factory=list)
+    cause: Cause | None = None  # why a REJECTED take failed; retake.py decides the next move from it
+    cause_note: str = ""
 
     @model_validator(mode="after")
     def _one_check_per_group(self) -> "TakeQc":
@@ -121,6 +124,8 @@ class TakeQc(ContractModel):
         dup = sorted({g for g in seen if seen.count(g) > 1})
         if dup:
             raise ValueError(f"take {self.take_id}: more than one check for {dup}")
+        if self.cause is not None and self.verdict().status != "REJECTED":
+            raise ValueError(f"take {self.take_id}: a failure cause only belongs on a rejected take")
         return self
 
     def check(self, group: str) -> GroupCheck:
