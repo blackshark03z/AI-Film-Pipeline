@@ -120,7 +120,7 @@ Per scene: key light direction/quality/colour temp, practicals; per shot: size, 
 composition note. Check against axis book (camera side) and shot-size variety (no 3 identical sizes in a row unless
 declared). Compiled into prompts only where the route supports it (document which fields reach the prompt).
 
-### P2-04 Animatic — DONE (see git log)
+### P2-04 Animatic — DONE (20223f4)
 `film.py animatic`: storyboard frames (schematic or approved stills) timed to the planned durations with temp
 dialogue/narration audio when available (TTS optional, offline-only libs; otherwise silence + subtitles), FFmpeg mp4
 under `films/<id>/media/animatic.mp4`, plus timing report. Gate 3 input. 0 credits. Test with tiny fixtures.
