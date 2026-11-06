@@ -211,7 +211,7 @@ verifies every hash and reports missing dependencies.
 
 ## P7 — Management (157–168)
 
-### P7-01 Status report + ledgers — READY (after P6-03)
+### P7-01 Status report + ledgers — DONE (report.py, film.py status/status --all/ledger: gates, credits vs estimate, usable seconds, retake rate, open P0/P1, dirty items, rights blockers, next action; learnings observation vs replicated; 9 tests)
 `film.py status` covers: gates, stage completeness, credits spent vs estimate, usable seconds, retake rate, open
 P0/P1, dirty items, rights blockers, next action. `ledger.json` learnings (observation vs replicated) per film.
 

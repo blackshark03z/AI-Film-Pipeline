@@ -130,6 +130,15 @@ warning means a human checks that cue; real takes carry room tone, so expect to 
 text with no translation blocks that language. A reframe is a box in `titles/reframe.json` (`w == h`, fractions of the frame);
 under half the frame it warns about softness, and an event with identity tags warns that the face moves under the tag.
 
+Status rule of thumb (`production/report.py`, `film.py status`, `film.py status --all`, `film.py ledger`): `status --film` is the one
+question "where is this film and what is next". It lists the gates, the missing stages, credits spent against the estimate and
+the cap, usable seconds (accepted generations x generation length: a nominal figure, not the cut), credits per usable second,
+the retake rate and first-pass rate, open retake decisions, open P0 / P1 findings, dirty post items, rights blockers, the
+delivery state and a single `next_action`. A section that fails is named in `errors`, never dropped. `status --all films/` puts every
+package side by side. Record what a film taught in `ledger.json` (`film.py ledger --add "<text>" --ref <where to check>`): it stays an
+`observation` until another film shows it again (`--replicate L001 --from-film <id> --ref <where>`); the same film twice never
+promotes it.
+
 Delivery rule of thumb (`production/deliver.py`, `film.py deliver`, `film.py status --package`): after `mastercheck` and `versions`,
 `deliver --generators "<tool and model>"` builds `delivery/` (marked masters, sidecars, thumbnails, metadata, QC, rights, package
 JSON, `MANIFEST.json` with hashes). It refuses (nothing is written, an earlier `delivery/` stays) when the opening title card has no

@@ -79,6 +79,7 @@ def main(argv: list[str] | None = None) -> int:
         sub = actions.add_parser(name, help=text)
         sub.add_argument("--film", required=name != "status", type=Path)
         if name == "status":
+            sub.add_argument("--all", type=Path, metavar="FILMS_DIR", help="one row per package under FILMS_DIR: gates, credits, usable seconds, retake rate, next action")
             sub.add_argument("--package", type=Path, help="restore check of a delivery/ archive, wherever it was copied to: every hash, the package, the disclosure, missing dependencies")
     plan = actions.add_parser("plan", help="write prompts, start-frame still prompts, storyboard and gate3.json")
     plan.add_argument("--film", required=True, type=Path)
@@ -158,6 +159,13 @@ def main(argv: list[str] | None = None) -> int:
     vs.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
     vs.add_argument("--portrait-source", type=Path, help="clean cut (no burned-in cues) with the master's clock and sound, cropped instead of the master")
     vs.add_argument("--generators", default="", help="generator line of the AI disclosure, e.g. 'Google Flow Omni 1.1 Flash'")
+    lg = actions.add_parser("ledger", help="learnings ledger of a film (ledger.json): observation until a second film shows it again")
+    lg.add_argument("--film", required=True, type=Path)
+    lg.add_argument("--add", metavar="TEXT", help="record a learning (needs --ref)")
+    lg.add_argument("--area", default="", help="stage or category the learning is about")
+    lg.add_argument("--ref", help="where the evidence can be checked: a file, commit or take id")
+    lg.add_argument("--replicate", metavar="LEARNING_ID", help="add evidence from another film (needs --from-film and --ref)")
+    lg.add_argument("--from-film", help="film_id of the film that shows the learning again")
     dv = actions.add_parser("deliver", help="delivery archive: marked masters (AI disclosure, optional C2PA), sidecars, thumbnails, metadata, QC, rights, package JSON, MANIFEST with hashes -> delivery/")
     dv.add_argument("--film", required=True, type=Path)
     dv.add_argument("--video", type=Path, help="the 16:9 master (default <film>/media/cut/mixed.mp4)")
@@ -224,9 +232,31 @@ def main(argv: list[str] | None = None) -> int:
             report = dl_mod.verify_archive(args.package)
             _emit(report)
             return 0 if report["ok"] else 1
+        if args.action == "status" and args.all:
+            from film_pipeline.production import report as rp_mod
+            _emit({"films": rp_mod.all_films(args.all)})
+            return 0
         if args.action == "status" and not args.film:
-            _emit({"error": "status needs --film DIR or --package DIR"})
+            _emit({"error": "status needs --film DIR, --all FILMS_DIR or --package DIR"})
             return 2
+        if args.action == "ledger":
+            from film_pipeline.production import report as rp_mod
+            root = args.film
+            film_id = load_package(root).header.film_id
+            try:
+                if args.add:
+                    if not args.ref:
+                        raise ValueError("--add needs --ref (where the evidence can be checked)")
+                    rp_mod.add_learning(root, film_id, args.add, args.ref, area=args.area)
+                elif args.replicate:
+                    if not (args.from_film and args.ref):
+                        raise ValueError("--replicate needs --from-film (the film that shows it again) and --ref")
+                    rp_mod.add_evidence(root, args.replicate, args.from_film, args.ref)
+            except ValueError as exc:
+                _emit({"error": str(exc)})
+                return 1
+            _emit(rp_mod.ledger_view(root, film_id))
+            return 0
         if args.action == "new":
             target = scaffold(args.film_id, args.profile, args.root, args.title)
             _emit({"created": str(target), "profile": args.profile})
@@ -573,7 +603,11 @@ def main(argv: list[str] | None = None) -> int:
             report["blocked"] = report["blocked"] or bool(pkg.issues) or blocked_by_planning
             _emit(report)
             return 1 if report["blocked"] else 0
+        from film_pipeline.production.report import status_report
+        full = status_report(pkg)
         _emit({
+            "next_action": full["next_action"],
+            "report": full,
             "film_id": pkg.header.film_id,
             "profile": pkg.header.profile,
             "stages_present": sorted(pkg.stages),

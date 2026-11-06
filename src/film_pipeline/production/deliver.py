@@ -144,8 +144,8 @@ def rights_record(pkg: Any) -> tuple[dict[str, Any], list[dict[str, str]]]:
     from film_pipeline.production import sound_rights as sr
     pre = pkg.typed.get("preprod")
     entries = [e.model_dump(mode="json") for e in pre.rights] if pre is not None else []
-    findings = [_finding("RIGHTS_PENDING", "WARN", f"{e['kind']} {e['subject']}: {e['status']}")
-                for e in entries if e["status"] != "cleared"]
+    from film_pipeline.production.planning import legal
+    findings = [_finding("RIGHTS_PENDING", "WARN", text) for text in legal(pkg)["owner_decisions"]]
     for issue in sr.check_assets(pkg)["issues"]:
         findings.append(_finding("SOUND_RIGHTS_OPEN", "WARN", f"{issue['code']} {issue['asset']}: {issue['detail']}"))
     record = {"preprod": entries, "sound_assets": sr.load_ledger(Path(pkg.root)).model_dump(mode="json"),
