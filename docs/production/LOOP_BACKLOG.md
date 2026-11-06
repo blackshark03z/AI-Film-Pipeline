@@ -181,7 +181,7 @@ Mix with ducking under dialogue, J/L crossfades, loudness target −14 LUFS / �
 `drama.post.normalize_loudness`, `measure_ebur128`). Sources: generated tones/noise beds offline, or CC0 libraries
 recorded in the rights ledger (no untrusted downloads). Test with synthetic stems: ducking depth, peaks, loudness.
 
-### P5-02 Music & SFX sourcing record — DONE (pending hash)
+### P5-02 Music & SFX sourcing record — DONE (0d14cda; sound_rights.py, film.py sounds: audio/assets.json ledger, validate blocks unrecorded/uncleared/changed assets, cue sheet from emotional curve, 17 tests)
 Rights ledger entries (source, license, hash, usage range). `validate` blocks delivery when any used asset lacks a
 cleared license. Music cue sheet from 02_direction emotional curve (where music starts/stops and why).
 
