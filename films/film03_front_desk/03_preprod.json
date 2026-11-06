@@ -1019,5 +1019,64 @@
       "version": 1,
       "prop": "the desk phone"
     }
-  }
+  },
+  "rights": [
+    {
+      "subject": "NORA",
+      "kind": "character",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional character, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "KESSLER",
+      "kind": "character",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional character, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "ORTIZ",
+      "kind": "character",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional character, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "lobby_morning",
+      "kind": "location",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional set, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "briefing_morning",
+      "kind": "location",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional set, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "none (room tone and SFX are generated)",
+      "kind": "music",
+      "status": "original",
+      "evidence": "films/film03_front_desk has no music stage",
+      "note": "no music track in the film"
+    },
+    {
+      "subject": "script.fountain",
+      "kind": "source",
+      "status": "pending",
+      "evidence": "",
+      "note": "original script, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "none (no real person's likeness)",
+      "kind": "likeness",
+      "status": "pending",
+      "evidence": "",
+      "note": "faces are generated, not modelled on a real person; Owner to confirm"
+    }
+  ],
+  "risk_fallbacks": {}
 }

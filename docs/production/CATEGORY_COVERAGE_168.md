@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 27 · PARTIAL 87 · GAP 28 · N/A 26 · total 168
+**Summary:** HAVE 29 · PARTIAL 89 · GAP 24 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -72,10 +72,10 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 50 | Continuity planning | `production/continuity.py`: six kinds over per-generation start/end states, `film.py continuity`, hooked into `plan` | HAVE | - |
 | 51 | Sound planning | Prompt carries room tone/SFX strings (`prompt.py`); no sound plan | PARTIAL | P5-01 |
 | 52 | Technical planning | `production/package.FilmHeader` records aspect/fps/resolution/generation_s; `plan` supports 16:9 only (refuses others) + `PreflightLimits` | PARTIAL | P6-02 |
-| 53 | Production scheduling | No schedule/order record | GAP | P2-05 |
-| 54 | Budgeting | `drama/kpi.py` actuals only; no estimate | PARTIAL | P2-05 |
-| 55 | Risk & safety | Moderation notes in memory only; no risk record | GAP | P2-05 |
-| 56 | Legal clearance | `disclosure` metadata; no rights/clearance ledger | GAP | P2-05 |
+| 53 | Production scheduling | `production/planning.py` schedule: hand-off chains, waves, stills before videos (`film.py planning`) | HAVE | - |
+| 54 | Budgeting | `planning.budget`: generations x 12 credits x retake factor from the film01-03 KPI ledgers; Owner estimate checked against it, shown by `validate` | HAVE | - |
+| 55 | Risk & safety | `planning.risks`: CONTACT/HANDOVER HIGH need a fallback plan (BLOCK), prop/crowd/depth reported; no provider-moderation risk model | PARTIAL | P3-03 |
+| 56 | Legal clearance | `03_preprod.rights` ledger, unresolved entries listed as Owner decisions; final compliance check is P6 | PARTIAL | P6-02 |
 
 ## IV. Production
 
@@ -209,7 +209,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 162 | Dependency management | `production/impact.py` `affected_by`: shots, stills, takes (+handoff cascade), edit/post items for one design; design dependencies only | PARTIAL | P2-01 |
 | 163 | Change management | Stale-pin issues + `film.py impact` list what to redo; no approval/ledger workflow for a change | PARTIAL | P2-01 |
 | 164 | Quality management | `qc` evidence + Owner gate; no P0/P1/P2 model | PARTIAL | P3-01 |
-| 165 | Risk management | No risk register | GAP | P2-05 |
+| 165 | Risk management | `planning.risks` register at plan level; no mitigation tracking over the run | PARTIAL | P3-03 |
 | 166 | Rights management | No rights ledger | GAP | P5-02 |
 | 167 | Data integrity | SHA-256 in manifests; `delivery.verify` | HAVE | - |
 | 168 | Production reporting | KPI ledger, `e2e status`; no cross-film report | PARTIAL | P7-01 |

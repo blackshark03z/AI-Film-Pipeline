@@ -125,7 +125,7 @@ declared). Compiled into prompts only where the route supports it (document whic
 dialogue/narration audio when available (TTS optional, offline-only libs; otherwise silence + subtitles), FFmpeg mp4
 under `films/<id>/media/animatic.mp4`, plus timing report. Gate 3 input. 0 credits. Test with tiny fixtures.
 
-### P2-05 Budget, schedule, risk, legal — READY (after P2-01)
+### P2-05 Budget, schedule, risk, legal — DONE (see git log)
 Estimate credits = generations × cost/gen × expected retake factor (from KPI ledgers film01–03), schedule order
 (dependency: start frames before videos), risk list (physical contact/interaction shots flagged with fallback
 coverage plan), legal: character/location/music/source rights entries. `validate` shows budget and risks.

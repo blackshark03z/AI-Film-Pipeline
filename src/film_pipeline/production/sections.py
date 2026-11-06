@@ -21,6 +21,7 @@ from film_pipeline.drama.feasibility import FeasibilityLimits
 from film_pipeline.drama.preflight import PreflightLimits
 from film_pipeline.production.camera import CameraSetup, LightingPlan
 from film_pipeline.production.direction import DirectionPlan
+from film_pipeline.production.planning import RightsEntry
 from film_pipeline.production.story import StorySection
 
 
@@ -109,6 +110,8 @@ class PreprodSection(ContractModel):
     # generation_id -> reason: prompts known to exceed preflight.max_prompt_words once the start prefix is added
     accepted_overlong: dict[str, str] = Field(default_factory=dict)
     designs: dict[str, DesignEntry] = Field(default_factory=dict)  # design id -> versioned entry
+    rights: list[RightsEntry] = Field(default_factory=list)  # planning.py: legal/rights ledger
+    risk_fallbacks: dict[str, str] = Field(default_factory=dict)  # generation_id -> fallback coverage for a HIGH risk
 
     @model_validator(mode="after")
     def _references_resolve(self) -> "PreprodSection":

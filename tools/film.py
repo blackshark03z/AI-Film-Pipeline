@@ -98,6 +98,8 @@ def main(argv: list[str] | None = None) -> int:
     ani.add_argument("--stills", type=Path, help="directory of approved start stills <gid>.png")
     ani.add_argument("--storyboard", type=Path, help="directory of plan storyboard frames <gid>.png")
     ani.add_argument("--audio", type=Path, help="directory of temp dialogue tracks <gid>.wav (silence if absent)")
+    pln = actions.add_parser("planning", help="budget, schedule, risk register and rights ledger")
+    pln.add_argument("--film", required=True, type=Path)
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
     narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
     narr.add_argument("--project", type=Path, help="E2E project directory (import)")
@@ -154,6 +156,14 @@ def main(argv: list[str] | None = None) -> int:
             _emit({k: report[k] for k in ("video", "subtitles", "planned_duration_s", "actual_duration_s", "ok",
                                           "findings")})
             return 0 if report["ok"] else 1
+        if args.action == "planning":
+            from film_pipeline.production.planning import planning_report
+            if "shots" not in pkg.typed:
+                _emit({"error": "planning needs a valid 04_shots.json"})
+                return 2
+            report = planning_report(pkg)
+            _emit(report)
+            return 0 if report["ok"] else 1
         if args.action == "plan":
             result = plan_package(pkg, args.out, takes_dir=args.takes, storyboard=not args.no_storyboard,
                                   approve_storyboard=args.approve_storyboard)
@@ -166,7 +176,16 @@ def main(argv: list[str] | None = None) -> int:
         report = summary(results)
         if args.action == "validate":
             report["package_issues"] = pkg.issues
-            report["blocked"] = report["blocked"] or bool(pkg.issues)
+            blocked_by_planning = False
+            if pkg.header.profile == "drama" and "preprod" in pkg.typed and "shots" in pkg.typed:
+                from film_pipeline.production.planning import planning_report
+                plan = planning_report(pkg)
+                report["planning"] = {"budget": {k: plan["budget"][k] for k in (
+                    "generations", "expected_credits", "high_credits", "cap_credits", "owner_estimate")},
+                    "risk_summary": plan["risk_summary"], "legal": plan["legal"]["status"],
+                    "owner_decisions": plan["legal"]["owner_decisions"], "issues": plan["issues"]}
+                blocked_by_planning = not plan["ok"]
+            report["blocked"] = report["blocked"] or bool(pkg.issues) or blocked_by_planning
             _emit(report)
             return 1 if report["blocked"] else 0
         _emit({

@@ -42,6 +42,7 @@ python tools/film.py status   --film films/<film_id>
 python tools/film.py continuity --film films/<film_id>    # action/spatial/object/temporal/visual/emotional; BLOCKs also fail `plan`
 python tools/film.py camera     --film films/<film_id>    # camera & lighting plan (scenes[].lighting, generations[].camera)
 python tools/film.py animatic   --film films/<film_id> [--stills <dir>] [--audio <dir>]   # media/animatic.mp4 + srt + timing report, 0 credits
+python tools/film.py planning   --film films/<film_id>    # budget, schedule, risk register, rights ledger (validate shows a summary)
 python tools/film.py plan     --film films/<film_id> --out <dir> --takes <takes_dir> --approve-storyboard "<reviewer>"
 ```
 
@@ -55,6 +56,10 @@ obey. Three identical sizes in one scene BLOCK unless each repeat carries `decla
 
 Animatic: review `media/animatic_report.json` before Generate - `DIALOGUE_TOO_FAST` means the line cannot be spoken in
 its 8 s window (more than 3.5 words/s); fix the script or split the generation. Approved stills replace schematic frames.
+
+Planning: a shot with person-to-person contact or a prop passing between characters is a HIGH risk and needs a
+`risk_fallbacks[<generation_id>]` plan (usually an insert or cutaway that avoids staging the touch). Rights entries live in
+`03_preprod.rights`; anything not `original`/`cleared` is an Owner decision, never a pass.
 
 Never mark a gate PASS by hand. A stage that exists but has no validator reports `NOT_RUN`, which is not a pass.
 
