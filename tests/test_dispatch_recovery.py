@@ -1,6 +1,7 @@
 import asyncio
 import hashlib
 import json
+import os
 import sqlite3
 import subprocess
 import sys
@@ -116,7 +117,10 @@ def test_F0_requires_fresh_authority_and_F1_real_process_exit_is_durable(tmp_pat
     decision = executor.recovery_decision(job.provider_job_id)
     assert decision.classification == 'NOT_RESERVED' and not decision.may_submit
     program = "from film_pipeline.store import SQLiteStore;import os,sys;SQLiteStore(sys.argv[1]).reserve_dispatch(sys.argv[2]);os._exit(72)"
-    result = subprocess.run([sys.executable, '-c', program, str(store.path), job.provider_job_id], capture_output=True)
+    # the child process does not inherit pytest's `pythonpath`; point it at the package this test imported
+    src = str(Path(sys.modules['film_pipeline'].__file__).resolve().parent.parent)
+    env = {**os.environ, 'PYTHONPATH': src + os.pathsep + os.environ.get('PYTHONPATH', '')}
+    result = subprocess.run([sys.executable, '-c', program, str(store.path), job.provider_job_id], capture_output=True, env=env)
     assert result.returncode == 72
     fresh = SQLiteStore(store.path)
     assert fresh.read_provider_job(job.provider_job_id).dispatch_count == 1
