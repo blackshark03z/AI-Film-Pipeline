@@ -11,7 +11,7 @@ Category IDs refer to the Owner's 168-item list; tick them in `CATEGORY_COVERAGE
 
 ## P0 — Foundation
 
-### P0-01 Coverage matrix on this branch — DONE (3109bf1: 168 rows; HAVE 14 / PARTIAL 79 / GAP 49 / N/A 26; every GAP mapped to a backlog item)
+### P0-01 Coverage matrix on this branch — DONE (3ea43e9: 168 rows; HAVE 14 / PARTIAL 79 / GAP 49 / N/A 26; every GAP mapped to a backlog item)
 Create `docs/production/CATEGORY_COVERAGE_168.md`: one row per category 1–168 (keep Owner's numbering/names), columns
 `ID | Category | Responsibility (code path / package field / operator receipt / N/A+reason) | Status (HAVE/PARTIAL/GAP/N/A) | Backlog item`.
 Seed from root `D:/AI FILM MAKER/AI-Film-Pipeline/docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (read-only;
