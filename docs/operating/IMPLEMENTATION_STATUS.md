@@ -11,6 +11,7 @@ is accepted.
 
 | Date | Commit | Increment | Proof | Owner |
 |---|---|---|---|---|
+| 11-06 | `4054a2e` | Phase P0 (production foundation): `films/<id>/` package schema + loader, `tools/film.py new/validate/status/plan`, film03 ported to `films/film03_front_desk`, generic `plan` stage; coverage of Owner's 168 categories mapped ([CATEGORY_COVERAGE_168.md](../production/CATEGORY_COVERAGE_168.md): HAVE 15 / PARTIAL 78 / GAP 49 / N/A 26) | `plan` reproduces all 16 video prompts, 21 still prompts and the gate3 record of `tools/drama_film03.py` byte-for-byte (golden test); full suite 1444 passed, 194 skipped, 2 failed (pre-existing environment cases, see backlog P0-05) | n/a |
 | 11-06 | `b16dd1d` | Per-project image profile/tab and Flow account alias (`prepare --image-profile/--image-tab/--flow-account-alias`); defaults keep old lineage | 424 focused tests PASS; real project `e2e_badge_20261104` status readback unchanged (2 selected / 6 pending, DB/plan/meta hashes unchanged) | n/a |
 | 11-06 | `80041f9` | pytest finds `src` without `PYTHONPATH` | suites run with plain `python -m pytest` | n/a |
 | 11-06 | `4e232c3` | SRT faithful-action gate: `action_meaning` blocks partial sentences, words not in the SRT, choreography without ACTION → REACTION; escalation warnings; QC questions in review template | 420 focused tests PASS | rule is Owner's; code not Owner-reviewed |

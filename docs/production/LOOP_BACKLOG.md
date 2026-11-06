@@ -43,7 +43,7 @@ prop states, occupancy, story time, shots, choreography, SFX, voices, cards, fac
 `docs/drama/film03/`.
 Done when `load_package` loads it with zero schema errors.
 
-### P0-05 Generic `plan` stage reproduces film03 — READY
+### P0-05 Generic `plan` stage reproduces film03 — DONE (4054a2e: golden = 16 prompts + 21 stills + gate3 byte-identical; full suite 1444 passed, 194 skipped, 2 failed — test_dispatch_recovery F0/F1 spawns `python -c` without PYTHONPATH so `film_pipeline` is not importable (env, pre-existing); test_v2_010a_dola_re_001::test_05_invariants fails while the tree has non-Dola dirty files)
 `production/plan.py` + `film.py plan --film DIR --out DIR`: generalise what `tools/drama_film03.py` does (feasibility,
 preflight per generation, handoffs, compile prompts via `drama.prompt.compile_scene_prompt`, still prompts,
 schematic storyboard, gate3 json) driven only by package data.
@@ -56,7 +56,7 @@ Phase end: full suite, push, IMPLEMENTATION_STATUS row.
 
 ## P1 — Story & Direction (categories 1–34)
 
-### P1-01 Story bible model + Gate 1 — READY (after P0-05)
+### P1-01 Story bible model + Gate 1 — READY
 Typed `01_story.json`: concept, theme, genre, audience (who/expectation), premise + central conflict, logline,
 structure (acts with beats: id, function SETUP/INCITING/ESCALATION/MIDPOINT/CRISIS/CLIMAX/RESOLUTION, scene ids),
 plot + subplots, characters (want, need, flaw, arc_change, change_scene_id), scenes (purpose, conflict, outcome,
