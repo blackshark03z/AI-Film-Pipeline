@@ -170,7 +170,8 @@ def qualified_catalog_snapshot(records, *, project_id: str,
     authority entry point: ordinary callers reach it only through
     ``freeze``'s runtime-owned capture, never with their own record lists.
     """
-    if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+    if (fingerprint not in contract.QUALIFIED_CATALOG_FINGERPRINTS
+            or fingerprint != contract.catalog_fingerprint(records)):
         raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
     try:
         validated = contract._validate_catalog_rows(records, project_id)
@@ -233,7 +234,8 @@ class QualifiedFlowCatalogCapability:
         """
         records = FlowReferenceRpcSession.catalog(self.session)
         fingerprint = getattr(self.session, 'catalog_fingerprint', None)
-        if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+        if (fingerprint not in contract.QUALIFIED_CATALOG_FINGERPRINTS
+                or fingerprint != contract.catalog_fingerprint(records)):
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
         if self.session.project_id != self._minted_project:
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_SOURCE_PROJECT_MISMATCH')
@@ -360,7 +362,7 @@ class FlowR2VShotRuntime:
         snapshot identity, so tampered snapshots fail closed.
         """
         snapshot = job.pre_dispatch_snapshot
-        if snapshot.get('catalog_fingerprint') != contract.QUALIFIED_BASELINE_FINGERPRINT:
+        if snapshot.get('catalog_fingerprint') not in contract.QUALIFIED_CATALOG_FINGERPRINTS:
             raise OwnerAmbiguityGate('FLOW_R2V_CATALOG_BASELINE_DRIFT')
         if snapshot.get('project_id') != self.project_id:
             raise OwnerAmbiguityGate('FLOW_R2V_BASELINE_PROJECT_MISMATCH')
@@ -380,12 +382,15 @@ class FlowR2VShotRuntime:
 
     # --- Freeze -------------------------------------------------------------
 
-    def _existing_job_for_shot(self, shot_id: str):
+    def _existing_job_for_shot(self, shot_id: str, spec_version: int | None = None):
         """A restart resumes the same job; it cannot create another attempt."""
         with sqlite3.connect(self.store.path) as connection:
-            attempts = [row[0] for row in connection.execute(
-                "SELECT id FROM generation_attempts WHERE json_extract(payload,'$.shot_id')=?",
-                (shot_id,)).fetchall()]
+            query = "SELECT id FROM generation_attempts WHERE json_extract(payload,'$.shot_id')=?"
+            args = [shot_id]
+            if spec_version is not None:
+                query += " AND json_extract(payload,'$.shot_spec_version')=?"
+                args.append(spec_version)
+            attempts = [row[0] for row in connection.execute(query, args).fetchall()]
             if not attempts:
                 return None
             if len(attempts) != 1:
@@ -397,11 +402,31 @@ class FlowR2VShotRuntime:
             raise OwnerAmbiguityGate('FLOW_R2V_SHOT_JOB_AMBIGUOUS')
         return self.store.read_provider_job(jobs[0])
 
+    def repair_parent(self, shot: ShotSpec, repair_decision_id: str) -> ShotSpec:
+        """A changed version needs an exact, resolved, Owner-rejected predecessor.
+
+        This only qualifies a new intent. The caller still needs its current
+        Owner budget; no failed or uncertain request becomes retryable.
+        """
+        from .qc import QCStore
+        try:
+            parent, route, job, _, repair = QCStore(self.store).repair_source(repair_decision_id)
+        except (ValueError, KeyError) as error:
+            raise OwnerAmbiguityGate('FLOW_REPAIR_PREDECESSOR_UNQUALIFIED') from error
+        if (repair['shot_id'] != shot.shot_id or job.project_binding_id != self.project_binding_id
+                or job.provider_id != 'flow_veo' or route.provider_id != 'flow_veo'
+                or job.status != 'SUCCEEDED' or job.dispatch_count != 1
+                or shot.spec_version != parent.spec_version + 1 or shot.spec_version > 4
+                or shot.shot_id != parent.shot_id or sha256(shot) == sha256(parent)):
+            raise OwnerAmbiguityGate('FLOW_REPAIR_PREDECESSOR_UNQUALIFIED')
+        return parent
+
     def freeze(self, shot: ShotSpec, capabilities: ProviderCapabilities, *,
                reference_asset, reference_media_id: str, reference_filename: str = '',
                catalog_source, started_at: str | None = None,
                prompt_compiler=compact_r2v_prompt,
-               compiler_kwargs: dict | None = None) -> FrozenR2VShot:
+               compiler_kwargs: dict | None = None,
+               repair_decision_id: str | None = None) -> FrozenR2VShot:
         """Compile, route and freeze one ordinary R2V shot into a ProviderJob
         whose exact submission prompt is durable before any authority exists.
         A restart with identical inputs returns the same frozen job.
@@ -440,9 +465,20 @@ class FlowR2VShotRuntime:
         attempt = dry.create_attempt(shot, plan, decision, request,
                                      started_at=started_at)
 
-        prior = self._existing_job_for_shot(shot.shot_id)
+        if repair_decision_id:
+            parent = self.repair_parent(shot, repair_decision_id)
+            if sha256(shot.blocking) == sha256(parent.blocking) and shot.references == parent.references:
+                raise OwnerAmbiguityGate('FLOW_REPAIR_CHANGED_INPUT_REQUIRED')
+        prior = self._existing_job_for_shot(shot.shot_id, shot.spec_version)
         if prior is not None:
+            if prior.correlation_evidence.get('repair_decision_id') != repair_decision_id:
+                raise OwnerAmbiguityGate('FLOW_REPAIR_RESTART_DECISION_CHANGED')
             return self._resume_frozen(prior, shot, plan, decision, reference_binding)
+        if not repair_decision_id:
+            with sqlite3.connect(self.store.path) as connection:
+                if connection.execute("SELECT id FROM generation_attempts WHERE json_extract(payload,'$.shot_id')=?",
+                                      (shot.shot_id,)).fetchone():
+                    raise OwnerAmbiguityGate('FLOW_R2V_RESTART_REPAIR_DECISION_REQUIRED')
         # The ONE authoritative pre-dispatch catalog observation, captured by
         # the runtime through the qualified capability: exactly one concrete
         # read that itself establishes the qualified baseline; a restart
@@ -461,6 +497,9 @@ class FlowR2VShotRuntime:
             'correlation_marker': compiled.marker,
             'provider_prompt_compiler': compiled.version,
             'reference_binding': reference_binding}})
+        if repair_decision_id:
+            job = job.model_copy(update={'correlation_evidence': {
+                **job.correlation_evidence, 'repair_decision_id': repair_decision_id}})
         self.store.save_frozen_path_and_job(shot, plan, decision, attempt, job)
         if job.provider_job_id != preview.provider_job_id:
             raise ValueError('provider job identity changed during freeze')
@@ -737,7 +776,8 @@ class FlowR2VShotRuntime:
         try:
             records = FlowReferenceRpcSession.catalog(session)
             fingerprint = getattr(session, 'catalog_fingerprint', None)
-            if fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+            if (fingerprint not in contract.QUALIFIED_CATALOG_FINGERPRINTS
+                    or fingerprint != contract.catalog_fingerprint(records)):
                 raise FlowReferenceRpcDrift('FLOW_R2V_CATALOG_BASELINE_DRIFT')
             if session.project_id != self.project_id:
                 raise FlowReferenceRpcDrift('FLOW_R2V_RENDER_SOURCE_PROJECT_MISMATCH')

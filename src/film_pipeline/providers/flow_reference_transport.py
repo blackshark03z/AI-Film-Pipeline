@@ -117,8 +117,8 @@ class FlowReferenceTransport:
         if progress and progress['effective_state'] != 'LOCAL_RESERVED':
             return self.reconcile_only(asset)
         # Drift/auth preflight occurs before creating a new intent.
-        self.session.catalog()
-        if self.session.catalog_fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+        records = self.session.catalog()
+        if self.session.catalog_fingerprint != contract.catalog_fingerprint(records):
             raise ValueError('FLOW_REFERENCE_RPC_DRIFT')
         progress = self.store.reserve_local('flow_veo', self.session.project_id,
                                             self.account_id, asset)
@@ -214,7 +214,7 @@ class FlowReferenceTransport:
         for probe in range(self.probes):
             records = self.session.catalog()
             contract._validate_catalog_rows(records, self.session.project_id)
-            if self.session.catalog_fingerprint != contract.QUALIFIED_BASELINE_FINGERPRINT:
+            if self.session.catalog_fingerprint != contract.catalog_fingerprint(records):
                 raise OwnerAmbiguityGate('catalog contract drift during reconciliation')
             candidates, unresolved, matches = [], [], []
             for row in records:

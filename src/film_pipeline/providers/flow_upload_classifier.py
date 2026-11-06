@@ -122,6 +122,17 @@ def _contains_uuid(value) -> bool:
     return False
 
 
+def linked_upload_asset_header(node, media, project_id):
+    """Recognize only the bidirectionally linked library header seen 2026-11-04."""
+    return (isinstance(media, list) and len(media) == 7
+            and isinstance(node, list) and len(node) == 5
+            and node[1:3] == [None, None] and node[4] == project_id
+            and media[1] == project_id and node[0] == media[2]
+            and isinstance(node[0], str) and UUID_RE.fullmatch(node[0]) is not None
+            and isinstance(node[3], list) and len(node[3]) in {5, 7}
+            and node[3][4] == media[0])
+
+
 def classify_upload_response(status, payload, *, project_id: str,
                              request_id: str) -> UploadResponseClassified:
     """Classify one observed maseQ response. Deterministic; fail-closed.
@@ -157,6 +168,7 @@ def classify_upload_response(status, payload, *, project_id: str,
         conflicting = [
             node[0] for node in payload[1:]
             if isinstance(node, list) and node
+            and not linked_upload_asset_header(node, payload[0], project_id)
             and isinstance(node[0], str) and UUID_RE.fullmatch(node[0])
             and node[0].lower() not in metadata_ids
             and node[0].lower() != primary.lower()]

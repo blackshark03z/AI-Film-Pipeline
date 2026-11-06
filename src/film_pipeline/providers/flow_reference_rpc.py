@@ -373,6 +373,9 @@ class FlowReferenceRpcSession:
         # Nested metadata UUIDs are not identities. Unknown resource-like siblings
         # still fail closed; never resolve a conflict by gallery/record ordering.
         for sibling in payload[1:]:
+            from .flow_upload_classifier import linked_upload_asset_header
+            if linked_upload_asset_header(sibling, payload[0], self.project_id):
+                continue
             if (isinstance(sibling, list) and sibling
                     and isinstance(sibling[0], str)
                     and contract.UUID_RE.fullmatch(sibling[0])
