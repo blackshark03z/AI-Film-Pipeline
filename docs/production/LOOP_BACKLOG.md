@@ -105,17 +105,17 @@ built from the E2E test fixture validates and `status` matches `e2e.status` fiel
 
 ## P2 — Pre-production (35–56)
 
-### P2-01 Design versions + dependency index — READY (after P1-02)
+### P2-01 Design versions + dependency index — DONE (a5919bc: sections.DesignEntry + pins, impact.py, film.py impact, film03 designs; 12 tests; focused suite 364 passed)
 Character look, costume, hair/makeup, prop and location entries carry `version`; shots reference `id@version`.
 `production/impact.py`: `affected_by(change) -> shots, stills, takes, edit ranges, post items` (G13).
 Test: bump film03 Nora costume version → exactly the shots where Nora is in frame are listed; others untouched.
 
-### P2-02 Prop/object state machine + 6 continuity types — READY (after P2-01)
+### P2-02 Prop/object state machine + 6 continuity types — READY
 Continuity bible: per generation start/end state across action, spatial, object, temporal, visual (lighting, time of
 day), emotional. Object changes need a causing action in an ACTION phase. Reuse `drama.continuity`,
 `scene_bible`, `sequence.validate_shot_sequence`. Test: letter moves pocket → bin without an action → BLOCK.
 
-### P2-03 Camera & lighting plan — READY (after P2-01)
+### P2-03 Camera & lighting plan — READY
 Per scene: key light direction/quality/colour temp, practicals; per shot: size, angle, height, movement, lens intent,
 composition note. Check against axis book (camera side) and shot-size variety (no 3 identical sizes in a row unless
 declared). Compiled into prompts only where the route supports it (document which fields reach the prompt).
