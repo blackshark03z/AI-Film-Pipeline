@@ -221,12 +221,12 @@ ambience/music/colour match) → QC → deliver. Report diffs vs the shipped fin
 
 ## P8 — Proof film
 
-### P8-01 film04 authored from scratch by the model — READY (after P1-03, P2-04, P7-01)
+### P8-01 film04 authored from scratch by the model — DONE 51130ec (after P1-03, P2-04, P7-01)
 Following `DIRECTOR_PLAYBOOK.md` only, author an original 90–120 s drama (new characters/location; no real persons;
 Owner rules on moderation). All stage files through 03_preprod + 04_shots; `validate` all gates PASS or
 OWNER_PENDING; animatic rendered; budget estimate. No new Python specific to film04 — any need becomes a system item.
 
-### P8-02 film04 production — LIVE (after P8-01)
+### P8-02 film04 production — LIVE (after P8-01; P8-01 done, awaiting Owner: storyboard approval, rights, go-live)
 Generate per plan within budget, dailies review, retake/pickup policy, cut, post, QC, deliver. KPI vs film02/03
 (credits per usable second, first-pass rate). Owner creative review required; never self-accept.
 
