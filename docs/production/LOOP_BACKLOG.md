@@ -214,3 +214,12 @@ OWNER_PENDING; animatic rendered; budget estimate. No new Python specific to fil
 ### P8-02 film04 production — LIVE (after P8-01)
 Generate per plan within budget, dailies review, retake/pickup policy, cut, post, QC, deliver. KPI vs film02/03
 (credits per usable second, first-pass rate). Owner creative review required; never self-accept.
+
+## P9 — Found by the loop
+
+### P9-01 `test_dispatch_recovery` F0/F1 needs `film_pipeline` importable in its subprocess — READY
+Evidence (2026-11-06, full suite): `tests/test_dispatch_recovery.py::test_F0_requires_fresh_authority_and_F1_real_process_exit_is_durable`
+runs `python -c "from film_pipeline..."` as a subprocess and gets `ModuleNotFoundError` (returncode 1, expected 72) because
+`pythonpath = ["src"]` only applies to the pytest process. Fix: pass `env` with `PYTHONPATH=<repo>/src` (or `cwd`/`-I` aware)
+in that subprocess call. Do not weaken the assertion.
+
