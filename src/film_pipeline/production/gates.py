@@ -11,6 +11,7 @@ from typing import Any
 
 from film_pipeline.core import ContractModel
 from film_pipeline.production.package import GATE_NAMES, SCRIPT_FILE, STAGE_FILES, FilmPackage, GateState
+from film_pipeline.production.direction import direction_issues
 from film_pipeline.production.story import story_issues, story_pending
 
 # gate id -> stage keys that must have content before the gate can be evaluated
@@ -25,7 +26,7 @@ GATE_STAGES: dict[str, tuple[str, ...]] = {
 
 Validator = Callable[[FilmPackage], list[str]]
 _VALIDATORS: dict[str, Validator] = {}  # overrides (tests, experiments); built-ins below are not cleared with them
-_BUILTIN: dict[str, Validator] = {"1": story_issues}
+_BUILTIN: dict[str, Validator] = {"1": story_issues, "2": direction_issues}
 # gate id -> reasons the Owner must decide even though the validator found no defect (-> OWNER_PENDING, never PASS)
 _PENDING: dict[str, Validator] = {"1": story_pending}
 

@@ -1,4 +1,491 @@
 {
+  "vision": {
+    "tone": "Quiet, controlled, procedural: authority is shown by calm, never by volume.",
+    "references": [
+      "a bright civic lobby seen at eye level",
+      "a low-key workplace drama in plain morning light"
+    ]
+  },
+  "visual_rules": [
+    {
+      "rule": "Eye-level camera, no dutch angles, no handheld shake.",
+      "why": "The reversal should come from people, not from camera tricks."
+    },
+    {
+      "rule": "Keep Nora screen-right of Kessler across the desk (one axis for the whole lobby).",
+      "why": "The status relationship stays readable from any cut."
+    },
+    {
+      "rule": "Hold on the reaction after a line lands; do not cut away to the speaker.",
+      "why": "The drama is in how people take the words (the smirk, the swallow)."
+    },
+    {
+      "rule": "One shot per 8 s generation, one dominant action per shot.",
+      "why": "Matches the generator's reliable unit and keeps comprehension simple."
+    }
+  ],
+  "reveals": [
+    {
+      "fact_id": "letter_is_appointment",
+      "scene_id": "SC02"
+    },
+    {
+      "fact_id": "lieutenant_confirms",
+      "scene_id": "SC05"
+    }
+  ],
+  "coverage_plan": {
+    "B1": [
+      "MASTER",
+      "OTS"
+    ],
+    "B2": [
+      "OTS",
+      "MASTER"
+    ],
+    "B3": [
+      "SINGLE",
+      "MASTER"
+    ],
+    "B4": [
+      "SINGLE",
+      "MASTER"
+    ],
+    "B5": [
+      "SINGLE"
+    ],
+    "B6": [
+      "SINGLE"
+    ],
+    "B7": [
+      "MASTER",
+      "SINGLE"
+    ]
+  },
+  "scenes": {
+    "SC01": {
+      "pov": {
+        "whose": "NORA",
+        "audience_knows": [
+          "nora_is_captain"
+        ],
+        "characters_know": {
+          "NORA": [
+            "nora_is_captain"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "NORA": {
+          "start": 1,
+          "end": 2
+        },
+        "KESSLER": {
+          "start": 1,
+          "end": 2
+        },
+        "ORTIZ": {
+          "start": 1,
+          "end": 1
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC01_g2",
+            "seconds": 2.0,
+            "why": "hold on Nora's calm after 'not here to complain'"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "opening card, then a hard cut into the lobby"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "same room, same morning"
+      }
+    },
+    "SC02": {
+      "pov": {
+        "whose": "KESSLER",
+        "audience_knows": [
+          "nora_is_captain",
+          "letter_is_appointment"
+        ],
+        "characters_know": {
+          "NORA": [
+            "nora_is_captain"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Kessler reads the letter and sneers at the word captain",
+          "device": "hold",
+          "generation_id": "SC02_g1",
+          "fact_id": "letter_is_appointment"
+        }
+      ],
+      "curve": {
+        "NORA": {
+          "start": 2,
+          "end": 3
+        },
+        "KESSLER": {
+          "start": 2,
+          "end": 3
+        },
+        "ORTIZ": {
+          "start": 1,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC02_g1",
+            "seconds": 2.0,
+            "why": "hold on Kessler's smirk after 'Captain?'"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the lobby"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the lobby"
+      }
+    },
+    "SC03": {
+      "pov": {
+        "whose": "ORTIZ",
+        "audience_knows": [
+          "nora_is_captain",
+          "letter_is_appointment"
+        ],
+        "characters_know": {
+          "NORA": [
+            "nora_is_captain"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Ortiz looks from Nora to the bin",
+          "device": "reaction",
+          "generation_id": "SC03_g1"
+        }
+      ],
+      "curve": {
+        "NORA": {
+          "start": 3,
+          "end": 3
+        },
+        "KESSLER": {
+          "start": 3,
+          "end": 3
+        },
+        "ORTIZ": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC03_g1",
+            "seconds": 2.0,
+            "why": "hold on Ortiz before he is shut down"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the lobby"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the lobby"
+      }
+    },
+    "SC04": {
+      "pov": {
+        "whose": "NORA",
+        "audience_knows": [
+          "nora_is_captain",
+          "letter_is_appointment"
+        ],
+        "characters_know": {
+          "NORA": [
+            "nora_is_captain"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Ortiz takes the crumpled letter out of the bin",
+          "device": "push",
+          "generation_id": "SC04_g2"
+        }
+      ],
+      "curve": {
+        "NORA": {
+          "start": 3,
+          "end": 3
+        },
+        "KESSLER": {
+          "start": 3,
+          "end": 3
+        },
+        "ORTIZ": {
+          "start": 3,
+          "end": 4
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC04_g2",
+            "seconds": 2.0,
+            "why": "hold while Ortiz smooths the letter"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the lobby"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the lobby"
+      }
+    },
+    "SC05": {
+      "pov": {
+        "whose": "KESSLER",
+        "audience_knows": [
+          "nora_is_captain",
+          "letter_is_appointment",
+          "lieutenant_confirms"
+        ],
+        "characters_know": {
+          "KESSLER": [
+            "lieutenant_confirms"
+          ],
+          "NORA": [
+            "nora_is_captain"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Kessler hears 'the new captain' on his own phone",
+          "device": "reaction",
+          "generation_id": "SC05_g1",
+          "fact_id": "lieutenant_confirms"
+        }
+      ],
+      "curve": {
+        "NORA": {
+          "start": 3,
+          "end": 3
+        },
+        "KESSLER": {
+          "start": 3,
+          "end": 5
+        },
+        "ORTIZ": {
+          "start": 4,
+          "end": 4
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC05_g1",
+            "seconds": 3.0,
+            "why": "hold on Kessler hearing 'the new captain' on the phone"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the lobby"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the lobby"
+      }
+    },
+    "SC06": {
+      "pov": {
+        "whose": "KESSLER",
+        "audience_knows": [
+          "nora_is_captain",
+          "lieutenant_confirms"
+        ],
+        "characters_know": {
+          "KESSLER": [
+            "lieutenant_confirms"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "The smirk drops as he says Captain",
+          "device": "hold",
+          "generation_id": "SC06_g2"
+        }
+      ],
+      "curve": {
+        "NORA": {
+          "start": 3,
+          "end": 3
+        },
+        "KESSLER": {
+          "start": 4,
+          "end": 3
+        },
+        "ORTIZ": {
+          "start": 3,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC06_g2",
+            "seconds": 3.0,
+            "why": "hold while the smirk goes"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the lobby"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "the roll-call card marks the time and place jump"
+      }
+    },
+    "SC07": {
+      "pov": {
+        "whose": "NORA",
+        "audience_knows": [
+          "nora_is_captain",
+          "time_jump"
+        ],
+        "characters_know": {
+          "NORA": [
+            "nora_is_captain"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Nora states the rule to the whole room",
+          "device": "push",
+          "generation_id": "SC07_g2"
+        }
+      ],
+      "curve": {
+        "NORA": {
+          "start": 2,
+          "end": 2
+        },
+        "KESSLER": {
+          "start": 3,
+          "end": 3
+        },
+        "ORTIZ": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC07_g2",
+            "seconds": 2.0,
+            "why": "hold on Nora after the rule is stated"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "context card 'Roll call, 8 a.m.' then a hard cut"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "same room"
+      }
+    },
+    "SC08": {
+      "pov": {
+        "whose": "ORTIZ",
+        "audience_knows": [
+          "nora_is_captain"
+        ],
+        "characters_know": {
+          "NORA": [
+            "nora_is_captain"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Kessler lowers his eyes and keeps the desk",
+          "device": "hold",
+          "generation_id": "SC08_g2"
+        }
+      ],
+      "curve": {
+        "NORA": {
+          "start": 2,
+          "end": 2
+        },
+        "KESSLER": {
+          "start": 3,
+          "end": 2
+        },
+        "ORTIZ": {
+          "start": 3,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 8.0,
+        "holds": [
+          {
+            "generation_id": "SC08_g2",
+            "seconds": 3.0,
+            "why": "hold on Kessler lowering his eyes"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "end card follows the last line"
+      }
+    }
+  },
   "comprehension": {
     "intros": [
       {

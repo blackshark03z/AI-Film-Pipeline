@@ -19,6 +19,7 @@ from film_pipeline.drama.coverage import Coverage
 from film_pipeline.drama.comprehension import ContextCard, CharacterIntro, IdentityTag, StoryFact
 from film_pipeline.drama.feasibility import FeasibilityLimits
 from film_pipeline.drama.preflight import PreflightLimits
+from film_pipeline.production.direction import DirectionPlan
 from film_pipeline.production.story import StorySection
 
 
@@ -42,8 +43,8 @@ class ComprehensionSpec(ContractModel):
     cards: list[ContextCard] = Field(default_factory=list)
 
 
-class DirectionSection(ContractModel):
-    """`02_direction.json`."""
+class DirectionSection(DirectionPlan):
+    """`02_direction.json`: director's plan (see direction.py) + viewer comprehension."""
 
     comprehension: ComprehensionSpec = Field(default_factory=ComprehensionSpec)
     translations: dict[str, str] = Field(default_factory=dict)  # sidecar: English text -> second language
