@@ -138,7 +138,7 @@ P0/P1/P2, level `STILL|SAMPLED|FULL_MOTION|CUT`, evidence path, reviewer (`human
 Rule: auto tools may only produce WARN/UNASSESSED for content groups; only a human review can PASS
 narrative/action/motion/performance. Shot accepted iff no P0 FAIL and P1 FAILs explicitly waived with reason.
 
-### P3-02 Take log + dailies review — IN_PROGRESS
+### P3-02 Take log + dailies review — DONE (2088e85)
 `takes/` index: take id, generation id, prompt hash, start-frame hash, model/route, credits, output hash, status.
 `film.py review --film DIR` writes a dailies template per new take (QC groups, the shot's `qc_questions` from
 action_meaning, choreography timing, expected start/end state) and ingests a filled one. Integrate
