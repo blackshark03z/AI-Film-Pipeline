@@ -56,7 +56,7 @@ Phase end: full suite, push, IMPLEMENTATION_STATUS row.
 
 ## P1 — Story & Direction (categories 1–34)
 
-### P1-00 Review follow-ups for P0 (Codex gpt-6.1-sol review, 2026-11-06) — IN_PROGRESS
+### P1-00 Review follow-ups for P0 (Codex gpt-6.1-sol review, 2026-11-06) — DONE (36de9b7: evidence.py, ShotDecl.dialogue, accepted_overlong; 12 tests; focused suite 305 passed, 1 skipped)
 Run before P1-01. Fixed already in this review pass: storyboard approval is opt-in (`--approve-storyboard`), `plan` exit code
 aggregates every BLOCK, cross-reference/id/predecessor validation, path-escape guard, aspect refusal, `new` never overwrites,
 `validate` fails on package issues, golden text comparisons independent of Pillow, matrix rows 18/20/37/52, media untracked.
