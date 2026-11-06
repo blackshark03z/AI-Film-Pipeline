@@ -90,7 +90,7 @@ per scene: POV (whose, what audience knows vs characters — tie to `comprehensi
 every beat has ≥1 carrier shot in 04_shots (Gate 2, reuse `drama.coverage`/`comprehension`); every reveal has an
 emphasis device. Fill for film03.
 
-### P1-03 Director playbook — READY (after P1-02)
+### P1-03 Director playbook — DONE (5e97e02: docs/director/DIRECTOR_PLAYBOOK.md + .claude/skills/film-director; docs only)
 `docs/director/DIRECTOR_PLAYBOOK.md`: how the model authors each stage file, in order, with decision checklists
 mapped to categories 1–56, lessons from `docs/drama/FILM01_LESSONS.md`, film02 comprehension failure, film03 README,
 WP5 route, Owner SRT faithful-action rule (`docs/sot/film/05_PROMPT_COMPILER.md` in the root repo), provider limits
