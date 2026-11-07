@@ -374,14 +374,14 @@ Files: `stills.py` (`register_still`), tests. A PNG signature followed by garbag
 `load()`), require width/height ≥ the film resolution's aspect ratio sanity (not zero), refuse otherwise. Finding 10 (stills not
 git-ignored) is **refuted**: `films/.gitignore` has `*/media/`.
 
-### P11-07 Draft the edit and the generators record from the package — IN_PROGRESS (P10-05 manual steps M1–M3)
+### P11-07 Draft the edit and the generators record from the package — DONE (52b14cf) (P10-05 manual steps M1–M3)
 Files: new `production/edit_init.py` or `edit.py`, `tools/film.py` (`edit --init`, `generators --init`), tests.
 Evidence: `docs/production/REHEARSAL_FILM04.md` — `05_edit.json` was `{}` and a human/rehearsal had to write the TAKE events, the
 title card with the AI line (deliver BLOCKs `AI_LABEL_MISSING` without it) and `generators.json`. `edit --init` drafts the EDL from
 the shot list and the latest ACCEPTED takes (refuses to overwrite a non-empty EDL), title card from the film title plus the AI
 line; `generators --init` drafts the record from the route/model of the take log. Both are drafts for a human to review.
 
-### P11-08 The rehearsal also runs the archive restore check — READY (found by P10-07, row 156)
+### P11-08 The rehearsal also runs the archive restore check — IN_PROGRESS (found by P10-07, row 156)
 Files: `rehearsal.py`, `tests/test_production_rehearsal.py`, `REHEARSAL_FILM04.md`. `deliver.verify_archive` is the restore
 check (`film.py status --package <delivery>`) but no run exercises it. Add it as the last rehearsal step on a *copy* of the
 archive moved to another directory; record the result. Done when the rehearsal report lists `restore` ok.
