@@ -139,6 +139,17 @@ def test_end_state_names_only_what_the_shot_changes(sample):
     assert G1_START.describe_change(G1_START) == ""
 
 
+def test_static_props_are_pinned_for_the_whole_shot():
+    # film04 SC01_g2 t1: the shutter was not named, the action mentioned the gap under it, the model rolled it up
+    start = ContinuityState(props={"the shutter:": "pulled down onto the catches"})
+    end = ContinuityState(props={"the shutter:": "pulled down onto the catches", "the jar:": "in his hands"})
+    assert end.describe_static(start) == "Unchanged the whole shot, nothing moves it: the shutter pulled down onto the catches."
+    assert end.describe_change(start) == "Ends with the jar in his hands, held to the last frame."
+    raised = ContinuityState(props={"the shutter:": "pushed all the way up"})
+    assert raised.describe_static(start) == ""   # a prop the shot changes is not pinned
+    assert ContinuityState().describe_static(ContinuityState()) == ""
+
+
 def test_character_named_by_start_state_needs_its_look_in_prompt(
         tmp_path, sample):
     state = G1_END.model_copy(update={

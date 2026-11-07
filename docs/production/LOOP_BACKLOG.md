@@ -442,6 +442,16 @@ the stills registry) and start SC01_g2 (plate B + THEO + end_SC01_g1), registere
 matches the still (door pushed with one hand, jar in the other). Open, Owner: approve THEO's look, start SC01_g2 and
 storyboard SC01_S2; then one 8 s send (8 credits). Later: MARA's face is hidden by the lowered shutter from camera A; SC02
 ("looks at him over her glasses") needs staging (she stoops to the gap, or camera C side-on through the glass screen).
+Owner approved THEO + start SC01_g2 + storyboard SC01_S2 ("Duyệt, gửi đi"); start uploaded through the Bắt đầu picker,
+one 8 s send YES->NO: PASSED (Omni 1.2 Flash, 8 s, cost 8, start slot by pixels 0.4) -> SC01_g2_t1.mp4, take SC01_g2_t1.
+Tech Lead QC (strip + zoom): FAIL P0 - the lowered shutter rolls up by itself at 3.0-4.0 s and THEO leans into the opened
+window; P1 - his olive rain jacket becomes a black jacket and hoodie. Dialogue present (about 4.6-7.0 s). Waits for the
+Owner's verdict; not ingested.
+Causes -> fixes: (1) prompt named only changed props, the action named "the gap under the shutter" -> start-frame prompts
+now pin unchanged props ("Unchanged the whole shot, nothing moves it: ...", ContinuityState.describe_static); (2) THEO
+starts small at the far door, nothing pins his look where he arrives -> plan WARN LOOK_NOT_PINNED (film04: SC01_g2,
+SC06_g1). Next (after the Owner rejects t1): `retake --pickup SC01_g2` with end_frame + end_pose (bent at the gap under
+the shutter, jar in both hands, olive jacket), draw and approve the end still, one 8 s send.
 Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
 `film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
 catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.

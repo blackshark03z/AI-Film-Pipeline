@@ -56,6 +56,15 @@ class ContinuityState(ContractModel):
             return ""
         return "Ends with " + "; ".join(parts) + ", held to the last frame."
 
+    def describe_static(self, start: "ContinuityState") -> str:
+        """Prompt sentence pinning the props this end state leaves as they were ("" if none).
+        A prop the prompt does not name is free to move: film04 SC01_g2 t1 rolled the lowered shutter up by itself
+        when the action mentioned the gap under it."""
+        parts = [f"{prop.rstrip(':')} {where}" for prop, where in start.props.items() if self.props.get(prop) == where]
+        if not parts:
+            return ""
+        return "Unchanged the whole shot, nothing moves it: " + "; ".join(parts) + "."
+
 
 class GenerationHandoff(ContractModel):
     previous_generation_id: str

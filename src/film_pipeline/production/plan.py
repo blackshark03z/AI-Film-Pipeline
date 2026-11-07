@@ -232,6 +232,21 @@ class _Plan:
                 add("TARGET_CONFLICT", f"end_pose must mention the stop object ({', '.join(labels)})")
         return out
 
+    def look_pin_issues(self, decl: ShotDecl) -> list[PreflightIssue]:
+        """A character who moves across a start-frame shot is pinned only by the first frame, where he may be small and
+        far: film04 SC01_g2 t1 walked THEO to the camera and his olive rain jacket turned into a black hoodie. Without an
+        end frame that shows him where he arrives, warn (LOOK_NOT_PINNED)."""
+        if decl.end_frame or self.pre.preflight.prompt_style != "start_frame":
+            return []
+        start, end = self.state(decl.start_state), self.state(decl.end_state)
+        moved = [c for c in decl.visible if c in start.positions and c in end.positions
+                 and start.positions[c] != end.positions[c]]
+        if not moved:
+            return []
+        return [PreflightIssue(check="LOOK_NOT_PINNED", severity="WARN",
+                               detail=f"{', '.join(moved)} moves during the shot and only the start frame shows the look; "
+                                      "add an end frame (end_frame + end_pose) where they arrive")]
+
     def dialogue_problems(self) -> list[str]:
         """Each scripted dialogue line is spoken by exactly one generation of its scene; references must exist."""
         out: list[str] = []
@@ -359,7 +374,7 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         still = p.still_prompt(decl, unit)
         _write(out / "stills" / f"start_{gid}.txt", still + "\n", out)
         issues = list(report.issues)
-        issues += p.motion_target_issues(decl)
+        issues += p.motion_target_issues(decl) + p.look_pin_issues(decl)
         end_words: int | None = None
         if decl.end_frame:
             if p.end_clauses(decl):

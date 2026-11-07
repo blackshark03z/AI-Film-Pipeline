@@ -177,7 +177,9 @@ def compile_scene_prompt(unit: SceneUnit, *,
         visible = {c for shot in unit.shots for c in shot.axis.visible}
         if len(visible) < 2:
             prohibitions = tuple(p for p in prohibitions if p != "No touching.")
-        continuity = end_state.describe_change(start_state or ContinuityState()) if end_state else ""
+        continuity = " ".join(t for t in (
+            end_state.describe_change(start_state or ContinuityState()),
+            end_state.describe_static(start_state or ContinuityState())) if t) if end_state else ""
         dialogue_text = " ".join(dialogue)
         sound_text = ("Sound design: " + "; ".join(sound) + ".") if sound else ""
     else:

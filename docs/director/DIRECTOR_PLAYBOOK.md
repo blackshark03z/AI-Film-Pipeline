@@ -265,6 +265,11 @@ verified (§8).
    A motion that stops mid-travel stops **on a visible set object** (`stops_at`, e.g. brass shutter catches):
    never "halfway" / "the middle" (`STOP_TARGET`, `TARGET_CONFLICT`). With an end still, the last frame comes
    right after the stop. Measure the prop's path on every take (`film.py motion`) before the review.
+   **What the shot does not change is pinned too** (film04 SC01_g2 t1: the action named "the gap under the shutter"
+   and the model rolled the shutter up to make one): start-frame prompts say "Unchanged the whole shot, nothing moves
+   it: <prop> <state>" for every prop whose end state equals its start state. A person who walks toward the camera is
+   pinned only by a far, small start frame (same take: olive rain jacket became a black hoodie); give such a shot an
+   end frame where they arrive (plan WARN `LOOK_NOT_PINNED`).
 6. **Words that cost credits.** Police + race themes together triggered refunded "reputational risk" blocks (film01,
    film03): no race words in video prose (the start frame carries the look) and drop "police" from the prose of the
    video prompt (`.soft.txt`), dialogue unchanged. Photoreal character refs are refused by some providers; the
