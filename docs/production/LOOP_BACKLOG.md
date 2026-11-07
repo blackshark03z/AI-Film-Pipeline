@@ -358,13 +358,13 @@ passes: a missing clip is a BLOCK. (c) After `dailies` + `ingest`, `review_file`
 raises (extra keys forbidden): `ingest_review` should point `review_file` at the stored bare QC, and `_review` should unwrap a
 legacy sheet. Tests for each; existing film03 gate-4 tests stay green.
 
-### P11-04 Gate 3 staleness: header fields and storyboard files — IN_PROGRESS (Codex findings 8–9; verified)
+### P11-04 Gate 3 staleness: header fields and storyboard files — DONE (3a71668) (Codex findings 8–9; verified)
 Files: `gate_checks.py` (`PLAN_INPUTS`, `plan_issues`), tests.
 (a) `film.json` `language`, `generation_s`, `fps`, `aspect` feed the plan but are not in `plan_inputs_sha`: include the
 planning-relevant header fields (not `gates`, `budget`, `disclosure`, `rehearsal`). (b) Storyboard approval survives a changed or
 deleted PNG: gate 3 re-checks the approved frame hashes. The film03 golden test must stay byte-identical.
 
-### P11-05 Acceptance is bound to the disclosure policy — READY (Codex finding 1; verified)
+### P11-05 Acceptance is bound to the disclosure policy — IN_PROGRESS (Codex finding 1; verified)
 Files: `deliver.py` (`accept_delivery`, manifest), `gate_checks.py` (`master_issues`), tests.
 Record `ai_label` in the manifest / `07_delivery.json`; `accept_delivery` and gate 6 refuse when it differs from the current
 `film.json` `disclosure.ai_label` ("deliver again under the current policy").
