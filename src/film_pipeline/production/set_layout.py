@@ -42,6 +42,8 @@ class SetObject(ContractModel):
     zone: Ident
     placement: str  # fixes it relative to other things: "mounted above the ticket window, rolls down over its glass"
     operation: str = ""  # how a person works it on screen: "pulled down by the handle on its bottom edge"
+    # zone the operator stands in; without it film04's clerk reached through the glass to a hall-side handle
+    operated_from: Ident | None = None
     at: tuple[float, float] | None = None
 
 
@@ -78,6 +80,8 @@ class SetLayout(ContractModel):
         for o in self.objects:
             if o.zone not in zone_ids:
                 raise ValueError(f"set layout: object {o.id} is in unknown zone {o.zone!r}")
+            if o.operated_from is not None and o.operated_from not in zone_ids:
+                raise ValueError(f"set layout: object {o.id} is operated from unknown zone {o.operated_from!r}")
         for c in self.cameras:
             if c.zone not in zone_ids:
                 raise ValueError(f"set layout: camera {c.id} is in unknown zone {c.zone!r}")
@@ -114,7 +118,16 @@ class SetLayout(ContractModel):
             parts.append(f"The {o.label} is {o.placement}.")
             if o.operation:
                 parts.append(f"The {o.label} is {o.operation}.")
+            if o.operated_from is not None:
+                parts.append(self._operator_side(o, cam))
         return " ".join(parts)
+
+    def _operator_side(self, o: SetObject, cam: CameraPosition) -> str:
+        zone = next(z for z in self.zones if z.id == o.operated_from)
+        if cam.zone == o.operated_from:
+            return f"It is worked from the {zone.label}, the camera's side."
+        return (f"It is worked only from the {zone.label}, the far side from the camera: "
+                f"the hand on it stays on that side and never reaches through to the camera's side.")
 
     def unseen_text(self, cid: str) -> str:
         """Objects this camera does not see. The location text names every object, so without this the

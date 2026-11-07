@@ -326,7 +326,13 @@ film04: ticket office layout, cameras A (hall, through the window) / B (booth, t
 on camera A with the shutter pulled by its handle. Focused suite 775 passed, 1 skipped. Plates A/B/C made in Flow image mode (0 credits) and
 sent to the Owner. Plate B invented a second clock in the hall -> plate prompts name out-of-frame objects (`unseen_text`), B redone.
 Owner approved plates A/B/C (2026-11-07; media/stills/plate_ticket_office_night_*). SC01_g1 start still redone from plate A + MARA (0 credits,
-Flow media cc2e86cc), registered NOT approved. Open: Owner approves still + storyboard, then one resend (~6 credits, OWNER_GO_LIVE YES->NO).
+Flow media cc2e86cc), registered NOT approved.
+Owner rejected that still: the clerk's hand reached through the glass to a hall-side shutter handle. Cause: the layout never said which side
+a mechanism is worked from, and the image model defaults handles to the customer side. Fix: `SetObject.operated_from` (zone); view text says
+the hand stays on that side when the camera is on the other. film04: shutter on the booth side, worked by fingers under its bottom edge (no
+handle), plain rectangular window, clock beside (not above) the window. Plate A redone (A5, Flow 00b15c17), start still v8 (Flow 4a20dabf)
+registered NOT approved; Flow picker items are now picked by pixels (picker order is 'recent' and moves). Open: plate C still draws the
+shutter on the hall side (redo in ChatGPT tab); Owner approves still + storyboard, then one resend (~6 credits, OWNER_GO_LIVE YES->NO).
 SC03_g1 is still a two-person WIDE with a jar-on-counter beat (not flagged by the rule; no take yet).
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)

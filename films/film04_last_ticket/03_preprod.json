@@ -119,7 +119,7 @@
             "id": "window",
             "label": "brass-framed ticket window",
             "zone": "booth",
-            "placement": "set into the glass screen on top of the counter, the only opening between clerk and customer",
+            "placement": "a plain rectangular opening set into the glass screen on top of the counter, the only opening between clerk and customer",
             "at": [
               0.62,
               0.42
@@ -129,8 +129,9 @@
             "id": "shutter",
             "label": "roll-down shutter",
             "zone": "booth",
-            "placement": "mounted directly above the ticket window inside its brass frame; lowered, it covers the window glass",
-            "operation": "pulled down and pushed up by the metal handle on its bottom edge",
+            "placement": "mounted on the booth side of the ticket window, directly above it inside its brass frame; lowered, it covers the window glass from behind",
+            "operation": "pulled down and pushed up by fingers hooked under its bottom edge, from inside the booth",
+            "operated_from": "booth",
             "at": [
               0.62,
               0.36
@@ -150,7 +151,7 @@
             "id": "clock",
             "label": "round wall clock",
             "zone": "booth",
-            "placement": "on the back wall of the clerk booth, above the clerk's head, seen through the ticket window",
+            "placement": "on the back wall of the clerk booth, to the right of the ticket window, seen through the glass screen",
             "at": [
               0.62,
               0.08
@@ -998,11 +999,11 @@
   "stills": {
     "SC01_g1": {
       "file": "media/stills/start_SC01_g1.jpg",
-      "sha256": "823d2f968a7a9bcd77f32fb2ba34bf0977ca98a73927bbbbbac60844390587a1",
-      "prompt_sha256": "0453549f597ce6c6947ff9668aa69d0b2a5047abe792cff20cf70e8b4c6457cf",
-      "source": "Flow GPM wanglin08ma, Nano Banana 2.1, refs plate A (0126f9b6) + MARA; media cc2e86cc",
+      "sha256": "10febc9b4c5e3a2add160266c0ec376c623eba9123f198eafe32ea56e7af5ab5",
+      "prompt_sha256": "511abe7d93a4f808b7e2d1cdcf265dfb2f25d3213d33ccedb6223bd83cdffc71",
+      "source": "Flow GPM wanglin08ma, Nano Banana 2.1, refs plate A5 (00b15c17, pixel-matched) + MARA; media 4a20dabf",
       "credits": 0.0,
-      "registered_at": "2026-11-07T13:42:21+00:00",
+      "registered_at": "2026-11-07T13:57:47+00:00",
       "approved_by": "",
       "approved_at": ""
     }

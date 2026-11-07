@@ -146,6 +146,22 @@ def test_unseen_text_names_objects_out_of_frame():
     assert layout.unseen_text("nope") == ""
 
 
+def test_operated_from_tells_which_side_the_hand_stays_on():
+    # film04 SC01_g1 still: the clerk's hand reached through the glass to a hall-side shutter handle
+    data = layout_data()
+    next(o for o in data["objects"] if o["id"] == "shutter")["operated_from"] = "booth"
+    layout = SetLayout.model_validate(data)
+    assert layout.view_text("A").endswith(
+        "It is worked only from the clerk booth (staff side), the far side from the camera: "
+        "the hand on it stays on that side and never reaches through to the camera's side.")
+    data["cameras"][1]["sees"] = ["clock", "shutter"]
+    assert "It is worked from the clerk booth (staff side), the camera's side." in \
+        SetLayout.model_validate(data).view_text("B")
+    next(o for o in data["objects"] if o["id"] == "shutter")["operated_from"] = "roof"
+    with pytest.raises(ValueError, match="operated from unknown zone"):
+        SetLayout.model_validate(data)
+
+
 # ---- rules --------------------------------------------------------------------------------------------------
 
 def test_clean_layout_has_no_issues(tmp_path):

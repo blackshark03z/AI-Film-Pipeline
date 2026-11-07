@@ -70,7 +70,7 @@ def test_still_prompt_states_the_pose_of_the_first_instant_and_names_only_who_is
     # and the prompt called for a "two-shot, THEO left" with MARA alone
     pkg = pkg_of(root)
     prompt = S.still_prompts(pkg)["SC01_g1"]
-    assert "First instant: MARA stands behind the counter at the ticket window, her hand on the handle of the raised shutter." in prompt
+    assert "First instant: MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter." in prompt
     assert "THEO" not in prompt and "two-shot" not in prompt and "Only MARA in frame" in prompt
 
 

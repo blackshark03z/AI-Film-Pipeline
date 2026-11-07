@@ -19,13 +19,13 @@
             "kind": "SETUP",
             "start_s": 0.0,
             "end_s": 2.0,
-            "description": "MARA stands behind the counter at the ticket window, her hand on the handle of the raised shutter"
+            "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
           },
           {
             "kind": "ACTION",
             "start_s": 2.0,
             "end_s": 6.0,
-            "description": "she pulls the shutter halfway down by its handle and stops, her hand still on it"
+            "description": "she pulls the shutter halfway down by its bottom edge and stops, her fingers still on it"
           },
           {
             "kind": "HOLD",
@@ -35,7 +35,7 @@
           }
         ],
         "once_actions": [
-          "pulls the shutter halfway down by its handle and stops"
+          "pulls the shutter halfway down by its bottom edge and stops"
         ],
         "gesture_budget": 1,
         "performance": [
