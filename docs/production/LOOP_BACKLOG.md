@@ -3,7 +3,16 @@
 OWNER_GO_LIVE: NO
 <!-- Owner flips to YES to allow LIVE items (real Flow/ChatGPT generation). Tech Lead never flips it. -->
 
-## Active phase: P10 — Ship readiness (Tech Lead plan, 2026-11-07)
+## Loop outcome (2026-11-07): STOPPED - no READY item left
+
+P0-P11 are DONE offline. Only two items remain and both are **LIVE** (need `OWNER_GO_LIVE: YES`, written by the Owner): **P3-05**
+(one canary generation, Omni Flash 360p) and **P8-02** (film04: 12 generations, expected 171.2, cap 256.8 credits). Test and
+canary videos use Omni Flash at 360p (Owner, 2026-11-07). P11 (Codex review follow-ups) closed in 8 commits: P11-01 9:16 label
+(37b7813), P11-02 label pixel check (2a866de), P11-03 gate 4 (8ddd638), P11-04 gate 3 (3a71668), P11-05 disclosure policy
+(98aeab3), P11-06 still decode (db60d67), P11-07 `edit --init` / `generators --init` (52b14cf), P11-08 rehearsal restore check
+(e666c5d). The loop restarts when the Owner flips the go-live line or adds a READY item.
+
+## Phase P10 — Ship readiness (Tech Lead plan, 2026-11-07), closed
 
 P0–P9 built every stage offline; film04 is authored to gate 2 + plan. **Ship** = a new film goes from package to a delivered
 master using only `film.py` commands and Owner checkpoints, with no per-film code, and the Owner accepts it. What stands in
@@ -381,7 +390,7 @@ title card with the AI line (deliver BLOCKs `AI_LABEL_MISSING` without it) and `
 the shot list and the latest ACCEPTED takes (refuses to overwrite a non-empty EDL), title card from the film title plus the AI
 line; `generators --init` drafts the record from the route/model of the take log. Both are drafts for a human to review.
 
-### P11-08 The rehearsal also runs the archive restore check — IN_PROGRESS (found by P10-07, row 156)
+### P11-08 The rehearsal also runs the archive restore check — DONE (e666c5d) (found by P10-07, row 156)
 Files: `rehearsal.py`, `tests/test_production_rehearsal.py`, `REHEARSAL_FILM04.md`. `deliver.verify_archive` is the restore
 check (`film.py status --package <delivery>`) but no run exercises it. Add it as the last rehearsal step on a *copy* of the
 archive moved to another directory; record the result. Done when the rehearsal report lists `restore` ok.

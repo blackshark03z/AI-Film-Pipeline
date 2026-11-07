@@ -32,7 +32,7 @@ Keep this file to one screen. Full history up to 2026-11-06:
 | film03 "The Front Desk" | TECHNICAL PASS, 139 s final with C2PA dev signer; Owner review pending |
 | E2E narration CLI (`tools/film_e2e.py`) | prepare/resume/status/finish; plan v2 gates blocking, continuity, WP3 choreography and SRT action meaning; per-project image profile/tab and Flow account alias |
 | E2E sample `e2e_badge_20261104` | 2 SelectedTakes, 6 clips awaiting review; SHOT04 fix awaiting Owner; SHOT08 NOT_FIXED |
-| Production system (`films/<id>/` + `tools/film.py`), 2026-11-07 | P0–P10 DONE offline ([backlog](../production/LOOP_BACKLOG.md)): gates 1–6 validated, start-still stage, delivery fixes, prompt word budget, offline dress rehearsal of film04 (synthetic, never product proof), runbook + Owner review pack, Codex review; full suite 1873 passed; film03 re-run through the package (technical); film04 "Last Ticket" authored to gate 2 + clean plan, 0 credits; next: Owner go-live for P3-05 / P8-02, P11 hardening meanwhile |
+| Production system (`films/<id>/` + `tools/film.py`), 2026-11-07 | P0–P10 DONE offline ([backlog](../production/LOOP_BACKLOG.md)): gates 1–6 validated, start-still stage, delivery fixes, prompt word budget, offline dress rehearsal of film04 (synthetic, never product proof), runbook + Owner review pack, Codex review; full suite 1873 passed; P11 hardening from the Codex review DONE (9:16 label, gates 3/4/6 evidence, `edit --init`, rehearsal restore check; loop stopped, only LIVE items left); film03 re-run through the package (technical); film04 "Last Ticket" authored to gate 2 + clean plan, 0 credits; next: Owner go-live for P3-05 / P8-02 (test clips Omni Flash 360p) |
 
 ## Main blocker and next step
 
