@@ -350,7 +350,7 @@ target's own contrast ≥ threshold *and* the difference. (b) 3 of 5 sampled fra
 frame (sample count stays 5, add the first and last body frame) or record the exact frames missing the label as BLOCK.
 Tests: zero-contrast target with negative control fails; 4 of 5 fails. Do not lower any threshold.
 
-### P11-03 Gate 4 binds acceptance to current inputs and present bytes — IN_PROGRESS (Codex findings 5–7; verified)
+### P11-03 Gate 4 binds acceptance to current inputs and present bytes — DONE (8ddd638) (Codex findings 5–7; verified)
 Files: `gate_checks.py` (`_take_state`, `_review`), `takes.py` (review file pointer), tests.
 (a) An ACCEPTED take stays valid after the shot prompt changes without a `ShotDecl.version` bump: compare the take's
 `prompt_sha256` with the current emitted prompt and mark the take stale. (b) A missing accepted clip skips the hash check and
@@ -358,7 +358,7 @@ passes: a missing clip is a BLOCK. (c) After `dailies` + `ingest`, `review_file`
 raises (extra keys forbidden): `ingest_review` should point `review_file` at the stored bare QC, and `_review` should unwrap a
 legacy sheet. Tests for each; existing film03 gate-4 tests stay green.
 
-### P11-04 Gate 3 staleness: header fields and storyboard files — READY (Codex findings 8–9; verified)
+### P11-04 Gate 3 staleness: header fields and storyboard files — IN_PROGRESS (Codex findings 8–9; verified)
 Files: `gate_checks.py` (`PLAN_INPUTS`, `plan_issues`), tests.
 (a) `film.json` `language`, `generation_s`, `fps`, `aspect` feed the plan but are not in `plan_inputs_sha`: include the
 planning-relevant header fields (not `gates`, `budget`, `disclosure`, `rehearsal`). (b) Storyboard approval survives a changed or
