@@ -6,6 +6,8 @@ OWNER_GO_LIVE: NO
 
 ## Loop outcome (2026-11-07): STOPPED - no READY item left
 
+**2026-11-07 later:** P14 (gaps from the external comparison) added as READY offline items; the loop may resume on them.
+
 P0-P11 are DONE offline. Only two items remain and both are **LIVE** (need `OWNER_GO_LIVE: YES`, written by the Owner): **P3-05**
 (one canary generation, Omni Flash 360p) and **P8-02** (film04: 12 generations, expected 171.2, cap 256.8 credits). Test and
 canary videos use Omni Flash at 360p (Owner, 2026-11-07). P11 (Codex review follow-ups) closed in 8 commits: P11-01 9:16 label
@@ -487,3 +489,74 @@ runs `python -c "from film_pipeline..."` as a subprocess and gets `ModuleNotFoun
 `pythonpath = ["src"]` only applies to the pytest process. Fix: pass `env` with `PYTHONPATH=<repo>/src` (or `cwd`/`-I` aware)
 in that subprocess call. Do not weaken the assertion.
 
+
+## P14 — Gaps found by the external comparison (Tech Lead, 2026-11-07)
+
+Source: desk research of public e2e AI film/drama systems (ViMax, MVAgent, DramaChain Bench, "Lights, Camera, Consistency",
+OpenMontage, manju-laoli Director Suite, Dramake, Story Claw). Our direction grammar and gates are deeper than all of them; these
+items close the gaps where they are ahead. All offline (0 credits) unless marked LIVE. They do not compete with P8-02: film04
+waits on the Owner's take review. Assist signals stay WARN/ranking only; nothing here may ACCEPT a still or a take.
+
+### P14-01 Map external rule sets onto our preflight — READY
+Read (web, no downloads, nothing executed) the prompt/plan rules of manju-laoli Director Suite
+(`github.com/lixiaoxiao9888-create/manju-laoli-skill`: `validate_prompt.py` C1–C33, H1–H12, `gate_check.py`) and Dramake
+(`github.com/xixihhhh/ai-short-drama-skill`: `validate_plan.py`, four gates, continuity ledger, voice bible). Write
+`docs/research/EXTERNAL_RULES_MAP.md`: one row per external rule → our rule/code path (`preflight`, `feasibility`, `axis`,
+`set_layout`, `gate_checks`) or MISSING or N/A with reason. Each MISSING rule that matches a defect we actually hit (film01–04
+lessons, P13 reviews) becomes a new READY item with that evidence; others are listed, not built. Licenses recorded; no code copied.
+Done when every external rule has a row.
+
+### P14-02 Best-of-N start stills — READY
+Files: `production/stills.py`, `tools/film.py stills`, `production/reviewpack.py`, tests. Today a generation has one registered
+still. Allow N candidates per generation (default 2; image mode is 0 credits) under `stills/<gid>/cand_<k>`; the review pack shows
+them side by side with the plate and the readout; `approve` names the chosen candidate and records the others as REJECTED with an
+optional cause. Gate 3 and `approved_still_path` keep their current contract (one approved still). Evidence: ViMax reports best-of-2
+keyframe selection +3.8% cross-shot consistency, best-of-3/4 no further gain. Done when film04 stills list/approve works with 2
+candidates in a test package and existing still tests pass unchanged.
+
+### P14-03 VLM checklist judge for stills and takes (WARN) — READY (after P14-02)
+Files: new `production/vlm_check.py`, reuse `gemini_semantic.py` (`GeminiSemanticQCEvaluator`, key handling, fingerprint), `film.py
+review`, tests with a fake evaluator. Build a yes/no checklist from the plan: readout facts + evidence (`set_layout`), people in frame,
+choreography phases and `once_actions`, performance `visible_cues` and `prohibited_misread`, start/end state. Ask it on the still
+and on sampled take frames (first/last/phase midpoints). Output: per-question answer + frame, written into the dailies template as
+pre-filled WARN; also a ranking of P14-02 candidates. Never PASS/ACCEPT. Log every judge answer next to the human verdict so
+agreement can be measured (VLM yes/no judges are known to lean "yes"); report agreement on film04 takes once they exist. Live API
+calls only with a key already configured for the project; tests use a fake. Done when a film04 dailies template carries the
+checklist and the agreement report runs on recorded verdicts.
+
+### P14-04 Dialogue check: what was said vs the script (WARN) — READY (ASR install: Owner decision)
+Files: new `production/dialogue_check.py`, `film.py review`, tests. `master_qc` already checks dialogue-cue timing against the
+dialogue stem (row 142); nothing checks the words. Compare a transcript of each take with its `SpokenLine`s (Vietnamese): missing,
+extra or swapped lines, word error rate, speech outside the speaker's shot window, speech when the plan says silence. Build the
+comparison with an injected transcript first (fixtures); the ASR backend (e.g. faster-whisper, local model) is a dependency install
+→ `BLOCKED: needs Owner` for that part only, as WP4 was. Evidence: DramaChain Bench's weakest automated score is shot-level
+audio-visual sync (1.49/5). Covers rows 74, 142. Done when the comparison runs on fixtures and the dailies template shows the WARNs.
+
+### P14-05 Voice bible per character — READY
+Files: `03_preprod` schema (`production/sections.py`), `drama/prompt.py` dialogue block, `continuity.py`, tests. Each speaking
+character gets a fixed voice description (age, pitch, pace, accent, timbre words) and, once a take is accepted, a reference clip
+(take id + time range). Prompts carry the same voice words in every scene; `validate` BLOCKs a speaking character without a voice
+entry; take review asks "same voice as the reference clip?". No audio embedding yet. Evidence: Dramake and Story Claw keep a
+per-character voice map; we only describe voice per line. Done when film04's characters have entries and prompts compile within the
+word budget (golden film03 unchanged or diff justified).
+
+### P14-06 Defect taxonomy aligned with DramaChain Bench — READY
+Files: `production/qc_model.py`, `drama/kpi.py`, `production/report.py`, tests. Read the DramaChain Bench paper
+(arXiv 2609.00646) axes and leaf dimensions; map our review cause codes and 16 QC groups onto them (table in
+`docs/research/EXTERNAL_RULES_MAP.md` or its own file). KPI ledger then reports defects by stage that missed them **and** by
+benchmark axis, so our numbers can be compared with published ones. No change to existing verdicts. Done when `film.py status`
+prints the per-axis count for film01–03 ledgers.
+
+### P14-07 Motion conditioning beyond text + start frame: capability study — READY (offline part)
+Files: `docs/research/MOTION_CONDITIONING.md`, provider capability manifest. SHOT08 (push → backward recoil) failed with text +
+start frame only. Record, per provider we can reach (Flow Veo 3.1, Dola Seedance 2.0), which conditioning exists: last frame,
+multi-image ref, video reference (Seedance Omni Reference: up to 3 clips), pose/depth/control video; mark each MEASURED or ASSUMED.
+Propose one A/B (text-only vs video-ref from a staged reference clip or animatic) for a contact/recoil beat with its credit
+estimate. The run itself is a separate LIVE item (Omni Flash 360p on Flow, or Dola within its quota) only after Owner go-live.
+
+### P14-08 API provider fallback: interface only — READY
+Files: `providers/base.py` (read first), new `providers/api_stub.py`, capability manifest, tests. The browser routes (Flow, Dola)
+are the fragile part of the system. Define what an API route would need to satisfy the same take contract (intent receipt, output
+hash, route/model in the take log, credits/cost) and add a stub adapter that refuses to send. No keys, no network, no paid account;
+using a paid API (e.g. BytePlus ModelArk) remains an Owner decision (handoff 2026-10-31: backup only). Done when the stub passes the
+same take-log tests as the mock runner.
