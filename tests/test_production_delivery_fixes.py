@@ -127,6 +127,46 @@ def test_always_setting_with_a_master_that_has_no_label_blocks_the_delivery(tmp_
 
 
 @needs_ffmpeg
+def test_the_9x16_version_carries_its_own_label_and_deliver_checks_it(tmp_path):
+    """P11-01: the 16:9 label (x 24-130) is cut off by the 9:16 crop, so the portrait is burned and sampled on its own."""
+    root, report = pipeline(tmp_path)
+    vr = json.loads((root / "versions" / "versions.json").read_text(encoding="utf-8"))
+    item = next(v for v in vr["versions"] if v["name"] == "portrait_9x16")
+    assert item["ai_label"]["text"] == "AI-generated" and item["ai_label"]["start_s"] > 0
+    portrait = root / item["file"]
+    assert DL.label_evidence(portrait, float(item["ai_label"]["start_s"]), 4.0, portrait=True)["ok"]
+    done, body = deliver(root, report)
+    assert done.returncode == 0 and body["ok"], body
+    assert body["ai_label"]["portrait_evidence"]["ok"] and body["ai_label"]["portrait_evidence"]["positive"] >= 3
+
+
+@needs_ffmpeg
+def test_title_card_mode_burns_no_label_on_the_9x16_either(tmp_path):
+    root, _ = pipeline(tmp_path, ai_label="title_card")
+    vr = json.loads((root / "versions" / "versions.json").read_text(encoding="utf-8"))
+    item = next(v for v in vr["versions"] if v["name"] == "portrait_9x16")
+    assert item["ai_label"] is None
+    assert not DL.label_evidence(root / item["file"], 3.0, 4.0, portrait=True)["ok"]
+
+
+@needs_ffmpeg
+def test_a_9x16_version_without_the_label_blocks_the_delivery(tmp_path):
+    from film_pipeline.production import versions as VS
+    root, report = pipeline(tmp_path)
+    path = root / "versions" / "versions.json"
+    vr = json.loads(path.read_text(encoding="utf-8"))
+    item = next(v for v in vr["versions"] if v["name"] == "portrait_9x16")
+    master = root / "media" / "cut" / "mixed.mp4"
+    VS.render_portrait(master, item["segments"], root / item["file"], 720, 24.0)  # an old version: no label overlay
+    item["sha256"] = VS.sha256_file(root / item["file"])
+    path.write_text(json.dumps(vr), encoding="utf-8")
+    done, body = deliver(root, report)
+    assert done.returncode == 1 and "AI_LABEL_NOT_BURNED_9X16" in codes(body, "BLOCK")
+    assert "AI_LABEL_NOT_BURNED" not in codes(body, "BLOCK")  # the 16:9 master is fine
+    assert not (root / "delivery").exists()
+
+
+@needs_ffmpeg
 def test_deliver_takes_a_generators_file_and_refuses_both_forms(tmp_path):
     root, report = pipeline(tmp_path)
     path = gen_file(tmp_path, [FLOW, IMAGE])

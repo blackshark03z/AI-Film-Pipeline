@@ -108,7 +108,23 @@ def portrait_segments(plan: dict[str, Any], section: Any, reframes: dict[str, An
     return segments, problems
 
 
-def portrait_graph(segments: list[dict[str, Any]], height: int) -> str:
+PORTRAIT_LABEL_X, PORTRAIT_LABEL_Y, PORTRAIT_LABEL_SIZE = 24, PORTRAIT_H - 260, 28  # above the bottom strip platforms cover
+
+
+def portrait_label_png(path: Path, text: str) -> Path:
+    """The body AI label drawn for the 9:16 frame (the 16:9 one sits at x 24-130 and is cut off by the crop)."""
+    from PIL import Image, ImageDraw, ImageFont
+    from film_pipeline.drama.post import DEFAULT_FONTS
+    img = Image.new("RGBA", (PORTRAIT_W, PORTRAIT_H), (0, 0, 0, 0))
+    ImageDraw.Draw(img).text((PORTRAIT_LABEL_X, PORTRAIT_LABEL_Y), text,
+                             font=ImageFont.truetype(DEFAULT_FONTS[0], PORTRAIT_LABEL_SIZE), fill=(255, 255, 255, 190))
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    img.save(path)
+    return Path(path)
+
+
+def portrait_graph(segments: list[dict[str, Any]], height: int, label_window: tuple[float, float] | None = None) -> str:
+    """`label_window` (start_s, end_s) overlays input 1 (the label PNG) on the concatenated picture for that window."""
     parts, labels = [], []
     for k, s in enumerate(segments):
         trim = f"[0:v]trim=start_frame={s['start_frame']}:end_frame={s['end_frame']},setpts=PTS-STARTPTS"
@@ -118,12 +134,19 @@ def portrait_graph(segments: list[dict[str, Any]], height: int) -> str:
             shape = f"scale={PORTRAIT_W}:-2:flags=lanczos,pad={PORTRAIT_W}:{PORTRAIT_H}:0:(oh-ih)/2:black"
         parts.append(f"{trim},{shape},setsar=1[s{k}]")
         labels.append(f"[s{k}]")
-    return ";".join(parts) + ";" + "".join(labels) + f"concat=n={len(segments)}:v=1:a=0[v]"
+    head = ";".join(parts) + ";" + "".join(labels) + f"concat=n={len(segments)}:v=1:a=0"
+    if label_window is None:
+        return head + "[v]"
+    return head + (f"[c];[c][1:v]overlay=0:0:shortest=1:enable='between(t,{label_window[0]:.3f},{label_window[1]:.3f})'[v]")
 
 
-def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, height: int, fps: float) -> Path:
+def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, height: int, fps: float,
+                    label: tuple[Path, float, float] | None = None) -> Path:
+    """`label` = (PNG, start_s, end_s): the AI label burned over the body of the 9:16 picture."""
     out.parent.mkdir(parents=True, exist_ok=True)
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(source), "-filter_complex", portrait_graph(segments, height),
+    inputs = ["-i", str(source)] + (["-loop", "1", "-i", str(label[0])] if label else [])
+    graph = portrait_graph(segments, height, (label[1], label[2]) if label else None)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", graph,
                     "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
                     "-r", f"{fps:g}", "-c:a", "copy", "-movflags", "+faststart", str(out)], check=True)
     return out
@@ -289,7 +312,14 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
         problems.append(_problem("PORTRAIT_BURNED_TEXT", "WARN",
                                  "the master carries burned-in dialogue cues across the 16:9 frame; the 9:16 crop loses part of them "
                                  "(use --portrait-source with a clean cut or ship the sidecar SRTs)"))
-    portrait = render_portrait(source, segments, out / f"{pkg.header.film_id}_9x16.mp4", height, fps)
+    label_info: dict[str, Any] | None = None
+    label = None
+    if pkg.header.disclosure.ai_label == "always":  # same promise as the 16:9 body: the label stays on from the end of the title to the end card
+        from film_pipeline.production.deliver import BODY_LABEL
+        label_info = {"text": BODY_LABEL, "start_s": plan["title_s"], "end_s": plan["body_end_s"],
+                      "x": PORTRAIT_LABEL_X, "y": PORTRAIT_LABEL_Y}
+        label = (portrait_label_png(out / "portrait_label.png", BODY_LABEL), plan["title_s"], plan["body_end_s"])
+    portrait = render_portrait(source, segments, out / f"{pkg.header.film_id}_9x16.mp4", height, fps, label)
     thumbs, found = thumbnails(pkg, master, plan, section, out / "thumbs", titles_report)
     problems += found
     p_w, p_h, p_fps = probe_size(portrait)
@@ -297,7 +327,7 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
                  "sha256": sha256_file(master)},
                 {"name": "portrait_9x16", "file": str(portrait.relative_to(Path(pkg.root))).replace("\\", "/"), "width": p_w,
                  "height": p_h, "fps": p_fps, "sha256": sha256_file(portrait), "upscale": round(PORTRAIT_H / height, 2),
-                 "segments": segments}]
+                 "ai_label": label_info, "segments": segments}]
     if (p_w, p_h) != (PORTRAIT_W, PORTRAIT_H):
         problems.append(_problem("PORTRAIT_SIZE", "BLOCK", f"portrait render is {p_w}x{p_h}, expected {PORTRAIT_W}x{PORTRAIT_H}"))
     draft, found = metadata_draft(pkg, plan, [{k: v for k, v in x.items() if k != "segments"} for x in versions], generators=generators)

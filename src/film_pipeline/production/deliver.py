@@ -112,8 +112,10 @@ def build_disclosure(pkg: Any, section: Any, generators: Any) -> Any:
                       visible_label=label, jurisdiction_notes=JURISDICTION)
 
 
-def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int = 5, min_contrast: float = 25.0) -> dict[str, Any]:
-    """Look for the burned-in body label in sampled frames of the 16:9 master.
+def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int = 5, min_contrast: float = 25.0,
+                   portrait: bool = False) -> dict[str, Any]:
+    """Look for the burned-in body label in sampled frames of the 16:9 master (`portrait=True`: of the 9:16 version, where
+    the label is drawn by `versions.portrait_label_png` and the control sits 300 px to the right).
 
     At each sample the label's glyph pixels (as `drama.post.ai_label_png` draws them) are compared with the ring around them;
     the same comparison 400 px to the right is the control. A frame counts when the glyphs stand out by `min_contrast` luma
@@ -122,6 +124,9 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
     import tempfile
     from PIL import Image, ImageFilter
     from film_pipeline.drama.post import H, W, ai_label_png, probe_video_duration
+    from film_pipeline.production import versions as vs
+    if portrait:
+        W, H = vs.PORTRAIT_W, vs.PORTRAIT_H  # noqa: N806 - the frame being sampled
     total = probe_video_duration(master)
     lo, hi = title_s + 0.3, total - end_s - 0.3
     if hi <= lo:
@@ -129,7 +134,8 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
     times = [lo + (hi - lo) * (i + 0.5) / samples for i in range(samples)]
     with tempfile.TemporaryDirectory() as tmp:
         work = Path(tmp)
-        alpha = Image.open(ai_label_png(work / "label.png", BODY_LABEL)).split()[3]
+        made = vs.portrait_label_png(work / "label.png", BODY_LABEL) if portrait else ai_label_png(work / "label.png", BODY_LABEL)
+        alpha = Image.open(made).split()[3]
         glyph = alpha.point(lambda v: 255 if v > 100 else 0)
         ring_img = glyph.filter(ImageFilter.MaxFilter(7))
         box = glyph.getbbox()
@@ -139,7 +145,7 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
         pixels = [(x, y) for y in range(max(0, y0), min(H, y1)) for x in range(max(0, x0), min(W, x1))]
         on = [p for p in pixels if glyph.getpixel(p)]
         ring = [p for p in pixels if ring_img.getpixel(p) and not glyph.getpixel(p)]
-        shift = 400
+        shift = 300 if portrait else 400
 
         def contrast(frame: Any, dx: int) -> float:
             mean = lambda ps: sum(frame.getpixel((x + dx, y)) for x, y in ps) / len(ps)  # noqa: E731
@@ -286,6 +292,15 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
             findings.append(_finding("AI_LABEL_NOT_BURNED", "BLOCK",
                                      f"film.json disclosure.ai_label is 'always' but the master does not show the label over "
                                      f"the body ({label_check['evidence']['detail']}): render with film.py titles --render"))
+        if portrait is not None:  # the 9:16 crop cuts the 16:9 label off, so it carries its own and is checked on its own pixels
+            try:
+                label_check["portrait_evidence"] = label_evidence(portrait, float(section.title_s), float(section.end_s), portrait=True)
+            except Exception as exc:  # noqa: BLE001
+                label_check["portrait_evidence"] = {"checked": 0, "positive": 0, "ok": False, "detail": str(exc)[:200]}
+            if not label_check["portrait_evidence"]["ok"]:
+                findings.append(_finding("AI_LABEL_NOT_BURNED_9X16", "BLOCK",
+                                         f"film.json disclosure.ai_label is 'always' but the 9:16 version does not show the label over "
+                                         f"the body ({label_check['portrait_evidence']['detail']}): run film.py versions again"))
 
     # ---- stage the archive
     stage = root / "delivery.staging"

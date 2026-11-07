@@ -336,7 +336,7 @@ only P11 items marked BLOCKED/LIVE remain.
 
 ## P11 — Found by P10 (rehearsal manual steps, review findings)
 
-### P11-01 The 9:16 version drops the body AI label — READY (found by P10-03)
+### P11-01 The 9:16 version drops the body AI label — IN_PROGRESS (found by P10-03)
 Files: `versions.py` (portrait render), `deliver.py` (`label_evidence` for the portrait), tests. `film.json disclosure.ai_label`
 `always` burns the label bottom-left of the 16:9 body (x 24–130 of 1280); the 9:16 centre/tag crop is ~404 px wide, so the
 label is cut off unless the window starts left of x≈130. Evidence: `portrait_segments` crop_x in `tests/test_production_versions.py`.
