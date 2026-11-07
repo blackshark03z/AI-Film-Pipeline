@@ -75,6 +75,61 @@ def test_gate3_stale_plan_and_real_blocks(tmp_path):
     assert "SC01_g1 LOOK: lost the look" in gate(root, "3").issues
 
 
+def set_header(root, **changes):
+    path = root / "film.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    for key, value in changes.items():
+        if isinstance(value, dict):
+            data[key] = {**data.get(key, {}), **value}
+        else:
+            data[key] = value
+    path.write_text(json.dumps(data), encoding="utf-8")
+
+
+def test_gate3_a_planning_header_field_makes_the_plan_stale_but_bookkeeping_does_not(tmp_path):
+    """P11-04: language / fps / aspect / clip length feed the plan; budget, disclosure, rehearsal and gates do not."""
+    root = clone(tmp_path)
+    planned(root, storyboard=False)
+    before = GC.plan_inputs_sha(root)
+    assert GC.HEADER_KEY in before
+    set_header(root, budget={"credits_estimate": 99.0}, disclosure={"ai_label": "title_card"}, rehearsal=True)
+    assert GC.plan_inputs_sha(root) == before
+    assert not any("stale" in i for i in gate(root, "3").issues)
+    for field, value in (("fps", 30), ("generation_s", 6), ("language", "vi"), ("aspect", "9:16")):
+        raw = (root / "film.json").read_text(encoding="utf-8")
+        set_header(root, **{field: value})
+        res = gate(root, "3")
+        assert res.status == "BLOCK" and "stale" in res.issues[0] and GC.HEADER_KEY in res.issues[0], field
+        (root / "film.json").write_text(raw, encoding="utf-8")
+    assert not any("stale" in i for i in gate(root, "3").issues)
+
+
+def test_gate3_spelling_out_a_default_is_not_a_planning_change(tmp_path):
+    root = clone(tmp_path)
+    before = GC.plan_inputs_sha(root)[GC.HEADER_KEY]
+    set_header(root, fps=load_package(root).header.fps, generation_s=load_package(root).header.generation_s)
+    assert GC.plan_inputs_sha(root)[GC.HEADER_KEY] == before
+
+
+def test_gate3_approval_does_not_survive_a_changed_or_deleted_storyboard_frame(tmp_path):
+    pytest.importorskip("PIL")
+    from PIL import Image
+    root = clone(tmp_path)
+    planned(root, approve_storyboard="Reviewer")
+    assert gate(root, "3").status == "PASS"
+    frames = sorted((GC.plan_dir(root) / "storyboard").rglob("*.png"))
+    assert len(frames) == 12
+    original = frames[0].read_bytes()
+    Image.new("RGB", (640, 360), (250, 0, 0)).save(frames[0])  # swapped after the Owner approved it
+    res = gate(root, "3")
+    assert res.status == "BLOCK" and any("changed after it was approved" in i for i in res.issues)
+    frames[0].write_bytes(original)
+    assert gate(root, "3").status == "PASS"
+    frames[1].unlink()
+    res = gate(root, "3")
+    assert res.status == "BLOCK" and any("approved storyboard frame is missing" in i for i in res.issues)
+
+
 def test_plan_sidecar_keeps_gate3_json_unchanged_in_shape(tmp_path):
     root = clone(tmp_path)
     planned(root, storyboard=False)

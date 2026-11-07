@@ -43,9 +43,29 @@ def _preprod_sha(path: Path) -> str:
     return hashlib.sha256(json.dumps(raw, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
 
 
+# film.json fields the plan reads (language of the cues, clip length, frame rate, frame shape); gates, budget, disclosure and
+# rehearsal are bookkeeping and never change a prompt
+HEADER_PLAN_FIELDS = ("language", "generation_s", "fps", "aspect", "resolution")
+HEADER_KEY = "film.json#planning"
+
+
+def _header_sha(path: Path) -> str:
+    """Hash of the planning-relevant header fields with their defaults applied (spelling out a default changes nothing)."""
+    from film_pipeline.production.package import FilmHeader
+    try:
+        header = FilmHeader.model_validate_json(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return file_sha(path)
+    fields = {k: getattr(header, k) for k in HEADER_PLAN_FIELDS}
+    return hashlib.sha256(json.dumps(fields, sort_keys=True).encode("utf-8")).hexdigest()
+
+
 def plan_inputs_sha(root: Path) -> dict[str, str]:
-    return {name: (_preprod_sha if name == "03_preprod.json" else file_sha)(Path(root) / name)
-            for name in PLAN_INPUTS if (Path(root) / name).is_file()}
+    out = {name: (_preprod_sha if name == "03_preprod.json" else file_sha)(Path(root) / name)
+           for name in PLAN_INPUTS if (Path(root) / name).is_file()}
+    if (Path(root) / "film.json").is_file():
+        out[HEADER_KEY] = _header_sha(Path(root) / "film.json")
+    return out
 
 
 def plan_dir(root: Path) -> Path:
@@ -76,11 +96,35 @@ def _is_pending_storyboard(issue: dict[str, Any]) -> bool:
     return issue.get("check") == "STORYBOARD" and str(issue.get("detail", "")).endswith("storyboard PENDING")
 
 
+def storyboard_issues(root: Path) -> list[str]:
+    """An approved frame must still be the file that was approved: a changed or deleted PNG voids the approval."""
+    from film_pipeline.drama.bible import hash_file
+    from film_pipeline.drama.storyboard import StoryboardBoard
+    base = plan_dir(root) / "storyboard"
+    board_path = base / "storyboard.json"
+    if not board_path.is_file():
+        return []
+    try:
+        board = StoryboardBoard.model_validate_json(board_path.read_text(encoding="utf-8"))
+    except ValueError as exc:
+        return [f"storyboard record unreadable: {str(exc)[:120]}"]
+    out = []
+    for frame in board.frames:
+        if frame.status != "APPROVED":
+            continue
+        path = base / frame.image_path
+        if not path.is_file():
+            out.append(f"{frame.shot_id}: the approved storyboard frame is missing ({frame.image_path}): run film.py plan again")
+        elif hash_file(path) != frame.sha256:
+            out.append(f"{frame.shot_id}: the storyboard frame changed after it was approved: run film.py plan again and re-approve")
+    return out
+
+
 def plan_issues(pkg: Any) -> list[str]:
     record, meta, problems = _load_plan(pkg)
     if problems or record is None or meta is None:
         return problems
-    out: list[str] = []
+    out: list[str] = storyboard_issues(Path(pkg.root))
     for key in _PLAN_KEYS:
         out += [f"{key.upper()} {i['check']}: {i['detail']}" for i in record.get(key, []) if i.get("severity") == "BLOCK"]
     for gid, gen in record.get("generations", {}).items():
