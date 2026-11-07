@@ -48,6 +48,22 @@
       "cause": "PROMPT",
       "registered_at": "2026-11-07T19:58:45Z",
       "review_file": "reviews/SC01_g1_t3.qc.json"
+    },
+    {
+      "take_id": "SC01_g1_t4",
+      "generation_id": "SC01_g1",
+      "prompt_sha256": "015a54c8e554af084b2cad5484b25af3cf0281dba75f2f899ca5bd033a3e3904",
+      "start_frame_sha256": "10febc9b4c5e3a2add160266c0ec376c623eba9123f198eafe32ea56e7af5ab5",
+      "route": "start_frame+end_frame+Khung hinh",
+      "model": "Omni Flash 360p",
+      "credits": 12.0,
+      "output_file": "SC01_g1_t10.mp4",
+      "output_sha256": "0f39e5b40fb2e47e0d3197ab013d7742bb4790807a995f2de79a2da6d7714893",
+      "status": "GENERATED",
+      "shot_version": 4,
+      "cause": "",
+      "registered_at": "2026-11-07T21:37:46Z",
+      "review_file": "dailies/SC01_g1_t4.review.json"
     }
   ]
 }

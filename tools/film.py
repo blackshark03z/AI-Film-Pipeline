@@ -354,7 +354,7 @@ def main(argv: list[str] | None = None) -> int:
                 try:
                     entry, created = tk_mod.register_take(
                         pkg.root, pkg.header.film_id, args.register, args.clip,
-                        prompt_text=args.prompt.read_text(encoding="utf-8"), route=args.route, model=args.model,
+                        prompt_text=args.prompt.read_text(encoding="utf-8").strip(), route=args.route, model=args.model,
                         credits=args.credits, start_frame=args.start_frame, known_generations=known,
                         shot_version=next((g.version for g in pkg.typed["shots"].generations
                                            if g.generation_id == args.register), 1) if "shots" in pkg.typed else 1)

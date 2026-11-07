@@ -1,3 +1,4 @@
+import hashlib
 import json
 import subprocess
 import sys
@@ -186,7 +187,7 @@ def test_dailies_embed_autoqc_note_when_clips_given(tmp_path, monkeypatch):
 def test_cli_register_review_ingest_roundtrip(tmp_path):
     pkg = film(tmp_path)
     prompt = tmp_path / "prompt.txt"
-    prompt.write_text("the sent prompt", encoding="utf-8")
+    prompt.write_text("the sent prompt\n", encoding="utf-8")  # plan files end in a newline; generate sends the stripped text
     mp4 = clip(tmp_path, "t.mp4")
 
     def run(*args):
@@ -197,6 +198,7 @@ def test_cli_register_review_ingest_roundtrip(tmp_path):
     code, body = run("takes", *film_arg, "--register", "SC01_g1", "--clip", str(mp4), "--prompt", str(prompt),
                      "--model", "veo-omni-flash", "--credits", "12")
     assert code == 0 and body["created"] and body["take"]["take_id"] == "SC01_g1_t1"
+    assert body["take"]["prompt_sha256"] == hashlib.sha256(b"the sent prompt").hexdigest()  # same hash as generate's receipt
     code, body = run("takes", *film_arg, "--register", "SC01_g1", "--clip", str(mp4))
     assert code == 2 and "--prompt" in body["error"]
     code, body = run("review", *film_arg)

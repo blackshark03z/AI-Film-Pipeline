@@ -374,7 +374,7 @@ scene cuts" ("continuous" stays banned: UNCONTROLLED_REPEAT), action first then 
 overlong shots are gone (OPEN_OVERLONG empty). SC01_g1 v4: one moment, no clock glance; hold = hands rest on the still
 shutter. Tests: tests/test_drama_prompt_start_frame.py.
 
-### P13-05 End state pinned by an end still (Flow "Kết thúc" slot) — DONE (code); waits for Owner picks
+### P13-05 End state pinned by an end still (Flow "Kết thúc" slot) — DONE (code + first send); take t4 waits for Owner review
 
 Google Omni docs: first and last frame interpolation, "describe the desired transition". `ShotDecl.end_frame`; plan writes
 `stills/end_<gid>.txt` (edit of the start still, "Keep everything else the same"); stills record `end:<gid>` needs an
@@ -390,6 +390,17 @@ ChatGPT GPM tab try 1 put her face IN FRONT of the half-lowered shutter (the old
 Open, Owner: pick the end frame (B registered: chest, face hidden; A: brow, face visible), approve it and the storyboard;
 then upload the end still to the Flow gallery, set the composer back to Video / Khung hình, one send (YES->NO).
 Note: Flow shows 6 credits for 360p 8 s; the pipeline books 12 (CREDITS_PER_GENERATION) - over-counts the budget.
+Owner picks (2026-11-08, "Bạn tự làm đi" = Tech Lead decides): B approved as end:SC01_g1 + storyboard (by owner-khoikk03).
+Send (2026-11-08): end still uploaded through the "Kết thúc" picker ("Tải nội dung nghe nhìn lên"; Khung hình mode has no
+"+"); one send YES->NO; both slots found by pixels (diff 0.0 / 0.4). flow_send ended AMBIGUOUS: video_count read 7 after
+8 (virtual-grid miscount). Manual re-check: front detail page 6d1cb844 holds the whole sent prompt and the old front
+(t9, ...bda21804) is second -> bound, downloaded as SC01_g1_t10.mp4, registered as take SC01_g1_t4 (GENERATED).
+Tech Lead eye check (0.5 s strip + zoom): start frame matches; shutter comes down once (about 1.5-4 s, earlier than the
+2-6 s phase) and holds; last frame matches the end still (edge at chest, both hands on it, face hidden); no hand through
+the shutter seen at 360p. Not self-accepted: Owner reviews t4.
+Fix found by this send: `film.py takes --register` hashed the prompt file with its trailing newline, so the take log
+disagreed with the generate receipt; it now strips like generate (test in test_production_takes).
+Open: video_count undercounts on the virtual grid -> AMBIGUOUS on a good send (follow-up: count by media ids, not grid slots).
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
 
