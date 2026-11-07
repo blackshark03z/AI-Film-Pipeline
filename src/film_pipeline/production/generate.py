@@ -69,6 +69,28 @@ def _blocker(code: str, detail: str, live_only: bool = False) -> dict[str, Any]:
     return {"code": code, "detail": detail, "live_only": live_only}
 
 
+def _start_still(pkg: Any, generation_id: str, stills_dir: Path | None, blockers: list[dict[str, Any]]) -> Path:
+    """An explicit `--stills` directory wins. Otherwise the still recorded in 03_preprod.json must be approved and current;
+    a generation with no record keeps the old behaviour (media/stills/start_<gid>.png)."""
+    from film_pipeline.production import stills as S
+    root = Path(pkg.root)
+    if stills_dir:
+        still = Path(stills_dir) / f"start_{generation_id}.png"
+    elif generation_id in pkg.typed["preprod"].stills:
+        still = root / pkg.typed["preprod"].stills[generation_id].file
+        state, reason = S.state_of(pkg, generation_id)
+        if state != "APPROVED":
+            blockers.append(_blocker("START_FRAME_NOT_APPROVED", f"{generation_id}: start still {state.lower()}: {reason} "
+                                     f"(film.py stills --approve {generation_id} --by NAME)"))
+        return still
+    else:
+        still = root / "media" / "stills" / f"start_{generation_id}.png"
+    if not still.is_file():
+        blockers.append(_blocker("START_FRAME_MISSING", f"{still} not found (prompt in plan stills/start_{generation_id}.txt; "
+                                 f"film.py stills --register {generation_id} --image PATH)"))
+    return still
+
+
 def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None, stills_dir: Path | None = None,
                   start_token: str | None = None) -> dict[str, Any]:
     shots, pre = pkg.typed.get("shots"), pkg.typed.get("preprod")
@@ -79,7 +101,6 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
         raise ValueError(f"unknown generation {generation_id!r}")
     root = Path(pkg.root)
     plan_out = Path(plan_out) if plan_out else root / "media" / "plan"
-    stills_dir = Path(stills_dir) if stills_dir else root / "media" / "stills"
     log = load_log(root, pkg.header.film_id)
     blockers: list[dict[str, Any]] = []
 
@@ -106,9 +127,7 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
         start_source = f"end frame of {accepted[-1].take_id}" if accepted else f"end frame of {prev.generation_id}"
     else:
         start_source = "approved start still"
-    still = stills_dir / f"start_{generation_id}.png"
-    if not still.is_file():
-        blockers.append(_blocker("START_FRAME_MISSING", f"{still} not found (prompt in plan stills/start_{generation_id}.txt)"))
+    still = _start_still(pkg, generation_id, stills_dir, blockers)
 
     sent = _sent_receipts(root, pkg.header.film_id)
     logged = {t.take_id for t in log.takes}

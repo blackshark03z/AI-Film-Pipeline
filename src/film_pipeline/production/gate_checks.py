@@ -31,8 +31,21 @@ def file_sha(path: Path) -> str:
     return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
+def _preprod_sha(path: Path) -> str:
+    """03_preprod.json without its `stills` record: registering or approving a start still is not a planning change."""
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return file_sha(path)
+    if not isinstance(raw, dict):
+        return file_sha(path)
+    raw.pop("stills", None)  # always canonical JSON, so adding the first still does not change the hash
+    return hashlib.sha256(json.dumps(raw, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
+
+
 def plan_inputs_sha(root: Path) -> dict[str, str]:
-    return {name: file_sha(Path(root) / name) for name in PLAN_INPUTS if (Path(root) / name).is_file()}
+    return {name: (_preprod_sha if name == "03_preprod.json" else file_sha)(Path(root) / name)
+            for name in PLAN_INPUTS if (Path(root) / name).is_file()}
 
 
 def plan_dir(root: Path) -> Path:

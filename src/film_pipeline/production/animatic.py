@@ -8,7 +8,8 @@
 * ``animatic_report.json``  the timing report (Gate 3 input): per generation start/end, frame source, dialogue windows,
                             reading speed, findings
 
-Frames, best source first: an approved still `<stills_dir>/<gid>.png|jpg`, else the schematic storyboard frame
+Frames, best source first: an approved still (`<stills_dir>/<gid>.png|jpg` when a directory is given, else the approved
+stills recorded in `03_preprod.json`, see stills.py), else the schematic storyboard frame
 (`plan`'s `storyboard/<gid>.png`, or rendered here from the axis book), else a plain card. Audio is silence unless a
 temp dialogue track `<audio_dir>/<gid>.wav|mp3|m4a` exists for a generation (any TTS, produced elsewhere - this module
 never synthesises speech and never touches the network); it is padded or cut to the generation length so the timeline
@@ -158,6 +159,10 @@ def build_animatic(pkg: FilmPackage, out_dir: Path | str | None = None, *, still
     stills, board = Path(stills_dir) if stills_dir else None, Path(storyboard_dir) if storyboard_dir else None
     audio = Path(audio_dir) if audio_dir else None
     gen_s = float(pkg.header.generation_s)
+    approved: dict[str, Path] = {}
+    if stills is None and "preprod" in pkg.typed:  # default: the stills the package recorded as approved (stills.py)
+        from film_pipeline.production.stills import approved_stills
+        approved = approved_stills(pkg)
 
     dialogue = {(s.scene_id, e.line_no): e for s in pkg.script.scenes for e in s.elements if e.kind == "dialogue"}
     generated: dict[str, Path] = {}
@@ -172,7 +177,7 @@ def build_animatic(pkg: FilmPackage, out_dir: Path | str | None = None, *, still
     clock = 0.0
     for decl in shots.generations:
         gid = decl.generation_id
-        base, source = _find(stills, gid, _IMAGE_EXT), "still"
+        base, source = _find(stills, gid, _IMAGE_EXT) or approved.get(gid), "still"
         if base is None:
             base, source = _find(board, gid, _IMAGE_EXT) or generated.get(gid), "storyboard"
         if base is None:

@@ -65,7 +65,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 43 | Hair & makeup | `designs` kind hair_makeup with version; shots pin it; no story-day state yet | PARTIAL | P2-01 |
 | 44 | Cinematography planning | `production/camera.py`: per-shot camera setup + per-scene lighting plan, all-or-nothing rule, `film.py camera`, `plan` BLOCKs | HAVE | - |
 | 45 | Lighting design | `camera.LightingPlan` (key direction/quality/colour temp/motivation/practicals, LIGHT_JUMP warn); not compiled into prompts | PARTIAL | - |
-| 46 | Storyboarding | `drama/storyboard.py` schematic board + Gate 2 | HAVE | - |
+| 46 | Storyboarding | `drama/storyboard.py` schematic board + Gate 2; start stills registered/approved in `03_preprod.stills` (`production/stills.py`, `film.py stills`; stale when the still prompt or file changes) | HAVE | - |
 | 47 || `production/animatic.py`: timed storyboard/still frames + captions + optional temp audio -> mp4/srt/timing report (`film.py animatic`) | HAVE | - |
 | 48 | Blocking diagram | `storyboard.render_schematic_frame` + AxisBook | PARTIAL | P2-03 |
 | 49 | Shot planning | `generation.py` split into 8 s units + `coverage` shot list | PARTIAL | P2-05 |

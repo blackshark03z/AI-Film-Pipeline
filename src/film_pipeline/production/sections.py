@@ -98,6 +98,19 @@ def _prop_key(name: str) -> str:
     return name.strip().rstrip(":").strip().lower()
 
 
+class StillRecord(ContractModel):
+    """One registered start still (`03_preprod.json` `stills[<generation_id>]`, see stills.py)."""
+
+    file: str  # path relative to the film root, under media/stills/
+    sha256: str
+    prompt_sha256: str  # sha256 of the still prompt text the image was made for
+    source: str = ""
+    credits: float = Field(default=0.0, ge=0)
+    registered_at: str = ""
+    approved_by: str = ""
+    approved_at: str = ""
+
+
 class PreprodSection(ContractModel):
     """`03_preprod.json`."""
 
@@ -113,11 +126,12 @@ class PreprodSection(ContractModel):
     designs: dict[str, DesignEntry] = Field(default_factory=dict)  # design id -> versioned entry
     rights: list[RightsEntry] = Field(default_factory=list)  # planning.py: legal/rights ledger
     risk_fallbacks: dict[str, str] = Field(default_factory=dict)  # generation_id -> fallback coverage for a HIGH risk
+    stills: dict[str, StillRecord] = Field(default_factory=dict)  # generation_id -> registered start still (stills.py)
 
     @model_validator(mode="after")
     def _references_resolve(self) -> "PreprodSection":
         for label, keys in (("characters", self.characters), ("locations", self.locations),
-                            ("scenes", self.scenes), ("states", self.states),
+                            ("scenes", self.scenes), ("states", self.states), ("stills", self.stills),
                             ("accepted_overlong", self.accepted_overlong), ("designs", self.designs)):
             _bad_keys(label, keys)
         for did, d in self.designs.items():

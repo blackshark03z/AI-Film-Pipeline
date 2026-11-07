@@ -124,6 +124,14 @@ def main(argv: list[str] | None = None) -> int:
     gn.add_argument("--stills", type=Path, help="directory of approved start stills start_<gid>.png")
     gn.add_argument("--start-token", help="tok:<tail> of the start still uploaded to Flow (live only)")
     gn.add_argument("--backlog", type=Path, help="file holding the OWNER_GO_LIVE line (default: the loop backlog)")
+    st = actions.add_parser("stills", help="start stills: list their state, --register an image made elsewhere, --approve it")
+    st.add_argument("--film", required=True, type=Path)
+    st.add_argument("--register", metavar="GENERATION_ID")
+    st.add_argument("--image", type=Path, help="the PNG/JPEG to register for --register")
+    st.add_argument("--source", default="", help='where the image came from, e.g. "ChatGPT GPM tab 2"')
+    st.add_argument("--credits", type=float, default=0.0)
+    st.add_argument("--approve", metavar="GENERATION_ID")
+    st.add_argument("--by", help="reviewer name for --approve")
     rt = actions.add_parser("retake", help="retake/pickup policy over the take log; --pickup GID starts a new shot version")
     rt.add_argument("--film", required=True, type=Path)
     rt.add_argument("--pickup", metavar="GENERATION_ID")
@@ -332,6 +340,29 @@ def main(argv: list[str] | None = None) -> int:
             if args.dry_run:
                 return 0
             return 0 if done["sent"] and done.get("manifest_result") == "PASSED" else 1
+        if args.action == "stills":
+            from film_pipeline.production import stills as st_mod
+            if "preprod" not in pkg.typed or "shots" not in pkg.typed:
+                _emit({"error": "stills needs a valid 03_preprod.json and 04_shots.json"})
+                return 2
+            try:
+                if args.register:
+                    if args.image is None:
+                        _emit({"error": "--register needs --image"})
+                        return 2
+                    _emit({"registered": st_mod.register_still(pkg, args.register, args.image, source=args.source,
+                                                               credits=args.credits)})
+                    return 0
+                if args.approve:
+                    _emit({"approved": st_mod.approve_still(pkg, args.approve, args.by or "")})
+                    return 0
+            except (ValueError, OSError) as exc:
+                _emit({"error": str(exc)})
+                return 1
+            rows = st_mod.list_stills(pkg)
+            missing = [r["generation_id"] for r in rows if r["needs_still"] and r["state"] != "APPROVED"]
+            _emit({"stills": rows, "waiting": missing})
+            return 0 if not missing else 1
         if args.action == "lock":
             from film_pipeline.production import lock as lk_mod
             if args.lock:
