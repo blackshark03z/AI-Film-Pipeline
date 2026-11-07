@@ -94,5 +94,5 @@ Sergeant Kessler keeps the desk.
 00:02:15,150 --> 00:02:19,150
 Characters: NORA · KESSLER · ORTIZ
 Synthetic characters: faces and voices are AI-generated.
-Generated with AI: Google Flow Omni 1.1 Flash
+Generated with AI: Google Flow Omni 1.1 Flash (video+audio); Google Flow Nano Banana 2.1 (image)
 A work of fiction. All characters are fictional.

@@ -94,5 +94,5 @@ Trung sĩ Kessler tiếp tục ngồi quầy trực.
 00:02:15,150 --> 00:02:19,150
 Nhân vật: NORA · KESSLER · ORTIZ
 Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra.
-Tạo bằng AI: Google Flow Omni 1.1 Flash
+Tạo bằng AI: Google Flow Omni 1.1 Flash (video+audio); Google Flow Nano Banana 2.1 (image)
 Tác phẩm hư cấu. Mọi nhân vật đều là hư cấu.

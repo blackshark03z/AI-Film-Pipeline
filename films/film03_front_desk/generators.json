@@ -1,0 +1,4 @@
+[
+  {"role": "video+audio", "name": "Google Flow", "model": "Omni 1.1 Flash", "settings": "720p, 8 s generations from a start frame (Khung hinh)"},
+  {"role": "image", "name": "Google Flow", "model": "Nano Banana 2.1", "settings": "character stills, set plates, start frames"}
+]

@@ -19,10 +19,25 @@
     "ai_generated": true,
     "digital_source_type": "trainedAlgorithmicMedia",
     "synthetic_persons": true,
-    "generators": "Google Flow Omni 1.1 Flash",
+    "generators": "Google Flow Omni 1.1 Flash (video+audio); Google Flow Nano Banana 2.1 (image)",
+    "generator_records": [
+      {
+        "provider": "Google Flow",
+        "model": "Omni 1.1 Flash",
+        "role": "video+audio",
+        "settings": "720p, 8 s generations from a start frame (Khung hinh)"
+      },
+      {
+        "provider": "Google Flow",
+        "model": "Nano Banana 2.1",
+        "role": "image",
+        "settings": "character stills, set plates, start frames"
+      }
+    ],
+    "ai_label": "always",
     "text": {
-      "en": "Generated with AI: Google Flow Omni 1.1 Flash Synthetic characters: faces and voices are AI-generated.",
-      "vi": "Tạo bằng AI: Google Flow Omni 1.1 Flash Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra."
+      "en": "Generated with AI: Google Flow Omni 1.1 Flash (video+audio); Google Flow Nano Banana 2.1 (image) Synthetic characters: faces and voices are AI-generated.",
+      "vi": "Tạo bằng AI: Google Flow Omni 1.1 Flash (video+audio); Google Flow Nano Banana 2.1 (image) Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra."
     }
   },
   "credits": {
@@ -42,7 +57,7 @@
       "width": 1280,
       "height": 720,
       "fps": 24.0,
-      "sha256": "3aaf232739f907f700d01ee6723e159b78fda860c3b9925b496f83c940c31dfa"
+      "sha256": "e36f5dbb6b6b9ee17aa9efaf41d6bb286365578fdc73b36db757d8913ef763b0"
     },
     {
       "name": "portrait_9x16",
@@ -50,7 +65,7 @@
       "width": 720,
       "height": 1280,
       "fps": 24.0,
-      "sha256": "e236db9e17e1341be7a3d5b1dc521cd0b156d84aa416ad1e5bbf94b23dd7b105",
+      "sha256": "055e094704b9e40b7d06295d817fc0577f9eed5fa9e14ca07df7bc4d9eb33ceb",
       "upscale": 1.78
     }
   ],

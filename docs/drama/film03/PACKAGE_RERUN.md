@@ -33,15 +33,31 @@ Tests: `tests/test_production_film03_rerun.py`.
 | Credits card | title + fiction line + "Video, images and voices generated with AI." | cast, synthetic-persons notice, generator line, fiction line | built from the package; fits the frame |
 | Identity tag text | `NORA BELL – the precinct's new captain` | two lines, name then role | same names, same times |
 | Sidecars | EN + VI, 23 cues each | EN + VI, 23 cues each | VI translations come from `direction.translations`; none missing |
-| Disclosure | metadata + C2PA dev signer; visible label "AI-generated" **always on over the body** | metadata; visible label **only on the 3.0 s title card** | see open item 1 |
-| Generators in disclosure | video+audio (Omni 1.1 Flash) and image (Nano Banana 2.1) with settings | both listed as role `video+audio`, no settings, model strings prefixed "Flow" | see open item 2 |
+| Disclosure | metadata + C2PA dev signer; visible label "AI-generated" **always on over the body** | metadata; title card names AI, and (re-run 2, P10-03) the body label is `always` and checked in the master | open item 1 fixed |
+| Generators in disclosure | video+audio (Omni 1.1 Flash) and image (Nano Banana 2.1) with settings | (re-run 2) both with role and settings, from `films/film03_front_desk/generators.json` | open item 2 fixed |
+
+## Re-run 2 (P10-03, 2026-11-07)
+
+Chain `titles --render --color` → `mix` → `mastercheck` → `versions` → `deliver` with `--generators-file`, same takes, no
+credits. Wall time 192 + 24 + 4 + 30 + 3 s. `deliver` ok, 33 files, 0 BLOCK, 8 WARN (`PICTURE_NOT_LOCKED` + 7 `RIGHTS_PENDING`),
+`release_ready: false`. Master QC ok with the same 4 WARN (`DUPLICATED_FRAMES`, `COLOR_MATCH`, 2 × `CUE_NO_SPEECH`).
+
+| Line | Before | After |
+| --- | --- | --- |
+| Credits generator line (EN) | `Generated with AI: Google Flow Omni 1.1 Flash` | `… Omni 1.1 Flash (video+audio); Google Flow Nano Banana 2.1 (image)` (font 26 → 25 to fit) |
+| `metadata.json` ai_disclosure | one string | string + `generator_records` (role, settings) + `ai_label: always` |
+| Disclosure generators | two entries, both `video+audio`, no settings | `video+audio` with the 720p/Khung hinh settings, `image` with its settings |
+| `deliver` label check | none | `ai_label: always`, 4 of 5 sampled body frames show the label → ok |
+| Delivery MANIFEST sha256 | `e5522bee…` | `34b82eaa…` |
 
 ## Open items found by the re-run (not fixed here)
 
-1. **Visible AI label coverage regressed.** The shipped film burned "AI-generated" bottom-left for the whole body; the package
+1. **FIXED in P10-03 (re-run 2).** ~~Visible AI label coverage regressed.~~ The render already burned the body label; what was
+   missing was a setting and a check: `film.json disclosure.ai_label` (`always` default | `title_card`) and a frame-sample check in
+   `deliver`. Still open: the 9:16 version crops the label off (P11-01); title-card-only is an Owner decision. Original note: The shipped film burned "AI-generated" bottom-left for the whole body; the package
    only requires the label on the title card. Whether the card alone is enough is a legal/product call for the Owner. If the
    always-on label stays, `deliver`/`titles` need a watermark option (pipeline gap, not film-specific).
-2. **`--generators` loses role and settings.** One string cannot say that Nano Banana makes images. Needs structured generator input
+2. **FIXED in P10-03.** `--generators-file` carries role and settings into credits, metadata and disclosure. Original note: **`--generators` loses role and settings.** One string cannot say that Nano Banana makes images. Needs structured generator input
    (role, settings) in `deliver`.
 3. **C2PA not re-applied** (no signer supplied; the shipped dev signer is untrusted anyway). A trusted signer is still an Owner item.
 4. **DUPLICATED_FRAMES 7.3 %** of body frames repeat the previous one (> 5 %). The takes themselves are probably the source; the shipped
