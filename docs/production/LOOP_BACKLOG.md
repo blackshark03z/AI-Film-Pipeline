@@ -294,7 +294,7 @@ over the limit. Playbook §6 gets the three film04 rules (budget dominated by lo
 entrant must be in the start state; a once-action must be spelled in its ACTION phase; a prop that changes needs an
 ACTION/CONSEQUENCE phase naming it). Do not change the 215 limit (Owner item).
 
-### P10-05 Offline dress rehearsal on film04 — READY (after P10-01, P10-02, P10-03)
+### P10-05 Offline dress rehearsal on film04 — DONE (1f98cbf; reached delivery with 0 BLOCK, 312 s; manual steps M1-M5 in REHEARSAL_FILM04.md -> P11-07)
 Files: `src/film_pipeline/production/rehearsal.py`, `tools/film.py rehearse`, `tests/test_production_rehearsal.py`,
 `docs/production/REHEARSAL_FILM04.md`.
 `film.py rehearse --film F --out DIR` copies the package to `DIR` (never touches the real one), sets
@@ -322,7 +322,7 @@ Re-check every GAP/PARTIAL row against the code as it is now (e.g. 166 says "no 
 `03_preprod.rights` + `sound_rights.py` exist); fix stale rows with the file that proves it; recompute the summary line. Rows
 that are honestly PARTIAL because they need live footage stay PARTIAL with that reason. Docs only.
 
-### P10-08 Independent review (Codex gpt-6.1-sol, read-only) — READY (after P10-07)
+### P10-08 Independent review (Codex gpt-6.1-sol, read-only) — DONE EARLY (ran in P10-04/05 on the owner's "speed up": `docs/production/reviews/CODEX_REVIEW_2026-11-07.md`; 9 of 11 findings confirmed by code read, 1 partial, 1 refuted → P11-01..P11-06; no code fixed here; rehearsal.py post-dates the review and is not covered)
 Run `codex.exe exec -m gpt-6.1-sol -s read-only -C "D:/AI FILM MAKER/AFP-stable" --ephemeral --color never -o <scratch>/review.md - < prompt.md`
 on the diff `65c4470..HEAD` plus the P5–P7 modules (`mix.py, sound_rights.py, color.py, titles.py, master_qc.py,
 versions.py, deliver.py, report.py, gates.py, stills.py, rehearsal.py`). Prompt: correctness bugs, gates that can PASS
@@ -341,7 +341,45 @@ Files: `versions.py` (portrait render), `deliver.py` (`label_evidence` for the p
 `always` burns the label bottom-left of the 16:9 body (x 24–130 of 1280); the 9:16 centre/tag crop is ~404 px wide, so the
 label is cut off unless the window starts left of x≈130. Evidence: `portrait_segments` crop_x in `tests/test_production_versions.py`.
 Fix: draw the label onto the portrait body (and check it in `deliver` for `portrait_9x16`), or record why the portrait is
-exempt. Do not weaken the 16:9 check.
+exempt. Do not weaken the 16:9 check. (Codex review finding 2 is the same gap: the portrait claims `watermark_always_on` unchecked.)
+
+### P11-02 AI-label pixel check: independent evidence and full coverage — READY (Codex review 2026-11-07, findings 3–4; verified)
+Files: `deliver.py` `label_evidence`, `tests/test_production_delivery_fixes.py`.
+(a) `contrast(target) - contrast(control)` lets a target with 0 contrast and a negative control pass (+30 ≥ 25): require the
+target's own contrast ≥ threshold *and* the difference. (b) 3 of 5 sampled frames passes `always`: require every sampled
+frame (sample count stays 5, add the first and last body frame) or record the exact frames missing the label as BLOCK.
+Tests: zero-contrast target with negative control fails; 4 of 5 fails. Do not lower any threshold.
+
+### P11-03 Gate 4 binds acceptance to current inputs and present bytes — READY (Codex findings 5–7; verified)
+Files: `gate_checks.py` (`_take_state`, `_review`), `takes.py` (review file pointer), tests.
+(a) An ACCEPTED take stays valid after the shot prompt changes without a `ShotDecl.version` bump: compare the take's
+`prompt_sha256` with the current emitted prompt and mark the take stale. (b) A missing accepted clip skips the hash check and
+passes: a missing clip is a BLOCK. (c) After `dailies` + `ingest`, `review_file` points at the wrapped sheet and `_review`
+raises (extra keys forbidden): `ingest_review` should point `review_file` at the stored bare QC, and `_review` should unwrap a
+legacy sheet. Tests for each; existing film03 gate-4 tests stay green.
+
+### P11-04 Gate 3 staleness: header fields and storyboard files — READY (Codex findings 8–9; verified)
+Files: `gate_checks.py` (`PLAN_INPUTS`, `plan_issues`), tests.
+(a) `film.json` `language`, `generation_s`, `fps`, `aspect` feed the plan but are not in `plan_inputs_sha`: include the
+planning-relevant header fields (not `gates`, `budget`, `disclosure`, `rehearsal`). (b) Storyboard approval survives a changed or
+deleted PNG: gate 3 re-checks the approved frame hashes. The film03 golden test must stay byte-identical.
+
+### P11-05 Acceptance is bound to the disclosure policy — READY (Codex finding 1; verified)
+Files: `deliver.py` (`accept_delivery`, manifest), `gate_checks.py` (`master_issues`), tests.
+Record `ai_label` in the manifest / `07_delivery.json`; `accept_delivery` and gate 6 refuse when it differs from the current
+`film.json` `disclosure.ai_label` ("deliver again under the current policy").
+
+### P11-06 Start stills are decoded before registration — READY (Codex finding 11; verified)
+Files: `stills.py` (`register_still`), tests. A PNG signature followed by garbage is accepted today. Decode (Pillow `verify()` +
+`load()`), require width/height ≥ the film resolution's aspect ratio sanity (not zero), refuse otherwise. Finding 10 (stills not
+git-ignored) is **refuted**: `films/.gitignore` has `*/media/`.
+
+### P11-07 Draft the edit and the generators record from the package — READY (P10-05 manual steps M1–M3)
+Files: new `production/edit_init.py` or `edit.py`, `tools/film.py` (`edit --init`, `generators --init`), tests.
+Evidence: `docs/production/REHEARSAL_FILM04.md` — `05_edit.json` was `{}` and a human/rehearsal had to write the TAKE events, the
+title card with the AI line (deliver BLOCKs `AI_LABEL_MISSING` without it) and `generators.json`. `edit --init` drafts the EDL from
+the shot list and the latest ACCEPTED takes (refuses to overwrite a non-empty EDL), title card from the film title plus the AI
+line; `generators --init` drafts the record from the route/model of the take log. Both are drafts for a human to review.
 
 ## P9 — Found by the loop
 
