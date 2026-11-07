@@ -117,6 +117,8 @@ def lock_picture(pkg: Any, locked_by: str, reason: str = "", clips_dir: Path | N
     a BLOCK finding at a cut."""
     if not locked_by.strip():
         raise ValueError("a picture lock names the person who locked it (locked_by)")
+    from film_pipeline.production.rehearsal import refuse_bot
+    refuse_bot(Path(pkg.root), locked_by)
     section = pkg.typed.get("edit")
     if section is None:
         raise ValueError("there is no valid 05_edit.json to lock")

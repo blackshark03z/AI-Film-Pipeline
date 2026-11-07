@@ -252,6 +252,8 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any]) -> dict
     qc_raw = dict(filled.get("qc", filled))
     claimed = qc_raw.pop("output_sha256", None)
     take = TakeQc.model_validate(qc_raw)  # raises on any invalid check (auto PASS on content, missing proof, ...)
+    from film_pipeline.production.rehearsal import refuse_bot
+    refuse_bot(film_root, *(c.reviewer for c in take.checks), *(c.waiver.by for c in take.checks if c.waiver))
     log = load_log(film_root, film_id)
     entry = log.get(take.take_id)
     if take.generation_id != entry.generation_id:

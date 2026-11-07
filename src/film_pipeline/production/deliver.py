@@ -313,6 +313,8 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
         findings.append(_finding("PICTURE_NOT_LOCKED", "WARN", f"picture is not locked and fresh: {status.get('reason') or 'no lock'}"))
     rights, found = rights_record(pkg)
     findings += found
+    if pkg.header.rehearsal:  # a WARN keeps release_ready false and travels in the manifest
+        findings.append(_finding("REHEARSAL_SYNTHETIC", "WARN", "REHEARSAL — synthetic: mock footage, no provider, never releasable"))
     if blocked:
         shutil.rmtree(stage, ignore_errors=True)
         return {"film_id": film_id, "ok": False, "release_ready": False, "findings": findings, "archive": None,
@@ -351,6 +353,7 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
     stamp_post_item(pkg, "delivery", {"manifest": "delivery/MANIFEST.json", "manifest_sha256": manifest_sha,
                                       "release_ready": release_ready, "files": len(manifest.files)}, filename="07_delivery.json")
     return {"film_id": film_id, "ok": True, "release_ready": release_ready, "archive": "delivery", "manifest_sha256": manifest_sha,
+            **({"stamp": "REHEARSAL — synthetic"} if pkg.header.rehearsal else {}),
             "superseded": superseded.name if superseded else None, "package_files": copied, "findings": findings,
             "ai_label": label_check,
             "external_dependencies": {"count": len(manifest.external_dependencies),
@@ -372,6 +375,10 @@ def accept_delivery(pkg: Any, by: str) -> dict[str, Any]:
     if not by.strip():
         raise ValueError("an acceptance needs the name of the person who accepts")
     root = Path(pkg.root)
+    if pkg.header.rehearsal:
+        raise ValueError("cannot accept: this is a rehearsal package (REHEARSAL — synthetic); it is never releasable")
+    from film_pipeline.production.rehearsal import refuse_bot
+    refuse_bot(root, by)
     not_pass = [f"gate {r.gate} {r.name} is {r.status}: {r.issues[0] if r.issues else ''}"
                 for r in evaluate_gates(pkg) if r.gate in "12345" and r.status != "PASS"]
     refusals = not_pass + gate_checks.master_issues(pkg)

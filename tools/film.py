@@ -222,6 +222,11 @@ def main(argv: list[str] | None = None) -> int:
     sn.add_argument("--usage", action="append", default=[], metavar="START:END", help="usage range in seconds, END may be empty")
     qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
     qcp.add_argument("--record", required=True, type=Path)
+    rh = actions.add_parser("rehearse", help="offline dress rehearsal: run the whole chain on a COPY of the package with a mock "
+                                             "video runner (no provider, no credits); the result is stamped REHEARSAL and never releasable")
+    rh.add_argument("--film", required=True, type=Path, help="the package to copy (it is not modified)")
+    rh.add_argument("--out", required=True, type=Path, help="new empty directory for the rehearsal copy (media stays inside it)")
+    rh.add_argument("--keep-going", action="store_true", help="continue after a failed step instead of stopping")
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
     narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
     narr.add_argument("--project", type=Path, help="E2E project directory (import)")
@@ -240,6 +245,11 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.action == "narration":
             return _narration(args, rest, parser)
+        if args.action == "rehearse":
+            from film_pipeline.production import rehearsal as rh_mod
+            report = rh_mod.rehearse(args.film, args.out, stop_on_fail=not args.keep_going)
+            _emit(report)
+            return 0 if report["all_steps_ok"] and report["reached_delivery"] else 1
         if args.action == "qc":
             from pydantic import ValidationError
 

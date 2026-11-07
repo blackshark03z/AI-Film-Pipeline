@@ -244,6 +244,8 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
             render_schematic_frame(unit, shot, out / "storyboard" / rel, width=640)
             gate.register(unit.scene_id, shot.shot_id, rel)
             if approve_storyboard:
+                from film_pipeline.production.rehearsal import refuse_bot
+                refuse_bot(Path(pkg.root), approve_storyboard)
                 gate.review(shot.shot_id, status="APPROVED", reviewer=approve_storyboard)
         gate.save()
 

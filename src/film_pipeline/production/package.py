@@ -71,6 +71,7 @@ class FilmHeader(ContractModel):
     generation_s: int = Field(default=8, gt=0)
     budget: Budget = Field(default_factory=Budget)
     disclosure: DisclosureSettings = Field(default_factory=DisclosureSettings)
+    rehearsal: bool = False  # offline dress rehearsal copy (production/rehearsal.py): synthetic footage, never releasable
     gates: dict[str, GateState] = Field(default_factory=lambda: {k: "NOT_RUN" for k in GATE_NAMES})
 
     @field_validator("film_id")

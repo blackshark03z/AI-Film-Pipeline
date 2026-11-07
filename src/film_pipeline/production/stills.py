@@ -154,6 +154,8 @@ def approve_still(pkg: Any, gid: str, by: str, *, now: str | None = None) -> dic
     """Mark the registered still approved by a named reviewer; refuses a missing or stale still."""
     if not by.strip():
         raise ValueError("an approval needs the reviewer's name")
+    from film_pipeline.production.rehearsal import refuse_bot
+    refuse_bot(Path(pkg.root), by)
     state, reason = state_of(pkg, gid)
     if state == "MISSING":
         raise ValueError(f"{gid}: {reason}; register one first")

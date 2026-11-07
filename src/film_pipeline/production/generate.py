@@ -149,7 +149,9 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     if not start_token:
         blockers.append(_blocker("START_TOKEN_MISSING", "pass --start-token tok:<tail> of the start still uploaded to Flow",
                                  live_only=True))
-    if cap is None:
+    if pkg.header.rehearsal:
+        pass  # a rehearsal spends nothing: no budget to check (credits are recorded as 0)
+    elif cap is None:
         blockers.append(_blocker("BUDGET_NOT_SET", "film.json budget.credits_estimate is empty", live_only=True))
     elif spent + CREDITS_PER_GENERATION > cap:
         blockers.append(_blocker("BUDGET_EXCEEDED", f"{spent:g} spent + {CREDITS_PER_GENERATION:g} > cap {cap:g}",
@@ -161,7 +163,7 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
             "prompt_words": len(prompt.split()), "start_frame": {"source": start_source, "file": str(still),
                                                                 "exists": still.is_file(),
                                                                 "sha256": sha256_file(still) if still.is_file() else ""},
-            "route": ROUTE, "model": MODEL, "expected_credits": CREDITS_PER_GENERATION, "credits_spent": spent,
+            "route": ROUTE, "model": MODEL, "expected_credits": 0.0 if pkg.header.rehearsal else CREDITS_PER_GENERATION, "credits_spent": spent,
             "credit_cap": cap, "output": str(out), "argv": argv,
             "preconditions": ["Flow composer is on Omni Flash, 360p, video mode",
                               "the start still is uploaded to the Flow gallery (its tail is --start-token)",
@@ -212,7 +214,9 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
         receipt = _write_receipt(root, payload, dry_run=True, sent=False, owner_go_live=owner_go_live(backlog))
         return {"sent": False, "dry_run": True, "ready_to_send": not payload["blockers"], "payload": payload,
                 "receipt": str(receipt)}
-    go = owner_go_live(backlog)
+    # the go-live flag guards the provider; a rehearsal package with an explicit (mock) runner never reaches one
+    mock = bool(pkg.header.rehearsal and runner is not None)
+    go = mock or owner_go_live(backlog)
     refusals = ([] if go else [_blocker("OWNER_GO_LIVE_NO", "the backlog header does not say OWNER_GO_LIVE: YES")])
     refusals += live_blocked
     if refusals:
@@ -237,7 +241,7 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     if outcome == "PASSED" and out.is_file():
         entry, _ = register_take(root, pkg.header.film_id, generation_id, out,
                                  prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
-                                 route=ROUTE, model=MODEL, credits=CREDITS_PER_GENERATION,
+                                 route=ROUTE, model=MODEL, credits=0.0 if mock else CREDITS_PER_GENERATION,
                                  start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"])
         result["take"] = entry.model_dump(mode="json")
     result["manifest_result"] = outcome
