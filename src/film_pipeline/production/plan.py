@@ -22,6 +22,7 @@ from film_pipeline.production.continuity import continuity_issues, temporal_issu
 from film_pipeline.production.evidence import end_state_verified, load_attestations
 from film_pipeline.production.package import FilmPackage, PackageError
 from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection
+from film_pipeline.production.set_layout import layout_issues, render_floor_plan
 
 _LANGUAGE = {"en": "English", "vi": "Vietnamese"}
 SUPPORTED_ASPECT = "16:9"  # prompt compiler and schematic renderer are landscape-only
@@ -157,12 +158,15 @@ class _Plan:
         props = f" {props}." if props else ""
         extras = f" {scene.extras.capitalize()}." if scene.extras and shot.coverage == "MASTER" else ""
         alone = "" if len(shown) > 1 else f" Only {shown[0]} in frame."
-        location = self.pre.locations[scene.location].look
+        loc_spec = self.pre.locations[scene.location]
+        location = loc_spec.look
+        view = (f" {loc_spec.layout.view_text(decl.camera_position)}"
+                if decl.camera_position and loc_spec.layout is not None else "")
         # film04 SC01_g1: the still showed MARA seated while the shot says she stands, hand on the cord
         setup = next((p.description for p in decl.choreography.phases if p.kind == "SETUP"), "")
         pose = f" First instant: {setup}." if setup and self.pre.still_templates.pose else ""
         return (f"Photoreal film still, 16:9, {self.pre.still_templates.framing[shot.coverage]}: "
-                f"{shot.describe(unit.axis_book)}. {location.text}. {people}.{props}{extras}{alone}{pose} "
+                f"{shot.describe(unit.axis_book)}. {location.text}.{view} {people}.{props}{extras}{alone}{pose} "
                 "Faces and clothes exactly as in the attached character images. Natural, restrained "
                 "expressions. No text, no logos.")
 
@@ -199,6 +203,9 @@ class _Plan:
 
     def camera(self) -> list[Any]:
         return camera_issues(self.pre, self.shots)
+
+    def layout(self) -> list[Any]:
+        return layout_issues(self.pre, self.shots)
 
     def continuity(self) -> list[Any]:
         return continuity_issues(self.pre, self.shots, include_temporal=False)
@@ -258,6 +265,13 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     for look_id, loc in p.pre.locations.items():
         _write(out / "stills" / f"plate_{look_id}.txt",
                p.pre.still_templates.plate.format(text=loc.look.text) + "\n", out)
+        if loc.layout is not None:
+            for cam in loc.layout.cameras:
+                _write(out / "stills" / f"plate_{look_id}_{cam.id}.txt",
+                       p.pre.still_templates.plate.format(
+                           text=f"{loc.look.text}. {loc.layout.view_text(cam.id)}".rstrip(".")) + "\n", out)
+            if storyboard and loc.layout.drawable():
+                render_floor_plan(loc.layout, loc.look.location, out / "layout" / f"{look_id}.png")
 
     record: dict[str, Any] = {"feasibility": [i.model_dump() for i in feas.issues],
                               "temporal": [i.model_dump() for i in temporal], "generations": {}}
@@ -267,6 +281,9 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     camera = p.camera()
     if camera:  # likewise: a film with no camera findings keeps its golden gate3.json
         record["camera"] = [i.model_dump() for i in camera]
+    layout = p.layout()
+    if layout:  # likewise: only recorded when there are findings
+        record["layout"] = [i.model_dump() for i in layout]
     for decl in p.shots.generations:
         gid = decl.generation_id
         unit, plan, report = p.build(decl, gate)
@@ -288,7 +305,7 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     record["locations"] = [v.look.model_dump() for v in p.pre.locations.values()]
     record["states"] = {k: v.model_dump() for k, v in p.pre.states.items()}
     _write(out / "gate3.json", json.dumps(record, ensure_ascii=False, indent=2), out)
-    problems = [f"{k.upper()} {i['check']}: {i['detail']}" for k in ("feasibility", "temporal", "continuity", "camera", "comprehension")
+    problems = [f"{k.upper()} {i['check']}: {i['detail']}" for k in ("feasibility", "temporal", "continuity", "camera", "layout", "comprehension")
                 for i in record.get(k, []) if i["severity"] == "BLOCK"]
     problems += [f"{g} preflight {v['verdict']}" for g, v in record["generations"].items() if v["verdict"] != "PASS"]
     problems += p.dialogue_problems() + p.overlong_problems(record)

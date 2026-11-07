@@ -19,13 +19,13 @@
             "kind": "SETUP",
             "start_s": 0.0,
             "end_s": 2.0,
-            "description": "MARA stands behind the counter at the ticket window, her hand on the shutter cord, the wall clock beside her"
+            "description": "MARA stands behind the counter at the ticket window, her hand on the handle of the raised shutter"
           },
           {
             "kind": "ACTION",
             "start_s": 2.0,
             "end_s": 6.0,
-            "description": "she pulls the shutter halfway down and stops, her hand still on the cord"
+            "description": "she pulls the shutter halfway down by its handle and stops, her hand still on it"
           },
           {
             "kind": "HOLD",
@@ -35,7 +35,7 @@
           }
         ],
         "once_actions": [
-          "pulls the shutter halfway down and stops"
+          "pulls the shutter halfway down by its handle and stops"
         ],
         "gesture_budget": 1,
         "performance": [
@@ -69,11 +69,37 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "medium close-up on MARA at the ticket window, the counter and the wall clock in frame"
+        "composition": "from the public hall through the ticket window: MARA behind the glass, the clock and the suitcase behind her"
       },
       "version": 2,
       "repair_of": "SC01_g1@v1",
-      "repair_reason": "Owner review: the WIDE master gave no meaning (seated Mara, unreadable cord, clock and shutter). Re-staged as a MEDIUM_CLOSE single: standing at the ticket window, hand on the cord, pulls the shutter halfway and stops, looks at the clock then at the shutter."
+      "repair_reason": "Owner review: the WIDE master gave no meaning (seated Mara, unreadable cord, clock and shutter). Re-staged as a MEDIUM_CLOSE single: standing at the ticket window, hand on the cord, pulls the shutter halfway and stops, looks at the clock then at the shutter.",
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "it is past closing time",
+          "evidence": [
+            "clock"
+          ],
+          "min_size": "MEDIUM_CLOSE"
+        },
+        {
+          "fact": "she is closing the ticket window",
+          "evidence": [
+            "MARA",
+            "shutter",
+            "window"
+          ],
+          "min_size": "MEDIUM"
+        },
+        {
+          "fact": "it is her last night here",
+          "evidence": [
+            "suitcase"
+          ],
+          "min_size": "MEDIUM"
+        }
+      ]
     },
     {
       "generation_id": "SC01_g2",
@@ -151,7 +177,18 @@
         "movement": "STATIC",
         "lens_intent": "NORMAL",
         "composition": "over MARA's shoulder onto THEO at the window"
-      }
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "a drenched young man rushes in from the rain to the closing window",
+          "evidence": [
+            "THEO",
+            "door",
+            "window"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC02_g1",
@@ -223,7 +260,17 @@
         "movement": "STATIC",
         "lens_intent": "NORMAL",
         "composition": "single on MARA"
-      }
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she refuses: the window is closed",
+          "evidence": [
+            "MARA",
+            "shutter"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC02_g2",
@@ -294,7 +341,17 @@
         "movement": "STATIC",
         "lens_intent": "SHALLOW_ISOLATE",
         "composition": "close single on THEO"
-      }
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "his train is about to leave from the platform behind him",
+          "evidence": [
+            "THEO",
+            "door"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC03_g1",
@@ -370,7 +427,18 @@
         "movement": "STATIC",
         "lens_intent": "WIDE_ESTABLISH",
         "composition": "master on the whole office"
-      }
+      },
+      "camera_position": "C",
+      "readout": [
+        {
+          "fact": "he offers all he has, a jar of coins, across the counter",
+          "evidence": [
+            "THEO",
+            "MARA",
+            "counter"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC03_g2",
@@ -442,7 +510,17 @@
         "movement": "STATIC",
         "lens_intent": "SHALLOW_ISOLATE",
         "composition": "close single on MARA"
-      }
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she weighs the time against the coins",
+          "evidence": [
+            "MARA",
+            "clock"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC04_g1",
@@ -519,7 +597,17 @@
         "movement": "STATIC",
         "lens_intent": "SHALLOW_ISOLATE",
         "composition": "close single on MARA"
-      }
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she thinks of her own last night",
+          "evidence": [
+            "MARA",
+            "suitcase"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC04_g2",
@@ -602,7 +690,19 @@
         "movement": "STATIC",
         "lens_intent": "NORMAL",
         "composition": "two-shot across the counter"
-      }
+      },
+      "camera_position": "C",
+      "readout": [
+        {
+          "fact": "she reopens the window for him",
+          "evidence": [
+            "MARA",
+            "THEO",
+            "shutter",
+            "tray"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC05_g1",
@@ -678,7 +778,17 @@
         "movement": "STATIC",
         "lens_intent": "NORMAL",
         "composition": "single on MARA at the counter"
-      }
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she counts his coins to sell him the ticket",
+          "evidence": [
+            "MARA",
+            "tray"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC05_g2",
@@ -762,7 +872,18 @@
         "movement": "STATIC",
         "lens_intent": "NORMAL",
         "composition": "over THEO's shoulder onto MARA"
-      }
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "he gets the last ticket",
+          "evidence": [
+            "THEO",
+            "MARA",
+            "counter"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC06_g1",
@@ -838,7 +959,16 @@
         "movement": "STATIC",
         "lens_intent": "WIDE_ESTABLISH",
         "composition": "master on the whole platform"
-      }
+      },
+      "readout": [
+        {
+          "fact": "she leaves too, suitcase in hand: her last night",
+          "evidence": [
+            "MARA",
+            "THEO"
+          ]
+        }
+      ]
     },
     {
       "generation_id": "SC06_g2",
@@ -914,7 +1044,16 @@
         "movement": "STATIC",
         "lens_intent": "NORMAL",
         "composition": "two-shot side by side facing the train"
-      }
+      },
+      "readout": [
+        {
+          "fact": "they board the last train together",
+          "evidence": [
+            "MARA",
+            "THEO"
+          ]
+        }
+      ]
     }
   ],
   "history": [

@@ -63,7 +63,7 @@
       "look": {
         "look_id": "ticket_office_night",
         "location": "HOLLOWAY STATION TICKET OFFICE",
-        "text": "Ticket office at night: wooden counter with a felt coin tray, shuttered window on the right, wall clock, glass door on the left, suitcase behind the counter",
+        "text": "Ticket office at night: wooden counter, brass ticket window with a roll-down shutter above it, felt coin tray, wall clock, glass door left, suitcase in the booth",
         "invariants": [
           "wooden counter with a brass-framed ticket window",
           "roll-down shutter above the window",
@@ -80,7 +80,170 @@
         ],
         "approved": true
       },
-      "room_tone": "rain on glass"
+      "room_tone": "rain on glass",
+      "layout": {
+        "zones": [
+          {
+            "id": "booth",
+            "label": "clerk booth (staff side)",
+            "box": [
+              0.4,
+              0.05,
+              0.95,
+              0.42
+            ]
+          },
+          {
+            "id": "hall",
+            "label": "public hall (customer side)",
+            "box": [
+              0.05,
+              0.42,
+              0.95,
+              0.95
+            ]
+          }
+        ],
+        "objects": [
+          {
+            "id": "counter",
+            "label": "wooden counter",
+            "zone": "booth",
+            "placement": "the barrier between the clerk booth and the public hall, waist-high, with a glass screen rising from it",
+            "at": [
+              0.4,
+              0.42
+            ]
+          },
+          {
+            "id": "window",
+            "label": "brass-framed ticket window",
+            "zone": "booth",
+            "placement": "set into the glass screen on top of the counter, the only opening between clerk and customer",
+            "at": [
+              0.62,
+              0.42
+            ]
+          },
+          {
+            "id": "shutter",
+            "label": "roll-down shutter",
+            "zone": "booth",
+            "placement": "mounted directly above the ticket window inside its brass frame; lowered, it covers the window glass",
+            "operation": "pulled down and pushed up by the metal handle on its bottom edge",
+            "at": [
+              0.62,
+              0.36
+            ]
+          },
+          {
+            "id": "tray",
+            "label": "felt coin tray",
+            "zone": "booth",
+            "placement": "on the counter under the ticket window, reachable from both sides",
+            "at": [
+              0.62,
+              0.48
+            ]
+          },
+          {
+            "id": "clock",
+            "label": "round wall clock",
+            "zone": "booth",
+            "placement": "on the back wall of the clerk booth, above the clerk's head, seen through the ticket window",
+            "at": [
+              0.62,
+              0.08
+            ]
+          },
+          {
+            "id": "lamp",
+            "label": "green-shaded desk lamp",
+            "zone": "booth",
+            "placement": "on the clerk's desk behind the counter, the warm light of the booth",
+            "at": [
+              0.84,
+              0.32
+            ]
+          },
+          {
+            "id": "suitcase",
+            "label": "worn brown suitcase",
+            "zone": "booth",
+            "placement": "on the floor of the clerk booth by the back wall, visible behind the clerk",
+            "at": [
+              0.46,
+              0.16
+            ]
+          },
+          {
+            "id": "door",
+            "label": "glass door to the platform",
+            "zone": "hall",
+            "placement": "in the left wall of the public hall, rain streaking its glass",
+            "at": [
+              0.05,
+              0.68
+            ]
+          }
+        ],
+        "cameras": [
+          {
+            "id": "A",
+            "zone": "hall",
+            "view": "Camera in the public hall at a customer's eye level, facing the ticket window; through its glass, the clerk booth and its back wall",
+            "sees": [
+              "counter",
+              "window",
+              "shutter",
+              "tray",
+              "clock",
+              "lamp",
+              "suitcase"
+            ],
+            "at": [
+              0.62,
+              0.86
+            ],
+            "look_at": "window"
+          },
+          {
+            "id": "B",
+            "zone": "booth",
+            "view": "Camera inside the clerk booth behind the clerk, facing out through the ticket window to the public hall and the glass door",
+            "sees": [
+              "counter",
+              "window",
+              "shutter",
+              "tray",
+              "door"
+            ],
+            "at": [
+              0.7,
+              0.22
+            ],
+            "look_at": "door"
+          },
+          {
+            "id": "C",
+            "zone": "hall",
+            "view": "Camera in the public hall, side-on to the counter: the customer's side on the left, the clerk behind the ticket window on the right",
+            "sees": [
+              "counter",
+              "window",
+              "shutter",
+              "tray",
+              "clock",
+              "door"
+            ],
+            "at": [
+              0.28,
+              0.64
+            ],
+            "look_at": "window"
+          }
+        ]
+      }
     },
     "platform_night": {
       "look": {

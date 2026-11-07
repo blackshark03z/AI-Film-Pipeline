@@ -134,6 +134,15 @@ def register_take(film_root: Path, film_id: str, generation_id: str, clip: Path,
 
 def _questions(decl: Any, pre: Any, script_lines: dict[int, str]) -> list[dict[str, str]]:
     q: list[dict[str, str]] = []
+    scene = pre.scenes.get(decl.scene_id)
+    loc = pre.locations.get(scene.location) if scene is not None else None
+    layout = getattr(loc, "layout", None)
+    for r in decl.readout:
+        labels = []
+        for item in r.evidence:
+            obj = layout.object(item) if layout is not None else None
+            labels.append(obj.label if obj is not None else item)
+        q.append({"group": "narrative", "question": f"Viewer reads: {r.fact} - carried by: {', '.join(labels)}"})
     choreo = decl.choreography
     for p in choreo.phases:
         q.append({"group": "action", "question": f"{p.start_s:g}-{p.end_s:g}s {p.kind}: does this happen on screen - "

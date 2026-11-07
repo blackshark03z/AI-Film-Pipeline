@@ -23,6 +23,7 @@ from film_pipeline.production.camera import CameraSetup, LightingPlan
 from film_pipeline.production.direction import DirectionPlan
 from film_pipeline.production.edit import EditSection
 from film_pipeline.production.planning import RightsEntry
+from film_pipeline.production.set_layout import Readout, SetLayout
 from film_pipeline.production.story import StorySection
 
 
@@ -62,6 +63,7 @@ class CharacterSpec(ContractModel):
 class LocationSpec(ContractModel):
     look: LocationLook
     room_tone: str = ""
+    layout: SetLayout | None = None  # set_layout.py: zones, objects and named camera positions
 
 
 class SceneSpec(ContractModel):
@@ -166,6 +168,8 @@ class ShotDecl(ContractModel):
     design_refs: list[Annotated[str, StringConstraints(pattern=_PIN.pattern)]] = Field(default_factory=list)
     # `id@version` of the designs this shot was planned against (checked against 03_preprod.designs)
     camera: CameraSetup | None = None  # camera.py: size/angle/height/movement/lens (all shots or none)
+    camera_position: str = ""  # set_layout.py: id of a camera position of the location's layout
+    readout: list[Readout] = Field(default_factory=list)  # set_layout.py: what the viewer must read, and the evidence
     version: int = Field(default=1, ge=1)  # retake.py: bumped when a pickup replaces this shot's design
     repair_of: str = ""  # "<generation_id>@v<N>": the version this one replaces
     repair_reason: str = ""

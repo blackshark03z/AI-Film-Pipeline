@@ -22,8 +22,8 @@ PLAN_DIR = ("media", "plan")
 PLAN_META = "plan_meta.json"
 # the stage files a plan is made from (a change to any of them makes the plan stale)
 PLAN_INPUTS = ("script.fountain", "02_direction.json", "03_preprod.json", "04_shots.json")
-_PLAN_KEYS = ("feasibility", "temporal", "continuity", "camera", "comprehension")
-_COVERED_BY_RECORD = ("FEASIBILITY", "TEMPORAL", "CONTINUITY", "CAMERA", "COMPREHENSION")
+_PLAN_KEYS = ("feasibility", "temporal", "continuity", "camera", "layout", "comprehension")
+_COVERED_BY_RECORD = ("FEASIBILITY", "TEMPORAL", "CONTINUITY", "CAMERA", "LAYOUT", "COMPREHENSION")
 
 
 def file_sha(path: Path) -> str:

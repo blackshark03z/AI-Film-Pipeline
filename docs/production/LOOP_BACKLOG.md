@@ -315,6 +315,17 @@ only who is in frame; `StillTemplates.pose` (film04 on, film03 off to keep its g
 test_production_stills, test_production_camera; focused suite 752 passed, 1 skipped. film04 SC01_g1: take rejected (narrative P0, cause STAGING),
 pickup to v2 = MEDIUM_CLOSE SINGLE at the ticket window; B1 coverage plan MASTER -> SINGLE; new start still registered (0 credits), NOT approved;
 storyboard needs the Owner's re-approval (plan re-run). Open: Owner approves still + storyboard, then one resend (~6 credits, OWNER_GO_LIVE YES->NO).
+
+### P13-02 The set has a geography and each shot states what the viewer reads — DONE (Owner: "from the image it is still unclear", 2026-11-07)
+Cause: a location was a list of objects with no spatial relations (the shutter drew as a separate window, sides were unclear) and no shot said
+what the viewer must understand. New `production/set_layout.py`: `LocationSpec.layout` (zones, objects with placement/operation, camera
+positions with `sees`/`look_at`), `ShotDecl.camera_position` + `readout` (fact, evidence, min_size). BLOCK rules LAYOUT_CAMERA,
+READOUT_MISSING (all-or-nothing per film), READOUT_EVIDENCE (evidence must be in frame), READOUT_SIZE. Still prompts carry the camera's view
+text; plan writes per-camera plates `plate_<look>_<cam>.txt` and a floor plan `layout/<look>.png`; take review asks readout questions first.
+film04: ticket office layout, cameras A (hall, through the window) / B (booth, to the door) / C (side-on), readouts for all 12 shots; SC01_g1
+on camera A with the shutter pulled by its handle. Focused suite 775 passed, 1 skipped. Plates A/B/C made in Flow image mode (0 credits) and
+sent to the Owner. Open: plate B invented a second clock in the hall -> plate prompts name out-of-view objects; Owner approves plates, then
+SC01_g1 start still is redone from plate A.
 SC03_g1 is still a two-person WIDE with a jar-on-counter beat (not flagged by the rule; no take yet).
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
