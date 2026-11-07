@@ -364,12 +364,12 @@ Files: `gate_checks.py` (`PLAN_INPUTS`, `plan_issues`), tests.
 planning-relevant header fields (not `gates`, `budget`, `disclosure`, `rehearsal`). (b) Storyboard approval survives a changed or
 deleted PNG: gate 3 re-checks the approved frame hashes. The film03 golden test must stay byte-identical.
 
-### P11-05 Acceptance is bound to the disclosure policy — IN_PROGRESS (Codex finding 1; verified)
+### P11-05 Acceptance is bound to the disclosure policy — DONE (98aeab3) (Codex finding 1; verified)
 Files: `deliver.py` (`accept_delivery`, manifest), `gate_checks.py` (`master_issues`), tests.
 Record `ai_label` in the manifest / `07_delivery.json`; `accept_delivery` and gate 6 refuse when it differs from the current
 `film.json` `disclosure.ai_label` ("deliver again under the current policy").
 
-### P11-06 Start stills are decoded before registration — READY (Codex finding 11; verified)
+### P11-06 Start stills are decoded before registration — IN_PROGRESS (Codex finding 11; verified)
 Files: `stills.py` (`register_still`), tests. A PNG signature followed by garbage is accepted today. Decode (Pillow `verify()` +
 `load()`), require width/height ≥ the film resolution's aspect ratio sanity (not zero), refuse otherwise. Finding 10 (stills not
 git-ignored) is **refuted**: `films/.gitignore` has `*/media/`.
