@@ -54,9 +54,9 @@ Manual steps the rehearsal had to do itself (nothing in the CLI authors them):
 
 | # | Manual step | P11 item |
 | --- | --- | --- |
-| M1 | `05_edit.json` was `{}`: the rehearsal wrote one TAKE event per generation in plan order | P11-02 `film.py edit --init`: draft an EDL from the shot list and the take log (human edits it) |
-| M2 | The title card needs an AI line (`title: [..., "Generated with AI"]`) or `deliver` BLOCKs | same item: the drafted EDL includes the title card with the AI line |
-| M3 | `generators.json` (role/name/model/settings) written by hand | P11-03 `film.py generators --init` from the take log routes/models |
+| M1 | `05_edit.json` was `{}`: the rehearsal wrote one TAKE event per generation in plan order | closed by P11-07 `film.py edit --init`: drafts an EDL from the shot list and the take log (human edits it); the rehearsal itself still writes its own |
+| M2 | The title card needs an AI line (`title: [..., "Generated with AI"]`) or `deliver` BLOCKs | closed by P11-07: the drafted EDL includes the title card with the AI line |
+| M3 | `generators.json` (role/name/model/settings) written by hand | closed by P11-07 `film.py generators --init` from the take log routes/models and the still sources |
 | M4 | Start stills are storyboard frames; real ones need the image step in Flow | LIVE (P3-05) – no system fix |
 | M5 | Storyboard approval and every take review are placeholders | Owner checkpoints, by design |
 

@@ -94,9 +94,12 @@ groups (an auto tool may only WARN). `--ingest` binds the sheet to the take's by
 
 ## R8 Edit and picture lock
 
-`05_edit.json` lists the accepted takes in order, the title card (it must carry the AI line) and the tags.
+`05_edit.json` lists the accepted takes in order, the title card (it must carry the AI line) and the tags. `edit --init`
+drafts it from the shot list and the latest ACCEPTED take of each generation (a generation without one is listed as missing, no
+footage is invented); it refuses to overwrite an EDL that already has events. Check the draft, then cut:
 
 ```bash
+python tools/film.py edit --film films/film05_name --init
 python tools/film.py cut --film films/film05_name --render --out films/film05_name/media/cut/cut.mp4
 python tools/film.py lock --film films/film05_name --lock --by "Owner Name" --reason "picture approved"
 ```
@@ -115,7 +118,9 @@ python tools/film.py mastercheck --film films/film05_name --cut-report films/fil
 python tools/film.py versions --film films/film05_name --cut-report films/film05_name/media/cut/titled_cut.cut.json --generators-file films/film05_name/generators.json
 ```
 
-`generators.json` names each provider with role, model and settings (it feeds the credits and the AI disclosure). A BLOCK from
+`generators.json` names each provider with role, model and settings (it feeds the credits and the AI disclosure).
+`python tools/film.py generators --film films/film05_name --init` drafts it from the take log (video tool) and the registered
+start stills (image tool); check the names and settings, it never overwrites a filled file. A BLOCK from
 `mastercheck` (freeze, loudness, label) is fixed upstream, never waived by editing the check.
 
 ## R10 Deliver and accept

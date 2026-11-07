@@ -231,6 +231,12 @@ def main(argv: list[str] | None = None) -> int:
                                                "budget, risks, rights, takes awaiting review); changes nothing in the package")
     rp.add_argument("--film", required=True, type=Path)
     rp.add_argument("--out", type=Path, help="page to write (default <film>/media/review/index.html)")
+    ed = actions.add_parser("edit", help="--init drafts 05_edit.json from the shot list and the latest ACCEPTED takes plus a title card with the AI line (a draft for a human to edit)")
+    ed.add_argument("--film", required=True, type=Path)
+    ed.add_argument("--init", action="store_true", required=True, help="write the draft (refused when 05_edit.json already has events)")
+    gs = actions.add_parser("generators", help="--init drafts generators.json (video tool from the take log, image tool from the registered stills) for review")
+    gs.add_argument("--film", required=True, type=Path)
+    gs.add_argument("--init", action="store_true", required=True, help="write the draft (refused when generators.json already has entries)")
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
     narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
     narr.add_argument("--project", type=Path, help="E2E project directory (import)")
@@ -394,6 +400,24 @@ def main(argv: list[str] | None = None) -> int:
             missing = [r["generation_id"] for r in rows if r["needs_still"] and r["state"] != "APPROVED"]
             _emit({"stills": rows, "waiting": missing})
             return 0 if not missing else 1
+        if args.action in ("edit", "generators"):
+            from film_pipeline.production import draft as dr_mod
+            try:
+                if args.action == "edit":
+                    draft = dr_mod.edit_draft(pkg)
+                    missing = draft.pop("missing")
+                    path = dr_mod.write_json(Path(pkg.root) / "05_edit.json", draft)
+                    _emit({"written": str(path), "events": len(draft["events"]), "missing_takes": missing,
+                           "note": "a draft: check the order, the cuts and the title card before film.py cut"})
+                else:
+                    records = dr_mod.generators_draft(pkg)
+                    path = dr_mod.write_json(Path(pkg.root) / "generators.json", records)
+                    _emit({"written": str(path), "generators": records,
+                           "note": "a draft: check the provider names, models and settings before film.py deliver"})
+            except (ValueError, OSError) as exc:
+                _emit({"error": str(exc)})
+                return 1
+            return 0
         if args.action == "reviewpack":
             from film_pipeline.production import reviewpack as rv_mod
             _emit(rv_mod.build(pkg, args.out))
