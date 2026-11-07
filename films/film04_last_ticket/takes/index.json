@@ -16,6 +16,22 @@
       "cause": "STAGING",
       "registered_at": "2026-11-07T11:28:55Z",
       "review_file": "reviews/SC01_g1_t1.qc.json"
+    },
+    {
+      "take_id": "SC01_g1_t2",
+      "generation_id": "SC01_g1",
+      "prompt_sha256": "2354b6dbadb626d6f7a2bc431f5b5726a70cc86fb82eba8f45e28cec382f3e1e",
+      "start_frame_sha256": "10febc9b4c5e3a2add160266c0ec376c623eba9123f198eafe32ea56e7af5ab5",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni Flash 360p",
+      "credits": 12.0,
+      "output_file": "SC01_g1_t8.mp4",
+      "output_sha256": "820634bc80fec1df45c315adaa659a13d185243c4c32a1e592ccfdfd7ca1c553",
+      "status": "GENERATED",
+      "shot_version": 2,
+      "cause": "",
+      "registered_at": "2026-11-07T14:42:29Z",
+      "review_file": ""
     }
   ]
 }

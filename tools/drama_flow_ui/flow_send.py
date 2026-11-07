@@ -102,6 +102,16 @@ JS_VIDEO_AT =r"""([x, y]) => { const v = [...document.querySelectorAll('video')]
 ATTACH_LIST_XY, START_LIST_XY = (384, 400), (142, 400)
 
 
+async def _picker_to_top(page, over: tuple[int, int], wheels: int = 12):
+    """The picker reopens at its last scroll position (film04 SC01_g1 t7: it
+    opened mid-list, the search only wheeled down and never saw the newest
+    still at the top). Both searches start from the top."""
+    await page.mouse.move(*over)
+    for _ in range(wheels):
+        await page.mouse.wheel(0, -1000)
+        await page.wait_for_timeout(150)
+
+
 async def _picker_find(page, tok: str, over: tuple[int, int],
                        scrolls: int = 16):
     """The picker renders only the items in view (about 15; film03 lost
@@ -111,6 +121,7 @@ async def _picker_find(page, tok: str, over: tuple[int, int],
     <img> nodes, so after a programmatic scroll the node found showed a
     neighbour and the click picked it (film03: NORA attached for KESSLER,
     wrong start frames). Click only where elementFromPoint hits the item."""
+    await _picker_to_top(page, over)
     for _ in range(scrolls + 1):
         await page.wait_for_timeout(300)
         xy = await page.evaluate(JS_PICKER_AT, tok)
@@ -144,6 +155,7 @@ async def _picker_find_image(page, still: Path, over: tuple[int, int],
     SLOT_DIFF_MAX) and beat the runner-up by PICKER_MARGIN (a sibling still of
     the same room scores about 7). Otherwise None. The slot is checked again
     after the click (start_slot_diff)."""
+    await _picker_to_top(page, over)
     for _ in range(scrolls + 1):
         await page.wait_for_timeout(300)
         scored = []

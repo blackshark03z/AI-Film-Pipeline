@@ -335,8 +335,13 @@ the hand stays on that side when the camera is on the other. film04: shutter on 
 handle), plain rectangular window, clock beside (not above) the window. Plate A redone (A5, Flow 00b15c17), start still v8 (Flow 4a20dabf)
 registered NOT approved; Flow picker items are now picked by pixels (picker order is 'recent' and moves). Open: plate C still draws the
 shutter on the hall side -> redrawn in a ChatGPT tab (same GPM profile) from plate A5. Owner approved start still v8 and plates A5/C
-(2026-11-07); Owner approved the 12-frame storyboard (gate 3 PASS). Focused suite 777 passed, 1 skipped. Open: one resend of
-SC01_g1 v2 (~6 credits, OWNER_GO_LIVE YES->NO), then the Owner's take review.
+(2026-11-07); Owner approved the 12-frame storyboard (gate 3 PASS). Focused suite 777 passed, 1 skipped. Resend (Owner: "Cho gửi"):
+receipt t7 = START_NOT_FOUND, nothing sent, 0 credits (the start picker reopened mid-list and the search only wheeled down past
+the newest still) -> flow_send now scrolls each picker to the top first (tests/test_flow_send_picker.py); receipt t8 = PASSED,
+DETAIL_PROMPT_MATCH, media 3e9f674e, registered as SC01_g1_t2 (v2, GENERATED, 6 credits), OWNER_GO_LIVE back to NO.
+Tech Lead QC of t2: start frame and booth-side grip hold (no hand through the glass), but the shutter drops only to her brow,
+she lets go at ~3 s, the shutter jumps back to fully raised and she rests her hands on the coin tray for the last 4.5 s
+-> "she is closing the ticket window" does not read. Proposed REJECTED/ACTION. Open: the Owner's take review.
 SC03_g1 is still a two-person WIDE with a jar-on-counter beat (not flagged by the rule; no take yet).
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
