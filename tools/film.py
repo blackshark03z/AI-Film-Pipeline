@@ -227,6 +227,10 @@ def main(argv: list[str] | None = None) -> int:
     rh.add_argument("--film", required=True, type=Path, help="the package to copy (it is not modified)")
     rh.add_argument("--out", required=True, type=Path, help="new empty directory for the rehearsal copy (media stays inside it)")
     rh.add_argument("--keep-going", action="store_true", help="continue after a failed step instead of stopping")
+    rp = actions.add_parser("reviewpack", help="write one self-contained HTML page the Owner can decide from (gates, storyboard, "
+                                               "budget, risks, rights, takes awaiting review); changes nothing in the package")
+    rp.add_argument("--film", required=True, type=Path)
+    rp.add_argument("--out", type=Path, help="page to write (default <film>/media/review/index.html)")
     narr = actions.add_parser("narration", help="narration profile over an E2E project (import, status, or delegate)")
     narr.add_argument("verb", choices=["import", "status", "prepare", "resume", "finish"])
     narr.add_argument("--project", type=Path, help="E2E project directory (import)")
@@ -390,6 +394,10 @@ def main(argv: list[str] | None = None) -> int:
             missing = [r["generation_id"] for r in rows if r["needs_still"] and r["state"] != "APPROVED"]
             _emit({"stills": rows, "waiting": missing})
             return 0 if not missing else 1
+        if args.action == "reviewpack":
+            from film_pipeline.production import reviewpack as rv_mod
+            _emit(rv_mod.build(pkg, args.out))
+            return 0
         if args.action == "lock":
             from film_pipeline.production import lock as lk_mod
             if args.lock:
@@ -673,6 +681,7 @@ def main(argv: list[str] | None = None) -> int:
         full = status_report(pkg)
         _emit({
             "next_action": full["next_action"],
+            "runbook": full["runbook"],
             "report": full,
             "film_id": pkg.header.film_id,
             "profile": pkg.header.profile,

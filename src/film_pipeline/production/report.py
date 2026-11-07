@@ -260,6 +260,19 @@ def next_action(report: dict[str, Any]) -> str:
     return "Nothing open on the pipeline side: waiting for the Owner's acceptance"
 
 
+RUNBOOK = "docs/production/RUNBOOK.md"
+# next_action text prefix -> the RUNBOOK.md step that explains what to do (kept next to next_action; a test pins both)
+RUNBOOK_STEPS = (("Resolve Gate 3", "R3"), ("Resolve Gate", "R2"), ("Owner decision needed", "R4"), ("Generate is paused", "R4"),
+                 ("Retake decision", "R7"), ("Review takes", "R7"), ("Render", "R6"), ("Write 05_edit.json", "R8"),
+                 ("Lock the picture", "R8"), ("Rebuild what", "R9"), ("Produce the missing post", "R9"),
+                 ("Run film.py deliver", "R10"), ("Clear what keeps", "R10"), ("Nothing open", "R10"))
+
+
+def runbook_step(action: str) -> str:
+    """`R<n>` of RUNBOOK.md for a next_action text; empty when it matches no known step."""
+    return next((step for prefix, step in RUNBOOK_STEPS if action.startswith(prefix)), "")
+
+
 # ------------------------------------------------------------------ report
 
 def status_report(pkg: Any) -> dict[str, Any]:
@@ -299,6 +312,7 @@ def status_report(pkg: Any) -> dict[str, Any]:
     report["learnings"] = ledger_view(Path(pkg.root), pkg.header.film_id)["counts"]
     report["errors"] = errors
     report["next_action"] = next_action(report)
+    report["runbook"] = f"{RUNBOOK} {runbook_step(report['next_action'])}".strip()
     return report
 
 
