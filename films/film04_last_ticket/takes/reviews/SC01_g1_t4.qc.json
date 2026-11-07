@@ -1,0 +1,119 @@
+{
+  "take_id": "SC01_g1_t4",
+  "generation_id": "SC01_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Tại sao vẫn có hành động đẩy ngược lên thừa vậy?') of SC01_g1_t10.mp4; Tech Lead measured the shutter edge per frame.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Start and last frame match the approved stills; the hands stay under the edge on the booth side, nothing passes through the glass.",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Tại sao vẫn có hành động đẩy ngược lên thừa vậy?') of SC01_g1_t10.mp4; Tech Lead measured the shutter edge per frame.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "The shutter reaches the end-still height at 4.0 s, overshoots to waist height at 5.0 s (edge y 249 vs 210 of 360), then is pushed back up to 200 by 6.25 s: a down-then-up reversal, same as t3 (t9).",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "Time fill: the 4 s ACTION phase held a ~2 s pull, so the model overshot and corrected; the stop was an arbitrary mid-point ('middle of the window'). Pipeline fix: per-shot duration (Omni 1.2 Flash 3-15 s), motion library TIME_FILL/RUSHED, stop on a visible set object (STOP_TARGET/TARGET_CONFLICT), trajectory QC (film.py motion: MOTION_REVERSAL on t9 and t10).",
+  "output_sha256": "0f39e5b40fb2e47e0d3197ab013d7742bb4790807a995f2de79a2da6d7714893"
+}

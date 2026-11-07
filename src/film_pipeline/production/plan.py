@@ -23,7 +23,7 @@ from film_pipeline.production.camera import camera_issues
 from film_pipeline.production.continuity import continuity_issues, temporal_issues
 from film_pipeline.production.evidence import end_state_verified, load_attestations
 from film_pipeline.production.package import FilmPackage, PackageError
-from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection
+from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection, shot_seconds
 from film_pipeline.production.set_layout import layout_issues, render_floor_plan
 
 _LANGUAGE = {"en": "English", "vi": "Vietnamese"}
@@ -37,6 +37,10 @@ BUDGET_SECTIONS = ("prefix", "characters", "setting", "continuity", "shots", "pe
 BUDGET_LABELS = {"prefix": "start prefix", "characters": "cast/looks", "setting": "setting", "continuity": "start state",
                  "shots": "shot timing/action", "performance": "performance", "dialogue": "dialogue", "sound": "sound",
                  "prohibitions": "fixed tail"}
+
+# words that leave the stopping point of a mid-travel motion to the model
+VAGUE_POSITION_WORDS = ("halfway", "half way", "half-closed", "middle", "upper half", "lower half", "partway",
+                        "part way", "a third")
 
 
 def word_budget(sections: dict[str, str], prefix: str = START_PREFIX) -> dict[str, int]:
@@ -110,11 +114,12 @@ class _Plan:
         sid, k = decl.scene_id, self.gen_index[decl.generation_id]
         book = self.pre.scenes[sid].axis
         shot_id = f"{sid}_S{k}"
+        seconds = shot_seconds(decl, self.pkg.header)
         shot = CoverageShot(
             shot_id=shot_id, coverage=decl.coverage, shot_size=_SIZE[decl.coverage], subject=decl.subject,
-            foreground=decl.foreground, start_s=0.0, end_s=self.gen_s, lines=self.lines_for(decl),
+            foreground=decl.foreground, start_s=0.0, end_s=seconds, lines=self.lines_for(decl),
             action=self.action_text(decl), axis=axis_record(book, shot_id, decl.visible))
-        return SceneUnit(scene_id=sid, duration_s=self.gen_s, shots=[shot], axis_book=book)
+        return SceneUnit(scene_id=sid, duration_s=seconds, shots=[shot], axis_book=book)
 
     def handoff_for(self, decl: ShotDecl) -> GenerationHandoff | None:
         if decl.previous_generation_id is None:
@@ -195,6 +200,37 @@ class _Plan:
         pose = (" " + apply_handles(f"Pose at the end of the shot: {last.rstrip('.')}.", handles)) if last else ""
         return ("Edit the given image, the first frame of this shot. "
                 f"{change}.{pose} Keep everything else the same: framing, people, faces, clothes, light.")
+
+    def motion_target_issues(self, decl: ShotDecl) -> list[PreflightIssue]:
+        """Mid-travel stops must name a real set object (STOP_TARGET) and no text may describe the stop vaguely
+        (TARGET_CONFLICT); the model otherwise picks its own stopping point (film04 SC01_g1 t9/t10)."""
+        stops = [p for p in decl.choreography.phases if p.kind == "ACTION" and p.stops_at]
+        if not stops:
+            return []
+        out: list[PreflightIssue] = []
+
+        def add(check: str, detail: str) -> None:
+            out.append(PreflightIssue(check=check, severity="BLOCK", detail=detail))
+
+        layout = self.pre.locations[self.pre.scenes[decl.scene_id].location].layout
+        objects = {o.id: o for o in layout.objects} if layout is not None else {}
+        for phase in stops:
+            obj = objects.get(phase.stops_at)
+            if obj is None:
+                add("STOP_TARGET", f"stops_at {phase.stops_at!r} is not an object of the location layout")
+            elif obj.label.lower() not in phase.description.lower():
+                add("STOP_TARGET", f"the phase description must name the stop object {obj.label!r}")
+        texts = {"ACTION phase": " ".join(p.description for p in stops), "end_pose": decl.end_pose,
+                 "end state change": " ".join(self.end_clauses(decl))}
+        for where, text in texts.items():
+            vague = [w for w in VAGUE_POSITION_WORDS if w in text.lower()]
+            if vague:
+                add("TARGET_CONFLICT", f"{where} places the stop vaguely ({', '.join(vague)}); name the set object instead")
+        if decl.end_frame:
+            labels = [objects[p.stops_at].label for p in stops if p.stops_at in objects]
+            if labels and not any(label.lower() in decl.end_pose.lower() for label in labels):
+                add("TARGET_CONFLICT", f"end_pose must mention the stop object ({', '.join(labels)})")
+        return out
 
     def dialogue_problems(self) -> list[str]:
         """Each scripted dialogue line is spoken by exactly one generation of its scene; references must exist."""
@@ -323,6 +359,7 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         still = p.still_prompt(decl, unit)
         _write(out / "stills" / f"start_{gid}.txt", still + "\n", out)
         issues = list(report.issues)
+        issues += p.motion_target_issues(decl)
         end_words: int | None = None
         if decl.end_frame:
             if p.end_clauses(decl):

@@ -32,7 +32,16 @@ from pydantic import Field
 
 from film_pipeline.core import ContractModel
 
-CREDITS_PER_GENERATION = 12.0  # film03: "19 charged x 12"; images are 0 credits
+CREDITS_PER_GENERATION = 12.0  # film03: "19 charged x 12"; images are 0 credits (old Omni 1.1 history basis)
+# the budget and retake estimates below keep this 1.1 basis; a single send is priced by `flow_credits`
+
+
+def flow_credits(seconds: float) -> float:
+    """Omni 1.2 Flash 360p, measured in Flow on 2026-11-08: 1 credit per second up to 10 s, 2 per second above
+    (11 s = 12, 12 = 14, 13 = 16, 14 = 18, 15 = 20). Seconds are rounded up to a whole second."""
+    s = max(0, -int(-seconds // 1))
+    return float(s if s <= 10 else 10 + 2 * (s - 10))
+
 # film -> (planned generations, production credits = credits_total - credits_investigation)
 KPI_HISTORY: dict[str, tuple[int, float]] = {"film01_first_day": (10, 168.0), "film02_spare_key": (6, 84.0),
                                              "film03_front_desk": (16, 192.0)}

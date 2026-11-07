@@ -374,7 +374,7 @@ scene cuts" ("continuous" stays banned: UNCONTROLLED_REPEAT), action first then 
 overlong shots are gone (OPEN_OVERLONG empty). SC01_g1 v4: one moment, no clock glance; hold = hands rest on the still
 shutter. Tests: tests/test_drama_prompt_start_frame.py.
 
-### P13-05 End state pinned by an end still (Flow "Kết thúc" slot) — DONE (code + first send); take t4 waits for Owner review
+### P13-05 End state pinned by an end still (Flow "Kết thúc" slot) — DONE (code + first send); take t4 REJECTED (P13-06)
 
 Google Omni docs: first and last frame interpolation, "describe the desired transition". `ShotDecl.end_frame`; plan writes
 `stills/end_<gid>.txt` (edit of the start still, "Keep everything else the same"); stills record `end:<gid>` needs an
@@ -401,6 +401,38 @@ the shutter seen at 360p. Not self-accepted: Owner reviews t4.
 Fix found by this send: `film.py takes --register` hashed the prompt file with its trailing newline, so the take log
 disagreed with the generate receipt; it now strips like generate (test in test_production_takes).
 Open: video_count undercounts on the virtual grid -> AMBIGUOUS on a good send (follow-up: count by media ids, not grid slots).
+Owner review of t4 (2026-11-08): REJECTED, action P0 - shutter at the end height at 4.0 s, overshoots to waist (edge y 249
+vs 210 of 360) at 5.0 s, pushed back up to 200 by 6.25 s; the Tech Lead eye check missed it. Cause: see P13-06.
+
+### P13-06 A shot is as long as its action (Omni 1.2 Flash 3-15 s) + trajectory QC — DONE (code + v5 data); v5 send waits for Owner still approval
+
+Diagnosis (t9 and t10 both reverse): the shot design gave a ~2 s pull a 4 s ACTION phase inside a fixed 8 s generation and
+stopped it at an arbitrary mid-point; the model filled the time with an overshoot and a correction. Preflight had no notion
+of how long a motion takes; QC looked at strips, not at the trajectory.
+Fix (A+B+C): A `ShotDecl.duration_s` 3-15 (Omni 1.2 Flash slider; `flow_send --model/--duration` sets and verifies model,
+seconds and cost before filling the frames; generate books `flow_credits(s)` = 1/s to 10 s, then 2/s at 360p) and a motion
+library (`drama/motion_library.py`: TIME_FILL > max*1.25, RUSHED < min*0.8, MOTION_UNKNOWN); B a mid-travel stop needs
+`stops_at` = a visible layout object whose label is in the text (STOP_TARGET), vague stops (halfway/middle/partway...)
+are TARGET_CONFLICT; C end still = the instant right after the stop. QC: `film.py motion` (optical flow on the
+declared `tracked` ROI; MOTION_REVERSAL / NO_MOTION P1, MOTION_OUTSIDE_ACTION P2) flags t9 and t10 as MOTION_REVERSAL.
+Playbook §4/§5/§6.5 + film-director skill updated.
+film04 v5: SC01_g1 = 4 s (SETUP 0-1, ACTION 1-3 lower_roll_shutter_partial stops_at shutter_catch, HOLD 3-4); layout adds
+`shutter_catch` ("brass shutter catches"); every shutter state now rests on the catches. New stills (ChatGPT GPM tab)
+registered as start/end SC01_g1, NOT approved; storyboard frame changed (4 s) -> approval voided. Preflight caught "keeps"
+in the HOLD line (UNCONTROLLED_REPEAT) -> "her hands rest on...".
+Live settings check (0 credits, no send): `_set_composer_settings` failed "duration slider not found" - Flow renders the
+length as `input[type=range]`, not `[role=slider]`; fixed; re-run set Omni 1.2 Flash, 4 s, Flow shows "tốn 4 tín dụng",
+chip "Video · 360p · 4 giây". The composer is left on 4 s.
+Owner approved start/end SC01_g1 v5 + storyboard SC01_S1 only ("Duyệt, gửi đi", 2026-11-08; `--approve-storyboard` would
+approve all 12 frames, so only SC01_S1 was reviewed through StoryboardGate). Both stills uploaded via the Kết thúc picker;
+one send YES->NO: flow_send PASSED (model Omni 1.2 Flash, 4 s, Flow cost 4; both slots by pixels, diff 0.3 / 0.4; bound
+without AMBIGUOUS) -> SC01_g1_t11.mp4 (3.97 s), take SC01_g1_t5 GENERATED, 4 credits.
+`film.py motion` PASS: one monotonic pull 0.5-3.1 s, peak = final 52.7 (no reversal); edge y 215 from 3.1 s to the end =
+end still 215. Tech Lead zoom strip: both hands stay under the edge, stops on the brass catches, face hidden at the end.
+Not self-accepted: Owner reviews t5. Note: the motion starts at 0.5 s, inside SETUP (0-1 s) - inside the P2 tolerance.
+Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
+`film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
+catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
 

@@ -59,11 +59,27 @@
       "credits": 12.0,
       "output_file": "SC01_g1_t10.mp4",
       "output_sha256": "0f39e5b40fb2e47e0d3197ab013d7742bb4790807a995f2de79a2da6d7714893",
-      "status": "GENERATED",
+      "status": "REJECTED",
       "shot_version": 4,
-      "cause": "",
+      "cause": "PROMPT",
       "registered_at": "2026-11-07T21:37:46Z",
-      "review_file": "dailies/SC01_g1_t4.review.json"
+      "review_file": "reviews/SC01_g1_t4.qc.json"
+    },
+    {
+      "take_id": "SC01_g1_t5",
+      "generation_id": "SC01_g1",
+      "prompt_sha256": "cbaf5f52cf2d9ab56965295ffd39ea5a8c3373bfebf471aeb88960d3f663540e",
+      "start_frame_sha256": "0c5014e5b46fa98199e41b31d805d151a447763f72282c16a09beb7b27ce4100",
+      "route": "start_frame+end_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 4.0,
+      "output_file": "SC01_g1_t11.mp4",
+      "output_sha256": "743c0f914730511905108c08df9323886bb6b579c7fd103e742ee1642a8bca16",
+      "status": "GENERATED",
+      "shot_version": 5,
+      "cause": "",
+      "registered_at": "2026-11-07T22:24:44Z",
+      "review_file": ""
     }
   ]
 }

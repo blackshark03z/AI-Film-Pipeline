@@ -80,6 +80,43 @@ def _narration(args, rest: list[str], parser) -> int:
     return 1 if report["package"]["blocked"] or report.get("error") else 0
 
 
+def _motion(args, pkg) -> int:
+    """`motion`: exit 0 PASS, 1 FLAG (findings for the reviewer), 2 error."""
+    from film_pipeline.drama import trajectory as tj
+    shots = pkg.typed.get("shots")
+    decl = next((g for g in shots.generations if g.generation_id == args.gid), None) if shots is not None else None
+    if decl is None:
+        _emit({"error": f"unknown generation {args.gid!r}"})
+        return 2
+    if decl.tracked is None:
+        _emit({"error": f"{args.gid} has no `tracked` motion in 04_shots.json"})
+        return 2
+    if not args.clip.is_file():
+        _emit({"error": f"clip not found: {args.clip}"})
+        return 2
+    acts = [p for p in decl.choreography.phases if p.kind == "ACTION"]
+    phase = next((p for p in acts if p.motion), acts[0] if acts else None)
+    if phase is None:
+        _emit({"error": f"{args.gid} has no ACTION phase"})
+        return 2
+    window = (phase.start_s, phase.end_s)
+    t = decl.tracked
+    try:
+        curve = tj.motion_curve(args.clip, t.roi, t.axis)
+    except ValueError as exc:
+        _emit({"error": str(exc)})
+        return 2
+    verdict = tj.judge_motion(curve, direction=t.direction, action=window)
+    if args.plot:
+        tj.plot_curve(curve, window, args.plot)
+    _emit({"gid": args.gid, "clip": str(args.clip), "verdict": "FLAG" if verdict["findings"] else "PASS",
+           "note": "a measurement for the reviewer, not an acceptance of the take", "tracked": t.model_dump(),
+           "action_window": list(window), "findings": verdict["findings"], "peak_t": verdict["peak_t"],
+           "peak": verdict["peak"], "final": verdict["final"], "curve": verdict["curve"],
+           **({"plot": str(args.plot)} if args.plot else {})})
+    return 1 if verdict["findings"] else 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_subparsers(dest="action", required=True)
@@ -126,6 +163,11 @@ def main(argv: list[str] | None = None) -> int:
     tk.add_argument("--route", default="start_frame+Khung hinh")
     tk.add_argument("--model", default="")
     tk.add_argument("--credits", type=float)
+    mo = actions.add_parser("motion", help="trajectory QC: measure a tracked prop's travel in a take (a measurement for the reviewer, not an acceptance)")
+    mo.add_argument("--film", required=True, type=Path)
+    mo.add_argument("--gid", required=True, metavar="GENERATION_ID")
+    mo.add_argument("--clip", required=True, type=Path)
+    mo.add_argument("--plot", type=Path, help="write the displacement curve as a PNG")
     rv = actions.add_parser("review", help="write dailies templates for new takes, or --ingest a filled review")
     rv.add_argument("--film", required=True, type=Path)
     rv.add_argument("--ingest", type=Path, help="filled review sheet (or bare TakeQc) JSON")
@@ -342,6 +384,8 @@ def main(argv: list[str] | None = None) -> int:
             _emit({k: report[k] for k in ("video", "subtitles", "planned_duration_s", "actual_duration_s", "ok",
                                           "findings")})
             return 0 if report["ok"] else 1
+        if args.action == "motion":
+            return _motion(args, pkg)
         if args.action == "takes":
             from film_pipeline.production import takes as tk_mod
             if args.register:

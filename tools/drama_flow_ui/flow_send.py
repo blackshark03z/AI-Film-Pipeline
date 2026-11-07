@@ -5,6 +5,7 @@ Usage (repo root):
                                           [--upload FILE ...] [--timeout 600]
                                           [--image] [--start tok:TAIL] [--start-file F]
                                           [--end tok:TAIL] [--end-file F]
+                                          [--model NAME] [--duration SECONDS]
 
 Custody (WP1b):
   1. baseline = the set of /asb/ thumbnail tokens in the gallery before send;
@@ -435,6 +436,105 @@ def probe_duration(path: Path) -> float | None:
         return None
 
 
+# composer settings (model + clip length): the chip is the button whose text has "Video" and "giây"
+SETTINGS_CHIP_RE = re.compile(r"Video[\s\S]*giây")
+MODEL_BUTTON_RE = re.compile(r"Omni|Veo")
+DURATION_RE = re.compile(r"Độ dài\s*(\d+)\s*giây")
+COST_RE = re.compile(r"tốn\s*(\d+)\s*tín dụng")
+MIN_DURATION_S, MAX_DURATION_S = 3, 15   # the slider runs 3..15 s in 1 s steps; Home = 3 s
+
+JS_OPTION_XY = r"""(name) => { const vis = e => { const r = e.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden' };
+    const hits = [...document.querySelectorAll('body *')].filter(e => vis(e)
+        && !(e.innerText || '').includes('arrow_drop_down')
+        && (e.innerText || '').trim().startsWith(name));
+    if (!hits.length) return null;
+    hits.sort((a, b) => a.getBoundingClientRect().width * a.getBoundingClientRect().height
+        - b.getBoundingClientRect().width * b.getBoundingClientRect().height);
+    const r = hits[0].getBoundingClientRect();
+    return [r.x + r.width / 2, r.y + r.height / 2] }"""
+
+
+def parse_duration_s(text: str) -> int | None:
+    """Clip length shown in the composer settings ("Độ dài 8 giây"), or None."""
+    m = DURATION_RE.search(text or "")
+    return int(m.group(1)) if m else None
+
+
+def parse_cost(text: str) -> int | None:
+    """Credits the settings panel says the send costs ("tốn 8 tín dụng"), or None."""
+    m = COST_RE.search(text or "")
+    return int(m.group(1)) if m else None
+
+
+def model_label(button_text: str) -> str:
+    """The model name on the dropdown button: icon ligature and line breaks removed."""
+    return " ".join((button_text or "").replace("arrow_drop_down", " ").split())
+
+
+def model_matches(button_text: str, name: str) -> bool:
+    return model_label(button_text).startswith(name)
+
+
+def slider_presses(seconds: int) -> int:
+    """ArrowRight presses after Home (3 s) that land the duration slider on `seconds`."""
+    if not MIN_DURATION_S <= seconds <= MAX_DURATION_S:
+        raise ValueError(f"duration {seconds} s outside {MIN_DURATION_S}-{MAX_DURATION_S}")
+    return seconds - MIN_DURATION_S
+
+
+async def _set_composer_settings(page, model: str, duration: int | None, rec: dict) -> str | None:
+    """Set model / clip length in the composer settings menu and verify both. None = fine, else a result string."""
+    chip = page.locator("button").filter(has_text=SETTINGS_CHIP_RE).first
+    if not await chip.count():
+        return "SETTINGS_NOT_SET settings chip not found"
+    await chip.click()
+    await page.wait_for_timeout(800)
+    if model:
+        dropdown = page.locator("button").filter(has_text="arrow_drop_down").filter(has_text=MODEL_BUTTON_RE).first
+        if not await dropdown.count():
+            return "SETTINGS_NOT_SET model dropdown not found"
+        if not model_matches(await dropdown.inner_text(), model):
+            await dropdown.click()
+            await page.wait_for_timeout(600)
+            xy = await page.evaluate(JS_OPTION_XY, model)
+            if xy is None:
+                return f"SETTINGS_NOT_SET model option {model!r} not found"
+            await page.mouse.click(*xy)
+            await page.wait_for_timeout(800)
+        shown = model_label(await dropdown.inner_text())
+        rec["model_set"] = shown
+        if not shown.startswith(model):
+            return f"SETTINGS_NOT_SET model shows {shown!r}, wanted {model!r}"
+    if duration is not None:
+        try:
+            presses = slider_presses(duration)
+        except ValueError as e:
+            return f"SETTINGS_NOT_SET {e}"
+        slider = page.locator("input[type=range], [role=slider]").first  # Flow renders a range input
+        if not await slider.count():
+            return "SETTINGS_NOT_SET duration slider not found"
+        await slider.focus()
+        await page.keyboard.press("Home")
+        for _ in range(presses):
+            await page.keyboard.press("ArrowRight")
+        await page.wait_for_timeout(500)
+    body = await page.evaluate("() => document.body.innerText")
+    shown_s, cost = parse_duration_s(body), parse_cost(body)
+    if duration is not None:
+        rec["duration_set"] = shown_s
+    if cost is not None:
+        rec["flow_credits"] = cost
+    await page.keyboard.press("Escape")
+    await page.wait_for_timeout(500)
+    if duration is not None:
+        if shown_s != duration:
+            return f"SETTINGS_NOT_SET duration shows {shown_s}, wanted {duration}"
+        if f"{duration} giây" not in await chip.inner_text():
+            return f"SETTINGS_NOT_SET chip does not show {duration} giây"
+    return None
+
+
 async def run(args) -> dict:
     from patchright.async_api import async_playwright
     prompt = Path(args.prompt_file).read_text(encoding="utf-8").strip()
@@ -488,6 +588,11 @@ async def run(args) -> dict:
             await (await fc.value).set_files([f])
             await page.wait_for_timeout(15000)
             await page.keyboard.press("Escape")
+        if args.model or args.duration is not None:   # before the frame slots: a mode change can clear them
+            failed = await _set_composer_settings(page, args.model, args.duration, rec)
+            if failed:
+                rec["result"] = failed
+                return rec
         for which, tok, still in (("start", args.start, args.start_file), ("end", args.end, args.end_file)):
             if tok:   # "Khung hình" mode: image into the start / end frame slot (start first)
                 failed = await _fill_frame_slot(page, which, tok, Path(still) if still else None, rec)
@@ -636,6 +741,10 @@ def main() -> None:
                     help="tok:TAIL of a gallery image for the end frame")
     ap.add_argument("--end-file", default="",
                     help="local copy of the end frame: the filled end slot must match it")
+    ap.add_argument("--model", default="",
+                    help="composer model name (dropdown text must start with it), e.g. 'Omni 1.2 Flash'")
+    ap.add_argument("--duration", type=int, default=None,
+                    help="clip length in seconds (3-15), set on the settings slider")
     ap.add_argument("--image", action="store_true",
                     help="composer is in image mode; save the output image")
     args = ap.parse_args()

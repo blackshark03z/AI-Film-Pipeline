@@ -151,8 +151,24 @@ class PreprodSection(ContractModel):
         return self
 
 
+class TrackedMotion(ContractModel):
+    """A moved prop the trajectory QC measures (see drama/trajectory.py): where to look and which way it moves."""
+
+    object: Ident
+    roi: tuple[float, float, float, float]  # x0, y0, x1, y1 as fractions of the frame
+    axis: Literal["x", "y"]
+    direction: Literal["down", "up", "left", "right"]
+
+    @model_validator(mode="after")
+    def _roi_ok(self) -> "TrackedMotion":
+        x0, y0, x1, y1 = self.roi
+        if not (0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1):
+            raise ValueError(f"roi {self.roi} must satisfy 0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1")
+        return self
+
+
 class ShotDecl(ContractModel):
-    """One generation = one 8 s shot rendered from a start frame."""
+    """One generation = one shot of 3-15 s rendered from a start frame."""
 
     generation_id: Ident
     scene_id: Ident
@@ -179,6 +195,13 @@ class ShotDecl(ContractModel):
     # the end still's pose, written as a still image (a HOLD phase says what does not move, which an image cannot
     # show); empty = the last phase's description
     end_pose: str = ""
+    duration_s: int | None = Field(default=None, ge=3, le=15)  # None = the film header's generation_s
+    tracked: TrackedMotion | None = None  # trajectory.py: the moved prop the motion QC measures
+
+
+def shot_seconds(decl: ShotDecl, header) -> float:
+    """Length of one generation: its own `duration_s`, else the film header's `generation_s`."""
+    return float(decl.duration_s if decl.duration_s is not None else header.generation_s)
 
 
 class ShotsSection(ContractModel):

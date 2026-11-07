@@ -188,7 +188,8 @@ def test_end_frame_payload_argv_route_and_receipt(tmp_path):
     i = p["argv"].index("--end")
     assert p["argv"][i:] == ["--end", "tok:xyz", "--end-file", str(folder / f"end_{GID}.png")]
     assert p["argv"][p["argv"].index("--start"):i] == ["--start", "tok:abc", "--start-file",
-                                                       str(folder / f"start_{GID}.png")]
+                                                       str(folder / f"start_{GID}.png"), "--model",
+                                                       "Omni 1.2 Flash", "--duration", "8"]
     assert p["end_frame"] == {"file": str(folder / f"end_{GID}.png"), "exists": True,
                               "sha256": T.sha256_text(f"png-end_{GID}")}
     assert any("end still is uploaded" in c for c in p["preconditions"])
@@ -220,8 +221,8 @@ def test_shots_without_end_frame_keep_payload_argv_and_receipt(tmp_path):
                       backlog=backlog(tmp_path))
     p = done["payload"]
     assert "end_frame" not in p and "--end" not in p["argv"] and "--end-file" not in p["argv"]
-    assert p["route"] == "start_frame+Khung hinh" and len(p["argv"]) == 8
-    assert p["preconditions"] == ["Flow composer is on Omni Flash, 360p, video mode",
+    assert p["route"] == "start_frame+Khung hinh" and len(p["argv"]) == 12
+    assert p["preconditions"] == ["Flow composer is on Omni 1.2 Flash, 360p, video mode (flow_send sets model and duration)",
                                   "the start still is uploaded to the Flow gallery (its tail is --start-token)",
                                   "GPM / Flow browser stays open; no cookies or captchas touched"]
     assert p["blockers"] == []                       # END_TOKEN_MISSING and END_FRAME_* concern end_frame shots only

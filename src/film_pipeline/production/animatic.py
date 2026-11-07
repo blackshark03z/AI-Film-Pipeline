@@ -2,7 +2,7 @@
 
 `build_animatic` takes a Production Package and writes under `out_dir` (default `films/<id>/media/`):
 
-* ``animatic.mp4``          one frame per generation, held for the planned generation length (`film.json` generation_s),
+* ``animatic.mp4``          one frame per generation, held for its own length (`duration_s`, else `film.json` generation_s),
                             dialogue burned in as captions, a small label with the generation id and its time range
 * ``animatic.srt``          the same captions as subtitles, on the animatic timeline
 * ``animatic_report.json``  the timing report (Gate 3 input): per generation start/end, frame source, dialogue windows,
@@ -31,6 +31,7 @@ from typing import Any
 from film_pipeline.drama.post import probe_video_duration, write_srt
 from film_pipeline.drama.storyboard import _font, render_schematic_frame
 from film_pipeline.production.package import FilmPackage, PackageError
+from film_pipeline.production.sections import shot_seconds
 
 MAX_WORDS_PER_SECOND = 3.5  # spoken dialogue in a drama: ~2.5 w/s normal, 3.5 is already brisk
 SIZE = (1280, 720)
@@ -158,7 +159,6 @@ def build_animatic(pkg: FilmPackage, out_dir: Path | str | None = None, *, still
     work.mkdir(parents=True, exist_ok=True)
     stills, board = Path(stills_dir) if stills_dir else None, Path(storyboard_dir) if storyboard_dir else None
     audio = Path(audio_dir) if audio_dir else None
-    gen_s = float(pkg.header.generation_s)
     approved: dict[str, Path] = {}
     if stills is None and "preprod" in pkg.typed:  # default: the stills the package recorded as approved (stills.py)
         from film_pipeline.production.stills import approved_stills
@@ -184,6 +184,7 @@ def build_animatic(pkg: FilmPackage, out_dir: Path | str | None = None, *, still
             base, source = work / f"{gid}_card.png", "placeholder"
             _card(base, gid, decl.choreography.phases[0].description if decl.choreography.phases else decl.coverage)
             findings.append({"check": "FRAME_PLACEHOLDER", "detail": f"{gid}: no still and no storyboard frame"})
+        gen_s = shot_seconds(decl, pkg.header)
         setup = decl.choreography.phases[0].end_s if decl.choreography.phases and \
             decl.choreography.phases[0].kind == "SETUP" else 0.0
         lines = [dialogue[(decl.scene_id, n)] for n in decl.dialogue if (decl.scene_id, n) in dialogue]
@@ -231,7 +232,7 @@ def build_animatic(pkg: FilmPackage, out_dir: Path | str | None = None, *, still
     shutil.rmtree(work, ignore_errors=True)
     report = {"film_id": pkg.header.film_id, "video": str(mp4), "subtitles": str(out_dir / "animatic.srt"),
               "planned_duration_s": round(clock, 3), "actual_duration_s": round(actual, 3),
-              "generation_s": gen_s, "audio": "temp dialogue where provided, silence elsewhere",
+              "generation_s": float(pkg.header.generation_s), "audio": "temp dialogue where provided, silence elsewhere",
               "ok": abs(actual - clock) <= DRIFT_TOLERANCE_S, "findings": findings, "generations": gen_rows}
     (out_dir / "animatic_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n",
                                                   encoding="utf-8", newline="\n")

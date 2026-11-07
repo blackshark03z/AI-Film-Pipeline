@@ -18,20 +18,22 @@
           {
             "kind": "SETUP",
             "start_s": 0.0,
-            "end_s": 2.0,
+            "end_s": 1.0,
             "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
           },
           {
             "kind": "ACTION",
-            "start_s": 2.0,
-            "end_s": 6.0,
-            "description": "she pulls the shutter down by its bottom edge, slowly and evenly, until the edge reaches the middle of the window, and stops there"
+            "start_s": 1.0,
+            "end_s": 3.0,
+            "motion": "lower_roll_shutter_partial",
+            "stops_at": "shutter_catch",
+            "description": "she pulls the shutter down in one smooth pull until its bottom edge comes to rest on the brass shutter catches"
           },
           {
             "kind": "HOLD",
-            "start_s": 6.0,
-            "end_s": 8.0,
-            "description": "she stays still, both hands resting on the shutter's bottom edge; the shutter does not move"
+            "start_s": 3.0,
+            "end_s": 4.0,
+            "description": "her hands rest on the shutter's bottom edge; nothing moves"
           }
         ],
         "once_actions": [
@@ -41,7 +43,7 @@
         "performance": [
           {
             "character": "MARA",
-            "emotion_intent": "routine, unhurried closing",
+            "emotion_intent": "routine, unhurried",
             "visible_cues": [
               "steady hands",
               "a tired, calm face"
@@ -71,10 +73,10 @@
         "lens_intent": "NORMAL",
         "composition": "from the public hall through the ticket window: MARA behind the glass, the clock and the suitcase behind her"
       },
-      "version": 4,
+      "version": 5,
       "end_frame": true,
-      "repair_of": "SC01_g1@v3",
-      "repair_reason": "Owner rejected SC01_g1_t3 (down-then-up reversal, clock glance unread): one focused moment per clip, P13-04",
+      "repair_of": "SC01_g1@v4",
+      "repair_reason": "time-fill overshoot (t9/t10): 4 s ACTION for a ~2 s pull; v5 = 4 s shot, stop on brass shutter catches, end frame right after the stop",
       "camera_position": "A",
       "readout": [
         {
@@ -101,7 +103,19 @@
           "min_size": "MEDIUM"
         }
       ],
-      "end_pose": "she stands behind the half-closed window, on the far side of the shutter: the lowered shutter hides her face; below its bottom edge only her chest and both hands holding the edge show"
+      "end_pose": "she stands behind the window, on the far side of the shutter: the lowered shutter hides her face; its bottom edge rests on the brass shutter catches, and below it only her chest and both hands holding the edge show",
+      "duration_s": 4,
+      "tracked": {
+        "object": "shutter",
+        "roi": [
+          0.44,
+          0.04,
+          0.67,
+          0.8
+        ],
+        "axis": "y",
+        "direction": "down"
+      }
     },
     {
       "generation_id": "SC01_g2",
@@ -1332,6 +1346,109 @@
           "min_size": "MEDIUM"
         }
       ]
+    },
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC01_g1",
+      "end_state": "SC01_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC01_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "she pulls the shutter down by its bottom edge, slowly and evenly, until the edge reaches the middle of the window, and stops there"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "she stays still, both hands resting on the shutter's bottom edge; the shutter does not move"
+          }
+        ],
+        "once_actions": [
+          "pulls the shutter down"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "routine, unhurried closing",
+            "visible_cues": [
+              "steady hands",
+              "a tired, calm face"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anxiety"
+          }
+        ]
+      },
+      "sfx": [
+        "shutter rolling down"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "from the public hall through the ticket window: MARA behind the glass, the clock and the suitcase behind her"
+      },
+      "version": 4,
+      "end_frame": true,
+      "repair_of": "SC01_g1@v3",
+      "repair_reason": "Owner rejected SC01_g1_t3 (down-then-up reversal, clock glance unread): one focused moment per clip, P13-04",
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "it is past closing time",
+          "evidence": [
+            "clock"
+          ],
+          "min_size": "MEDIUM_CLOSE"
+        },
+        {
+          "fact": "she is closing the ticket window",
+          "evidence": [
+            "MARA",
+            "shutter",
+            "window"
+          ],
+          "min_size": "MEDIUM"
+        },
+        {
+          "fact": "it is her last night here",
+          "evidence": [
+            "suitcase"
+          ],
+          "min_size": "MEDIUM"
+        }
+      ],
+      "end_pose": "she stands behind the half-closed window, on the far side of the shutter: the lowered shutter hides her face; below its bottom edge only her chest and both hands holding the edge show"
     }
   ]
 }

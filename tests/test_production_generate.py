@@ -87,7 +87,8 @@ def test_dry_run_builds_the_exact_payload_and_sends_nothing(tmp_path):
     assert not done["sent"] and done["dry_run"] and not runner.calls
     assert p["prompt_sha256"] == T.sha256_text(prompt) and p["prompt_words"] == len(prompt.split())
     assert p["take_id"] == "SC01_g1_t1" and p["output"].endswith("SC01_g1_t1.mp4")
-    assert p["route"] == "start_frame+Khung hinh" and p["model"] == "Omni Flash 360p" and p["expected_credits"] == 12
+    assert p["route"] == "start_frame+Khung hinh" and p["model"] == "Omni 1.2 Flash 360p" and p["expected_credits"] == 8
+    assert p["duration_s"] == 8 and p["argv"][-4:] == ["--model", "Omni 1.2 Flash", "--duration", "8"]
     assert p["argv"][2:5] == [p["prompt_file"], p["output"], "--start"] and "--start-file" in p["argv"]
     assert p["start_frame"]["exists"] and p["start_frame"]["sha256"] == T.sha256_text("png-bytes")
     assert not (Path(p["output"])).exists()  # nothing rendered
@@ -197,7 +198,7 @@ def test_live_with_go_sends_once_and_registers_the_take(tmp_path):
     assert "tok:abc" in runner.calls[0] and runner.calls[0][runner.calls[0].index("--start") + 1] == "tok:abc"
     logged = T.load_log(pkg.root, pkg.header.film_id).get("SC01_g1_t1")
     assert logged.status == "GENERATED" and logged.prompt_sha256 == done["payload"]["prompt_sha256"]
-    assert logged.start_frame_sha256 == done["payload"]["start_frame"]["sha256"] and logged.credits == 12
+    assert logged.start_frame_sha256 == done["payload"]["start_frame"]["sha256"] and logged.credits == 8
     receipt = json.loads(Path(done["receipt"]).read_text(encoding="utf-8"))
     assert receipt["sent"] and receipt["result"] == "PASSED" and receipt["take_registered"]
 
@@ -266,15 +267,15 @@ def live(pkg, tmp_path, runner, **kw):
 
 
 def test_a_failed_send_keeps_its_take_number_and_its_credits(tmp_path):
-    pkg = film(tmp_path, 20)   # cap 30: two 12-credit sends fit, three do not
+    pkg = film(tmp_path, 14)   # cap 21: two 8-credit sends fit, three do not
     first = live(pkg, tmp_path, FakeRunner("TIMEOUT"))
     assert first["sent"] and first["payload"]["take_id"] == "SC01_g1_t1"
     second = live(pkg, tmp_path, FakeRunner("TIMEOUT"))
-    assert second["payload"]["take_id"] == "SC01_g1_t2" and second["payload"]["credits_spent"] == 12
+    assert second["payload"]["take_id"] == "SC01_g1_t2" and second["payload"]["credits_spent"] == 8
     assert (Path(first["receipt"]).parent / "SC01_g1_t1.intent.json").is_file()   # evidence of t1 is not overwritten
     third = live(pkg, tmp_path, FakeRunner())
     assert not third["sent"] and [r["code"] for r in third["refused"]] == ["BUDGET_EXCEEDED"]
-    assert third["payload"]["credits_spent"] == 24
+    assert third["payload"]["credits_spent"] == 16
 
 
 def test_an_interrupted_send_blocks_the_next_one(tmp_path):
@@ -337,3 +338,14 @@ def test_an_existing_output_is_never_overwritten(tmp_path):
     runner = FakeRunner()
     done = live(pkg, tmp_path, runner)
     assert [r["code"] for r in done["refused"]] == ["OUTPUT_EXISTS"] and not runner.calls and out.read_bytes() == b"evidence"
+
+
+def test_a_shot_with_its_own_duration_is_priced_and_sent_with_it(tmp_path):
+    pkg = film(tmp_path, 100, approve=False)
+    shots = json.loads((pkg.root / "04_shots.json").read_text(encoding="utf-8"))
+    shots["generations"][0]["duration_s"] = 12
+    (pkg.root / "04_shots.json").write_text(json.dumps(shots), encoding="utf-8")
+    pkg = load_package(pkg.root)
+    p = G.build_payload(pkg, "SC01_g1", stills_dir=still(tmp_path), start_token="tok:abc")
+    assert p["duration_s"] == 12 and p["expected_credits"] == 14
+    assert p["argv"][-4:] == ["--model", "Omni 1.2 Flash", "--duration", "12"]

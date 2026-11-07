@@ -197,8 +197,8 @@ Decide, in this order, and write each down:
 | 10–12 Screenplay, dialogue, rewrite | the Fountain script, rewrite log | `script.fountain`, `rewrite_log` | Every story scene is a script scene and vice versa; log each rewrite with its reason |
 | 14 Adaptation | source and rights | `adaptation` / `source_note` | Any source material → `adaptation.rights_status`; anything but `cleared` makes Gate 1 `OWNER_PENDING` |
 
-Script writing constraints that come from the generator, not taste: **one scene = 16 s = two 8 s generations, one
-shot each**; at most 2 speakers and 3 people in frame; dialogue ≤ 28 syllables per generation at 2.5 syll/s; at least
+Script writing constraints that come from the generator, not taste: **a scene is cut from generations of 3-15 s
+(Omni 1.2 Flash; film header `generation_s` is only the default), one shot each, each as long as its action**; at most 2 speakers and 3 people in frame; dialogue ≤ 28 syllables per generation at 2.5 syll/s; at least
 3 s of silence/reaction in a scene (film03 limits in `03_preprod.json`). Write beats as **observable actions**
 (§6), not feelings.
 
@@ -236,7 +236,7 @@ than the first generation that needs it. Plan it with the script — dialogue fi
 
 ## 5. Stage 4 — shots (`04_shots.json`)
 
-One declaration per 8 s generation: `generation_id` (`SC03_g1`), `scene_id`, `coverage`
+One declaration per generation (`duration_s` 3-15, default the header's `generation_s`): `generation_id` (`SC03_g1`), `scene_id`, `coverage`
 (MASTER / TWO_SHOT / OTS / SINGLE / REACTION), `subject`, `foreground`, `visible`, `dialogue` (script **line
 numbers**, `[]` for a silent shot; every scripted line must be assigned exactly once), `start_state`, `end_state`,
 `previous_generation_id`, `choreography` (timed phases, visible performance cues, once-only must-show actions), `sfx`.
@@ -258,26 +258,33 @@ verified (§8).
    out of the state (film01 defect 4).
 4. **Framing is not honoured reliably** on single-shot 8 s generations; a planned close-up may come out as a medium.
    Plan so either reads correctly, and do not let a story point depend on exact framing.
-5. **Words that cost credits.** Police + race themes together triggered refunded "reputational risk" blocks (film01,
+5. **A shot is as long as its action** (film04 SC01_g1 t9/t10: a ~2 s shutter pull in a 4 s ACTION phase; the model
+   pulled past the target and pushed it back up to fill the time). Give each ACTION phase a `motion` from
+   `drama/motion_library.py` (natural length; preflight `TIME_FILL` / `RUSHED`), size `duration_s` as about
+   1 s setup + the motion + 0.5-1 s settle, and fill extra story time with a scripted beat, not a hold.
+   A motion that stops mid-travel stops **on a visible set object** (`stops_at`, e.g. brass shutter catches):
+   never "halfway" / "the middle" (`STOP_TARGET`, `TARGET_CONFLICT`). With an end still, the last frame comes
+   right after the stop. Measure the prop's path on every take (`film.py motion`) before the review.
+6. **Words that cost credits.** Police + race themes together triggered refunded "reputational risk" blocks (film01,
    film03): no race words in video prose (the start frame carries the look) and drop "police" from the prose of the
    video prompt (`.soft.txt`), dialogue unchanged. Photoreal character refs are refused by some providers; the
    start-frame route avoids refs in the video prompt.
-6. **Prompt budget.** `PreflightLimits.max_prompt_words` defaults to 120; the Flow start-frame route runs at **215**
+7. **Prompt budget.** `PreflightLimits.max_prompt_words` defaults to 120; the Flow start-frame route runs at **215**
    (film02: all six prompts 165–220 words, 6/6 first pass), set in `03_preprod.json`. The limit applies to the
    **emitted** text (start prefix + compiled text). A prompt over the limit is either shortened or listed in
    `accepted_overlong` with a reason — never silently allowed. (The earlier backlog figure of 170 words does not match
    either value; use the one in the film's `preflight` block.)
-7. **Know where the words go.** `plan` writes `plan_meta.json` `word_budget` per generation (words per section of the
+8. **Know where the words go.** `plan` writes `plan_meta.json` `word_budget` per generation (words per section of the
    emitted text: start prefix, cast/looks, setting, start state, shot timing/action, performance, dialogue, sound,
    fixed tail; they add up to the prompt's word count) and an over-limit `PROMPT_TOO_LONG` line names the three biggest.
    In film04 the budget was eaten by the locked looks + location text + the start-state list, not by the action: shorten
    there first (fewer people in frame, a shorter state list) before cutting beats. The limit stays 215 (Owner item).
-8. **A mid-shot entrant is in the start state.** Anyone who walks into frame during the 8 s must still be named in the
+9. **A mid-shot entrant is in the start state.** Anyone who walks into frame during the 8 s must still be named in the
    start state (off-screen, with position), or the model invents them and the next handoff has no state to match.
-9. **A once-action is spelled out in its ACTION phase.** A must-show action ("hands over the badge") is written in the
+10. **A once-action is spelled out in its ACTION phase.** A must-show action ("hands over the badge") is written in the
    choreography phase where it happens, in observable words; a mention only in the summary or the performance cue is
    not enough, and the model may skip or repeat it.
-10. **A prop that changes needs an ACTION/CONSEQUENCE phase that names it.** If a prop is opened, torn, filled or
+11. **A prop that changes needs an ACTION/CONSEQUENCE phase that names it.** If a prop is opened, torn, filled or
     moved, the phase says which prop and what the visible result is; otherwise the end state cannot be verified and the
     next generation starts from a guess (§2 above: only control what the model controls).
 
@@ -292,7 +299,7 @@ verified (§8).
 | film01 | Provider blocked refs + mistreatment storyline | Route evidence; text-only route is a supported mode |
 | film02 | The aunt read as the mother — a viewer could not tell who anyone was | `drama.comprehension`: intros, fact carriers, identity tags, cards; `lint_script` before generation |
 | film03 | Wrong start frames from the Flow picker (virtual list) | `flow_send --start-file` pixel-checks the slot before paying |
-| film03 | 12 credits ×3 lost to moderation | Prompt wording in §6.5; record risk in the README |
+| film03 | 12 credits ×3 lost to moderation | Prompt wording in §6.6; record risk in the README |
 
 ## 8. Generation discipline (once the Owner lifts the pause)
 

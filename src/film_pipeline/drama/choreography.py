@@ -14,6 +14,7 @@ from typing import Literal
 from pydantic import Field
 
 from ..core import ContractModel
+from .motion_library import MOTION_LIBRARY
 from .scene_bible import RuleIssue
 
 TOLERANCE = 1e-3
@@ -24,6 +25,8 @@ class Phase(ContractModel):
     start_s: float
     end_s: float
     description: str
+    motion: str = ""      # MOTION_LIBRARY key: the motion this ACTION phase performs (timing is checked)
+    stops_at: str = ""    # id of a set object where a mid-travel motion stops
 
 
 class PerformanceCue(ContractModel):
@@ -84,6 +87,25 @@ class GenerationChoreography(ContractModel):
         actions = [p for p in phases if p.kind == "ACTION"]
         if not actions:
             add("CHOREOGRAPHY", "BLOCK", "no ACTION phase")
+        for phase in actions:
+            if not phase.motion:
+                continue
+            spec = MOTION_LIBRARY.get(phase.motion)
+            if spec is None:
+                add("MOTION_UNKNOWN", "BLOCK", f"phase {phase.start_s:g}-{phase.end_s:g}s: motion "
+                    f"{phase.motion!r} is not in the motion library")
+                continue
+            length = phase.end_s - phase.start_s
+            if length > spec.max_s * 1.25:
+                add("TIME_FILL", "BLOCK", f"{phase.motion} takes {spec.min_s:g}-{spec.max_s:g}s but its phase lasts "
+                    f"{length:g}s; the model fills spare time with invented motion (overshoot and correction, "
+                    "film04 SC01_g1 t9/t10)")
+            elif length < spec.min_s * 0.8:
+                add("RUSHED", "BLOCK", f"{phase.motion} takes {spec.min_s:g}-{spec.max_s:g}s but its phase lasts "
+                    f"only {length:g}s")
+            if spec.stop == "mid_travel" and not phase.stops_at:
+                add("STOP_TARGET", "BLOCK", f"{phase.motion} stops mid-travel; name the set object where it stops "
+                    "(stops_at)")
         action_text = " ".join(p.description for p in actions).lower()
         for once in self.once_actions:
             if once.lower() not in action_text:

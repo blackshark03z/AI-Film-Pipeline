@@ -18,7 +18,7 @@ Blockers keep a send from being safe; they are listed in the payload either way:
 payload) and returns the payload. Without ``dry_run`` it refuses unless the backlog header says ``OWNER_GO_LIVE: YES`` **and**
 there are no blockers; only then it calls the runner (default: `flow_send.py`), and a PASSED clip is registered in the take
 log. The receipt is written *before* the send and updated with the result, so an interrupted send leaves evidence. Every
-real send spends credits; the video model is always Omni Flash at 360p.
+real send spends credits; the video model is always Omni 1.2 Flash at 360p.
 """
 from __future__ import annotations
 
@@ -31,7 +31,8 @@ from pathlib import Path
 from typing import Any, Callable
 
 from film_pipeline.production.plan import plan_package
-from film_pipeline.production.planning import CREDITS_PER_GENERATION
+from film_pipeline.production.planning import flow_credits
+from film_pipeline.production.sections import shot_seconds
 from film_pipeline.production.takes import (load_log, register_take, sha256_file, sha256_text, takes_dir)
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -39,7 +40,8 @@ BACKLOG = ROOT / "docs" / "production" / "LOOP_BACKLOG.md"
 FLOW_SEND = ROOT / "tools" / "drama_flow_ui" / "flow_send.py"
 ROUTE = "start_frame+Khung hinh"
 ROUTE_END = "start_frame+end_frame+Khung hinh"
-MODEL = "Omni Flash 360p"
+MODEL = "Omni 1.2 Flash 360p"
+FLOW_MODEL = "Omni 1.2 Flash"  # the model name Flow's composer dropdown starts with
 PLACEHOLDER_TOKEN = "tok:<TAIL_OF_UPLOADED_START_FRAME>"
 PLACEHOLDER_END_TOKEN = "tok:<TAIL_OF_UPLOADED_END_FRAME>"
 _GO = re.compile(r"^OWNER_GO_LIVE: (YES|NO)[ \t\r]*$", re.MULTILINE)
@@ -145,7 +147,8 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     still = _start_still(pkg, generation_id, stills_dir, blockers)
     end_still = _frame_still(pkg, generation_id, stills_dir, blockers, "end") if decl.end_frame else None
 
-    sent = _sent_receipts(root, pkg.header.film_id)
+    prices = {g.generation_id: flow_credits(shot_seconds(g, pkg.header)) for g in shots.generations}
+    sent = _sent_receipts(root, pkg.header.film_id, prices)
     logged = {t.take_id for t in log.takes}
     # a send that did not end in a registered take still used its number (and probably its credits): never reuse it
     used = [len(log.for_generation(generation_id))] + [
@@ -162,6 +165,8 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
         blockers.append(_blocker("OUTPUT_EXISTS", f"{out} (or its manifest) already exists; it is evidence and is not "
                                  f"overwritten", live_only=True))
     cap = pkg.header.budget.credits_cap
+    seconds = shot_seconds(decl, pkg.header)
+    cost = flow_credits(seconds)
     if not start_token:
         blockers.append(_blocker("START_TOKEN_MISSING", "pass --start-token tok:<tail> of the start still uploaded to Flow",
                                  live_only=True))
@@ -172,12 +177,13 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
         pass  # a rehearsal spends nothing: no budget to check (credits are recorded as 0)
     elif cap is None:
         blockers.append(_blocker("BUDGET_NOT_SET", "film.json budget.credits_estimate is empty", live_only=True))
-    elif spent + CREDITS_PER_GENERATION > cap:
-        blockers.append(_blocker("BUDGET_EXCEEDED", f"{spent:g} spent + {CREDITS_PER_GENERATION:g} > cap {cap:g}",
+    elif spent + cost > cap:
+        blockers.append(_blocker("BUDGET_EXCEEDED", f"{spent:g} spent + {cost:g} > cap {cap:g}",
                                  live_only=True))
     argv = [sys.executable, str(FLOW_SEND), str(prompt_file), str(out), "--start", start_token or PLACEHOLDER_TOKEN,
-            "--start-file", str(still)]
-    preconditions = ["Flow composer is on Omni Flash, 360p, video mode",
+            "--start-file", str(still),
+            "--model", FLOW_MODEL, "--duration", str(int(seconds))]
+    preconditions = ["Flow composer is on Omni 1.2 Flash, 360p, video mode (flow_send sets model and duration)",
                      "the start still is uploaded to the Flow gallery (its tail is --start-token)"]
     if end_still is not None:
         argv += ["--end", end_token or PLACEHOLDER_END_TOKEN, "--end-file", str(end_still)]
@@ -188,7 +194,8 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
             "prompt_words": len(prompt.split()), "start_frame": {"source": start_source, "file": str(still),
                                                                 "exists": still.is_file(),
                                                                 "sha256": sha256_file(still) if still.is_file() else ""},
-            "route": ROUTE_END if end_still is not None else ROUTE, "model": MODEL, "expected_credits": 0.0 if pkg.header.rehearsal else CREDITS_PER_GENERATION, "credits_spent": spent,
+            "route": ROUTE_END if end_still is not None else ROUTE, "model": MODEL, "duration_s": int(seconds),
+            "expected_credits": 0.0 if pkg.header.rehearsal else cost, "credits_spent": spent,
             "credit_cap": cap, "output": str(out), "argv": argv,
             "preconditions": preconditions, "blockers": blockers}
     if end_still is not None:
@@ -197,21 +204,23 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     return payload
 
 
-def _sent_receipts(root: Path, film_id: str) -> dict[str, dict[str, Any]]:
-    """Intent receipts of real sends (take id -> receipt). An unreadable receipt counts as a pending send."""
+def _sent_receipts(root: Path, film_id: str, prices: dict[str, float]) -> dict[str, dict[str, Any]]:
+    """Intent receipts of real sends (take id -> receipt). An unreadable receipt counts as a pending send, priced at
+    its shot's `flow_credits` (`prices`: generation id -> credits)."""
     out: dict[str, dict[str, Any]] = {}
     folder = takes_dir(root) / "intents"
     if not folder.is_dir():
         return out
     for path in sorted(folder.glob("*.intent.json")):
         take_id = path.name[:-len(".intent.json")]
+        fallback = prices.get(take_id.rsplit("_t", 1)[0], flow_credits(8))
         try:
             body = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
-            out[take_id] = {"sent": True, "result": "PENDING", "expected_credits": CREDITS_PER_GENERATION}
+            out[take_id] = {"sent": True, "result": "PENDING", "expected_credits": fallback}
             continue
         if body.get("sent") and body.get("film_id", film_id) == film_id:
-            out[take_id] = {**body, "expected_credits": float(body.get("expected_credits") or CREDITS_PER_GENERATION)}
+            out[take_id] = {**body, "expected_credits": float(body.get("expected_credits") or fallback)}
     return out
 
 
@@ -219,7 +228,7 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
     path = takes_dir(root) / "intents" / f"{payload['take_id']}.intent.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     keep = ("film_id", "generation_id", "take_id", "shot_version", "prompt_sha256", "route", "model",
-            "expected_credits", "credits_spent", "credit_cap")
+            "duration_s", "expected_credits", "credits_spent", "credit_cap")
     receipt = {k: payload[k] for k in keep}
     receipt["start_frame_sha256"] = payload["start_frame"]["sha256"]
     receipt["start_frame_source"] = payload["start_frame"]["source"]
@@ -270,7 +279,7 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     if outcome == "PASSED" and out.is_file():
         entry, _ = register_take(root, pkg.header.film_id, generation_id, out,
                                  prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
-                                 route=payload["route"], model=MODEL, credits=0.0 if mock else CREDITS_PER_GENERATION,
+                                 route=payload["route"], model=MODEL, credits=0.0 if mock else payload["expected_credits"],
                                  start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"])
         result["take"] = entry.model_dump(mode="json")
     result["manifest_result"] = outcome

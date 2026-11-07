@@ -181,3 +181,9 @@ def test_validate_blocks_on_a_planning_error_and_cli_planning(tmp_path):
     ok = subprocess.run([sys.executable, str(tool), "planning", "--film", str(FILM03)], capture_output=True,
                         text=True, encoding="utf-8")
     assert ok.returncode == 0
+
+
+def test_flow_credits_follow_the_measured_omni_12_price():
+    from film_pipeline.production.planning import flow_credits
+    assert [flow_credits(x) for x in (3, 8, 10, 11, 12, 13, 14, 15)] == [3, 8, 10, 12, 14, 16, 18, 20]
+    assert flow_credits(7.2) == 8 and flow_credits(10.5) == 12   # seconds round up

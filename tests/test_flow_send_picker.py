@@ -190,3 +190,31 @@ def test_plus_is_found_in_the_dom_and_falls_back_to_fixed_coordinates():
     # 2026-11-08: the GPM window was 1397x655; the "+" sat at (417, 598), not PLUS_XY (358, 662)
     assert asyncio.run(fs._plus_xy(_PlusPage([417.3, 598.5]))) == (417.3, 598.5)
     assert asyncio.run(fs._plus_xy(_PlusPage(None))) == fs.PLUS_XY
+
+
+def test_settings_text_parsers():
+    body = "Veo\nĐộ dài 12 giây\nSố lượng 1\nSẽ tốn 14 tín dụng"
+    assert fs.parse_duration_s(body) == 12
+    assert fs.parse_cost(body) == 14
+    assert fs.parse_duration_s("Độ dài  8  giây") == 8
+    assert fs.parse_duration_s("no settings here") is None
+    assert fs.parse_cost("") is None
+
+
+def test_model_label_and_match():
+    assert fs.model_label("Omni 1.2 Flash\narrow_drop_down") == "Omni 1.2 Flash"
+    assert fs.model_matches("Omni 1.2 Flash\narrow_drop_down", "Omni 1.2 Flash")
+    assert not fs.model_matches("Omni Flash arrow_drop_down", "Omni 1.2 Flash")
+    assert not fs.model_matches("", "Omni 1.2 Flash")
+
+
+def test_slider_presses_from_home():
+    assert fs.slider_presses(3) == 0
+    assert fs.slider_presses(8) == 5
+    assert fs.slider_presses(15) == 12
+    for bad in (2, 16):
+        try:
+            fs.slider_presses(bad)
+        except ValueError:
+            continue
+        raise AssertionError(f"{bad} accepted")
