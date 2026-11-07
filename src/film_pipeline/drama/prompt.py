@@ -72,6 +72,7 @@ def compile_scene_prompt(unit: SceneUnit, *,
                          max_reference_images: int | None = None,
                          dialogue_language: str = "Vietnamese",
                          start_state: ContinuityState | None = None,
+                         end_state: ContinuityState | None = None,
                          location: LocationLook | None = None,
                          choreography: GenerationChoreography | None = None
                          ) -> ScenePromptPlan:
@@ -123,7 +124,10 @@ def compile_scene_prompt(unit: SceneUnit, *,
     sections = {
         "characters": " ".join(cast),
         "setting": setting_text,
-        "continuity": start_state.describe() if start_state else "",
+        "continuity": " ".join(t for t in (
+            start_state.describe() if start_state else "",
+            end_state.describe_change(start_state or ContinuityState())
+            if end_state else "") if t),
         "shots": shots_text,
         "performance": performance,
         "dialogue": (f"{dialogue_language} dialogue, lip-synced: "

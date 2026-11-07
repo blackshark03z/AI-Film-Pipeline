@@ -69,6 +69,12 @@ def _blocker(code: str, detail: str, live_only: bool = False) -> dict[str, Any]:
     return {"code": code, "detail": detail, "live_only": live_only}
 
 
+def _problem_subject(problem: str) -> str | None:
+    """The generation a per-shot plan problem is about, or None for a package-wide one."""
+    m = re.match(r"^(\S+) preflight ", problem) or re.match(r"^PROMPT_TOO_LONG (\S+):", problem)
+    return m.group(1) if m else None
+
+
 def _start_still(pkg: Any, generation_id: str, stills_dir: Path | None, blockers: list[dict[str, Any]]) -> Path:
     """An explicit `--stills` directory wins. Otherwise the still recorded in 03_preprod.json must be approved and current;
     a generation with no record keeps the old behaviour (media/stills/start_<gid>.png)."""
@@ -109,9 +115,8 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     verified = frozenset(t.generation_id for t in log.takes
                          if t.status == "ACCEPTED" and t.shot_version == versions.get(t.generation_id))
     result = plan_package(pkg, plan_out, storyboard=False, verified_handoffs=verified)
-    # another shot's preflight (e.g. one that waits for this take) is not a reason to hold this one back
-    own = [p for p in result.problems
-           if not (re.match(r"^(\S+) preflight ", p) and re.match(r"^(\S+)", p).group(1) != generation_id)]
+    # another shot's preflight or prompt length (e.g. one that waits for this take) is not a reason to hold this one back
+    own = [p for p in result.problems if _problem_subject(p) in (None, generation_id)]
     blockers += [_blocker("PACKAGE_PROBLEM", p) for p in own]
     prompt_file = plan_out / "prompts" / f"{generation_id}.txt"
     prompt = prompt_file.read_text(encoding="utf-8").strip()

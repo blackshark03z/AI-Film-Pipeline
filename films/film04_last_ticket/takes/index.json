@@ -27,11 +27,11 @@
       "credits": 12.0,
       "output_file": "SC01_g1_t8.mp4",
       "output_sha256": "820634bc80fec1df45c315adaa659a13d185243c4c32a1e592ccfdfd7ca1c553",
-      "status": "GENERATED",
+      "status": "REJECTED",
       "shot_version": 2,
-      "cause": "",
+      "cause": "PROMPT",
       "registered_at": "2026-11-07T14:42:29Z",
-      "review_file": ""
+      "review_file": "reviews/SC01_g1_t2.qc.json"
     }
   ]
 }

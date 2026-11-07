@@ -1,0 +1,119 @@
+{
+  "take_id": "SC01_g1_t2",
+  "generation_id": "SC01_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-07 (chat: 'Reject, fix the action') of SC01_g1_t8.mp4 after the Tech Lead frame review (0.5 s strip).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Start frame matches still v8; the grip stays on the booth side, no hand through the glass.",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-07 (chat: 'Reject, fix the action') of SC01_g1_t8.mp4 after the Tech Lead frame review (0.5 s strip).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "The shutter drops only to her brow, she lets go at ~3 s, the shutter jumps back to fully raised and she rests her hands on the coin tray for the last 4.5 s: 'she is closing the ticket window' does not read.",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "The prompt stated only the start state (shutter up) and never the end state, and the HOLD phase dropped her grip; the model returned the shutter to the one state it was told. Pipeline fix: the prompt names every prop/position the shot changes, held to the last frame.",
+  "output_sha256": "820634bc80fec1df45c315adaa659a13d185243c4c32a1e592ccfdfd7ca1c553"
+}

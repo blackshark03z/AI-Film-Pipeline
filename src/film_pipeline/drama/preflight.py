@@ -36,6 +36,8 @@ CONTINUITY_KEYS = ("positions", "props", "looks", "lighting", "time_of_day")
 
 class PreflightLimits(ContractModel):
     max_prompt_words: int = 120          # (*)
+    # "Ends with <prop> <state>, held to the last frame." (P13-03); off only for films shipped before it (bytes frozen)
+    end_state_in_prompt: bool = True
     timing: SceneTiming = Field(default_factory=SceneTiming)
     feasibility: FeasibilityLimits = Field(default_factory=FeasibilityLimits)
 

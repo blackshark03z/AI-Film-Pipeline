@@ -133,7 +133,9 @@ class _Plan:
                 for c in start.positions]
         plan = compile_scene_prompt(
             unit, characters=cast, setting=scene.extras, room_tone=location.room_tone, sfx=decl.sfx or None,
-            dialogue_language=self.language, start_state=start, location=location.look,
+            dialogue_language=self.language, start_state=start,
+            end_state=(self.cut(self.state(decl.end_state), decl.visible)
+                       if self.pre.preflight.end_state_in_prompt else None), location=location.look,
             choreography=decl.choreography)
         report = preflight_scene(
             scene=self.scenes[decl.scene_id], unit=unit, prompt=plan, reference_sets=[],

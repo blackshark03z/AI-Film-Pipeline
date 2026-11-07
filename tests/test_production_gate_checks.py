@@ -27,8 +27,10 @@ def clone(tmp_path):
         shutil.copyfile(FILM04 / name, root / name)
     # film04 now carries the Owner's real start still for SC01_g1 (and its local media is not copied): start with none
     pre = json.loads((root / "03_preprod.json").read_text(encoding="utf-8"))
-    if pre.pop("stills", None) is not None:
-        (root / "03_preprod.json").write_text(json.dumps(pre, ensure_ascii=False, indent=2), encoding="utf-8")
+    pre.pop("stills", None)
+    # gate mechanics only: the end-state sentence (P13-03) puts three not-yet-restaged shots over the word limit
+    pre["preflight"]["end_state_in_prompt"] = False
+    (root / "03_preprod.json").write_text(json.dumps(pre, ensure_ascii=False, indent=2), encoding="utf-8")
     return root
 
 

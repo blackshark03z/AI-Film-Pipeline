@@ -341,8 +341,21 @@ the newest still) -> flow_send now scrolls each picker to the top first (tests/t
 DETAIL_PROMPT_MATCH, media 3e9f674e, registered as SC01_g1_t2 (v2, GENERATED, 6 credits), OWNER_GO_LIVE back to NO.
 Tech Lead QC of t2: start frame and booth-side grip hold (no hand through the glass), but the shutter drops only to her brow,
 she lets go at ~3 s, the shutter jumps back to fully raised and she rests her hands on the coin tray for the last 4.5 s
--> "she is closing the ticket window" does not read. Proposed REJECTED/ACTION. Open: the Owner's take review.
+-> "she is closing the ticket window" does not read. Owner rejected it ("Reject, fix the action") -> P13-03.
 SC03_g1 is still a two-person WIDE with a jar-on-counter beat (not flagged by the rule; no take yet).
+
+### P13-03 The prompt says how the shot ends, not only how it starts — DONE (Owner rejected SC01_g1_t2, 2026-11-07)
+
+Defect: the prompt named only the start state ("the shutter: up"); the model pulled the shutter down, let go and it sprang
+back to the one state it was told. Stage that missed it: prompt compile. Fix: `ContinuityState.describe_change` adds
+"Ends with <prop> <state>, held to the last frame." for every prop the end state changes (people's moves stay in the action
+text; word budget). `generate` no longer lets another shot's PROMPT_TOO_LONG hold this one back (`_problem_subject`).
+Review t2 ingested: REJECTED, cause PROMPT. Shot SC01_g1 v3 (retake): action "slowly pulls the shutter down by its bottom
+edge to the middle of the window and stops", hold "her fingers stay on the still shutter", once-action "pulls the shutter
+down"; prompt 214 words. `preflight.end_state_in_prompt` (default true) is false only in film03 (shipped, golden prompt
+bytes). Open: film04 SC03_g1, SC04_g2, SC05_g2 now run 10-20 words over 215 (gate 3 BLOCK; named in
+test_production_film04 OPEN_OVERLONG) - shorten them when they are restaged, before their own send;
+storyboard PENDING again (plan input changed) - Owner re-approval, then one resend of SC01_g1 v3 (~6 credits, YES->NO).
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
 

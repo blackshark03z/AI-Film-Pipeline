@@ -151,6 +151,13 @@ def test_take_numbers_follow_the_log(tmp_path):
     assert done["payload"]["take_id"] == "SC01_g1_t2" and done["payload"]["credits_spent"] == 12
 
 
+def test_problems_of_another_shot_do_not_hold_this_one_back():
+    # film04: once end states joined the prompt, later shots ran over the word limit and blocked SC01_g1's send
+    assert G._problem_subject("SC03_g1 preflight BLOCKED") == "SC03_g1"
+    assert G._problem_subject("PROMPT_TOO_LONG SC03_g1: 229 words > 215 (emitted text)") == "SC03_g1"
+    assert G._problem_subject("DIALOGUE_UNASSIGNED SC01: line 4 (MARA) is spoken in no generation") is None
+
+
 def test_unknown_generation_is_an_error(tmp_path):
     with pytest.raises(ValueError, match="unknown generation"):
         G.generate(film(tmp_path), "SC99_g1", dry_run=True)

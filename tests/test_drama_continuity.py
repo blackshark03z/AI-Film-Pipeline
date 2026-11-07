@@ -119,6 +119,25 @@ def test_start_state_is_compiled_between_setting_and_shots(sample):
         text.index("Shot 1 (0-")
 
 
+def test_end_state_names_only_what_the_shot_changes(sample):
+    # film04 SC01_g1 t2: told only "shutter up", the model pulled it down and let it spring back up
+    _, _, unit = sample
+    plan = compile_scene_prompt(
+        unit, characters=[CharacterBrief(name="MAI", look=MAI),
+                          CharacterBrief(name="HÙNG", look=HUNG)],
+        setting="Old kitchen at night", start_state=G1_START,
+        end_state=G1_END)
+    text = plan.compiled_text
+    assert ("Ends with letter torn pieces on the floor at MAI's feet, "
+            "held to the last frame.") in text
+    assert "Ends with MAI" not in text  # people's moves stay in the action text
+    moved = G1_END.model_copy(update={"positions": {"MAI": "at the door"}})
+    assert "MAI" not in moved.describe_change(G1_START).split(" feet")[0].replace("MAI's", "")
+    assert text.index("Continues from") < text.index("Ends with") < \
+        text.index("Shot 1 (0-")
+    assert G1_START.describe_change(G1_START) == ""
+
+
 def test_character_named_by_start_state_needs_its_look_in_prompt(
         tmp_path, sample):
     state = G1_END.model_copy(update={
