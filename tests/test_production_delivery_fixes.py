@@ -157,6 +157,27 @@ def test_one_body_frame_without_the_label_fails_the_whole_check(tmp_path):
 
 
 @needs_ffmpeg
+def test_delivery_records_the_disclosure_policy_and_a_policy_change_refuses_acceptance(tmp_path):
+    """P11-05: the manifest and 07_delivery.json carry ai_label; changing film.json afterwards makes the archive stale."""
+    from film_pipeline.production import gate_checks as GC
+    root, report = pipeline(tmp_path)
+    done, body = deliver(root, report)
+    assert done.returncode == 0 and body["ok"], body
+    manifest = json.loads((root / "delivery" / "MANIFEST.json").read_text(encoding="utf-8"))
+    item = json.loads((root / "07_delivery.json").read_text(encoding="utf-8"))["delivery"]
+    assert manifest["ai_label"] == "always" and item["ai_label"] == "always"
+    assert not [i for i in GC.master_issues(load_package(root)) if "ai_label" in i]
+    header_path = root / "film.json"
+    data = json.loads(header_path.read_text(encoding="utf-8"))
+    data["disclosure"] = {"ai_label": "title_card"}
+    header_path.write_text(json.dumps(data), encoding="utf-8")
+    assert [i for i in GC.master_issues(load_package(root)) if "built with ai_label 'always'" in i]
+    with pytest.raises(ValueError, match="cannot accept"):
+        DL.accept_delivery(load_package(root), "Owner")
+    assert "owner_acceptance" not in (root / "07_delivery.json").read_text(encoding="utf-8")
+
+
+@needs_ffmpeg
 def test_the_9x16_version_carries_its_own_label_and_deliver_checks_it(tmp_path):
     """P11-01: the 16:9 label (x 24-130) is cut off by the 9:16 crop, so the portrait is burned and sampled on its own."""
     root, report = pipeline(tmp_path)

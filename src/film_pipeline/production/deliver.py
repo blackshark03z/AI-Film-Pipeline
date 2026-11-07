@@ -62,6 +62,7 @@ class ArchiveManifest(ContractModel):
     title: str
     created: str
     release_ready: bool
+    ai_label: str = ""  # film.json disclosure.ai_label the archive was built under ("" = an archive from before the policy was recorded)
     picture_lock: dict[str, Any] = Field(default_factory=dict)
     masters: dict[str, str] = Field(default_factory=dict)  # name -> path inside the archive
     files: list[FileEntry] = Field(default_factory=list)
@@ -362,7 +363,7 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
     copied = copy_package(root, stage / "package")
     release_ready = not any(f["severity"] in ("BLOCK", "WARN") for f in findings)
     manifest = ArchiveManifest(film_id=film_id, title=pkg.header.title, created=datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                               release_ready=release_ready,
+                               release_ready=release_ready, ai_label=pkg.header.disclosure.ai_label,
                                picture_lock={k: status.get(k) for k in ("locked", "fresh", "lock_edl_sha256", "locked_by") if k in status},
                                masters=masters, files=inventory(stage), external_dependencies=dependencies(pkg), findings=findings)
     (stage / MANIFEST).write_text(json.dumps(manifest.model_dump(mode="json"), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -376,7 +377,8 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
     stage.rename(final)
     manifest_sha = sha256_file(final / MANIFEST)
     stamp_post_item(pkg, "delivery", {"manifest": "delivery/MANIFEST.json", "manifest_sha256": manifest_sha,
-                                      "release_ready": release_ready, "files": len(manifest.files)}, filename="07_delivery.json")
+                                      "release_ready": release_ready, "files": len(manifest.files),
+                                      "ai_label": pkg.header.disclosure.ai_label}, filename="07_delivery.json")
     return {"film_id": film_id, "ok": True, "release_ready": release_ready, "archive": "delivery", "manifest_sha256": manifest_sha,
             **({"stamp": "REHEARSAL — synthetic"} if pkg.header.rehearsal else {}),
             "superseded": superseded.name if superseded else None, "package_files": copied, "findings": findings,

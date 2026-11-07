@@ -282,6 +282,26 @@ def test_gate6_clean_delivery_is_pending_until_the_owner_accepts_this_manifest()
     assert "release_ready is false" in GC.master_pending(delivery_pkg(release_ready=False))[0]
 
 
+def test_gate6_acceptance_is_bound_to_the_disclosure_policy_the_archive_was_built_under(tmp_path):
+    """P11-05: an archive built under one ai_label setting cannot be accepted after the setting changed."""
+    root = clone(tmp_path)
+    archive = root / "delivery"
+    archive.mkdir()
+    (archive / DL.MANIFEST).write_text(json.dumps({"film_id": "film04_last_ticket", "title": "T", "created": "x", "release_ready": True}), encoding="utf-8")
+
+    def policy_issues(**item):
+        sha = DL.sha256_file(archive / DL.MANIFEST)
+        (root / "07_delivery.json").write_text(json.dumps({"delivery": {"manifest_sha256": sha, **item}}), encoding="utf-8")
+        return [i for i in GC.master_issues(load_package(root)) if "disclosure policy" in i or "ai_label" in i]
+
+    assert load_package(root).header.disclosure.ai_label == "always"
+    assert not policy_issues(ai_label="always")
+    changed = policy_issues(ai_label="title_card")
+    assert len(changed) == 1 and "title_card" in changed[0] and "always" in changed[0] and "deliver again" in changed[0]
+    legacy = policy_issues()  # a delivery recorded before the policy was kept
+    assert len(legacy) == 1 and "records no disclosure policy" in legacy[0]
+
+
 def test_gate6_blocks_without_evidence(tmp_path):
     root = clone(tmp_path)
     (root / "06_post.json").write_text('{"x": {"locked_against": ""}}', encoding="utf-8")

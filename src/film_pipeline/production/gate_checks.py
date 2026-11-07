@@ -248,6 +248,13 @@ def master_issues(pkg: Any) -> list[str]:
         return out
     if item.get("manifest_sha256") != sha256_file(archive / MANIFEST):
         out.append("delivery/MANIFEST.json changed after 07_delivery.json recorded it")
+    policy = pkg.header.disclosure.ai_label
+    built_under = item.get("ai_label")
+    if not built_under:
+        out.append("07_delivery.json records no disclosure policy (ai_label): deliver again under the current policy")
+    elif built_under != policy:
+        out.append(f"the archive was built with ai_label '{built_under}' but film.json now says '{policy}': "
+                   "deliver again under the current policy")
     verified = verify_archive(archive)
     if not verified.get("ok"):
         why = [f"missing {m}" for m in verified.get("missing_files", [])] + [f"hash {m}" for m in verified.get("hash_mismatch", [])]
