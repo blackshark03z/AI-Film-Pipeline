@@ -369,12 +369,12 @@ Files: `deliver.py` (`accept_delivery`, manifest), `gate_checks.py` (`master_iss
 Record `ai_label` in the manifest / `07_delivery.json`; `accept_delivery` and gate 6 refuse when it differs from the current
 `film.json` `disclosure.ai_label` ("deliver again under the current policy").
 
-### P11-06 Start stills are decoded before registration — IN_PROGRESS (Codex finding 11; verified)
+### P11-06 Start stills are decoded before registration — DONE (db60d67) (Codex finding 11; verified)
 Files: `stills.py` (`register_still`), tests. A PNG signature followed by garbage is accepted today. Decode (Pillow `verify()` +
 `load()`), require width/height ≥ the film resolution's aspect ratio sanity (not zero), refuse otherwise. Finding 10 (stills not
 git-ignored) is **refuted**: `films/.gitignore` has `*/media/`.
 
-### P11-07 Draft the edit and the generators record from the package — READY (P10-05 manual steps M1–M3)
+### P11-07 Draft the edit and the generators record from the package — IN_PROGRESS (P10-05 manual steps M1–M3)
 Files: new `production/edit_init.py` or `edit.py`, `tools/film.py` (`edit --init`, `generators --init`), tests.
 Evidence: `docs/production/REHEARSAL_FILM04.md` — `05_edit.json` was `{}` and a human/rehearsal had to write the TAKE events, the
 title card with the AI line (deliver BLOCKs `AI_LABEL_MISSING` without it) and `generators.json`. `edit --init` drafts the EDL from
