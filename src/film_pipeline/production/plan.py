@@ -269,4 +269,9 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     problems += p.dialogue_problems() + p.overlong_problems(record)
     if not p.shots.generations:
         problems.append("no generations in 04_shots.json")
+    from film_pipeline.production.gate_checks import PLAN_META, plan_inputs_sha
+    # sidecar (not part of gate3.json, which is pinned byte-for-byte by the film03 golden test): gate 3 reads it to
+    # tell a plan that still matches its stage files from a stale one
+    _write(out / PLAN_META, json.dumps({"planned_from": plan_inputs_sha(pkg.root), "problems": problems},
+                                       ensure_ascii=False, indent=2), out)
     return PlanResult(record, problems)

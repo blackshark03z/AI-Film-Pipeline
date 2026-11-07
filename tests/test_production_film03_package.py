@@ -40,7 +40,8 @@ def test_loads_with_zero_schema_errors(pkg):
 def test_gates_report_only_unvalidated_and_missing_stages(pkg):
     res = {r.gate: r for r in evaluate_gates(pkg)}
     assert res["2"].status == "PASS"  # 02_direction.json checked against story + shots
-    assert res["3"].status == res["4"].status == "NOT_RUN"  # present, no validator yet
+    assert res["3"].status in ("BLOCK", "OWNER_PENDING")  # P10-01: reads media/plan (gitignored: BLOCK when not planned here)
+    assert res["4"].status == "OWNER_PENDING" and "waits for a human review" in res["4"].issues[0]  # takes imported, unreviewed
     assert res["1"].status == "PASS" and res["1"].issues == []  # real checks: 01_story.json + script scenes
 
 

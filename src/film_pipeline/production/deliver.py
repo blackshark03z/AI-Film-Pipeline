@@ -298,6 +298,36 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: str = "", c
             "summary": {"files": len(manifest.files), "blocks": 0, "warnings": sum(f["severity"] == "WARN" for f in findings)}}
 
 
+# ------------------------------------------------------------------ Owner acceptance
+
+def accept_delivery(pkg: Any, by: str) -> dict[str, Any]:
+    """Record the Owner's acceptance of the *current* archive (bound to its manifest hash; a new ``deliver`` drops it).
+
+    Raises ValueError, writing nothing, unless gates 1-5 PASS, the delivery verifies, and ``release_ready`` is true: an
+    acceptance never papers over a missing review, an open rights decision or a stale archive.
+    """
+    from datetime import datetime, timezone
+    from film_pipeline.production import gate_checks
+    from film_pipeline.production.gates import evaluate_gates
+    if not by.strip():
+        raise ValueError("an acceptance needs the name of the person who accepts")
+    root = Path(pkg.root)
+    not_pass = [f"gate {r.gate} {r.name} is {r.status}: {r.issues[0] if r.issues else ''}"
+                for r in evaluate_gates(pkg) if r.gate in "12345" and r.status != "PASS"]
+    refusals = not_pass + gate_checks.master_issues(pkg)
+    item = gate_checks._delivery_item(pkg)
+    if not refusals and item.get("release_ready") is not True:
+        refusals.append("release_ready is false: resolve the WARN findings (rights, picture lock) and deliver again")
+    if refusals:
+        raise ValueError("cannot accept: " + "; ".join(refusals[:6]))
+    path = root / "07_delivery.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["delivery"]["owner_acceptance"] = {"by": by.strip(), "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                                            "manifest_sha256": item["manifest_sha256"]}
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {"accepted_by": by.strip(), "manifest_sha256": item["manifest_sha256"]}
+
+
 # ------------------------------------------------------------------ restore check
 
 def verify_archive(archive: Path) -> dict[str, Any]:

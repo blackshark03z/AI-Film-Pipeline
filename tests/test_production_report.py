@@ -21,7 +21,18 @@ def film(tmp_path: Path, name="film") -> Path:
     root.mkdir(parents=True)
     for f in FILES:
         shutil.copyfile(FILM03 / f, root / f)
+    plan_clean(root)
     return root
+
+
+def plan_clean(root: Path) -> None:
+    """A plan record with no findings and a matching sidecar, so Gate 3 is not what these report tests are about."""
+    from film_pipeline.production import gate_checks as GC
+    gids = [g.generation_id for g in load_package(root).typed["shots"].generations]
+    base = GC.plan_dir(root)
+    base.mkdir(parents=True)
+    (base / "gate3.json").write_text(json.dumps({"generations": {g: {"issues": []} for g in gids}}), encoding="utf-8")
+    (base / GC.PLAN_META).write_text(json.dumps({"planned_from": GC.plan_inputs_sha(root), "problems": []}), encoding="utf-8")
 
 
 def run(*args):
@@ -192,3 +203,10 @@ def test_cli_status_ledger_and_all(tmp_path):
     assert [r["film"] for r in table] == ["broken", "film03_front_desk"]
     assert "error" in table[0] and table[1]["next_action"].startswith("Generate is paused") and table[1]["delivered"] is False
     assert run("status").returncode == 2
+
+
+def test_an_unplanned_film_is_told_to_plan_before_anything_else(tmp_path):
+    root = film(tmp_path)
+    shutil.rmtree(root / "media")
+    r = report(root)
+    assert r["next_action"].startswith("Resolve Gate 3 (visual_spatial): no plan record") and "film.py plan" in r["next_action"]

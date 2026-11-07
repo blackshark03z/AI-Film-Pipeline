@@ -45,7 +45,8 @@ def test_loads_clean_with_the_four_authored_stages(pkg):
 def test_gates_1_and_2_pass_and_the_rest_are_not_claimed(pkg):
     res = {r.gate: r for r in evaluate_gates(pkg)}
     assert res["1"].status == res["2"].status == "PASS"
-    assert res["3"].status == res["4"].status == "NOT_RUN"  # no registered validator; gate3.json is the plan record
+    assert res["3"].status in ("BLOCK", "OWNER_PENDING")  # P10-01: the plan record decides; only the storyboard is the Owner's
+    assert res["4"].status == "BLOCK" and "no take of shot version 1" in res["4"].issues[0]  # nothing generated
     assert res["5"].status == res["6"].status == "BLOCK"  # nothing shot, nothing cut: never a pass
 
 

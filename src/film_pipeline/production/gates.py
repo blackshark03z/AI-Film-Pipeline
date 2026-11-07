@@ -46,11 +46,34 @@ def _picture_lock(pkg: FilmPackage) -> list[str]:
     return picture_lock_issues(pkg)
 
 
+def _checks(name: str) -> Validator:
+    def run(pkg: FilmPackage) -> list[str]:
+        from film_pipeline.production import gate_checks
+        return getattr(gate_checks, name)(pkg)
+    return run
+
+
+# gates 3, 4 and 6 read evidence on disk (plan record, take log + reviews, delivery archive); drama profile only
+_DRAMA_ONLY: dict[str, tuple[Validator, Validator]] = {
+    "3": (_checks("plan_issues"), _checks("plan_pending")),
+    "4": (_checks("take_issues"), _checks("take_pending")),
+    "6": (_checks("master_issues"), _checks("master_pending")),
+}
+
+
 def _builtin(pkg: FilmPackage, gate_id: str) -> Validator | None:
     """Built-in validator for a gate; gate 5 (picture lock) exists for the drama profile only."""
     if gate_id == "5":
         return _picture_lock if pkg.header.profile == "drama" else None
+    if gate_id in _DRAMA_ONLY:
+        return _DRAMA_ONLY[gate_id][0] if pkg.header.profile == "drama" else None
     return _BUILTIN.get(gate_id)
+
+
+def _pending(pkg: FilmPackage, gate_id: str) -> Validator | None:
+    if gate_id in _DRAMA_ONLY:
+        return _DRAMA_ONLY[gate_id][1] if pkg.header.profile == "drama" else None
+    return _PENDING.get(gate_id)
 
 
 def register_validator(gate_id: str, fn: Validator) -> None:
@@ -96,8 +119,9 @@ def evaluate_gate(pkg: FilmPackage, gate_id: str) -> GateResult:
     elif gate_id in _VALIDATORS or _builtin(pkg, gate_id) is not None:
         issues = (_VALIDATORS.get(gate_id) or _builtin(pkg, gate_id))(pkg)
         status = "BLOCK" if issues else "PASS"
-        if status == "PASS" and gate_id in _PENDING and gate_id not in _VALIDATORS:
-            issues = _PENDING[gate_id](pkg)
+        pending = _pending(pkg, gate_id)
+        if status == "PASS" and pending is not None and gate_id not in _VALIDATORS:
+            issues = pending(pkg)
             status = "OWNER_PENDING" if issues else "PASS"
     else:
         status = "NOT_RUN"

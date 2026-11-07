@@ -60,7 +60,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 38 | Production design | `scene_bible` location look; no set geometry/palette record | PARTIAL | P2-03 |
 | 39 | Set design | `scene_bible` location look; no set geometry/palette record | PARTIAL | P2-03 |
 | 40 | Set dressing | `production/continuity.py` OBJECT: prop state machine, changes need a causing ACTION phase; no ownership/version of dressing | PARTIAL | P2-03 |
-| 41 | Props | `production/continuity.py` OBJECT (cause rule, hand-off equality) + versioned `prop_*` designs (`impact.py`) | HAVE | - |
+| 41 | Props | `production/continuity.py` OBJECT (cause rule, hand-off equality) + versioned `prop_*` designs (`impact.py`); Gate 3 reads the plan record and its staleness | HAVE | - |
 | 42 | Costume design | `designs` kind costume with version; shots pin it; no story-day wardrobe state yet | PARTIAL | P2-01 |
 | 43 | Hair & makeup | `designs` kind hair_makeup with version; shots pin it; no story-day state yet | PARTIAL | P2-01 |
 | 44 | Cinematography planning | `production/camera.py`: per-shot camera setup + per-scene lighting plan, all-or-nothing rule, `film.py camera`, `plan` BLOCKs | HAVE | - |
@@ -107,7 +107,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 80 | Set operation | No crew/rehearsal on AI route; animatic is the rehearsal analogue | N/A | P2-04 |
 | 81 | Assistant directing | No crew/rehearsal on AI route; animatic is the rehearsal analogue | N/A | P2-04 |
 | 82 | Rehearsal | No crew/rehearsal on AI route; animatic is the rehearsal analogue | N/A | P2-04 |
-| 83 | Take management | `production/takes.py` take log `takes/index.json`: take id per generation, prompt/start-frame/output hashes, route, model, credits, status from review | HAVE | - |
+| 83 | Take management | `production/takes.py` take log `takes/index.json`: take id per generation, prompt/start-frame/output hashes, route, model, credits, status from review; Gate 4 (`gate_checks.py`) needs a human-accepted take of the current shot version per generation | HAVE | - |
 | 84 | Script supervision | `drama/qc.py` post-render gating + `sequence` | PARTIAL | P3-02 |
 | 85 | Live monitoring | `flow_send.py` network-bound output capture; `film.py generate` payload + intent receipt written before any send, take registered after (live path untested until P3-05) | PARTIAL | P3-05 |
 | 86 | Production sound | AI-generated sound; no separate capture. N/A | N/A | - |
@@ -180,7 +180,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 143 | Color QC | `color.match` deviation per shot + `OUT_OF_RANGE` WARN; `master_qc` crushed/blown-out frame share; no banding detector | PARTIAL | - |
 | 144 | Technical QC | `master_qc`: streams, resolution/fps/codec/pix_fmt, duration vs planned clock, black/freeze/duplicate frames, faststart; record `qc/master_qc.json` at level CUT | HAVE | - |
 | 145 | Compliance QC | `disclosure.check_release`; no rights/platform compliance | PARTIAL | P5-02 |
-| 146 | Delivery QC | `delivery.verify`, `e2e status --package` | PARTIAL | P6-03 |
+| 146 | Delivery QC | `delivery.verify`, `e2e status --package`; Gate 6 (`gate_checks.py`) checks QC record, picture lock, archive hashes and the Owner's `deliver --accept` bound to the manifest; not yet run on real takes | PARTIAL | P10-05 |
 
 ## VII. Delivery & distribution
 

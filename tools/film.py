@@ -173,6 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     dv.add_argument("--generators", default="", help="generator line of the disclosure, e.g. 'Google Flow Omni 1.1 Flash' (';' between several)")
     dv.add_argument("--c2pa-cert", type=Path, help="PEM certificate chain for C2PA signing (with --c2pa-key)")
     dv.add_argument("--c2pa-key", type=Path, help="PEM private key for C2PA signing")
+    dv.add_argument("--accept", metavar="NAME", help="record the Owner's acceptance of the current delivery (gates 1-5 must pass); builds nothing")
     lk = actions.add_parser("lock", help="picture lock: status and dirty post/delivery items; --lock freezes the cut")
     lk.add_argument("--film", required=True, type=Path)
     lk.add_argument("--lock", action="store_true", help="freeze the cut (every take accepted, no BLOCK at a cut)")
@@ -390,6 +391,13 @@ def main(argv: list[str] | None = None) -> int:
             return 0 if record.ok else 1
         if args.action == "deliver":
             from film_pipeline.production import deliver as dl_mod
+            if args.accept is not None:
+                try:
+                    _emit(dl_mod.accept_delivery(pkg, args.accept))
+                except ValueError as exc:
+                    _emit({"error": str(exc)})
+                    return 1
+                return 0
             video = args.video or pkg.root / "media" / "cut" / "mixed.mp4"
             if not video.is_file():
                 _emit({"error": f"{video} not found (render and mix the cut first)"})
