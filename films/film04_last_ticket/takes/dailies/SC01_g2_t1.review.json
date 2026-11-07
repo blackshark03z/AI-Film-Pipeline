@@ -1,0 +1,231 @@
+{
+  "take": {
+    "take_id": "SC01_g2_t1",
+    "generation_id": "SC01_g2",
+    "prompt_sha256": "62989a646f7ca6aee0a3eba74b1ad822114437611f938e9eb7adf9e90a2a5f02",
+    "start_frame_sha256": "4d86275bb2be3eda6298d6ab3e364e5d38736f6d5c766349180e16ece1ed4787",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 8.0,
+    "output_file": "SC01_g2_t1.mp4",
+    "output_sha256": "39fb74caf393ecd7c718766e5c1de38211bcb0fa1928ea2a455a7fdc42554767",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-07T23:12:04Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "OTS",
+    "visible": [
+      "MARA",
+      "THEO"
+    ],
+    "start_state": "SC01_g2",
+    "end_state": "SC01_end",
+    "phases": [
+      {
+        "kind": "ACTION",
+        "start_s": 0.0,
+        "end_s": 1.5,
+        "description": "THEO pushes the glass door open with one hand and steps in out of the rain, the jar of coins in his other hand"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.5,
+        "end_s": 4.0,
+        "description": "he hurries across the hall and stops at the counter in front of the ticket window"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 4.0,
+        "end_s": 7.0,
+        "description": "he stoops until his face is level with the open gap under the shutter's bottom edge and speaks"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 7.0,
+        "end_s": 8.0,
+        "description": "he stays bent at the gap, breathing hard, eyes on her"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: a drenched young man rushes in from the rain to the closing window - carried by: THEO, glass door to the platform, brass-framed ticket window"
+    },
+    {
+      "group": "action",
+      "question": "0-1.5s ACTION: does this happen on screen - THEO pushes the glass door open with one hand and steps in out of the rain, the jar of coins in his other hand?"
+    },
+    {
+      "group": "action",
+      "question": "1.5-4s ACTION: does this happen on screen - he hurries across the hall and stops at the counter in front of the ticket window?"
+    },
+    {
+      "group": "action",
+      "question": "4-7s ACTION: does this happen on screen - he stoops until his face is level with the open gap under the shutter's bottom edge and speaks?"
+    },
+    {
+      "group": "action",
+      "question": "7-8s HOLD: does this happen on screen - he stays bent at the gap, breathing hard, eyes on her?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): speaks"
+    },
+    {
+      "group": "character",
+      "question": "THEO: does the face/body read as urgent plea (moderate)? Must NOT read as: anger."
+    },
+    {
+      "group": "sync",
+      "question": "Line 15 is audible, spoken by the right character, lips match: THEO: One ticket to Halden. Please."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size MEDIUM_CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC01_g2: Continues from the previous shot: MARA behind the counter, frame-right; THEO outside the glass door, frame-left; the shutter: pulled down, its bottom edge resting on the brass shutter catches at her chest height."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC01_end: Continues from the previous shot: MARA behind the counter, frame-right; THEO at the window, frame-left; the shutter: pulled down, its bottom edge resting on the brass shutter catches at her chest height; the jar: in THEO's hands."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC01_g2_t1",
+    "generation_id": "SC01_g2",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "output_sha256": "39fb74caf393ecd7c718766e5c1de38211bcb0fa1928ea2a455a7fdc42554767"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}

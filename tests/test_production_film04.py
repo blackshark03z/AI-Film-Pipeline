@@ -64,10 +64,10 @@ def test_plan_has_only_the_pending_storyboard_left(plan):
     assert done.returncode == 1  # exit 1 while the storyboard is not approved
     checks = {(i["check"], i["severity"]) for v in g3["generations"].values() for i in v["issues"]}
     # STORYBOARD: an Owner/reviewer decision, never self-approved; LOOK_NOT_PINNED (WARN): shots where someone
-    # walks and no end frame shows where they arrive (SC01_g2 t1 lost THEO's jacket that way)
+    # walks and no end frame shows where they arrive (SC01_g2 t1 lost THEO's jacket that way; v2 has an end frame)
     assert checks == {("STORYBOARD", "BLOCK"), ("LOOK_NOT_PINNED", "WARN")}, checks
     warned = {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "LOOK_NOT_PINNED"}
-    assert "SC01_g2" in warned and not any(g3["generations"][g]["verdict"] == "BLOCKED" and
+    assert warned == {"SC06_g1"} and not any(g3["generations"][g]["verdict"] == "BLOCKED" and
                                             all(i["check"] == "LOOK_NOT_PINNED" for i in g3["generations"][g]["issues"])
                                             for g in warned)
     assert len(g3["generations"]) == 12

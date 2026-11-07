@@ -452,6 +452,11 @@ now pin unchanged props ("Unchanged the whole shot, nothing moves it: ...", Cont
 starts small at the far door, nothing pins his look where he arrives -> plan WARN LOOK_NOT_PINNED (film04: SC01_g2,
 SC06_g1). Next (after the Owner rejects t1): `retake --pickup SC01_g2` with end_frame + end_pose (bent at the gap under
 the shutter, jar in both hands, olive jacket), draw and approve the end still, one 8 s send.
+Owner rejected t1 ("Loại t1, làm bản 2"): ingested (action P0, character P1, cause PROMPT). SC01_g2 v2 = end_frame +
+end_pose. First end-still edit raised the shutter (edge row 317 vs 389 in the approved start): the start still's gap was
+too small for a face. Fix: kept the end still's geometry and redrew the start from it (edge 315); both registered, NOT
+approved (the start changed, so it needs a new approval); storyboard SC01_S2 kept its approval. Plan PASS (199 words).
+Follow-up: a still-pair check (static-prop rows/diff between start and end stills) as a tool, not only an eye check.
 Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
 `film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
 catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.

@@ -1034,13 +1034,23 @@
     },
     "SC01_g2": {
       "file": "media/stills/start_SC01_g2.jpg",
-      "sha256": "4d86275bb2be3eda6298d6ab3e364e5d38736f6d5c766349180e16ece1ed4787",
+      "sha256": "cac4bc1bf09a768a086d9e71507f645f215534046f19871a8e47931e6c9fb710",
       "prompt_sha256": "0d13a1e9026bcf6776692c9135757ff37770ecab732ec9babd5e23b56e112816",
-      "source": "ChatGPT GPM tab (wanglin08ma), refs plate B + char_THEO + end_SC01_g1",
+      "source": "ChatGPT GPM tab (wanglin08ma), v2: redrawn from the end still so the shutter edge height matches",
       "credits": 0.0,
-      "registered_at": "2026-11-07T23:06:20+00:00",
-      "approved_by": "owner-khoikk03",
-      "approved_at": "2026-11-07T23:08:15+00:00"
+      "registered_at": "2026-11-07T23:21:04+00:00",
+      "approved_by": "",
+      "approved_at": ""
+    },
+    "end:SC01_g2": {
+      "file": "media/stills/end_SC01_g2.png",
+      "sha256": "a4f62cb4543ee961f5f72119d88cf33af9bcaa1498a6dc54cef316e45d9d342c",
+      "prompt_sha256": "3b8fb923f76478f33060ed2f1cd608a8cfd1acf3a236ae89498683e0b690f177",
+      "source": "ChatGPT GPM tab (wanglin08ma), v2 end: THEO bent at the gap, olive jacket",
+      "credits": 0.0,
+      "registered_at": "2026-11-07T23:21:04+00:00",
+      "approved_by": "",
+      "approved_at": ""
     }
   }
 }

@@ -270,6 +270,10 @@ verified (§8).
    it: <prop> <state>" for every prop whose end state equals its start state. A person who walks toward the camera is
    pinned only by a far, small start frame (same take: olive rain jacket became a black hoodie); give such a shot an
    end frame where they arrive (plan WARN `LOOK_NOT_PINNED`).
+   **Draw the end still first when the action needs room in a prop** (same shot, v2: the approved start still left a
+   ~15 cm gap under the shutter; asked for THEO's face in the gap, the end-still edit raised the shutter). Make the
+   end still, then redraw the start still from it, and check that unchanged props sit at the same height in both
+   (shutter edge row 315 vs 317 here; the old start was 389) before asking for approval.
 6. **Words that cost credits.** Police + race themes together triggered refunded "reputational risk" blocks (film01,
    film03): no race words in video prose (the start frame carries the look) and drop "police" from the prose of the
    video prompt (`.soft.txt`), dialogue unchanged. Photoreal character refs are refused by some providers; the

@@ -1,0 +1,119 @@
+{
+  "take_id": "SC01_g2_t1",
+  "generation_id": "SC01_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Loại t1, làm bản 2') of SC01_g2_t1.mp4 after the Tech Lead strip (0.5 s) and zoom 2.6-4.4 s.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO's olive green rain jacket becomes a black jacket with a hoodie as he walks toward the camera.",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Loại t1, làm bản 2') of SC01_g2_t1.mp4 after the Tech Lead strip (0.5 s) and zoom 2.6-4.4 s.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "The lowered shutter rolls up by itself at 3.0-4.0 s; THEO then leans into the opened window. The shutter must stay on the brass catches until SC04.",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Loại t1, làm bản 2') of SC01_g2_t1.mp4 after the Tech Lead strip (0.5 s) and zoom 2.6-4.4 s.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Rain, door and his line are audible (speech about 4.6-7.0 s).",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Loại t1, làm bản 2') of SC01_g2_t1.mp4 after the Tech Lead strip (0.5 s) and zoom 2.6-4.4 s.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "640x360 h264 + aac, 7.96 s, decodes.",
+      "waiver": null
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "Prompt pinned only props the shot changes; the action named the gap under the shutter. THEO's look was pinned only by a far start frame. Fixed: unchanged props pinned in start-frame prompts; plan WARN LOOK_NOT_PINNED; v2 adds an end frame at the window.",
+  "output_sha256": "39fb74caf393ecd7c718766e5c1de38211bcb0fa1928ea2a455a7fdc42554767"
+}

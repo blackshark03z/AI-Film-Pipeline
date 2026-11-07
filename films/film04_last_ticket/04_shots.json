@@ -213,7 +213,12 @@
           ]
         }
       ],
-      "duration_s": 8
+      "duration_s": 8,
+      "end_frame": true,
+      "end_pose": "he stands at the counter in front of the ticket window, bent forward so his face shows in the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches above his head; he holds the jar of coins in both hands on the counter; his olive green rain jacket is wet",
+      "version": 2,
+      "repair_of": "SC01_g2@v1",
+      "repair_reason": "t1: the lowered shutter rolled up by itself at 3-4 s (unchanged prop not pinned in the prompt) and THEO's olive rain jacket became a black hoodie (look pinned only by a far start frame); v2 pins the shutter and adds an end frame at the window"
     },
     {
       "generation_id": "SC02_g1",
@@ -1458,6 +1463,104 @@
         }
       ],
       "end_pose": "she stands behind the half-closed window, on the far side of the shutter: the lowered shutter hides her face; below its bottom edge only her chest and both hands holding the edge show"
+    },
+    {
+      "generation_id": "SC01_g2",
+      "scene_id": "SC01",
+      "coverage": "OTS",
+      "subject": "THEO",
+      "foreground": "MARA",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC01_g2",
+      "end_state": "SC01_end",
+      "previous_generation_id": "SC01_g1",
+      "choreography": {
+        "generation_id": "SC01_g2",
+        "phases": [
+          {
+            "kind": "ACTION",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "motion": "open_door",
+            "description": "THEO pushes the glass door open with one hand and steps in out of the rain, the jar of coins in his other hand"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 4.0,
+            "motion": "walk_across_room",
+            "description": "he hurries across the hall and stops at the counter in front of the ticket window"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 4.0,
+            "end_s": 7.0,
+            "description": "he stoops until his face is level with the open gap under the shutter's bottom edge and speaks"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 7.0,
+            "end_s": 8.0,
+            "description": "he stays bent at the gap, breathing hard, eyes on her"
+          }
+        ],
+        "once_actions": [
+          "speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "urgent plea",
+            "visible_cues": [
+              "wet hair",
+              "breathing hard",
+              "eyes on MARA"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [
+        "door opening"
+      ],
+      "dialogue": [
+        15
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over MARA's shoulder onto THEO at the window"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "a drenched young man rushes in from the rain to the closing window",
+          "evidence": [
+            "THEO",
+            "door",
+            "window"
+          ]
+        }
+      ],
+      "duration_s": 8
     }
   ]
 }
