@@ -307,7 +307,7 @@ tests that a non-rehearsal package refuses `REHEARSAL-BOT`. Record per-step resu
 still needed in the doc; each manual step becomes a P11 item. Media stays under `DIR` (gitignored).
 Done when: the rehearsal reaches a delivery archive with 0 BLOCK, or each BLOCK is recorded as a P11 system item.
 
-### P10-06 Operator runbook + Owner review pack — READY (after P10-05)
+### P10-06 Operator runbook + Owner review pack — DONE (97a1a92)
 Files: `docs/production/RUNBOOK.md`, `src/film_pipeline/production/reviewpack.py`, `tools/film.py reviewpack`, tests.
 Runbook: the command sequence from `film.py new` to `deliver --accept`, each Owner checkpoint (story, storyboard, rights,
 go-live + budget, take reviews, picture lock, final acceptance), stop rules (1.5x budget, same cause twice), recovery, where
@@ -316,7 +316,7 @@ media lives. A test parses every `film.py <action>` in the runbook and asserts i
 storyboard frames, animatic path, budget, risks + fallbacks, rights pending, takes awaiting review with their QC sheet —
 one page the Owner can decide from. `status` "next action" names the runbook step.
 
-### P10-07 Coverage + operating state reconciliation — READY (after P10-06)
+### P10-07 Coverage + operating state reconciliation — DONE (ea7ad2d; 9 rows fixed, GAP 3 -> 1, summary recounted)
 Files: `docs/production/CATEGORY_COVERAGE_168.md`, `docs/drama/film03/PACKAGE_RERUN.md`.
 Re-check every GAP/PARTIAL row against the code as it is now (e.g. 166 says "no rights ledger" although
 `03_preprod.rights` + `sound_rights.py` exist); fix stale rows with the file that proves it; recompute the summary line. Rows
@@ -380,6 +380,11 @@ Evidence: `docs/production/REHEARSAL_FILM04.md` — `05_edit.json` was `{}` and 
 title card with the AI line (deliver BLOCKs `AI_LABEL_MISSING` without it) and `generators.json`. `edit --init` drafts the EDL from
 the shot list and the latest ACCEPTED takes (refuses to overwrite a non-empty EDL), title card from the film title plus the AI
 line; `generators --init` drafts the record from the route/model of the take log. Both are drafts for a human to review.
+
+### P11-08 The rehearsal also runs the archive restore check — READY (found by P10-07, row 156)
+Files: `rehearsal.py`, `tests/test_production_rehearsal.py`, `REHEARSAL_FILM04.md`. `deliver.verify_archive` is the restore
+check (`film.py status --package <delivery>`) but no run exercises it. Add it as the last rehearsal step on a *copy* of the
+archive moved to another directory; record the result. Done when the rehearsal report lists `restore` ok.
 
 ## P9 — Found by the loop
 
