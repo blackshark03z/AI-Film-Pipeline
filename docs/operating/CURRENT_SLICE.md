@@ -1,4 +1,4 @@
-# CURRENT SLICE — DRAMA (ACTIVE) — 2026-11-06
+# CURRENT SLICE — DRAMA (ACTIVE) — 2026-11-07
 
 Keep this file to one screen. Full history up to 2026-11-06:
 [archive/CURRENT_SLICE_HISTORY_THRU_20261106.md](archive/CURRENT_SLICE_HISTORY_THRU_20261106.md).
@@ -32,9 +32,15 @@ Keep this file to one screen. Full history up to 2026-11-06:
 | film03 "The Front Desk" | TECHNICAL PASS, 139 s final with C2PA dev signer; Owner review pending |
 | E2E narration CLI (`tools/film_e2e.py`) | prepare/resume/status/finish; plan v2 gates blocking, continuity, WP3 choreography and SRT action meaning; per-project image profile/tab and Flow account alias |
 | E2E sample `e2e_badge_20261104` | 2 SelectedTakes, 6 clips awaiting review; SHOT04 fix awaiting Owner; SHOT08 NOT_FIXED |
+| Production system (`films/<id>/` + `tools/film.py`), 2026-11-07 | P0–P9 DONE offline ([backlog](../production/LOOP_BACKLOG.md)); film03 re-run through the package (technical); film04 "Last Ticket" authored to gate 2 + clean plan, 0 credits |
 
 ## Main blocker and next step
 
+- **Ship the production system (active, Tech Lead plan 2026-11-07):** phase P10 in the
+  [loop backlog](../production/LOOP_BACKLOG.md) — gates 3/4/6 validators, start-still stage, delivery fixes, prompt budget
+  report, offline dress rehearsal of film04 on synthetic clips, runbook + Owner review pack, coverage reconciliation, Codex
+  review. Executed by the Sonnet loop. After P10 the strongest blocker is the Owner go-live for P3-05 (one Omni Flash 360p
+  canary) and P8-02 (film04: 12 generations, expected 171.2, cap 256.8 credits). Rehearsal output is never product proof.
 - **SHOT08 (shove → stagger back):** no accepted take after G/H/A/B/I2/Omni (at least 306 credits). Last Omni 360p
   take was PARTIAL (extra knee-lift/return step). Next, only on Owner go: one Omni Flash 360p attempt whose
   plan declares `action_meaning` + choreography so lock/prompt/QC follow the SRT rule. Same cause twice →

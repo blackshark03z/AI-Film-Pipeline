@@ -3,12 +3,19 @@
 OWNER_GO_LIVE: NO
 <!-- Owner flips to YES to allow LIVE items (real Flow/ChatGPT generation). Tech Lead never flips it. -->
 
-## Loop outcome (2026-11-07)
+## Active phase: P10 — Ship readiness (Tech Lead plan, 2026-11-07)
 
-No READY item remains. Remaining items are LIVE or blocked on the Owner: **P3-05**, **P8-02** (need `OWNER_GO_LIVE: YES`), and the
-Owner decisions listed in `docs/drama/film03/PACKAGE_RERUN.md` and `films/film04_last_ticket/README.md` (storyboard approval,
-originality/rights, credits estimate, 215-word limit, always-on AI label, trusted C2PA signer, creative review of film02/03/04,
-117 MiB history cleanup). Not yet done: Codex review of P5–P7.
+P0–P9 built every stage offline; film04 is authored to gate 2 + plan. **Ship** = a new film goes from package to a delivered
+master using only `film.py` commands and Owner checkpoints, with no per-film code, and the Owner accepts it. What stands in
+the way, in order: (1) gates 3/4/6 report `NOT_RUN` instead of a verdict; (2) there is no package step for start stills, so
+`generate` cannot run from the package alone; (3) delivery regressions found by P7-02 (AI label, generator roles);
+(4) the whole chain has never run on a *new* film, only on film03's legacy takes; (5) no operator runbook / Owner review pack;
+(6) P5–P9 never had an independent review. P10 closes these offline. After it, only Owner decisions and LIVE items remain
+(P3-05 canary → P8-02 film04 production).
+
+Owner decisions still open (product only): `OWNER_GO_LIVE` for P3-05/P8-02 (film04 plan: 12 generations, expected 171.2,
+cap 256.8 credits); film04 storyboard approval, originality/rights; AI label always-on vs title card only; trusted C2PA signer;
+215-word limit; creative review of film02/03; 117 MiB history cleanup.
 
 Status values: READY · IN_PROGRESS · DONE (commit, result) · BLOCKED (cause) · LIVE (needs OWNER_GO_LIVE: YES).
 Protocol: [LOOP_PROTOCOL.md](LOOP_PROTOCOL.md). Plan: [E2E_PRODUCTION_PLAN.md](E2E_PRODUCTION_PLAN.md).
@@ -161,9 +168,9 @@ pickup list feeds back into 04_shots as new shot versions with `repair_of`. Test
 (start frame + "Khung hình" route) and records an intent receipt; without `--dry-run` it refuses unless
 `OWNER_GO_LIVE: YES` is in this backlog **and** film budget allows. Mock-session test only.
 
-### P3-05 LIVE canary: one generation through the package — LIVE (after P3-04)
-Omni Flash 360p, one shot of film04 (or a film03 pickup), full path: start frame → send → acquire → take log → review
-template. Stop after one attempt; report.
+### P3-05 LIVE canary: one generation through the package — LIVE (after P3-04, P10-02)
+Omni Flash 360p, film04 SC01_g1, full path: start still (ChatGPT GPM, `stills --register`, Owner approves) → `generate`
+→ acquire → take log → review template. One attempt, then stop and report credits, wall time and every manual step.
 
 ## P4 — Editorial (91–106)
 
@@ -233,9 +240,101 @@ Following `DIRECTOR_PLAYBOOK.md` only, author an original 90–120 s drama (new 
 Owner rules on moderation). All stage files through 03_preprod + 04_shots; `validate` all gates PASS or
 OWNER_PENDING; animatic rendered; budget estimate. No new Python specific to film04 — any need becomes a system item.
 
-### P8-02 film04 production — LIVE (after P8-01; P8-01 done, awaiting Owner: storyboard approval, rights, go-live)
+### P8-02 film04 production — LIVE (after P3-05, P10-09; awaiting Owner: storyboard approval, rights, go-live)
 Generate per plan within budget, dailies review, retake/pickup policy, cut, post, QC, deliver. KPI vs film02/03
 (credits per usable second, first-pass rate). Owner creative review required; never self-accept.
+
+## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
+
+Phase rule: every item ends with its own tests + the focused suite. No item may weaken an existing assertion; where a test
+pinned `NOT_RUN` only because no validator existed, replace it with the new real verdict and say so in the commit.
+
+### P10-01 Gate 3, 4 and 6 validators — READY
+Files: `src/film_pipeline/production/gates.py` (+ a small module per gate if needed), `tests/test_production_gates*.py`,
+`tests/test_production_film03_package.py`, `tests/test_production_film04.py`.
+- Gate 3 (visual_spatial): read the plan record (`<film>/media/plan/gate3.json`, path from the package, not a CLI arg).
+  Missing or older than the stage files it was planned from (store/compare a hash of 03/04 in gate3.json; add it in `plan`)
+  → BLOCK "re-run film.py plan". Any non-STORYBOARD BLOCK → BLOCK with the detail. Only storyboard PENDING → OWNER_PENDING.
+  Clean + storyboard approved → PASS.
+- Gate 4 (production_asset): every generation the EDL needs (or every generation in 04_shots when there is no EDL) has a take
+  whose review is complete and ACCEPTED by a named human reviewer → PASS; a take with an open P0/P1 or no take → BLOCK;
+  takes present but unreviewed → OWNER_PENDING. Reuse `takes.py`/`qc_model.py`; never accept from autoqc.
+- Gate 6 (final_master): fresh `qc/master_qc.json` PASS for the current master hash and `07_delivery.json` MANIFEST hash matching
+  the archive → OWNER_PENDING (final creative acceptance is the Owner's); any mismatch/BLOCK finding → BLOCK. Never PASS
+  without an Owner acceptance record (add `07_delivery.json.owner_acceptance {by, at}` written only by
+  `film.py deliver --accept "<name>"`, refused unless every other gate is PASS).
+Done when: film04 validate shows 3 = OWNER_PENDING (storyboard), 4 = BLOCK (no takes), 5/6 = BLOCK; film03 shows 3 = BLOCK
+or OWNER_PENDING with the real reason, 4 = OWNER_PENDING (unreviewed takes), 6 = OWNER_PENDING or BLOCK with the reason.
+Categories: 41, 80–90, 141–146 partials → re-tick.
+
+### P10-02 Start-still stage in the package — READY (after P10-01)
+Files: new `src/film_pipeline/production/stills.py`, `tools/film.py stills`, `generate.py`, `animatic.py`, tests.
+`film.py stills --film F` lists each generation's still prompt (from the plan) and its state; `--register GID --image PATH
+[--source "ChatGPT GPM tab 2" --credits N]` copies the image under `media/stills/`, records sha256, the still-prompt hash it
+answers and the source in `03_preprod.json.stills[GID]` (typed, `ContractModel`); `--approve GID --by NAME` marks it approved
+(a re-planned prompt with a different hash makes the approval stale → not approved). `generate` and `animatic` take approved
+stills from this record by default (`--stills` dir stays as an override). Making the image is an operator/LIVE step outside
+this command; nothing here calls a provider. Tests with tiny generated PNGs. Categories: 44–47, 57.
+
+### P10-03 Delivery fixes from the film03 re-run — READY (after P10-01)
+Files: `deliver.py`, `titles.py`, `versions.py`, `tools/film.py`, tests; `docs/drama/film03/PACKAGE_RERUN.md` (mark items).
+(a) Structured generators: `--generators-file JSON` = list of {role: video+audio|image|voice|music, name, model, settings};
+the string form stays for compatibility and maps to one role-less entry; disclosure + credits print roles; the P7-02 film03
+command line in PACKAGE_RERUN is updated to the file form. (b) Visible AI label: `film.json.disclosure.ai_label` =
+`always` (default — matches the shipped film01–03 finals) | `title_card`; `titles --render` burns a small bottom-left
+"AI-generated" over the whole body when `always`; `deliver` checks the master carries what the setting says (sample frames).
+Owner may switch to `title_card`; the code must not pick the weaker one by default. (c) Re-run the film03 chain and record
+the new diff lines. Categories: 147–149, 155.
+
+### P10-04 Prompt word budget report + playbook rules — READY
+Files: `plan.py` (record only), `docs/director/DIRECTOR_PLAYBOOK.md`, tests.
+`plan` writes per generation the emitted word count split by section (prefix, cast/looks, setting, continuity state, shot
+timing/action, performance, dialogue, sound, fixed tail) into `gate3.json` and prints the top 3 sections when a prompt is
+over the limit. Playbook §6 gets the three film04 rules (budget dominated by looks + location + state list; a mid-shot
+entrant must be in the start state; a once-action must be spelled in its ACTION phase; a prop that changes needs an
+ACTION/CONSEQUENCE phase naming it). Do not change the 215 limit (Owner item).
+
+### P10-05 Offline dress rehearsal on film04 — READY (after P10-01, P10-02, P10-03)
+Files: `src/film_pipeline/production/rehearsal.py`, `tools/film.py rehearse`, `tests/test_production_rehearsal.py`,
+`docs/production/REHEARSAL_FILM04.md`.
+`film.py rehearse --film F --out DIR` copies the package to `DIR` (never touches the real one), sets
+`film.json.rehearsal = true`, and runs the real chain with a mock runner instead of Flow: placeholder stills (storyboard frame)
+→ `stills --register/--approve` → `generate` per generation with a mock runner that renders an 8 s clip from the still
+(ffmpeg, silent or tone) → `takes` → `review` (rehearsal reviewer `REHEARSAL-BOT`, allowed **only** when `rehearsal` is
+true) → `cut` → `lock` → `grade` → `titles --render` → `mix` → `mastercheck` → `versions` → `deliver`. A rehearsal package
+must be refused by `deliver --accept`, stamp every report `REHEARSAL — synthetic`, and keep `release_ready: false`; add
+tests that a non-rehearsal package refuses `REHEARSAL-BOT`. Record per-step result, wall time and every manual step that was
+still needed in the doc; each manual step becomes a P11 item. Media stays under `DIR` (gitignored).
+Done when: the rehearsal reaches a delivery archive with 0 BLOCK, or each BLOCK is recorded as a P11 system item.
+
+### P10-06 Operator runbook + Owner review pack — READY (after P10-05)
+Files: `docs/production/RUNBOOK.md`, `src/film_pipeline/production/reviewpack.py`, `tools/film.py reviewpack`, tests.
+Runbook: the command sequence from `film.py new` to `deliver --accept`, each Owner checkpoint (story, storyboard, rights,
+go-live + budget, take reviews, picture lock, final acceptance), stop rules (1.5x budget, same cause twice), recovery, where
+media lives. A test parses every `film.py <action>` in the runbook and asserts it exists in the CLI parser.
+`film.py reviewpack --film F` writes `media/review/index.html` (self-contained, no external assets): gates with reasons,
+storyboard frames, animatic path, budget, risks + fallbacks, rights pending, takes awaiting review with their QC sheet —
+one page the Owner can decide from. `status` "next action" names the runbook step.
+
+### P10-07 Coverage + operating state reconciliation — READY (after P10-06)
+Files: `docs/production/CATEGORY_COVERAGE_168.md`, `docs/drama/film03/PACKAGE_RERUN.md`.
+Re-check every GAP/PARTIAL row against the code as it is now (e.g. 166 says "no rights ledger" although
+`03_preprod.rights` + `sound_rights.py` exist); fix stale rows with the file that proves it; recompute the summary line. Rows
+that are honestly PARTIAL because they need live footage stay PARTIAL with that reason. Docs only.
+
+### P10-08 Independent review (Codex gpt-6.1-sol, read-only) — READY (after P10-07)
+Run `codex.exe exec -m gpt-6.1-sol -s read-only -C "D:/AI FILM MAKER/AFP-stable" --ephemeral --color never -o <scratch>/review.md - < prompt.md`
+on the diff `65c4470..HEAD` plus the P5–P7 modules (`mix.py, sound_rights.py, color.py, titles.py, master_qc.py,
+versions.py, deliver.py, report.py, gates.py, stills.py, rehearsal.py`). Prompt: correctness bugs, gates that can PASS
+unchecked, any path that self-accepts footage or sends to a provider without `OWNER_GO_LIVE: YES`. Save the review under
+`docs/production/reviews/`; each confirmed finding becomes a P11 item (READY, with evidence); fix none in this item.
+
+### P10-09 Phase close — READY (after P10-08)
+Full suite; `IMPLEMENTATION_STATUS.md` row with the four Product Progress Gate answers (product delta, proof class,
+main blocker, next choice); update `docs/operating/CURRENT_SLICE.md` "Where things stand" table; push. Then stop the loop if
+only P11 items marked BLOCKED/LIVE remain.
+
+## P11 — Found by P10 (rehearsal manual steps, review findings)
 
 ## P9 — Found by the loop
 
