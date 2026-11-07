@@ -26,6 +26,23 @@ from film_pipeline.production.sections import DirectionSection, PreprodSection, 
 _LANGUAGE = {"en": "English", "vi": "Vietnamese"}
 SUPPORTED_ASPECT = "16:9"  # prompt compiler and schematic renderer are landscape-only
 START_PREFIX = "Starts on the given frame; same room, people and places. "
+# the emitted prompt = start prefix + the compiler's sections in this order (drama.prompt.SECTION_ORDER)
+BUDGET_SECTIONS = ("prefix", "characters", "setting", "continuity", "shots", "performance", "dialogue", "sound", "prohibitions")
+# plain names for the report: characters = cast and locked looks, continuity = start-state list, shots = shot + timing/action
+BUDGET_LABELS = {"prefix": "start prefix", "characters": "cast/looks", "setting": "setting", "continuity": "start state",
+                 "shots": "shot timing/action", "performance": "performance", "dialogue": "dialogue", "sound": "sound",
+                 "prohibitions": "fixed tail"}
+
+
+def word_budget(sections: dict[str, str]) -> dict[str, int]:
+    """Words of the emitted prompt per section (zeros left out); they add up to the prompt's word count."""
+    counts = {"prefix": len(START_PREFIX.split()), **{k: len(v.split()) for k, v in sections.items()}}
+    return {k: counts[k] for k in BUDGET_SECTIONS if counts.get(k)}
+
+
+def top_sections(sections: dict[str, int], n: int = 3) -> str:
+    ranked = sorted(sections.items(), key=lambda kv: (-kv[1], BUDGET_SECTIONS.index(kv[0])))[:n]
+    return ", ".join(f"{BUDGET_LABELS[k]} {v}" for k, v in ranked)
 
 
 class _Plan:
@@ -47,6 +64,7 @@ class _Plan:
             raise PackageError(f"04_shots.json references scenes missing from script.fountain: {absent}")
         self.gen_s = float(pkg.header.generation_s)
         self.by_id = {g.generation_id: g for g in self.shots.generations}
+        self.budget: dict[str, dict[str, int]] = {}  # generation_id -> words per section of the emitted prompt
         self.takes_dir = takes_dir
         self.verified_handoffs = verified_handoffs  # generations whose accepted take verifies their end state
         self.attestations = load_attestations(attestations if attestations is not None
@@ -167,7 +185,8 @@ class _Plan:
     def overlong_problems(self, record: dict[str, Any]) -> list[str]:
         """Limit applies to the text actually written (start prefix included); exceptions must carry a reason."""
         limit = self.pre.preflight.max_prompt_words
-        return [f"PROMPT_TOO_LONG {gid}: {v['words']} words > {limit} (emitted text); add a reason to "
+        return [f"PROMPT_TOO_LONG {gid}: {v['words']} words > {limit} (emitted text; biggest: "
+                f"{top_sections(self.budget.get(gid, {}))}); add a reason to "
                 "03_preprod.json accepted_overlong or shorten the shot"
                 for gid, v in record["generations"].items()
                 if v["words"] > limit and gid not in self.pre.accepted_overlong]
@@ -247,6 +266,7 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         gid = decl.generation_id
         unit, plan, report = p.build(decl, gate)
         text = START_PREFIX + plan.compiled_text
+        p.budget[gid] = word_budget(plan.sections)
         _write(out / "prompts" / f"{gid}.txt", text + "\n", out)
         still = p.still_prompt(decl, unit)
         _write(out / "stills" / f"start_{gid}.txt", still + "\n", out)
@@ -272,6 +292,9 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     from film_pipeline.production.gate_checks import PLAN_META, plan_inputs_sha
     # sidecar (not part of gate3.json, which is pinned byte-for-byte by the film03 golden test): gate 3 reads it to
     # tell a plan that still matches its stage files from a stale one
-    _write(out / PLAN_META, json.dumps({"planned_from": plan_inputs_sha(pkg.root), "problems": problems},
-                                       ensure_ascii=False, indent=2), out)
+    limit = p.pre.preflight.max_prompt_words
+    budget = {gid: {"words": record["generations"][gid]["words"], "limit": limit, "sections": p.budget[gid]}
+              for gid in record["generations"]}
+    _write(out / PLAN_META, json.dumps({"planned_from": plan_inputs_sha(pkg.root), "problems": problems,
+                                        "word_budget": budget}, ensure_ascii=False, indent=2), out)
     return PlanResult(record, problems)

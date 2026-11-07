@@ -267,6 +267,19 @@ verified (§8).
    **emitted** text (start prefix + compiled text). A prompt over the limit is either shortened or listed in
    `accepted_overlong` with a reason — never silently allowed. (The earlier backlog figure of 170 words does not match
    either value; use the one in the film's `preflight` block.)
+7. **Know where the words go.** `plan` writes `plan_meta.json` `word_budget` per generation (words per section of the
+   emitted text: start prefix, cast/looks, setting, start state, shot timing/action, performance, dialogue, sound,
+   fixed tail; they add up to the prompt's word count) and an over-limit `PROMPT_TOO_LONG` line names the three biggest.
+   In film04 the budget was eaten by the locked looks + location text + the start-state list, not by the action: shorten
+   there first (fewer people in frame, a shorter state list) before cutting beats. The limit stays 215 (Owner item).
+8. **A mid-shot entrant is in the start state.** Anyone who walks into frame during the 8 s must still be named in the
+   start state (off-screen, with position), or the model invents them and the next handoff has no state to match.
+9. **A once-action is spelled out in its ACTION phase.** A must-show action ("hands over the badge") is written in the
+   choreography phase where it happens, in observable words; a mention only in the summary or the performance cue is
+   not enough, and the model may skip or repeat it.
+10. **A prop that changes needs an ACTION/CONSEQUENCE phase that names it.** If a prop is opened, torn, filled or
+    moved, the phase says which prop and what the visible result is; otherwise the end state cannot be verified and the
+    next generation starts from a guess (§2 above: only control what the model controls).
 
 ## 7. Lessons from shipped films (each is a check, not a story)
 

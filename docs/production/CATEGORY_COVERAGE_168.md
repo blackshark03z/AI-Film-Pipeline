@@ -68,7 +68,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 46 | Storyboarding | `drama/storyboard.py` schematic board + Gate 2; start stills registered/approved in `03_preprod.stills` (`production/stills.py`, `film.py stills`; stale when the still prompt or file changes) | HAVE | - |
 | 47 || `production/animatic.py`: timed storyboard/still frames + captions + optional temp audio -> mp4/srt/timing report (`film.py animatic`) | HAVE | - |
 | 48 | Blocking diagram | `storyboard.render_schematic_frame` + AxisBook | PARTIAL | P2-03 |
-| 49 | Shot planning | `generation.py` split into 8 s units + `coverage` shot list | PARTIAL | P2-05 |
+| 49 | Shot planning | `generation.py` split into 8 s units + `coverage` shot list; `plan` reports words per prompt section (`plan_meta.json` `word_budget`) and names the 3 biggest when over the limit | PARTIAL | P2-05 |
 | 50 | Continuity planning | `production/continuity.py`: six kinds over per-generation start/end states, `film.py continuity`, hooked into `plan` | HAVE | - |
 | 51 | Sound planning | Prompt carries room tone/SFX strings (`prompt.py`); no sound plan | PARTIAL | P5-01 |
 | 52 | Technical planning | `production/package.FilmHeader` records aspect/fps/resolution/generation_s; `plan` supports 16:9 only by design (`PreflightLimits`); 9:16 is derived in post (`versions`) | HAVE | - |
