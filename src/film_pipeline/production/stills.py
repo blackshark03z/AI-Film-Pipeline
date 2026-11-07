@@ -118,6 +118,22 @@ def _extension(image: Path) -> str:
     raise ValueError(f"{image.name}: not a PNG or JPEG image")
 
 
+def decode_check(image: Path) -> tuple[int, int]:
+    """Decode the whole image (a valid signature followed by garbage is not a picture); returns (width, height)."""
+    from PIL import Image
+    try:
+        with Image.open(image) as probe:
+            probe.verify()                      # chunk / marker structure and checksums
+        with Image.open(image) as pic:
+            pic.load()                          # the pixel data really decodes
+            width, height = pic.size
+    except Exception as exc:  # noqa: BLE001 - Pillow raises many types for a broken file
+        raise ValueError(f"{image.name}: the image does not decode ({type(exc).__name__}: {str(exc)[:100]})") from exc
+    if width <= 0 or height <= 0:
+        raise ValueError(f"{image.name}: the image has no size ({width}x{height})")
+    return width, height
+
+
 def register_still(pkg: Any, gid: str, image: Path, *, source: str = "", credits: float = 0.0,
                    now: str | None = None) -> dict[str, Any]:
     """Copy `image` under media/stills/ and record it for `gid`. A new registration is never approved."""
@@ -130,6 +146,7 @@ def register_still(pkg: Any, gid: str, image: Path, *, source: str = "", credits
     if credits < 0:
         raise ValueError("credits cannot be negative")
     ext = _extension(image)
+    decode_check(image)
     root = Path(pkg.root)
     target = stills_dir(root) / f"start_{gid}{ext}"
     sha = sha256_file(image)

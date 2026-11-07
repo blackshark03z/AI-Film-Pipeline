@@ -88,6 +88,33 @@ def test_register_refuses_bad_input_and_writes_nothing(root, tmp_path):
     assert (root / "03_preprod.json").read_text(encoding="utf-8") == before and not (root / "media").exists()
 
 
+def test_register_decodes_the_image_a_signature_alone_is_not_a_picture(root, tmp_path):
+    """P11-06: a PNG/JPEG signature followed by garbage, or a cut-off file, is refused and nothing is written."""
+    gid = head_and_chained(root)[0]
+    before = (root / "03_preprod.json").read_text(encoding="utf-8")
+    good = png(tmp_path, "good.png").read_bytes()
+    png_magic, jpeg_magic = good[:8], bytes([0xFF, 0xD8, 0xFF, 0xE0])
+    fakes = {"garbage.png": png_magic + b"not really a picture " * 20,
+             "cut.png": good[:len(good) // 2],
+             "corrupt.png": good[:-20] + bytes(20),              # intact signature, damaged tail
+             "fake.jpg": jpeg_magic + b"junk" * 50}
+    for name, data in fakes.items():
+        path = tmp_path / name
+        path.write_bytes(data)
+        with pytest.raises(ValueError, match="does not decode"):
+            S.register_still(pkg_of(root), gid, path)
+    assert (root / "03_preprod.json").read_text(encoding="utf-8") == before and not (root / "media").exists()
+
+
+def test_register_accepts_a_real_jpeg_and_a_real_png(root, tmp_path):
+    PIL = pytest.importorskip("PIL.Image")
+    gid = head_and_chained(root)[0]
+    jpg = tmp_path / "real.jpg"
+    PIL.new("RGB", (64, 36), (200, 30, 30)).save(jpg)
+    assert S.register_still(pkg_of(root), gid, jpg)["file"].endswith(".jpg")
+    assert S.decode_check(png(tmp_path, "ok.png")) == (8, 8)
+
+
 def test_approve_needs_a_name_a_registered_current_still(root, tmp_path):
     gid = head_and_chained(root)[0]
     with pytest.raises(ValueError, match="register one first"):
