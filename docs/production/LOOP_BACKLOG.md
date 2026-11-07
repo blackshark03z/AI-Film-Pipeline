@@ -276,7 +276,7 @@ answers and the source in `03_preprod.json.stills[GID]` (typed, `ContractModel`)
 stills from this record by default (`--stills` dir stays as an override). Making the image is an operator/LIVE step outside
 this command; nothing here calls a provider. Tests with tiny generated PNGs. Categories: 44–47, 57.
 
-### P10-03 Delivery fixes from the film03 re-run — READY (after P10-01)
+### P10-03 Delivery fixes from the film03 re-run — DONE (9b477c8)
 Files: `deliver.py`, `titles.py`, `versions.py`, `tools/film.py`, tests; `docs/drama/film03/PACKAGE_RERUN.md` (mark items).
 (a) Structured generators: `--generators-file JSON` = list of {role: video+audio|image|voice|music, name, model, settings};
 the string form stays for compatibility and maps to one role-less entry; disclosure + credits print roles; the P7-02 film03
