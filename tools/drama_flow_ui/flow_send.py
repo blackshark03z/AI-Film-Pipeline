@@ -121,6 +121,18 @@ JS_VIDEO_AT =r"""([x, y]) => { const v = [...document.querySelectorAll('video')]
 ATTACH_LIST_XY, START_LIST_XY = (384, 400), (142, 400)
 
 
+# the composer "+" (add-menu trigger); fixed PLUS_XY only when it is not in the DOM
+JS_PLUS = r"""() => { const b = [...document.querySelectorAll('button.add-menu-trigger')].find(b => {
+    const r = b.getBoundingClientRect(); return r.width > 0 && r.y < innerHeight && r.bottom > 0 });
+    if (!b) return null; const r = b.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2] }"""
+
+
+async def _plus_xy(page) -> tuple[float, float]:
+    """The composer "+", found in the DOM: the GPM window size changes (1397x655 on 2026-11-08), PLUS_XY then misses."""
+    xy = await page.evaluate(JS_PLUS)
+    return (xy[0], xy[1]) if xy else PLUS_XY
+
+
 async def _slot_xy(page, which: str) -> tuple[float, float]:
     """Centre of the start/end slot button, found by its text; fixed coordinates only when the text is not there."""
     xy = await page.evaluate(JS_FRAME_SLOT, SLOT_LABEL[which])
@@ -470,7 +482,7 @@ async def run(args) -> dict:
 
         for f in args.upload:
             async with page.expect_file_chooser(timeout=15000) as fc:
-                await page.mouse.click(*PLUS_XY)
+                await page.mouse.click(*await _plus_xy(page))
                 await page.wait_for_timeout(1200)
                 await page.get_by_text("Tải nội dung", exact=False).last.click()
             await (await fc.value).set_files([f])
@@ -483,10 +495,14 @@ async def run(args) -> dict:
                     rec["result"] = failed
                     return rec
         for title in args.attach:
-            await page.mouse.click(*PLUS_XY)
+            await page.mouse.click(*await _plus_xy(page))
             await page.wait_for_timeout(1500)
-            if title.startswith("tok:"):   # picker item by thumbnail token
-                xy = await _picker_find(page, title[4:], ATTACH_LIST_XY)
+            if title.startswith(("tok:", "file:")):   # picker item by thumbnail token, or by the pixels of a local copy
+                over = await _list_xy(page)
+                over = over if over != START_LIST_XY else ATTACH_LIST_XY
+                # token tails change between page loads (2026-11-08: tok:4a20dabf of the approved film04 still was gone)
+                xy = (await _picker_find(page, title[4:], over) if title.startswith("tok:")
+                      else await _picker_find_image(page, Path(title[5:]), over))
                 if xy is None:
                     rec["result"] = f"ATTACH_NOT_FOUND {title}"
                     return rec
@@ -607,7 +623,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("prompt_file")
     ap.add_argument("out")
-    ap.add_argument("--attach", nargs="*", default=[])
+    ap.add_argument("--attach", nargs="*", default=[],
+                    help="picker items: TITLE, tok:TAIL, or file:PATH (found by the pixels of that local image)")
     ap.add_argument("--upload", nargs="*", default=[])
     ap.add_argument("--timeout", type=int, default=600)
     ap.add_argument("--start", default="",

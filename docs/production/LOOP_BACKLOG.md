@@ -374,12 +374,22 @@ scene cuts" ("continuous" stays banned: UNCONTROLLED_REPEAT), action first then 
 overlong shots are gone (OPEN_OVERLONG empty). SC01_g1 v4: one moment, no clock glance; hold = hands rest on the still
 shutter. Tests: tests/test_drama_prompt_start_frame.py.
 
-### P13-05 End state pinned by an end still (Flow "Kết thúc" slot) — IN PROGRESS
+### P13-05 End state pinned by an end still (Flow "Kết thúc" slot) — DONE (code); waits for Owner picks
 
 Google Omni docs: first and last frame interpolation, "describe the desired transition". `ShotDecl.end_frame`; plan writes
 `stills/end_<gid>.txt` (edit of the start still, "Keep everything else the same"); stills record `end:<gid>` needs an
 Owner approval like a start still; generate/flow_send send both slots. flow_send finds slots by button text, not fixed
 coordinates (the GPM window was 1397x655, not 1280x720). film04 SC01_g1 v4 is the first end_frame shot.
+Making the end still (2026-11-08): Flow Nano Banana 2.1 edits of the start still barely moved the shutter (tries 1-2)
+or stopped it at her brow with the hands still up (try 3) -> fixes: the film's end state names a body-relative height
+("its bottom edge at her chest height") instead of "halfway down"; `ShotDecl.end_pose` (a still pose; a HOLD phase says
+what does not move, which an image cannot show); `flow_send --attach file:PATH` finds a gallery image by its pixels
+(token tails change: tok:4a20dabf was gone); the composer "+" is found in the DOM (button.add-menu-trigger).
+ChatGPT GPM tab try 1 put her face IN FRONT of the half-lowered shutter (the old "through the shutter" defect); try 2
+(end_pose: the lowered shutter hides her face) is physically right and is registered as end:SC01_g1, NOT approved.
+Open, Owner: pick the end frame (B registered: chest, face hidden; A: brow, face visible), approve it and the storyboard;
+then upload the end still to the Flow gallery, set the composer back to Video / Khung hình, one send (YES->NO).
+Note: Flow shows 6 credits for 360p 8 s; the pipeline books 12 (CREDITS_PER_GENERATION) - over-counts the budget.
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
 

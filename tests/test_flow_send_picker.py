@@ -175,3 +175,18 @@ def test_end_slot_is_filled_after_the_start_slot():
     src = Path(fs.__file__).read_text(encoding="utf-8")
     loop = src[src.index("for which, tok, still in"):][:200]
     assert loop.index('("start", args.start') < loop.index('("end", args.end')
+
+
+class _PlusPage:
+    def __init__(self, xy):
+        self.xy = xy
+
+    async def evaluate(self, js, *_):
+        assert js is fs.JS_PLUS
+        return self.xy
+
+
+def test_plus_is_found_in_the_dom_and_falls_back_to_fixed_coordinates():
+    # 2026-11-08: the GPM window was 1397x655; the "+" sat at (417, 598), not PLUS_XY (358, 662)
+    assert asyncio.run(fs._plus_xy(_PlusPage([417.3, 598.5]))) == (417.3, 598.5)
+    assert asyncio.run(fs._plus_xy(_PlusPage(None))) == fs.PLUS_XY

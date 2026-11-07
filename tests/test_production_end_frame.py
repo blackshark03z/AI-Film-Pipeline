@@ -109,6 +109,21 @@ def test_plan_writes_the_end_still_prompt_and_the_two_frame_prefix(tmp_path):
     assert sum(budget["sections"].values()) == budget["words"]
 
 
+def test_end_pose_replaces_the_last_phase_in_the_end_still(tmp_path):
+    # film04 SC01_g1 v4: the HOLD phase ("the shutter does not move") is motion talk an image cannot show
+    pkg = film(tmp_path, style="start_frame", approve=False)
+    shots = json.loads((Path(pkg.root) / "04_shots.json").read_text(encoding="utf-8"))
+    for g in shots["generations"]:
+        if g["generation_id"] == GID:
+            g["end_pose"] = "she stands at the desk, both hands flat beside the letter"
+    (Path(pkg.root) / "04_shots.json").write_text(json.dumps(shots), encoding="utf-8")
+    out = Path(pkg.root) / "media" / "plan"
+    plan_package(load_package(pkg.root), out, storyboard=False)
+    text = (out / "stills" / f"end_{GID}.txt").read_text(encoding="utf-8")
+    assert "Pose at the end of the shot: she stands at the desk, both hands flat beside the letter. Keep" in text
+    assert "lays a folded letter" not in text
+
+
 def test_other_prompt_styles_keep_their_prefix(tmp_path):
     pkg = film(tmp_path, approve=False)          # prompt_style "full": the end frame changes the prompt prefix only in "start_frame"
     out = Path(pkg.root) / "media" / "plan"

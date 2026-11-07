@@ -581,7 +581,7 @@
         "THEO": "outside the glass door, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down"
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height"
       },
       "looks": {
         "MARA": "mara_cardigan",
@@ -597,7 +597,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down",
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -614,7 +614,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down",
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -631,7 +631,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down",
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -648,7 +648,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down",
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -665,7 +665,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down",
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -682,7 +682,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down",
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height",
         "the jar:": "on the counter, full of coins"
       },
       "looks": {
@@ -699,7 +699,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down",
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height",
         "the jar:": "on the counter, full of coins"
       },
       "looks": {
@@ -716,7 +716,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down",
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height",
         "the jar:": "on the counter, full of coins"
       },
       "looks": {
@@ -733,7 +733,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "halfway down",
+        "the shutter:": "pulled down over the upper half of the window glass, its bottom edge at her chest height",
         "the jar:": "on the counter, full of coins"
       },
       "looks": {
@@ -1008,6 +1008,16 @@
       "registered_at": "2026-11-07T13:57:47+00:00",
       "approved_by": "Owner",
       "approved_at": "2026-11-07T14:08:46+00:00"
+    },
+    "end:SC01_g1": {
+      "file": "media/stills/end_SC01_g1.png",
+      "sha256": "44e810244f5eeb204c0487c97261cbea82c3c38f464f25181cc19b28c44c2c26",
+      "prompt_sha256": "1029c62956743d280433253f81f8e57d643b3d6054951d9b9a960192812aa703",
+      "source": "ChatGPT GPM tab (wanglin08ma), edit of start still v8; Flow Nano Banana 2.1 tries 1-3 kept the hands up / barely moved the shutter",
+      "credits": 0.0,
+      "registered_at": "2026-11-07T21:05:17+00:00",
+      "approved_by": "",
+      "approved_at": ""
     }
   }
 }

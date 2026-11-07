@@ -191,8 +191,8 @@ class _Plan:
         # the end frame is the last phase's pose too: an edit naming only the prop kept her hands where the start had
         # them (film04 SC01_g1 v4: hands up at the raised shutter, shutter at the middle)
         phases = decl.choreography.phases if decl.choreography else []
-        pose = (" " + apply_handles(f"Pose at the end of the shot: {phases[-1].description.strip().rstrip('.')}.",
-                                    handles)) if phases else ""
+        last = decl.end_pose.strip() or (phases[-1].description.strip() if phases else "")
+        pose = (" " + apply_handles(f"Pose at the end of the shot: {last.rstrip('.')}.", handles)) if last else ""
         return ("Edit the given image, the first frame of this shot. "
                 f"{change}.{pose} Keep everything else the same: framing, people, faces, clothes, light.")
 

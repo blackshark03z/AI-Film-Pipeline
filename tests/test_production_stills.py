@@ -277,7 +277,7 @@ def test_end_still_prompt_is_an_edit_instruction_only_for_end_frame_shots(end_ro
     assert [k for k in prompts if k.startswith("end:")] == [END]
     assert prompts[END].startswith("Edit the given image, the first frame of this shot. Change only this: ")
     assert prompts[END].endswith("Keep everything else the same: framing, people, faces, clothes, light.")
-    assert "the shutter halfway down" in prompts[END] and "MARA" not in prompts[END]
+    assert "the shutter pulled down over the upper half of the window glass" in prompts[END] and "MARA" not in prompts[END]
     rows = {r["generation_id"]: r for r in S.list_stills(pkg_of(end_root))}
     assert rows[END]["kind"] == "end" and rows[END]["needs_still"] and rows[END]["prompt_file"] == "stills/end_SC01_g1.txt"
     assert rows["SC01_g1"]["kind"] == "start" and rows["SC01_g1"]["prompt_file"] == "stills/start_SC01_g1.txt"

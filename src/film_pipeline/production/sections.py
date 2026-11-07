@@ -176,6 +176,9 @@ class ShotDecl(ContractModel):
     repair_reason: str = ""
     # an approved end still pins the end state (first/last-frame interpolation, sent in Flow's "Ket thuc" slot)
     end_frame: bool = False
+    # the end still's pose, written as a still image (a HOLD phase says what does not move, which an image cannot
+    # show); empty = the last phase's description
+    end_pose: str = ""
 
 
 class ShotsSection(ContractModel):
