@@ -249,7 +249,7 @@ Generate per plan within budget, dailies review, retake/pickup policy, cut, post
 Phase rule: every item ends with its own tests + the focused suite. No item may weaken an existing assertion; where a test
 pinned `NOT_RUN` only because no validator existed, replace it with the new real verdict and say so in the commit.
 
-### P10-01 Gate 3, 4 and 6 validators — READY
+### P10-01 Gate 3, 4 and 6 validators — DONE c61fe7c (gate_checks.py, plan_meta.json sidecar, deliver --accept; 12 tests; focused suite green)
 Files: `src/film_pipeline/production/gates.py` (+ a small module per gate if needed), `tests/test_production_gates*.py`,
 `tests/test_production_film03_package.py`, `tests/test_production_film04.py`.
 - Gate 3 (visual_spatial): read the plan record (`<film>/media/plan/gate3.json`, path from the package, not a CLI arg).
