@@ -343,7 +343,7 @@ label is cut off unless the window starts left of x≈130. Evidence: `portrait_s
 Fix: draw the label onto the portrait body (and check it in `deliver` for `portrait_9x16`), or record why the portrait is
 exempt. Do not weaken the 16:9 check. (Codex review finding 2 is the same gap: the portrait claims `watermark_always_on` unchecked.)
 
-### P11-02 AI-label pixel check: independent evidence and full coverage — READY (Codex review 2026-11-07, findings 3–4; verified)
+### P11-02 AI-label pixel check: independent evidence and full coverage — IN_PROGRESS (Codex review 2026-11-07, findings 3–4; verified)
 Files: `deliver.py` `label_evidence`, `tests/test_production_delivery_fixes.py`.
 (a) `contrast(target) - contrast(control)` lets a target with 0 contrast and a negative control pass (+30 ≥ 25): require the
 target's own contrast ≥ threshold *and* the difference. (b) 3 of 5 sampled frames passes `always`: require every sampled

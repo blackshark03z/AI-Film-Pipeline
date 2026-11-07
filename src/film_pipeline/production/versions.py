@@ -111,13 +111,20 @@ def portrait_segments(plan: dict[str, Any], section: Any, reframes: dict[str, An
 PORTRAIT_LABEL_X, PORTRAIT_LABEL_Y, PORTRAIT_LABEL_SIZE = 24, PORTRAIT_H - 260, 28  # above the bottom strip platforms cover
 
 
-def portrait_label_png(path: Path, text: str) -> Path:
-    """The body AI label drawn for the 9:16 frame (the 16:9 one sits at x 24-130 and is cut off by the crop)."""
+def portrait_label_png(path: Path, text: str, *, box: bool = True) -> Path:
+    """The body AI label drawn for the 9:16 frame (the 16:9 one sits at x 24-130 and is cut off by the crop).
+
+    It sits on a translucent dark box so it stays readable over bright footage; `box=False` draws the glyphs alone (the mask
+    `deliver.label_evidence` looks for)."""
     from PIL import Image, ImageDraw, ImageFont
     from film_pipeline.drama.post import DEFAULT_FONTS
     img = Image.new("RGBA", (PORTRAIT_W, PORTRAIT_H), (0, 0, 0, 0))
-    ImageDraw.Draw(img).text((PORTRAIT_LABEL_X, PORTRAIT_LABEL_Y), text,
-                             font=ImageFont.truetype(DEFAULT_FONTS[0], PORTRAIT_LABEL_SIZE), fill=(255, 255, 255, 190))
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype(DEFAULT_FONTS[0], PORTRAIT_LABEL_SIZE)
+    if box:
+        x0, y0, x1, y1 = draw.textbbox((PORTRAIT_LABEL_X, PORTRAIT_LABEL_Y), text, font=font)
+        draw.rectangle((x0 - 10, y0 - 6, x1 + 10, y1 + 6), fill=(0, 0, 0, 150))
+    draw.text((PORTRAIT_LABEL_X, PORTRAIT_LABEL_Y), text, font=font, fill=(255, 255, 255, 235))
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     img.save(path)
     return Path(path)

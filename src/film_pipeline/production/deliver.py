@@ -112,6 +112,12 @@ def build_disclosure(pkg: Any, section: Any, generators: Any) -> Any:
                       visible_label=label, jurisdiction_notes=JURISDICTION)
 
 
+def frame_shows_label(target: float, control: float, min_contrast: float) -> bool:
+    """One sampled frame counts only when the label's own contrast reaches `min_contrast` *and* it beats the control by as much
+    (a control that is negative must not lift a target with no contrast over the line)."""
+    return target >= min_contrast and target - control >= min_contrast
+
+
 def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int = 5, min_contrast: float = 25.0,
                    portrait: bool = False) -> dict[str, Any]:
     """Look for the burned-in body label in sampled frames of the 16:9 master (`portrait=True`: of the 9:16 version, where
@@ -119,7 +125,8 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
 
     At each sample the label's glyph pixels (as `drama.post.ai_label_png` draws them) are compared with the ring around them;
     the same comparison 400 px to the right is the control. A frame counts when the glyphs stand out by `min_contrast` luma
-    levels more than the control does. The label is present when 60 % of the sampled frames count."""
+    levels more than the control does and by `min_contrast` on its own (`frame_shows_label`). The samples run from the first to the
+    last body frame and every one must count; the ones that do not are listed in `missing_at_s`."""
     import subprocess
     import tempfile
     from PIL import Image, ImageFilter
@@ -131,10 +138,10 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
     lo, hi = title_s + 0.3, total - end_s - 0.3
     if hi <= lo:
         return {"checked": 0, "positive": 0, "ok": False, "detail": "the body is too short to sample"}
-    times = [lo + (hi - lo) * (i + 0.5) / samples for i in range(samples)]
+    times = [lo + (hi - lo) * i / (samples - 1) for i in range(samples)]
     with tempfile.TemporaryDirectory() as tmp:
         work = Path(tmp)
-        made = vs.portrait_label_png(work / "label.png", BODY_LABEL) if portrait else ai_label_png(work / "label.png", BODY_LABEL)
+        made = vs.portrait_label_png(work / "label.png", BODY_LABEL, box=False) if portrait else ai_label_png(work / "label.png", BODY_LABEL)
         alpha = Image.open(made).split()[3]
         glyph = alpha.point(lambda v: 255 if v > 100 else 0)
         ring_img = glyph.filter(ImageFilter.MaxFilter(7))
@@ -151,7 +158,7 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
             mean = lambda ps: sum(frame.getpixel((x + dx, y)) for x, y in ps) / len(ps)  # noqa: E731
             return mean(on) - mean(ring)
 
-        positive = 0
+        positive, missing = 0, []
         for n, t in enumerate(times):
             png = work / f"f{n}.png"
             done = subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", str(master), "-frames:v", "1", str(png)],
@@ -159,9 +166,12 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
             if done.returncode != 0 or not png.is_file():
                 raise ValueError(f"could not extract a frame at {t:.1f} s: {done.stderr.strip()[:200]}")
             frame = Image.open(png).convert("L").resize((W, H))
-            positive += contrast(frame, 0) - contrast(frame, shift) >= min_contrast
-    need = -(-samples * 6 // 10)
-    return {"checked": samples, "positive": positive, "ok": positive >= need, "detail": f"{positive} of {samples} sampled frames show the label"}
+            if frame_shows_label(contrast(frame, 0), contrast(frame, shift), min_contrast):
+                positive += 1
+            else:
+                missing.append(round(t, 2))
+    detail = f"{positive} of {samples} sampled frames show the label" + (f"; missing at {missing} s" if missing else "")
+    return {"checked": samples, "positive": positive, "ok": positive == samples, "missing_at_s": missing, "detail": detail}
 
 
 def mark_master(src: Path, dst: Path, disclosure: Any, disclosure_json: Path, *, c2pa: tuple[Path, Path] | None = None) -> Any:

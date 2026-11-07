@@ -126,6 +126,36 @@ def test_always_setting_with_a_master_that_has_no_label_blocks_the_delivery(tmp_
     assert not (root / "delivery").exists()
 
 
+def test_a_frame_counts_only_when_the_label_has_contrast_of_its_own():
+    """P11-02: a flat target (0) with a negative control (-30) used to pass because the difference was 30 >= 25."""
+    assert not DL.frame_shows_label(0.0, -30.0, 25.0)
+    assert not DL.frame_shows_label(24.9, -30.0, 25.0)
+    assert not DL.frame_shows_label(40.0, 30.0, 25.0)   # the control stands out nearly as much: not the label
+    assert DL.frame_shows_label(60.0, 5.0, 25.0)
+    assert DL.frame_shows_label(25.0, 0.0, 25.0)
+
+
+@needs_ffmpeg
+def test_one_body_frame_without_the_label_fails_the_whole_check(tmp_path):
+    """P11-02: 4 of 5 sampled frames used to pass; now every sampled frame, first to last, must show the label."""
+    import subprocess
+    root, report = pipeline(tmp_path)
+    master = root / "media" / "cut" / "mixed.mp4"
+    planned = json.loads(Path(report).read_text(encoding="utf-8"))["planned"]
+    title_s, end_s = float(planned["title_s"]), float(planned["total_s"]) - float(planned["body_end_s"])
+    good = DL.label_evidence(master, title_s, end_s)
+    assert good["ok"] and good["positive"] == good["checked"] == 5 and good["missing_at_s"] == []
+    last = planned["body_end_s"] - 0.3
+    cut = tmp_path / "last_frame_clean.mp4"
+    done = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(master), "-vf",
+                           f"drawbox=x=0:y=660:w=200:h=60:color=black:t=fill:enable='gte(t,{last - 0.2:.3f})'",
+                           "-c:a", "copy", str(cut)], capture_output=True, text=True)
+    assert done.returncode == 0, done.stderr
+    bad = DL.label_evidence(cut, title_s, end_s)
+    assert not bad["ok"] and bad["positive"] == 4 and len(bad["missing_at_s"]) == 1 and bad["missing_at_s"][0] > last - 0.3
+    assert "missing at" in bad["detail"]
+
+
 @needs_ffmpeg
 def test_the_9x16_version_carries_its_own_label_and_deliver_checks_it(tmp_path):
     """P11-01: the 16:9 label (x 24-130) is cut off by the 9:16 crop, so the portrait is burned and sampled on its own."""
