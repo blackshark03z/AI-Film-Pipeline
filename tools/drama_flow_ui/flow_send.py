@@ -213,14 +213,22 @@ async def run(args) -> dict:
         baseline = set(await page.evaluate(JS_TOKENS))
         bodies: list[str] = []
 
+        trace: list[dict] = []   # P3-05: where does a video result arrive? paths only, never bodies or signed URLs
+
         async def on_response(resp):
             # video jobs answer on batchexecute, image jobs on a REST call
-            if len(bodies) < MAX_BODIES and ("batchexecute" in resp.url or
-                                             "generate" in resp.url.lower()):
+            wanted = "batchexecute" in resp.url or "generate" in resp.url.lower()
+            seen = resp.request.resource_type in ("xhr", "fetch") and "flow.google" in resp.url
+            if len(bodies) < MAX_BODIES and (wanted or seen):
                 try:
-                    bodies.append(await resp.text())
+                    body = await resp.text()
                 except Exception:  # noqa: BLE001 - body may be gone
-                    pass
+                    return
+                if wanted:
+                    bodies.append(body)
+                if len(trace) < 80:
+                    trace.append({"path": resp.url.split("?")[0].split("flow.google.com")[-1][-90:], "bytes": len(body),
+                                  "status": resp.status, "kept": wanted, "_body": body})
         page.on("response", on_response)
 
         for f in args.upload:
@@ -304,6 +312,11 @@ async def run(args) -> dict:
         rec["elapsed_s"] = round(time.time() - t0)
         page.remove_listener("response", on_response)
         rec["responses_seen"] = len(bodies)
+        for entry in trace:   # booleans only: which response mentions the prompt / a new tile
+            body = entry.pop("_body")
+            entry["has_prompt"] = prompt[:30] in body or json.dumps(prompt[:30])[1:-1] in body
+            entry["has_new_token"] = any(t in body for t in new)
+        rec["net_trace"] = trace
         if not new:
             tail = await page.evaluate(
                 "document.body.innerText.slice(0, 1500)")

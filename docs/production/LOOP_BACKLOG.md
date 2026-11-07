@@ -1,7 +1,7 @@
 # Loop backlog — E2E production system
 
 OWNER_GO_LIVE: NO
-<!-- 2026-11-07: Owner authorised P3-05 only in chat ("cho phep tat ca", "Duyet ca hai"); Claude set YES for the one canary send and back to NO right after it. P8-02 stays locked. -->
+<!-- 2026-11-07: Owner authorised P3-05 only in chat ("cho phep tat ca", "Duyet ca hai", "Cho gui lan hai"); Claude set YES for each canary send and back to NO right after it. P8-02 stays locked. -->
 <!-- Owner flips to YES to allow LIVE items (real Flow/ChatGPT generation). Tech Lead never flips it. -->
 
 ## Loop outcome (2026-11-07): STOPPED - no READY item left
@@ -191,6 +191,22 @@ downloaded by hand because custody requires the network binding. Credits: about 
 Manual steps: GPM profile start + port forward 9333, new Flow project, composer mode/model/Khung hinh selection, still generation with
 attached refs, `flow_send` viewport pinned to 1280x720 (window was 1397x655). Next (needs a second live send, Owner call): find why the Omni
 response does not match `bind()` (capture and inspect response frames in memory, never persist signed URLs).
+
+**Attempts 2 and 3 (same day): P3-05 is BLOCKED (same cause twice: no network binding for Omni Flash).** Attempt 2 stopped at
+`START_NOT_FOUND` before sending (a page reload had changed the gallery token form; no credits). Attempt 3 (t3) sent (slot diff 0.0)
+and ended AMBIGUOUS (2 new tiles). With `flow_send` now recording a body-free `net_trace`, the result is clear: only two XHR
+responses (143 and 250 bytes, batchexecute) came back, neither holds the prompt or a tile token, so `bind()` can never match
+this model. Flow now holds two 360p clips for SC01_g1 (t1 and t3, same prompt), neither downloaded nor registered; about 12
+credits spent in all (Flow's quoted 6 per send, not read back). The clip's detail page (`/edit/<media id>`) shows the full prompt
+text, so binding can use the page instead of the network. No further live send until P12-01 is done; go-live is back to NO.
+
+### P12-01 Bind a Flow video to its prompt from the clip's detail page — READY (found by P3-05)
+Files: `tools/drama_flow_ui/flow_send.py`, a small pure helper + `tests/`. When the network gives no match, open each new tile's
+detail page (`/edit/<media id>`), read the prompt text shown there and bind only when exactly one new tile's text equals the sent
+prompt (normalised whitespace); record `binding: DETAIL_PROMPT_MATCH` and the media id tail. Two tiles with the same prompt, or a
+tile that existed before the send, stays AMBIGUOUS/UNBOUND: never pick by position. Unit-test the matcher offline (equal, extra
+whitespace, truncated prompt, two equal tiles, none). Done when the helper is tested and `flow_send` uses it; a live check needs
+one more send, which is the Owner's call (same `OWNER_GO_LIVE` rules). Then re-open P3-05.
 
 ## P4 — Editorial (91–106)
 
