@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 58 · PARTIAL 81 · GAP 3 · N/A 26 · total 168
+**Summary:** HAVE 58 · PARTIAL 83 · GAP 1 · N/A 26 · total 168
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -70,7 +70,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 48 | Blocking diagram | `storyboard.render_schematic_frame` + AxisBook | PARTIAL | P2-03 |
 | 49 | Shot planning | `generation.py` split into 8 s units + `coverage` shot list; `plan` reports words per prompt section (`plan_meta.json` `word_budget`) and names the 3 biggest when over the limit | PARTIAL | P2-05 |
 | 50 | Continuity planning | `production/continuity.py`: six kinds over per-generation start/end states, `film.py continuity`, hooked into `plan` | HAVE | - |
-| 51 | Sound planning | Prompt carries room tone/SFX strings (`prompt.py`); no sound plan | PARTIAL | P5-01 |
+| 51 | Sound planning | Prompt carries room tone/SFX strings (`prompt.py`); `production/mix.py` `MixPlan` (`mix_plan.json`) holds music cues and the declared SFX cues of `04_shots`; sound-design judgement stays human | PARTIAL | - |
 | 52 | Technical planning | `production/package.FilmHeader` records aspect/fps/resolution/generation_s; `plan` supports 16:9 only by design (`PreflightLimits`); 9:16 is derived in post (`versions`) | HAVE | - |
 | 53 | Production scheduling | `production/planning.py` schedule: hand-off chains, waves, stills before videos (`film.py planning`) | HAVE | - |
 | 54 | Budgeting | `planning.budget`: generations x 12 credits x retake factor from the film01-03 KPI ledgers; Owner estimate checked against it, shown by `validate` | HAVE | - |
@@ -143,7 +143,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 111 | Sound effects | `mix` places declared `sfx` from `audio/sfx/<slug>.wav`; `sound_rights` blocks `validate` until each used file has a cleared record (source, license, sha256, usage); no sound library yet, assets are put in place by a human | PARTIAL | - |
 | 112 | Ambience | `mix`: one generated, calibrated (`ambience_lufs`) noise bed per scene span coloured by the location's `room_tone`, cross-faded at the edges | HAVE | - |
 | 113 | Room tone | `mix`: room tone per location from `room_tone` text; silent over title/end cards | HAVE | - |
-| 114 | Sound perspective | Generated room tone only; no stems or SFX cues | GAP | P5-01 |
+| 114 | Sound perspective | `mix.build_stems` writes dialogue/ambience/sfx/music stems and ducks dialogue; no spatial or perspective mixing per cue | PARTIAL | - |
 | 115 | Music scoring | `mix_plan.json` music cues (asset, range, gain, fades, why, scene) mixed under dialogue; `sound_rights.cue_sheet` advises IN/HOLD/DUCK/OUT per scene from the emotional curve; no score is composed or sourced automatically | PARTIAL | - |
 | 116 | Music editing | Cue start/end/fades/gain in the plan, ducking by `mix`; no waveform editing | PARTIAL | - |
 | 117 | Sound mixing | `production/mix.py`: four stems, side-chain ducking of ambience+music under dialogue (depth measured), sum, -14 LUFS / -1 dBTP master; `film.py mix` | HAVE | - |
@@ -170,17 +170,17 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 133 | Character QC | `autoqc` identity WARN-only; dailies pre-fill WARNs but need anchors (not wired); human PASS in `qc_model` | PARTIAL | P6-01 |
 | 134 | Spatial QC | `autoqc` SET_DRIFT as a dailies WARN; start/end-state questions per take; `AxisBook` | PARTIAL | P6-01 |
 | 135 | Action QC | Dailies questions generated from every choreography phase/once-action; human FULL_MOTION review only; rejected action takes route to `retake` | PARTIAL | P6-01 |
-| 136 | Motion QC | `qc_model` motion group: human FULL_MOTION review only, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
+| 136 | Motion QC | `qc_model` motion group: human FULL_MOTION review, P0/P1/P2; `master_qc` detects frozen/black frames on the master (technical only, not motion quality) | PARTIAL | - |
 | 137 | Camera QC | `autoqc.shot_scale` WARN against the planned size in dailies | PARTIAL | P6-01 |
-| 138 | Visual QC | `qc_model` visual group: human SAMPLED review, P0/P1/P2; no automated detector | PARTIAL | P3-02 |
+| 138 | Visual QC | `qc_model` visual group: human SAMPLED review, P0/P1/P2; `master_qc.video_checks` flags black/frozen/duplicated frames and crushed/blown-out share on the master | PARTIAL | - |
 | 139 | Temporal QC | `master_qc`: black frames, frozen frames, duplicated-frame share on the master (title/end/card windows exempt); take-level temporal stays human | PARTIAL | - |
-| 140 | Sequence QC | No temporal/sequence QC beyond `sequence.validate_shot_sequence` (plan) | PARTIAL | P6-01 |
+| 140 | Sequence QC | `sequence.validate_shot_sequence` (plan); `drama/qc.py` `HandoffQC` + `evidence.end_state_verified` check hand-offs between takes; cut-level judgement is a human review | PARTIAL | - |
 | 141 | Audio QC | `master_qc`: codec, -14 LUFS +-1.5, true peak <= -1 dBTP, clipping runs, silent gaps > 3 s | HAVE | - |
 | 142 | Sync QC | `master_qc`: A/V length agreement; dialogue cues vs `audio/stems/dialogue.wav` activity (offset > 0.3 s blocks); UNASSESSED without stem or timed cues | PARTIAL | - |
 | 143 | Color QC | `color.match` deviation per shot + `OUT_OF_RANGE` WARN; `master_qc` crushed/blown-out frame share; no banding detector | PARTIAL | - |
 | 144 | Technical QC | `master_qc`: streams, resolution/fps/codec/pix_fmt, duration vs planned clock, black/freeze/duplicate frames, faststart; record `qc/master_qc.json` at level CUT | HAVE | - |
-| 145 | Compliance QC | `disclosure.check_release`; no rights/platform compliance | PARTIAL | P5-02 |
-| 146 | Delivery QC | `delivery.verify`, `e2e status --package`; Gate 6 (`gate_checks.py`) checks QC record, picture lock, archive hashes and the Owner's `deliver --accept` bound to the manifest; not yet run on real takes | PARTIAL | P10-05 |
+| 145 | Compliance QC | `disclosure.check_release` + visible-label frame check, rights WARN/BLOCK findings in `deliver` (`planning.legal`, `sound_rights_issues`); platform rules are not checked against the live platform | PARTIAL | - |
+| 146 | Delivery QC | `delivery.verify`, `e2e status --package`; Gate 6 (`gate_checks.py`) checks QC record, picture lock, archive hashes and the Owner's `deliver --accept` bound to the manifest; run end to end only on a synthetic rehearsal (`film.py rehearse`, P10-05; REHEARSAL_FILM04.md), not yet on real takes | PARTIAL | P3-05 |
 
 ## VII. Delivery & distribution
 
@@ -195,7 +195,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 153 | Platform compliance | `deliver` runs `disclosure.check_release` on both masters (tags, hash-bound record, visible AI label burned in the opening title); C2PA only with a supplied cert (dev signer is untrusted); platform-specific rules are the Owner's at upload | PARTIAL | - |
 | 154 | Publishing | Publishing prohibited unless Owner asks | N/A | - |
 | 155 | Analytics | Post-release; out of scope until a film is published | N/A | - |
-| 156 | Archive | `delivery.finalize/verify`; no restore rehearsal | PARTIAL | P6-03 |
+| 156 | Archive | `deliver` + `verify_archive` (`status --package`) re-check an archive wherever it was copied; the rehearsal does not call the restore check yet (P11-08) | PARTIAL | P11-08 |
 
 ## VIII. Production management
 
@@ -210,6 +210,6 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 163 | Change management | Stale-pin issues + `film.py impact` list what to redo; no approval/ledger workflow for a change | PARTIAL | P2-01 |
 | 164 | Quality management | `qc_model` P0/P1/P2 take verdicts + waivers (`film.py qc`); Owner gate | PARTIAL | P3-02 |
 | 165 | Risk management | `planning.risks` register + `retake` credits-spent / escalation per shot + open retake decisions in `status`; no run-wide mitigation log | PARTIAL | - |
-| 166 | Rights management | No rights ledger | GAP | P5-02 |
+| 166 | Rights management | `03_preprod.rights` (characters, locations, sources, likeness) + `audio/assets.json` sound ledger (`sound_rights.py`) feed `delivery/rights/rights.json`; open entries are WARN and keep `release_ready` false; clearance itself is the Owner's, so it cannot be HAVE | PARTIAL | - |
 | 167 | Data integrity | SHA-256 in manifests; `delivery.verify` | HAVE | - |
 | 168 | Production reporting | `report.py`: per-film status report, `status --all FILMS_DIR` cross-film table, `ledger.json` learnings (observation / replicated) | HAVE | - |
