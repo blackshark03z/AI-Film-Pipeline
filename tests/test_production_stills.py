@@ -41,6 +41,10 @@ def root(tmp_path):
     target.mkdir()
     for name in FILES:
         shutil.copyfile(FILM04 / name, target / name)
+    # film04 now carries the Owner's real start still for SC01_g1; these tests start from a package with none registered
+    pre = json.loads((target / "03_preprod.json").read_text(encoding="utf-8"))
+    pre.pop("stills", None)
+    (target / "03_preprod.json").write_text(json.dumps(pre, ensure_ascii=False, indent=2), encoding="utf-8")
     return target
 
 

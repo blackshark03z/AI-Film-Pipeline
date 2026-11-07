@@ -23,9 +23,17 @@ def run(*args):
                           env={**__import__("os").environ, "PYTHONPATH": str(ROOT / "src"), "PYTHONIOENCODING": "utf-8"})
 
 
+FILES = ("film.json", "script.fountain", "01_story.json", "02_direction.json", "03_preprod.json", "04_shots.json",
+         "05_edit.json", "06_post.json", "07_delivery.json", "ledger.json")
+
+
 @pytest.fixture(scope="module")
-def pkg():
-    return load_package(PKG)
+def pkg(tmp_path_factory):
+    # a copy of the stage files only: media/ (plan, stills, takes) is local, git-ignored state of whoever ran the film
+    root = tmp_path_factory.mktemp("film04_pkg")
+    for name in FILES:
+        (root / name).write_bytes((PKG / name).read_bytes())
+    return load_package(root)
 
 
 @pytest.fixture(scope="module")
@@ -68,7 +76,7 @@ def test_no_overlong_exemption_and_every_high_risk_has_a_fallback(pkg):
     done = run("validate", "--film", str(PKG))
     planning = json.loads(done.stdout)["planning"]
     assert planning["issues"] == []
-    assert planning["budget"]["generations"] == 12 and planning["budget"]["owner_estimate"] is None
+    assert planning["budget"]["generations"] == 12 and planning["budget"]["owner_estimate"] == 171.2  # the Owner set it on 2026-11-07
     assert planning["legal"] == "pending"  # originality is the Owner's to confirm
 
 

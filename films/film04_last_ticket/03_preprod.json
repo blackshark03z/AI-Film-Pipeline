@@ -830,5 +830,17 @@
     "SC01_g2": "if the door push does not render, start with THEO already inside and the door closing at the frame edge",
     "SC04_g2": "if the shutter push does not render, show the shutter already raised; the push happens off-screen",
     "SC05_g2": "the ticket lies on the counter between them and THEO picks it up himself; no hand-to-hand pass"
+  },
+  "stills": {
+    "SC01_g1": {
+      "file": "media/stills/start_SC01_g1.jpg",
+      "sha256": "665cfe67ba0e400c1c618cf5a33901b9818c3f1733af8785055c375e98e368bd",
+      "prompt_sha256": "7c0f156f0dc27936fc2b29798570db5818529aded922fb0a60dae16db706748f",
+      "source": "Flow Nano Banana 2.1",
+      "credits": 0.0,
+      "registered_at": "2026-11-07T10:30:16+00:00",
+      "approved_by": "Owner (khoikk03)",
+      "approved_at": "2026-11-07T10:36:42+00:00"
+    }
   }
 }

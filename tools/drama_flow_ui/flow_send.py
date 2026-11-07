@@ -205,6 +205,8 @@ async def run(args) -> dict:
         ctx = browser.contexts[0]
         page = next(p for p in ctx.pages if "flow.google" in p.url)
         rec["project"] = page.url.rsplit("/", 1)[-1][:36]
+        # the click coordinates above are calibrated for 1280x720 CSS px; a GPM window of another size shifts them
+        await page.set_viewport_size({"width": 1280, "height": 720})
         await page.keyboard.press("Escape")
         await page.evaluate(JS_TOP)
         await page.wait_for_timeout(1500)

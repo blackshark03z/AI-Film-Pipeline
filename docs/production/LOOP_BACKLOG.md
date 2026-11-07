@@ -1,6 +1,7 @@
 # Loop backlog — E2E production system
 
 OWNER_GO_LIVE: NO
+<!-- 2026-11-07: Owner authorised P3-05 only in chat ("cho phep tat ca", "Duyet ca hai"); Claude set YES for the one canary send and back to NO right after it. P8-02 stays locked. -->
 <!-- Owner flips to YES to allow LIVE items (real Flow/ChatGPT generation). Tech Lead never flips it. -->
 
 ## Loop outcome (2026-11-07): STOPPED - no READY item left
@@ -180,6 +181,16 @@ pickup list feeds back into 04_shots as new shot versions with `repair_of`. Test
 ### P3-05 LIVE canary: one generation through the package — LIVE (after P3-04, P10-02)
 Omni Flash 360p, film04 SC01_g1, full path: start still (ChatGPT GPM, `stills --register`, Owner approves) → `generate`
 → acquire → take log → review template. One attempt, then stop and report credits, wall time and every manual step.
+
+**Attempt 1 (2026-11-07, Owner go-live in chat): UNBOUND, not DONE.** Flow account = GPM profile `wanglin08ma`; start still made in Flow (Nano
+Banana 2.1, 0 credits; refs MARA + ticket-office plate), approved by the Owner with the storyboard; composer Khung hình, Omni 1.1 Flash,
+360p, 8 s, x1 (Flow showed 6 credits; plan said 12). `flow_send` filled the start slot (slot diff 0.0), sent, and a new video tile appeared
+(38 s wall) but the one captured response did not bind it to the prompt, so the clip was not saved and no take was registered
+(`takes/intents/SC01_g1_t1.intent.json`, result UNBOUND, `take_registered: false`). The clip sits in the Flow project; it was not
+downloaded by hand because custody requires the network binding. Credits: about 6 spent (Flow's quoted cost, not read back).
+Manual steps: GPM profile start + port forward 9333, new Flow project, composer mode/model/Khung hinh selection, still generation with
+attached refs, `flow_send` viewport pinned to 1280x720 (window was 1397x655). Next (needs a second live send, Owner call): find why the Omni
+response does not match `bind()` (capture and inspect response frames in memory, never persist signed URLs).
 
 ## P4 — Editorial (91–106)
 

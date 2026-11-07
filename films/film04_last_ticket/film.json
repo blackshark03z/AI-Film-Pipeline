@@ -8,7 +8,7 @@
   "resolution": "1280x720",
   "generation_s": 8,
   "budget": {
-    "credits_estimate": null,
+    "credits_estimate": 171.2,
     "cap_factor": 1.5
   },
   "gates": {
