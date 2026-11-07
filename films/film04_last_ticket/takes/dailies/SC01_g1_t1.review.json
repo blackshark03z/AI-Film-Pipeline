@@ -1,0 +1,212 @@
+{
+  "take": {
+    "take_id": "SC01_g1_t1",
+    "generation_id": "SC01_g1",
+    "prompt_sha256": "e9f570470d9426dab44cd46535be476cbf24216e63b282ae9a2485af2cf45885",
+    "start_frame_sha256": "665cfe67ba0e400c1c618cf5a33901b9818c3f1733af8785055c375e98e368bd",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni Flash 360p",
+    "credits": 12.0,
+    "output_file": "SC01_g1_t6.mp4",
+    "output_sha256": "0c00dccef2c106c2d4c83f3c68dd0e57e140cc38c280db143e8a59b3af324e0b",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-07T11:28:55Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "MARA"
+    ],
+    "start_state": "SC01_g1",
+    "end_state": "SC01_g2",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 2.0,
+        "description": "MARA stands behind the counter, her hand on the shutter cord"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 2.0,
+        "end_s": 6.0,
+        "description": "she pulls the shutter halfway down"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 6.0,
+        "end_s": 8.0,
+        "description": "she glances at the wall clock reading 10:31"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-2s SETUP: does this happen on screen - MARA stands behind the counter, her hand on the shutter cord?"
+    },
+    {
+      "group": "action",
+      "question": "2-6s ACTION: does this happen on screen - she pulls the shutter halfway down?"
+    },
+    {
+      "group": "action",
+      "question": "6-8s HOLD: does this happen on screen - she glances at the wall clock reading 10:31?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): pulls the shutter halfway down"
+    },
+    {
+      "group": "character",
+      "question": "MARA: does the face/body read as routine, unhurried closing (restrained)? Must NOT read as: anxiety."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC01_g1: Continues from the previous shot: MARA behind the counter, frame-right; the shutter: up, window open."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC01_g2: Continues from the previous shot: MARA behind the counter, frame-right; THEO outside the glass door, frame-left; the shutter: halfway down."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC01_g1_t1",
+    "generation_id": "SC01_g1",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "output_sha256": "0c00dccef2c106c2d4c83f3c68dd0e57e140cc38c280db143e8a59b3af324e0b"
+  },
+  "auto_evidence": {
+    "note": "autoqc not requested (no --clips directory)",
+    "warnings": []
+  }
+}
