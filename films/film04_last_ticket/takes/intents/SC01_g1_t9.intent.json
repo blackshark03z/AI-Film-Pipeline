@@ -1,0 +1,20 @@
+{
+  "film_id": "film04_last_ticket",
+  "generation_id": "SC01_g1",
+  "take_id": "SC01_g1_t9",
+  "shot_version": 3,
+  "prompt_sha256": "c4e1bfa7958384ea3200391b365d120da9b2cb498798858c5b63375fdfdb899d",
+  "route": "start_frame+Khung hinh",
+  "model": "Omni Flash 360p",
+  "expected_credits": 12.0,
+  "credits_spent": 96.0,
+  "credit_cap": 256.79999999999995,
+  "start_frame_sha256": "10febc9b4c5e3a2add160266c0ec376c623eba9123f198eafe32ea56e7af5ab5",
+  "start_frame_source": "approved start still",
+  "blockers": [],
+  "dry_run": false,
+  "sent": true,
+  "owner_go_live": true,
+  "result": "PASSED",
+  "take_registered": true
+}

@@ -355,7 +355,10 @@ edge to the middle of the window and stops", hold "her fingers stay on the still
 down"; prompt 214 words. `preflight.end_state_in_prompt` (default true) is false only in film03 (shipped, golden prompt
 bytes). Open: film04 SC03_g1, SC04_g2, SC05_g2 now run 10-20 words over 215 (gate 3 BLOCK; named in
 test_production_film04 OPEN_OVERLONG) - shorten them when they are restaged, before their own send;
-storyboard PENDING again (plan input changed) - Owner re-approval, then one resend of SC01_g1 v3 (~6 credits, YES->NO).
+storyboard re-approved by the Owner ("Approve and send", 2026-11-07); SC01_g1 v3 sent once (YES->NO): take
+SC01_g1_t3 (file SC01_g1_t9.mp4), GENERATED, awaiting Owner review. Tech Lead readout: the shutter goes ~2/3 down by
+3.5 s, then she pushes it back up to ~1/3 by 5.5 s and holds it there; she never looks at the clock. That is a reversal
+(once-action broken) and the end height is not the middle. Not self-accepted.
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
 
