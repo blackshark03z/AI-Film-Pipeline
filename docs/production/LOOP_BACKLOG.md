@@ -286,7 +286,7 @@ command line in PACKAGE_RERUN is updated to the file form. (b) Visible AI label:
 Owner may switch to `title_card`; the code must not pick the weaker one by default. (c) Re-run the film03 chain and record
 the new diff lines. Categories: 147–149, 155.
 
-### P10-04 Prompt word budget report + playbook rules — READY
+### P10-04 Prompt word budget report + playbook rules — DONE (2d72023; budget is in plan_meta.json word_budget, not gate3.json, which the film03 golden test pins byte-for-byte)
 Files: `plan.py` (record only), `docs/director/DIRECTOR_PLAYBOOK.md`, tests.
 `plan` writes per generation the emitted word count split by section (prefix, cast/looks, setting, continuity state, shot
 timing/action, performance, dialogue, sound, fixed tail) into `gate3.json` and prints the top 3 sections when a prompt is
