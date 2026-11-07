@@ -42,6 +42,12 @@ The report is `<out>/REHEARSAL_REPORT.json`.
 
 Total 312 s. Gates after the run: 1–5 PASS, 6 `OWNER_PENDING`; `deliver --accept Owner` is refused.
 
+**Re-run after P11-01…P11-08 (2026-11-07):** same chain, all steps ok, 494 s wall, 0 credits. The delivery now carries the AI label on
+the 16:9 body *and* the 9:16 version (every sampled frame, P11-01/02), gate 4 and gate 3 read the stronger evidence (P11-03/04), and
+a last step `restore` copies `delivery/` to a temporary directory and runs `film.py status --package` on the copy: ok, 31 files,
+`film04_last_ticket`, every hash, the package and each master's disclosure verified (P11-08; `REHEARSAL_REPORT.json` key `restore`).
+Still synthetic: no footage quality, no Owner acceptance.
+
 ## Things the rehearsal found (each becomes a P11 item)
 
 First attempts failed for real reasons, not mock tricks:

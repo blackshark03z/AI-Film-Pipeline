@@ -17,6 +17,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
@@ -71,6 +72,7 @@ class _Log:
         self.dest = dest
         self.steps: list[dict[str, Any]] = []
         self.manual: list[str] = []
+        self.restore: dict[str, Any] = {"ok": None, "detail": "not run (no delivery archive)"}
 
     def add(self, name: str, ok: bool, secs: float, detail: str = "") -> bool:
         self.steps.append({"step": name, "ok": ok, "secs": round(secs, 1), "detail": detail[-600:]})
@@ -179,13 +181,37 @@ def rehearse(src: Path, dest: Path, *, stop_on_fail: bool = True) -> dict[str, A
         log.cli(name, *args)
         if stop():
             break
+    else:
+        restore_check(log, dest)
     return _finish(log, src, dest, started)
+
+
+def restore_check(log: _Log, dest: Path) -> bool:
+    """Copy the delivery archive to a new directory and run the restore check (`film.py status --package`) on the copy:
+    every hash, the package inside it, the disclosure of each master. Nothing under the rehearsal directory is read."""
+    archive = dest / "delivery"
+    if not (archive / "MANIFEST.json").is_file():
+        log.restore = {"ok": None, "detail": "not run: no delivery archive"}
+        return False
+    t0 = time.time()
+    with tempfile.TemporaryDirectory(prefix="rehearsal_restore_") as tmp:
+        moved = Path(tmp) / "delivery"
+        shutil.copytree(archive, moved)
+        ok, text = log.cli("restore", "status", "--package", str(moved))
+    try:
+        body = json.loads(text)
+    except ValueError:
+        body = {}
+    log.restore = {"ok": ok, "files": body.get("files"), "film_id": body.get("film_id"),
+                   "detail": "archive copied elsewhere; every hash, the package and each master's disclosure verified" if ok
+                   else (text[-300:] or "restore check failed")}
+    return ok
 
 
 def _finish(log: _Log, src: Path, dest: Path, started: float) -> dict[str, Any]:
     delivered = (dest / "delivery" / "MANIFEST.json").is_file()
     report = {"stamp": STAMP, "source": str(src), "rehearsal": str(dest), "release_ready": False,
-              "reached_delivery": delivered, "all_steps_ok": all(s["ok"] for s in log.steps),
+              "reached_delivery": delivered, "restore": log.restore, "all_steps_ok": all(s["ok"] for s in log.steps),
               "wall_s": round(time.time() - started, 1), "steps": log.steps, "manual_steps": log.manual}
     _write_json(dest / "REHEARSAL_REPORT.json", report)
     return report

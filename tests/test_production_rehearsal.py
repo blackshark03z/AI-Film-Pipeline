@@ -151,3 +151,30 @@ def test_mock_runner_writes_a_clip_and_manifest(tmp_path):
     probe = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(out)],
                            capture_output=True, text=True, check=True)
     assert 7.9 < float(probe.stdout) < 8.2
+
+
+def test_restore_check_is_not_run_without_a_delivery_archive(tmp_path):
+    log = R._Log(tmp_path)
+    assert R.restore_check(log, tmp_path) is False
+    assert log.restore["ok"] is None and "no delivery archive" in log.restore["detail"] and log.steps == []
+
+
+def test_restore_check_verifies_a_copy_of_the_archive_and_catches_a_damaged_one(tmp_path):
+    """P11-08: the archive is copied elsewhere and checked there; the report carries the result."""
+    from test_production_deliver import deliver, pipeline
+    if not (shutil.which("ffmpeg") and shutil.which("ffprobe")):
+        pytest.skip("ffmpeg not installed")
+    root, report = pipeline(tmp_path)
+    done, body = deliver(root, report)
+    assert done.returncode == 0 and body["ok"], body
+    log = R._Log(root)
+    assert R.restore_check(log, root) is True
+    assert log.restore["ok"] is True and log.restore["files"] > 5 and log.restore["film_id"]
+    assert [s["step"] for s in log.steps] == ["restore"] and log.steps[0]["ok"]
+    assert str(root) not in json.dumps(log.restore)               # the copy lived somewhere else
+    master = next((root / "delivery" / "masters").glob("*_16x9.mp4"))
+    with master.open("ab") as handle:
+        handle.write(b"\0")                                        # the archive no longer matches its manifest
+    log = R._Log(root)
+    assert R.restore_check(log, root) is False
+    assert log.restore["ok"] is False and log.restore["detail"] and not log.steps[0]["ok"]
