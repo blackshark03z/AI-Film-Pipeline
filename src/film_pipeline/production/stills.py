@@ -8,6 +8,8 @@ this module (ChatGPT in the GPM browser, a free tool); nothing here calls a prov
   credits it cost and the reviewer who approved it.
 * An approval is only worth something while it describes what is on disk: if the still prompt is re-planned to different text,
   or the image file changes, the approval is stale and the still counts as not approved.
+* An end still (P13-05, shots with ``end_frame``) uses the record key ``end:<generation_id>``, the file
+  ``media/stills/end_<gid>.<ext>`` and the prompt ``stills/end_<gid>.txt``; the rules are the same.
 * ``generate`` and ``animatic`` take approved stills from this record by default.
 """
 from __future__ import annotations
@@ -32,11 +34,29 @@ def prompt_hash(text: str) -> str:
     return sha256_text(text.strip())
 
 
+def end_key(gid: str) -> str:
+    return f"end:{gid}"
+
+
+def kind_of(key: str) -> str:
+    return "end" if key.startswith("end:") else "start"
+
+
+def _stem(key: str) -> str:
+    """File stem of a record key: start_<gid> or end_<gid>."""
+    return f"end_{key[4:]}" if kind_of(key) == "end" else f"start_{key}"
+
+
 def still_prompts(pkg: Any) -> dict[str, str]:
-    """generation_id -> the still prompt the current plan would write."""
+    """generation_id -> the start still prompt the current plan would write; `end:<gid>` -> the end still prompt
+    of each shot with end_frame whose end state changes something."""
     from film_pipeline.production.plan import _Plan
     plan = _Plan(pkg, None, None)
-    return {decl.generation_id: plan.still_prompt(decl, plan.unit_for(decl)) for decl in plan.shots.generations}
+    out = {decl.generation_id: plan.still_prompt(decl, plan.unit_for(decl)) for decl in plan.shots.generations}
+    for decl in plan.shots.generations:
+        if decl.end_frame and plan.end_clauses(decl):
+            out[end_key(decl.generation_id)] = plan.end_still_prompt(decl)
+    return out
 
 
 def chain_heads(pkg: Any) -> list[str]:
@@ -78,8 +98,9 @@ def list_stills(pkg: Any) -> list[dict[str, Any]]:
     rows = []
     for gid, text in prompts.items():
         state, reason = state_of(pkg, gid, text)
-        rows.append({"generation_id": gid, "needs_still": gid in heads, "state": state, "reason": reason,
-                     "prompt_file": f"stills/start_{gid}.txt", "prompt_sha256": prompt_hash(text),
+        kind = kind_of(gid)
+        rows.append({"generation_id": gid, "kind": kind, "needs_still": kind == "end" or gid in heads, "state": state,
+                     "reason": reason, "prompt_file": f"stills/{_stem(gid)}.txt", "prompt_sha256": prompt_hash(text),
                      "file": (_records(pkg).get(gid).file if gid in _records(pkg) else "")})
     return rows
 
@@ -93,7 +114,7 @@ def approved_stills(pkg: Any) -> dict[str, Path]:
     if not _records(pkg):
         return {}
     prompts = still_prompts(pkg)
-    return {gid: path for gid in _records(pkg) if gid in prompts
+    return {gid: path for gid in _records(pkg) if gid in prompts and kind_of(gid) == "start"  # end stills are not start frames
             and (path := approved_still_path(pkg, gid, prompts[gid])) is not None}
 
 
@@ -148,14 +169,15 @@ def register_still(pkg: Any, gid: str, image: Path, *, source: str = "", credits
     ext = _extension(image)
     decode_check(image)
     root = Path(pkg.root)
-    target = stills_dir(root) / f"start_{gid}{ext}"
+    stem = _stem(gid)
+    target = stills_dir(root) / f"{stem}{ext}"
     sha = sha256_file(image)
     target.parent.mkdir(parents=True, exist_ok=True)
     previous = _records(pkg).get(gid)
     if target.is_file() and sha256_file(target) != sha:  # the replaced image is evidence: keep it
         history = target.parent / "history"
         history.mkdir(exist_ok=True)
-        shutil.move(str(target), str(history / f"start_{gid}.{sha256_file(target)[:12]}{ext}"))
+        shutil.move(str(target), str(history / f"{stem}.{sha256_file(target)[:12]}{ext}"))
     if not target.is_file():
         shutil.copyfile(image, target)
     record = StillRecord(file=target.relative_to(root).as_posix(), sha256=sha, prompt_sha256=prompt_hash(prompts[gid]),

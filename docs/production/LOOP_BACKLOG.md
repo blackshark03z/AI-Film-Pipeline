@@ -360,6 +360,27 @@ SC01_g1_t3 (file SC01_g1_t9.mp4), GENERATED, awaiting Owner review. Tech Lead re
 3.5 s, then she pushes it back up to ~1/3 by 5.5 s and holds it there; she never looks at the clock. That is a reversal
 (once-action broken) and the end height is not the middle. Not self-accepted.
 
+### P13-04 Prompts follow Google's official Omni Flash / Veo guidance — DONE (Owner rejected SC01_g1_t3, "Sửa đi", 2026-11-08)
+
+Defect: take t3 (v3) pulled the shutter ~2/3 down, pushed it back up to ~1/3 and never looked at the clock. Review
+ingested: REJECTED, cause PROMPT. Sources read 2026-11-08: aistudio.google.com/docs/omni (Omni Flash prompt guide, timing
+events, first/last frame), docs.cloud.google.com video prompt guide + "Best practices" (image-to-video: "Prompt for motion
+only", do not re-describe character/background/light; refer to "the woman"; one focused moment per short clip; audio in
+its own sentence). Our 214-word prompt re-described looks and set (~60 words) and buried the end state among them.
+Fix (stage: prompt compile): `PreflightLimits.prompt_style` "start_frame" (default; film03 pinned "full"):
+no cast/set look text, `CharacterSpec.handle` instead of names, timecodes `[0-2s] ...`, "A single unbroken Ns shot, no
+scene cuts" ("continuous" stays banned: UNCONTROLLED_REPEAT), action first then the end state, `PerformanceCue.motion_text`,
+"Sound design: ...", "No touching." only with 2+ people visible. film04 prompts now 101-149 words; the three P13-03
+overlong shots are gone (OPEN_OVERLONG empty). SC01_g1 v4: one moment, no clock glance; hold = hands rest on the still
+shutter. Tests: tests/test_drama_prompt_start_frame.py.
+
+### P13-05 End state pinned by an end still (Flow "Kết thúc" slot) — IN PROGRESS
+
+Google Omni docs: first and last frame interpolation, "describe the desired transition". `ShotDecl.end_frame`; plan writes
+`stills/end_<gid>.txt` (edit of the start still, "Keep everything else the same"); stills record `end:<gid>` needs an
+Owner approval like a start still; generate/flow_send send both slots. flow_send finds slots by button text, not fixed
+coordinates (the GPM window was 1397x655, not 1280x720). film04 SC01_g1 v4 is the first end_frame shot.
+
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
 
 Phase rule: every item ends with its own tests + the focused suite. No item may weaken an existing assertion; where a test

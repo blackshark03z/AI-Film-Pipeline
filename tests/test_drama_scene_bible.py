@@ -102,7 +102,8 @@ def test_preflight_passes_with_location(tmp_path, sample):
 
 
 def test_preflight_blocks_when_location_text_missing(tmp_path, sample):
-    kw = _kwargs(tmp_path, sample, setting="Some kitchen", location=KITCHEN)
+    kw = _kwargs(tmp_path, sample, setting="Some kitchen", location=KITCHEN,
+                 limits=PreflightLimits(prompt_style="full"))
     report = preflight_scene(**kw)
     assert any("does not carry the locked location" in i.detail
                for i in _checks(report, "LOCATION"))

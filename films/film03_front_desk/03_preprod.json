@@ -10,6 +10,7 @@
   "preflight": {
     "max_prompt_words": 215,
     "end_state_in_prompt": false,
+    "prompt_style": "full",
     "timing": {
       "duration_s": 8.0,
       "max_shots": 1,

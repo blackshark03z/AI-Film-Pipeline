@@ -137,14 +137,15 @@ def main(argv: list[str] | None = None) -> int:
     gn.add_argument("--plan-out", type=Path, help="where the plan is (re)written (default <film>/media/plan)")
     gn.add_argument("--stills", type=Path, help="directory of approved start stills start_<gid>.png")
     gn.add_argument("--start-token", help="tok:<tail> of the start still uploaded to Flow (live only)")
+    gn.add_argument("--end-token", help="tok:<tail> of the end still uploaded to Flow (live only; shots with end_frame)")
     gn.add_argument("--backlog", type=Path, help="file holding the OWNER_GO_LIVE line (default: the loop backlog)")
     st = actions.add_parser("stills", help="start stills: list their state, --register an image made elsewhere, --approve it")
     st.add_argument("--film", required=True, type=Path)
-    st.add_argument("--register", metavar="GENERATION_ID")
+    st.add_argument("--register", metavar="GENERATION_ID|end:GENERATION_ID")
     st.add_argument("--image", type=Path, help="the PNG/JPEG to register for --register")
     st.add_argument("--source", default="", help='where the image came from, e.g. "ChatGPT GPM tab 2"')
     st.add_argument("--credits", type=float, default=0.0)
-    st.add_argument("--approve", metavar="GENERATION_ID")
+    st.add_argument("--approve", metavar="GENERATION_ID|end:GENERATION_ID")
     st.add_argument("--by", help="reviewer name for --approve")
     rt = actions.add_parser("retake", help="retake/pickup policy over the take log; --pickup GID starts a new shot version")
     rt.add_argument("--film", required=True, type=Path)
@@ -369,7 +370,7 @@ def main(argv: list[str] | None = None) -> int:
             from film_pipeline.production.generate import generate
             try:
                 done = generate(pkg, args.gid, dry_run=args.dry_run, plan_out=args.plan_out, stills_dir=args.stills,
-                                start_token=args.start_token, backlog=args.backlog)
+                                start_token=args.start_token, backlog=args.backlog, end_token=args.end_token)
             except ValueError as exc:
                 _emit({"error": str(exc)})
                 return 2

@@ -38,8 +38,10 @@ ROOT = Path(__file__).resolve().parents[3]
 BACKLOG = ROOT / "docs" / "production" / "LOOP_BACKLOG.md"
 FLOW_SEND = ROOT / "tools" / "drama_flow_ui" / "flow_send.py"
 ROUTE = "start_frame+Khung hinh"
+ROUTE_END = "start_frame+end_frame+Khung hinh"
 MODEL = "Omni Flash 360p"
 PLACEHOLDER_TOKEN = "tok:<TAIL_OF_UPLOADED_START_FRAME>"
+PLACEHOLDER_END_TOKEN = "tok:<TAIL_OF_UPLOADED_END_FRAME>"
 _GO = re.compile(r"^OWNER_GO_LIVE: (YES|NO)[ \t\r]*$", re.MULTILINE)
 _RECEIPT_NUMBER = re.compile(r"_t(\d+)$")
 
@@ -75,30 +77,38 @@ def _problem_subject(problem: str) -> str | None:
     return m.group(1) if m else None
 
 
-def _start_still(pkg: Any, generation_id: str, stills_dir: Path | None, blockers: list[dict[str, Any]]) -> Path:
-    """An explicit `--stills` directory wins. Otherwise the still recorded in 03_preprod.json must be approved and current;
-    a generation with no record keeps the old behaviour (media/stills/start_<gid>.png)."""
+def _frame_still(pkg: Any, generation_id: str, stills_dir: Path | None, blockers: list[dict[str, Any]],
+                 kind: str = "start") -> Path:
+    """The `kind` ("start" or "end") still of a generation. An explicit `--stills` directory wins. Otherwise the still
+    recorded in 03_preprod.json must be approved and current; a generation with no record keeps the old behaviour
+    (media/stills/<kind>_<gid>.png)."""
     from film_pipeline.production import stills as S
     root = Path(pkg.root)
+    label, code, key = kind.upper(), kind.upper() + "_FRAME", generation_id if kind == "start" else S.end_key(generation_id)
+    name = f"{kind}_{generation_id}"
     if stills_dir:
-        still = Path(stills_dir) / f"start_{generation_id}.png"
-    elif generation_id in pkg.typed["preprod"].stills:
-        still = root / pkg.typed["preprod"].stills[generation_id].file
-        state, reason = S.state_of(pkg, generation_id)
+        still = Path(stills_dir) / f"{name}.png"
+    elif key in pkg.typed["preprod"].stills:
+        still = root / pkg.typed["preprod"].stills[key].file
+        state, reason = S.state_of(pkg, key)
         if state != "APPROVED":
-            blockers.append(_blocker("START_FRAME_NOT_APPROVED", f"{generation_id}: start still {state.lower()}: {reason} "
-                                     f"(film.py stills --approve {generation_id} --by NAME)"))
+            blockers.append(_blocker(f"{code}_NOT_APPROVED", f"{generation_id}: {kind} still {state.lower()}: {reason} "
+                                     f"(film.py stills --approve {key} --by NAME)"))
         return still
     else:
-        still = root / "media" / "stills" / f"start_{generation_id}.png"
+        still = root / "media" / "stills" / f"{name}.png"
     if not still.is_file():
-        blockers.append(_blocker("START_FRAME_MISSING", f"{still} not found (prompt in plan stills/start_{generation_id}.txt; "
-                                 f"film.py stills --register {generation_id} --image PATH)"))
+        blockers.append(_blocker(f"{code}_MISSING", f"{still} not found (prompt in plan stills/{name}.txt; "
+                                 f"film.py stills --register {key} --image PATH)"))
     return still
 
 
+def _start_still(pkg: Any, generation_id: str, stills_dir: Path | None, blockers: list[dict[str, Any]]) -> Path:
+    return _frame_still(pkg, generation_id, stills_dir, blockers, "start")
+
+
 def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None, stills_dir: Path | None = None,
-                  start_token: str | None = None) -> dict[str, Any]:
+                  start_token: str | None = None, end_token: str | None = None) -> dict[str, Any]:
     shots, pre = pkg.typed.get("shots"), pkg.typed.get("preprod")
     if shots is None or pre is None:
         raise ValueError("generate needs a valid 03_preprod.json and 04_shots.json")
@@ -133,6 +143,7 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     else:
         start_source = "approved start still"
     still = _start_still(pkg, generation_id, stills_dir, blockers)
+    end_still = _frame_still(pkg, generation_id, stills_dir, blockers, "end") if decl.end_frame else None
 
     sent = _sent_receipts(root, pkg.header.film_id)
     logged = {t.take_id for t in log.takes}
@@ -154,6 +165,9 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     if not start_token:
         blockers.append(_blocker("START_TOKEN_MISSING", "pass --start-token tok:<tail> of the start still uploaded to Flow",
                                  live_only=True))
+    if decl.end_frame and not end_token:
+        blockers.append(_blocker("END_TOKEN_MISSING", "pass --end-token tok:<tail> of the end still uploaded to Flow",
+                                 live_only=True))
     if pkg.header.rehearsal:
         pass  # a rehearsal spends nothing: no budget to check (credits are recorded as 0)
     elif cap is None:
@@ -163,17 +177,24 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
                                  live_only=True))
     argv = [sys.executable, str(FLOW_SEND), str(prompt_file), str(out), "--start", start_token or PLACEHOLDER_TOKEN,
             "--start-file", str(still)]
-    return {"film_id": pkg.header.film_id, "generation_id": generation_id, "take_id": take_id,
+    preconditions = ["Flow composer is on Omni Flash, 360p, video mode",
+                     "the start still is uploaded to the Flow gallery (its tail is --start-token)"]
+    if end_still is not None:
+        argv += ["--end", end_token or PLACEHOLDER_END_TOKEN, "--end-file", str(end_still)]
+        preconditions.append("the end still is uploaded to the Flow gallery (its tail is --end-token)")
+    preconditions.append("GPM / Flow browser stays open; no cookies or captchas touched")
+    payload = {"film_id": pkg.header.film_id, "generation_id": generation_id, "take_id": take_id,
             "shot_version": decl.version, "prompt_file": str(prompt_file), "prompt_sha256": sha256_text(prompt),
             "prompt_words": len(prompt.split()), "start_frame": {"source": start_source, "file": str(still),
                                                                 "exists": still.is_file(),
                                                                 "sha256": sha256_file(still) if still.is_file() else ""},
-            "route": ROUTE, "model": MODEL, "expected_credits": 0.0 if pkg.header.rehearsal else CREDITS_PER_GENERATION, "credits_spent": spent,
+            "route": ROUTE_END if end_still is not None else ROUTE, "model": MODEL, "expected_credits": 0.0 if pkg.header.rehearsal else CREDITS_PER_GENERATION, "credits_spent": spent,
             "credit_cap": cap, "output": str(out), "argv": argv,
-            "preconditions": ["Flow composer is on Omni Flash, 360p, video mode",
-                              "the start still is uploaded to the Flow gallery (its tail is --start-token)",
-                              "GPM / Flow browser stays open; no cookies or captchas touched"],
-            "blockers": blockers}
+            "preconditions": preconditions, "blockers": blockers}
+    if end_still is not None:
+        payload["end_frame"] = {"file": str(end_still), "exists": end_still.is_file(),
+                                "sha256": sha256_file(end_still) if end_still.is_file() else ""}
+    return payload
 
 
 def _sent_receipts(root: Path, film_id: str) -> dict[str, dict[str, Any]]:
@@ -202,6 +223,8 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
     receipt = {k: payload[k] for k in keep}
     receipt["start_frame_sha256"] = payload["start_frame"]["sha256"]
     receipt["start_frame_source"] = payload["start_frame"]["source"]
+    if "end_frame" in payload:
+        receipt["end_frame_sha256"] = payload["end_frame"]["sha256"]
     receipt["blockers"] = [b["code"] for b in payload["blockers"]]
     receipt.update(extra)
     path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -210,8 +233,9 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
 
 def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Path | None = None,
              stills_dir: Path | None = None, start_token: str | None = None, backlog: Path | None = None,
-             runner: Runner | None = None) -> dict[str, Any]:
-    payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token)
+             runner: Runner | None = None, end_token: str | None = None) -> dict[str, Any]:
+    payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
+                            end_token=end_token)
     root = Path(pkg.root)
     live_blocked = [b for b in payload["blockers"] if not b["live_only"] or not dry_run]
     if dry_run:
@@ -246,7 +270,7 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     if outcome == "PASSED" and out.is_file():
         entry, _ = register_take(root, pkg.header.film_id, generation_id, out,
                                  prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
-                                 route=ROUTE, model=MODEL, credits=0.0 if mock else CREDITS_PER_GENERATION,
+                                 route=payload["route"], model=MODEL, credits=0.0 if mock else CREDITS_PER_GENERATION,
                                  start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"])
         result["take"] = entry.model_dump(mode="json")
     result["manifest_result"] = outcome

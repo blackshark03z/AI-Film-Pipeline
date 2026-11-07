@@ -61,7 +61,8 @@ def _text_only(tmp_path, sample, *, briefs=None, start_state=None):
     return prompt, dict(scene=scene, unit=unit, prompt=prompt,
                         reference_sets=[], reference_root=tmp_path,
                         storyboard=gate, known_characters=script.characters,
-                        reference_mode="TEXT_ONLY", looks=[MAI, HUNG])
+                        reference_mode="TEXT_ONLY", looks=[MAI, HUNG],
+                        limits=PreflightLimits(prompt_style="full"))
 
 
 # ------------------------------------------------------------ locked looks

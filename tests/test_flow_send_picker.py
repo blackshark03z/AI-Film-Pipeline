@@ -43,3 +43,135 @@ def test_image_search_finds_the_newest_still_when_the_picker_opens_mid_list(monk
     page = _VirtualListPage(items, top=12)
     xy = asyncio.run(fs._picker_find_image(page, Path("start.jpg"), fs.START_LIST_XY))
     assert xy == (142, 100)
+
+
+# --- P13-05: start and end slots -------------------------------------------------------------------------------
+
+import json  # noqa: E402
+import shutil  # noqa: E402
+import subprocess  # noqa: E402
+
+import pytest  # noqa: E402
+
+needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node is needed to run the page scripts")
+
+
+def _node(fn_src: str, arg, dom: str):
+    """Run one page script against a stub DOM; returns its JSON result."""
+    code = (f"{dom}\nconst fn = ({fn_src});\n"
+            f"Promise.resolve(fn({json.dumps(arg)})).then(v => console.log(JSON.stringify(v)));")
+    done = subprocess.run(["node", "-e", code], capture_output=True, text=True, timeout=30, check=True)
+    return json.loads(done.stdout)
+
+
+_RECT = "const R = (x, y, w, h) => ({x, y, width: w, height: h, bottom: y + h});\n"
+
+
+@needs_node
+def test_slot_is_found_by_its_button_text():
+    dom = _RECT + """globalThis.innerHeight = 655;
+    const B = (t, r) => ({innerText: t, getBoundingClientRect: () => r});
+    globalThis.document = {querySelectorAll: () => [B('Thêm', R(10, 10, 40, 40)), B('Bắt đầu', R(300, 500, 56, 56)),
+        B('Kết thúc', R(398, 500, 56, 56)), B('Kết thúc', R(398, 900, 56, 56))]};"""
+    assert _node(fs.JS_FRAME_SLOT, "Bắt đầu", dom) == [328, 528]
+    assert _node(fs.JS_FRAME_SLOT, "Kết thúc", dom) == [426, 528]   # the copy below the viewport is not visible
+    assert _node(fs.JS_FRAME_SLOT, "Nothing", dom) is None
+
+
+@needs_node
+def test_slot_bytes_come_from_the_nearest_image_within_60px():
+    dom = _RECT + """const I = (src, r) => ({currentSrc: src, src, getBoundingClientRect: () => r});
+    globalThis.document = {images: [I('start', R(300, 500, 56, 56)), I('end', R(398, 500, 56, 56)),
+        I('zero', R(0, 0, 0, 0))]};
+    globalThis.fetch = async (u) => ({arrayBuffer: async () => new TextEncoder().encode(u).buffer});"""
+    as_text = lambda v: bytes(v).decode() if v else v  # noqa: E731
+    assert as_text(_node(fs.JS_SLOT_BYTES, [426, 528], dom)) == "end"      # the end slot, not the first image near it
+    assert as_text(_node(fs.JS_SLOT_BYTES, [328, 528], dom)) == "start"
+    assert _node(fs.JS_SLOT_BYTES, [700, 528], dom) is None
+
+
+class _Locator:
+    async def count(self):
+        return 0
+
+
+class _SlotPage:
+    """Composer with a start and an end slot; `texts` False = the slot labels are not in the page."""
+
+    def __init__(self, texts=True, thumbs=((150, 100), (150, 148), (150, 196))):
+        self.texts, self.thumbs, self.clicks = texts, list(thumbs), []
+        self.mouse = self
+        self.slot_asked = []
+
+    async def click(self, x, y):
+        self.clicks.append((x, y))
+
+    async def wait_for_timeout(self, _ms):
+        pass
+
+    def get_by_text(self, *_a, **_k):
+        return _Locator()
+
+    async def evaluate(self, js, *args):
+        if js is fs.JS_FRAME_SLOT:
+            self.slot_asked.append(args[0])
+            if not self.texts:
+                return None
+            return {"Bắt đầu": [330, 520], "Kết thúc": [428, 520]}[args[0]]
+        if js is fs.JS_PICKER_CENTRES:
+            return [list(t) for t in self.thumbs]
+        if js is fs.JS_SLOT_BYTES:
+            return list(b"slot")
+        raise AssertionError(js[:40])
+
+
+def _patch_picker(monkeypatch, seen):
+    async def find(_page, tok, over, scrolls=16):
+        seen.append((tok, over))
+        return (150, 148)
+    monkeypatch.setattr(fs, "_picker_find", find)
+    monkeypatch.setattr(fs, "slot_diff", lambda data, _still: 0.2)
+
+
+def test_slot_uses_found_coordinates_and_the_picker_median(monkeypatch):
+    seen = []
+    _patch_picker(monkeypatch, seen)
+    page, rec = _SlotPage(), {}
+    assert asyncio.run(fs._fill_frame_slot(page, "end", "tok:ENDTAIL", Path("end.png"), rec)) is None
+    assert page.slot_asked == ["Kết thúc"]
+    assert page.clicks[0] == (428, 520) and page.clicks[-1] == (150, 148)
+    assert seen == [("ENDTAIL", (150, 148))]            # median of the visible thumbnails
+    assert rec["end_found_by"] == "token_tail" and rec["end_slot_diff"] == 0.2
+
+
+def test_slot_falls_back_to_fixed_coordinates(monkeypatch):
+    seen = []
+    _patch_picker(monkeypatch, seen)
+    page = _SlotPage(texts=False, thumbs=())
+    assert asyncio.run(fs._fill_frame_slot(page, "start", "tok:S", None, {})) is None
+    assert page.clicks[0] == fs.START_XY and seen[0][1] == fs.START_LIST_XY
+    page = _SlotPage(texts=False, thumbs=())
+    assert asyncio.run(fs._fill_frame_slot(page, "end", "tok:E", None, {})) is None
+    assert page.clicks[0] == (fs.START_XY[0] + 98, fs.START_XY[1])
+
+
+def test_slot_failures_name_the_slot(monkeypatch):
+    seen = []
+    _patch_picker(monkeypatch, seen)
+    monkeypatch.setattr(fs, "slot_diff", lambda data, _still: 40.0)
+    assert asyncio.run(fs._fill_frame_slot(_SlotPage(), "end", "tok:E", Path("e.png"), {})) == "END_NOT_SET tok:E"
+    assert asyncio.run(fs._fill_frame_slot(_SlotPage(), "start", "tok:S", Path("s.png"), {})) == "START_NOT_SET tok:S"
+
+    async def nothing(*_a, **_k):
+        return None
+    monkeypatch.setattr(fs, "_picker_find", nothing)
+    monkeypatch.setattr(fs, "_picker_find_image", nothing)
+    assert asyncio.run(fs._fill_frame_slot(_SlotPage(), "end", "tok:E", Path("e.png"), {})) == "END_NOT_FOUND tok:E"
+    assert asyncio.run(fs._fill_frame_slot(_SlotPage(), "start", "tok:S", None, {})) == "START_NOT_FOUND tok:S"
+
+
+def test_end_slot_is_filled_after_the_start_slot():
+    # run() needs a live browser: check the order of the two slots in its fill loop
+    src = Path(fs.__file__).read_text(encoding="utf-8")
+    loop = src[src.index("for which, tok, still in"):][:200]
+    assert loop.index('("start", args.start') < loop.index('("end", args.end')

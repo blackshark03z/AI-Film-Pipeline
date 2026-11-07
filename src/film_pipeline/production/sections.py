@@ -58,6 +58,7 @@ class CharacterSpec(ContractModel):
     look: CharacterLook
     video_text: str  # description used in video prompts (the start frame carries the face; no ethnicity words)
     voice: str
+    handle: str = ""  # how a start-frame prompt names the person, e.g. "the woman"
 
 
 class LocationSpec(ContractModel):
@@ -129,14 +130,14 @@ class PreprodSection(ContractModel):
     designs: dict[str, DesignEntry] = Field(default_factory=dict)  # design id -> versioned entry
     rights: list[RightsEntry] = Field(default_factory=list)  # planning.py: legal/rights ledger
     risk_fallbacks: dict[str, str] = Field(default_factory=dict)  # generation_id -> fallback coverage for a HIGH risk
-    stills: dict[str, StillRecord] = Field(default_factory=dict)  # generation_id -> registered start still (stills.py)
+    stills: dict[str, StillRecord] = Field(default_factory=dict)  # generation_id (or "end:<generation_id>") -> registered still (stills.py)
 
     @model_validator(mode="after")
     def _references_resolve(self) -> "PreprodSection":
         for label, keys in (("characters", self.characters), ("locations", self.locations),
                             ("scenes", self.scenes), ("states", self.states), ("stills", self.stills),
                             ("accepted_overlong", self.accepted_overlong), ("designs", self.designs)):
-            _bad_keys(label, keys)
+            _bad_keys(label, [k.removeprefix("end:") for k in keys] if label == "stills" else keys)
         for did, d in self.designs.items():
             if d.kind in _CHARACTER_KINDS and d.owner not in self.characters:
                 raise ValueError(f"design {did}: {d.kind} needs a character owner (got {d.owner!r})")
@@ -173,6 +174,8 @@ class ShotDecl(ContractModel):
     version: int = Field(default=1, ge=1)  # retake.py: bumped when a pickup replaces this shot's design
     repair_of: str = ""  # "<generation_id>@v<N>": the version this one replaces
     repair_reason: str = ""
+    # an approved end still pins the end state (first/last-frame interpolation, sent in Flow's "Ket thuc" slot)
+    end_frame: bool = False
 
 
 class ShotsSection(ContractModel):

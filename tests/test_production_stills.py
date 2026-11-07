@@ -45,6 +45,24 @@ def root(tmp_path):
     pre = json.loads((target / "03_preprod.json").read_text(encoding="utf-8"))
     pre.pop("stills", None)
     (target / "03_preprod.json").write_text(json.dumps(pre, ensure_ascii=False, indent=2), encoding="utf-8")
+    # the start-still tests below know nothing of end stills (SC01_g1 carries end_frame, see the end_root tests)
+    shots = json.loads((target / "04_shots.json").read_text(encoding="utf-8"))
+    for g in shots["generations"]:
+        g.pop("end_frame", None)
+    (target / "04_shots.json").write_text(json.dumps(shots, ensure_ascii=False, indent=2), encoding="utf-8")
+    return target
+
+
+@pytest.fixture()
+def end_root(tmp_path):
+    """film04 as shipped: SC01_g1 has end_frame (the shutter ends halfway down)."""
+    target = tmp_path / "film04_end"
+    target.mkdir()
+    for name in FILES:
+        shutil.copyfile(FILM04 / name, target / name)
+    pre = json.loads((target / "03_preprod.json").read_text(encoding="utf-8"))
+    pre.pop("stills", None)
+    (target / "03_preprod.json").write_text(json.dumps(pre, ensure_ascii=False, indent=2), encoding="utf-8")
     return target
 
 
@@ -247,3 +265,69 @@ def test_cli_list_register_approve(root, tmp_path):
     assert code == 0 and body["approved"]["approved_by"] == "Owner"
     code, body = film()
     assert gid not in body["waiting"]
+
+
+# --- P13-05: end stills (key "end:<gid>") ----------------------------------------------------------------------
+
+END = "end:SC01_g1"
+
+
+def test_end_still_prompt_is_an_edit_instruction_only_for_end_frame_shots(end_root):
+    prompts = S.still_prompts(pkg_of(end_root))
+    assert [k for k in prompts if k.startswith("end:")] == [END]
+    assert prompts[END].startswith("Edit the given image, the first frame of this shot. Change only this: ")
+    assert prompts[END].endswith("Keep everything else the same: framing, people, faces, clothes, light.")
+    assert "the shutter halfway down" in prompts[END] and "MARA" not in prompts[END]
+    rows = {r["generation_id"]: r for r in S.list_stills(pkg_of(end_root))}
+    assert rows[END]["kind"] == "end" and rows[END]["needs_still"] and rows[END]["prompt_file"] == "stills/end_SC01_g1.txt"
+    assert rows["SC01_g1"]["kind"] == "start" and rows["SC01_g1"]["prompt_file"] == "stills/start_SC01_g1.txt"
+    assert len(rows) == 13
+
+
+def test_end_still_register_approve_stale_cycle(end_root, tmp_path):
+    S.register_still(pkg_of(end_root), END, png(tmp_path, "end.png", 30))
+    assert (end_root / "media/stills/end_SC01_g1.png").is_file()
+    assert S.state_of(pkg_of(end_root), END)[0] == "UNAPPROVED"
+    assert S.state_of(pkg_of(end_root), "SC01_g1")[0] == "MISSING"      # the start still is untouched
+    assert S.approved_still_path(pkg_of(end_root), END) is None
+    S.approve_still(pkg_of(end_root), END, "Owner")
+    assert S.approved_still_path(pkg_of(end_root), END) == end_root / "media/stills/end_SC01_g1.png"
+    assert END not in S.approved_stills(pkg_of(end_root))              # an end still is never an animatic start frame
+    (end_root / "media/stills/end_SC01_g1.png").write_bytes(b"tampered")
+    assert S.state_of(pkg_of(end_root), END)[0] == "STALE_FILE"
+    S.register_still(pkg_of(end_root), END, png(tmp_path, "end.png", 30))  # same image again: approval comes back
+    assert S.state_of(pkg_of(end_root), END)[0] == "APPROVED"
+    raw = json.loads((end_root / "03_preprod.json").read_text(encoding="utf-8"))
+    raw["stills"][END]["prompt_sha256"] = "0" * 64
+    (end_root / "03_preprod.json").write_text(json.dumps(raw), encoding="utf-8")
+    assert S.state_of(pkg_of(end_root), END)[0] == "STALE_PROMPT"
+    S.register_still(pkg_of(end_root), END, png(tmp_path, "end.png", 30))
+    S.register_still(pkg_of(end_root), END, png(tmp_path, "end2.png", 200))   # a different image: history, no approval
+    assert S.state_of(pkg_of(end_root), END)[0] == "UNAPPROVED"
+    assert len(list((end_root / "media/stills/history").glob("end_SC01_g1.*.png"))) == 2  # tampered + replaced
+
+
+def test_end_still_only_for_end_frame_shots_and_bots_cannot_approve(end_root, tmp_path):
+    with pytest.raises(ValueError, match="unknown generation"):
+        S.register_still(pkg_of(end_root), "end:SC01_g2", png(tmp_path, "x.png"))
+    S.register_still(pkg_of(end_root), END, png(tmp_path, "end.png"))
+    with pytest.raises(ValueError, match="reviewer's name"):
+        S.approve_still(pkg_of(end_root), END, "")
+    from film_pipeline.production.rehearsal import BOT
+    with pytest.raises(ValueError, match="only allowed in a rehearsal"):
+        S.approve_still(pkg_of(end_root), END, BOT)
+
+
+def test_cli_registers_and_approves_an_end_still(end_root, tmp_path):
+    def film(*args):
+        done = subprocess.run([sys.executable, str(ROOT / "tools" / "film.py"), "stills", "--film", str(end_root), *args],
+                              capture_output=True, text=True, encoding="utf-8", cwd=ROOT,
+                              env={**os.environ, "PYTHONPATH": str(ROOT / "src"), "PYTHONIOENCODING": "utf-8"})
+        return done.returncode, json.loads(done.stdout)
+
+    code, body = film("--register", END, "--image", str(png(tmp_path, "end.png")))
+    assert code == 0 and body["registered"]["file"] == "media/stills/end_SC01_g1.png"
+    code, body = film("--approve", END, "--by", "Owner")
+    assert code == 0 and body["approved"]["approved_by"] == "Owner"
+    code, body = film()
+    assert END not in body["waiting"] and "SC01_g1" in body["waiting"]

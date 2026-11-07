@@ -37,12 +37,21 @@ class ContinuityState(ContractModel):
             return ""
         return "Continues from the previous shot: " + "; ".join(parts) + "."
 
+    def prop_changes(self, start: "ContinuityState") -> list[str]:
+        """Props this end state moves or changes from `start`, as "<prop> <where>" clauses."""
+        return [f"{prop.rstrip(':')} {where}" for prop, where in self.props.items() if start.props.get(prop) != where]
+
+    def change_clauses(self, start: "ContinuityState") -> list[str]:
+        """Everything this end state changes from `start`: props first, then people's positions (end-frame edit)."""
+        return self.prop_changes(start) + [f"{who} {where}" for who, where in self.positions.items()
+                                           if start.positions.get(who) != where]
+
     def describe_change(self, start: "ContinuityState") -> str:
         """Prompt sentence for the props this end state changes from `start`, held to the last frame ("" if none).
         A prompt that names only the start lets the model put things back: film04 SC01_g1 t2 pulled the shutter
         down, then it sprang up again to the one state the prompt named. People's moves stay in the action
         text (the word budget is tight)."""
-        parts = [f"{prop} {where}" for prop, where in self.props.items() if start.props.get(prop) != where]
+        parts = self.prop_changes(start)
         if not parts:
             return ""
         return "Ends with " + "; ".join(parts) + ", held to the last frame."

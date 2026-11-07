@@ -38,6 +38,9 @@ class PreflightLimits(ContractModel):
     max_prompt_words: int = 120          # (*)
     # "Ends with <prop> <state>, held to the last frame." (P13-03); off only for films shipped before it (bytes frozen)
     end_state_in_prompt: bool = True
+    # "full" re-describes looks and set (text-only routes and films shipped before P13-04);
+    # "start_frame" prompts motion only, the start image carries looks and set
+    prompt_style: Literal["full", "start_frame"] = "start_frame"
     timing: SceneTiming = Field(default_factory=SceneTiming)
     feasibility: FeasibilityLimits = Field(default_factory=FeasibilityLimits)
 
@@ -77,6 +80,7 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
                     ) -> PreflightReport:
     limits = limits or PreflightLimits()
     report = PreflightReport(scene_id=scene.scene_id)
+    start_frame = limits.prompt_style == "start_frame"
 
     def add(check: str, detail: str, severity: str = "BLOCK") -> None:
         report.issues.append(PreflightIssue(check=check, detail=detail,
@@ -128,7 +132,7 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
                 continue
             for problem in look.problems():
                 add("LOOK", problem)
-            if look.text not in cast_text:
+            if not start_frame and look.text not in cast_text:
                 add("LOOK", f"{name}: prompt does not carry the locked look "
                             f"text for {look.look_id}")
             ref_set = by_name.get(name)
@@ -139,7 +143,7 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
         setting_text = prompt.sections.get("setting", "")
         for problem in location.problems():
             add("LOCATION", problem)
-        if location.text not in setting_text:
+        if not start_frame and location.text not in setting_text:
             add("LOCATION", f"prompt does not carry the locked location "
                             f"text for {location.look_id}")
         for issue in check_environment(scene, location, [setting_text]):
@@ -175,7 +179,9 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
     if list(prompt.sections) != list(SECTION_ORDER):
         add("PROMPT_ORDER", f"sections {list(prompt.sections)} not in "
                             f"order {list(SECTION_ORDER)}")
-    for required in ("characters", "setting", "shots", "prohibitions"):
+    # start-frame style: the image carries the cast, so the characters section is empty by design
+    for required in (("setting", "shots", "prohibitions") if start_frame
+                     else ("characters", "setting", "shots", "prohibitions")):
         if required not in present:
             add("PROMPT_SECTION", f"empty section: {required}")
     if generation_index > 1 and handoff is None and             previous_end_state is None:
@@ -193,7 +199,7 @@ def preflight_scene(*, scene: ScriptScene, unit: SceneUnit,
     if isinstance(previous_end_state, ContinuityState):
         previous_end_state = previous_end_state.as_dict()
     if isinstance(start_state, ContinuityState):
-        if start_state.describe() and not prompt.sections.get("continuity"):
+        if not start_frame and start_state.describe() and not prompt.sections.get("continuity"):
             add("STATE", "start state is not compiled into the prompt")
         start_state = start_state.as_dict()
     if previous_end_state is not None:

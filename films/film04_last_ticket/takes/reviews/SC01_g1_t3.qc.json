@@ -1,0 +1,119 @@
+{
+  "take_id": "SC01_g1_t3",
+  "generation_id": "SC01_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Sửa đi') of SC01_g1_t9.mp4 after the Tech Lead frame review (0.5 s strip + 4 zoom frames).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Start frame matches still v8; the hands stay on the booth side of the shutter, nothing passes through the glass.",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Sửa đi') of SC01_g1_t9.mp4 after the Tech Lead frame review (0.5 s strip + 4 zoom frames).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "The shutter goes ~2/3 down by 3.5 s, then she pushes it back up to ~1/3 by 5.5 s and holds it there; she never looks at the clock. A down-then-up reversal (once-action broken); the end height is not the middle.",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "The end state was one sentence among ~210 words and the timing ran as prose; the model overshot and corrected. Pipeline fix (P13-04): prompt structure from the official Veo/Flow prompt guides.",
+  "output_sha256": "8c3027f2395e2cc957d52510981c9335610c57096fce3641f3973abba245f0c6"
+}

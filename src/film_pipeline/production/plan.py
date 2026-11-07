@@ -14,6 +14,8 @@ from typing import Any
 from film_pipeline.drama import (CharacterBrief, ContinuityState, GenerationHandoff, StoryboardGate,
                                  compile_scene_prompt, preflight_scene, render_schematic_frame)
 from film_pipeline.drama.axis import axis_record
+from film_pipeline.drama.preflight import PreflightIssue
+from film_pipeline.drama.prompt import apply_handles
 from film_pipeline.drama.comprehension import check_comprehension, lint_script
 from film_pipeline.drama.coverage import _SIZE, CoverageShot, SceneUnit, SpokenLine
 from film_pipeline.drama.feasibility import check_script
@@ -27,6 +29,8 @@ from film_pipeline.production.set_layout import layout_issues, render_floor_plan
 _LANGUAGE = {"en": "English", "vi": "Vietnamese"}
 SUPPORTED_ASPECT = "16:9"  # prompt compiler and schematic renderer are landscape-only
 START_PREFIX = "Starts on the given frame; same room, people and places. "
+START_FRAME_PREFIX = "The given image is the first frame. "  # prompt_style "start_frame" (P13-04)
+END_FRAME_PREFIX = "The given images are the first and last frames. "  # start_frame style + ShotDecl.end_frame (P13-05)
 # the emitted prompt = start prefix + the compiler's sections in this order (drama.prompt.SECTION_ORDER)
 BUDGET_SECTIONS = ("prefix", "characters", "setting", "continuity", "shots", "performance", "dialogue", "sound", "prohibitions")
 # plain names for the report: characters = cast and locked looks, continuity = start-state list, shots = shot + timing/action
@@ -35,9 +39,9 @@ BUDGET_LABELS = {"prefix": "start prefix", "characters": "cast/looks", "setting"
                  "prohibitions": "fixed tail"}
 
 
-def word_budget(sections: dict[str, str]) -> dict[str, int]:
+def word_budget(sections: dict[str, str], prefix: str = START_PREFIX) -> dict[str, int]:
     """Words of the emitted prompt per section (zeros left out); they add up to the prompt's word count."""
-    counts = {"prefix": len(START_PREFIX.split()), **{k: len(v.split()) for k, v in sections.items()}}
+    counts = {"prefix": len(prefix.split()), **{k: len(v.split()) for k, v in sections.items()}}
     return {k: counts[k] for k in BUDGET_SECTIONS if counts.get(k)}
 
 
@@ -129,14 +133,15 @@ class _Plan:
         location = self.pre.locations[scene.location]
         unit = self.unit_for(decl)
         start = self.cut(self.state(decl.start_state), decl.visible)
-        cast = [CharacterBrief(name=c, look=self.video_looks[c], voice=self.pre.characters[c].voice)
-                for c in start.positions]
+        cast = [CharacterBrief(name=c, look=self.video_looks[c], voice=self.pre.characters[c].voice,
+                               handle=self.pre.characters[c].handle) for c in start.positions]
         plan = compile_scene_prompt(
             unit, characters=cast, setting=scene.extras, room_tone=location.room_tone, sfx=decl.sfx or None,
             dialogue_language=self.language, start_state=start,
             end_state=(self.cut(self.state(decl.end_state), decl.visible)
                        if self.pre.preflight.end_state_in_prompt else None), location=location.look,
-            choreography=decl.choreography)
+            choreography=decl.choreography, style=self.pre.preflight.prompt_style,
+            handles={n: c.handle for n, c in self.pre.characters.items() if c.handle})
         report = preflight_scene(
             scene=self.scenes[decl.scene_id], unit=unit, prompt=plan, reference_sets=[],
             reference_root=self.reference_root, storyboard=gate, known_characters=self.script.characters,
@@ -171,6 +176,25 @@ class _Plan:
                 f"{shot.describe(unit.axis_book)}. {location.text}.{view} {people}.{props}{extras}{alone}{pose} "
                 "Faces and clothes exactly as in the attached character images. Natural, restrained "
                 "expressions. No text, no logos.")
+
+    def end_clauses(self, decl: ShotDecl) -> list[str]:
+        """What the end state changes from the start state (people in frame only)."""
+        start = self.cut(self.state(decl.start_state), decl.visible)
+        end = self.cut(self.state(decl.end_state), decl.visible)
+        return end.change_clauses(start)
+
+    def end_still_prompt(self, decl: ShotDecl) -> str:
+        """End-frame image: an edit of the start image (Google's editing guidance: short, ends with 'keep the rest').
+        Character names become their handles, as in the start-frame prompt."""
+        handles = {n: c.handle for n, c in self.pre.characters.items() if c.handle}
+        change = apply_handles("Change only this: " + "; ".join(self.end_clauses(decl)), handles)
+        # the end frame is the last phase's pose too: an edit naming only the prop kept her hands where the start had
+        # them (film04 SC01_g1 v4: hands up at the raised shutter, shutter at the middle)
+        phases = decl.choreography.phases if decl.choreography else []
+        pose = (" " + apply_handles(f"Pose at the end of the shot: {phases[-1].description.strip().rstrip('.')}.",
+                                    handles)) if phases else ""
+        return ("Edit the given image, the first frame of this shot. "
+                f"{change}.{pose} Keep everything else the same: framing, people, faces, clothes, light.")
 
     def dialogue_problems(self) -> list[str]:
         """Each scripted dialogue line is spoken by exactly one generation of its scene; references must exist."""
@@ -290,14 +314,29 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     for decl in p.shots.generations:
         gid = decl.generation_id
         unit, plan, report = p.build(decl, gate)
-        text = START_PREFIX + plan.compiled_text
-        p.budget[gid] = word_budget(plan.sections)
+        prefix = START_FRAME_PREFIX if p.pre.preflight.prompt_style == "start_frame" else START_PREFIX
+        if decl.end_frame and p.pre.preflight.prompt_style == "start_frame":
+            prefix = END_FRAME_PREFIX
+        text = prefix + plan.compiled_text
+        p.budget[gid] = word_budget(plan.sections, prefix)
         _write(out / "prompts" / f"{gid}.txt", text + "\n", out)
         still = p.still_prompt(decl, unit)
         _write(out / "stills" / f"start_{gid}.txt", still + "\n", out)
+        issues = list(report.issues)
+        end_words: int | None = None
+        if decl.end_frame:
+            if p.end_clauses(decl):
+                end_still = p.end_still_prompt(decl)
+                _write(out / "stills" / f"end_{gid}.txt", end_still + "\n", out)
+                end_words = len(end_still.split())
+            else:
+                issues.append(PreflightIssue(check="END_FRAME", severity="BLOCK",
+                                             detail="end_frame set but the end state changes nothing"))
         record["generations"][gid] = {
-            "words": len(text.split()), "verdict": report.verdict, "still_words": len(still.split()),
-            "issues": [i.model_dump() for i in report.issues]}
+            "words": len(text.split()), "verdict": "BLOCKED" if any(i.severity == "BLOCK" for i in issues) else "PASS",
+            "still_words": len(still.split()), "issues": [i.model_dump() for i in issues]}
+        if end_words is not None:  # only for end_frame shots, so other films keep their golden gate3.json
+            record["generations"][gid]["end_still_words"] = end_words
     comp = p.direction.comprehension
     order = [g.generation_id for g in p.shots.generations]
     in_frame = {g.generation_id: list(g.visible) for g in p.shots.generations}

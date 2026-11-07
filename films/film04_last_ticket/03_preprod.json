@@ -40,7 +40,8 @@
         "approved": true
       },
       "video_text": "woman in her sixties, grey hair in a low bun, round glasses on a chain, mustard cardigan",
-      "voice": "warm dry low female voice"
+      "voice": "warm dry low female voice",
+      "handle": "the woman"
     },
     "THEO": {
       "look": {
@@ -55,7 +56,8 @@
         "approved": true
       },
       "video_text": "young man, early twenties, short dark wet hair, olive green rain jacket, grey backpack",
-      "voice": "breathless young male voice"
+      "voice": "breathless young male voice",
+      "handle": "the young man"
     }
   },
   "locations": {

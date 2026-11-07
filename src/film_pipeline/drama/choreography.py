@@ -33,6 +33,12 @@ class PerformanceCue(ContractModel):
     intensity: Literal["restrained", "moderate", "strong"] = "restrained"
     prohibited_misread: str = ""
 
+    def motion_text(self) -> str:
+        """Start-frame style: one plain sentence (prompt_text's "not a <misread>" stays for frozen prompts)."""
+        misread = f", never {self.prohibited_misread}" if self.prohibited_misread.strip() else ""
+        return (f"{self.character} plays it {self.intensity}: {self.emotion_intent}, "
+                f"{', '.join(self.visible_cues)}{misread}.")
+
     def prompt_text(self) -> str:
         return (f"{self.character}: {self.emotion_intent} — "
                 f"{', '.join(self.visible_cues)}; {self.intensity}; "
@@ -92,6 +98,10 @@ class GenerationChoreography(ContractModel):
                 add("PERFORMANCE", "BLOCK",
                     f"{cue.character}: no prohibited_misread")
         return found
+
+    def timecode_text(self) -> str:
+        """Phases as one timecoded sentence each: ``[0-2s] description.`` (start-frame prompt style)."""
+        return " ".join(f"[{p.start_s:g}-{p.end_s:g}s] {p.description.strip().rstrip('.')}." for p in self.phases)
 
     def timing_text(self) -> str:
         parts = [f"{p.start_s:g}-{p.end_s:g}s {p.kind.lower()}: "
