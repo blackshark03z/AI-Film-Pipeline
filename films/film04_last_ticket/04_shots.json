@@ -134,22 +134,30 @@
         "generation_id": "SC01_g2",
         "phases": [
           {
-            "kind": "SETUP",
+            "kind": "ACTION",
             "start_s": 0.0,
             "end_s": 1.5,
-            "description": "THEO pushes through the glass door out of the rain"
+            "motion": "open_door",
+            "description": "THEO pushes the glass door open with one hand and steps in out of the rain, the jar of coins in his other hand"
           },
           {
             "kind": "ACTION",
             "start_s": 1.5,
-            "end_s": 5.0,
-            "description": "THEO crosses to the window with the jar and speaks"
+            "end_s": 4.0,
+            "motion": "walk_across_room",
+            "description": "he hurries across the hall and stops at the counter in front of the ticket window"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 4.0,
+            "end_s": 7.0,
+            "description": "he stoops until his face is level with the open gap under the shutter's bottom edge and speaks"
           },
           {
             "kind": "HOLD",
-            "start_s": 5.0,
+            "start_s": 7.0,
             "end_s": 8.0,
-            "description": "he waits, breathing hard"
+            "description": "he stays bent at the gap, breathing hard, eyes on her"
           }
         ],
         "once_actions": [
@@ -204,7 +212,8 @@
             "window"
           ]
         }
-      ]
+      ],
+      "duration_s": 8
     },
     {
       "generation_id": "SC02_g1",

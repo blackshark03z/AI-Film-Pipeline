@@ -63,10 +63,15 @@ class StoryboardGate:
 
     def register(self, scene_id: str, shot_id: str,
                  image_path: str) -> StoryboardFrame:
-        """(Re)register a frame; a new image always resets to PENDING."""
+        """(Re)register a frame; a new image always resets to PENDING.
+
+        The same image (same path and hash) keeps its review: re-running the plan must not drop the Owner's approval."""
+        sha = hash_file(self.root / image_path)
+        old = self.frame(shot_id)
+        if old is not None and old.sha256 == sha and old.image_path == image_path and old.scene_id == scene_id:
+            return old
         frame = StoryboardFrame(
-            scene_id=scene_id, shot_id=shot_id, image_path=image_path,
-            sha256=hash_file(self.root / image_path))
+            scene_id=scene_id, shot_id=shot_id, image_path=image_path, sha256=sha)
         self.board.frames = [f for f in self.board.frames
                              if f.shot_id != shot_id] + [frame]
         return frame

@@ -209,6 +209,7 @@
               "counter",
               "window",
               "shutter",
+              "shutter_catch",
               "tray",
               "clock",
               "lamp",
@@ -228,6 +229,7 @@
               "counter",
               "window",
               "shutter",
+              "shutter_catch",
               "tray",
               "door"
             ],
@@ -245,6 +247,7 @@
               "counter",
               "window",
               "shutter",
+              "shutter_catch",
               "tray",
               "clock",
               "door"
@@ -1028,6 +1031,16 @@
       "registered_at": "2026-11-07T22:15:30+00:00",
       "approved_by": "owner-khoikk03",
       "approved_at": "2026-11-07T22:19:49+00:00"
+    },
+    "SC01_g2": {
+      "file": "media/stills/start_SC01_g2.jpg",
+      "sha256": "4d86275bb2be3eda6298d6ab3e364e5d38736f6d5c766349180e16ece1ed4787",
+      "prompt_sha256": "0d13a1e9026bcf6776692c9135757ff37770ecab732ec9babd5e23b56e112816",
+      "source": "ChatGPT GPM tab (wanglin08ma), refs plate B + char_THEO + end_SC01_g1",
+      "credits": 0.0,
+      "registered_at": "2026-11-07T23:06:20+00:00",
+      "approved_by": "",
+      "approved_at": ""
     }
   }
 }

@@ -31,4 +31,5 @@ MOTION_LIBRARY: dict[str, MotionSpec] = {
     "put_down_small_object": MotionSpec(min_s=0.8, max_s=1.8, stop="end_of_travel"),
     "hand_over_object": MotionSpec(min_s=1.0, max_s=2.0, stop="end_of_travel"),
     "open_door": MotionSpec(min_s=1.0, max_s=2.0, stop="end_of_travel"),
+    "walk_across_room": MotionSpec(min_s=1.5, max_s=3.0, stop="end_of_travel"),   # a few steps to a counter or door
 }

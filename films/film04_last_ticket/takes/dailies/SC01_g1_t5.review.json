@@ -1,0 +1,224 @@
+{
+  "take": {
+    "take_id": "SC01_g1_t5",
+    "generation_id": "SC01_g1",
+    "prompt_sha256": "cbaf5f52cf2d9ab56965295ffd39ea5a8c3373bfebf471aeb88960d3f663540e",
+    "start_frame_sha256": "0c5014e5b46fa98199e41b31d805d151a447763f72282c16a09beb7b27ce4100",
+    "route": "start_frame+end_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 4.0,
+    "output_file": "SC01_g1_t11.mp4",
+    "output_sha256": "743c0f914730511905108c08df9323886bb6b579c7fd103e742ee1642a8bca16",
+    "status": "GENERATED",
+    "shot_version": 5,
+    "cause": "",
+    "registered_at": "2026-11-07T22:24:44Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "MARA"
+    ],
+    "start_state": "SC01_g1",
+    "end_state": "SC01_g2",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 3.0,
+        "description": "she pulls the shutter down in one smooth pull until its bottom edge comes to rest on the brass shutter catches"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 3.0,
+        "end_s": 4.0,
+        "description": "her hands rest on the shutter's bottom edge; nothing moves"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: it is past closing time - carried by: round wall clock"
+    },
+    {
+      "group": "narrative",
+      "question": "Viewer reads: she is closing the ticket window - carried by: MARA, roll-down shutter, brass-framed ticket window"
+    },
+    {
+      "group": "narrative",
+      "question": "Viewer reads: it is her last night here - carried by: worn brown suitcase"
+    },
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter?"
+    },
+    {
+      "group": "action",
+      "question": "1-3s ACTION: does this happen on screen - she pulls the shutter down in one smooth pull until its bottom edge comes to rest on the brass shutter catches?"
+    },
+    {
+      "group": "action",
+      "question": "3-4s HOLD: does this happen on screen - her hands rest on the shutter's bottom edge; nothing moves?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): pulls the shutter down"
+    },
+    {
+      "group": "character",
+      "question": "MARA: does the face/body read as routine, unhurried (restrained)? Must NOT read as: anxiety."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size MEDIUM_CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC01_g1: Continues from the previous shot: MARA behind the counter, frame-right; the shutter: up, window open."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC01_g2: Continues from the previous shot: MARA behind the counter, frame-right; THEO outside the glass door, frame-left; the shutter: pulled down, its bottom edge resting on the brass shutter catches at her chest height."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC01_g1_t5",
+    "generation_id": "SC01_g1",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "output_sha256": "743c0f914730511905108c08df9323886bb6b579c7fd103e742ee1642a8bca16"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}

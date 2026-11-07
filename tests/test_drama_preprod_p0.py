@@ -311,8 +311,14 @@ def test_storyboard_gate_needs_approved_unchanged_first_frame(
     assert gate.problems([unit]) == []
     gate.save()
     assert StoryboardGate(tmp_path).problems([unit]) == []
+    # a re-plan that renders the same image keeps the approval; a new image resets it
+    again = StoryboardGate(tmp_path)
+    again.register(unit.scene_id, first.shot_id, "sb/s1.png")
+    assert again.problems([unit]) == []
     render_schematic_frame(unit, unit.shots[2], tmp_path / "sb" / "s1.png")
     assert "changed after review" in gate.problems([unit])[0]
+    again.register(unit.scene_id, first.shot_id, "sb/s1.png")
+    assert "PENDING" in again.problems([unit])[0]
 
 
 # ------------------------------------------------------- #16 prompt/audio

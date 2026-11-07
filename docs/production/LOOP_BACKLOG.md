@@ -430,6 +430,18 @@ without AMBIGUOUS) -> SC01_g1_t11.mp4 (3.97 s), take SC01_g1_t5 GENERATED, 4 cre
 `film.py motion` PASS: one monotonic pull 0.5-3.1 s, peak = final 52.7 (no reversal); edge y 215 from 3.1 s to the end =
 end still 215. Tech Lead zoom strip: both hands stay under the edge, stops on the brass catches, face hidden at the end.
 Not self-accepted: Owner reviews t5. Note: the motion starts at 0.5 s, inside SETUP (0-1 s) - inside the P2 tolerance.
+Owner (2026-11-08, "Tạm ổn, tiếp tục"): t5 ACCEPTED (all groups PASS, human:owner-khoikk03). SC01_g1 is done.
+Fix found next: every `film.py plan` re-registered each storyboard frame as PENDING even when the PNG was unchanged, so an
+Owner approval vanished on the next plan (all 12 frames were PENDING). `StoryboardGate.register` now keeps the review of
+an identical image (test in test_drama_preprod_p0).
+SC01_g2 v1 redesigned under P13-06 before any take: 8 s = door 0-1.5 (open_door) / walk to the counter 1.5-4
+(`walk_across_room`, new: 1.5-3 s) / stoop to the gap under the shutter and speak 4-7 / hold 7-8 (was: cross+speak 1.5-5,
+3 s hold). Staging: the shutter covers the window down to the catches, so from the booth THEO must stoop to the gap to talk.
+Layout cameras A/B/C now list `shutter_catch` in `sees`. New refs (ChatGPT GPM tab): char_THEO (portrait, not tracked by
+the stills registry) and start SC01_g2 (plate B + THEO + end_SC01_g1), registered NOT approved; the door phase text now
+matches the still (door pushed with one hand, jar in the other). Open, Owner: approve THEO's look, start SC01_g2 and
+storyboard SC01_S2; then one 8 s send (8 credits). Later: MARA's face is hidden by the lowered shutter from camera A; SC02
+("looks at him over her glasses") needs staging (she stoops to the gap, or camera C side-on through the glass screen).
 Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
 `film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
 catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.

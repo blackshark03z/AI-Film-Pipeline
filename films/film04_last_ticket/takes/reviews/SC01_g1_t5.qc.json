@@ -1,0 +1,119 @@
+{
+  "take_id": "SC01_g1_t5",
+  "generation_id": "SC01_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "The clerk closes the window for the night: one routine pull.",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Same MARA as the approved start still (grey hair, glasses, mustard cardigan); calm, restrained.",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "She stays behind the glass; both hands under the shutter's bottom edge throughout; nothing passes through the shutter or glass.",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "One pull down, stops on the brass shutter catches at about 3.1 s and holds; no overshoot or push back up.",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Tracked shutter ROI: monotonic, peak = final 52.7 at 3.9 s; edge y 215 from 3.1 s = end still 215. Starts at 0.5 s, inside SETUP (minor).",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Locked close shot, no drift or cut.",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Matches the approved stills; 360p test quality; Flow sparkle mark bottom right (crop/cover at finishing).",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Single unbroken 4 s shot; start and last frame match the approved stills.",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Room tone and shutter sound (mean -38.8 dB, max -15.9 dB); no dialogue.",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "No dialogue; shutter sound with the pull.",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g1_t11.mp4 (chat: 'Tạm ổn, tiếp tục'); Tech Lead evidence: film.py motion PASS, zoom strip 0.4-3.2 s, last frame vs approved end still.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "640x360 h264 + aac, 3.97 s, decodes.",
+      "waiver": null
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "output_sha256": "743c0f914730511905108c08df9323886bb6b579c7fd103e742ee1642a8bca16"
+}
