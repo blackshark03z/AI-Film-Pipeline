@@ -267,7 +267,7 @@ Done when: film04 validate shows 3 = OWNER_PENDING (storyboard), 4 = BLOCK (no t
 or OWNER_PENDING with the real reason, 4 = OWNER_PENDING (unreviewed takes), 6 = OWNER_PENDING or BLOCK with the reason.
 Categories: 41, 80–90, 141–146 partials → re-tick.
 
-### P10-02 Start-still stage in the package — READY (after P10-01)
+### P10-02 Start-still stage in the package — DONE (dd00c4b)
 Files: new `src/film_pipeline/production/stills.py`, `tools/film.py stills`, `generate.py`, `animatic.py`, tests.
 `film.py stills --film F` lists each generation's still prompt (from the plan) and its state; `--register GID --image PATH
 [--source "ChatGPT GPM tab 2" --credits N]` copies the image under `media/stills/`, records sha256, the still-prompt hash it
