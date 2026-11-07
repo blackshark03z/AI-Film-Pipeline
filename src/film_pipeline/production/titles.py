@@ -109,9 +109,12 @@ def cast_names(pkg: Any) -> list[str]:
     return list(pre.characters) if pre is not None else []
 
 
-def credits_lines(pkg: Any, lang: str = "en", *, generators: str = "") -> tuple[list[tuple[str, int]], list[dict[str, str]]]:
-    """(lines, problems) of the end card in ``lang`` ('en' / 'vi')."""
+def credits_lines(pkg: Any, lang: str = "en", *, generators: Any = "") -> tuple[list[tuple[str, int]], list[dict[str, str]]]:
+    """(lines, problems) of the end card in ``lang`` ('en' / 'vi'). ``generators``: the text form or GeneratorRecords
+    (their roles are printed: 'Omni 1.1 Flash (video+audio); Nano Banana 2.1 (image)')."""
+    from film_pipeline.production.generators import generators_line
     from film_pipeline.production.sound_rights import attributions
+    generators = generators_line(generators)
     words = LABELS[lang]
     lines: list[tuple[str, int]] = [(pkg.header.title, 64)]
     names = cast_names(pkg)
@@ -321,7 +324,7 @@ def reframe_problems(section: EditSection, reframes: ReframePlan) -> list[dict[s
 # ------------------------------------------------------------------ the whole step
 
 def prepare(pkg: Any, *, clips_dir: Path | None = None, langs: tuple[str, ...] = ("en", "vi"),
-            generators: str = "") -> dict[str, Any]:
+            generators: Any = "") -> dict[str, Any]:
     """Credits, dialogue cues, sidecar texts and reframe checks for the EDL. Nothing is written."""
     section = pkg.typed.get("edit")
     if section is None or not section.events:

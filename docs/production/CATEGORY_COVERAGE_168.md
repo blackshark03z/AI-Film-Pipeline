@@ -186,9 +186,9 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 
 | ID | Category | Responsibility (code path / package field / operator receipt / N/A) | Status | Backlog |
 |---|---|---|---|---|
-| 147 | Mastering | `post.assemble` + `normalize_loudness` final master | HAVE | - |
+| 147 | Mastering | `post.assemble` + `normalize_loudness` final master; `film.json disclosure.ai_label` (`always` default / `title_card`) sets the body label and `deliver` samples frames of the master against it (`AI_LABEL_NOT_BURNED`) | HAVE | - |
 | 148 | Encoding | H.264/AAC 16:9 master and 9:16 version (`versions`, 720x1280, sound copied), faststart | HAVE | - |
-| 149 | Versioning | `versions`: 16:9 master + 9:16 reframe (focus from tags / reframe boxes, cards fitted); language versions are sidecar SRTs only | PARTIAL | - |
+| 149 | Versioning | `versions`: 16:9 master + 9:16 reframe (focus from tags / reframe boxes, cards fitted); language versions are sidecar SRTs only; generators named with role + settings (`--generators-file`). The 9:16 centre crop can cut off the bottom-left body label (not checked yet: P11-01) | PARTIAL | - |
 | 150 | Localization | EN/VI subtitle sidecars | PARTIAL | P5-04 |
 | 151 | Packaging | `delivery/`: marked masters, sidecars, thumbnails, metadata, QC, rights, package JSON, MANIFEST | HAVE | - |
 | 152 | Metadata | `versions/metadata.json`: title (source/vi), logline description, tags, AI disclosure, credits, hashes; DRAFT_NOT_PUBLISHED | HAVE | - |

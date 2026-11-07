@@ -456,6 +456,9 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
     entries = {t.take_id: t for t in load_log(root, pkg.header.film_id).takes}
     title, end = resolved_cards(pkg, section)
     title, end = title_lines or title, end_lines or end
+    # film.json disclosure.ai_label: "always" burns the small label over the body; "title_card" leaves the body clean
+    # (an empty label draws nothing, so the filter graph is the same either way)
+    label_text = "AI-generated" if pkg.header.disclosure.ai_label == "always" else ""
     fine = _is_fine(section)
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -499,7 +502,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
             sub_cues = [c.model_copy(update={"generation_id": "body", "start_s": at[c.generation_id] + c.start_s,
                                              "end_s": at[c.generation_id] + c.end_s}) for c in sub_cues]
             assemble([body], out, cues=sub_cues, title_lines=title, end_lines=end, title_s=section.title_s,
-                     end_s=section.end_s, overlays=overlays, grade="null")
+                     end_s=section.end_s, overlays=overlays, grade="null", label_text=label_text)
         else:
             clips: list[Path] = []
             for event, src, gain, box in zip(section.events, sources, gains, boxes):
@@ -515,7 +518,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
             overlays = [Overlay(generation_id=t.event_id, start_s=t.start_s, end_s=t.end_s, png=tag_png(i, t))
                         for i, t in enumerate(section.tags, 1)]
             assemble(clips, out, cues=sub_cues, title_lines=title, end_lines=end, title_s=section.title_s,
-                     end_s=section.end_s, overlays=overlays, grade=GRADE)
+                     end_s=section.end_s, overlays=overlays, grade=GRADE, label_text=label_text)
             lengths = {e.event_id: probe_video_duration(c) for e, c in zip(section.events, clips)}
             plan = timeline(section, durations, lengths)
     total = probe_video_duration(out)

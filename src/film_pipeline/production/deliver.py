@@ -35,6 +35,7 @@ from pydantic import Field
 from film_pipeline.core import ContractModel
 
 LABEL_WORD = re.compile(r"\bAI\b")
+BODY_LABEL = "AI-generated"  # the small bottom-left label drama.post.assemble burns over the body (film.json disclosure.ai_label)
 MANIFEST = "MANIFEST.json"
 PACKAGE_GLOBS = ("film.json", "script.fountain", "0[1-6]_*.json", "takes/*.json", "color/*.json", "titles/*.json",
                  "audio/*.json", "lock/*.json", "lock/history/*.json", "qc/*.json", "versions/*.json")
@@ -83,14 +84,9 @@ def _finding(code: str, severity: str, detail: str) -> dict[str, str]:
 # ------------------------------------------------------------------ disclosure
 
 def split_generators(text: str) -> list[Any]:
-    """'Google Flow Omni 1.1 Flash; Other Tool 2' -> GeneratorRecords (first word is the provider)."""
-    from film_pipeline.drama.disclosure import GeneratorRecord
-    out = []
-    for part in (p.strip() for p in text.split(";")):
-        if part:
-            provider, _, model = part.partition(" ")
-            out.append(GeneratorRecord(provider=provider, model=model or "unspecified", role="video+audio"))
-    return out
+    """'Google Flow Omni 1.1 Flash; Other Tool 2' -> role-less GeneratorRecords (first word is the provider)."""
+    from film_pipeline.production.generators import split_generators as split
+    return split(text)
 
 
 def visible_label(section: Any) -> Any:
@@ -102,13 +98,64 @@ def visible_label(section: Any) -> Any:
     return VisibleLabel(text="", start_s=0.0, duration_s=0.0)
 
 
-def build_disclosure(pkg: Any, section: Any, generators: str) -> Any:
+def build_disclosure(pkg: Any, section: Any, generators: Any) -> Any:
+    """`generators` is the `--generators` text or the records of a `--generators-file`."""
     from film_pipeline.drama.disclosure import Disclosure
     from film_pipeline.production import titles as ti
+    from film_pipeline.production.generators import as_records
+    label = visible_label(section)
+    if pkg.header.disclosure.ai_label == "always":  # the opening card names AI and a small label stays on for the whole body
+        label = label.model_copy(update={"watermark_text": BODY_LABEL, "watermark_always_on": True})
     return Disclosure(film_id=pkg.header.film_id, title=pkg.header.title, created=date.today().isoformat(),
-                      generators=split_generators(generators), post_tools=["ffmpeg"],
+                      generators=as_records(generators), post_tools=["ffmpeg"],
                       synthetic_persons=bool(ti.cast_names(pkg)), human_contribution=HUMAN_CONTRIBUTION,
-                      visible_label=visible_label(section), jurisdiction_notes=JURISDICTION)
+                      visible_label=label, jurisdiction_notes=JURISDICTION)
+
+
+def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int = 5, min_contrast: float = 25.0) -> dict[str, Any]:
+    """Look for the burned-in body label in sampled frames of the 16:9 master.
+
+    At each sample the label's glyph pixels (as `drama.post.ai_label_png` draws them) are compared with the ring around them;
+    the same comparison 400 px to the right is the control. A frame counts when the glyphs stand out by `min_contrast` luma
+    levels more than the control does. The label is present when 60 % of the sampled frames count."""
+    import subprocess
+    import tempfile
+    from PIL import Image, ImageFilter
+    from film_pipeline.drama.post import H, W, ai_label_png, probe_video_duration
+    total = probe_video_duration(master)
+    lo, hi = title_s + 0.3, total - end_s - 0.3
+    if hi <= lo:
+        return {"checked": 0, "positive": 0, "ok": False, "detail": "the body is too short to sample"}
+    times = [lo + (hi - lo) * (i + 0.5) / samples for i in range(samples)]
+    with tempfile.TemporaryDirectory() as tmp:
+        work = Path(tmp)
+        alpha = Image.open(ai_label_png(work / "label.png", BODY_LABEL)).split()[3]
+        glyph = alpha.point(lambda v: 255 if v > 100 else 0)
+        ring_img = glyph.filter(ImageFilter.MaxFilter(7))
+        box = glyph.getbbox()
+        if box is None:
+            return {"checked": 0, "positive": 0, "ok": False, "detail": "the label renders no pixels"}
+        x0, y0, x1, y1 = box[0] - 4, box[1] - 4, box[2] + 4, box[3] + 4
+        pixels = [(x, y) for y in range(max(0, y0), min(H, y1)) for x in range(max(0, x0), min(W, x1))]
+        on = [p for p in pixels if glyph.getpixel(p)]
+        ring = [p for p in pixels if ring_img.getpixel(p) and not glyph.getpixel(p)]
+        shift = 400
+
+        def contrast(frame: Any, dx: int) -> float:
+            mean = lambda ps: sum(frame.getpixel((x + dx, y)) for x, y in ps) / len(ps)  # noqa: E731
+            return mean(on) - mean(ring)
+
+        positive = 0
+        for n, t in enumerate(times):
+            png = work / f"f{n}.png"
+            done = subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", str(master), "-frames:v", "1", str(png)],
+                                  capture_output=True, text=True)
+            if done.returncode != 0 or not png.is_file():
+                raise ValueError(f"could not extract a frame at {t:.1f} s: {done.stderr.strip()[:200]}")
+            frame = Image.open(png).convert("L").resize((W, H))
+            positive += contrast(frame, 0) - contrast(frame, shift) >= min_contrast
+    need = -(-samples * 6 // 10)
+    return {"checked": samples, "positive": positive, "ok": positive >= need, "detail": f"{positive} of {samples} sampled frames show the label"}
 
 
 def mark_master(src: Path, dst: Path, disclosure: Any, disclosure_json: Path, *, c2pa: tuple[Path, Path] | None = None) -> Any:
@@ -181,7 +228,7 @@ def inventory(out: Path) -> list[FileEntry]:
 
 # ------------------------------------------------------------------ deliver
 
-def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: str = "", c2pa: tuple[Path, Path] | None = None) -> dict[str, Any]:
+def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c2pa: tuple[Path, Path] | None = None) -> dict[str, Any]:
     """Build ``delivery/``; returns the report (``ok`` false and nothing replaced when a BLOCK finding stands)."""
     from film_pipeline.drama import disclosure as D
     from film_pipeline.production import master_qc as mq
@@ -226,7 +273,19 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: str = "", c
         findings.append(_finding("AI_LABEL_MISSING", "BLOCK",
                                  "the opening title card carries no AI label: add a title line naming AI (05_edit.json `title`)"))
     if not disclosure.generators:
-        findings.append(_finding("GENERATORS_MISSING", "BLOCK", "no generator named for the disclosure (--generators)"))
+        findings.append(_finding("GENERATORS_MISSING", "BLOCK",
+                                 "no generator named for the disclosure (--generators or --generators-file)"))
+    label_mode = pkg.header.disclosure.ai_label
+    label_check: dict[str, Any] = {"mode": label_mode}
+    if label_mode == "always":  # the setting promises a label on the whole body: the master has to show it
+        try:
+            label_check["evidence"] = label_evidence(master, float(section.title_s), float(section.end_s))
+        except Exception as exc:  # noqa: BLE001 - an unreadable master is a finding, not a crash
+            label_check["evidence"] = {"checked": 0, "positive": 0, "ok": False, "detail": str(exc)[:200]}
+        if not label_check["evidence"]["ok"]:
+            findings.append(_finding("AI_LABEL_NOT_BURNED", "BLOCK",
+                                     f"film.json disclosure.ai_label is 'always' but the master does not show the label over "
+                                     f"the body ({label_check['evidence']['detail']}): render with film.py titles --render"))
 
     # ---- stage the archive
     stage = root / "delivery.staging"
@@ -293,6 +352,7 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: str = "", c
                                       "release_ready": release_ready, "files": len(manifest.files)}, filename="07_delivery.json")
     return {"film_id": film_id, "ok": True, "release_ready": release_ready, "archive": "delivery", "manifest_sha256": manifest_sha,
             "superseded": superseded.name if superseded else None, "package_files": copied, "findings": findings,
+            "ai_label": label_check,
             "external_dependencies": {"count": len(manifest.external_dependencies),
                                       "present": sum(d.present_at_delivery for d in manifest.external_dependencies)},
             "summary": {"files": len(manifest.files), "blocks": 0, "warnings": sum(f["severity"] == "WARN" for f in findings)}}

@@ -16,9 +16,23 @@ from film_pipeline.production.package import (  # noqa: E402
 )
 
 
+GENERATORS_FILE_HELP = ("JSON list of {role: video+audio|image|voice|music, name, model, settings}: what each generator made "
+                        "(instead of --generators)")
+
+
 def _emit(payload: dict) -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     print(json.dumps(payload, ensure_ascii=False, indent=2))
+
+
+def _generators(args):
+    """The generator input of titles / versions / deliver: the --generators text, or the records of --generators-file."""
+    if args.generators_file is None:
+        return args.generators
+    if args.generators:
+        raise ValueError("use --generators or --generators-file, not both")
+    from film_pipeline.production.generators import load_generators_file
+    return load_generators_file(args.generators_file)
 
 
 def scaffold(film_id: str, profile: str, root: Path, title: str | None) -> Path:
@@ -154,6 +168,7 @@ def main(argv: list[str] | None = None) -> int:
     tt.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
     tt.add_argument("--langs", default="en,vi", help="sidecar languages (default en,vi)")
     tt.add_argument("--generators", default="", help="generator line of the AI credit, e.g. 'Google Flow Omni 1.1 Flash'")
+    tt.add_argument("--generators-file", type=Path, help=GENERATORS_FILE_HELP)
     tt.add_argument("--render", action="store_true", help="also render the cut with credits, burned-in cues and reframes")
     tt.add_argument("--out", type=Path, help="titled cut (default <film>/media/cut/titled_cut.mp4)")
     tt.add_argument("--color", action="store_true", help="also apply the colour match of color/color.json")
@@ -167,6 +182,7 @@ def main(argv: list[str] | None = None) -> int:
     vs.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
     vs.add_argument("--portrait-source", type=Path, help="clean cut (no burned-in cues) with the master's clock and sound, cropped instead of the master")
     vs.add_argument("--generators", default="", help="generator line of the AI disclosure, e.g. 'Google Flow Omni 1.1 Flash'")
+    vs.add_argument("--generators-file", type=Path, help=GENERATORS_FILE_HELP)
     lg = actions.add_parser("ledger", help="learnings ledger of a film (ledger.json): observation until a second film shows it again")
     lg.add_argument("--film", required=True, type=Path)
     lg.add_argument("--add", metavar="TEXT", help="record a learning (needs --ref)")
@@ -179,6 +195,7 @@ def main(argv: list[str] | None = None) -> int:
     dv.add_argument("--video", type=Path, help="the 16:9 master (default <film>/media/cut/mixed.mp4)")
     dv.add_argument("--cut-report", type=Path, help="the .cut.json of the master (default: next to the video, else media/cut/rough_cut.cut.json)")
     dv.add_argument("--generators", default="", help="generator line of the disclosure, e.g. 'Google Flow Omni 1.1 Flash' (';' between several)")
+    dv.add_argument("--generators-file", type=Path, help=GENERATORS_FILE_HELP)
     dv.add_argument("--c2pa-cert", type=Path, help="PEM certificate chain for C2PA signing (with --c2pa-key)")
     dv.add_argument("--c2pa-key", type=Path, help="PEM private key for C2PA signing")
     dv.add_argument("--accept", metavar="NAME", help="record the Owner's acceptance of the current delivery (gates 1-5 must pass); builds nothing")
@@ -442,7 +459,7 @@ def main(argv: list[str] | None = None) -> int:
                 _emit({"error": "--c2pa-cert and --c2pa-key go together"})
                 return 2
             try:
-                report = dl_mod.deliver(pkg, video, report_path, generators=args.generators,
+                report = dl_mod.deliver(pkg, video, report_path, generators=_generators(args),
                                         c2pa=(args.c2pa_cert, args.c2pa_key) if args.c2pa_cert else None)
             except (ValueError, KeyError) as exc:
                 _emit({"error": str(exc)})
@@ -462,7 +479,7 @@ def main(argv: list[str] | None = None) -> int:
                 _emit({"error": "versions needs the .cut.json of the master (--cut-report)"})
                 return 2
             try:
-                report = vs_mod.build(pkg, video, report_path, portrait_source=args.portrait_source, generators=args.generators)
+                report = vs_mod.build(pkg, video, report_path, portrait_source=args.portrait_source, generators=_generators(args))
             except (ValueError, KeyError) as exc:
                 _emit({"error": str(exc)})
                 return 1
@@ -474,7 +491,7 @@ def main(argv: list[str] | None = None) -> int:
             from film_pipeline.production import titles as ti_mod
             from film_pipeline.production.mix import stamp_post_item
             try:
-                prepared = ti_mod.prepare(pkg, clips_dir=args.clips, generators=args.generators,
+                prepared = ti_mod.prepare(pkg, clips_dir=args.clips, generators=_generators(args),
                                           langs=tuple(x for x in args.langs.split(",") if x))
             except ValueError as exc:
                 _emit({"error": str(exc)})

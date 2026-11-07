@@ -336,6 +336,13 @@ only P11 items marked BLOCKED/LIVE remain.
 
 ## P11 — Found by P10 (rehearsal manual steps, review findings)
 
+### P11-01 The 9:16 version drops the body AI label — READY (found by P10-03)
+Files: `versions.py` (portrait render), `deliver.py` (`label_evidence` for the portrait), tests. `film.json disclosure.ai_label`
+`always` burns the label bottom-left of the 16:9 body (x 24–130 of 1280); the 9:16 centre/tag crop is ~404 px wide, so the
+label is cut off unless the window starts left of x≈130. Evidence: `portrait_segments` crop_x in `tests/test_production_versions.py`.
+Fix: draw the label onto the portrait body (and check it in `deliver` for `portrait_9x16`), or record why the portrait is
+exempt. Do not weaken the 16:9 check.
+
 ## P9 — Found by the loop
 
 ### P9-01 `test_dispatch_recovery` F0/F1 needs `film_pipeline` importable in its subprocess — DONE 07defac

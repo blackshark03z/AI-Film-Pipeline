@@ -51,6 +51,13 @@ class Budget(ContractModel):
         return None if self.credits_estimate is None else self.credits_estimate * self.cap_factor
 
 
+class DisclosureSettings(ContractModel):
+    """`film.json` `disclosure`: how visible the AI label is. `always` (default) = a small label over the whole body plus the
+    opening card; `title_card` = the opening card only. Weakening it is the Owner's call, never the code's default."""
+
+    ai_label: Literal["always", "title_card"] = "always"
+
+
 class FilmHeader(ContractModel):
     """Contents of `film.json`."""
 
@@ -63,6 +70,7 @@ class FilmHeader(ContractModel):
     resolution: str = "1280x720"
     generation_s: int = Field(default=8, gt=0)
     budget: Budget = Field(default_factory=Budget)
+    disclosure: DisclosureSettings = Field(default_factory=DisclosureSettings)
     gates: dict[str, GateState] = Field(default_factory=lambda: {k: "NOT_RUN" for k in GATE_NAMES})
 
     @field_validator("film_id")

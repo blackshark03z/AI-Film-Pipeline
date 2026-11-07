@@ -224,9 +224,12 @@ def thumbnails(pkg: Any, source: Path, plan: dict[str, Any], section: Any, out_d
 
 # ------------------------------------------------------------------ metadata
 
-def metadata_draft(pkg: Any, plan: dict[str, Any], versions: list[dict[str, Any]], *, generators: str = "") -> tuple[dict[str, Any], list[dict[str, Any]]]:
+def metadata_draft(pkg: Any, plan: dict[str, Any], versions: list[dict[str, Any]], *, generators: Any = "") -> tuple[dict[str, Any], list[dict[str, Any]]]:
     from film_pipeline.production import titles as ti
     from film_pipeline.production import sound_rights as sr
+    from film_pipeline.production.generators import as_records, generators_line
+    records = [g.model_dump(mode="json") for g in as_records(generators)]
+    generators = generators_line(generators)
     problems: list[dict[str, Any]] = []
     story = pkg.typed.get("story")
     source = pkg.header.language
@@ -246,11 +249,12 @@ def metadata_draft(pkg: Any, plan: dict[str, Any], versions: list[dict[str, Any]
     for issue in rights:
         problems.append(_problem("META_RIGHTS_OPEN", "WARN", f"{issue['code']} {issue['asset']}: {issue['detail']}"))
     if not generators:
-        problems.append(_problem("META_NO_GENERATORS", "WARN", "no generator named for the AI disclosure (pass --generators)"))
+        problems.append(_problem("META_NO_GENERATORS", "WARN", "no generator named for the AI disclosure (pass --generators or --generators-file)"))
     lang = "en" if source == "en" else "vi"
     words = ti.LABELS
     disclosure = {"ai_generated": True, "digital_source_type": "trainedAlgorithmicMedia", "synthetic_persons": bool(names),
-                  "generators": generators,
+                  "generators": generators, "generator_records": records,
+                  "ai_label": pkg.header.disclosure.ai_label,
                   "text": {code: (f"{words[code]['ai_with']}: {generators}" if generators else words[code]["ai_generic"])
                            + (f" {words[code]['synthetic']}" if names else "") for code in ("en", "vi")}}
     draft = {"film_id": pkg.header.film_id, "status": "DRAFT_NOT_PUBLISHED", "source_language": source,
@@ -264,7 +268,7 @@ def metadata_draft(pkg: Any, plan: dict[str, Any], versions: list[dict[str, Any]
 
 
 def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = None, portrait_source: Path | None = None,
-          generators: str = "") -> dict[str, Any]:
+          generators: Any = "") -> dict[str, Any]:
     """Write ``versions/`` (9:16 mp4, thumbnails, metadata.json, versions.json) and return the report."""
     from film_pipeline.production import titles as ti
     section = pkg.typed.get("edit")

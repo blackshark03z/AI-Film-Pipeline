@@ -15,9 +15,13 @@ EVENTS = [EditEvent(event_id="a", take_id="SC02_g1_t1"), EditEvent(event_id="b",
 LABELLED = [TextLine(text="The Front Desk", size=64), TextLine(text="Generated with AI", size=26)]
 
 
-def pipeline(tmp_path: Path, *, label=True, versions=True, mastercheck=True):
-    """film03's skeleton, three synthetic takes, then titles -> mix -> mastercheck -> versions, all through the CLI."""
+def pipeline(tmp_path: Path, *, label=True, versions=True, mastercheck=True, ai_label=None):
+    """film03's skeleton, three synthetic takes, then titles -> mix -> mastercheck -> versions, all through the CLI.
+    `ai_label` sets film.json disclosure.ai_label before the render (default: the header's own default)."""
     root, clips = film(tmp_path), tmp_path / "clips"
+    if ai_label:
+        header = json.loads((root / "film.json").read_text(encoding="utf-8"))
+        (root / "film.json").write_text(json.dumps({**header, "disclosure": {"ai_label": ai_label}}), encoding="utf-8")
     register(root, clips, ["SC02_g1", "SC03_g1", "SC04_g2"])
     (root / "05_edit.json").write_text(EditSection(events=EVENTS, title=LABELLED if label else []).model_dump_json(), encoding="utf-8")
     cut = root / "media" / "cut" / "titled_cut.mp4"
