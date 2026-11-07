@@ -3,7 +3,7 @@
     {
       "generation_id": "SC01_g1",
       "scene_id": "SC01",
-      "coverage": "MASTER",
+      "coverage": "SINGLE",
       "subject": "MARA",
       "foreground": "",
       "visible": [
@@ -19,23 +19,23 @@
             "kind": "SETUP",
             "start_s": 0.0,
             "end_s": 2.0,
-            "description": "MARA stands behind the counter, her hand on the shutter cord"
+            "description": "MARA stands behind the counter at the ticket window, her hand on the shutter cord, the wall clock beside her"
           },
           {
             "kind": "ACTION",
             "start_s": 2.0,
             "end_s": 6.0,
-            "description": "she pulls the shutter halfway down"
+            "description": "she pulls the shutter halfway down and stops, her hand still on the cord"
           },
           {
             "kind": "HOLD",
             "start_s": 6.0,
             "end_s": 8.0,
-            "description": "she glances at the wall clock reading 10:31"
+            "description": "she looks at the wall clock reading 10:31, then at the half-open shutter"
           }
         ],
         "once_actions": [
-          "pulls the shutter halfway down"
+          "pulls the shutter halfway down and stops"
         ],
         "gesture_budget": 1,
         "performance": [
@@ -64,13 +64,16 @@
         "prop_jar@1"
       ],
       "camera": {
-        "size": "WIDE",
+        "size": "MEDIUM_CLOSE",
         "angle": "EYE_LEVEL",
         "height": "EYE",
         "movement": "STATIC",
-        "lens_intent": "WIDE_ESTABLISH",
-        "composition": "master on the whole office"
-      }
+        "lens_intent": "NORMAL",
+        "composition": "medium close-up on MARA at the ticket window, the counter and the wall clock in frame"
+      },
+      "version": 2,
+      "repair_of": "SC01_g1@v1",
+      "repair_reason": "Owner review: the WIDE master gave no meaning (seated Mara, unreadable cord, clock and shutter). Re-staged as a MEDIUM_CLOSE single: standing at the ticket window, hand on the cord, pulls the shutter halfway and stops, looks at the clock then at the shutter."
     },
     {
       "generation_id": "SC01_g2",
@@ -911,6 +914,80 @@
         "movement": "STATIC",
         "lens_intent": "NORMAL",
         "composition": "two-shot side by side facing the train"
+      }
+    }
+  ],
+  "history": [
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "coverage": "MASTER",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC01_g1",
+      "end_state": "SC01_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC01_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA stands behind the counter, her hand on the shutter cord"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "she pulls the shutter halfway down"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "she glances at the wall clock reading 10:31"
+          }
+        ],
+        "once_actions": [
+          "pulls the shutter halfway down"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "routine, unhurried closing",
+            "visible_cues": [
+              "steady hands",
+              "a glance at the clock"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anxiety"
+          }
+        ]
+      },
+      "sfx": [
+        "shutter rolling down"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole office"
       }
     }
   ]

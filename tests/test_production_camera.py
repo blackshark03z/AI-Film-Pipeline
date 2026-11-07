@@ -158,6 +158,33 @@ def test_size_against_coverage(tmp_path):
     assert "CAMERA_SIZE_COVERAGE" in checks(issues, "WARN") and not blocking(issues)
 
 
+def test_a_lone_figure_acting_on_a_prop_at_wide_size_blocks_unless_the_wide_is_explained(tmp_path):
+    # film04 SC01_g1: MARA a tiny figure, the shutter and the clock unreadable; the viewer got no meaning from it
+    def solo(shots):
+        g = gen(shots, "SC02_g2")
+        g["visible"] = g["visible"][:1]
+
+    assert "CAMERA_ACTION_LEGIBLE" in checks(found(clone(tmp_path, shots=solo)))
+
+    def explained(shots):
+        solo(shots)
+        gen(shots, "SC02_g2")["camera"]["wide_reason"] = "the whole hall must read as empty"
+
+    assert "CAMERA_ACTION_LEGIBLE" not in checks(found(clone(sub(tmp_path, "b"), shots=explained)))
+
+
+def test_a_clock_time_in_a_wide_shot_blocks(tmp_path):
+    def clock(shots):
+        phase = next(p for p in gen(shots, "SC02_g2")["choreography"]["phases"] if p["kind"] in ("ACTION", "HOLD"))
+        phase["description"] = "she glances at the wall clock reading 10:31"
+
+    assert "CAMERA_ACTION_LEGIBLE" in checks(found(clone(tmp_path, shots=clock)))
+
+
+def test_a_two_person_wide_prop_beat_is_not_flagged(tmp_path):
+    assert "CAMERA_ACTION_LEGIBLE" not in checks(found(clone(tmp_path)))
+
+
 def test_lens_intent_against_size_and_millimetres(tmp_path):
     def lens(shots):
         gen(shots, "SC01_g1")["camera"].update(lens_intent="TELE_COMPRESS", lens_mm=135)

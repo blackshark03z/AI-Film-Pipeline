@@ -65,6 +65,15 @@ def test_list_shows_a_still_prompt_per_generation_and_what_is_waiting(root):
     assert all(len(r["prompt_sha256"]) == 64 for r in rows)
 
 
+def test_still_prompt_states_the_pose_of_the_first_instant_and_names_only_who_is_in_frame(root):
+    # film04 SC01_g1: the approved still showed MARA seated; the shot says she stands, hand on the cord,
+    # and the prompt called for a "two-shot, THEO left" with MARA alone
+    pkg = pkg_of(root)
+    prompt = S.still_prompts(pkg)["SC01_g1"]
+    assert "First instant: MARA stands behind the counter at the ticket window, her hand on the shutter cord, the wall clock beside her." in prompt
+    assert "THEO" not in prompt and "two-shot" not in prompt and "Only MARA in frame" in prompt
+
+
 def test_register_copies_the_image_records_it_and_never_approves(root, tmp_path):
     gid = head_and_chained(root)[0]
     image = png(tmp_path, "made.png")

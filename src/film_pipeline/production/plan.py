@@ -158,8 +158,11 @@ class _Plan:
         extras = f" {scene.extras.capitalize()}." if scene.extras and shot.coverage == "MASTER" else ""
         alone = "" if len(shown) > 1 else f" Only {shown[0]} in frame."
         location = self.pre.locations[scene.location].look
+        # film04 SC01_g1: the still showed MARA seated while the shot says she stands, hand on the cord
+        setup = next((p.description for p in decl.choreography.phases if p.kind == "SETUP"), "")
+        pose = f" First instant: {setup}." if setup and self.pre.still_templates.pose else ""
         return (f"Photoreal film still, 16:9, {self.pre.still_templates.framing[shot.coverage]}: "
-                f"{shot.describe(unit.axis_book)}. {location.text}. {people}.{props}{extras}{alone} "
+                f"{shot.describe(unit.axis_book)}. {location.text}. {people}.{props}{extras}{alone}{pose} "
                 "Faces and clothes exactly as in the attached character images. Natural, restrained "
                 "expressions. No text, no logos.")
 

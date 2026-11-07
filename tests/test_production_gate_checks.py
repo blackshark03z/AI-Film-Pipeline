@@ -166,7 +166,7 @@ def test_gate4_no_take_blocks_unreviewed_is_pending_all_accepted_passes(tmp_path
     root = clone(tmp_path)
     pkg = load_package(root)
     res = gate(pkg, "4")
-    assert res.status == "BLOCK" and res.issues[0] == "SC01_g1: no take of shot version 1"
+    assert res.status == "BLOCK" and res.issues[0] == f"SC01_g1: no take of shot version {pkg.typed['shots'].generations[0].version}"
     entries = register_all(root, pkg)
     res = gate(root, "4")
     assert res.status == "OWNER_PENDING" and "waits for a human review" in res.issues[0]
@@ -192,7 +192,7 @@ def test_gate4_rejected_take_blocks_and_an_old_shot_version_does_not_count(tmp_p
     log.takes[0].shot_version = 7
     log.takes[0].status = "ACCEPTED"
     T.save_log(root, log)
-    assert "no take of shot version 1 (older: SC01_g1_t1)" in gate(root, "4").issues[0]
+    assert f"no take of shot version {pkg.typed['shots'].generations[0].version} (older: SC01_g1_t1)" in gate(root, "4").issues[0]
 
 
 def test_gate4_accepted_without_a_review_or_with_changed_bytes_blocks(tmp_path):

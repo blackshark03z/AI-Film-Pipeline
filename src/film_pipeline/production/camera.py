@@ -15,6 +15,9 @@ Rules (`camera_issues`):
 * ``CAMERA_SIZE_RUN``    three identical sizes in a row inside one scene is a BLOCK, across scenes a WARN, unless every
                          repeat declares `declared_repeat` (e.g. a deliberate shot / reverse-shot rhythm)
 * ``CAMERA_SIZE_COVERAGE`` the size must fit the coverage type (a MASTER is not a CLOSE); one step off is a WARN
+* ``CAMERA_ACTION_LEGIBLE`` a WIDE shot with ONE person in frame whose ACTION/CONSEQUENCE/HOLD phases act on one of its own
+                         props (``prop_*`` design refs), or any WIDE shot that reads a clock time, cannot be read by a viewer at that size (film04 SC01_g1: MARA a
+                         tiny figure, shutter and clock unreadable): BLOCK unless `wide_reason` says why wide is right
 * ``CAMERA_LENS_SIZE``   lens intent against size (tele compression on a wide, a wide-angle lens on a close) is a WARN
 * ``LIGHT_JUMP``         the key light of a location changes between scenes of the same time of day: WARN
 
@@ -26,6 +29,7 @@ names the compiled fields and `prompt_hint` renders the optional text a route th
 """
 from __future__ import annotations
 
+import re
 from typing import Any, Literal
 
 from pydantic import Field, model_validator
@@ -48,6 +52,7 @@ _SIZE_ORDER = ["EXTREME_WIDE", "WIDE", "MEDIUM", "MEDIUM_CLOSE", "CLOSE", "INSER
 _COVERAGE_SIZE = {"MASTER": "WIDE", "TWO_SHOT": "MEDIUM", "OTS": "MEDIUM_CLOSE", "SINGLE": "CLOSE",
                   "REACTION": "MEDIUM_CLOSE"}
 _WIDE_SIZES, _TIGHT_SIZES = {"EXTREME_WIDE", "WIDE"}, {"CLOSE", "INSERT"}
+_CLOCK_TIME = re.compile(r"\b\d{1,2}:\d{2}\b")
 
 
 class Practical(ContractModel):
@@ -75,6 +80,7 @@ class CameraSetup(ContractModel):
     side: CameraSide = "ESTABLISHED"
     crossing_note: str = ""
     declared_repeat: str = ""  # why the same size again is deliberate
+    wide_reason: str = ""  # why a prop / clock beat is deliberately played wide
 
     @model_validator(mode="after")
     def _crossing_is_motivated(self) -> "CameraSetup":
@@ -137,6 +143,18 @@ def _per_shot(pre: Any, shots: Any, out: list[RuleIssue]) -> None:
             elif gap > 1 and cam.size != "INSERT":
                 _issue(out, "CAMERA_SIZE_COVERAGE", "WARN",
                        f"{gid}: {cam.size} is {gap} steps from the usual {expect} for {g.coverage}")
+        if cam.size in _WIDE_SIZES and not cam.wide_reason.strip():
+            beat = " ".join(p.description for p in g.choreography.phases
+                            if p.kind in ("ACTION", "CONSEQUENCE", "HOLD")).lower()
+            props = [r.split("@")[0][len("prop_"):].replace("_", " ") for r in g.design_refs if r.startswith("prop_")]
+            # a lone figure acting on a prop is the unreadable case; a clock time is unreadable at any head count
+            solo = len(g.visible) == 1
+            hits = ([p for p in props if p and p in beat] if solo else []) + (
+                ["a clock time"] if _CLOCK_TIME.search(beat) else [])
+            if hits:
+                _issue(out, "CAMERA_ACTION_LEGIBLE", "BLOCK",
+                       f"{gid}: a {cam.size} shot plays a beat on {', '.join(hits)}; the viewer cannot read it at that size "
+                       "- use MEDIUM or closer, or give camera.wide_reason")
         if (cam.lens_intent == "TELE_COMPRESS" and cam.size in _WIDE_SIZES) or (
                 cam.lens_intent == "WIDE_ESTABLISH" and cam.size in _TIGHT_SIZES):
             _issue(out, "CAMERA_LENS_SIZE", "WARN", f"{gid}: lens intent {cam.lens_intent} on a {cam.size} shot")

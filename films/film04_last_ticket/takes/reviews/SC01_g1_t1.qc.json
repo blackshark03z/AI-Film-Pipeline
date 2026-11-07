@@ -1,0 +1,119 @@
+{
+  "take_id": "SC01_g1_t1",
+  "generation_id": "SC01_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "Owner creative review of the take SC01_g1_t6.mp4, 2026-11-07 (chat): the shot gives the viewer no meaning - Mara sits pulling the cord and the window shutter closes.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Owner words: the shot does not create meaning for the viewer. She sits (the start still seated her), pulls a cord, the shutter closes; at WIDE size the cord, clock and 10:31 cannot be read.",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    }
+  ],
+  "cause": "STAGING",
+  "cause_note": "Primary: WIDE master on a lone figure acting on a prop - re-stage as a closer single. Also START_FRAME (still seated Mara, not the first-instant pose) and PROMPT (named absent THEO in a two-shot). Pipeline fixes: describe() per people in frame, still_prompt first-instant pose, CAMERA_ACTION_LEGIBLE rule.",
+  "output_sha256": "0c00dccef2c106c2d4c83f3c68dd0e57e140cc38c280db143e8a59b3af324e0b"
+}

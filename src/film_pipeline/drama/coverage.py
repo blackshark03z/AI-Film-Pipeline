@@ -67,6 +67,11 @@ class CoverageShot(ContractModel):
 
     def describe(self, book: AxisBook) -> str:
         if self.coverage == "MASTER":
+            # film04 SC01_g1 asked for a "two-shot, THEO left" with MARA alone in
+            # frame, because the scene's axis book lists both people
+            alone = [c for c in self.axis.visible if c in book.sides]
+            if len(self.axis.visible) == 1 and alone:
+                return f"wide shot, {alone[0]} {book.sides[alone[0]].lower()}"
             placed = ", ".join(f"{c} {s.lower()}"
                                for c, s in book.sides.items())
             kind = "wide two-shot" if len(book.sides) <= 2 else "wide shot"

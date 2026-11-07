@@ -306,6 +306,17 @@ dung toi da han muc"; flag back to NO). film04 is a strict hand-off chain: every
 to be ACCEPTED (its end frame is the next start frame), so only the Owner's take review (R7) unblocks SC01_g2. The only independent
 generation is SC06_g1 (needs its start still made and approved). Rights checkpoint 3 is still an open Owner decision.
 
+### P13-01 A shot must be readable: wide size, absent people, still pose — DONE (found by the Owner's review of SC01_g1_t1, 2026-11-07)
+Owner: the take "gave the viewer no meaning - she sits pulling the cord, the shutter closes". Causes, by stage that missed them:
+planner/prompt (`CoverageShot.describe`) named THEO in a two-shot with MARA alone; still prompt (`still_prompt`) never stated the SETUP pose, so
+the approved start still seated MARA; camera plan let a WIDE master carry a lone figure acting on a prop and a clock time. Fixes: `describe` names
+only who is in frame; `StillTemplates.pose` (film04 on, film03 off to keep its golden) adds "First instant: <SETUP>"; `CAMERA_ACTION_LEGIBLE`
+(BLOCK) for a WIDE shot with one person acting on its own prop or a clock time, unless `camera.wide_reason`. Tests in test_drama_scene_bible,
+test_production_stills, test_production_camera; focused suite 752 passed, 1 skipped. film04 SC01_g1: take rejected (narrative P0, cause STAGING),
+pickup to v2 = MEDIUM_CLOSE SINGLE at the ticket window; B1 coverage plan MASTER -> SINGLE; new start still registered (0 credits), NOT approved;
+storyboard needs the Owner's re-approval (plan re-run). Open: Owner approves still + storyboard, then one resend (~6 credits, OWNER_GO_LIVE YES->NO).
+SC03_g1 is still a two-person WIDE with a jar-on-counter beat (not flagged by the rule; no take yet).
+
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
 
 Phase rule: every item ends with its own tests + the focused suite. No item may weaken an existing assertion; where a test

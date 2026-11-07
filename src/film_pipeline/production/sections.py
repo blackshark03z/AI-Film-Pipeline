@@ -77,6 +77,7 @@ class StillTemplates(ContractModel):
     framing: dict[str, str]  # coverage kind -> framing phrase
     character: str  # contains {text}
     plate: str  # contains {text}
+    pose: bool = False  # state the SETUP pose as the still's first instant (off keeps film03's frozen golden prompts)
 
 
 DesignKind = Literal["look", "costume", "hair_makeup", "prop", "location"]

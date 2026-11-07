@@ -32,7 +32,7 @@
   ],
   "coverage_plan": {
     "B1": [
-      "MASTER",
+      "SINGLE",
       "OTS"
     ],
     "B2": [

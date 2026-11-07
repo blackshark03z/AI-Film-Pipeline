@@ -252,3 +252,17 @@ def test_master_with_three_people_is_not_a_two_shot(sample):
     book = AxisBook(scene_id="S", axis_pair=["MAI", "HÙNG"],
                     sides={"MAI": "LEFT", "HÙNG": "RIGHT", "LAN": "LEFT"})
     assert master.describe(book).startswith("wide shot, ")
+
+
+def test_master_with_one_person_in_frame_names_only_that_person(sample):
+    # film04 SC01_g1: MARA alone, yet the prompt said "wide two-shot, THEO left, MARA right"
+    from film_pipeline.drama import AxisBook
+    from film_pipeline.drama.axis import axis_record
+    _, _, unit = sample
+    master = unit.shots[0]
+    book = AxisBook(scene_id="S", axis_pair=["MARA", "THEO"], sides={"THEO": "LEFT", "MARA": "RIGHT"})
+    alone = master.model_copy(update={"axis": axis_record(book, "S_S1", ["MARA"])})
+    text = alone.describe(book)
+    assert text == "wide shot, MARA right" and "THEO" not in text and "two-shot" not in text
+    both = master.model_copy(update={"axis": axis_record(book, "S_S1", ["MARA", "THEO"])})
+    assert both.describe(book).startswith("wide two-shot")

@@ -11,11 +11,11 @@
       "credits": 12.0,
       "output_file": "SC01_g1_t6.mp4",
       "output_sha256": "0c00dccef2c106c2d4c83f3c68dd0e57e140cc38c280db143e8a59b3af324e0b",
-      "status": "GENERATED",
+      "status": "REJECTED",
       "shot_version": 1,
-      "cause": "",
+      "cause": "STAGING",
       "registered_at": "2026-11-07T11:28:55Z",
-      "review_file": "dailies/SC01_g1_t1.review.json"
+      "review_file": "reviews/SC01_g1_t1.qc.json"
     }
   ]
 }
