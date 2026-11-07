@@ -329,7 +329,7 @@ versions.py, deliver.py, report.py, gates.py, stills.py, rehearsal.py`). Prompt:
 unchecked, any path that self-accepts footage or sends to a provider without `OWNER_GO_LIVE: YES`. Save the review under
 `docs/production/reviews/`; each confirmed finding becomes a P11 item (READY, with evidence); fix none in this item.
 
-### P10-09 Phase close — READY (after P10-08)
+### P10-09 Phase close — DONE (232b392)
 Full suite; `IMPLEMENTATION_STATUS.md` row with the four Product Progress Gate answers (product delta, proof class,
 main blocker, next choice); update `docs/operating/CURRENT_SLICE.md` "Where things stand" table; push. Then stop the loop if
 only P11 items marked BLOCKED/LIVE remain.
