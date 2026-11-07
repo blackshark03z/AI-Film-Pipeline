@@ -77,7 +77,9 @@ JS_SLOT_BYTES = r"""async ([x, y]) => { const i = [...document.images].find(
         && Math.abs(r.y + r.height / 2 - y) < 90 });
     if (!i) return null; const r = await fetch(i.currentSrc || i.src);
     return Array.from(new Uint8Array(await r.arrayBuffer())) }"""
-SLOT_DIFF_MAX = 12.0     # mean abs grey diff at 64x36; other stills >= 40
+SLOT_DIFF_MAX = 4.0      # mean abs grey diff at 64x36; the same still scores 0-1,
+                         # a sibling still of the same room 7 (film04 plate), others >= 40
+PICKER_MARGIN = 3.0      # the best picker match must beat the runner-up by this much
 
 
 def slot_diff(data: bytes, still: Path) -> float:
@@ -117,6 +119,44 @@ async def _picker_find(page, tok: str, over: tuple[int, int],
             if await page.evaluate(JS_PICKER_AT, tok) == xy:
                 return xy
             continue
+        await page.mouse.move(*over)
+        await page.mouse.wheel(0, 250)
+        await page.wait_for_timeout(500)
+    return None
+
+
+JS_PICKER_THUMBS = r"""async () => { const out = [];
+    for (const i of document.images) { const r = i.getBoundingClientRect();
+        if (!(r.width > 0 && r.width < 80 && r.y > 0 && r.bottom < innerHeight)) continue;
+        try { const b = await (await fetch(i.currentSrc || i.src)).arrayBuffer();
+            out.push([r.x + r.width / 2, r.y + r.height / 2, Array.from(new Uint8Array(b))]);
+        } catch (_) {} }
+    return out }"""
+
+
+async def _picker_find_image(page, still: Path, over: tuple[int, int],
+                             scrolls: int = 16):
+    """Find the picker item that IS the approved still, by its pixels.
+
+    A thumbnail token tail changes between page loads (P3-05 attempt 4: the
+    same still showed under another token), so the tail cannot name it. The
+    pixels can: one picker image must match the still (diff <=
+    SLOT_DIFF_MAX) and beat the runner-up by PICKER_MARGIN (a sibling still of
+    the same room scores about 7). Otherwise None. The slot is checked again
+    after the click (start_slot_diff)."""
+    for _ in range(scrolls + 1):
+        await page.wait_for_timeout(300)
+        scored = []
+        for x, y, data in await page.evaluate(JS_PICKER_THUMBS):
+            try:
+                scored.append((slot_diff(bytes(data), still), x, y))
+            except Exception:  # noqa: BLE001 - undecodable thumbnail
+                continue
+        scored.sort()
+        if scored and scored[0][0] <= SLOT_DIFF_MAX:
+            if len(scored) == 1 or scored[1][0] >= scored[0][0] + PICKER_MARGIN:
+                return scored[0][1], scored[0][2]
+            return None   # two near-identical candidates: refuse
         await page.mouse.move(*over)
         await page.mouse.wheel(0, 250)
         await page.wait_for_timeout(500)
@@ -191,70 +231,97 @@ JS_SCROLL_STEP = r"""(y) => { let moved = false;
             const was = e.scrollTop; e.scrollTop = y; if (e.scrollTop !== was) moved = true } });
     return moved }"""
 
-JS_VIDEO_TITLES = r"""() => [...document.querySelectorAll('flow-grid-tile-container')]
-    .filter(c => c.querySelector('flow-video-tile'))
-    .map(c => c.getAttribute('aria-label') || '')"""
+# video containers with their absolute grid position (scroller-relative), so a
+# recycled virtual-list node or a repeated title never counts twice
+JS_VIDEO_GRID = r"""() => [...document.querySelectorAll('flow-grid-tile-container')]
+    .filter(c => c.querySelector('flow-video-tile')).map(c => {
+        let s = c.parentElement;
+        while (s && !(s.clientHeight > 300 && s.scrollHeight > s.clientHeight + 50
+                      && getComputedStyle(s).overflowY !== 'visible')) s = s.parentElement;
+        const r = c.getBoundingClientRect(), sr = s ? s.getBoundingClientRect() : {top: 0};
+        return [Math.round((r.top - sr.top + (s ? s.scrollTop : 0)) / 8),
+                Math.round(r.left / 8), c.getAttribute('aria-label') || ''] })"""
 
-JS_TITLE_TOKEN = r"""(t) => { const c = [...document.querySelectorAll('flow-grid-tile-container')]
-    .filter(c => c.querySelector('flow-video-tile') && c.getAttribute('aria-label') === t);
-    if (c.length !== 1) return {n: c.length, tok: null};
-    const i = c[0].querySelector('img');
+# mark the n-th video tile of the grid at scroll 0 (top-to-bottom, left-to-right)
+JS_MARK_NTH = r"""(n) => { document.querySelectorAll('[data-vp-n]').forEach(e => e.removeAttribute('data-vp-n'));
+    const cs = [...document.querySelectorAll('flow-grid-tile-container')]
+        .filter(c => c.querySelector('flow-video-tile'))
+        .map(c => { const r = c.getBoundingClientRect(); return [r.top, r.left, c] })
+        .sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    if (!cs[n]) return false; cs[n][2].setAttribute('data-vp-n', '1'); return true }"""
+
+JS_MARKED_TOKEN = r"""() => { const c = document.querySelector('[data-vp-n]');
+    const i = c && c.querySelector('img');
     const m = i && (i.currentSrc || i.src).match(/\/asb\/([A-Za-z0-9_\-]{24,})/);
-    return {n: 1, tok: m ? m[1] : null} }"""
+    return m ? m[1] : null }"""
 
 
-async def video_titles(page) -> list[str]:
-    """Titles of every video tile in the (virtualised) gallery, scrolled through once.
-
-    A set, not a multiset: one title seen at two scroll positions is one tile,
-    and a new tile whose title repeats an old one is refused (UNBOUND) later.
-    """
-    seen: set[str] = set()
-    for y in range(0, 20000, 500):
+async def video_count(page) -> int:
+    """Number of video tiles in the (virtualised) gallery, each counted once by
+    its grid position; scrolled through top to bottom, then back to the top."""
+    seen: set[tuple[int, int]] = set()
+    for y in range(0, 40000, 400):
         moved = await page.evaluate(JS_SCROLL_STEP, y)
-        await page.wait_for_timeout(700)
-        seen.update(t for t in await page.evaluate(JS_VIDEO_TITLES) if t)
+        await page.wait_for_timeout(600)
+        seen.update((a, b) for a, b, _ in await page.evaluate(JS_VIDEO_GRID))
         if not moved and y > 0:
             break
     await page.evaluate(JS_TOP)
     await page.wait_for_timeout(500)
-    return sorted(seen)
+    return len(seen)
 
 
-async def detail_bind(page, titles_before: list[str], prompt: str, rec: dict) -> str | None:
-    """P12-01: bind the one new video tile by its detail page; returns its token."""
+async def read_nth_detail(page, n: int, home: str) -> dict | None:
+    """Open the n-th video tile (gallery at scroll 0), read its detail page
+    (URL has the media id, body has the prompt), come back to the gallery."""
+    await page.evaluate(JS_TOP)
+    await page.wait_for_timeout(500)
+    if not await page.evaluate(JS_MARK_NTH, n):
+        return None
+    await page.locator("[data-vp-n] flow-video-tile").first.click(timeout=8000)
+    await page.wait_for_timeout(3500)
+    out = {"url": page.url, "text": await page.evaluate("document.body.innerText")}
+    await page.goto(home, timeout=45000)
+    await page.wait_for_timeout(4000)
+    await page.evaluate(JS_TOP)
+    return out
+
+
+async def front_snapshot(page, home: str) -> dict:
+    """Before the send: how many videos exist and which media id is in front."""
+    n = await video_count(page)
+    d = await read_nth_detail(page, 0, home) if n else None
+    return {"n": n, "front_id": fb.media_id_from_url(d["url"]) if d else None}
+
+
+async def detail_bind(page, pre: dict, prompt: str, rec: dict) -> str | None:
+    """P12-01: bind the new front video tile; returns its thumbnail token.
+
+    Proof, not position: one more tile than before, the old front tile now
+    second (same media id), the new front tile is a different media id and
+    its detail page holds the whole sent prompt."""
     home = page.url
-    after = await video_titles(page)
-    rec["titles_before"], rec["titles_after"] = len(titles_before), len(after)
-    cand = fb.new_titles(titles_before, after)
-    details: dict[str, dict] = {}
-    if len(cand) == 1:
-        loc = page.locator("flow-grid-tile-container[aria-label=%s] flow-video-tile"
-                           % json.dumps(cand[0], ensure_ascii=False))
-        if await loc.count() == 1:
-            await loc.first.click(timeout=8000)
-            await page.wait_for_timeout(3500)
-            details[cand[0]] = {"url": page.url,
-                                "text": await page.evaluate("document.body.innerText")}
-            await page.goto(home, timeout=45000)
-            await page.wait_for_timeout(4000)
-            await page.evaluate(JS_TOP)
-    verdict = fb.decide(titles_before, after, details, prompt)
-    rec["detail_bind"] = {k: (v[-8:] if k == "media_id" else v)
-                          for k, v in verdict.items() if k != "title"}
+    n_after = await video_count(page)
+    front = second = None
+    if n_after == pre["n"] + 1:
+        front = await read_nth_detail(page, 0, home)
+        if pre["n"]:
+            second = await read_nth_detail(page, 1, home)
+    verdict = fb.decide_front(pre["n"], n_after, pre["front_id"], front, second, prompt)
+    rec["detail_bind"] = {"n_before": pre["n"], "n_after": n_after,
+                          **{k: (v[-8:] if k == "media_id" else v) for k, v in verdict.items()}}
     if verdict["result"] != "BOUND":
         rec["result"] = verdict["result"]
         return None
+    await page.evaluate(JS_MARK_NTH, 0)
     for _ in range(6):   # the thumbnail of a finished tile can load late
-        got = await page.evaluate(JS_TITLE_TOKEN, verdict["title"])
-        if got["n"] != 1:
-            rec["result"], rec["detail_bind"]["why"] = "AMBIGUOUS", "title not unique on the page"
-            return None
-        if got["tok"]:
+        tok = await page.evaluate(JS_MARKED_TOKEN)
+        if tok:
             rec["binding"] = verdict["binding"]
             rec["media_id_tail"] = verdict["media_id"][-8:]
-            return got["tok"]
+            return tok
         await page.wait_for_timeout(5000)
+        await page.evaluate(JS_MARK_NTH, 0)
     rec["result"], rec["detail_bind"]["why"] = "UNBOUND", "bound tile has no thumbnail token"
     return None
 
@@ -291,9 +358,9 @@ async def run(args) -> dict:
         await page.evaluate(JS_TOP)
         await page.wait_for_timeout(1500)
         baseline = set(await page.evaluate(JS_TOKENS))
-        # P12-01: tile titles BEFORE the send; a lazy thumbnail can make an old
-        # clip look new by token, a title never changes
-        titles_before = [] if args.image else await video_titles(page)
+        # P12-01: the video count and the front media id BEFORE the send; a lazy
+        # thumbnail can make an old clip look new by token, a media id never changes
+        pre = None if args.image else await front_snapshot(page, page.url)
         bodies: list[str] = []
 
         trace: list[dict] = []   # P3-05: where does a video result arrive? paths only, never bodies or signed URLs
@@ -329,6 +396,10 @@ async def run(args) -> dict:
                 await page.mouse.click(*START_XY)
                 await page.wait_for_timeout(1500)
                 xy = await _picker_find(page, args.start[4:], START_LIST_XY)
+                rec["start_found_by"] = "token_tail"
+                if xy is None and args.start_file:   # tail changed: use pixels
+                    xy = await _picker_find_image(page, Path(args.start_file), START_LIST_XY)
+                    rec["start_found_by"] = "pixels"
                 if xy is not None:
                     break
             await page.wait_for_timeout(500)
@@ -420,9 +491,10 @@ async def run(args) -> dict:
             # film03: four failed video jobs each "found" one new tile -- an
             # older take's re-issued thumbnail -- and saved that take again;
             # P3-05: Omni Flash never puts the prompt on the network. A video
-            # is kept only when exactly ONE title is new and its detail page
+            # is kept only when the gallery has exactly one more video, the old
+            # front video is now second and the new front video's detail page
             # holds the whole sent prompt (DETAIL_PROMPT_MATCH).
-            token = await detail_bind(page, titles_before, prompt, rec)
+            token = await detail_bind(page, pre, prompt, rec)
             if token is None:
                 tail = await page.evaluate(
                     "document.body.innerText.slice(0, 1500)")
