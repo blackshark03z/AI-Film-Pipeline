@@ -11,7 +11,9 @@ Custody (WP1b):
      written; no signed URL, cookie or token is persisted);
   3. the output is the ONE new token absent from the baseline; it is
      network-bound when a decoded response frame holds both that token and
-     the prompt text (``NETWORK_PROMPT_MATCH``), else ``NEW_TILE_ONLY``;
+     the prompt text (``NETWORK_PROMPT_MATCH``), else ``NEW_TILE_ONLY``
+     (images only). A video with no network match is bound from its detail
+     page (``DETAIL_PROMPT_MATCH``, see ``flow_bind.py``);
   4. the video under that exact tile is downloaded and hashed.
 Result: PASSED, BLOCKED, SEND_FAILED, AMBIGUOUS, UNBOUND or TIMEOUT, written as a JSON
 manifest next to OUT_MP4 (``<stem>.take.json``). Every send spends credits.
@@ -28,6 +30,9 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import flow_bind as fb  # noqa: E402
 
 CDP = "http://127.0.0.1:9333"
 TOKEN_RE = re.compile(r"/asb/([A-Za-z0-9_\-]{24,})")
@@ -179,6 +184,81 @@ def bind(bodies: list[str], token: str, prompt: str) -> bool:
     return False
 
 
+JS_SCROLL_STEP = r"""(y) => { let moved = false;
+    document.querySelectorAll('*').forEach(e => {
+        if (e.clientHeight > 300 && e.scrollHeight > e.clientHeight + 50
+            && getComputedStyle(e).overflowY !== 'visible') {
+            const was = e.scrollTop; e.scrollTop = y; if (e.scrollTop !== was) moved = true } });
+    return moved }"""
+
+JS_VIDEO_TITLES = r"""() => [...document.querySelectorAll('flow-grid-tile-container')]
+    .filter(c => c.querySelector('flow-video-tile'))
+    .map(c => c.getAttribute('aria-label') || '')"""
+
+JS_TITLE_TOKEN = r"""(t) => { const c = [...document.querySelectorAll('flow-grid-tile-container')]
+    .filter(c => c.querySelector('flow-video-tile') && c.getAttribute('aria-label') === t);
+    if (c.length !== 1) return {n: c.length, tok: null};
+    const i = c[0].querySelector('img');
+    const m = i && (i.currentSrc || i.src).match(/\/asb\/([A-Za-z0-9_\-]{24,})/);
+    return {n: 1, tok: m ? m[1] : null} }"""
+
+
+async def video_titles(page) -> list[str]:
+    """Titles of every video tile in the (virtualised) gallery, scrolled through once.
+
+    A set, not a multiset: one title seen at two scroll positions is one tile,
+    and a new tile whose title repeats an old one is refused (UNBOUND) later.
+    """
+    seen: set[str] = set()
+    for y in range(0, 20000, 500):
+        moved = await page.evaluate(JS_SCROLL_STEP, y)
+        await page.wait_for_timeout(700)
+        seen.update(t for t in await page.evaluate(JS_VIDEO_TITLES) if t)
+        if not moved and y > 0:
+            break
+    await page.evaluate(JS_TOP)
+    await page.wait_for_timeout(500)
+    return sorted(seen)
+
+
+async def detail_bind(page, titles_before: list[str], prompt: str, rec: dict) -> str | None:
+    """P12-01: bind the one new video tile by its detail page; returns its token."""
+    home = page.url
+    after = await video_titles(page)
+    rec["titles_before"], rec["titles_after"] = len(titles_before), len(after)
+    cand = fb.new_titles(titles_before, after)
+    details: dict[str, dict] = {}
+    if len(cand) == 1:
+        loc = page.locator("flow-grid-tile-container[aria-label=%s] flow-video-tile"
+                           % json.dumps(cand[0], ensure_ascii=False))
+        if await loc.count() == 1:
+            await loc.first.click(timeout=8000)
+            await page.wait_for_timeout(3500)
+            details[cand[0]] = {"url": page.url,
+                                "text": await page.evaluate("document.body.innerText")}
+            await page.goto(home, timeout=45000)
+            await page.wait_for_timeout(4000)
+            await page.evaluate(JS_TOP)
+    verdict = fb.decide(titles_before, after, details, prompt)
+    rec["detail_bind"] = {k: (v[-8:] if k == "media_id" else v)
+                          for k, v in verdict.items() if k != "title"}
+    if verdict["result"] != "BOUND":
+        rec["result"] = verdict["result"]
+        return None
+    for _ in range(6):   # the thumbnail of a finished tile can load late
+        got = await page.evaluate(JS_TITLE_TOKEN, verdict["title"])
+        if got["n"] != 1:
+            rec["result"], rec["detail_bind"]["why"] = "AMBIGUOUS", "title not unique on the page"
+            return None
+        if got["tok"]:
+            rec["binding"] = verdict["binding"]
+            rec["media_id_tail"] = verdict["media_id"][-8:]
+            return got["tok"]
+        await page.wait_for_timeout(5000)
+    rec["result"], rec["detail_bind"]["why"] = "UNBOUND", "bound tile has no thumbnail token"
+    return None
+
+
 def probe_duration(path: Path) -> float | None:
     try:
         out = subprocess.run(
@@ -211,6 +291,9 @@ async def run(args) -> dict:
         await page.evaluate(JS_TOP)
         await page.wait_for_timeout(1500)
         baseline = set(await page.evaluate(JS_TOKENS))
+        # P12-01: tile titles BEFORE the send; a lazy thumbnail can make an old
+        # clip look new by token, a title never changes
+        titles_before = [] if args.image else await video_titles(page)
         bodies: list[str] = []
 
         trace: list[dict] = []   # P3-05: where does a video result arrive? paths only, never bodies or signed URLs
@@ -333,16 +416,19 @@ async def run(args) -> dict:
             token, rec["binding"] = next(iter(bound)), "NETWORK_PROMPT_MATCH"
         elif len(new) == 1 and not bound and args.image:
             token, rec["binding"] = next(iter(new)), "NEW_TILE_ONLY"
-        elif len(new) == 1 and not bound:
+        elif not args.image and not bound:
             # film03: four failed video jobs each "found" one new tile -- an
             # older take's re-issued thumbnail -- and saved that take again;
-            # a video is kept only when the network binds it to the prompt
-            tail = await page.evaluate(
-                "document.body.innerText.slice(0, 1500)")
-            rec["result"] = "UNBOUND"
-            rec["page_hint"] = [ln for ln in tail.splitlines()
-                                if re.search(r"(?i)không|lỗi|policy|chính sách|thất bại|error", ln)][:5]
-            return rec
+            # P3-05: Omni Flash never puts the prompt on the network. A video
+            # is kept only when exactly ONE title is new and its detail page
+            # holds the whole sent prompt (DETAIL_PROMPT_MATCH).
+            token = await detail_bind(page, titles_before, prompt, rec)
+            if token is None:
+                tail = await page.evaluate(
+                    "document.body.innerText.slice(0, 1500)")
+                rec["page_hint"] = [ln for ln in tail.splitlines()
+                                    if re.search(r"(?i)không|lỗi|policy|chính sách|thất bại|error", ln)][:5]
+                return rec
         else:
             rec["result"] = "AMBIGUOUS"
             rec["bound_tiles"] = len(bound)
