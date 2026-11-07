@@ -324,8 +324,9 @@ READOUT_MISSING (all-or-nothing per film), READOUT_EVIDENCE (evidence must be in
 text; plan writes per-camera plates `plate_<look>_<cam>.txt` and a floor plan `layout/<look>.png`; take review asks readout questions first.
 film04: ticket office layout, cameras A (hall, through the window) / B (booth, to the door) / C (side-on), readouts for all 12 shots; SC01_g1
 on camera A with the shutter pulled by its handle. Focused suite 775 passed, 1 skipped. Plates A/B/C made in Flow image mode (0 credits) and
-sent to the Owner. Open: plate B invented a second clock in the hall -> plate prompts name out-of-view objects; Owner approves plates, then
-SC01_g1 start still is redone from plate A.
+sent to the Owner. Plate B invented a second clock in the hall -> plate prompts name out-of-frame objects (`unseen_text`), B redone.
+Owner approved plates A/B/C (2026-11-07; media/stills/plate_ticket_office_night_*). SC01_g1 start still redone from plate A + MARA (0 credits,
+Flow media cc2e86cc), registered NOT approved. Open: Owner approves still + storyboard, then one resend (~6 credits, OWNER_GO_LIVE YES->NO).
 SC03_g1 is still a two-person WIDE with a jar-on-counter beat (not flagged by the rule; no take yet).
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
