@@ -94,7 +94,8 @@ def sheet_pass(sheet):
 def register_all(root, pkg, upto=None):
     entries = []
     for n, decl in enumerate(pkg.typed["shots"].generations[:upto]):
-        clip = root / f"{decl.generation_id}.mp4"
+        clip = root / "media" / "takes" / f"{decl.generation_id}.mp4"  # where the accepted bytes are expected
+        clip.parent.mkdir(parents=True, exist_ok=True)
         clip.write_bytes(f"clip {n}".encode())
         entry, _ = T.register_take(root, pkg.header.film_id, decl.generation_id, clip, prompt_text="sent", route="r", model="m",
                                    credits=1, shot_version=decl.version)
@@ -147,9 +148,68 @@ def test_gate4_accepted_without_a_review_or_with_changed_bytes_blocks(tmp_path):
     T.save_log(root, log)
     T.ingest_review(root, pkg.header.film_id, sheet_pass(T.dailies_template(pkg, entry)))
     media = root / "media" / "takes"
-    media.mkdir(parents=True)
     (media / entry.output_file).write_bytes(b"other bytes")
     assert any("clip on disk changed" in i for i in gate(root, "4").issues)
+
+
+def accepted_one(tmp_path, prompt="sent"):
+    root = clone(tmp_path)
+    pkg = load_package(root)
+    clip = root / "media" / "takes" / "SC01_g1.mp4"
+    clip.parent.mkdir(parents=True)
+    clip.write_bytes(b"clip")
+    decl = pkg.typed["shots"].generations[0]
+    entry, _ = T.register_take(root, pkg.header.film_id, decl.generation_id, clip, prompt_text=prompt, route="r", model="m",
+                               credits=1, shot_version=decl.version)
+    T.ingest_review(root, pkg.header.film_id, sheet_pass(T.dailies_template(pkg, entry)))
+    return root, pkg, entry, clip
+
+
+def only_one_generation_left(res):
+    """The film has 12 generations; the other 11 have no take. Keep what is about SC01_g1."""
+    return [i for i in res.issues if i.startswith("SC01_g1")]
+
+
+def test_gate4_a_missing_accepted_clip_is_a_block_not_a_pass(tmp_path):
+    root, pkg, entry, clip = accepted_one(tmp_path)
+    assert not any("SC01_g1_t1" in i for i in gate(root, "4").issues)
+    clip.unlink()
+    assert any("SC01_g1_t1: the accepted clip is missing" in i for i in gate(root, "4").issues)
+
+
+def test_gate4_a_changed_prompt_makes_an_accepted_take_stale_without_a_version_bump(tmp_path):
+    root, pkg, entry, clip = accepted_one(tmp_path)
+    prompt = GC.plan_dir(root) / "prompts" / "SC01_g1.txt"
+    prompt.parent.mkdir(parents=True)
+    prompt.write_text("sent" + chr(10), encoding="utf-8")  # the plan emits exactly what the take was made from
+    assert not any("SC01_g1_t1" in i for i in gate(root, "4").issues)
+    prompt.write_text("sent, but now with a different action" + chr(10), encoding="utf-8")
+    assert any("SC01_g1_t1: the prompt changed after this take was generated" in i for i in gate(root, "4").issues)
+
+
+def test_gate4_review_after_dailies_and_ingest_points_at_the_stored_review(tmp_path):
+    root = clone(tmp_path)
+    pkg = load_package(root)
+    clip = root / "media" / "takes" / "SC01_g1.mp4"
+    clip.parent.mkdir(parents=True)
+    clip.write_bytes(b"clip")
+    decl = pkg.typed["shots"].generations[0]
+    T.register_take(root, pkg.header.film_id, decl.generation_id, clip, prompt_text="sent", route="r", model="m", credits=1,
+                    shot_version=decl.version)
+    T.write_dailies(pkg, root)
+    log = T.load_log(root, pkg.header.film_id)
+    assert log.takes[0].review_file == "dailies/SC01_g1_t1.review.json"
+    sheet_path = T.takes_dir(root) / log.takes[0].review_file
+    filled = sheet_pass(json.loads(sheet_path.read_text(encoding="utf-8")))
+    T.ingest_review(root, pkg.header.film_id, filled)
+    log = T.load_log(root, pkg.header.film_id)
+    assert log.takes[0].review_file == "reviews/SC01_g1_t1.qc.json" and log.takes[0].status == "ACCEPTED"
+    assert not any("SC01_g1_t1" in i for i in gate(root, "4").issues)  # used to raise on the wrapped sheet
+    # a log written before this fix still points at the wrapped sheet: it is unwrapped, not rejected
+    sheet_path.write_text(json.dumps({**filled, "qc": {**filled["qc"], "output_sha256": log.takes[0].output_sha256}}), encoding="utf-8")
+    log.takes[0].review_file = "dailies/SC01_g1_t1.review.json"
+    T.save_log(root, log)
+    assert not any("SC01_g1_t1" in i for i in gate(root, "4").issues)
 
 
 # ----------------------------------------------------------------------------- gate 6 + acceptance

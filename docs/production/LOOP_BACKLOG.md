@@ -350,7 +350,7 @@ target's own contrast ≥ threshold *and* the difference. (b) 3 of 5 sampled fra
 frame (sample count stays 5, add the first and last body frame) or record the exact frames missing the label as BLOCK.
 Tests: zero-contrast target with negative control fails; 4 of 5 fails. Do not lower any threshold.
 
-### P11-03 Gate 4 binds acceptance to current inputs and present bytes — READY (Codex findings 5–7; verified)
+### P11-03 Gate 4 binds acceptance to current inputs and present bytes — IN_PROGRESS (Codex findings 5–7; verified)
 Files: `gate_checks.py` (`_take_state`, `_review`), `takes.py` (review file pointer), tests.
 (a) An ACCEPTED take stays valid after the shot prompt changes without a `ShotDecl.version` bump: compare the take's
 `prompt_sha256` with the current emitted prompt and mark the take stale. (b) A missing accepted clip skips the hash check and

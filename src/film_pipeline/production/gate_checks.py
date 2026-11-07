@@ -113,6 +113,8 @@ def _review(root: Path, entry: Any) -> Any | None:
     if not path.is_file():
         return None
     raw = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(raw.get("qc"), dict):  # a legacy pointer at the wrapped dailies sheet: the review is its `qc` block
+        raw = dict(raw["qc"])
     claimed = raw.pop("output_sha256", None)
     return TakeQc.model_validate(raw), claimed
 
@@ -157,10 +159,19 @@ def _take_state(pkg: Any) -> tuple[list[str], list[str]]:
             if review.verdict().status != "ACCEPTED":
                 blocks.append(f"{entry.take_id}: the stored review does not accept it ({'; '.join(review.verdict().reasons)})")
             clip = root / "media" / "takes" / entry.output_file
-            if clip.is_file():
+            if not clip.is_file():  # the accepted bytes cannot be checked: that is a defect, not a pass
+                blocks.append(f"{entry.take_id}: the accepted clip is missing (media/takes/{entry.output_file}), its bytes cannot be checked")
+            else:
                 from film_pipeline.production.takes import sha256_file
                 if sha256_file(clip) != entry.output_sha256:
                     blocks.append(f"{entry.take_id}: the clip on disk changed after it was logged")
+            prompt_file = plan_dir(root) / "prompts" / f"{gid}.txt"
+            if prompt_file.is_file():  # the take was judged against the prompt it was made from; a changed prompt makes it stale
+                from film_pipeline.production.takes import sha256_text
+                current = sha256_text(prompt_file.read_text(encoding="utf-8").strip())
+                if current != entry.prompt_sha256:
+                    blocks.append(f"{entry.take_id}: the prompt changed after this take was generated (shot version {decl.version} "
+                                  f"is unchanged): retake it or bump the shot version")
     return blocks, pending
 
 

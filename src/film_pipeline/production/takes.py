@@ -269,7 +269,6 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any]) -> dict
     stored = take.model_dump(mode="json")
     stored["output_sha256"] = entry.output_sha256
     path.write_text(json.dumps(stored, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    if not entry.review_file:
-        entry.review_file = rel
+    entry.review_file = rel  # the stored, bound review - not the dailies sheet that wraps it
     save_log(film_root, log)
     return {"take_id": take.take_id, "status": entry.status, "reasons": verdict.reasons, "review": str(path)}
