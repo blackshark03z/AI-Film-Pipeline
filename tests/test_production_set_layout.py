@@ -138,6 +138,14 @@ def test_view_text_order_and_operation():
     assert "shutter" not in layout.view_text("B")
 
 
+def test_unseen_text_names_objects_out_of_frame():
+    # film04 plate B: the location text names the clock, camera B does not see it, the model drew a second one
+    layout = SetLayout.model_validate(layout_data())
+    assert layout.unseen_text("A") == "Out of frame, not shown: the wall clock."
+    assert layout.unseen_text("B") == "Out of frame, not shown: the ticket window, the roll-down shutter."
+    assert layout.unseen_text("nope") == ""
+
+
 # ---- rules --------------------------------------------------------------------------------------------------
 
 def test_clean_layout_has_no_issues(tmp_path):
@@ -225,6 +233,7 @@ def test_plan_writes_camera_plate_and_still_prompt(tmp_path):
     view = SetLayout.model_validate(layout_data()).view_text("A")
     plate = (out / "stills" / f"plate_{OFFICE}_A.txt").read_text(encoding="utf-8")
     assert view in plate
+    assert "Out of frame, not shown: the wall clock. " in plate and ".." not in plate
     assert (out / "stills" / f"plate_{OFFICE}.txt").is_file()
     assert (out / "stills" / f"plate_{OFFICE}_B.txt").is_file()
     assert view in (out / "stills" / "start_SC01_g1.txt").read_text(encoding="utf-8")

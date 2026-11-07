@@ -269,7 +269,8 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
             for cam in loc.layout.cameras:
                 _write(out / "stills" / f"plate_{look_id}_{cam.id}.txt",
                        p.pre.still_templates.plate.format(
-                           text=f"{loc.look.text}. {loc.layout.view_text(cam.id)}".rstrip(".")) + "\n", out)
+                           text=" ".join(t for t in (f"{loc.look.text}.", loc.layout.view_text(cam.id),
+                                                     loc.layout.unseen_text(cam.id)) if t).rstrip(".")) + "\n", out)
             if storyboard and loc.layout.drawable():
                 render_floor_plan(loc.layout, loc.look.location, out / "layout" / f"{look_id}.png")
 

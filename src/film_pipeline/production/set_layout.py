@@ -116,6 +116,15 @@ class SetLayout(ContractModel):
                 parts.append(f"The {o.label} is {o.operation}.")
         return " ".join(parts)
 
+    def unseen_text(self, cid: str) -> str:
+        """Objects this camera does not see. The location text names every object, so without this the
+        model draws the missing ones somewhere in frame (film04 plate B grew a second clock in the hall)."""
+        cam = self.camera(cid)
+        if cam is None:
+            return ""
+        labels = [o.label for o in self.objects if o.id not in cam.sees]
+        return f"Out of frame, not shown: {', '.join('the ' + l for l in labels)}." if labels else ""
+
     def drawable(self) -> bool:
         return (all(z.box is not None for z in self.zones) and all(o.at is not None for o in self.objects)
                 and all(c.at is not None for c in self.cameras))
