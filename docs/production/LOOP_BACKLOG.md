@@ -333,7 +333,8 @@ the hand stays on that side when the camera is on the other. film04: shutter on 
 handle), plain rectangular window, clock beside (not above) the window. Plate A redone (A5, Flow 00b15c17), start still v8 (Flow 4a20dabf)
 registered NOT approved; Flow picker items are now picked by pixels (picker order is 'recent' and moves). Open: plate C still draws the
 shutter on the hall side -> redrawn in a ChatGPT tab (same GPM profile) from plate A5. Owner approved start still v8 and plates A5/C
-(2026-11-07). Open: storyboard re-approval (12 frames), then one resend (~6 credits, OWNER_GO_LIVE YES->NO).
+(2026-11-07); Owner approved the 12-frame storyboard (gate 3 PASS). Focused suite 777 passed, 1 skipped. Open: one resend of
+SC01_g1 v2 (~6 credits, OWNER_GO_LIVE YES->NO), then the Owner's take review.
 SC03_g1 is still a two-person WIDE with a jar-on-counter beat (not flagged by the rule; no take yet).
 
 ## P10 — Ship readiness (offline; Tech Lead plan 2026-11-07)
