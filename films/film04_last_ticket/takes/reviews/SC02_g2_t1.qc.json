@@ -1,0 +1,142 @@
+{
+  "take_id": "SC02_g2_t1",
+  "generation_id": "SC02_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO pleads through the gap with the jar; line 27 to MARA.",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:27": "Yes: THEO faces MARA through the gap while speaking."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO olive rain jacket, jar in both hands; MARA back of head, brown bun, mustard cardigan. Tech Lead flag accepted by Owner: MARA's hair reads lighter in SC02_g1.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "OTS over MARA's shoulder, frame-right; THEO beyond the gap, frame-left/centre; 180-degree line kept across the exchange.",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:MARA": "Yes: MARA's shoulder and back of head fill the near frame-right the whole clip.",
+        "REL_GAZE": "Yes: THEO looks at MARA, not into the lens.",
+        "REL_BARRIER": "Yes: THEO stays in the public hall at the gap, MARA behind the counter."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO glances, speaks to MARA, waits; MARA still.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Slow push-in instead of a static frame (flag accepted by Owner).",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC02_g2_t1.mp4 and cut SC01_g2|SC02_g1|SC02_g2 (chat: 'Accept'); Tech Lead evidence: 8-frame contact sheet 1 s, boundary frames vs SC02_g1 end, first frame vs approved still, loudness (mean -32.6 dB, max -10.9 dB), autoqc 0 warnings; clip bound by prompt via flow_reconcile (media a39db4ed).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:27",
+    "REL_LISTENER:MARA",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "211c6656a05959042c8d487c9b79d25afe496e534cd14f1231c0046aa063ba80"
+}

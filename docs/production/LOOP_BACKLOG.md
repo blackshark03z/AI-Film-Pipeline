@@ -860,7 +860,7 @@ newest k picker items by pixels (no list search, no wheel down) -> `START_NOT_FO
 media id; `--download` saves `<receipt>.mp4` for `takes --register`. Limit: receipts hold only prompt_sha256, so a
 receipt whose plan prompt changed since reports NO_PROMPT/PROMPT_CHANGED (film04 SC01_g1 t1/t3/t5 likely). 13 new tests.
 Done-criterion from P15-06 (5 live sends without START_NOT_FOUND/AMBIGUOUS) is measured from P16-09 on.
-### P16-09 Live pilot: SC02_g1 then SC02_g2, 360p Omni Flash, adjacent cuts — LIVE, Owner review
+### P16-09 Live pilot: SC02_g1 then SC02_g2, 360p Omni Flash, adjacent cuts — DONE (2026-11-08)
 SC02_g1 v4 sent 2026-11-08 (Owner: "Send SC02_g1"): take SC02_g1_t4 = media/takes/SC02_g1_t7.mp4, PASSED,
 DETAIL_PROMPT_MATCH, upload_newest slot diff 0.4, 5 credits. Two earlier attempts stopped pre-submit (0 credits):
 t5 PRE_SUBMIT_ERROR (no composer '+' in Video mode -> upload now inside the slot picker, 747d4b8), t6
@@ -870,8 +870,9 @@ dailies takes/dailies/SC02_g1_t4.review.json. Owner accepted SC02_g1_t4 ("Accept
 Storyboard frames were stale (rendered before v4/v2); re-rendered, Owner approved SC02_S1/S2 ("Approve boards, send").
 SC02_g2 v2 sent: AMBIGUOUS (gallery count jumped 14->24), reconciled BOUND by prompt (flow_reconcile, media a39db4ed),
 take SC02_g2_t1 registered, 8 credits, autoqc 0 warnings. Review: media/review/cut_SC01_g2__SC02_g1__SC02_g2.mp4,
-boundary_SC02_g1__SC02_g2.png. Waits for the Owner's verdict.
+boundary_SC02_g1__SC02_g2.png. Owner accepted SC02_g2_t1 ("Accept"). Pilot exchange proven.
 Open defect: generate checks a storyboard approval only against the file hash, not against the current shot decl
 (SC02_g1 v4 went out under the v3-era board approval) -> plan/generate must flag a board older than its shot.
-### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for P16-09 and the Owner's P15-07 choice
+### P16-11 Storyboard staleness: plan/generate flag a board approval older than its shot decl — READY
+### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for the Owner's P15-07 choice
 ### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE
