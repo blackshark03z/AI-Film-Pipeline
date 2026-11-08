@@ -514,6 +514,10 @@ end. Second take with the same defect: lowering a body until the face enters a f
 moves the gap instead. Proposed v3: no body travel against the pinned prop inside the shot. Start already seated with
 her face in the gap (the approved end still as start frame), 5 s: glance at the clock and back, speak, hold. She sits
 down across the cut from SC01_g2 (camera B, behind her), which costs a small standing-to-seated jump. Waits for Owner.
+Owner rejected t2 ("Loại t2, chạy A"): ingested (action P0, cause STAGING). v3 written (5 s, seated, GREEN). Owner
+approved the v3 start still (= approved end still) and sent ("Duyệt, gửi đi"). Send PASSED -> SC02_g1_t4.mp4 (5 s),
+take SC02_g1_t3, 5 credits. QC: `film.py motion` PASS (shutter peak 0.27 px), autoqc 0 warnings; strip: shutter stays
+on its catches, face in the gap throughout, glance up 0.5-1 s, speech about 2-4 s. Waits for Owner take review.
 Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
 `film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
 catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.

@@ -144,6 +144,22 @@
       "cause": "STAGING",
       "registered_at": "2026-11-08T00:55:00Z",
       "review_file": "reviews/SC02_g1_t2.qc.json"
+    },
+    {
+      "take_id": "SC02_g1_t3",
+      "generation_id": "SC02_g1",
+      "prompt_sha256": "bfdcce438fd1cf911d3b1fef7706641bed0efdcf9f8d813812009b760b7a772c",
+      "start_frame_sha256": "67b77263a6bf0398a0ecfa1e098adb05db2d96edc2d5e4d1b04e136753f8931c",
+      "route": "start_frame+end_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 5.0,
+      "output_file": "SC02_g1_t4.mp4",
+      "output_sha256": "153dfb47359abeebd2485dc257d59426b25b065a707a78b0c2ad0388c2660d3c",
+      "status": "GENERATED",
+      "shot_version": 3,
+      "cause": "",
+      "registered_at": "2026-11-08T02:11:41Z",
+      "review_file": "dailies/SC02_g1_t3.review.json"
     }
   ]
 }
