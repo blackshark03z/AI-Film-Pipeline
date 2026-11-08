@@ -163,5 +163,6 @@ def test_cli_on_film04_copy(tmp_path):
     assert proc.returncode == 0, proc.stderr
     out = json.loads(proc.stdout)
     assert out["SC01_g1"]["level"] == "RED" and out["SC01_g1"]["accepted_take_reuse"] == "SC01_g1_t5"
-    assert out["SC02_g1"]["level"] == "GREEN" and out["SC02_g1"]["drafts"] == 1
+    # P16-07a: SC02_g1 is the OTS pilot (two people in frame, TWO_PEOPLE_ACTION), no longer a GREEN single
+    assert out["SC02_g1"]["level"] == "AMBER" and out["SC02_g1"]["drafts"] == 2
     assert {"level", "findings", "drafts"} <= set(out["SC04_g2"])

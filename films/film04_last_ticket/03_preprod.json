@@ -24,7 +24,8 @@
       "scene_duration_s": 16.0,
       "min_silence_s": 3.0,
       "syllables_per_second": 2.5
-    }
+    },
+    "interaction_contract": true
   },
   "characters": {
     "MARA": {
@@ -263,6 +264,32 @@
             ],
             "look_at": "window"
           }
+        ],
+        "marks": [
+          {
+            "id": "clerk_stool",
+            "at": [
+              0.62,
+              0.3
+            ],
+            "zone": "booth"
+          },
+          {
+            "id": "customer_window",
+            "at": [
+              0.62,
+              0.52
+            ],
+            "zone": "hall"
+          },
+          {
+            "id": "hall_door",
+            "at": [
+              0.1,
+              0.68
+            ],
+            "zone": "hall"
+          }
         ]
       }
     },
@@ -310,7 +337,7 @@
         ],
         "events": [
           {
-            "generation_index": 1,
+            "generation_index": 2,
             "character": "THEO",
             "kind": "ENTER"
           }
@@ -340,7 +367,8 @@
             "note": "glass door on the left, cold night"
           }
         ]
-      }
+      },
+      "encounter_id": "window_plea"
     },
     "SC02": {
       "location": "ticket_office_night",
@@ -387,7 +415,8 @@
             "note": "glass door on the left, cold night"
           }
         ]
-      }
+      },
+      "encounter_id": "window_plea"
     },
     "SC03": {
       "location": "ticket_office_night",
@@ -434,7 +463,8 @@
             "note": "glass door on the left, cold night"
           }
         ]
-      }
+      },
+      "encounter_id": "window_plea"
     },
     "SC04": {
       "location": "ticket_office_night",
@@ -481,7 +511,8 @@
             "note": "glass door on the left, cold night"
           }
         ]
-      }
+      },
+      "encounter_id": "window_plea"
     },
     "SC05": {
       "location": "ticket_office_night",
@@ -528,7 +559,8 @@
             "note": "glass door on the left, cold night"
           }
         ]
-      }
+      },
+      "encounter_id": "window_plea"
     },
     "SC06": {
       "location": "platform_night",
@@ -591,11 +623,18 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "standing at the window, fingers under the shutter's bottom edge",
+          "facing": "the hall"
+        }
+      }
     },
     "SC01_g2": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "outside the glass door, frame-left"
       },
       "props": {
@@ -607,11 +646,23 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "hall_door",
+          "posture": "standing in the doorway",
+          "facing": "the window"
+        }
+      }
     },
     "SC01_end": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
@@ -624,11 +675,23 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "bent forward, face in the open gap",
+          "facing": "MARA"
+        }
+      }
     },
     "SC02_g1": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
@@ -641,7 +704,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "bent forward, face in the open gap",
+          "facing": "MARA"
+        }
+      }
     },
     "SC02_g2": {
       "positions": {
@@ -658,7 +733,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "bent forward, face in the open gap",
+          "facing": "MARA"
+        }
+      }
     },
     "SC02_end": {
       "positions": {
@@ -675,7 +762,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "bent forward, face in the open gap",
+          "facing": "MARA"
+        }
+      }
     },
     "SC03_g1": {
       "positions": {

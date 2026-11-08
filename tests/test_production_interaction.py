@@ -28,6 +28,37 @@ def _save(path, data):
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+END_POSE = ("she sits on her stool behind the counter, her face level with the open gap under the lowered shutter, whose "
+            "bottom edge stays on the brass shutter catches just above her head; she looks out through the gap over her "
+            "round glasses; her hands rest on the counter")
+
+
+def legacy_film04(pre, shots):
+    """Rebuild the pre-P16-07a film04 in a tmp copy: contract off, no marks/blocking/encounters, no relation fields,
+    SC02_g1 as the v3 clean single and SC02_g2 as the plain THEO single. The shipped package is the pilot now."""
+    pre["preflight"].pop("interaction_contract", None)
+    pre["locations"][LOC]["layout"].pop("marks", None)
+    for st in pre["states"].values():
+        st.pop("blocking", None)
+    for sid in ("SC01_g2", "SC01_end", "SC02_g1"):  # the pilot's MARA text said "seated on her stool" from here on
+        pos = pre["states"][sid]["positions"]
+        pos["MARA"] = pos["MARA"].replace("seated on her stool behind", "behind")
+    for sc in pre["scenes"].values():
+        sc.pop("encounter_id", None)
+    for ev in pre["scenes"]["SC01"]["occupancy"]["events"]:
+        if ev["character"] == "THEO" and ev["kind"] == "ENTER":
+            ev["generation_index"] = 1
+    for g in shots["generations"]:
+        for k in ("addressees", "listener_anchors", "gaze_target"):
+            g.pop(k, None)
+        if g["generation_id"] == "SC02_g1":
+            g.update(coverage="SINGLE", foreground="", visible=["MARA"], camera_position="A", version=3,
+                     end_frame=True, end_pose=END_POSE)
+        elif g["generation_id"] == "SC02_g2":
+            g.update(coverage="SINGLE", subject="THEO", foreground="", visible=["THEO"], camera_position="B")
+            g.pop("version", None)
+
+
 def make(tmp_path, *, contract=True, marks=True, addressees=True, shot=None):
     """tmp copy of film04; `shot` patches SC02_g1 (dict update)."""
     root = tmp_path / "film"
@@ -35,6 +66,8 @@ def make(tmp_path, *, contract=True, marks=True, addressees=True, shot=None):
     for name in FILES:
         (root / name).write_text((FILM04 / name).read_text(encoding="utf-8"), encoding="utf-8")
     pre = _load(root / "03_preprod.json")
+    shots = _load(root / "04_shots.json")
+    legacy_film04(pre, shots)
     if contract:
         pre["preflight"]["interaction_contract"] = True
     if marks:
@@ -45,7 +78,6 @@ def make(tmp_path, *, contract=True, marks=True, addressees=True, shot=None):
         for sc in ("SC01", "SC02"):
             pre["scenes"][sc]["encounter_id"] = "E1"
     _save(root / "03_preprod.json", pre)
-    shots = _load(root / "04_shots.json")
     g = next(x for x in shots["generations"] if x["generation_id"] == "SC02_g1")
     if addressees:
         g["addressees"] = {"22": ["THEO"]}
@@ -75,6 +107,7 @@ def off_frame(tmp_path, anchor=None, camera=None, visible=None):
 
 def _camera():
     shots = _load(FILM04 / "04_shots.json")
+    legacy_film04(_load(FILM04 / "03_preprod.json"), shots)
     return next(x for x in shots["generations"] if x["generation_id"] == "SC02_g1")["camera"]
 
 
@@ -140,9 +173,9 @@ def test_addressee_absent_or_speaker(tmp_path):
 
 
 def test_empty_blocking_stays_out_of_dumps(tmp_path):
-    pre = _load(FILM04 / "03_preprod.json")
-    assert "blocking" not in load_package(make(tmp_path, contract=False, marks=False)).typed["preprod"].states[
-        "SC02_g1"].model_dump()
+    root = make(tmp_path, contract=False, marks=False)
+    pre = _load(root / "03_preprod.json")
+    assert "blocking" not in load_package(root).typed["preprod"].states["SC02_g1"].model_dump()
     assert "marks" not in pre["locations"][LOC]["layout"]
 
 

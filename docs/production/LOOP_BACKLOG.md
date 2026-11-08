@@ -836,7 +836,16 @@ RED needs `accepted_take_reuse` (no new send) or an Owner `generability_exceptio
 attempt/credit cap and expiry; free-text waivers demote nothing (WARN LEGACY). `generate` blocks SEND_CAP,
 AWAITING_REVIEW (2nd AMBER), EXCEPTION_MISMATCH/EXPIRED/SPENT, ACCEPTED_TAKE_REUSE; payload carries `attempts`.
 Film04: SC01_g1/g2 waivers migrated to reuse of t5/t2. 12 entry-point tests + 24 rating tests.
-### P16-07a Pilot exchange SC01_g2 -> SC02_g1 v4 (OTS over THEO) -> SC02_g2 (OTS over MARA): package + stills — waits for P16-02..05; Owner approves board/stills
+### P16-07a Pilot exchange SC01_g2 -> SC02_g1 v4 (OTS over THEO) -> SC02_g2 (OTS over MARA): package + stills — PACKAGE DONE (2026-11-08); stills next, then Owner approves board/stills
+Film04 `interaction_contract` on. Marks clerk_stool / customer_window / hall_door; encounter `window_plea` (SC01-SC05);
+blocking on SC01_g1..SC02_end (MARA seated through SC01_g2 per the accepted take's frames). SC02_g1 v4 = OTS over
+THEO from camera A (addressee 22 -> THEO, anchor OTS_FOREGROUND, gaze THEO; end frame dropped: no state change).
+SC02_g2 v2 = reverse OTS over MARA from camera B (SC01_g2 framing). Pilot gate3: only STORYBOARD + AMBER WARN.
+Found: SC01 occupancy put THEO's ENTER at index 1 but plan.gen_index is 1-based (he entered in SC01_g1 on paper);
+fixed to 2. Pipeline gap -> P16-07b: check that an ENTER at generation k matches a position in k's start state.
+Open: SC02_g1 `tracked.roi` was drawn on the v3 still; re-measure on the approved v4 still. SC03-SC06 BLOCK on
+contract data until P16-07b (expected). `02_direction.coverage_plan.B2` SINGLE -> OTS (gate 2 tracks the restage).
+Pilot prompts trimmed to <= 215 words (SC01_g2 214, SC02_g1 ~211, SC02_g2 ~214).
 ### P16-08 Send reliability offline (= P15-06) — READY
 ### P16-09 Live pilot: SC02_g1 then SC02_g2, 360p Omni Flash, adjacent cuts — LIVE, Owner review
 ### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for P16-09 and the Owner's P15-07 choice

@@ -4,7 +4,7 @@ import json
 from film_pipeline.production.package import load_package
 from film_pipeline.production.plan import plan_package
 
-from test_production_interaction import FILM04, off_frame, make
+from test_production_interaction import OFF as OFF_ANCHOR, off_frame, make
 
 OTS_SHOT = {"coverage": "OTS", "foreground": "THEO", "visible": ["MARA", "THEO"], "subject": "MARA",
             "gaze_target": "THEO", "listener_anchors": {"THEO": {"mode": "OTS_FOREGROUND"}}}
@@ -58,8 +58,9 @@ def test_hidden_person_unplaced_blocks(tmp_path):
 
 
 def test_contract_off_prompts_are_unchanged(tmp_path):
-    root = make(tmp_path, contract=False, marks=False, addressees=False)
-    video, still, _ = plan(root)
-    shipped = FILM04 / "media" / "plan"
-    assert video == (shipped / "prompts" / "SC02_g1.txt").read_text(encoding="utf-8")
-    assert still == (shipped / "stills" / "start_SC02_g1.txt").read_text(encoding="utf-8")
+    # contract off: authored marks/blocking/addressees/anchors/gaze are inert, the prompts equal the plain v3 film04's
+    # (the shipped media/plan is local state of the pilot now, so the baseline is rebuilt here, not read from it)
+    video, still, _ = plan(make(tmp_path / "bare", contract=False, marks=False, addressees=False))
+    video2, still2, _ = plan(make(tmp_path / "authored", contract=False, marks=True, addressees=True,
+                                  shot={"gaze_target": "THEO", "listener_anchors": {"THEO": OFF_ANCHOR}}))
+    assert video == video2 and still == still2

@@ -35,6 +35,8 @@ def make(tmp_path, *, contract=True, encounter=True, end=STAND, start=SIT, ellip
     pre["locations"][LOC]["layout"]["marks"] = copy.deepcopy(MARKS)
     pre["states"]["SC01_end"]["blocking"] = {"MARA": copy.deepcopy(end)}
     pre["states"]["SC02_g1"]["blocking"] = {"MARA": copy.deepcopy(start)}
+    for sc in pre["scenes"].values():  # the shipped film04 is the P16-07a pilot and carries encounter ids already
+        sc.pop("encounter_id", None)
     if encounter:
         for sc in ("SC01", "SC02"):
             pre["scenes"][sc]["encounter_id"] = "E1"

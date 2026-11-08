@@ -10,6 +10,8 @@ from film_pipeline.production.package import load_package
 from film_pipeline.production.qc_model import MIN_LEVEL
 from film_pipeline.production.relation_review import relation_questions, speakers_of
 
+from test_production_interaction import legacy_film04
+
 ROOT = Path(__file__).resolve().parents[1]
 FILM04 = ROOT / "films" / "film04_last_ticket"
 FILES = ("film.json", "script.fountain", "01_story.json", "02_direction.json", "03_preprod.json", "04_shots.json")
@@ -37,13 +39,14 @@ def make(tmp_path, *, contract=True):
     for name in FILES:
         (root / name).write_text((FILM04 / name).read_text(encoding="utf-8"), encoding="utf-8")
     pre = _load(root / "03_preprod.json")
+    shots = _load(root / "04_shots.json")
+    legacy_film04(pre, shots)  # the shipped film04 is the P16-07a pilot: start from the plain v3 package
     if contract:
         pre["preflight"]["interaction_contract"] = True
         pre["locations"][LOC]["layout"]["marks"] = copy.deepcopy(MARKS)
         for sid in ("SC01_g2", "SC01_end", "SC02_g1", "SC02_g2", "SC02_end"):
             pre["states"][sid]["blocking"] = copy.deepcopy(POSES)
     _save(root / "03_preprod.json", pre)
-    shots = _load(root / "04_shots.json")
     g = next(x for x in shots["generations"] if x["generation_id"] == "SC02_g1")
     if contract:
         g.update(copy.deepcopy(OTS))

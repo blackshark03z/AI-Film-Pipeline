@@ -67,8 +67,17 @@ def test_plan_has_only_the_pending_storyboard_left(plan):
     # walks and no end frame shows where they arrive (SC01_g2 t1 lost THEO's jacket that way; v2 has an end frame)
     # P16-06 generability: SC04/SC05 are RED and not yet restaged (BLOCK until a restage or an Owner exception);
     # SC01_g1/g2 reuse their Owner-accepted takes (t5, t2) and send nothing new
+    # P16-07a: the interaction contract is on and only the pilot (SC01..SC02) is authored for it; the contract
+    # BLOCKs below are expected on SC03..SC06 until the rollout P16-07b
+    contract = {("ADDRESSEE_MISSING", "BLOCK"), ("MARK_UNRESOLVED", "BLOCK"), ("HIDDEN_PERSON_UNPLACED", "BLOCK"),
+                ("GAZE_TARGET_MISSING", "BLOCK")}
     assert checks == {("STORYBOARD", "BLOCK"), ("LOOK_NOT_PINNED", "WARN"), ("GENERABILITY_RED", "BLOCK"),
-                      ("GENERABILITY_RED_REUSE", "WARN"), ("GENERABILITY_AMBER", "WARN")}, checks
+                      ("GENERABILITY_RED_REUSE", "WARN"), ("GENERABILITY_AMBER", "WARN")} | contract, checks
+    per_gen = {g: {(i["check"], i["severity"]) for i in v["issues"]} for g, v in g3["generations"].items()}
+    for gid in ("SC01_g1", "SC01_g2", "SC02_g1", "SC02_g2"):  # the pilot: only the storyboard blocks, generability warns
+        assert not per_gen[gid] & contract, (gid, per_gen[gid])
+        assert {c for c, sev in per_gen[gid] if sev == "BLOCK"} == {"STORYBOARD"}, (gid, per_gen[gid])
+        assert all(c.startswith("GENERABILITY_") for c, sev in per_gen[gid] if sev == "WARN"), (gid, per_gen[gid])
     red = {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "GENERABILITY_RED"}
     assert red == {"SC04_g1", "SC04_g2", "SC05_g1", "SC05_g2"}
     warned = {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "LOOK_NOT_PINNED"}

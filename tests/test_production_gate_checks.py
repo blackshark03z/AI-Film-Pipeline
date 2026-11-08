@@ -14,6 +14,8 @@ from film_pipeline.production.package import load_package
 from film_pipeline.production.plan import plan_package
 from film_pipeline.production.qc_model import MIN_LEVEL
 
+from test_production_interaction import legacy_film04
+
 ROOT = Path(__file__).resolve().parents[1]
 FILM04 = ROOT / "films" / "film04_last_ticket"
 FILES = ("film.json", "script.fountain", "01_story.json", "02_direction.json", "03_preprod.json", "04_shots.json",
@@ -32,7 +34,14 @@ def clone(tmp_path):
     pre["preflight"]["end_state_in_prompt"] = False
     # likewise P15-01: SC04/SC05 are RED and not yet restaged, which blocks the plan
     pre["preflight"]["generability"] = False
+    # these tests exercise gate/storyboard/draft mechanics, not the interaction contract: use the pre-pilot film04
+    shots = json.loads((root / "04_shots.json").read_text(encoding="utf-8"))
+    legacy_film04(pre, shots)
+    direction = json.loads((root / "02_direction.json").read_text(encoding="utf-8"))
+    direction["coverage_plan"]["B2"] = ["SINGLE"]  # SC02 is the plain single again, so is its planned coverage
+    (root / "02_direction.json").write_text(json.dumps(direction, ensure_ascii=False, indent=2), encoding="utf-8")
     (root / "03_preprod.json").write_text(json.dumps(pre, ensure_ascii=False, indent=2), encoding="utf-8")
+    (root / "04_shots.json").write_text(json.dumps(shots, ensure_ascii=False, indent=2), encoding="utf-8")
     return root
 
 
