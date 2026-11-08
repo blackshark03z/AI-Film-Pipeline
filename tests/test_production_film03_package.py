@@ -68,7 +68,8 @@ def test_preprod_matches_legacy(pkg, legacy):
     pre = pkg.typed["preprod"]
     assert pre.states == f.STATE
     # the legacy build never wrote an end-state sentence (P13-03): film03 opts out to keep its prompt bytes
-    assert pre.feasibility == f.FEAS and pre.preflight == f.LIMITS.model_copy(update={"end_state_in_prompt": False, "prompt_style": "full"})
+    assert pre.feasibility == f.FEAS and pre.preflight == f.LIMITS.model_copy(update={"end_state_in_prompt": False, "prompt_style": "full",
+                                                                                         "generability": False})
     for name, spec in pre.characters.items():
         assert spec.look == f.LOOKS[name]
         assert spec.video_text == f.VIDEO_LOOKS[name].text and spec.voice == f.VOICE[name]
