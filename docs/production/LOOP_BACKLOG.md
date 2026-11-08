@@ -28,6 +28,11 @@ review) merged and ordered by what shortens the critical path:
 | B. Fewer, better takes | P15-06 send reliability → P14-02 + P15-03 best-of-N stills and takes → P14-03 / P15-04 VLM judge (WARN) → P15-05 + P14-07 Flow capability probe (Omni clip edit, start frame + character refs) | probe ≤ 20 | Owner sees only drafts that pass motion QC + judge |
 | C. Shoot film04 | SC02_g1 v3 → SC06_g2 with the new loop; KPI ≤ 2 sends per accepted shot | ~140-170 | All generations ACCEPTED by the Owner |
 | D. Finish and deliver | cut, grade, titles, mix, mastercheck, versions, deliver (P4-P6 built, rehearsed in P10-05); **Owner: rights checkpoint 3, AI label, C2PA signer, final acceptance** | 0 | Master delivered, Owner accepts |
+
+**Superseded order (2026-11-08, after Owner review of SC02_g1_t3: "who is she talking to?"):** phases B-C now run as P16
+(interaction contract), see [PRODUCTION_PROCESS_V2.md](PRODUCTION_PROCESS_V2.md) (Claude x Codex brainstorm, rounds in
+`reviews/PROCESS_V2_BRAINSTORM_2026-11-08/`). Next live send only after P16-01..06, P16-07a, P16-08 and Owner approval of the
+pilot board/stills. Ledger figures above are stale until P16-01.
 | E. After ship | P14-04 dialogue ASR (**Owner: install**), P14-06 DramaChain taxonomy, P14-08 API stub, rest of P14-01 | 0 | — |
 
 Budget risk: restaging may add insert shots; best-of-2 by default keeps phase C inside the cap, best-of-3 only for restaged RED
@@ -785,3 +790,21 @@ START_NOT_FOUND / AMBIGUOUS.
 SC04_g1 (glasses on a chain), SC04_g2 (shutter up + coins pour, two people), SC05_g1 (counting coins), SC05_g2 (stamp), and any
 shot where the shutter edge is near a moving body. Proposal per beat with the restage tool and credit estimate → Owner chooses →
 package edit → stills. No send before the Owner's choice.
+
+## P16 Interaction contract (Claude x Codex, 2026-11-08) — plan in [PRODUCTION_PROCESS_V2.md](PRODUCTION_PROCESS_V2.md) §9
+
+Trigger: Owner on take SC02_g1_t3 (MARA speaks to an empty counter): "cô ấy đang nói chuyện với ai? Các quan hệ có vẻ không được
+đảm bảo". Same unanchored-listener pattern in SC02_g2, SC03_g2, SC04_g1, SC05_g1. Order: P16-01 -> 02 -> 03 -> 04 -> 05 -> 06 ->
+07a -> 08 -> 09 (LIVE) -> 07b -> 10. Done-criteria live in the plan table; each item here is one loop round.
+
+### P16-01 Ledger reconcile — READY
+### P16-02 Interaction-contract schema + checks — READY (after P16-01)
+### P16-03 One placement source for still + video prompts; explicit camera.size wins — READY (after P16-02)
+### P16-04 Relation review questions with required QC evidence — READY (after P16-02)
+### P16-05 Encounter continuity across scene numbers — READY (after P16-02)
+### P16-06 Generability v2 (UNKNOWN, exceptions, caps proven at the generation entry point) — READY
+### P16-07a Pilot exchange SC01_g2 -> SC02_g1 v4 (OTS over THEO) -> SC02_g2 (OTS over MARA): package + stills — waits for P16-02..05; Owner approves board/stills
+### P16-08 Send reliability offline (= P15-06) — READY
+### P16-09 Live pilot: SC02_g1 then SC02_g2, 360p Omni Flash, adjacent cuts — LIVE, Owner review
+### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for P16-09 and the Owner's P15-07 choice
+### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE
