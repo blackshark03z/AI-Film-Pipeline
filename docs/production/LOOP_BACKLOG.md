@@ -889,5 +889,16 @@ SC04_g4 = static insert (coverage REACTION, size INSERT: no INSERT coverage in t
 encounter last_train. New check OCCUPANCY_ENTER_NO_POSITION. Gate3: STORYBOARD pending on all; WARN LOOK_NOT_PINNED SC06_g1.
 Open: shutter tracked ROI on SC03_g1/SC03_g2/SC04_g1 copied from SC02_g1, re-measure on the approved stills; gate 4 flags
 'prompt changed after this take' for SC01_g1_t5/SC01_g2_t2 (pre-existing, prompts trimmed in P16-07a).
-### P16-12 film04 stills + boards SC03-SC06 (ChatGPT/Flow image, 0 credits) -> Owner approval — READY
+### P16-12 film04 stills + boards SC03-SC06 (ChatGPT/Flow image, 0 credits) -> Owner approval — DONE (2026-11-09)
+12 stills (11 start + end:SC06_g1) drawn in ChatGPT, new tab of GPM wanglin08ma, 0 credits, each an edit of an approved
+still or of the previous new still (identity + set chain); Tech Lead reviewed each against its decl, redrew 3 (SC03_g1:
+booth props behind THEO; SC06_g1: THEO faced the door, downpour; end:SC06_g1: camera moved), tries kept in
+media/stills/history/. SC06_g1 gets end_frame + end_pose (MARA arrives beside THEO): LOOK_NOT_PINNED resolved; platform
+look text 'door on the left' contradicted the layout (door mark frame-right of camera A) -> 'door in the station wall'.
+Owner approved stills + boards from media/review/P16-12_SC03-SC06_stills_boards.jpg (2026-11-09, 'Duyệt tất cả');
+recorded via film.py stills --approve and StoryboardGate.review with the quote (no --approve-storyboard).
+Shutter tracked.roi re-measured on the approved stills: SC03_g1 [0.14,0,0.74,0.05] (bottom-edge bar only, top of
+frame), SC03_g2 [0.38,0,0.74,0.27], SC04_g1 [0.1,0,0.9,0.1] (bottom-edge bar). Gate3 SC03-SC06: PASS (AMBER WARN only).
+Open: board renderer draws an empty frame + broken caption for a shot with no people (SC04_g4 'looking none');
+SC05_g1 clock reads ~10:46-10:47; plan rc=1 from the pre-existing SC01_g1 STALE_PROMPT end still. Next: P16-10 shoot (LIVE).
 ### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE

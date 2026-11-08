@@ -297,13 +297,13 @@
       "look": {
         "look_id": "platform_night",
         "location": "HOLLOWAY STATION PLATFORM",
-        "text": "Station platform at night in light rain: one lamp post, a wooden bench, a timetable board, wet rails, the ticket office door on the left",
+        "text": "Station platform at night in light rain: one lamp post, a wooden bench, a timetable board, wet rails, the ticket office door in the station wall",
         "invariants": [
           "single lamp post",
           "painted wooden bench",
           "timetable board",
           "wet rails",
-          "ticket office door on the left"
+          "ticket office door in the station wall"
         ],
         "interior": false,
         "time_of_day": "NIGHT",
@@ -1542,6 +1542,126 @@
       "registered_at": "2026-11-08T04:06:00+00:00",
       "approved_by": "owner-khoikk03",
       "approved_at": "2026-11-08T04:11:34+00:00"
+    },
+    "SC03_g1": {
+      "file": "media/stills/start_SC03_g1.png",
+      "sha256": "45b79517f56caf782b17cda6fce22bca8f9ed1a526137b9b5617e8d5edf4f760",
+      "prompt_sha256": "2064a0adfa85a3796043c02421a3cc7c3b22c28f127dcb03ebffcb11f2e61b61",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: edit of the approved start_SC02_g2 still, counter-level OTS over MARA, try 2 (try 1 put booth props behind THEO)",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:37:33+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:50+00:00"
+    },
+    "SC03_g2": {
+      "file": "media/stills/start_SC03_g2.png",
+      "sha256": "90d63a1aeec3bbe1009b84e54bd2b8a450768ca9354ce8f46c54d02ca2b5e651",
+      "prompt_sha256": "2608a1c69d6624a20b8d090f2c98b7c85e6bd6a6b6885fb1ae744ffa9ef5bcc2",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: edit of the approved start_SC02_g1 still, jar on the counter, clock 10:44, try 1",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:37:34+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:51+00:00"
+    },
+    "SC04_g1": {
+      "file": "media/stills/start_SC04_g1.png",
+      "sha256": "ef75a04b07d01da000701706f23141ef42ecd399eff322d51d03207473dab408",
+      "prompt_sha256": "1009059548fefca00a53a5e60c630e6edb9f6fde09469e913f949cd5a12e0b7f",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: edit of the SC03_g2 still, close on MARA through the gap, try 1",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:37:35+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:52+00:00"
+    },
+    "SC04_g2": {
+      "file": "media/stills/start_SC04_g2.png",
+      "sha256": "fe9a0a70b368819ca8ee8c405d021a0b1b0cb3d514f9b2095c6239a6b7af4aaf",
+      "prompt_sha256": "3240c4787dddbfa371c6d26b029c5207c1e3367c14b7089380dbd5bc2c4ec294",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: edit of the SC03_g1 still, close on THEO in the gap, try 1",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:37:36+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:53+00:00"
+    },
+    "SC04_g3": {
+      "file": "media/stills/start_SC04_g3.png",
+      "sha256": "611a8b95d477c4eff9f6f62500cb541578e3edf22cf7520410d33381cd0fb4f5",
+      "prompt_sha256": "0886d4435dd146326139705d8c54bd1f4a16df651b458d96491d98b56ee4fe62",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: edit of the SC03_g2 still, shutter fully up, THEO standing, try 1",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:37:37+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:54+00:00"
+    },
+    "SC04_g4": {
+      "file": "media/stills/start_SC04_g4.png",
+      "sha256": "fb0f200f4d87988263e000c6c86658d920b76aafced8f491a015b49a90110869",
+      "prompt_sha256": "40790a15347cb5900ee966e11610ce6aff67f92b7211dedca87b2768e2cdfa0e",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: insert drawn from the SC04_g3 still, jar on its side, coins spread, try 1",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:43:04+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:54+00:00"
+    },
+    "SC05_g1": {
+      "file": "media/stills/start_SC05_g1.png",
+      "sha256": "d592a97b176e8135449a93ba08b3c85f489bfa37fbdd08f4d0d56be6b1215ca2",
+      "prompt_sha256": "2e7b87e85f9c445628b0e64c83419011f0daea8f1261a3230e2f6ca22a2abd80",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: edit of the SC04_g3 still, coins in stacks, jar on its side, clock 10:47, try 1",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:43:05+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:55+00:00"
+    },
+    "SC05_g2": {
+      "file": "media/stills/start_SC05_g2.png",
+      "sha256": "33bd9c288f3ccf885630720aa5f0d35e2d58daa95a0c6d960ee11e1d6e127e3a",
+      "prompt_sha256": "c3320b280fc6dfb4112c6ccc0186254d8c844fcdb20f6b6331f12cc621a4d2e6",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: edit of the SC04_g2 still, shutter up, stacks on the counter, try 1",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:43:07+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:56+00:00"
+    },
+    "SC05_g3": {
+      "file": "media/stills/start_SC05_g3.png",
+      "sha256": "26aa0fc07f38d6d8c03ff02eac68a5020624e888d2cb9f5c6ff130ef206f2f43",
+      "prompt_sha256": "7a869c8711e51a3f0bff17837270230cd1d05bba2e79bfde41fde8675d3c44aa",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: edit of the SC03_g1 still, shutter up, ticket on the counter, try 1",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:43:08+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:57+00:00"
+    },
+    "SC06_g1": {
+      "file": "media/stills/start_SC06_g1.png",
+      "sha256": "ea1ffeb338205625593ce59aa5193f9581e91e3de94f026017e290f92c785ac2",
+      "prompt_sha256": "ad1c01df2d5c810bd2b790c2558549e248dd18cc28b49da892952dada8586caa",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: new platform master from char_THEO + start_SC01_g1 (MARA) + SC04_g3 for light, try 2 (try 1: THEO faced the door, downpour)",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:49:50+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:19:58+00:00"
+    },
+    "end:SC06_g1": {
+      "file": "media/stills/end_SC06_g1.png",
+      "sha256": "f757e8baea0a38d65516618ef4b87f9ce4e16c14ac97b42026860e7bbf6a3dab",
+      "prompt_sha256": "7f76eb35609737f0ffb86a4f2b1ee6aee7585d70e84b87718b22e32d5e7a3682",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: edit of the SC06_g1 start still, MARA beside THEO, try 2 (try 1 moved the camera)",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:49:55+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:20:00+00:00"
+    },
+    "SC06_g2": {
+      "file": "media/stills/start_SC06_g2.png",
+      "sha256": "296e8f5ae76f1061627b245dcc49cfab217e926b93f1e259ac862f680ff542b5",
+      "prompt_sha256": "e8038ab56f95308002c5f17291bf89521ffa581573ca60ff33b40d607055f5e2",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab: two-shot drawn from the SC06_g1 end still (try 1) for faces and props, try 1",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T20:49:58+00:00",
+      "approved_by": "owner-khoikk03",
+      "approved_at": "2026-11-08T21:20:01+00:00"
     }
   }
 }

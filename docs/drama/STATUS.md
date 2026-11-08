@@ -31,3 +31,5 @@ Prove the interaction contract on one exchange (SC01_g2 -> SC02_g1 -> SC02_g2), 
 
 ## Next step
 P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE). Then Owner's P15-07 restage choice -> P16-07b rollout SC03-SC06 -> P16-10 shoot.
+- P16-12 DONE: SC03-SC06 stills (12, ChatGPT GPM tab) + boards approved by the Owner ('Duyệt tất cả'); SC06_g1 end
+  frame added; shutter ROIs re-measured; gate3 SC03-SC06 PASS. Next: P16-10 shoot SC03-SC06 (needs OWNER_GO_LIVE per send).

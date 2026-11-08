@@ -68,7 +68,8 @@ def test_plan_has_only_the_pending_storyboard_left(plan):
     # P16-06 generability: SC01_g1/g2 reuse their Owner-accepted takes (t5, t2) and send nothing new
     # P16-07b: SC03..SC06 are restaged and on the interaction contract (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09):
     # none is RED, so only the storyboard blocks and generability warns
-    assert checks == {("STORYBOARD", "BLOCK"), ("LOOK_NOT_PINNED", "WARN"),
+    # P16-12: SC06_g1 has an end frame where MARA arrives, so no shot warns LOOK_NOT_PINNED any more
+    assert checks == {("STORYBOARD", "BLOCK"),
                       ("GENERABILITY_RED_REUSE", "WARN"), ("GENERABILITY_AMBER", "WARN")}, checks
     per_gen = {g: {(i["check"], i["severity"]) for i in v["issues"]} for g, v in g3["generations"].items()}
     for gid, issues in per_gen.items():  # every shot: only the storyboard blocks, generability and the look pin warn
@@ -77,9 +78,7 @@ def test_plan_has_only_the_pending_storyboard_left(plan):
         assert all(c.startswith("GENERABILITY_") or c == "LOOK_NOT_PINNED" for c, sev in issues if sev == "WARN"), (gid, issues)
     assert not any(i["check"] == "GENERABILITY_RED" for v in g3["generations"].values() for i in v["issues"])
     warned = {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "LOOK_NOT_PINNED"}
-    assert warned == {"SC06_g1"} and not any(g3["generations"][g]["verdict"] == "BLOCKED" and
-                                            all(i["check"] == "LOOK_NOT_PINNED" for i in g3["generations"][g]["issues"])
-                                            for g in warned)
+    assert warned == set()
     assert len(g3["generations"]) == 15
     for gid in g3["generations"]:  # the 215-word limit holds with no accepted_overlong everywhere else
         words = len((out / "prompts" / f"{gid}.txt").read_text(encoding="utf-8").split())

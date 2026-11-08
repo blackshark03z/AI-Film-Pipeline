@@ -532,10 +532,10 @@
       "tracked": {
         "object": "shutter",
         "roi": [
-          0.46,
-          0.05,
-          0.66,
-          0.55
+          0.14,
+          0.0,
+          0.74,
+          0.05
         ],
         "axis": "y",
         "direction": "still"
@@ -643,10 +643,10 @@
       "tracked": {
         "object": "shutter",
         "roi": [
-          0.46,
-          0.05,
-          0.66,
-          0.55
+          0.38,
+          0.0,
+          0.74,
+          0.27
         ],
         "axis": "y",
         "direction": "still"
@@ -749,10 +749,10 @@
       "tracked": {
         "object": "shutter",
         "roi": [
-          0.46,
-          0.05,
-          0.66,
-          0.55
+          0.1,
+          0.0,
+          0.9,
+          0.1
         ],
         "axis": "y",
         "direction": "still"
@@ -1393,7 +1393,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "WIDE_ESTABLISH",
-        "composition": "master on the whole platform: the lamp post, the wet rails and the train headlights, the office door behind THEO"
+        "composition": "master on the whole platform: the wet rails and the train headlights at frame-left, the ticket office wall with its door and the lamp post at frame-right, the office door behind THEO"
       },
       "camera_position": "A",
       "readout": [
@@ -1408,7 +1408,7 @@
       "duration_s": 6,
       "version": 2,
       "repair_of": "SC06_g1@v1",
-      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): second location on the interaction contract: marks platform_edge and office_door, encounter last_train.",
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): second location on the interaction contract: marks platform_edge and office_door, encounter last_train. P16-12: end frame where MARA arrives (plan WARN LOOK_NOT_PINNED: she walks during the shot); composition names the side of the door and the rails for camera A.",
       "addressees": {
         "71": [
           "MARA"
@@ -1419,7 +1419,9 @@
           "mode": "VISIBLE"
         }
       },
-      "gaze_target": "MARA"
+      "gaze_target": "MARA",
+      "end_frame": true,
+      "end_pose": "MARA has walked from the office door to the platform edge and stands beside THEO, frame-right, the suitcase at her side, facing the train; THEO has turned toward her, the ticket in his hand"
     },
     {
       "generation_id": "SC06_g2",
