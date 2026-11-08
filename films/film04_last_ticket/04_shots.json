@@ -105,7 +105,7 @@
       ],
       "end_pose": "she stands behind the window, on the far side of the shutter: the lowered shutter hides her face; its bottom edge rests on the brass shutter catches, and below it only her chest and both hands holding the edge show",
       "duration_s": 4,
-      "generability_waiver": "accepted t5 after 5 takes; rated RED retroactively",
+      "accepted_take_reuse": "SC01_g1_t5",
       "tracked": {
         "object": "shutter",
         "roi": [
@@ -215,7 +215,7 @@
         }
       ],
       "duration_s": 8,
-      "generability_waiver": "accepted t2 after 2 takes; rated RED retroactively",
+      "accepted_take_reuse": "SC01_g2_t2",
       "end_frame": true,
       "end_pose": "he stands at the counter in front of the ticket window, bent forward so his face shows in the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches above his head; he holds the jar of coins in both hands on the counter; his olive green rain jacket is wet",
       "version": 2,

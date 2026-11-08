@@ -830,7 +830,12 @@ any. Stills register lists the questions. 6 tests; contract off unchanged.
 Contract route: scenes sharing `encounter_id` are continuous for handoff severity, emotional carry-over and once-action
 repeats. New SPATIAL_HANDOFF_BLOCKING (mark/posture) BLOCK; `ShotDecl.handoff_ellipsis` (reason) turns spatial handoff
 findings into WARN `*_ELLIPSIS`; lighting/time/location stay BLOCK. 5 tests; contract off unchanged.
-### P16-06 Generability v2 (UNKNOWN, exceptions, caps proven at the generation entry point) — READY
+### P16-06 Generability v2 (UNKNOWN, exceptions, caps proven at the generation entry point) — DONE (2026-11-08)
+GREEN/AMBER/RED/UNKNOWN (unmatched ACTION -> UNKNOWN; HOLD scanned for mechanism/text); send caps 1/2/1/0.
+RED needs `accepted_take_reuse` (no new send) or an Owner `generability_exception` bound to version + prompt sha,
+attempt/credit cap and expiry; free-text waivers demote nothing (WARN LEGACY). `generate` blocks SEND_CAP,
+AWAITING_REVIEW (2nd AMBER), EXCEPTION_MISMATCH/EXPIRED/SPENT, ACCEPTED_TAKE_REUSE; payload carries `attempts`.
+Film04: SC01_g1/g2 waivers migrated to reuse of t5/t2. 12 entry-point tests + 24 rating tests.
 ### P16-07a Pilot exchange SC01_g2 -> SC02_g1 v4 (OTS over THEO) -> SC02_g2 (OTS over MARA): package + stills — waits for P16-02..05; Owner approves board/stills
 ### P16-08 Send reliability offline (= P15-06) — READY
 ### P16-09 Live pilot: SC02_g1 then SC02_g2, 360p Omni Flash, adjacent cuts — LIVE, Owner review

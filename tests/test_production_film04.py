@@ -65,9 +65,10 @@ def test_plan_has_only_the_pending_storyboard_left(plan):
     checks = {(i["check"], i["severity"]) for v in g3["generations"].values() for i in v["issues"]}
     # STORYBOARD: an Owner/reviewer decision, never self-approved; LOOK_NOT_PINNED (WARN): shots where someone
     # walks and no end frame shows where they arrive (SC01_g2 t1 lost THEO's jacket that way; v2 has an end frame)
-    # P15-01 generability: SC04/SC05 are RED and not yet restaged (BLOCK until a waiver or a restage); SC01 are waived
+    # P16-06 generability: SC04/SC05 are RED and not yet restaged (BLOCK until a restage or an Owner exception);
+    # SC01_g1/g2 reuse their Owner-accepted takes (t5, t2) and send nothing new
     assert checks == {("STORYBOARD", "BLOCK"), ("LOOK_NOT_PINNED", "WARN"), ("GENERABILITY_RED", "BLOCK"),
-                      ("GENERABILITY_RED_WAIVED", "WARN"), ("GENERABILITY_AMBER", "WARN")}, checks
+                      ("GENERABILITY_RED_REUSE", "WARN"), ("GENERABILITY_AMBER", "WARN")}, checks
     red = {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "GENERABILITY_RED"}
     assert red == {"SC04_g1", "SC04_g2", "SC05_g1", "SC05_g2"}
     warned = {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "LOOK_NOT_PINNED"}

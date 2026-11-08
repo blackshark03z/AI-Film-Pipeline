@@ -4,9 +4,14 @@ film04 lost ~14 h because beats the model cannot do passed every gate (docs/prod
 sections 2 and 4); 5 of 6 rejected takes failed on a rolling shutter: an articulated prop at a partial position, a pinned
 prop that moved while a body moved near it, a body lowering its face into the fixed gap.
 
-The rules are data (``RULES``): a regex over the lowercased phase description. A RED shot blocks the plan unless the
-shot carries a ``generability_waiver`` (restage done, or the take was already accepted); then it is a WARN.
-HOLD phases say what does not move, so they are not scanned.
+The rules are data (``RULES``): a regex over the lowercased phase description. Levels GREEN / AMBER / RED / UNKNOWN,
+aggregated RED > UNKNOWN > AMBER > GREEN. GREEN needs a positive match: every ACTION phase must hit a ``SUPPORTED``
+family (or a rule); an ACTION that matches nothing makes the shot UNKNOWN (finding UNMATCHED_ACTION).
+
+A RED shot blocks the plan unless the shot reuses an Owner-accepted take (``accepted_take_reuse``) or carries a
+``generability_exception`` for its current version (both WARN here; the exception's prompt hash, expiry and budget are
+checked at generate time). The legacy free-text ``generability_waiver`` demotes nothing. HOLD phases say what does not
+move, so only the constraint rules (``HOLD_RULES``: a held state, e.g. a mechanism at a partial position) scan them.
 """
 from __future__ import annotations
 
@@ -17,13 +22,15 @@ from ..core import ContractModel
 from .motion_library import MOTION_LIBRARY
 from .preflight import PreflightIssue
 
-Level = Literal["GREEN", "AMBER", "RED"]
+Level = Literal["GREEN", "AMBER", "RED", "UNKNOWN"]
 
 # (rule id, level, regex over the lowercased description, reason)
 RULES: tuple[tuple[str, str, str, str], ...] = (
     ("PARTIAL_MECHANISM", "RED",
      r"\b(?:pushes|pulls|raises|lowers|drags|rolls|slides|push|pull|raise|lower)\b[^.;,]{0,30}"
-     r"\b(?:shutter|window|drawer|lid|blind)s?\b",
+     r"\b(?:shutter|window|drawer|lid|blind)s?\b"
+     r"|\b(?:half|partly|partially|halfway|part-way)\b[- ]?\w*\b[^.;,]{0,20}\b(?:shutter|window|drawer|lid|blind)s?\b"
+     r"|\b(?:shutter|window|drawer|lid|blind)s?\b[^.;,]{0,25}\b(?:half|partly|partially|halfway|part-way)\b",
      "a mechanism that must stop at a partial position is not held (film04 SC01_g1 t2-t4, SC04_g2)"),
     ("BODY_INTO_FIXED_GAP", "RED",
      r"\b(?:stoops?|bends?|bent|crouch\w*|lowers?|sits?|sinks?|leans?)\b[^.;]{0,100}\b(?:face|head)\b"
@@ -58,6 +65,24 @@ RULES: tuple[tuple[str, str, str, str], ...] = (
      "a door that opens: the end position is not controlled"),
 )
 
+# rules that describe a held state, so they also scan HOLD phases (everything else describes a motion)
+HOLD_RULES = frozenset({"PARTIAL_MECHANISM", "READABLE_TEXT"})
+
+# actions the model does reliably at a stable setup: an ACTION phase hitting one of these (and no AMBER/RED rule) is GREEN
+SUPPORTED: tuple[tuple[str, str], ...] = (
+    ("SPEAK", r"\b(?:speaks?|speaking|says?|saying|asks?|asking|replies|answers?|whispers?|murmurs?|tells?|talks?|talking)\b"),
+    ("LOOK", r"\b(?:glances?|glancing|looks?|looking|gazes?|stares?|watches)\b"
+             r"|\bturns? (?:her |his |their |the )?(?:head|face|gaze|eyes)\b"),
+    ("STILL", r"\bholds? (?:a |the |her |his )?(?:look|gaze|stare|still|stillness|pose|beat)\b"
+              r"|\b(?:stands|stays|remains|waits|pauses|freezes)\b(?! up)"),
+    ("NOD", r"\bnods?\b|\bshakes? (?:her|his) head\b"),
+    ("BREATHE", r"\b(?:breathes?|sighs?|exhales?|inhales?)\b"),
+    ("FACE", r"\b(?:blinks?|smiles?|frowns?|swallows?)\b"),
+    ("GESTURE", r"\b(?:gestures?|shrugs?|(?:crosses|folds) (?:her|his|their) arms)\b"),
+)
+_SUPPORTED = tuple(re.compile(rx) for _, rx in SUPPORTED)
+_SUPPORTED_MOTIONS = frozenset({"turn_head", "glance"})
+
 # a phase is a body action (not speech or looks) when one of these appears; used by TWO_PEOPLE_ACTION
 _ACTION_VERBS = re.compile(
     r"\b(?:walks?|hurries|steps?|crosses|opens?|pushes|pulls|lifts|takes|sets|puts|places|hands|lays|reaches|grabs|picks"
@@ -66,12 +91,13 @@ _POSTURE = re.compile(r"\b(?:sits|stands|rises?) (?:down|up)\b|\b(?:sit|stand) (
 _BODY_TRAVEL = {"sit_down", "stand_up", "walk_across_room"}
 _COMPILED = tuple((rid, lvl, re.compile(rx), why) for rid, lvl, rx, why in RULES)
 
-DRAFTS = {"GREEN": 1, "AMBER": 2, "RED": 3}
+# send cap per shot version (generate.py SEND_CAP); RED sends nothing without an Owner exception
+DRAFTS = {"GREEN": 1, "AMBER": 2, "UNKNOWN": 1, "RED": 0}
 
 
 class Finding(ContractModel):
     rule: str
-    level: Literal["AMBER", "RED"]
+    level: Literal["AMBER", "RED", "UNKNOWN"]
     phase: str   # "a-b s"
     reason: str
 
@@ -94,9 +120,14 @@ def rate_shot(decl) -> GenerabilityRating:
             findings.append(Finding(rule=rule, level=level, phase=window, reason=reason))  # type: ignore[arg-type]
 
     pinned = decl.tracked is not None and decl.tracked.direction == "still"
-    phases = [p for p in decl.choreography.phases if p.kind != "HOLD"]
-    for phase in phases:
+    for phase in decl.choreography.phases:
         text = phase.description.lower()
+        if phase.kind == "HOLD":
+            for rid, lvl, rx, why in _COMPILED:
+                if rid in HOLD_RULES and rx.search(text):
+                    add(rid, lvl, phase, why)
+            continue
+        before = len(findings)
         for rid, lvl, rx, why in _COMPILED:
             if rx.search(text):
                 add(rid, lvl, phase, why)
@@ -118,29 +149,48 @@ def rate_shot(decl) -> GenerabilityRating:
         if len(decl.visible) >= 2 and phase.kind in ("ACTION", "CONSEQUENCE") and \
                 (_ACTION_VERBS.search(text) or phase.motion):
             add("TWO_PEOPLE_ACTION", "AMBER", phase, "two people in frame and a body action: plan 2 drafts")
-    level: Level = ("RED" if any(f.level == "RED" for f in findings)
-                    else "AMBER" if findings else "GREEN")
+        if phase.kind == "ACTION" and len(findings) == before and phase.motion not in _SUPPORTED_MOTIONS \
+                and not any(rx.search(text) for rx in _SUPPORTED):
+            add("UNMATCHED_ACTION", "UNKNOWN", phase, f"no rule and no supported family matches: {phase.description!r}")
+    levels = {f.level for f in findings}
+    level: Level = ("RED" if "RED" in levels else "UNKNOWN" if "UNKNOWN" in levels
+                    else "AMBER" if "AMBER" in levels else "GREEN")
     waiver = (getattr(decl, "generability_waiver", "") or "").strip()
     return GenerabilityRating(generation_id=decl.generation_id, level=level, findings=findings,
                               drafts=DRAFTS[level], waiver=waiver)
 
 
 def generability_issues(decl) -> tuple[GenerabilityRating, list[PreflightIssue]]:
-    """gate3 issues: RED without a waiver BLOCKs, RED with one and AMBER WARN; GREEN says nothing."""
+    """gate3 issues: RED BLOCKs unless the shot reuses an accepted take or has an exception for its version (then WARN);
+    AMBER and UNKNOWN WARN; GREEN says nothing. A legacy waiver only adds a WARN."""
     rating = rate_shot(decl)
+    issues: list[PreflightIssue] = []
+    if rating.waiver:
+        issues.append(PreflightIssue(check="GENERABILITY_WAIVER_LEGACY", severity="WARN",
+                                     detail=f"{rating.waiver!r} demotes nothing; migrate to accepted_take_reuse or "
+                                            "generability_exception"))
     if rating.level == "GREEN":
-        return rating, []
+        return rating, issues
     rules = ", ".join(f"{f.rule} ({f.phase})" for f in rating.findings if f.level == rating.level)
+    exc = getattr(decl, "generability_exception", None)
+    reuse = (getattr(decl, "accepted_take_reuse", "") or "").strip()
     if rating.level == "RED":
-        if rating.waiver:
-            issue = PreflightIssue(check="GENERABILITY_RED_WAIVED", severity="WARN",
-                                   detail=f"{rules}; waiver: {rating.waiver}")
+        if reuse:
+            issues.append(PreflightIssue(check="GENERABILITY_RED_REUSE", severity="WARN",
+                                         detail=f"{rules}; reuses the accepted take {reuse}, no new send"))
+        elif exc is not None and exc.shot_version == decl.version:
+            issues.append(PreflightIssue(check="GENERABILITY_RED_EXCEPTION", severity="WARN",
+                                         detail=f"{rules}; Owner exception for v{exc.shot_version}, {exc.max_attempts} "
+                                                f"send(s) / {exc.max_credits:g} credits until {exc.expires}"))
         else:
-            issue = PreflightIssue(
+            issues.append(PreflightIssue(
                 check="GENERABILITY_RED", severity="BLOCK",
-                detail=f"{rules}; restage (cut around it, prop-only insert, off screen + sound, prop out of frame) "
-                       "or set generability_waiver")
+                detail=f"{rules}; restage (cut around it, prop-only insert, off screen + sound, prop out of frame), "
+                       "reuse an accepted take (accepted_take_reuse) or get an Owner generability_exception"))
+    elif rating.level == "UNKNOWN":
+        issues.append(PreflightIssue(check="GENERABILITY_UNKNOWN", severity="WARN",
+                                     detail=f"{rules}; unrated beat, offline work only, {rating.drafts} send per version"))
     else:
-        issue = PreflightIssue(check="GENERABILITY_AMBER", severity="WARN",
-                               detail=f"{rules}; plan {rating.drafts} drafts")
-    return rating, [issue]
+        issues.append(PreflightIssue(check="GENERABILITY_AMBER", severity="WARN",
+                                     detail=f"{rules}; plan {rating.drafts} drafts"))
+    return rating, issues

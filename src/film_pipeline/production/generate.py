@@ -11,6 +11,9 @@ Blockers keep a send from being safe; they are listed in the payload either way:
 * a chained generation whose previous generation has no ACCEPTED take of its current version (its end frame is the
   start frame, so an unreviewed or rejected take cannot hand off)
 * the start-frame still is missing
+* generability (only when the film opts in): a shot that reuses an accepted take, a RED shot without a valid Owner
+  exception (version, prompt hash, expiry, attempts and credits), the per-version send cap, an AMBER second send while the
+  first take waits for review
 * live only: no `--start-token`, no budget in `film.json`, or the take would push credits past the cap (`budget.cap_factor`
   x estimate, counting every take already logged, rejected ones included)
 
@@ -26,10 +29,11 @@ import json
 import re
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from film_pipeline.drama.generability import DRAFTS, rate_shot
 from film_pipeline.production.plan import plan_package
 from film_pipeline.production.planning import flow_credits
 from film_pipeline.production.sections import shot_seconds
@@ -110,7 +114,8 @@ def _start_still(pkg: Any, generation_id: str, stills_dir: Path | None, blockers
 
 
 def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None, stills_dir: Path | None = None,
-                  start_token: str | None = None, end_token: str | None = None) -> dict[str, Any]:
+                  start_token: str | None = None, end_token: str | None = None,
+                  today: date | None = None) -> dict[str, Any]:
     shots, pre = pkg.typed.get("shots"), pkg.typed.get("preprod")
     if shots is None or pre is None:
         raise ValueError("generate needs a valid 03_preprod.json and 04_shots.json")
@@ -179,6 +184,9 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     elif spent + cost > cap:
         blockers.append(_blocker("BUDGET_EXCEEDED", f"{spent:g} spent + {cost:g} > cap {cap:g}",
                                  live_only=True))
+    attempts = None
+    if pre.preflight.generability:
+        attempts = _generability_gate(decl, sent, log, sha256_text(prompt), cost, blockers, today or date.today())
     argv = [sys.executable, str(FLOW_SEND), str(prompt_file), str(out), "--start", start_token or PLACEHOLDER_TOKEN,
             "--start-file", str(still),
             "--model", FLOW_MODEL, "--duration", str(int(seconds))]
@@ -197,10 +205,50 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
             "expected_credits": 0.0 if pkg.header.rehearsal else cost, "credits_spent": spent,
             "credit_cap": cap, "output": str(out), "argv": argv,
             "preconditions": preconditions, "blockers": blockers}
+    if attempts is not None:
+        payload["attempts"] = attempts
     if end_still is not None:
         payload["end_frame"] = {"file": str(end_still), "exists": end_still.is_file(),
                                 "sha256": sha256_file(end_still) if end_still.is_file() else ""}
     return payload
+
+
+def _generability_gate(decl: Any, sent: dict[str, dict[str, Any]], log: Any, prompt_sha: str, cost: float,
+                       blockers: list[dict[str, Any]], today: date) -> dict[str, Any]:
+    """Blockers from the generability rating (drama/generability.py); returns the payload's `attempts` block.
+    A send counts once it was submitted (receipt sent, result not a pre-submit failure); a version bump keeps the history."""
+    gid, level = decl.generation_id, rate_shot(decl).level
+    mine = [r for tid, r in sent.items() if r.get("generation_id", tid.rsplit("_t", 1)[0]) == gid
+            and not str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS)]
+    here = [r for r in mine if r.get("shot_version", 1) == decl.version]
+    attempts = {"this_version": len(here), "all_versions": len(mine), "cap": DRAFTS[level], "level": level}
+    reuse = (decl.accepted_take_reuse or "").strip()
+    if reuse:
+        blockers.append(_blocker("ACCEPTED_TAKE_REUSE", f"{gid} reuses the accepted take {reuse}; no new send"))
+        return attempts
+    exc = decl.generability_exception
+    if level == "RED":
+        if exc is None:
+            blockers.append(_blocker("GENERABILITY_RED", f"{gid} v{decl.version} is RED and has no Owner "
+                                     f"generability_exception"))
+        else:
+            if exc.shot_version != decl.version or exc.prompt_sha256 != prompt_sha:
+                blockers.append(_blocker("EXCEPTION_MISMATCH", f"the exception is for v{exc.shot_version} prompt "
+                                         f"{exc.prompt_sha256[:12]}; this is v{decl.version} prompt {prompt_sha[:12]}"))
+            if today > exc.expires:
+                blockers.append(_blocker("EXCEPTION_EXPIRED", f"the exception expired on {exc.expires}"))
+            used = sum(float(r.get("expected_credits") or 0) for r in here)
+            if len(here) >= exc.max_attempts or used + cost > exc.max_credits:
+                blockers.append(_blocker("EXCEPTION_SPENT", f"{len(here)}/{exc.max_attempts} sends, {used:g} + {cost:g} "
+                                         f"credits vs {exc.max_credits:g}"))
+        return attempts
+    if len(here) >= DRAFTS[level]:
+        blockers.append(_blocker("SEND_CAP", f"{gid} v{decl.version} is {level}: {len(here)} of {DRAFTS[level]} send(s) used"))
+    waiting = [t.take_id for t in log.for_generation(gid) if t.shot_version == decl.version and t.status == "GENERATED"]
+    if level == "AMBER" and here and waiting:
+        blockers.append(_blocker("AWAITING_REVIEW", f"{', '.join(waiting)} is not reviewed yet; accept or reject it "
+                                 f"before the second AMBER send"))
+    return attempts
 
 
 # results the sender returns before pressing Enter on the prompt (tools/drama_flow_ui/flow_send.py): nothing was submitted
@@ -263,9 +311,10 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
 
 def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Path | None = None,
              stills_dir: Path | None = None, start_token: str | None = None, backlog: Path | None = None,
-             runner: Runner | None = None, end_token: str | None = None) -> dict[str, Any]:
+             runner: Runner | None = None, end_token: str | None = None,
+             today: date | None = None) -> dict[str, Any]:
     payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
-                            end_token=end_token)
+                            end_token=end_token, today=today)
     root = Path(pkg.root)
     live_blocked = [b for b in payload["blockers"] if not b["live_only"] or not dry_run]
     if dry_run:

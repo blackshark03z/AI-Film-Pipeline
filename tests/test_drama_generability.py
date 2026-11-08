@@ -16,13 +16,13 @@ TOOL = ROOT / "tools" / "film.py"
 FILES = ("film.json", "script.fountain", "01_story.json", "02_direction.json", "03_preprod.json", "04_shots.json")
 
 
-def shot(gid, phases, visible=("MARA",), tracked=None, waiver=""):
+def shot(gid, phases, visible=("MARA",), tracked=None, waiver="", **extra):
     ph = [{"kind": k, "start_s": float(i), "end_s": float(i + 1), "description": d, **({"motion": m} if m else {})}
           for i, (k, d, m) in enumerate(phases)]
     return ShotDecl.model_validate({
         "generation_id": gid, "scene_id": gid[:4], "coverage": "SINGLE", "visible": list(visible), "dialogue": [],
         "start_state": gid, "end_state": gid, "choreography": {"generation_id": gid, "phases": ph},
-        "tracked": tracked, "generability_waiver": waiver})
+        "tracked": tracked, "generability_waiver": waiver, **extra})
 
 
 def still(obj="shutter"):
@@ -81,27 +81,76 @@ def test_film04_beats(gid, phases, visible, tracked, level, expect):
     rating = rate_shot(decl)
     assert rating.level == level
     assert expect <= rules(decl)
-    assert rating.drafts == {"GREEN": 1, "AMBER": 2, "RED": 3}[level]
+    assert rating.drafts == {"GREEN": 1, "AMBER": 2, "UNKNOWN": 1, "RED": 0}[level]
 
 
-def test_red_blocks_unless_waived():
+def exception(version=1, **kw):
+    return {"authorized_by": "owner", "owner_words": "ok, one try", "shot_version": version, "prompt_sha256": "a" * 64,
+            "max_attempts": 1, "max_credits": 10, "expires": "2026-12-01", "reason": "test", **kw}
+
+
+def checks(decl):
+    return [(i.check, i.severity) for i in generability_issues(decl)[1]]
+
+
+def test_red_blocks_unless_reused_or_excepted():
     phases = [("ACTION", "she pushes the shutter up", None)]
-    rating, issues = generability_issues(shot("SC04_g2", phases))
-    assert rating.level == "RED" and [(i.check, i.severity) for i in issues] == [("GENERABILITY_RED", "BLOCK")]
-    _, waived = generability_issues(shot("SC04_g2", phases, waiver="restaged as a prop-only insert"))
-    assert [(i.check, i.severity) for i in waived] == [("GENERABILITY_RED_WAIVED", "WARN")]
+    rating, _ = generability_issues(shot("SC04_g2", phases))
+    assert rating.level == "RED" and checks(shot("SC04_g2", phases)) == [("GENERABILITY_RED", "BLOCK")]
+    reuse = shot("SC04_g2", phases, accepted_take_reuse="SC04_g2_t2")
+    assert checks(reuse) == [("GENERABILITY_RED_REUSE", "WARN")] and rate_shot(reuse).level == "RED"
+    excepted = shot("SC04_g2", phases, generability_exception=exception(1))
+    assert checks(excepted) == [("GENERABILITY_RED_EXCEPTION", "WARN")] and rate_shot(excepted).level == "RED"
+    other = shot("SC04_g2", phases, generability_exception=exception(2))  # an exception for another version
+    assert checks(other) == [("GENERABILITY_RED", "BLOCK")]
 
 
-def test_amber_warns_and_green_is_silent():
-    _, amber = generability_issues(shot("SC06_g1", [("ACTION", "she walks out", None)]))
-    assert [(i.check, i.severity) for i in amber] == [("GENERABILITY_AMBER", "WARN")]
+def test_legacy_waiver_demotes_nothing():
+    phases = [("ACTION", "she pushes the shutter up", None)]
+    assert checks(shot("SC04_g2", phases, waiver="restaged as a prop-only insert")) == [
+        ("GENERABILITY_WAIVER_LEGACY", "WARN"), ("GENERABILITY_RED", "BLOCK")]
+
+
+def test_exception_validates():
+    for bad in ({"authorized_by": "claude"}, {"owner_words": ""}, {"prompt_sha256": "xyz"}, {"max_attempts": 0},
+                {"max_credits": 0}):
+        with pytest.raises(ValueError):
+            shot("SC04_g2", [("ACTION", "he speaks", None)], generability_exception=exception(1, **bad))
+
+
+def test_amber_unknown_warn_and_green_is_silent():
+    assert checks(shot("SC06_g1", [("ACTION", "she walks out", None)])) == [("GENERABILITY_AMBER", "WARN")]
+    unknown = shot("SC06_g1", [("ACTION", "she juggles oranges", None)])
+    rating = rate_shot(unknown)
+    assert rating.level == "UNKNOWN" and rating.drafts == 1
+    assert [(f.rule, f.phase) for f in rating.findings] == [("UNMATCHED_ACTION", "0-1 s")]
+    assert "juggles oranges" in rating.findings[0].reason
+    assert checks(unknown) == [("GENERABILITY_UNKNOWN", "WARN")]
     assert generability_issues(shot("SC02_g2", [("ACTION", "he speaks", None)]))[1] == []
+
+
+def test_aggregation_red_unknown_amber_green():
+    walk, odd, push = ("ACTION", "she walks out", None), ("ACTION", "she juggles", None), ("ACTION", "she pushes the shutter up", None)
+    assert rate_shot(shot("SC01_g1", [walk, odd])).level == "UNKNOWN"
+    assert rate_shot(shot("SC01_g1", [walk, odd, push])).level == "RED"
+    assert rate_shot(shot("SC01_g1", [walk])).level == "AMBER"
+
+
+def test_hold_and_setup_scanning():
+    held = [("ACTION", "she speaks", None), ("HOLD", "the shutter stays half raised; she holds a level look", None)]
+    assert rate_shot(shot("SC01_g1", held)).level == "RED"  # a mechanism held at a partial position
+    calm = [("ACTION", "she speaks", None), ("HOLD", "she walks nowhere, a juggler stands by", None)]
+    assert rate_shot(shot("SC01_g1", calm)).level == "GREEN"  # HOLD is not scanned for actions or families
+    assert rate_shot(shot("SC01_g1", [("SETUP", "she juggles", None), ("ACTION", "she nods", None)])).level == "GREEN"
 
 
 @pytest.mark.parametrize("text", ["light spills across the floor", "she crosses her arms", "she stands behind the counter",
                                   "he glances at the door behind him"])
 def test_no_false_hits(text):
-    assert rate_shot(shot("SC01_g1", [("ACTION", text, None)])).level == "GREEN"
+    rating = rate_shot(shot("SC01_g1", [("ACTION", text, None)]))
+    # "light spills" matches no supported family: UNKNOWN (unrated) but never a RED/AMBER false hit
+    assert rating.level == ("UNKNOWN" if text.startswith("light") else "GREEN")
+    assert not [f for f in rating.findings if f.level in ("RED", "AMBER")]
 
 
 def test_cli_on_film04_copy(tmp_path):
@@ -113,6 +162,6 @@ def test_cli_on_film04_copy(tmp_path):
                           text=True, encoding="utf-8", env={**__import__("os").environ, "PYTHONPATH": str(ROOT / "src")})
     assert proc.returncode == 0, proc.stderr
     out = json.loads(proc.stdout)
-    assert out["SC01_g1"]["level"] == "RED" and out["SC01_g1"]["waiver"]
+    assert out["SC01_g1"]["level"] == "RED" and out["SC01_g1"]["accepted_take_reuse"] == "SC01_g1_t5"
     assert out["SC02_g1"]["level"] == "GREEN" and out["SC02_g1"]["drafts"] == 1
     assert {"level", "findings", "drafts"} <= set(out["SC04_g2"])

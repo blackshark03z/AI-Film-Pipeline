@@ -387,7 +387,9 @@ def main(argv: list[str] | None = None) -> int:
             if shots is None:
                 _emit({"error": "generability needs a valid 04_shots.json"})
                 return 2
-            _emit({d.generation_id: {k: v for k, v in rate_shot(d).model_dump().items() if k != "generation_id"}
+            _emit({d.generation_id: {**{k: v for k, v in rate_shot(d).model_dump().items() if k != "generation_id"},
+                                     "accepted_take_reuse": d.accepted_take_reuse,
+                                     "exception": bool(d.generability_exception)}
                    for d in shots.generations})
             return 0
         if args.action == "animatic":

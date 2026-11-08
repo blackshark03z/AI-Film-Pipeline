@@ -7,6 +7,7 @@ Stages not listed here stay permissive dicts in `package.py` until their phase t
 from __future__ import annotations
 
 import re
+from datetime import date
 from typing import Annotated, Literal
 
 from pydantic import Field, StringConstraints, model_validator
@@ -185,6 +186,20 @@ class TrackedMotion(ContractModel):
         return self
 
 
+class GenerabilityException(ContractModel):
+    """The Owner's bounded permission to send one RED shot version (drama/generability.py): one prompt, a capped number of
+    sends and credits, until a date. Checked at generate time against the payload."""
+
+    authorized_by: str = Field(pattern=r"^owner")
+    owner_words: str = Field(min_length=1)  # the Owner's quoted words
+    shot_version: int = Field(ge=1)
+    prompt_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    max_attempts: int = Field(ge=1)
+    max_credits: float = Field(gt=0)
+    expires: date
+    reason: str
+
+
 class ShotDecl(ContractModel):
     """One generation = one shot of 3-15 s rendered from a start frame."""
 
@@ -215,8 +230,10 @@ class ShotDecl(ContractModel):
     end_pose: str = ""
     duration_s: int | None = Field(default=None, ge=3, le=15)  # None = the film header's generation_s
     tracked: TrackedMotion | None = None  # trajectory.py: the moved prop the motion QC measures
-    # generability.py: why a RED shot is allowed (restage done, or the take was already accepted); turns BLOCK into WARN
+    # legacy free text: parsed for back-compat, no longer demotes anything (WARN GENERABILITY_WAIVER_LEGACY)
     generability_waiver: str = ""
+    generability_exception: GenerabilityException | None = None  # generability.py: Owner-authorised send of a RED shot
+    accepted_take_reuse: str = ""  # take id of an Owner-accepted take this shot reuses as-is (no new send)
     # interaction.py: script line number -> listeners ("SELF" = talking to oneself / voiceover)
     addressees: dict[int, list[str]] = Field(default_factory=dict)
     listener_anchors: dict[str, ListenerAnchor] = Field(default_factory=dict)  # keyed by character name
