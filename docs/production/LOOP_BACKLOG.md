@@ -806,7 +806,13 @@ Fix: `generate.credit_ledger` matches receipts to takes by output file and skips
 before it, `generate` counted 170 (every receipt id missing from the take ids was charged again). Test
 `test_credit_ledger_matches_receipts_to_takes_by_output_file_and_skips_pre_submit_failures`. Open: Owner verdict on
 SC02_g1_t3 (status GENERATED); the 3 unresolved sends can be released only after checking Flow for their clips.
-### P16-02 Interaction-contract schema + checks — READY (after P16-01)
+### P16-02 Interaction-contract schema + checks — DONE (2026-11-08)
+`production/interaction.py` (ActorMark, ActorPose, ListenerAnchor, `interaction_issues`); opt-in
+`preflight.interaction_contract`; `SetLayout.marks`, `ContinuityState.blocking` (omitted from dumps when empty, goldens
+unchanged), `SceneSpec.encounter_id`, `ShotDecl.addressees/listener_anchors/gaze_target`. Checks ADDRESSEE_MISSING/ABSENT,
+LISTENER_ANCHOR_MISSING, ANCHOR_CONTRADICTION, OFF_FRAME_TOO_WIDE/NOT_ESTABLISHED/WRONG_SIDE, MARK_UNRESOLVED,
+GAZE_TARGET_MISSING/UNRESOLVED, GAZE_INTO_LENS (WARN). 11 tests on a film04 copy: v3 as shot BLOCKs, five false OFF_FRAME
+claims BLOCK, OTS v4 and an established CLOSE off-frame single pass. film04 data not yet opted in (P16-07a).
 ### P16-03 One placement source for still + video prompts; explicit camera.size wins — READY (after P16-02)
 ### P16-04 Relation review questions with required QC evidence — READY (after P16-02)
 ### P16-05 Encounter continuity across scene numbers — READY (after P16-02)

@@ -22,6 +22,7 @@ from film_pipeline.drama.coverage import _SIZE, CoverageShot, SceneUnit, SpokenL
 from film_pipeline.drama.feasibility import check_script
 from film_pipeline.production.camera import camera_issues
 from film_pipeline.production.continuity import continuity_issues, temporal_issues
+from film_pipeline.production.interaction import interaction_issues
 from film_pipeline.production.evidence import end_state_verified, load_attestations
 from film_pipeline.production.package import FilmPackage, PackageError
 from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection, shot_seconds
@@ -380,6 +381,9 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         if p.pre.preflight.generability:
             rating, extra = generability_issues(decl)
             issues += extra
+        if p.pre.preflight.interaction_contract:
+            issues += interaction_issues(p.pre, p.shots, decl, p.gen_index[gid],
+                                         {l.line_no: l.character for l in p.lines_for(decl)})
         end_words: int | None = None
         if decl.end_frame:
             if p.end_clauses(decl):

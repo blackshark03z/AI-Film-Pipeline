@@ -43,6 +43,8 @@ class PreflightLimits(ContractModel):
     prompt_style: Literal["full", "start_frame"] = "start_frame"
     # rate each shot GREEN/AMBER/RED for the video model (generability.py); off only for films shipped before P15-01
     generability: bool = True
+    # interaction.py: addressees, listener anchors, actor marks/blocking and gaze targets; opt-in (films before P16-02)
+    interaction_contract: bool = False
     timing: SceneTiming = Field(default_factory=SceneTiming)
     feasibility: FeasibilityLimits = Field(default_factory=FeasibilityLimits)
 

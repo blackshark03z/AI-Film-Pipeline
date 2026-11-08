@@ -13,9 +13,12 @@ match the previous generation's end state.
 """
 from __future__ import annotations
 
-from pydantic import Field
+from typing import Any
+
+from pydantic import Field, model_serializer
 
 from ..core import ContractModel
+from ..production.interaction import ActorPose
 
 
 class ContinuityState(ContractModel):
@@ -25,6 +28,14 @@ class ContinuityState(ContractModel):
     lighting: str = ""
     time_of_day: str = ""
     location: str = ""     # LocationLook.look_id
+    blocking: dict[str, ActorPose] = Field(default_factory=dict)  # NORA: mark + posture (interaction contract)
+
+    @model_serializer(mode="wrap")
+    def _omit_empty_blocking(self, handler: Any) -> dict[str, Any]:
+        data = handler(self)
+        if not self.blocking:  # films without the interaction contract keep their golden dumps
+            data.pop("blocking", None)
+        return data
 
     def as_dict(self) -> dict:
         return self.model_dump()

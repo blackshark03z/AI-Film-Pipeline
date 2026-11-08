@@ -22,6 +22,7 @@ from film_pipeline.drama.preflight import PreflightLimits
 from film_pipeline.production.camera import CameraSetup, LightingPlan
 from film_pipeline.production.direction import DirectionPlan
 from film_pipeline.production.edit import EditSection
+from film_pipeline.production.interaction import ListenerAnchor
 from film_pipeline.production.planning import RightsEntry
 from film_pipeline.production.set_layout import Readout, SetLayout
 from film_pipeline.production.story import StorySection
@@ -89,6 +90,7 @@ class SceneSpec(ContractModel):
     story_time: StoryTime
     extras: str = ""  # unnamed people present (never in positions)
     lighting: LightingPlan | None = None  # camera.py: key light plan for the scene (all scenes or none)
+    encounter_id: Ident | None = None  # interaction.py: scenes sharing an id are one continuous encounter
 
 
 class StillTemplates(ContractModel):
@@ -215,6 +217,10 @@ class ShotDecl(ContractModel):
     tracked: TrackedMotion | None = None  # trajectory.py: the moved prop the motion QC measures
     # generability.py: why a RED shot is allowed (restage done, or the take was already accepted); turns BLOCK into WARN
     generability_waiver: str = ""
+    # interaction.py: script line number -> listeners ("SELF" = talking to oneself / voiceover)
+    addressees: dict[int, list[str]] = Field(default_factory=dict)
+    listener_anchors: dict[str, ListenerAnchor] = Field(default_factory=dict)  # keyed by character name
+    gaze_target: str = ""  # character, set object id, mark id or "LENS"
 
 
 def shot_seconds(decl: ShotDecl, header) -> float:

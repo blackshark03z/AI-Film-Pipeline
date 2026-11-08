@@ -26,6 +26,7 @@ from pydantic import Field, StringConstraints, model_validator
 from film_pipeline.core import ContractModel
 from film_pipeline.drama.scene_bible import RuleIssue
 from film_pipeline.production.camera import _SIZE_ORDER, Size
+from film_pipeline.production.interaction import ActorMark
 
 Ident = Annotated[str, StringConstraints(pattern=r"^[A-Za-z0-9][A-Za-z0-9_-]*$")]
 
@@ -64,6 +65,7 @@ class SetLayout(ContractModel):
     zones: list[SetZone]
     objects: list[SetObject]
     cameras: list[CameraPosition]
+    marks: list[ActorMark] = Field(default_factory=list)  # interaction.py: where people stand / sit
 
     @model_validator(mode="after")
     def _consistent(self) -> "SetLayout":
@@ -71,10 +73,10 @@ class SetLayout(ContractModel):
             raise ValueError("a set layout needs at least one zone")
         if not self.cameras:
             raise ValueError("a set layout needs at least one camera position")
-        ids = [x.id for x in (*self.zones, *self.objects, *self.cameras)]
+        ids = [x.id for x in (*self.zones, *self.objects, *self.cameras, *self.marks)]
         dup = sorted({i for i in ids if ids.count(i) > 1})
         if dup:
-            raise ValueError(f"set layout: duplicate ids {dup} (zones, objects and cameras share one id space)")
+            raise ValueError(f"set layout: duplicate ids {dup} (zones, objects, cameras and marks share one id space)")
         zone_ids = {z.id for z in self.zones}
         object_ids = {o.id for o in self.objects}
         for o in self.objects:
@@ -90,12 +92,15 @@ class SetLayout(ContractModel):
                 raise ValueError(f"set layout: camera {c.id} sees unknown objects {unknown}")
             if c.look_at is not None and c.look_at not in object_ids:
                 raise ValueError(f"set layout: camera {c.id} looks at unknown object {c.look_at!r}")
+        for m in self.marks:
+            if m.zone not in zone_ids:
+                raise ValueError(f"set layout: mark {m.id} is in unknown zone {m.zone!r}")
         for z in self.zones:
             if z.box is not None:
                 x0, y0, x1, y1 = z.box
                 if not _in_unit(z.box) or not (x0 < x1 and y0 < y1):
                     raise ValueError(f"set layout: zone {z.id} box {z.box} must lie within 0..1 with x0<x1, y0<y1")
-        for x in (*self.objects, *self.cameras):
+        for x in (*self.objects, *self.cameras, *self.marks):
             if x.at is not None and not _in_unit(x.at):
                 raise ValueError(f"set layout: {x.id} position {x.at} must lie within 0..1")
         return self
