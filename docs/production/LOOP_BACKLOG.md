@@ -866,6 +866,12 @@ DETAIL_PROMPT_MATCH, upload_newest slot diff 0.4, 5 credits. Two earlier attempt
 t5 PRE_SUBMIT_ERROR (no composer '+' in Video mode -> upload now inside the slot picker, 747d4b8), t6
 START_NOT_FOUND upload (header avatar scored as newest -> list-column filter, a9052ad). Review files:
 media/review/cut_SC01_g2_t4__SC02_g1_t7.mp4, SC02_g1_t7_sheet.png, boundary_SC01_g2__SC02_g1.png;
-dailies takes/dailies/SC02_g1_t4.review.json. Waits for the Owner's verdict; SC02_g2 v2 needs its own send go-ahead.
+dailies takes/dailies/SC02_g1_t4.review.json. Owner accepted SC02_g1_t4 ("Accept, send SC02_g2").
+Storyboard frames were stale (rendered before v4/v2); re-rendered, Owner approved SC02_S1/S2 ("Approve boards, send").
+SC02_g2 v2 sent: AMBIGUOUS (gallery count jumped 14->24), reconciled BOUND by prompt (flow_reconcile, media a39db4ed),
+take SC02_g2_t1 registered, 8 credits, autoqc 0 warnings. Review: media/review/cut_SC01_g2__SC02_g1__SC02_g2.mp4,
+boundary_SC02_g1__SC02_g2.png. Waits for the Owner's verdict.
+Open defect: generate checks a storyboard approval only against the file hash, not against the current shot decl
+(SC02_g1 v4 went out under the v3-era board approval) -> plan/generate must flag a board older than its shot.
 ### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for P16-09 and the Owner's P15-07 choice
 ### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE
