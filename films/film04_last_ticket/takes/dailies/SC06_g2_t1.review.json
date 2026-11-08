@@ -1,0 +1,256 @@
+{
+  "take": {
+    "take_id": "SC06_g2_t1",
+    "generation_id": "SC06_g2",
+    "prompt_sha256": "1352b03d599fa8de59b0a34cf3fd21654c1f930f536778c160dd869cbba61483",
+    "start_frame_sha256": "296e8f5ae76f1061627b245dcc49cfab217e926b93f1e259ac862f680ff542b5",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC06_g2_t2.mp4",
+    "output_sha256": "6ee2a98eead3370f3b5225b719fdd84cc7da00ea295d79c91aad7fb109f8984e",
+    "status": "GENERATED",
+    "shot_version": 2,
+    "cause": "",
+    "registered_at": "2026-11-08T22:25:00Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "TWO_SHOT",
+    "visible": [
+      "MARA",
+      "THEO"
+    ],
+    "start_state": "SC06_g2",
+    "end_state": "SC06_end",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 2.0,
+        "description": "THEO and MARA stand side by side at the platform edge as the train doors slide open"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 2.0,
+        "end_s": 4.5,
+        "description": "MARA speaks to THEO, her eyes on the train"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.5,
+        "end_s": 6.0,
+        "description": "the train light falls across both of them"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: they board the last train together - carried by: MARA, THEO, train doors"
+    },
+    {
+      "group": "action",
+      "question": "0-2s SETUP: does this happen on screen - THEO and MARA stand side by side at the platform edge as the train doors slide open?"
+    },
+    {
+      "group": "action",
+      "question": "2-4.5s ACTION: does this happen on screen - MARA speaks to THEO, her eyes on the train?"
+    },
+    {
+      "group": "action",
+      "question": "4.5-6s HOLD: does this happen on screen - the train light falls across both of them?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): speaks to THEO"
+    },
+    {
+      "group": "character",
+      "question": "MARA: does the face/body read as quiet contentment (restrained)? Must NOT read as: sadness."
+    },
+    {
+      "group": "sync",
+      "question": "Line 76 is audible, spoken by the right character, lips match: MARA: Last train. Last shift."
+    },
+    {
+      "group": "audio",
+      "question": "MARA sounds like the voice bible: warm dry low female voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size MEDIUM, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC06_g2: Continues from the previous shot: THEO on the platform, frame-left; MARA beside him on the platform, frame-right; the ticket: in THEO's hand."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC06_end: Continues from the previous shot: THEO on the platform, frame-left; MARA beside him on the platform, frame-right; the ticket: in THEO's hand."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_ADDRESS:76",
+      "group": "narrative",
+      "question": "Line 76: does MARA clearly speak to THEO (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:THEO",
+      "group": "spatial",
+      "question": "Is THEO in frame for the whole clip?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does MARA look at train_doors and never into the lens?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC06_g2_t1",
+    "generation_id": "SC06_g2",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:76",
+      "REL_LISTENER:THEO",
+      "REL_GAZE"
+    ],
+    "output_sha256": "6ee2a98eead3370f3b5225b719fdd84cc7da00ea295d79c91aad7fb109f8984e"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}

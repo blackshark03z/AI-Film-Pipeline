@@ -1,0 +1,142 @@
+{
+  "take_id": "SC05_g1_t1",
+  "generation_id": "SC05_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:57": "Yes: MARA faces THEO while speaking."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "MARA speaks over the neat stacks; coins and clock unchanged.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "OTS over THEO (frame-left), MARA frame-right behind the open window; shutter up.",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:THEO": "Yes: THEO's shoulder and back of head stay in the near frame-left.",
+        "REL_GAZE": "Yes: MARA looks at THEO, not into the lens.",
+        "REL_BARRIER": "Yes: MARA behind the counter, THEO in the hall."
+      }
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Clock reads about 10:47.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g1_t1.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), clip in media/review/heads_SC05_g1_t1__SC06_g1_t1.mp4, loudness mean -29.2 dB max -10.3 dB, autoqc 0 warnings, AMBIGUOUS send bound by prompt via flow_reconcile (media 4d5c001e).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:57",
+    "REL_LISTENER:THEO",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "35b72f2a4fa3fa3046612370ac5250ccabd1fdb36488f94f13c5553b580eb105"
+}

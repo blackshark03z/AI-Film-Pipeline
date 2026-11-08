@@ -905,3 +905,8 @@ SC04_g4 still re-registered (same image, new prompt sha) and its board reset; Ow
 'Duyệt SC04_g4'). Gate3 SC03-SC06 all PASS.
 SC05_g1 clock reads ~10:46-10:47; plan rc=1 from the pre-existing SC01_g1 STALE_PROMPT end still. Next: P16-10 shoot (LIVE).
 ### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE
+Progress 2026-11-09: ACCEPTED by the Owner ("Accept cả 3"): SC03_g1_t1, SC05_g1_t1, SC06_g1_t1.
+Sent: SC05_g2_t1 PASSED; SC06_g2 t1 UNBOUND (no clip), t2 PASSED (log take SC06_g2_t1). Both await
+Owner review (media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, cut_SC06_g1_t1__SC06_g2_t2.mp4).
+SC03_g2 BLOCKED: t1 UNBOUND, the Flow tile vanished without a clip (3rd time after SC03_g1_t2,
+SC06_g2_t1); GREEN cap 1 counts it, so SC04 chain waits. Ledger 178/256.8.

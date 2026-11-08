@@ -1,0 +1,142 @@
+{
+  "take_id": "SC03_g1_t1",
+  "generation_id": "SC03_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:34": "Yes: THEO faces MARA through the gap while speaking."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO holds the jar to his chest, sets it on the counter, hands flat, speaks.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "MEDIUM counter-level; slight drift, no cut.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "OTS over MARA (frame-right), THEO in the gap frame-left/centre; shutter unchanged.",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:MARA": "Yes: MARA's back and bun stay in the near frame-right the whole clip.",
+        "REL_GAZE": "Yes: THEO looks at MARA, not into the lens.",
+        "REL_BARRIER": "Yes: THEO stays in the hall at the gap, MARA behind the counter."
+      }
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Shutter still; ROI flag is a false positive (hair in ROI).",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC03_g1_t3.mp4 (chat: 'Accept cả 3'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch1.jpg), cut after SC02_g2_t1 (media/review/cut_SC02_g2__SC03_g1_t3.mp4), loudness mean -30.5 dB max -0.5 dB, autoqc 0 warnings, PASSED bound DETAIL_PROMPT_MATCH media 29a8383e. Motion QC FLAG 26 px is THEO's hair entering the thin shutter ROI: the bottom-edge bar sits at the same row in the first and last frames (top-strip compare).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:34",
+    "REL_LISTENER:MARA",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "e076e86c7733789458239e93145c99f449a18d85fb19fa01722f87f9d76e5e18"
+}

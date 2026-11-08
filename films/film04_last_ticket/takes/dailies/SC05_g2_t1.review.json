@@ -1,0 +1,247 @@
+{
+  "take": {
+    "take_id": "SC05_g2_t1",
+    "generation_id": "SC05_g2",
+    "prompt_sha256": "a8fa90e1f7fc19e04902fcb649da90a181b350b818a17a3889ed0aaf683cec45",
+    "start_frame_sha256": "33bd9c288f3ccf885630720aa5f0d35e2d58daa95a0c6d960ee11e1d6e127e3a",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 3.0,
+    "output_file": "SC05_g2_t1.mp4",
+    "output_sha256": "1aa7ca0dcde3edc27201e4bfc9c13e2c5cd337f92270fe35d6813c35b32dd5cd",
+    "status": "GENERATED",
+    "shot_version": 2,
+    "cause": "",
+    "registered_at": "2026-11-08T22:17:19Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "THEO"
+    ],
+    "start_state": "SC05_g2",
+    "end_state": "SC05_g3",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "THEO waits at the open window, looking toward MARA off frame-right"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.5,
+        "description": "a heavy thump is heard off screen and THEO looks down at the ticket now lying on the counter"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 2.5,
+        "end_s": 3.0,
+        "description": "THEO holds his look down at the ticket"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: the ticket is ready: the thump is the stamp - carried by: THEO"
+    },
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - THEO waits at the open window, looking toward MARA off frame-right?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.5s ACTION: does this happen on screen - a heavy thump is heard off screen and THEO looks down at the ticket now lying on the counter?"
+    },
+    {
+      "group": "action",
+      "question": "2.5-3s HOLD: does this happen on screen - THEO holds his look down at the ticket?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): looks down at the ticket"
+    },
+    {
+      "group": "character",
+      "question": "THEO: does the face/body read as held breath (restrained)? Must NOT read as: disappointment."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC05_g2: Continues from the previous shot: MARA seated on her stool behind the counter, frame-right; THEO at the window, frame-left; the shutter: up; the jar: on its side on the counter, empty; the coins: in neat stacks on the counter."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC05_g3: Continues from the previous shot: MARA seated on her stool behind the counter, frame-right; THEO at the window, frame-left; the shutter: up; the jar: on its side on the counter, empty; the coins: in neat stacks on the counter; the ticket: lying on the counter."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_LISTENER:MARA",
+      "group": "spatial",
+      "question": "Is the place where MARA stands kept out of frame (never shown empty), and do THEO's eyes go just past the lens to frame-right?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does THEO look at counter and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do MARA and THEO stay on their own sides (clerk booth (staff side) / public hall (customer side)) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC05_g2_t1",
+    "generation_id": "SC05_g2",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_LISTENER:MARA",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "1aa7ca0dcde3edc27201e4bfc9c13e2c5cd337f92270fe35d6813c35b32dd5cd"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}
