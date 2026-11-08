@@ -22,7 +22,8 @@ from film_pipeline.drama.coverage import _SIZE, CoverageShot, SceneUnit, SpokenL
 from film_pipeline.drama.feasibility import check_script
 from film_pipeline.production.camera import camera_issues
 from film_pipeline.production.continuity import continuity_issues, temporal_issues
-from film_pipeline.production.interaction import interaction_issues
+from film_pipeline.production.interaction import (framing_phrase, hidden_names, hidden_person_issues,
+                                                   interaction_issues, placement_sentences)
 from film_pipeline.production.evidence import end_state_verified, load_attestations
 from film_pipeline.production.package import FilmPackage, PackageError
 from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection, shot_seconds
@@ -39,6 +40,9 @@ BUDGET_SECTIONS = ("prefix", "characters", "setting", "continuity", "shots", "pe
 BUDGET_LABELS = {"prefix": "start prefix", "characters": "cast/looks", "setting": "setting", "continuity": "start state",
                  "shots": "shot timing/action", "performance": "performance", "dialogue": "dialogue", "sound": "sound",
                  "prohibitions": "fixed tail"}
+
+# camera sizes the coverage compiler has no name for
+_UNIT_SIZE = {"EXTREME_WIDE": "WIDE", "INSERT": "CLOSE"}
 
 # words that leave the stopping point of a mid-travel motion to the model
 VAGUE_POSITION_WORDS = ("halfway", "half way", "half-closed", "middle", "upper half", "lower half", "partway",
@@ -117,8 +121,11 @@ class _Plan:
         book = self.pre.scenes[sid].axis
         shot_id = f"{sid}_S{k}"
         seconds = shot_seconds(decl, self.pkg.header)
+        size = _SIZE[decl.coverage]
+        if self.pre.preflight.interaction_contract and decl.camera is not None:  # the declared size, not the coverage default
+            size = _UNIT_SIZE.get(decl.camera.size, decl.camera.size)
         shot = CoverageShot(
-            shot_id=shot_id, coverage=decl.coverage, shot_size=_SIZE[decl.coverage], subject=decl.subject,
+            shot_id=shot_id, coverage=decl.coverage, shot_size=size, subject=decl.subject,
             foreground=decl.foreground, start_s=0.0, end_s=seconds, lines=self.lines_for(decl),
             action=self.action_text(decl), axis=axis_record(book, shot_id, decl.visible))
         return SceneUnit(scene_id=sid, duration_s=seconds, shots=[shot], axis_book=book)
@@ -140,15 +147,21 @@ class _Plan:
         location = self.pre.locations[scene.location]
         unit = self.unit_for(decl)
         start = self.cut(self.state(decl.start_state), decl.visible)
+        end = self.cut(self.state(decl.end_state), decl.visible)
+        placement = ""
+        if self.pre.preflight.interaction_contract:
+            placement = " ".join(self.placement(decl))
+            # a prop held by someone out of frame would summon a stranger (the still prompt does the same)
+            away = hidden_names(self.pre, decl, self.gen_index[decl.generation_id])
+            start, end = self.without_props_of(start, away), self.without_props_of(end, away)
         cast = [CharacterBrief(name=c, look=self.video_looks[c], voice=self.pre.characters[c].voice,
                                handle=self.pre.characters[c].handle) for c in start.positions]
         plan = compile_scene_prompt(
             unit, characters=cast, setting=scene.extras, room_tone=location.room_tone, sfx=decl.sfx or None,
             dialogue_language=self.language, start_state=start,
-            end_state=(self.cut(self.state(decl.end_state), decl.visible)
-                       if self.pre.preflight.end_state_in_prompt else None), location=location.look,
+            end_state=end if self.pre.preflight.end_state_in_prompt else None, location=location.look,
             choreography=decl.choreography, style=self.pre.preflight.prompt_style,
-            handles={n: c.handle for n, c in self.pre.characters.items() if c.handle})
+            handles={n: c.handle for n, c in self.pre.characters.items() if c.handle}, placement=placement)
         report = preflight_scene(
             scene=self.scenes[decl.scene_id], unit=unit, prompt=plan, reference_sets=[],
             reference_root=self.reference_root, storyboard=gate, known_characters=self.script.characters,
@@ -157,6 +170,14 @@ class _Plan:
             start_state=start, location=location.look, occupancy=scene.occupancy,
             choreography=decl.choreography)
         return unit, plan, report
+
+    def placement(self, decl: ShotDecl) -> list[str]:
+        return placement_sentences(self.pre, decl, {l.line_no: l.character for l in self.lines_for(decl)})
+
+    @staticmethod
+    def without_props_of(state: ContinuityState, away: set[str]) -> ContinuityState:
+        keep = {k: v for k, v in state.props.items() if not any(c in v for c in away)}
+        return state if len(keep) == len(state.props) else state.model_copy(update={"props": keep})
 
     def still_prompt(self, decl: ShotDecl, unit: SceneUnit) -> str:
         """Start-frame image: the shot's first instant, character stills attached."""
@@ -172,6 +193,15 @@ class _Plan:
         props = f" {props}." if props else ""
         extras = f" {scene.extras.capitalize()}." if scene.extras and shot.coverage == "MASTER" else ""
         alone = "" if len(shown) > 1 else f" Only {shown[0]} in frame."
+        framing = self.pre.still_templates.framing[shot.coverage]
+        place = ""
+        if self.pre.preflight.interaction_contract:
+            if len(scene.occupancy.present_at(self.gen_index[decl.generation_id])) > 1:
+                alone = ""  # the others are in the room, only out of frame
+            place = " ".join(self.placement(decl))
+            place = f" {place}" if place else ""
+            if decl.camera is not None:
+                framing = framing_phrase(framing, decl.camera.size)
         loc_spec = self.pre.locations[scene.location]
         location = loc_spec.look
         view = (f" {loc_spec.layout.view_text(decl.camera_position)}"
@@ -179,8 +209,8 @@ class _Plan:
         # film04 SC01_g1: the still showed MARA seated while the shot says she stands, hand on the cord
         setup = next((p.description for p in decl.choreography.phases if p.kind == "SETUP"), "")
         pose = f" First instant: {setup}." if setup and self.pre.still_templates.pose else ""
-        return (f"Photoreal film still, 16:9, {self.pre.still_templates.framing[shot.coverage]}: "
-                f"{shot.describe(unit.axis_book)}. {location.text}.{view} {people}.{props}{extras}{alone}{pose} "
+        return (f"Photoreal film still, 16:9, {framing}: "
+                f"{shot.describe(unit.axis_book)}. {location.text}.{view} {people}.{props}{place}{extras}{alone}{pose} "
                 "Faces and clothes exactly as in the attached character images. Natural, restrained "
                 "expressions. No text, no logos.")
 
@@ -376,6 +406,8 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         still = p.still_prompt(decl, unit)
         _write(out / "stills" / f"start_{gid}.txt", still + "\n", out)
         issues = list(report.issues)
+        if p.pre.preflight.interaction_contract:
+            issues += hidden_person_issues(p.pre, decl, p.gen_index[gid], [text, still])
         issues += p.motion_target_issues(decl) + p.look_pin_issues(decl)
         rating = None
         if p.pre.preflight.generability:

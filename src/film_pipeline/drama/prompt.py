@@ -109,10 +109,12 @@ def compile_scene_prompt(unit: SceneUnit, *,
                          location: LocationLook | None = None,
                          choreography: GenerationChoreography | None = None,
                          style: Literal["full", "start_frame"] = "full",
-                         handles: dict[str, str] | None = None
+                         handles: dict[str, str] | None = None,
+                         placement: str = ""
                          ) -> ScenePromptPlan:
     """style="start_frame": the image carries looks and set, the prompt describes motion only (P13-04).
-    `handles` adds names of characters who are not in `characters` (out of frame) to the name->handle map."""
+    `handles` adds names of characters who are not in `characters` (out of frame) to the name->handle map.
+    `placement` (P16-03) = who speaks to whom and where the listeners are; it follows the shot description."""
     start_frame = style == "start_frame"
     attachments = attachment_plan(reference_sets or [],
                                   max_images=max_reference_images)
@@ -165,6 +167,8 @@ def compile_scene_prompt(unit: SceneUnit, *,
         # "unbroken", not "continuous": Google's Omni guide offers both; ours invites a loop (UNCONTROLLED_REPEAT)
         shots_text = (f"A single unbroken {unit.duration_s:g}s shot, no scene cuts, 16:9: "
                       f"{unit.shots[0].describe(book)}.")
+    if placement:
+        shots_text += " " + placement
     performance = ""
     if choreography is not None:
         if start_frame:

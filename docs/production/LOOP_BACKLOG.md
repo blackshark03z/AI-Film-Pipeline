@@ -813,7 +813,13 @@ unchanged), `SceneSpec.encounter_id`, `ShotDecl.addressees/listener_anchors/gaze
 LISTENER_ANCHOR_MISSING, ANCHOR_CONTRADICTION, OFF_FRAME_TOO_WIDE/NOT_ESTABLISHED/WRONG_SIDE, MARK_UNRESOLVED,
 GAZE_TARGET_MISSING/UNRESOLVED, GAZE_INTO_LENS (WARN). 11 tests on a film04 copy: v3 as shot BLOCKs, five false OFF_FRAME
 claims BLOCK, OTS v4 and an established CLOSE off-frame single pass. film04 data not yet opted in (P16-07a).
-### P16-03 One placement source for still + video prompts; explicit camera.size wins — READY (after P16-02)
+### P16-03 One placement source for still + video prompts; explicit camera.size wins — DONE (2026-11-08)
+Contract route only (contract off = byte-identical, film04 shipped prompts reproduced). `interaction.placement_sentences`
+("X speaks to Y", OTS shoulder sentence, OFF_FRAME placement + eyes past the lens, object gaze) goes into the still prompt
+and, through handles, the video prompt (`compile_scene_prompt(placement=...)`); no "Only X in frame" with 2+ present; props
+held by hidden people dropped from the video prompt; still framing word from `camera.size`; HIDDEN_PERSON_UNPLACED BLOCK.
+Known limits: `CoverageShot.describe` still hardcodes "close-up of" for SINGLE (camera size only reaches the still); authored
+choreography pronouns ("at him") are not checked — write names in P16-07a.
 ### P16-04 Relation review questions with required QC evidence — READY (after P16-02)
 ### P16-05 Encounter continuity across scene numbers — READY (after P16-02)
 ### P16-06 Generability v2 (UNKNOWN, exceptions, caps proven at the generation entry point) — READY

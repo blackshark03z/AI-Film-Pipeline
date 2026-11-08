@@ -14,9 +14,12 @@ said who she addressed or where he was, so the still showed an empty counter. De
 `interaction_issues` rules (BLOCK unless stated): ADDRESSEE_MISSING, ADDRESSEE_ABSENT, LISTENER_ANCHOR_MISSING,
 ANCHOR_CONTRADICTION, OFF_FRAME_TOO_WIDE, OFF_FRAME_NOT_ESTABLISHED, OFF_FRAME_WRONG_SIDE, MARK_UNRESOLVED,
 GAZE_TARGET_MISSING, GAZE_TARGET_UNRESOLVED, GAZE_INTO_LENS (WARN).
+`placement_sentences` (P16-03) compiles the same placement text into the still and the video prompt;
+`hidden_person_issues` adds HIDDEN_PERSON_UNPLACED.
 """
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Annotated, Any, Literal
 
 from pydantic import Field, StringConstraints, model_validator
@@ -171,3 +174,80 @@ def _not_established(pre: Any, shots: Any, decl: Any, a: ListenerAnchor, name: s
     if missing:
         return f"established_by {a.established_by!r} does not show {', '.join(missing)} in frame"
     return ""
+
+
+# -- prompt compilation (P16-03): one placement source for the still prompt and the video prompt ----------------------
+SIZE_WORDS = {"EXTREME_WIDE": "extreme wide", "WIDE": "wide", "MEDIUM": "medium", "MEDIUM_CLOSE": "medium close-up",
+              "CLOSE": "close-up", "INSERT": "insert close-up"}
+_SIZE_RE = re.compile(r"\b(extreme wide|medium close-up|insert close-up|wide|medium|close-up)\b")
+
+
+def framing_phrase(template: str, size: str) -> str:
+    """The still template's framing phrase with its size word replaced by the camera's size (a phrase naming no size
+    stays as authored)."""
+    m = _SIZE_RE.search(template)
+    if m is None or m.group(1) == SIZE_WORDS[size]:
+        return template
+    return template[:m.start()] + SIZE_WORDS[size] + template[m.end():]
+
+
+def hidden_names(pre: Any, decl: Any, index: int) -> set[str]:
+    """Characters in the scene at this generation who are not in the shot."""
+    return set(pre.scenes[decl.scene_id].occupancy.present_at(index)) - set(decl.visible)
+
+
+def placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[str]:
+    """Who speaks to whom and where each listener is, in character NAMES (the video prompt maps them to handles)."""
+    scene = pre.scenes[decl.scene_id]
+    subject = decl.subject or (decl.visible[0] if decl.visible else "")
+    out: list[str] = []
+
+    def add(text: str) -> None:
+        if text not in out:
+            out.append(text)
+
+    for n in decl.dialogue:
+        names, who = decl.addressees.get(n) or [], speakers.get(n)
+        if not names or not who:
+            continue
+        if names == ["SELF"]:
+            add(f"{who} speaks aloud to no one in particular.")
+        else:
+            add(f"{who} speaks to {' and '.join(x for x in names if x != 'SELF')}.")
+    for name, a in sorted(decl.listener_anchors.items()):
+        if a.mode == "OTS_FOREGROUND":
+            side = (scene.axis.sides.get(name) or "LEFT").lower()
+            add(f"Over {name}'s shoulder: the back of {name}'s head and one shoulder fill the near frame-{side}, "
+                f"out of focus; {subject} beyond faces {name}.")
+        elif a.mode == "OFF_FRAME":
+            text = a.placement.strip()
+            add(text if text.endswith(".") else text + ".")
+            if a.side == "BEHIND_CAMERA":
+                add(f"{subject} looks toward the camera's side, never into the lens.")
+            else:
+                add(f"{subject}'s eyes go just past the lens to frame-{(a.side or 'LEFT').lower()}.")
+    gaze = decl.gaze_target
+    if gaze and gaze != "LENS" and gaze not in pre.characters:
+        loc = pre.locations.get(scene.location)
+        layout = getattr(loc, "layout", None) if loc is not None else None
+        obj = layout.object(gaze) if layout is not None else None
+        add(f"{subject} looks at the {obj.label if obj is not None else gaze.replace('_', ' ')}.")
+    return out
+
+
+def hidden_person_issues(pre: Any, decl: Any, index: int, texts: list[str]) -> "list[PreflightIssue]":
+    """HIDDEN_PERSON_UNPLACED: a character in the scene but not in frame, named in a prompt, with no listener anchor."""
+    from film_pipeline.drama.preflight import PreflightIssue
+
+    out = []
+    for name in sorted(hidden_names(pre, decl, index) - set(decl.listener_anchors)):
+        handle = (pre.characters[name].handle or "") if name in pre.characters else ""
+        pats = [re.compile(r"(?<!\w)" + re.escape(name) + r"(?!\w)")]
+        if handle:
+            pats.append(re.compile(r"(?<!\w)" + re.escape(handle) + r"(?!\w)", re.IGNORECASE))
+        if any(p.search(t) for p in pats for t in texts):
+            out.append(PreflightIssue(
+                check="HIDDEN_PERSON_UNPLACED", severity="BLOCK",
+                detail=f"{decl.generation_id}: {name} is in the scene but not in frame, a prompt names {name}, "
+                       "and no listener anchor places them"))
+    return out
