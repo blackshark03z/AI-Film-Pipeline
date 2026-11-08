@@ -313,7 +313,131 @@
         ],
         "approved": true
       },
-      "room_tone": "light rain, distant train"
+      "room_tone": "light rain, distant train",
+      "layout": {
+        "zones": [
+          {
+            "id": "platform",
+            "label": "platform (public side)",
+            "box": [
+              0.05,
+              0.3,
+              0.95,
+              0.9
+            ]
+          },
+          {
+            "id": "track",
+            "label": "track side (rails and the arriving train)",
+            "box": [
+              0.05,
+              0.02,
+              0.95,
+              0.3
+            ]
+          }
+        ],
+        "objects": [
+          {
+            "id": "lamp_post",
+            "label": "single lamp post",
+            "zone": "platform",
+            "placement": "standing on the platform near the ticket office wall, its light falling on the wet platform",
+            "at": [
+              0.7,
+              0.55
+            ]
+          },
+          {
+            "id": "bench",
+            "label": "painted wooden bench",
+            "zone": "platform",
+            "placement": "against the ticket office wall, away from the platform edge",
+            "at": [
+              0.85,
+              0.75
+            ]
+          },
+          {
+            "id": "timetable",
+            "label": "timetable board",
+            "zone": "platform",
+            "placement": "on the ticket office wall beside the office door",
+            "at": [
+              0.75,
+              0.8
+            ]
+          },
+          {
+            "id": "train_doors",
+            "label": "train doors",
+            "zone": "track",
+            "placement": "the doors of the last train, stopped alongside the platform edge, sliding open onto the platform",
+            "at": [
+              0.4,
+              0.2
+            ]
+          }
+        ],
+        "cameras": [
+          {
+            "id": "A",
+            "zone": "platform",
+            "view": "Camera on the platform at head height, wide, looking along the platform: the ticket office wall with its door and the lamp post on one side, the platform edge, the wet rails and the train headlights on the other",
+            "sees": [
+              "lamp_post",
+              "bench",
+              "timetable",
+              "train_doors"
+            ],
+            "at": [
+              0.5,
+              0.85
+            ],
+            "look_at": "lamp_post"
+          },
+          {
+            "id": "B",
+            "zone": "platform",
+            "view": "Camera on the platform at head height, medium, side-on to the pair at the platform edge, facing the train: the open train doors and their light behind the two of them",
+            "sees": [
+              "train_doors",
+              "lamp_post"
+            ],
+            "at": [
+              0.4,
+              0.55
+            ],
+            "look_at": "train_doors"
+          }
+        ],
+        "marks": [
+          {
+            "id": "platform_edge",
+            "at": [
+              0.35,
+              0.4
+            ],
+            "zone": "platform"
+          },
+          {
+            "id": "edge_right",
+            "at": [
+              0.5,
+              0.4
+            ],
+            "zone": "platform"
+          },
+          {
+            "id": "office_door",
+            "at": [
+              0.85,
+              0.65
+            ],
+            "zone": "platform"
+          }
+        ]
+      }
     }
   },
   "scenes": {
@@ -538,8 +662,8 @@
       "story_time": {
         "scene_id": "SC05",
         "story_order": 5.0,
-        "transition_in": "LINEAR",
-        "marker": "",
+        "transition_in": "ELLIPSIS",
+        "marker": "the wall clock moves on from 10:44 to 10:47 while the coins are counted off screen",
         "source_conflict": ""
       },
       "extras": "",
@@ -607,7 +731,8 @@
             "note": "train headlights sweeping the platform"
           }
         ]
-      }
+      },
+      "encounter_id": "last_train"
     }
   },
   "states": {
@@ -791,7 +916,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "bent forward, face in the open gap",
+          "facing": "MARA"
+        }
+      }
     },
     "SC03_g2": {
       "positions": {
@@ -808,7 +945,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "bent forward, face in the open gap",
+          "facing": "MARA"
+        }
+      }
     },
     "SC03_end": {
       "positions": {
@@ -825,7 +974,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "bent forward, face in the open gap",
+          "facing": "MARA"
+        }
+      }
     },
     "SC04_g1": {
       "positions": {
@@ -842,7 +1003,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "bent forward, face in the open gap",
+          "facing": "MARA"
+        }
+      }
     },
     "SC04_g2": {
       "positions": {
@@ -859,7 +1032,78 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open gap",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "bent forward, face in the open gap",
+          "facing": "MARA"
+        }
+      }
+    },
+    "SC04_g3": {
+      "positions": {
+        "MARA": "seated on her stool behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "up",
+        "the jar:": "on the counter, full of coins"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open window",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "standing at the open window",
+          "facing": "MARA"
+        }
+      }
+    },
+    "SC04_g4": {
+      "positions": {
+        "MARA": "seated on her stool behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "up",
+        "the jar:": "on its side on the counter, empty",
+        "the coins:": "spread across the counter"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open window",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "standing at the open window",
+          "facing": "MARA"
+        }
+      }
     },
     "SC04_end": {
       "positions": {
@@ -868,8 +1112,8 @@
       },
       "props": {
         "the shutter:": "up",
-        "the jar:": "empty",
-        "the coins:": "in a heap in the tray"
+        "the jar:": "on its side on the counter, empty",
+        "the coins:": "spread across the counter"
       },
       "looks": {
         "MARA": "mara_cardigan",
@@ -877,7 +1121,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open window",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "standing at the open window",
+          "facing": "MARA"
+        }
+      }
     },
     "SC05_g1": {
       "positions": {
@@ -886,8 +1142,8 @@
       },
       "props": {
         "the shutter:": "up",
-        "the jar:": "empty",
-        "the coins:": "in a heap in the tray"
+        "the jar:": "on its side on the counter, empty",
+        "the coins:": "in neat stacks on the counter"
       },
       "looks": {
         "MARA": "mara_cardigan",
@@ -895,7 +1151,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open window",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "standing at the open window",
+          "facing": "MARA"
+        }
+      }
     },
     "SC05_g2": {
       "positions": {
@@ -904,9 +1172,8 @@
       },
       "props": {
         "the shutter:": "up",
-        "the jar:": "empty",
-        "the coins:": "in stacks in the tray",
-        "the ticket:": "blank, in MARA's hand"
+        "the jar:": "on its side on the counter, empty",
+        "the coins:": "in neat stacks on the counter"
       },
       "looks": {
         "MARA": "mara_cardigan",
@@ -914,7 +1181,50 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open window",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "standing at the open window",
+          "facing": "MARA"
+        }
+      }
+    },
+    "SC05_g3": {
+      "positions": {
+        "MARA": "seated on her stool behind the counter, frame-right",
+        "THEO": "at the window, frame-left"
+      },
+      "props": {
+        "the shutter:": "up",
+        "the jar:": "on its side on the counter, empty",
+        "the coins:": "in neat stacks on the counter",
+        "the ticket:": "lying on the counter"
+      },
+      "looks": {
+        "MARA": "mara_cardigan",
+        "THEO": "theo_rain_jacket"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open window",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "standing at the open window",
+          "facing": "MARA"
+        }
+      }
     },
     "SC05_end": {
       "positions": {
@@ -923,8 +1233,8 @@
       },
       "props": {
         "the shutter:": "up",
-        "the jar:": "empty",
-        "the coins:": "in stacks in the tray",
+        "the jar:": "on its side on the counter, empty",
+        "the coins:": "in neat stacks on the counter",
         "the ticket:": "in THEO's hand"
       },
       "looks": {
@@ -933,7 +1243,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "MARA": {
+          "mark": "clerk_stool",
+          "posture": "seated on her stool, face level with the open window",
+          "facing": "the hall"
+        },
+        "THEO": {
+          "mark": "customer_window",
+          "posture": "standing at the open window",
+          "facing": "MARA"
+        }
+      }
     },
     "SC06_g1": {
       "positions": {
@@ -949,7 +1271,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "THEO": {
+          "mark": "platform_edge",
+          "posture": "standing at the platform edge",
+          "facing": "the track"
+        },
+        "MARA": {
+          "mark": "office_door",
+          "posture": "standing in the office doorway, the suitcase at her side",
+          "facing": "THEO"
+        }
+      }
     },
     "SC06_g2": {
       "positions": {
@@ -965,7 +1299,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "THEO": {
+          "mark": "platform_edge",
+          "posture": "standing at the platform edge",
+          "facing": "MARA"
+        },
+        "MARA": {
+          "mark": "edge_right",
+          "posture": "standing beside THEO, the suitcase at her side",
+          "facing": "the train"
+        }
+      }
     },
     "SC06_end": {
       "positions": {
@@ -981,7 +1327,19 @@
       },
       "lighting": "",
       "time_of_day": "",
-      "location": ""
+      "location": "",
+      "blocking": {
+        "THEO": {
+          "mark": "platform_edge",
+          "posture": "standing at the platform edge",
+          "facing": "MARA"
+        },
+        "MARA": {
+          "mark": "edge_right",
+          "posture": "standing beside THEO, the suitcase at her side",
+          "facing": "the train"
+        }
+      }
     }
   },
   "still_templates": {
@@ -989,7 +1347,8 @@
       "MASTER": "wide shot of the whole room",
       "OTS": "medium over-the-shoulder shot",
       "SINGLE": "medium close-up",
-      "TWO_SHOT": "medium two-shot of both people side by side"
+      "TWO_SHOT": "medium two-shot of both people side by side",
+      "REACTION": "insert close-up of the set, nobody in frame"
     },
     "character": "Photoreal character reference portrait, 16:9, plain warm grey studio backdrop, head and shoulders, front view, neutral expression, soft even light: {text}. No text, no logos.",
     "plate": "Photoreal empty set plate, 16:9, eye-level wide view, nobody in the room: {text}. No people, no text, no logos.",
@@ -1111,9 +1470,7 @@
   ],
   "risk_fallbacks": {
     "SC01_g1": "if the cord pull does not render, reshoot as an insert on the shutter already halfway down; MARA's hand stays out of frame",
-    "SC01_g2": "if the door push does not render, start with THEO already inside and the door closing at the frame edge",
-    "SC04_g2": "if the shutter push does not render, show the shutter already raised; the push happens off-screen",
-    "SC05_g2": "the ticket lies on the counter between them and THEO picks it up himself; no hand-to-hand pass"
+    "SC01_g2": "if the door push does not render, start with THEO already inside and the door closing at the frame edge"
   },
   "stills": {
     "SC01_g1": {

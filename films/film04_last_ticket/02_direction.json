@@ -39,12 +39,11 @@
       "OTS"
     ],
     "B3": [
-      "MASTER",
-      "SINGLE"
+      "OTS"
     ],
     "B4": [
       "SINGLE",
-      "TWO_SHOT"
+      "OTS"
     ],
     "B5": [
       "SINGLE",
@@ -221,7 +220,7 @@
       },
       "emphasis": [
         {
-          "moment": "Mara takes off her glasses and glances at the suitcase behind her",
+          "moment": "Mara's eyes go to the suitcase behind her, then to Theo, and she lets out a breath",
           "device": "reaction",
           "generation_id": "SC04_g1",
           "fact_id": "mara_is_leaving"
@@ -271,9 +270,9 @@
       },
       "emphasis": [
         {
-          "moment": "the date stamp comes down on the ticket",
+          "moment": "the ticket lies on the counter after the heavy thump",
           "device": "insert",
-          "generation_id": "SC05_g2",
+          "generation_id": "SC05_g3",
           "fact_id": null
         }
       ],
@@ -291,15 +290,15 @@
         "target_avg_shot_s": 8.0,
         "holds": [
           {
-            "generation_id": "SC05_g2",
+            "generation_id": "SC05_g3",
             "seconds": 2.0,
-            "why": "hold on the stamped ticket on the counter"
+            "why": "hold on the ticket on the counter"
           }
         ]
       },
       "transition_in": {
         "kind": "CUT",
-        "reason": "continuous time in the ticket office"
+        "reason": "cut with a time skip: the wall clock moves on from 10:44 to 10:47"
       },
       "transition_out": {
         "kind": "CUT",

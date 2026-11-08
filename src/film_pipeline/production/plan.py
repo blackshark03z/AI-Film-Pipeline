@@ -193,7 +193,7 @@ class _Plan:
                           if not any(c in v for c in hidden))
         props = f" {props}." if props else ""
         extras = f" {scene.extras.capitalize()}." if scene.extras and shot.coverage == "MASTER" else ""
-        alone = "" if len(shown) > 1 else f" Only {shown[0]} in frame."
+        alone = "" if len(shown) != 1 else f" Only {shown[0]} in frame."  # a prop-only insert shows nobody
         framing = self.pre.still_templates.framing[shot.coverage]
         place = ""
         if self.pre.preflight.interaction_contract:

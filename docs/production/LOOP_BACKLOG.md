@@ -786,7 +786,7 @@ Files: `tools/drama_flow_ui/flow_send.py`, tests. Upload the still inside the se
 match as a check of the slot, not as the search. Done when the picker tests pass and the next 5 live sends have no
 START_NOT_FOUND / AMBIGUOUS.
 
-### P15-07 film04 restage of RED beats — PROPOSED, waits for the Owner ([FILM04_RESTAGE_PROPOSAL.md](FILM04_RESTAGE_PROPOSAL.md))
+### P15-07 film04 restage of RED beats — DECIDED 2026-11-09 (choice 2 amended, Tech Lead under Owner delegation), applied in P16-07b ([FILM04_RESTAGE_PROPOSAL.md](FILM04_RESTAGE_PROPOSAL.md))
 SC04_g1 (glasses on a chain), SC04_g2 (shutter up + coins pour, two people), SC05_g1 (counting coins), SC05_g2 (stamp), and any
 shot where the shutter edge is near a moving body. Proposal per beat with the restage tool and credit estimate → Owner chooses →
 package edit → stills. No send before the Owner's choice.
@@ -882,5 +882,12 @@ film01-03) keep the hash-only rule; a legacy frame redrawn byte-identical adopts
 film04 migration: SC01_S2 (SC01_g2 v2), SC02_S1 (SC02_g1 v4), SC02_S2 (SC02_g2 v2) redraw byte-identical from the
 current decls -> fingerprints backfilled, Owner approvals kept (media/plan/storyboard/storyboard.json, not in Git).
 Tests: tests/test_storyboard_staleness.py (7); film03 golden unchanged.
-### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for the Owner's P15-07 choice
+### P16-07b Rollout SC03-SC06 merged with P15-07 — DONE offline (2026-11-09)
+15 generations (SC03 2, SC04 4, SC05 3, SC06 2 after SC01/SC02): no RED; AMBER SC03_g1, SC04_g3, SC05_g3, SC06_g1, SC06_g2.
+SC04_g4 = static insert (coverage REACTION, size INSERT: no INSERT coverage in the schema). SC05 story_time ELLIPSIS
+(clock 10:44 -> 10:47). Jar tip = 0.5 s off-frame consequence at the end of SC04_g3, carried by sound. Platform layout +
+encounter last_train. New check OCCUPANCY_ENTER_NO_POSITION. Gate3: STORYBOARD pending on all; WARN LOOK_NOT_PINNED SC06_g1.
+Open: shutter tracked ROI on SC03_g1/SC03_g2/SC04_g1 copied from SC02_g1, re-measure on the approved stills; gate 4 flags
+'prompt changed after this take' for SC01_g1_t5/SC01_g2_t2 (pre-existing, prompts trimmed in P16-07a).
+### P16-12 film04 stills + boards SC03-SC06 (ChatGPT/Flow image, 0 credits) -> Owner approval — READY
 ### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE

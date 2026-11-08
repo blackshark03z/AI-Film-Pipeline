@@ -17,7 +17,8 @@ LOC = "ticket_office_night"
 MARKS = [{"id": "booth_stool", "at": [0.62, 0.30], "zone": "booth"},
          {"id": "hall_window", "at": [0.62, 0.52], "zone": "hall"}]
 POSES = {"MARA": {"mark": "booth_stool", "posture": "seated"}, "THEO": {"mark": "hall_window", "posture": "standing"}}
-ISSUE_PREFIXES = ("ADDRESSEE_", "LISTENER_ANCHOR_", "ANCHOR_CONTRADICTION", "OFF_FRAME_", "MARK_UNRESOLVED", "GAZE_")
+ISSUE_PREFIXES = ("ADDRESSEE_", "LISTENER_ANCHOR_", "ANCHOR_CONTRADICTION", "OFF_FRAME_", "MARK_UNRESOLVED", "GAZE_",
+                  "OCCUPANCY_ENTER_")
 
 
 def _load(path):
@@ -120,6 +121,18 @@ def test_contract_on_shipped_shot_blocks(tmp_path):
     found, res = checks(make(tmp_path, marks=False, addressees=False))
     assert found["ADDRESSEE_MISSING"] == "BLOCK" and found["MARK_UNRESOLVED"] == "BLOCK"
     assert not res.ok
+
+
+def test_enter_event_must_match_a_position_in_the_start_state(tmp_path):
+    # P16-01: SC01 put THEO's ENTER at generation 1 while his first position is in the start state of generation 2
+    root = make(tmp_path / "early")  # legacy_film04 rebuilds the early ENTER (generation_index 1)
+    found, res = checks(root, "SC01_g1")
+    assert found["OCCUPANCY_ENTER_NO_POSITION"] == "BLOCK" and not res.ok
+    pre = _load(root / "03_preprod.json")
+    pre["scenes"]["SC01"]["occupancy"]["events"][0]["generation_index"] = 2
+    _save(root / "03_preprod.json", pre)
+    assert "OCCUPANCY_ENTER_NO_POSITION" not in checks(root, "SC01_g1")[0]
+    assert "OCCUPANCY_ENTER_NO_POSITION" not in checks(root, "SC01_g2")[0]  # THEO is placed in SC01_g2's start state
 
 
 def test_false_off_frame_claims_block(tmp_path):

@@ -445,6 +445,1775 @@
     {
       "generation_id": "SC03_g1",
       "scene_id": "SC03",
+      "coverage": "OTS",
+      "subject": "THEO",
+      "foreground": "MARA",
+      "visible": [
+        "THEO",
+        "MARA"
+      ],
+      "start_state": "SC03_g1",
+      "end_state": "SC03_g2",
+      "previous_generation_id": "SC02_g2",
+      "choreography": {
+        "generation_id": "SC03_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "THEO stands at the window, the jar held to his chest, looking at MARA"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 3.5,
+            "description": "THEO sets the jar on the counter, hands flat beside it"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 3.5,
+            "end_s": 6.0,
+            "description": "THEO speaks to MARA"
+          }
+        ],
+        "once_actions": [
+          "sets the jar on the counter"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "tired honesty",
+            "visible_cues": [
+              "shoulders down",
+              "eyes on MARA"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [
+        "glass jar set on wood"
+      ],
+      "dialogue": [
+        34
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_jar@1",
+        "prop_shutter@1"
+      ],
+      "camera": {
+        "size": "MEDIUM",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over MARA's left shoulder from inside the booth, counter-level and lower than the SC02_g2 framing: the counter edge and the jar in the lower third, THEO's face in the open gap in the upper half, the shutter's bottom edge just above the top of the frame; MARA's back and bun at the right edge"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "he offers all he has, a jar of coins, across the counter",
+          "evidence": [
+            "THEO",
+            "counter"
+          ]
+        }
+      ],
+      "duration_s": 6,
+      "tracked": {
+        "object": "shutter",
+        "roi": [
+          0.46,
+          0.05,
+          0.66,
+          0.55
+        ],
+        "axis": "y",
+        "direction": "still"
+      },
+      "version": 2,
+      "repair_of": "SC03_g1@v1",
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): the wide master becomes an OTS over MARA from camera B (the SC02_g2 v2 setup) so the listener is in frame, counter-level with the shutter edge out of frame. Shutter ROI is a placeholder copied from SC02_g1: re-measure it on the approved start still.",
+      "addressees": {
+        "34": [
+          "MARA"
+        ]
+      },
+      "listener_anchors": {
+        "MARA": {
+          "mode": "OTS_FOREGROUND"
+        }
+      },
+      "gaze_target": "MARA"
+    },
+    {
+      "generation_id": "SC03_g2",
+      "scene_id": "SC03",
+      "coverage": "OTS",
+      "subject": "MARA",
+      "foreground": "THEO",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC03_g2",
+      "end_state": "SC03_end",
+      "previous_generation_id": "SC03_g1",
+      "choreography": {
+        "generation_id": "SC03_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "MARA sits still behind the counter, the jar of coins in front of her"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 4.0,
+            "description": "MARA looks at the jar, looks up at the wall clock which shows 10:44, then looks back at THEO"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "MARA speaks to THEO"
+          }
+        ],
+        "once_actions": [
+          "looks up at the wall clock"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "weighing a decision",
+            "visible_cues": [
+              "eyes from the jar to the clock to him",
+              "jaw tight then softening"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "contempt"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        39
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_jar@1",
+        "prop_shutter@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over THEO's right shoulder from the public hall onto MARA behind the counter: the back of his head and wet shoulder at the left edge, the jar on the counter in the lower frame, the wall clock behind her at the upper right"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she weighs the time against the coins",
+          "evidence": [
+            "MARA",
+            "clock"
+          ]
+        }
+      ],
+      "duration_s": 6,
+      "tracked": {
+        "object": "shutter",
+        "roi": [
+          0.46,
+          0.05,
+          0.66,
+          0.55
+        ],
+        "axis": "y",
+        "direction": "still"
+      },
+      "version": 2,
+      "repair_of": "SC03_g2@v1",
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): the single on MARA becomes an OTS over THEO from camera A so the addressee is in frame; the clock shows 10:44. Shutter ROI is a placeholder copied from SC02_g1: re-measure it on the approved start still.",
+      "addressees": {
+        "39": [
+          "THEO"
+        ]
+      },
+      "listener_anchors": {
+        "THEO": {
+          "mode": "OTS_FOREGROUND"
+        }
+      },
+      "gaze_target": "THEO"
+    },
+    {
+      "generation_id": "SC04_g1",
+      "scene_id": "SC04",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC04_g1",
+      "end_state": "SC04_g2",
+      "previous_generation_id": "SC03_g2",
+      "choreography": {
+        "generation_id": "SC04_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "MARA waits behind the counter, looking at THEO off frame-left"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 2.5,
+            "description": "MARA looks at the suitcase behind her, then back at THEO off frame-left"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.5,
+            "end_s": 4.0,
+            "description": "MARA exhales slowly"
+          }
+        ],
+        "once_actions": [
+          "exhales slowly"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "quiet decision",
+            "visible_cues": [
+              "eyes to the suitcase and back",
+              "a slow breath out"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "pity"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_jar@1",
+        "prop_shutter@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "close single on MARA from the public hall through the gap under the lowered shutter, the worn suitcase soft behind her, THEO off frame-left beside the camera"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she is leaving: the suitcase and her glance at it",
+          "evidence": [
+            "MARA",
+            "suitcase"
+          ]
+        }
+      ],
+      "duration_s": 4,
+      "tracked": {
+        "object": "shutter",
+        "roi": [
+          0.46,
+          0.05,
+          0.66,
+          0.55
+        ],
+        "axis": "y",
+        "direction": "still"
+      },
+      "version": 2,
+      "repair_of": "SC04_g1@v1",
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): the glasses gesture is dropped (glasses stay on); the decision reads on her face: suitcase, back to THEO, a breath. Shutter ROI is a placeholder copied from SC02_g1: re-measure it on the approved start still.",
+      "listener_anchors": {
+        "THEO": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "THEO stands just off frame-left at the window beside the camera, out of shot",
+          "established_by": "SC02_g1"
+        }
+      },
+      "gaze_target": "THEO"
+    },
+    {
+      "generation_id": "SC04_g2",
+      "scene_id": "SC04",
+      "coverage": "SINGLE",
+      "subject": "THEO",
+      "foreground": "",
+      "visible": [
+        "THEO"
+      ],
+      "start_state": "SC04_g2",
+      "end_state": "SC04_g3",
+      "previous_generation_id": "SC04_g1",
+      "choreography": {
+        "generation_id": "SC04_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "THEO waits at the window, looking at MARA off frame-right"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 4.0,
+            "description": "the shutter rattles up off screen and the green lamp light washes across THEO's face as he straightens, still looking at MARA"
+          }
+        ],
+        "once_actions": [
+          "the shutter rattles up off screen"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "held breath, then relief",
+            "visible_cues": [
+              "eyes on MARA",
+              "lamp light across his face"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "triumph"
+          }
+        ]
+      },
+      "sfx": [
+        "shutter rattling up, off screen"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "THEO_look@1",
+        "THEO_costume@1",
+        "loc_ticket_office_night@1",
+        "prop_jar@1",
+        "prop_shutter@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "close single on THEO from inside the booth, camera B side, MARA off frame-right beside the camera; the lamp light grows across his face"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "the window opens for him",
+          "evidence": [
+            "THEO"
+          ]
+        }
+      ],
+      "duration_s": 4,
+      "version": 2,
+      "repair_of": "SC04_g2@v1",
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): the push on the shutter is heard, not seen: sound and lamp light carry the turn.",
+      "listener_anchors": {
+        "MARA": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "MARA sits just off frame-right beside the camera, out of shot",
+          "established_by": "SC02_g1"
+        }
+      },
+      "gaze_target": "MARA"
+    },
+    {
+      "generation_id": "SC04_g3",
+      "scene_id": "SC04",
+      "coverage": "OTS",
+      "subject": "MARA",
+      "foreground": "THEO",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC04_g3",
+      "end_state": "SC04_g4",
+      "previous_generation_id": "SC04_g2",
+      "choreography": {
+        "generation_id": "SC04_g3",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "MARA looks at THEO through the open window, lamp light on her face"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 3.5,
+            "description": "MARA speaks to THEO through the open window"
+          },
+          {
+            "kind": "CONSEQUENCE",
+            "start_s": 3.5,
+            "end_s": 4.0,
+            "description": "below the frame edge the jar goes over and the coins clatter across the counter, heard more than seen"
+          }
+        ],
+        "once_actions": [
+          "speaks to THEO"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "brisk kindness",
+            "visible_cues": [
+              "a nod toward the counter"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "pity"
+          }
+        ]
+      },
+      "sfx": [
+        "coins clattering on wood, off screen"
+      ],
+      "dialogue": [
+        48
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_jar@1",
+        "prop_coins@1",
+        "prop_shutter@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over THEO's right shoulder from the public hall onto MARA through the fully open window; the back of his head and wet shoulder at the left edge, the counter in the lower frame"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she reopens the window for him",
+          "evidence": [
+            "MARA",
+            "THEO",
+            "window"
+          ]
+        }
+      ],
+      "duration_s": 4,
+      "version": 1,
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): new shot: MARA speaks through the now open window.",
+      "addressees": {
+        "48": [
+          "THEO"
+        ]
+      },
+      "listener_anchors": {
+        "THEO": {
+          "mode": "OTS_FOREGROUND"
+        }
+      },
+      "gaze_target": "THEO"
+    },
+    {
+      "generation_id": "SC04_g4",
+      "scene_id": "SC04",
+      "coverage": "REACTION",
+      "subject": "",
+      "foreground": "",
+      "visible": [],
+      "start_state": "SC04_g4",
+      "end_state": "SC04_end",
+      "previous_generation_id": "SC04_g3",
+      "choreography": {
+        "generation_id": "SC04_g4",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "the jar lies on its side with the coins spread across the counter, nobody in frame, no hands"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 4.0,
+            "description": "everything stays still; only the green lamp light shifts slowly across the coins"
+          }
+        ],
+        "once_actions": [
+          "only the green lamp light shifts"
+        ],
+        "gesture_budget": 1,
+        "performance": []
+      },
+      "sfx": [
+        "room tone, a faint coin settling"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "loc_ticket_office_night@1",
+        "prop_jar@1",
+        "prop_coins@1",
+        "prop_shutter@1"
+      ],
+      "camera": {
+        "size": "INSERT",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "static insert on the counter: the jar on its side and the coins spread across the felt tray and wood, lit by the green lamp; no people, no hands"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "the coins are out of the jar, on the counter",
+          "evidence": [
+            "counter",
+            "tray"
+          ]
+        }
+      ],
+      "duration_s": 4,
+      "version": 1,
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): the pour is cut around: a static aftermath insert, no hands, only the light moves."
+    },
+    {
+      "generation_id": "SC05_g1",
+      "scene_id": "SC05",
+      "coverage": "OTS",
+      "subject": "MARA",
+      "foreground": "THEO",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC05_g1",
+      "end_state": "SC05_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC05_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "the coins lie in neat stacks on the counter in the foreground; the wall clock behind MARA shows 10:47"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 4.0,
+            "description": "MARA speaks to THEO"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.0,
+            "end_s": 5.0,
+            "description": "MARA holds a level look at THEO; the coins and the clock do not change"
+          }
+        ],
+        "once_actions": [
+          "speaks to THEO"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "practised calm",
+            "visible_cues": [
+              "level look",
+              "a small nod"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "worry"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        57
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_jar@1",
+        "prop_coins@1",
+        "prop_shutter@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over THEO's right shoulder from the public hall onto MARA at the open window: the neat stacks of coins on the counter in the lower foreground, the wall clock behind her at 10:47"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "time has passed: the coins are counted and the clock moved on",
+          "evidence": [
+            "MARA",
+            "clock",
+            "counter"
+          ]
+        }
+      ],
+      "duration_s": 5,
+      "version": 2,
+      "repair_of": "SC05_g1@v1",
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): the counting is skipped by the cut: coins already in stacks, clock 10:47 against 10:44 in SC03; no hand-off from SC04_g4 (declared time skip, SC05 story_time ELLIPSIS).",
+      "addressees": {
+        "57": [
+          "THEO"
+        ]
+      },
+      "listener_anchors": {
+        "THEO": {
+          "mode": "OTS_FOREGROUND"
+        }
+      },
+      "gaze_target": "THEO"
+    },
+    {
+      "generation_id": "SC05_g2",
+      "scene_id": "SC05",
+      "coverage": "SINGLE",
+      "subject": "THEO",
+      "foreground": "",
+      "visible": [
+        "THEO"
+      ],
+      "start_state": "SC05_g2",
+      "end_state": "SC05_g3",
+      "previous_generation_id": "SC05_g1",
+      "choreography": {
+        "generation_id": "SC05_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "THEO waits at the open window, looking toward MARA off frame-right"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 2.5,
+            "description": "a heavy thump is heard off screen and THEO looks down at the ticket now lying on the counter"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 2.5,
+            "end_s": 3.0,
+            "description": "THEO holds his look down at the ticket"
+          }
+        ],
+        "once_actions": [
+          "looks down at the ticket"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "held breath",
+            "visible_cues": [
+              "eyes dropping to the counter"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "disappointment"
+          }
+        ]
+      },
+      "sfx": [
+        "a heavy thump, off screen"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "THEO_look@1",
+        "THEO_costume@1",
+        "loc_ticket_office_night@1",
+        "prop_jar@1",
+        "prop_ticket@1",
+        "prop_coins@1",
+        "prop_shutter@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "close single on THEO from inside the booth, camera B side, MARA off frame-right beside the camera; his eyes drop to the counter"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "the ticket is ready: the thump is the stamp",
+          "evidence": [
+            "THEO"
+          ]
+        }
+      ],
+      "duration_s": 3,
+      "version": 2,
+      "repair_of": "SC05_g2@v1",
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): the stamp is heard, not seen.",
+      "listener_anchors": {
+        "MARA": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "MARA sits just off frame-right beside the camera, out of shot",
+          "established_by": "SC05_g1"
+        }
+      },
+      "gaze_target": "counter"
+    },
+    {
+      "generation_id": "SC05_g3",
+      "scene_id": "SC05",
+      "coverage": "OTS",
+      "subject": "THEO",
+      "foreground": "MARA",
+      "visible": [
+        "THEO",
+        "MARA"
+      ],
+      "start_state": "SC05_g3",
+      "end_state": "SC05_end",
+      "previous_generation_id": "SC05_g2",
+      "choreography": {
+        "generation_id": "SC05_g3",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "the ticket lies on the counter between them; THEO looks at it"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 2.5,
+            "description": "THEO picks up the ticket"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.5,
+            "end_s": 5.0,
+            "description": "THEO speaks to MARA, the ticket in his hand"
+          }
+        ],
+        "once_actions": [
+          "picks up the ticket"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "quiet gratitude",
+            "visible_cues": [
+              "eyes up to MARA",
+              "a relieved breath"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "triumph"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        62
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_jar@1",
+        "prop_ticket@1",
+        "prop_coins@1",
+        "prop_shutter@1"
+      ],
+      "camera": {
+        "size": "MEDIUM",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over MARA's left shoulder from inside the booth onto THEO at the open window: MARA's back and bun at the right edge, the ticket on the counter between them"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "he has his ticket",
+          "evidence": [
+            "THEO",
+            "counter"
+          ]
+        }
+      ],
+      "duration_s": 5,
+      "version": 1,
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): new shot: the ticket lies on the counter and THEO takes it himself; no hand-to-hand pass.",
+      "addressees": {
+        "62": [
+          "MARA"
+        ]
+      },
+      "listener_anchors": {
+        "MARA": {
+          "mode": "OTS_FOREGROUND"
+        }
+      },
+      "gaze_target": "MARA"
+    },
+    {
+      "generation_id": "SC06_g1",
+      "scene_id": "SC06",
+      "coverage": "MASTER",
+      "subject": "THEO",
+      "foreground": "",
+      "visible": [
+        "THEO",
+        "MARA"
+      ],
+      "start_state": "SC06_g1",
+      "end_state": "SC06_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC06_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "THEO waits at the platform edge with the ticket in his hand while the headlights of the last train sweep the wet platform"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 4.5,
+            "description": "MARA walks out of the office door behind THEO with the suitcase at her side, and THEO turns toward her"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 4.5,
+            "end_s": 6.0,
+            "description": "THEO speaks to MARA"
+          }
+        ],
+        "once_actions": [
+          "THEO speaks to MARA"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "surprise",
+            "visible_cues": [
+              "head turning",
+              "eyebrows lifting"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [
+        "train approaching"
+      ],
+      "dialogue": [
+        71
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_platform_night@1",
+        "prop_ticket@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole platform: the lamp post, the wet rails and the train headlights, the office door behind THEO"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she leaves too, suitcase in hand: her last night",
+          "evidence": [
+            "MARA",
+            "THEO"
+          ]
+        }
+      ],
+      "duration_s": 6,
+      "version": 2,
+      "repair_of": "SC06_g1@v1",
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): second location on the interaction contract: marks platform_edge and office_door, encounter last_train.",
+      "addressees": {
+        "71": [
+          "MARA"
+        ]
+      },
+      "listener_anchors": {
+        "MARA": {
+          "mode": "VISIBLE"
+        }
+      },
+      "gaze_target": "MARA"
+    },
+    {
+      "generation_id": "SC06_g2",
+      "scene_id": "SC06",
+      "coverage": "TWO_SHOT",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC06_g2",
+      "end_state": "SC06_end",
+      "previous_generation_id": "SC06_g1",
+      "choreography": {
+        "generation_id": "SC06_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "THEO and MARA stand side by side at the platform edge as the train doors slide open"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 4.5,
+            "description": "MARA speaks to THEO, her eyes on the train"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.5,
+            "end_s": 6.0,
+            "description": "the train light falls across both of them"
+          }
+        ],
+        "once_actions": [
+          "speaks to THEO"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "quiet contentment",
+            "visible_cues": [
+              "eyes on the train",
+              "a small smile"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "sadness"
+          }
+        ]
+      },
+      "sfx": [
+        "train doors sliding open"
+      ],
+      "dialogue": [
+        76
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_platform_night@1",
+        "prop_ticket@1"
+      ],
+      "camera": {
+        "size": "MEDIUM",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "two-shot side by side facing the train, the open train doors and their light behind them"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "they board the last train together",
+          "evidence": [
+            "MARA",
+            "THEO",
+            "train_doors"
+          ]
+        }
+      ],
+      "duration_s": 6,
+      "version": 2,
+      "repair_of": "SC06_g2@v1",
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): second location on the interaction contract: MARA looks at the train doors.",
+      "addressees": {
+        "76": [
+          "THEO"
+        ]
+      },
+      "listener_anchors": {
+        "THEO": {
+          "mode": "VISIBLE"
+        }
+      },
+      "gaze_target": "train_doors"
+    }
+  ],
+  "history": [
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "coverage": "MASTER",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC01_g1",
+      "end_state": "SC01_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC01_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA stands behind the counter, her hand on the shutter cord"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "she pulls the shutter halfway down"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "she glances at the wall clock reading 10:31"
+          }
+        ],
+        "once_actions": [
+          "pulls the shutter halfway down"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "routine, unhurried closing",
+            "visible_cues": [
+              "steady hands",
+              "a glance at the clock"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anxiety"
+          }
+        ]
+      },
+      "sfx": [
+        "shutter rolling down"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master on the whole office"
+      }
+    },
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC01_g1",
+      "end_state": "SC01_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC01_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "she pulls the shutter halfway down by its bottom edge and stops, her fingers still on it"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "she looks at the wall clock reading 10:31, then at the half-open shutter"
+          }
+        ],
+        "once_actions": [
+          "pulls the shutter halfway down by its bottom edge and stops"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "routine, unhurried closing",
+            "visible_cues": [
+              "steady hands",
+              "a glance at the clock"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anxiety"
+          }
+        ]
+      },
+      "sfx": [
+        "shutter rolling down"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "from the public hall through the ticket window: MARA behind the glass, the clock and the suitcase behind her"
+      },
+      "version": 2,
+      "repair_of": "SC01_g1@v1",
+      "repair_reason": "Owner review: the WIDE master gave no meaning (seated Mara, unreadable cord, clock and shutter). Re-staged as a MEDIUM_CLOSE single: standing at the ticket window, hand on the cord, pulls the shutter halfway and stops, looks at the clock then at the shutter.",
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "it is past closing time",
+          "evidence": [
+            "clock"
+          ],
+          "min_size": "MEDIUM_CLOSE"
+        },
+        {
+          "fact": "she is closing the ticket window",
+          "evidence": [
+            "MARA",
+            "shutter",
+            "window"
+          ],
+          "min_size": "MEDIUM"
+        },
+        {
+          "fact": "it is her last night here",
+          "evidence": [
+            "suitcase"
+          ],
+          "min_size": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC01_g1",
+      "end_state": "SC01_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC01_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "she slowly pulls the shutter down by its bottom edge to the middle of the window and stops"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "her fingers stay on the still shutter; she looks at the wall clock reading 10:31, then at the shutter"
+          }
+        ],
+        "once_actions": [
+          "pulls the shutter down"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "routine, unhurried closing",
+            "visible_cues": [
+              "steady hands",
+              "a glance at the clock"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anxiety"
+          }
+        ]
+      },
+      "sfx": [
+        "shutter rolling down"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "from the public hall through the ticket window: MARA behind the glass, the clock and the suitcase behind her"
+      },
+      "version": 3,
+      "repair_of": "SC01_g1@v2",
+      "repair_reason": "Owner rejected take t2 (2026-11-07, 'Reject, fix the action'): the shutter came down only to her brow, she let go and it sprang back to fully raised. The prompt named only the start state; the end state is now in the prompt and the hold keeps her grip on the half-closed shutter.",
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "it is past closing time",
+          "evidence": [
+            "clock"
+          ],
+          "min_size": "MEDIUM_CLOSE"
+        },
+        {
+          "fact": "she is closing the ticket window",
+          "evidence": [
+            "MARA",
+            "shutter",
+            "window"
+          ],
+          "min_size": "MEDIUM"
+        },
+        {
+          "fact": "it is her last night here",
+          "evidence": [
+            "suitcase"
+          ],
+          "min_size": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC01_g1",
+      "end_state": "SC01_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC01_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 6.0,
+            "description": "she pulls the shutter down by its bottom edge, slowly and evenly, until the edge reaches the middle of the window, and stops there"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "she stays still, both hands resting on the shutter's bottom edge; the shutter does not move"
+          }
+        ],
+        "once_actions": [
+          "pulls the shutter down"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "routine, unhurried closing",
+            "visible_cues": [
+              "steady hands",
+              "a tired, calm face"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anxiety"
+          }
+        ]
+      },
+      "sfx": [
+        "shutter rolling down"
+      ],
+      "dialogue": [],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "from the public hall through the ticket window: MARA behind the glass, the clock and the suitcase behind her"
+      },
+      "version": 4,
+      "end_frame": true,
+      "repair_of": "SC01_g1@v3",
+      "repair_reason": "Owner rejected SC01_g1_t3 (down-then-up reversal, clock glance unread): one focused moment per clip, P13-04",
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "it is past closing time",
+          "evidence": [
+            "clock"
+          ],
+          "min_size": "MEDIUM_CLOSE"
+        },
+        {
+          "fact": "she is closing the ticket window",
+          "evidence": [
+            "MARA",
+            "shutter",
+            "window"
+          ],
+          "min_size": "MEDIUM"
+        },
+        {
+          "fact": "it is her last night here",
+          "evidence": [
+            "suitcase"
+          ],
+          "min_size": "MEDIUM"
+        }
+      ],
+      "end_pose": "she stands behind the half-closed window, on the far side of the shutter: the lowered shutter hides her face; below its bottom edge only her chest and both hands holding the edge show"
+    },
+    {
+      "generation_id": "SC01_g2",
+      "scene_id": "SC01",
+      "coverage": "OTS",
+      "subject": "THEO",
+      "foreground": "MARA",
+      "visible": [
+        "MARA",
+        "THEO"
+      ],
+      "start_state": "SC01_g2",
+      "end_state": "SC01_end",
+      "previous_generation_id": "SC01_g1",
+      "choreography": {
+        "generation_id": "SC01_g2",
+        "phases": [
+          {
+            "kind": "ACTION",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "motion": "open_door",
+            "description": "THEO pushes the glass door open with one hand and steps in out of the rain, the jar of coins in his other hand"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 4.0,
+            "motion": "walk_across_room",
+            "description": "he hurries across the hall and stops at the counter in front of the ticket window"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 4.0,
+            "end_s": 7.0,
+            "description": "he stoops until his face is level with the open gap under the shutter's bottom edge and speaks"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 7.0,
+            "end_s": 8.0,
+            "description": "he stays bent at the gap, breathing hard, eyes on her"
+          }
+        ],
+        "once_actions": [
+          "speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "THEO",
+            "emotion_intent": "urgent plea",
+            "visible_cues": [
+              "wet hair",
+              "breathing hard",
+              "eyes on MARA"
+            ],
+            "intensity": "moderate",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [
+        "door opening"
+      ],
+      "dialogue": [
+        15
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "THEO_look@1",
+        "THEO_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over MARA's shoulder onto THEO at the window"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "a drenched young man rushes in from the rain to the closing window",
+          "evidence": [
+            "THEO",
+            "door",
+            "window"
+          ]
+        }
+      ],
+      "duration_s": 8
+    },
+    {
+      "generation_id": "SC02_g1",
+      "scene_id": "SC02",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC02_g1",
+      "end_state": "SC02_g2",
+      "previous_generation_id": "SC01_g2",
+      "choreography": {
+        "generation_id": "SC02_g1",
+        "phases": [
+          {
+            "kind": "ACTION",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "motion": "sit_down",
+            "description": "MARA lets go of the shutter's bottom edge and sits down on her stool behind the counter, which brings her face level with the open gap under the shutter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 3.0,
+            "motion": "turn_head",
+            "description": "she glances at the wall clock and back at him over her glasses"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 3.0,
+            "end_s": 5.0,
+            "description": "she speaks without lifting the shutter"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 6.0,
+            "description": "she holds a level look"
+          }
+        ],
+        "once_actions": [
+          "speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "firm, not unkind",
+            "visible_cues": [
+              "level gaze over her glasses",
+              "mouth set"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "contempt"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        22
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "CHEST",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "single on MARA through the open gap under the lowered shutter"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she refuses: the window is closed",
+          "evidence": [
+            "MARA",
+            "shutter"
+          ]
+        }
+      ],
+      "duration_s": 6,
+      "end_frame": true,
+      "end_pose": "she sits on her stool behind the counter, her face level with the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches just above her head; she looks out through the gap over her round glasses; her hands rest on the counter",
+      "tracked": {
+        "object": "shutter",
+        "roi": [
+          0.44,
+          0.05,
+          0.65,
+          0.5
+        ],
+        "axis": "y",
+        "direction": "still"
+      }
+    },
+    {
+      "generation_id": "SC02_g1",
+      "scene_id": "SC02",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC02_g1",
+      "end_state": "SC02_g2",
+      "previous_generation_id": "SC01_g2",
+      "choreography": {
+        "generation_id": "SC02_g1",
+        "phases": [
+          {
+            "kind": "ACTION",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "motion": "sit_down",
+            "description": "MARA, standing behind the counter with her hands at her sides, sits down on her stool, which brings her face level with the open gap above the counter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 3.0,
+            "motion": "turn_head",
+            "description": "she glances at the wall clock and back at him over her glasses"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 3.0,
+            "end_s": 5.0,
+            "description": "she speaks to him through the gap"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 6.0,
+            "description": "she holds a level look"
+          }
+        ],
+        "once_actions": [
+          "speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "firm, not unkind",
+            "visible_cues": [
+              "level gaze over her glasses",
+              "mouth set"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "contempt"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        22
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "CHEST",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "single on MARA through the open gap under the lowered shutter"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she refuses: the window is closed",
+          "evidence": [
+            "MARA",
+            "shutter"
+          ]
+        }
+      ],
+      "duration_s": 6,
+      "end_frame": true,
+      "end_pose": "she sits on her stool behind the counter, her face level with the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches just above her head; she looks out through the gap over her round glasses; her hands rest on the counter",
+      "tracked": {
+        "object": "shutter",
+        "roi": [
+          0.44,
+          0.05,
+          0.65,
+          0.5
+        ],
+        "axis": "y",
+        "direction": "still"
+      },
+      "version": 2,
+      "repair_of": "SC02_g1@v1",
+      "repair_reason": "t1: she pushed the pinned shutter up (start still had her fingers under its edge; the action said she lets go of the edge); v2 starts with her hands at her sides, no action line names the shutter"
+    },
+    {
+      "generation_id": "SC03_g1",
+      "scene_id": "SC03",
       "coverage": "MASTER",
       "subject": "THEO",
       "foreground": "",
@@ -1143,694 +2912,6 @@
           ]
         }
       ]
-    }
-  ],
-  "history": [
-    {
-      "generation_id": "SC01_g1",
-      "scene_id": "SC01",
-      "coverage": "MASTER",
-      "subject": "MARA",
-      "foreground": "",
-      "visible": [
-        "MARA"
-      ],
-      "start_state": "SC01_g1",
-      "end_state": "SC01_g2",
-      "previous_generation_id": null,
-      "choreography": {
-        "generation_id": "SC01_g1",
-        "phases": [
-          {
-            "kind": "SETUP",
-            "start_s": 0.0,
-            "end_s": 2.0,
-            "description": "MARA stands behind the counter, her hand on the shutter cord"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 2.0,
-            "end_s": 6.0,
-            "description": "she pulls the shutter halfway down"
-          },
-          {
-            "kind": "HOLD",
-            "start_s": 6.0,
-            "end_s": 8.0,
-            "description": "she glances at the wall clock reading 10:31"
-          }
-        ],
-        "once_actions": [
-          "pulls the shutter halfway down"
-        ],
-        "gesture_budget": 1,
-        "performance": [
-          {
-            "character": "MARA",
-            "emotion_intent": "routine, unhurried closing",
-            "visible_cues": [
-              "steady hands",
-              "a glance at the clock"
-            ],
-            "intensity": "restrained",
-            "prohibited_misread": "anxiety"
-          }
-        ]
-      },
-      "sfx": [
-        "shutter rolling down"
-      ],
-      "dialogue": [],
-      "design_refs": [
-        "MARA_look@1",
-        "MARA_costume@1",
-        "MARA_hair@1",
-        "loc_ticket_office_night@1",
-        "prop_shutter@1",
-        "prop_jar@1"
-      ],
-      "camera": {
-        "size": "WIDE",
-        "angle": "EYE_LEVEL",
-        "height": "EYE",
-        "movement": "STATIC",
-        "lens_intent": "WIDE_ESTABLISH",
-        "composition": "master on the whole office"
-      }
-    },
-    {
-      "generation_id": "SC01_g1",
-      "scene_id": "SC01",
-      "coverage": "SINGLE",
-      "subject": "MARA",
-      "foreground": "",
-      "visible": [
-        "MARA"
-      ],
-      "start_state": "SC01_g1",
-      "end_state": "SC01_g2",
-      "previous_generation_id": null,
-      "choreography": {
-        "generation_id": "SC01_g1",
-        "phases": [
-          {
-            "kind": "SETUP",
-            "start_s": 0.0,
-            "end_s": 2.0,
-            "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 2.0,
-            "end_s": 6.0,
-            "description": "she pulls the shutter halfway down by its bottom edge and stops, her fingers still on it"
-          },
-          {
-            "kind": "HOLD",
-            "start_s": 6.0,
-            "end_s": 8.0,
-            "description": "she looks at the wall clock reading 10:31, then at the half-open shutter"
-          }
-        ],
-        "once_actions": [
-          "pulls the shutter halfway down by its bottom edge and stops"
-        ],
-        "gesture_budget": 1,
-        "performance": [
-          {
-            "character": "MARA",
-            "emotion_intent": "routine, unhurried closing",
-            "visible_cues": [
-              "steady hands",
-              "a glance at the clock"
-            ],
-            "intensity": "restrained",
-            "prohibited_misread": "anxiety"
-          }
-        ]
-      },
-      "sfx": [
-        "shutter rolling down"
-      ],
-      "dialogue": [],
-      "design_refs": [
-        "MARA_look@1",
-        "MARA_costume@1",
-        "MARA_hair@1",
-        "loc_ticket_office_night@1",
-        "prop_shutter@1",
-        "prop_jar@1"
-      ],
-      "camera": {
-        "size": "MEDIUM_CLOSE",
-        "angle": "EYE_LEVEL",
-        "height": "EYE",
-        "movement": "STATIC",
-        "lens_intent": "NORMAL",
-        "composition": "from the public hall through the ticket window: MARA behind the glass, the clock and the suitcase behind her"
-      },
-      "version": 2,
-      "repair_of": "SC01_g1@v1",
-      "repair_reason": "Owner review: the WIDE master gave no meaning (seated Mara, unreadable cord, clock and shutter). Re-staged as a MEDIUM_CLOSE single: standing at the ticket window, hand on the cord, pulls the shutter halfway and stops, looks at the clock then at the shutter.",
-      "camera_position": "A",
-      "readout": [
-        {
-          "fact": "it is past closing time",
-          "evidence": [
-            "clock"
-          ],
-          "min_size": "MEDIUM_CLOSE"
-        },
-        {
-          "fact": "she is closing the ticket window",
-          "evidence": [
-            "MARA",
-            "shutter",
-            "window"
-          ],
-          "min_size": "MEDIUM"
-        },
-        {
-          "fact": "it is her last night here",
-          "evidence": [
-            "suitcase"
-          ],
-          "min_size": "MEDIUM"
-        }
-      ]
-    },
-    {
-      "generation_id": "SC01_g1",
-      "scene_id": "SC01",
-      "coverage": "SINGLE",
-      "subject": "MARA",
-      "foreground": "",
-      "visible": [
-        "MARA"
-      ],
-      "start_state": "SC01_g1",
-      "end_state": "SC01_g2",
-      "previous_generation_id": null,
-      "choreography": {
-        "generation_id": "SC01_g1",
-        "phases": [
-          {
-            "kind": "SETUP",
-            "start_s": 0.0,
-            "end_s": 2.0,
-            "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 2.0,
-            "end_s": 6.0,
-            "description": "she slowly pulls the shutter down by its bottom edge to the middle of the window and stops"
-          },
-          {
-            "kind": "HOLD",
-            "start_s": 6.0,
-            "end_s": 8.0,
-            "description": "her fingers stay on the still shutter; she looks at the wall clock reading 10:31, then at the shutter"
-          }
-        ],
-        "once_actions": [
-          "pulls the shutter down"
-        ],
-        "gesture_budget": 1,
-        "performance": [
-          {
-            "character": "MARA",
-            "emotion_intent": "routine, unhurried closing",
-            "visible_cues": [
-              "steady hands",
-              "a glance at the clock"
-            ],
-            "intensity": "restrained",
-            "prohibited_misread": "anxiety"
-          }
-        ]
-      },
-      "sfx": [
-        "shutter rolling down"
-      ],
-      "dialogue": [],
-      "design_refs": [
-        "MARA_look@1",
-        "MARA_costume@1",
-        "MARA_hair@1",
-        "loc_ticket_office_night@1",
-        "prop_shutter@1",
-        "prop_jar@1"
-      ],
-      "camera": {
-        "size": "MEDIUM_CLOSE",
-        "angle": "EYE_LEVEL",
-        "height": "EYE",
-        "movement": "STATIC",
-        "lens_intent": "NORMAL",
-        "composition": "from the public hall through the ticket window: MARA behind the glass, the clock and the suitcase behind her"
-      },
-      "version": 3,
-      "repair_of": "SC01_g1@v2",
-      "repair_reason": "Owner rejected take t2 (2026-11-07, 'Reject, fix the action'): the shutter came down only to her brow, she let go and it sprang back to fully raised. The prompt named only the start state; the end state is now in the prompt and the hold keeps her grip on the half-closed shutter.",
-      "camera_position": "A",
-      "readout": [
-        {
-          "fact": "it is past closing time",
-          "evidence": [
-            "clock"
-          ],
-          "min_size": "MEDIUM_CLOSE"
-        },
-        {
-          "fact": "she is closing the ticket window",
-          "evidence": [
-            "MARA",
-            "shutter",
-            "window"
-          ],
-          "min_size": "MEDIUM"
-        },
-        {
-          "fact": "it is her last night here",
-          "evidence": [
-            "suitcase"
-          ],
-          "min_size": "MEDIUM"
-        }
-      ]
-    },
-    {
-      "generation_id": "SC01_g1",
-      "scene_id": "SC01",
-      "coverage": "SINGLE",
-      "subject": "MARA",
-      "foreground": "",
-      "visible": [
-        "MARA"
-      ],
-      "start_state": "SC01_g1",
-      "end_state": "SC01_g2",
-      "previous_generation_id": null,
-      "choreography": {
-        "generation_id": "SC01_g1",
-        "phases": [
-          {
-            "kind": "SETUP",
-            "start_s": 0.0,
-            "end_s": 2.0,
-            "description": "MARA stands inside the booth at the ticket window, behind the glass, her fingers hooked under the bottom edge of the raised shutter"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 2.0,
-            "end_s": 6.0,
-            "description": "she pulls the shutter down by its bottom edge, slowly and evenly, until the edge reaches the middle of the window, and stops there"
-          },
-          {
-            "kind": "HOLD",
-            "start_s": 6.0,
-            "end_s": 8.0,
-            "description": "she stays still, both hands resting on the shutter's bottom edge; the shutter does not move"
-          }
-        ],
-        "once_actions": [
-          "pulls the shutter down"
-        ],
-        "gesture_budget": 1,
-        "performance": [
-          {
-            "character": "MARA",
-            "emotion_intent": "routine, unhurried closing",
-            "visible_cues": [
-              "steady hands",
-              "a tired, calm face"
-            ],
-            "intensity": "restrained",
-            "prohibited_misread": "anxiety"
-          }
-        ]
-      },
-      "sfx": [
-        "shutter rolling down"
-      ],
-      "dialogue": [],
-      "design_refs": [
-        "MARA_look@1",
-        "MARA_costume@1",
-        "MARA_hair@1",
-        "loc_ticket_office_night@1",
-        "prop_shutter@1",
-        "prop_jar@1"
-      ],
-      "camera": {
-        "size": "MEDIUM_CLOSE",
-        "angle": "EYE_LEVEL",
-        "height": "EYE",
-        "movement": "STATIC",
-        "lens_intent": "NORMAL",
-        "composition": "from the public hall through the ticket window: MARA behind the glass, the clock and the suitcase behind her"
-      },
-      "version": 4,
-      "end_frame": true,
-      "repair_of": "SC01_g1@v3",
-      "repair_reason": "Owner rejected SC01_g1_t3 (down-then-up reversal, clock glance unread): one focused moment per clip, P13-04",
-      "camera_position": "A",
-      "readout": [
-        {
-          "fact": "it is past closing time",
-          "evidence": [
-            "clock"
-          ],
-          "min_size": "MEDIUM_CLOSE"
-        },
-        {
-          "fact": "she is closing the ticket window",
-          "evidence": [
-            "MARA",
-            "shutter",
-            "window"
-          ],
-          "min_size": "MEDIUM"
-        },
-        {
-          "fact": "it is her last night here",
-          "evidence": [
-            "suitcase"
-          ],
-          "min_size": "MEDIUM"
-        }
-      ],
-      "end_pose": "she stands behind the half-closed window, on the far side of the shutter: the lowered shutter hides her face; below its bottom edge only her chest and both hands holding the edge show"
-    },
-    {
-      "generation_id": "SC01_g2",
-      "scene_id": "SC01",
-      "coverage": "OTS",
-      "subject": "THEO",
-      "foreground": "MARA",
-      "visible": [
-        "MARA",
-        "THEO"
-      ],
-      "start_state": "SC01_g2",
-      "end_state": "SC01_end",
-      "previous_generation_id": "SC01_g1",
-      "choreography": {
-        "generation_id": "SC01_g2",
-        "phases": [
-          {
-            "kind": "ACTION",
-            "start_s": 0.0,
-            "end_s": 1.5,
-            "motion": "open_door",
-            "description": "THEO pushes the glass door open with one hand and steps in out of the rain, the jar of coins in his other hand"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 1.5,
-            "end_s": 4.0,
-            "motion": "walk_across_room",
-            "description": "he hurries across the hall and stops at the counter in front of the ticket window"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 4.0,
-            "end_s": 7.0,
-            "description": "he stoops until his face is level with the open gap under the shutter's bottom edge and speaks"
-          },
-          {
-            "kind": "HOLD",
-            "start_s": 7.0,
-            "end_s": 8.0,
-            "description": "he stays bent at the gap, breathing hard, eyes on her"
-          }
-        ],
-        "once_actions": [
-          "speaks"
-        ],
-        "gesture_budget": 1,
-        "performance": [
-          {
-            "character": "THEO",
-            "emotion_intent": "urgent plea",
-            "visible_cues": [
-              "wet hair",
-              "breathing hard",
-              "eyes on MARA"
-            ],
-            "intensity": "moderate",
-            "prohibited_misread": "anger"
-          }
-        ]
-      },
-      "sfx": [
-        "door opening"
-      ],
-      "dialogue": [
-        15
-      ],
-      "design_refs": [
-        "MARA_look@1",
-        "MARA_costume@1",
-        "THEO_look@1",
-        "THEO_costume@1",
-        "MARA_hair@1",
-        "loc_ticket_office_night@1",
-        "prop_shutter@1",
-        "prop_jar@1"
-      ],
-      "camera": {
-        "size": "MEDIUM_CLOSE",
-        "angle": "EYE_LEVEL",
-        "height": "EYE",
-        "movement": "STATIC",
-        "lens_intent": "NORMAL",
-        "composition": "over MARA's shoulder onto THEO at the window"
-      },
-      "camera_position": "B",
-      "readout": [
-        {
-          "fact": "a drenched young man rushes in from the rain to the closing window",
-          "evidence": [
-            "THEO",
-            "door",
-            "window"
-          ]
-        }
-      ],
-      "duration_s": 8
-    },
-    {
-      "generation_id": "SC02_g1",
-      "scene_id": "SC02",
-      "coverage": "SINGLE",
-      "subject": "MARA",
-      "foreground": "",
-      "visible": [
-        "MARA"
-      ],
-      "start_state": "SC02_g1",
-      "end_state": "SC02_g2",
-      "previous_generation_id": "SC01_g2",
-      "choreography": {
-        "generation_id": "SC02_g1",
-        "phases": [
-          {
-            "kind": "ACTION",
-            "start_s": 0.0,
-            "end_s": 2.0,
-            "motion": "sit_down",
-            "description": "MARA lets go of the shutter's bottom edge and sits down on her stool behind the counter, which brings her face level with the open gap under the shutter"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 2.0,
-            "end_s": 3.0,
-            "motion": "turn_head",
-            "description": "she glances at the wall clock and back at him over her glasses"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 3.0,
-            "end_s": 5.0,
-            "description": "she speaks without lifting the shutter"
-          },
-          {
-            "kind": "HOLD",
-            "start_s": 5.0,
-            "end_s": 6.0,
-            "description": "she holds a level look"
-          }
-        ],
-        "once_actions": [
-          "speaks"
-        ],
-        "gesture_budget": 1,
-        "performance": [
-          {
-            "character": "MARA",
-            "emotion_intent": "firm, not unkind",
-            "visible_cues": [
-              "level gaze over her glasses",
-              "mouth set"
-            ],
-            "intensity": "restrained",
-            "prohibited_misread": "contempt"
-          }
-        ]
-      },
-      "sfx": [],
-      "dialogue": [
-        22
-      ],
-      "design_refs": [
-        "MARA_look@1",
-        "MARA_costume@1",
-        "MARA_hair@1",
-        "loc_ticket_office_night@1",
-        "prop_shutter@1",
-        "prop_jar@1"
-      ],
-      "camera": {
-        "size": "MEDIUM_CLOSE",
-        "angle": "EYE_LEVEL",
-        "height": "CHEST",
-        "movement": "STATIC",
-        "lens_intent": "NORMAL",
-        "composition": "single on MARA through the open gap under the lowered shutter"
-      },
-      "camera_position": "A",
-      "readout": [
-        {
-          "fact": "she refuses: the window is closed",
-          "evidence": [
-            "MARA",
-            "shutter"
-          ]
-        }
-      ],
-      "duration_s": 6,
-      "end_frame": true,
-      "end_pose": "she sits on her stool behind the counter, her face level with the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches just above her head; she looks out through the gap over her round glasses; her hands rest on the counter",
-      "tracked": {
-        "object": "shutter",
-        "roi": [
-          0.44,
-          0.05,
-          0.65,
-          0.5
-        ],
-        "axis": "y",
-        "direction": "still"
-      }
-    },
-    {
-      "generation_id": "SC02_g1",
-      "scene_id": "SC02",
-      "coverage": "SINGLE",
-      "subject": "MARA",
-      "foreground": "",
-      "visible": [
-        "MARA"
-      ],
-      "start_state": "SC02_g1",
-      "end_state": "SC02_g2",
-      "previous_generation_id": "SC01_g2",
-      "choreography": {
-        "generation_id": "SC02_g1",
-        "phases": [
-          {
-            "kind": "ACTION",
-            "start_s": 0.0,
-            "end_s": 2.0,
-            "motion": "sit_down",
-            "description": "MARA, standing behind the counter with her hands at her sides, sits down on her stool, which brings her face level with the open gap above the counter"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 2.0,
-            "end_s": 3.0,
-            "motion": "turn_head",
-            "description": "she glances at the wall clock and back at him over her glasses"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 3.0,
-            "end_s": 5.0,
-            "description": "she speaks to him through the gap"
-          },
-          {
-            "kind": "HOLD",
-            "start_s": 5.0,
-            "end_s": 6.0,
-            "description": "she holds a level look"
-          }
-        ],
-        "once_actions": [
-          "speaks"
-        ],
-        "gesture_budget": 1,
-        "performance": [
-          {
-            "character": "MARA",
-            "emotion_intent": "firm, not unkind",
-            "visible_cues": [
-              "level gaze over her glasses",
-              "mouth set"
-            ],
-            "intensity": "restrained",
-            "prohibited_misread": "contempt"
-          }
-        ]
-      },
-      "sfx": [],
-      "dialogue": [
-        22
-      ],
-      "design_refs": [
-        "MARA_look@1",
-        "MARA_costume@1",
-        "MARA_hair@1",
-        "loc_ticket_office_night@1",
-        "prop_shutter@1",
-        "prop_jar@1"
-      ],
-      "camera": {
-        "size": "MEDIUM_CLOSE",
-        "angle": "EYE_LEVEL",
-        "height": "CHEST",
-        "movement": "STATIC",
-        "lens_intent": "NORMAL",
-        "composition": "single on MARA through the open gap under the lowered shutter"
-      },
-      "camera_position": "A",
-      "readout": [
-        {
-          "fact": "she refuses: the window is closed",
-          "evidence": [
-            "MARA",
-            "shutter"
-          ]
-        }
-      ],
-      "duration_s": 6,
-      "end_frame": true,
-      "end_pose": "she sits on her stool behind the counter, her face level with the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches just above her head; she looks out through the gap over her round glasses; her hands rest on the counter",
-      "tracked": {
-        "object": "shutter",
-        "roi": [
-          0.44,
-          0.05,
-          0.65,
-          0.5
-        ],
-        "axis": "y",
-        "direction": "still"
-      },
-      "version": 2,
-      "repair_of": "SC02_g1@v1",
-      "repair_reason": "t1: she pushed the pinned shutter up (start still had her fingers under its edge; the action said she lets go of the edge); v2 starts with her hands at her sides, no action line names the shutter"
     }
   ]
 }

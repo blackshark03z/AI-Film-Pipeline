@@ -1,6 +1,16 @@
 # film04 restage proposal for RED beats (P15-07, 2026-11-08)
 
-Waiting for the Owner's choice. Nothing is changed in the package and nothing is sent until then.
+**Decided 2026-11-09 by the Tech Lead under the Owner's delegation** ("Tự quyết định kỹ thuật, đừng hỏi mình, tiếp tục"):
+**choice 2** with these amendments (Codex r2 recommendation: sound-led shutter, static poured-coin aftermath, a legible interval
+before the stacks). Why: zero RED shots left in the film, no waiver spend, and every changed beat is carried by sound, light,
+the next line or the clock, so the story turn stays readable.
+
+- SC02_g1/SC02_g2 are already shot on the interaction contract (v4/v2, Owner-accepted); the table's "SC02_g1 v3" row is void.
+- SC04_g2c: static insert, the jar on its side and the coins spread across the counter, no hands, no motion but light (GREEN).
+- SC05_g1: the wall clock in the background reads 10:47 (it read 10:44 in SC03), so the skipped counting reads as time passed.
+- SC03_g1: counter-level framing, shutter bottom edge out of frame at the top; shutter `tracked` still where visible.
+- Story cost accepted: the glasses gesture, the visible pour, the visible count and the visible stamp are lost; their
+  information is carried as listed in the table.
 Ratings follow [FILM04_SHOT_QUALITY_REVIEW.md](FILM04_SHOT_QUALITY_REVIEW.md) §4. The story, its lines and its turn stay
 the same. What changes is **how** each beat is shown: a RED beat is cut around (before and after shown in GREEN shots, the
 change carried by sound), shown as a prop-only insert with no hands, or dropped for an equivalent look.

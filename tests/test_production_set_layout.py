@@ -43,7 +43,7 @@ def add_positions(shots):
     for g in shots["generations"]:
         if g["scene_id"] != "SC06":
             g["camera_position"] = "A"
-        g["readout"] = [{"fact": "the office is closing", "evidence": [g["visible"][0]], "min_size": "WIDE"}]
+        g["readout"] = [{"fact": "the office is closing", "evidence": [(g["visible"] or ["window"])[0]], "min_size": "WIDE"}]
     shots["generations"][0]["readout"] = [
         {"fact": "the shutter comes down", "evidence": ["shutter", "MARA"], "min_size": "MEDIUM_CLOSE"}]
 

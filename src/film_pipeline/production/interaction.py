@@ -13,7 +13,7 @@ said who she addressed or where he was, so the still showed an empty counter. De
 
 `interaction_issues` rules (BLOCK unless stated): ADDRESSEE_MISSING, ADDRESSEE_ABSENT, LISTENER_ANCHOR_MISSING,
 ANCHOR_CONTRADICTION, OFF_FRAME_TOO_WIDE, OFF_FRAME_NOT_ESTABLISHED, OFF_FRAME_WRONG_SIDE, MARK_UNRESOLVED,
-GAZE_TARGET_MISSING, GAZE_TARGET_UNRESOLVED, GAZE_INTO_LENS (WARN).
+OCCUPANCY_ENTER_NO_POSITION, GAZE_TARGET_MISSING, GAZE_TARGET_UNRESOLVED, GAZE_INTO_LENS (WARN).
 `placement_sentences` (P16-03) compiles the same placement text into the still and the video prompt;
 `hidden_person_issues` adds HIDDEN_PERSON_UNPLACED.
 """
@@ -142,6 +142,16 @@ def interaction_issues(pre: Any, shots: Any, decl: Any, index: int, speakers: di
             if pose.mark not in marks:
                 add("MARK_UNRESOLVED", f"{label} state {sid}: {who} stands on mark {pose.mark!r}, "
                                        f"not a mark of location {scene.location}")
+
+    # 7b an ENTER at this generation must show the entrant in this generation's start state (P16-01: SC01 put THEO's
+    # ENTER one generation early and nothing noticed)
+    start_state = pre.states.get(decl.start_state)
+    if start_state is not None:
+        for event in scene.occupancy.events:
+            if (event.kind == "ENTER" and event.generation_index == index
+                    and event.character not in start_state.blocking and event.character not in start_state.positions):
+                add("OCCUPANCY_ENTER_NO_POSITION", f"{event.character} ENTERs at generation {index} but start state "
+                                                   f"{decl.start_state} gives them no position or blocking")
 
     # 8 gaze
     only_one = decl.coverage == "SINGLE" or (bool(decl.subject) and len(decl.visible) == 1)

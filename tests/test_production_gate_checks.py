@@ -67,7 +67,7 @@ def test_gate3_pending_storyboard_is_owner_pending_and_approval_passes(tmp_path)
     root = clone(tmp_path)
     planned(root)
     res = gate(root, "3")
-    assert res.status == "OWNER_PENDING" and "12 frame(s)" in res.issues[0]
+    assert res.status == "OWNER_PENDING" and "15 frame(s)" in res.issues[0]
     planned(root, approve_storyboard="Reviewer")
     assert gate(root, "3").status == "PASS"
 
@@ -135,7 +135,7 @@ def test_gate3_approval_does_not_survive_a_changed_or_deleted_storyboard_frame(t
     planned(root, approve_storyboard="Reviewer")
     assert gate(root, "3").status == "PASS"
     frames = sorted((GC.plan_dir(root) / "storyboard").rglob("*.png"))
-    assert len(frames) == 12
+    assert len(frames) == 15
     original = frames[0].read_bytes()
     Image.new("RGB", (640, 360), (250, 0, 0)).save(frames[0])  # swapped after the Owner approved it
     res = gate(root, "3")
@@ -238,7 +238,7 @@ def accepted_one(tmp_path, prompt="sent"):
 
 
 def only_one_generation_left(res):
-    """The film has 12 generations; the other 11 have no take. Keep what is about SC01_g1."""
+    """The film has 15 generations; the other 14 have no take. Keep what is about SC01_g1."""
     return [i for i in res.issues if i.startswith("SC01_g1")]
 
 

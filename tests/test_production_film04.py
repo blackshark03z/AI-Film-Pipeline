@@ -47,7 +47,7 @@ def plan(tmp_path_factory):
 def test_loads_clean_with_the_four_authored_stages(pkg):
     assert pkg.issues == []
     assert set(pkg.typed) == {"story", "direction", "preprod", "shots"}
-    assert len(pkg.script.scenes) == 6 and len(pkg.typed["shots"].generations) == 12
+    assert len(pkg.script.scenes) == 6 and len(pkg.typed["shots"].generations) == 15
     assert pkg.header.profile == "drama" and pkg.header.generation_s == 8
 
 
@@ -65,26 +65,22 @@ def test_plan_has_only_the_pending_storyboard_left(plan):
     checks = {(i["check"], i["severity"]) for v in g3["generations"].values() for i in v["issues"]}
     # STORYBOARD: an Owner/reviewer decision, never self-approved; LOOK_NOT_PINNED (WARN): shots where someone
     # walks and no end frame shows where they arrive (SC01_g2 t1 lost THEO's jacket that way; v2 has an end frame)
-    # P16-06 generability: SC04/SC05 are RED and not yet restaged (BLOCK until a restage or an Owner exception);
-    # SC01_g1/g2 reuse their Owner-accepted takes (t5, t2) and send nothing new
-    # P16-07a: the interaction contract is on and only the pilot (SC01..SC02) is authored for it; the contract
-    # BLOCKs below are expected on SC03..SC06 until the rollout P16-07b
-    contract = {("ADDRESSEE_MISSING", "BLOCK"), ("MARK_UNRESOLVED", "BLOCK"), ("HIDDEN_PERSON_UNPLACED", "BLOCK"),
-                ("GAZE_TARGET_MISSING", "BLOCK")}
-    assert checks == {("STORYBOARD", "BLOCK"), ("LOOK_NOT_PINNED", "WARN"), ("GENERABILITY_RED", "BLOCK"),
-                      ("GENERABILITY_RED_REUSE", "WARN"), ("GENERABILITY_AMBER", "WARN")} | contract, checks
+    # P16-06 generability: SC01_g1/g2 reuse their Owner-accepted takes (t5, t2) and send nothing new
+    # P16-07b: SC03..SC06 are restaged and on the interaction contract (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09):
+    # none is RED, so only the storyboard blocks and generability warns
+    assert checks == {("STORYBOARD", "BLOCK"), ("LOOK_NOT_PINNED", "WARN"),
+                      ("GENERABILITY_RED_REUSE", "WARN"), ("GENERABILITY_AMBER", "WARN")}, checks
     per_gen = {g: {(i["check"], i["severity"]) for i in v["issues"]} for g, v in g3["generations"].items()}
-    for gid in ("SC01_g1", "SC01_g2", "SC02_g1", "SC02_g2"):  # the pilot: only the storyboard blocks, generability warns
-        assert not per_gen[gid] & contract, (gid, per_gen[gid])
-        assert {c for c, sev in per_gen[gid] if sev == "BLOCK"} == {"STORYBOARD"}, (gid, per_gen[gid])
-        assert all(c.startswith("GENERABILITY_") for c, sev in per_gen[gid] if sev == "WARN"), (gid, per_gen[gid])
-    red = {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "GENERABILITY_RED"}
-    assert red == {"SC04_g1", "SC04_g2", "SC05_g1", "SC05_g2"}
+    for gid, issues in per_gen.items():  # every shot: only the storyboard blocks, generability and the look pin warn
+        blocks = {c for c, sev in issues if sev == "BLOCK"}
+        assert blocks <= {"STORYBOARD"}, (gid, issues)
+        assert all(c.startswith("GENERABILITY_") or c == "LOOK_NOT_PINNED" for c, sev in issues if sev == "WARN"), (gid, issues)
+    assert not any(i["check"] == "GENERABILITY_RED" for v in g3["generations"].values() for i in v["issues"])
     warned = {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "LOOK_NOT_PINNED"}
     assert warned == {"SC06_g1"} and not any(g3["generations"][g]["verdict"] == "BLOCKED" and
                                             all(i["check"] == "LOOK_NOT_PINNED" for i in g3["generations"][g]["issues"])
                                             for g in warned)
-    assert len(g3["generations"]) == 12
+    assert len(g3["generations"]) == 15
     for gid in g3["generations"]:  # the 215-word limit holds with no accepted_overlong everywhere else
         words = len((out / "prompts" / f"{gid}.txt").read_text(encoding="utf-8").split())
         assert gid in OPEN_OVERLONG or words <= MAX_WORDS, (gid, words)
@@ -96,7 +92,7 @@ def test_no_overlong_exemption_and_every_high_risk_has_a_fallback(pkg):
     done = run("validate", "--film", str(PKG))
     planning = json.loads(done.stdout)["planning"]
     assert planning["issues"] == []
-    assert planning["budget"]["generations"] == 12 and planning["budget"]["owner_estimate"] == 171.2  # the Owner set it on 2026-11-07
+    assert planning["budget"]["generations"] == 15 and planning["budget"]["owner_estimate"] == 171.2  # the Owner set it on 2026-11-07
     assert planning["legal"] == "pending"  # originality is the Owner's to confirm
 
 
