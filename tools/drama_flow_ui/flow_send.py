@@ -248,12 +248,14 @@ async def _picker_find_image(page, still: Path, over: tuple[int, int],
         scored = []
         for x, y, data in await page.evaluate(JS_PICKER_THUMBS):
             try:
-                scored.append((slot_diff(bytes(data), still), x, y))
+                scored.append((slot_diff(bytes(data), still), x, y, bytes(data)))
             except Exception:  # noqa: BLE001 - undecodable thumbnail
                 continue
-        scored.sort()
+        scored.sort(key=lambda s: s[:3])
         if scored and scored[0][0] <= SLOT_DIFF_MAX:
-            if len(scored) == 1 or scored[1][0] >= scored[0][0] + PICKER_MARGIN:
+            # a runner-up with the same thumbnail bytes is the same still uploaded twice (film04 SC01_g2 t2/t3: two
+            # copies of the v2 start, both 1.7, START_NOT_FOUND); either copy is right, so take the best
+            if len(scored) == 1 or scored[1][0] >= scored[0][0] + PICKER_MARGIN or scored[1][3] == scored[0][3]:
                 return scored[0][1], scored[0][2]
             return None   # two near-identical candidates: refuse
         await page.mouse.move(*over)

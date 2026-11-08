@@ -45,6 +45,16 @@ def test_image_search_finds_the_newest_still_when_the_picker_opens_mid_list(monk
     assert xy == (142, 100)
 
 
+def test_image_search_takes_a_second_upload_of_the_same_still_but_refuses_a_close_sibling(monkeypatch):
+    # film04 SC01_g2 t2/t3: the v2 start was uploaded twice (same bytes, both score 1.7); the search refused it
+    scores = {"copy": 1.7, "sibling": 2.0}
+    monkeypatch.setattr(fs, "slot_diff", lambda data, _still: scores.get(data.decode(), 40.0))
+    page = _VirtualListPage(["copy", "plate", "copy", "plate2"], top=0)
+    assert asyncio.run(fs._picker_find_image(page, Path("start.jpg"), fs.START_LIST_XY)) == (142, 100)
+    page = _VirtualListPage(["copy", "sibling", "plate", "plate2"], top=0)
+    assert asyncio.run(fs._picker_find_image(page, Path("start.jpg"), fs.START_LIST_XY, scrolls=0)) is None
+
+
 # --- P13-05: start and end slots -------------------------------------------------------------------------------
 
 import json  # noqa: E402

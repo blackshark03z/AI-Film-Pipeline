@@ -1,0 +1,22 @@
+{
+  "film_id": "film04_last_ticket",
+  "generation_id": "SC01_g2",
+  "take_id": "SC01_g2_t3",
+  "shot_version": 2,
+  "prompt_sha256": "67470e704e41c7ca0c14d47316ad7b2f7bae5a6dd8e13d5697d8791f9a8809fc",
+  "route": "start_frame+end_frame+Khung hinh",
+  "model": "Omni 1.2 Flash 360p",
+  "duration_s": 8,
+  "expected_credits": 8.0,
+  "credits_spent": 132.0,
+  "credit_cap": 256.79999999999995,
+  "start_frame_sha256": "cac4bc1bf09a768a086d9e71507f645f215534046f19871a8e47931e6c9fb710",
+  "start_frame_source": "end frame of SC01_g1_t5",
+  "end_frame_sha256": "a4f62cb4543ee961f5f72119d88cf33af9bcaa1498a6dc54cef316e45d9d342c",
+  "blockers": [],
+  "dry_run": false,
+  "sent": true,
+  "owner_go_live": true,
+  "result": "START_NOT_FOUND tok:hKvMd5nR284g",
+  "take_registered": false
+}

@@ -457,6 +457,14 @@ end_pose. First end-still edit raised the shutter (edge row 317 vs 389 in the ap
 too small for a face. Fix: kept the end still's geometry and redrew the start from it (edge 315); both registered, NOT
 approved (the start changed, so it needs a new approval); storyboard SC01_S2 kept its approval. Plan PASS (199 words).
 Follow-up: a still-pair check (static-prop rows/diff between start and end stills) as a tool, not only an eye check.
+Owner approved start/end SC01_g2 v2 ("Duyệt, gửi đi", 2026-11-08). The start was uploaded twice (same bytes); the picker
+token tail missed and the pixel search refused two equal matches -> START_NOT_FOUND twice (intents t2, t3; nothing
+submitted, 0 Flow credits). Fix in `flow_send._picker_find_image`: a runner-up with the same thumbnail bytes is the same
+still, take the best (test_flow_send_picker). Third run PASSED -> SC01_g2_t4.mp4 (7.96 s), take SC01_g2_t2 GENERATED,
+8 credits; autoqc 0 warnings. Tech Lead strip: shutter edge holds its height the whole shot, jacket stays olive, door
+0-1.5 s, crosses to the counter, appears in the gap at 3.3 s, speech 4-7 s (-28 dB), quiet hold 7-8 s. Waits for Owner.
+Follow-up: `generate` budget counts a failed intent (START_NOT_FOUND, nothing submitted) at its expected credits
+(credits_spent 124 -> 140 for one 8-credit take); a pre-submit failure should count 0.
 Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
 `film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
 catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.
