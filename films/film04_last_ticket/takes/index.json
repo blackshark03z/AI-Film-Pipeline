@@ -251,11 +251,11 @@
       "credits": 3.0,
       "output_file": "SC05_g2_t1.mp4",
       "output_sha256": "1aa7ca0dcde3edc27201e4bfc9c13e2c5cd337f92270fe35d6813c35b32dd5cd",
-      "status": "GENERATED",
+      "status": "ACCEPTED",
       "shot_version": 2,
       "cause": "",
       "registered_at": "2026-11-08T22:17:19Z",
-      "review_file": "dailies/SC05_g2_t1.review.json"
+      "review_file": "reviews/SC05_g2_t1.qc.json"
     },
     {
       "take_id": "SC06_g2_t1",
@@ -267,11 +267,11 @@
       "credits": 6.0,
       "output_file": "SC06_g2_t2.mp4",
       "output_sha256": "6ee2a98eead3370f3b5225b719fdd84cc7da00ea295d79c91aad7fb109f8984e",
-      "status": "GENERATED",
+      "status": "ACCEPTED",
       "shot_version": 2,
       "cause": "",
       "registered_at": "2026-11-08T22:25:00Z",
-      "review_file": "dailies/SC06_g2_t1.review.json"
+      "review_file": "reviews/SC06_g2_t1.qc.json"
     }
   ]
 }

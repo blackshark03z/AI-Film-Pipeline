@@ -1,0 +1,140 @@
+{
+  "take_id": "SC06_g2_t1",
+  "generation_id": "SC06_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:76": "Yes: MARA speaks to THEO beside her."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO and MARA stand side by side at the platform edge by the train; MARA speaks with her eyes on the train.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Two-shot, train frame-left, MARA frame-right with the suitcase; continues from the SC06_g1 end pose.",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:THEO": "Yes: THEO is in frame the whole clip.",
+        "REL_GAZE": "Yes: both look toward the train, not into the lens."
+      }
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC06_g2_t2.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC06_g1_t1__SC06_g2_t2.mp4 (file SC06_g2_t2.mp4), integrated loudness -25.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media 44daf883).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:76",
+    "REL_LISTENER:THEO",
+    "REL_GAZE"
+  ],
+  "output_sha256": "6ee2a98eead3370f3b5225b719fdd84cc7da00ea295d79c91aad7fb109f8984e"
+}

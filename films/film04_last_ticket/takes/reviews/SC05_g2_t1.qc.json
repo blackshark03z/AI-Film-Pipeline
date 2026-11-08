@@ -1,0 +1,139 @@
+{
+  "take_id": "SC05_g2_t1",
+  "generation_id": "SC05_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO waits at the open window; the ticket lands on the counter and he looks down at it. A hand from frame-right places the ticket instead of a pure off-screen thump; the Owner accepted it.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Close-up of THEO looking screen-right; jar on its side and coin stacks hold.",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:MARA": "Yes: MARA stays off frame-right; only her hand enters to place the ticket.",
+        "REL_GAZE": "Yes: THEO looks frame-right then down at the ticket, not into the lens.",
+        "REL_BARRIER": "Yes: the shutter is up, the window open."
+      }
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Rain on glass and the off-screen thump; no dialogue in this shot.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g2_t1.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch2.jpg), clip in media/review/cut_SC05_g1_t1__SC05_g2_t1.mp4, integrated loudness -32.3 LUFS, autoqc 0 warnings, PASSED send bound by prompt (media fd8ff4db).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "No spoken line; the thump lands as the ticket appears.",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_LISTENER:MARA",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "1aa7ca0dcde3edc27201e4bfc9c13e2c5cd337f92270fe35d6813c35b32dd5cd"
+}
