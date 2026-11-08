@@ -820,7 +820,12 @@ and, through handles, the video prompt (`compile_scene_prompt(placement=...)`); 
 held by hidden people dropped from the video prompt; still framing word from `camera.size`; HIDDEN_PERSON_UNPLACED BLOCK.
 Known limits: `CoverageShot.describe` still hardcodes "close-up of" for SINGLE (camera size only reaches the still); authored
 choreography pronouns ("at him") are not checked — write names in P16-07a.
-### P16-04 Relation review questions with required QC evidence — READY (after P16-02)
+### P16-04 Relation review questions with required QC evidence — DONE (2026-11-08)
+Contract route: `relation_review.py` derives REL_ADDRESS:n / REL_LISTENER:name / REL_GAZE / REL_BARRIER per generation;
+dailies list them in `qc.required_answers`; a take stays INCOMPLETE until each has a non-blank human answer in its QC
+group. Existing takes: `film.py review --supplement <take>` writes `<take>.relations.review.json` (never overwrites);
+ingest combines it with the main review. CLI ingest re-derives the ids from the package and refuses sheets that drop
+any. Stills register lists the questions. 6 tests; contract off unchanged.
 ### P16-05 Encounter continuity across scene numbers — DONE (2026-11-08)
 Contract route: scenes sharing `encounter_id` are continuous for handoff severity, emotional carry-over and once-action
 repeats. New SPATIAL_HANDOFF_BLOCKING (mark/posture) BLOCK; `ShotDecl.handoff_ellipsis` (reason) turns spatial handoff

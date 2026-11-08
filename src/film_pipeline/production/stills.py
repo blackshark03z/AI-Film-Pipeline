@@ -189,6 +189,14 @@ def register_still(pkg: Any, gid: str, image: Path, *, source: str = "", credits
             "approved": bool(record.approved_by)}
 
 
+def relation_questions_for(pkg: Any, key: str) -> list[dict[str, str]]:
+    """P16-04 relation questions for a still's generation (`end:GID` allowed); empty when the contract is off."""
+    from film_pipeline.production.takes import _relation_questions, script_dialogue
+    gid = key.split(":", 1)[1] if key.startswith("end:") else key
+    decl = next((g for g in pkg.typed["shots"].generations if g.generation_id == gid), None)
+    return [] if decl is None else _relation_questions(pkg.typed["preprod"], decl, script_dialogue(pkg))
+
+
 def approve_still(pkg: Any, gid: str, by: str, *, now: str | None = None) -> dict[str, Any]:
     """Mark the registered still approved by a named reviewer; refuses a missing or stale still."""
     if not by.strip():

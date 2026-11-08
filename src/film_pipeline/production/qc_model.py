@@ -49,7 +49,12 @@ MIN_LEVEL: dict[str, str] = {
     "motion": "FULL_MOTION", "camera": "SAMPLED", "visual": "SAMPLED", "temporal": "FULL_MOTION", "sequence": "CUT",
     "audio": "FULL_MOTION", "sync": "FULL_MOTION", "color": "SAMPLED", "technical": "FULL_MOTION", "compliance": "STILL",
     "delivery": "STILL"}
+_ANSWER_GROUP = {"REL_ADDRESS": "narrative"}  # question-id prefix -> QC group (default spatial)
 _REVIEWER = r"^(?:$|(?:human|auto):[A-Za-z0-9_.\-]+)$"
+
+
+def answer_group(question_id: str) -> str:
+    return _ANSWER_GROUP.get(question_id.split(":")[0], "spatial")
 
 
 class Waiver(ContractModel):
@@ -66,6 +71,7 @@ class GroupCheck(ContractModel):
     reviewer: str = Field(default="", pattern=_REVIEWER)
     note: str = ""
     waiver: Waiver | None = None
+    answers: dict[str, str] = Field(default_factory=dict)  # review question id -> the reviewer's short answer / evidence
 
     @property
     def number(self) -> int:
@@ -117,6 +123,7 @@ class TakeQc(ContractModel):
     checks: list[GroupCheck] = Field(default_factory=list)
     cause: Cause | None = None  # why a REJECTED take failed; retake.py decides the next move from it
     cause_note: str = ""
+    required_answers: list[str] = Field(default_factory=list)  # question ids a human must answer before ACCEPTED
 
     @model_validator(mode="after")
     def _one_check_per_group(self) -> "TakeQc":
@@ -131,6 +138,19 @@ class TakeQc(ContractModel):
     def check(self, group: str) -> GroupCheck:
         return next((c for c in self.checks if c.group == group), GroupCheck(group=group))  # type: ignore[arg-type]
 
+    def _missing(self) -> list[tuple[str, str]]:
+        """(question id, group) of every required answer without a non-blank answer in a human-reviewed group check."""
+        out = []
+        for qid in self.required_answers:
+            group = answer_group(qid)
+            c = self.check(group)
+            if not (c.by_human and c.answers.get(qid, "").strip()):
+                out.append((qid, group))
+        return out
+
+    def unanswered(self) -> list[str]:
+        return list(dict.fromkeys(g for _, g in self._missing()))
+
     def verdict(self) -> Verdict:
         p0, p1u, p1w, p2 = [], [], [], []
         for c in self.checks:
@@ -144,6 +164,10 @@ class TakeQc(ContractModel):
             else:
                 p2.append(label)
         open_groups = [g for g in TAKE_GROUPS if self.check(g).result in ("UNASSESSED", "WARN")]
+        unanswered = self.unanswered()
+        for g in unanswered:
+            if g not in open_groups:
+                open_groups.append(g)
         reasons = [f"P0 FAIL: {', '.join(p0)}"] if p0 else []
         reasons += [f"P1 FAIL not waived: {', '.join(p1u)}"] if p1u else []
         if p0 or p1u:
@@ -151,6 +175,8 @@ class TakeQc(ContractModel):
         elif open_groups:
             status = "INCOMPLETE"
             reasons.append(f"not yet judged: {', '.join(open_groups)}")
+            if unanswered:
+                reasons.append(f"required answers missing: {', '.join(i for i, _ in self._missing())}")
         else:
             status = "ACCEPTED"
         return Verdict(status=status, p0=p0, p1_unwaived=p1u, p1_waived=p1w, p2=p2, open_groups=open_groups,

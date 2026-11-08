@@ -191,15 +191,59 @@ def dailies_template(pkg: Any, entry: TakeEntry, script_lines: dict[int, str] | 
         raise ValueError(f"take {entry.take_id} names {entry.generation_id}, which is not in 04_shots.json")
     qc = blank_take(entry.take_id, entry.generation_id).model_dump(mode="json")
     qc["output_sha256"] = entry.output_sha256  # the review is bound to these bytes
+    questions = _questions(decl, pre, script_lines or {})
+    instructions = ("Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then "
+                    "`film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.")
+    rel = _relation_questions(pre, decl, script_lines or {})
+    if rel:
+        questions += rel
+        qc["required_answers"] = [q["id"] for q in rel]
+        instructions += (" Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; "
+                         "without it the take cannot be ACCEPTED.")
     return {"take": entry.model_dump(mode="json"),
             "shot": {"coverage": decl.coverage, "visible": list(decl.visible), "start_state": decl.start_state,
                      "end_state": decl.end_state,
                      "phases": [{"kind": p.kind, "start_s": p.start_s, "end_s": p.end_s, "description": p.description}
                                 for p in decl.choreography.phases]},
-            "questions": _questions(decl, pre, script_lines or {}),
-            "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then "
-                            "`film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
-            "qc": qc}
+            "questions": questions, "instructions": instructions, "qc": qc}
+
+
+def _relation_questions(pre: Any, decl: Any, script_lines: dict[int, str]) -> list[dict[str, str]]:
+    """P16-04 relation questions; empty when the film's interaction contract is off."""
+    if not getattr(pre.preflight, "interaction_contract", False):
+        return []
+    from film_pipeline.production.relation_review import relation_questions, speakers_of
+    return relation_questions(pre, decl, speakers_of(decl, script_lines))
+
+
+def supplemental_template(pkg: Any, entry: TakeEntry, script_lines: dict[int, str] | None = None) -> Path:
+    """Write `dailies/<take_id>.relations.review.json` (relation questions only) for an already-reviewed take.
+    Never overwrites; refuses when the contract is off or the shot has no relation questions."""
+    shots, pre = pkg.typed.get("shots"), pkg.typed.get("preprod")
+    if shots is None or pre is None:
+        raise ValueError("dailies need a valid 03_preprod.json and 04_shots.json")
+    decl = next((g for g in shots.generations if g.generation_id == entry.generation_id), None)
+    if decl is None:
+        raise ValueError(f"take {entry.take_id} names {entry.generation_id}, which is not in 04_shots.json")
+    lines = script_lines if script_lines is not None else script_dialogue(pkg)
+    rel = _relation_questions(pre, decl, lines)
+    if not rel:
+        raise ValueError(f"no relation questions for {entry.generation_id} (interaction contract off or nothing to ask)")
+    path = takes_dir(pkg.root) / "dailies" / f"{entry.take_id}.relations.review.json"
+    if path.exists():
+        raise ValueError(f"{path} exists; fill it in and --ingest it (sheets are never overwritten)")
+    qc = TakeQc(take_id=entry.take_id, generation_id=entry.generation_id,
+                checks=[GroupCheck(group=g) for g in sorted({q["group"] for q in rel})],  # type: ignore[arg-type]
+                required_answers=[q["id"] for q in rel]).model_dump(mode="json")
+    qc["output_sha256"] = entry.output_sha256
+    sheet = {"supplemental": "relations", "take": entry.model_dump(mode="json"), "questions": rel,
+             "instructions": "Set each listed group to PASS/FAIL (evidence, level, reviewer human:<id>) and write a short "
+                             "answer per question id in that group check's answers{id: text}, then "
+                             "`film.py review --film DIR --ingest FILE`. A missing answer keeps the take from ACCEPTED.",
+             "qc": qc}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(sheet, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return path
 
 
 def auto_evidence(pkg: Any, entry: TakeEntry, clip: Path, previous_clip: Path | None = None) -> tuple[list[GroupCheck], str]:
@@ -265,8 +309,9 @@ def write_dailies(pkg: Any, film_root: Path, script_lines: dict[int, str] | None
     return out
 
 
-def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any]) -> dict[str, Any]:
+def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: Any = None) -> dict[str, Any]:
     """Validate a filled sheet (or a bare TakeQc), bind it to the logged bytes, store it and set the take's status."""
+    supplemental = filled.get("supplemental") == "relations"
     qc_raw = dict(filled.get("qc", filled))
     claimed = qc_raw.pop("output_sha256", None)
     take = TakeQc.model_validate(qc_raw)  # raises on any invalid check (auto PASS on content, missing proof, ...)
@@ -278,9 +323,21 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any]) -> dict
         raise ValueError(f"review names generation {take.generation_id}, the log has {entry.generation_id}")
     if claimed != entry.output_sha256:
         raise ValueError(f"review is not bound to this take's bytes (expected output_sha256 {entry.output_sha256[:12]}…)")
+    if pkg is not None:  # the questions come from the package, not from the (hand-editable) sheet
+        decl = next((g for g in pkg.typed["shots"].generations if g.generation_id == entry.generation_id), None)
+        expected = {q["id"] for q in _relation_questions(pkg.typed["preprod"], decl, script_dialogue(pkg))} if decl else set()
+        dropped = sorted(expected - set(take.required_answers))
+        if dropped and (supplemental or take.required_answers or _load_supplement(film_root, take.take_id) is None):
+            raise ValueError(f"review drops required relation questions {dropped}; fill them, do not remove them")
+    if supplemental:
+        return _ingest_supplement(film_root, log, entry, take)
     verdict = take.verdict()
-    entry.status = _STATUS_OF[verdict.status]  # type: ignore[assignment]
-    entry.cause = take.cause or ""
+    status, reasons, cause = verdict.status, list(verdict.reasons), take.cause or ""
+    supp = _load_supplement(film_root, take.take_id)
+    if supp is not None:  # a relations review is already on file: the main review does not erase it
+        status, reasons, cause = _combine(status, reasons, cause, supp)
+    entry.status = _STATUS_OF[status]  # type: ignore[assignment]
+    entry.cause = cause
     rel = f"reviews/{take.take_id}.qc.json"
     path = takes_dir(film_root) / rel
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -289,4 +346,52 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any]) -> dict
     path.write_text(json.dumps(stored, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     entry.review_file = rel  # the stored, bound review - not the dailies sheet that wraps it
     save_log(film_root, log)
-    return {"take_id": take.take_id, "status": entry.status, "reasons": verdict.reasons, "review": str(path)}
+    return {"take_id": take.take_id, "status": entry.status, "reasons": reasons, "review": str(path)}
+
+
+def _load_supplement(film_root: Path, take_id: str) -> TakeQc | None:
+    path = takes_dir(film_root) / "reviews" / f"{take_id}.relations.qc.json"
+    if not path.is_file():
+        return None
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    raw.pop("output_sha256", None)
+    return TakeQc.model_validate(raw)
+
+
+def _combine(status: str, reasons: list[str], cause: str, supp: TakeQc) -> tuple[str, list[str], str]:
+    """Main verdict + relations review. Any FAIL (either) -> REJECTED; ACCEPTED only when the main verdict is ACCEPTED and
+    every required relation answer is present in a human-reviewed group; otherwise (not rejected) INCOMPLETE."""
+    sv = supp.verdict()
+    reasons = list(reasons)
+    if sv.p0 or sv.p1_unwaived:
+        reasons.append(f"relation review FAIL: {', '.join(sv.p0 + sv.p1_unwaived)}")
+        return "REJECTED", reasons, cause or supp.cause or ""
+    missing = [q for q, _ in supp._missing()]
+    if status == "ACCEPTED" and missing:
+        reasons.append(f"relation answers missing: {', '.join(missing)}")
+        return "INCOMPLETE", reasons, cause
+    return status, reasons, cause
+
+
+def _ingest_supplement(film_root: Path, log: TakeLog, entry: TakeEntry, supp: TakeQc) -> dict[str, Any]:
+    """Store the relations review beside the main review and recompute the take's status from both."""
+    if not supp.required_answers:
+        raise ValueError("a relations review must list required_answers (an empty one would count as complete)")
+    orig = takes_dir(film_root) / "reviews" / f"{entry.take_id}.qc.json"
+    if orig.is_file():
+        raw = json.loads(orig.read_text(encoding="utf-8"))
+        raw.pop("output_sha256", None)
+        main = TakeQc.model_validate(raw)
+        status, reasons, cause = main.verdict().status, list(main.verdict().reasons), main.cause or ""
+    else:  # no main review yet: the relations review alone can only reject or leave the take open
+        status, reasons, cause = "INCOMPLETE", ["no main review ingested yet"], ""
+    status, reasons, cause = _combine(status, reasons, cause, supp)
+    entry.status = _STATUS_OF[status]  # type: ignore[assignment]
+    entry.cause = cause
+    path = takes_dir(film_root) / "reviews" / f"{entry.take_id}.relations.qc.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    stored = supp.model_dump(mode="json")
+    stored["output_sha256"] = entry.output_sha256
+    path.write_text(json.dumps(stored, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    save_log(film_root, log)  # entry.review_file stays the main review
+    return {"take_id": entry.take_id, "status": entry.status, "reasons": reasons, "review": str(path)}

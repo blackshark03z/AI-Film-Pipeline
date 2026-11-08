@@ -173,6 +173,8 @@ def main(argv: list[str] | None = None) -> int:
     rv = actions.add_parser("review", help="write dailies templates for new takes, or --ingest a filled review")
     rv.add_argument("--film", required=True, type=Path)
     rv.add_argument("--ingest", type=Path, help="filled review sheet (or bare TakeQc) JSON")
+    rv.add_argument("--supplement", metavar="TAKE_ID",
+                    help="write the relation-questions sheet for an already-reviewed take (interaction contract on)")
     rv.add_argument("--clips", type=Path, help="directory holding the take mp4s (enables autoqc warnings)")
     gn = actions.add_parser("generate", help="send payload + intent receipt for one generation (--dry-run: nothing is sent)")
     gn.add_argument("--film", required=True, type=Path)
@@ -443,8 +445,12 @@ def main(argv: list[str] | None = None) -> int:
                     if args.image is None:
                         _emit({"error": "--register needs --image"})
                         return 2
-                    _emit({"registered": st_mod.register_still(pkg, args.register, args.image, source=args.source,
-                                                               credits=args.credits)})
+                    out = st_mod.register_still(pkg, args.register, args.image, source=args.source,
+                                                credits=args.credits)
+                    rel = st_mod.relation_questions_for(pkg, args.register)
+                    if rel:  # informational: the Owner answers in chat; approval logic is unchanged
+                        out = {**out, "relation_questions": rel}
+                    _emit({"registered": out})
                     return 0
                 if args.approve:
                     _emit({"approved": st_mod.approve_still(pkg, args.approve, args.by or "")})
@@ -713,10 +719,18 @@ def main(argv: list[str] | None = None) -> int:
                 from pydantic import ValidationError
                 try:
                     _emit(tk_mod.ingest_review(pkg.root, pkg.header.film_id,
-                                               json.loads(args.ingest.read_text(encoding="utf-8"))))
+                                               json.loads(args.ingest.read_text(encoding="utf-8")), pkg=pkg))
                 except ValidationError as exc:
                     _emit({"error": [e["msg"] for e in exc.errors()]})
                     return 2
+                except (ValueError, KeyError) as exc:
+                    _emit({"error": str(exc.args[0] if exc.args else exc)})
+                    return 2
+                return 0
+            if args.supplement:
+                try:
+                    entry = tk_mod.load_log(pkg.root, pkg.header.film_id).get(args.supplement)
+                    _emit({"written": str(tk_mod.supplemental_template(pkg, entry))})
                 except (ValueError, KeyError) as exc:
                     _emit({"error": str(exc.args[0] if exc.args else exc)})
                     return 2
