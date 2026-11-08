@@ -352,3 +352,13 @@ def test_pre_submit_error_costs_no_credit():
     led = credit_ledger(SimpleNamespace(takes=[]), {"SC02_g1_t5": {"result": "PRE_SUBMIT_ERROR TimeoutError",
                                                                    "expected_credits": 5.0}})
     assert led["pre_submit"] == ["SC02_g1_t5"] and led["spent"] == 0
+
+
+def test_newest_ignores_small_page_images_outside_the_list_column(monkeypatch):
+    """Live 2026-11-08: the header avatar (x 1219, y 38) sorted above the list and was taken as the newest item."""
+    class _Page(_VirtualListPage):
+        async def evaluate(self, js, *a):
+            return [[1219, 38, list(b"avatar")]] + await super().evaluate(js, *a)
+    _scores(monkeypatch, {"start": 0.4})
+    page = _Page(["start", "plate", "other"], top=0)
+    assert asyncio.run(fs._picker_newest(page, Path("s.png"), (162, 300), 1)) == (142, 100)

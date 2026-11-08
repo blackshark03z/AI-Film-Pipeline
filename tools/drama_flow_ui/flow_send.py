@@ -133,6 +133,7 @@ JS_VIDEO_AT =r"""([x, y]) => { const v = [...document.querySelectorAll('video')]
 
 # over each picker's item column: "+" attach list, start-frame slot list
 ATTACH_LIST_XY, START_LIST_XY = (384, 400), (142, 400)
+LIST_COLUMN_TOL = 60   # px: a picker thumbnail sits within this of the list column centre
 
 
 # the composer "+" (add-menu trigger); fixed PLUS_XY only when it is not in the DOM
@@ -302,7 +303,9 @@ async def _picker_newest(page, still: Path, over: tuple[int, int], k: int):
     is a failure, never something to search for."""
     await _picker_to_top(page, over)
     await page.wait_for_timeout(300)
-    thumbs = sorted(await page.evaluate(JS_PICKER_THUMBS), key=lambda t: (t[1], t[0]))[:k]
+    # only the list column: small page images (the header avatar at y~38, 2026-11-08) would sort above the list
+    col = [t for t in await page.evaluate(JS_PICKER_THUMBS) if abs(t[0] - over[0]) <= LIST_COLUMN_TOL]
+    thumbs = sorted(col, key=lambda t: (t[1], t[0]))[:k]
     scored = []
     for x, y, data in thumbs:
         try:
