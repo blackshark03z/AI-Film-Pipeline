@@ -13,7 +13,9 @@
   "start_frame_sha256": "90d63a1aeec3bbe1009b84e54bd2b8a450768ca9354ce8f46c54d02ca2b5e651",
   "start_frame_source": "end frame of SC03_g1_t1",
   "blockers": [],
-  "dry_run": true,
-  "sent": false,
-  "owner_go_live": false
+  "dry_run": false,
+  "sent": true,
+  "owner_go_live": true,
+  "result": "AMBIGUOUS",
+  "take_registered": false
 }

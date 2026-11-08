@@ -272,6 +272,38 @@
       "cause": "",
       "registered_at": "2026-11-08T22:25:00Z",
       "review_file": "reviews/SC06_g2_t1.qc.json"
+    },
+    {
+      "take_id": "SC03_g2_t1",
+      "generation_id": "SC03_g2",
+      "prompt_sha256": "5aca7057e937c28cf2c49290c6198960e26179fd4694874509aca508e3194422",
+      "start_frame_sha256": "90d63a1aeec3bbe1009b84e54bd2b8a450768ca9354ce8f46c54d02ca2b5e651",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 6.0,
+      "output_file": "SC03_g2_t2.mp4",
+      "output_sha256": "376105879fb81ac0d420bdbf7e68f8c3111b668e3fe436922ebf8bd94320cba2",
+      "status": "GENERATED",
+      "shot_version": 2,
+      "cause": "",
+      "registered_at": "2026-11-08T22:46:39Z",
+      "review_file": "dailies/SC03_g2_t1.review.json"
+    },
+    {
+      "take_id": "SC05_g3_t1",
+      "generation_id": "SC05_g3",
+      "prompt_sha256": "75b004c4e958523c64f5323c0bc4af053dd999460ab4ee94646a1b4f3f007831",
+      "start_frame_sha256": "26aa0fc07f38d6d8c03ff02eac68a5020624e888d2cb9f5c6ff130ef206f2f43",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 5.0,
+      "output_file": "SC05_g3_t3.mp4",
+      "output_sha256": "46fd834979b83d5b9a430fca54cfa4be0d143e4a3f7f2063b5b822b7cd9d4024",
+      "status": "GENERATED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-08T22:49:31Z",
+      "review_file": "dailies/SC05_g3_t1.review.json"
     }
   ]
 }
