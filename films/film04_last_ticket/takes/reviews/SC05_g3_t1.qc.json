@@ -1,0 +1,142 @@
+{
+  "take_id": "SC05_g3_t1",
+  "generation_id": "SC05_g3",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:62": "Yes: THEO speaks to MARA."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO picks up the ticket and speaks to MARA, ticket held to the last frame.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Over MARA's shoulder frame-right onto THEO; jar on its side and coin stacks hold.",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:MARA": "Yes: MARA's shoulder stays in the near frame.",
+        "REL_GAZE": "Yes: THEO looks at MARA, not into the lens.",
+        "REL_BARRIER": "Yes: the shutter is up, the window open."
+      }
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-09 of SC05_g3_t3.mp4 (chat: 'Accept cả 2'); Tech Lead evidence: 6-frame contact sheet (media/review/P16-10_takes_batch3.jpg), clip in media/review/cut_SC05_g2_t1__SC05_g3_t3.mp4 (file SC05_g3_t3.mp4), integrated loudness -28.8 LUFS, autoqc 0 warnings, PASSED send bound by prompt.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:62",
+    "REL_LISTENER:MARA",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "46fd834979b83d5b9a430fca54cfa4be0d143e4a3f7f2063b5b822b7cd9d4024"
+}
