@@ -124,7 +124,9 @@ def _generation_changes(gid: str, decl: Any, start: ContinuityState, end: Contin
 
 
 def _handoff(gid: str, prev_id: str, same_scene: bool, prev_end: ContinuityState, start: ContinuityState,
-             out: list[RuleIssue]) -> None:
+             out: list[RuleIssue], contract: bool = False, ellipsis: str = "") -> None:
+    """`same_scene` = continuous (one scene, or with the interaction contract one encounter). `ellipsis` (contract
+    only) = the declared reason this cut skips time/movement: spatial findings drop to WARN `*_ELLIPSIS`."""
     severity = "BLOCK" if same_scene else "WARN"
     for key in sorted(set(prev_end.props) | set(start.props)):
         if prev_end.props.get(key) != start.props.get(key):
@@ -136,10 +138,20 @@ def _handoff(gid: str, prev_id: str, same_scene: bool, prev_end: ContinuityState
             _issue(out, "VISUAL_HANDOFF_LOOK", severity,
                    f"{gid}: {who} look {prev_end.looks[who]!r} at the end of {prev_id} != {start.looks[who]!r}")
     if same_scene:  # a cut may reposition people; a continued take may not
+        spatial, tail = ("BLOCK", "") if not (contract and ellipsis) else ("WARN", "_ELLIPSIS")
+        note = f" (declared ellipsis: {ellipsis})" if tail else ""
         for who in sorted(set(prev_end.positions) & set(start.positions)):
             if prev_end.positions[who] != start.positions[who]:
-                _issue(out, "SPATIAL_HANDOFF", "BLOCK",
-                       f"{gid}: {who} ends {prev_id} {prev_end.positions[who]!r} but starts {start.positions[who]!r}")
+                _issue(out, "SPATIAL_HANDOFF" + tail, spatial,
+                       f"{gid}: {who} ends {prev_id} {prev_end.positions[who]!r} but starts "
+                       f"{start.positions[who]!r}{note}")
+        if contract:
+            for who in sorted(set(prev_end.blocking) & set(start.blocking)):
+                a, b = prev_end.blocking[who], start.blocking[who]
+                if (a.mark, a.posture) != (b.mark, b.posture):
+                    _issue(out, "SPATIAL_HANDOFF_BLOCKING" + tail, spatial,
+                           f"{gid}: {who} ends {prev_id} ({a.mark}, {a.posture}) -> starts ({b.mark}, {b.posture})"
+                           f"{note}")
         for field in ("lighting", "time_of_day", "location"):
             a, b = getattr(prev_end, field), getattr(start, field)
             if a and b and a != b:
@@ -147,10 +159,18 @@ def _handoff(gid: str, prev_id: str, same_scene: bool, prev_end: ContinuityState
                        f"{gid}: {field} {a!r} at the end of {prev_id} != {b!r}")
 
 
-def _emotional(by_id: dict[str, Any], out: list[RuleIssue]) -> None:
+def _group(pre: Any, scene_id: str, contract: bool) -> str:
+    """The continuity group of a scene: its encounter with the interaction contract on, else the scene itself."""
+    scene = pre.scenes.get(scene_id) if contract else None
+    return getattr(scene, "encounter_id", None) or scene_id
+
+
+def _emotional(pre: Any, by_id: dict[str, Any], out: list[RuleIssue]) -> None:
+    contract = pre.preflight.interaction_contract
     for gid, decl in by_id.items():
         prev = by_id.get(decl.previous_generation_id or "")
-        if prev is None or prev.scene_id != decl.scene_id or prev.choreography is None or decl.choreography is None:
+        if (prev is None or _group(pre, prev.scene_id, contract) != _group(pre, decl.scene_id, contract)
+                or prev.choreography is None or decl.choreography is None):
             continue
         responded = any(p.kind in _RESPONSE_PHASES for p in prev.choreography.phases)
         before = {c.character: _INTENSITY[c.intensity] for c in prev.choreography.performance}
@@ -182,6 +202,7 @@ def continuity_issues(pre: Any, shots: Any, include_temporal: bool = True) -> li
     by_id = {g.generation_id: g for g in shots.generations}
     seen_actions: dict[tuple[str, str], str] = {}
     scene_time: dict[str, tuple[str, str]] = {}
+    contract = pre.preflight.interaction_contract
 
     for gid, decl in by_id.items():
         start, end = pre.states.get(decl.start_state), pre.states.get(decl.end_state)
@@ -209,19 +230,20 @@ def continuity_issues(pre: Any, shots: Any, include_temporal: bool = True) -> li
             _issue(out, "ACTION_HANDOFF_MISSING", "BLOCK",
                    f"{gid}: previous_generation_id {decl.previous_generation_id!r} is not a generation")
         elif prev is not None and (prev_end := pre.states.get(prev.end_state)) is not None:
-            _handoff(gid, prev.generation_id, prev.scene_id == decl.scene_id, prev_end, start, out)
+            _handoff(gid, prev.generation_id, _group(pre, prev.scene_id, contract) == _group(pre, decl.scene_id, contract),
+                     prev_end, start, out, contract, decl.handoff_ellipsis)
 
         if decl.choreography is not None:
             for action in decl.choreography.once_actions:
                 if any(w.startswith(_SPEECH_STEMS) for w in _words(action)):
                     continue
-                key = (decl.scene_id, " ".join(_words(action)))
+                key = (_group(pre, decl.scene_id, contract), " ".join(_words(action)))
                 if key in seen_actions and seen_actions[key] != gid:
                     _issue(out, "ACTION_REPEATED", "WARN",
                            f"{gid}: once-action {action!r} was already staged in {seen_actions[key]}")
                 seen_actions.setdefault(key, gid)
 
-    _emotional(by_id, out)
+    _emotional(pre, by_id, out)
     if include_temporal:
         out += temporal_issues(pre, shots)
     return out

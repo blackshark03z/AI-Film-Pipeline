@@ -821,7 +821,10 @@ held by hidden people dropped from the video prompt; still framing word from `ca
 Known limits: `CoverageShot.describe` still hardcodes "close-up of" for SINGLE (camera size only reaches the still); authored
 choreography pronouns ("at him") are not checked — write names in P16-07a.
 ### P16-04 Relation review questions with required QC evidence — READY (after P16-02)
-### P16-05 Encounter continuity across scene numbers — READY (after P16-02)
+### P16-05 Encounter continuity across scene numbers — DONE (2026-11-08)
+Contract route: scenes sharing `encounter_id` are continuous for handoff severity, emotional carry-over and once-action
+repeats. New SPATIAL_HANDOFF_BLOCKING (mark/posture) BLOCK; `ShotDecl.handoff_ellipsis` (reason) turns spatial handoff
+findings into WARN `*_ELLIPSIS`; lighting/time/location stay BLOCK. 5 tests; contract off unchanged.
 ### P16-06 Generability v2 (UNKNOWN, exceptions, caps proven at the generation entry point) — READY
 ### P16-07a Pilot exchange SC01_g2 -> SC02_g1 v4 (OTS over THEO) -> SC02_g2 (OTS over MARA): package + stills — waits for P16-02..05; Owner approves board/stills
 ### P16-08 Send reliability offline (= P15-06) — READY

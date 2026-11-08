@@ -221,6 +221,9 @@ class ShotDecl(ContractModel):
     addressees: dict[int, list[str]] = Field(default_factory=dict)
     listener_anchors: dict[str, ListenerAnchor] = Field(default_factory=dict)  # keyed by character name
     gaze_target: str = ""  # character, set object id, mark id or "LENS"
+    # continuity.py: why this cut deliberately skips time/movement (the changes happened off screen); non-empty turns
+    # the cross-cut spatial hand-off BLOCK into a WARN
+    handoff_ellipsis: str = ""
 
 
 def shot_seconds(decl: ShotDecl, header) -> float:
