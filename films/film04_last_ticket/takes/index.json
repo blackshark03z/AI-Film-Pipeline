@@ -160,6 +160,22 @@
       "cause": "",
       "registered_at": "2026-11-08T02:11:41Z",
       "review_file": "dailies/SC02_g1_t3.review.json"
+    },
+    {
+      "take_id": "SC02_g1_t4",
+      "generation_id": "SC02_g1",
+      "prompt_sha256": "a6d8c59b8b88611c67142c3b9d92bf702d82c11a3a153baddae434ea6dc8be97",
+      "start_frame_sha256": "be9778683c2f320207c9d660f4b315776bcfb8f17719582b67e5fe59d9de93a6",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 5.0,
+      "output_file": "SC02_g1_t7.mp4",
+      "output_sha256": "27d825e8b5bcbeea13fdfa331467354800cbefca474c1b1d47774cbdf90fdf67",
+      "status": "GENERATED",
+      "shot_version": 4,
+      "cause": "",
+      "registered_at": "2026-11-08T04:40:32Z",
+      "review_file": "dailies/SC02_g1_t4.review.json"
     }
   ]
 }

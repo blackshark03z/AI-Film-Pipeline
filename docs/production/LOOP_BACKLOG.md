@@ -861,5 +861,11 @@ media id; `--download` saves `<receipt>.mp4` for `takes --register`. Limit: rece
 receipt whose plan prompt changed since reports NO_PROMPT/PROMPT_CHANGED (film04 SC01_g1 t1/t3/t5 likely). 13 new tests.
 Done-criterion from P15-06 (5 live sends without START_NOT_FOUND/AMBIGUOUS) is measured from P16-09 on.
 ### P16-09 Live pilot: SC02_g1 then SC02_g2, 360p Omni Flash, adjacent cuts — LIVE, Owner review
+SC02_g1 v4 sent 2026-11-08 (Owner: "Send SC02_g1"): take SC02_g1_t4 = media/takes/SC02_g1_t7.mp4, PASSED,
+DETAIL_PROMPT_MATCH, upload_newest slot diff 0.4, 5 credits. Two earlier attempts stopped pre-submit (0 credits):
+t5 PRE_SUBMIT_ERROR (no composer '+' in Video mode -> upload now inside the slot picker, 747d4b8), t6
+START_NOT_FOUND upload (header avatar scored as newest -> list-column filter, a9052ad). Review files:
+media/review/cut_SC01_g2_t4__SC02_g1_t7.mp4, SC02_g1_t7_sheet.png, boundary_SC01_g2__SC02_g1.png;
+dailies takes/dailies/SC02_g1_t4.review.json. Waits for the Owner's verdict; SC02_g2 v2 needs its own send go-ahead.
 ### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for P16-09 and the Owner's P15-07 choice
 ### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE
