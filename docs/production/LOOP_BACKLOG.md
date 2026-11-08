@@ -899,6 +899,8 @@ Owner approved stills + boards from media/review/P16-12_SC03-SC06_stills_boards.
 recorded via film.py stills --approve and StoryboardGate.review with the quote (no --approve-storyboard).
 Shutter tracked.roi re-measured on the approved stills: SC03_g1 [0.14,0,0.74,0.05] (bottom-edge bar only, top of
 frame), SC03_g2 [0.38,0,0.74,0.27], SC04_g1 [0.1,0,0.9,0.1] (bottom-edge bar). Gate3 SC03-SC06: PASS (AMBER WARN only).
-Open: board renderer draws an empty frame + broken caption for a shot with no people (SC04_g4 'looking none');
+Found after approval: a shot with no people was described 'silent close-up of  looking none' in the video prompt,
+still prompt and board (SC04_g4); CoverageShot.describe now says 'static insert, no people in frame' (test added).
+SC04_g4 still re-registered (same image, new prompt sha) and its board reset: both await the Owner's re-approval.
 SC05_g1 clock reads ~10:46-10:47; plan rc=1 from the pre-existing SC01_g1 STALE_PROMPT end still. Next: P16-10 shoot (LIVE).
 ### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE

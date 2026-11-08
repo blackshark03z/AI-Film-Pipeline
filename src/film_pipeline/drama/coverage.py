@@ -66,6 +66,9 @@ class CoverageShot(ContractModel):
         return round(self.end_s - self.start_s, 3)
 
     def describe(self, book: AxisBook) -> str:
+        if not self.subject and not self.axis.visible:
+            # film04 SC04_g4: a prop-only insert read "silent close-up of  looking none"
+            return "static insert, no people in frame"
         if self.coverage == "MASTER":
             # film04 SC01_g1 asked for a "two-shot, THEO left" with MARA alone in
             # frame, because the scene's axis book lists both people

@@ -105,3 +105,11 @@ def test_authoring_added_no_film04_specific_code():
     hits = [p for root in ("src", "tools") for p in (ROOT / root).rglob("*.py")
             if "film04" in p.name or "last_ticket" in p.read_text(encoding="utf-8", errors="ignore")]
     assert hits == []
+
+
+def test_prop_only_insert_is_described_as_an_insert(plan):
+    """P16-12: SC04_g4 (no people) emitted 'silent close-up of  looking none' into the video and still prompts."""
+    _, _, out = plan
+    for rel in ("prompts/SC04_g4.txt", "stills/start_SC04_g4.txt"):
+        text = (out / rel).read_text(encoding="utf-8")
+        assert "looking none" not in text and "static insert, no people in frame" in text, rel

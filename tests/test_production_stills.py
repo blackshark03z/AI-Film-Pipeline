@@ -77,7 +77,8 @@ def head_and_chained(root):
 
 def test_list_shows_a_still_prompt_per_generation_and_what_is_waiting(root):
     rows = S.list_stills(pkg_of(root))
-    assert len(rows) == 12 and all(r["state"] == "MISSING" for r in rows)
+    # P16-07b restage: 15 generations (SC03 2, SC04 4, SC05 3, SC06 2 after SC01/SC02)
+    assert len(rows) == 15 and all(r["state"] == "MISSING" for r in rows)
     heads = {r["generation_id"] for r in rows if r["needs_still"]}
     assert heads == set(S.chain_heads(pkg_of(root))) and "SC01_g1" in heads
     assert all(len(r["prompt_sha256"]) == 64 for r in rows)
