@@ -50,7 +50,9 @@ MIN_LEVEL: dict[str, str] = {
     "audio": "FULL_MOTION", "sync": "FULL_MOTION", "color": "SAMPLED", "technical": "FULL_MOTION", "compliance": "STILL",
     "delivery": "STILL"}
 _ANSWER_GROUP = {"REL_ADDRESS": "narrative"}  # question-id prefix -> QC group (default spatial)
-_REVIEWER = r"^(?:$|(?:human|auto):[A-Za-z0-9_.\-]+)$"
+# agent:<name> = an AI reviewer the Owner delegated judgment to (film04, 2026-11-09: "Bạn tự duyệt still, board và
+# take (ký là agent:tech-lead, ủy quyền của mình)"); it may judge content groups like a human, auto: tools still may not
+_REVIEWER = r"^(?:$|(?:human|agent|auto):[A-Za-z0-9_.\-]+)$"
 
 
 def answer_group(question_id: str) -> str:
@@ -79,7 +81,8 @@ class GroupCheck(ContractModel):
 
     @property
     def by_human(self) -> bool:
-        return self.reviewer.startswith("human:")
+        """A judging reviewer: a human, or an agent the Owner delegated review to."""
+        return self.reviewer.startswith(("human:", "agent:"))
 
     @model_validator(mode="after")
     def _rules(self) -> "GroupCheck":

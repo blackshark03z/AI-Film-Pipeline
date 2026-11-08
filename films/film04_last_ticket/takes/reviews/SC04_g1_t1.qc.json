@@ -1,0 +1,139 @@
+{
+  "take_id": "SC04_g1_t1",
+  "generation_id": "SC04_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "MARA looks toward THEO off frame-left, turns to the suitcase behind her, back, and breathes out.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "Close-up, MARA looking screen-left; at 3-4 s her eyes come very near the lens but stay just past it to frame-left, as the prompt asks; accepted as the intended near-lens eyeline.",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:THEO": "Yes: THEO is off frame-left; MARA's eyeline holds on him.",
+        "REL_GAZE": "Yes, borderline: near-lens at the end but frame-left, not into the lens.",
+        "REL_BARRIER": "Yes: the shutter stays down; the brass frame holds."
+      }
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "Rain on glass only, as specified; no dialogue.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g1_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g1_t1.jpg plus a full-res crop at 3.3 s; loudness -41.4 LUFS (rain only, no dialogue); autoqc 0 warnings; shutter motion PASS (peak 0.10, final -0.02); PASSED send bound by prompt. Identity: MARA matches SC03_g2 (grey bun, round glasses on a chain, mustard cardigan). Continuity: shutter bars and the coin jar match SC03_g2.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "No spoken line in this shot.",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_LISTENER:THEO",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "e0c138bb9a8e1f13c6495d8ff9d5c45101887f421c78d5092888177779d82ed6"
+}

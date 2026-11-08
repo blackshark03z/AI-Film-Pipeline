@@ -1,0 +1,247 @@
+{
+  "take": {
+    "take_id": "SC04_g1_t1",
+    "generation_id": "SC04_g1",
+    "prompt_sha256": "45805e25f7209ec1ee2668ac951c4570a143bbe396efd703b3db561e4cae2ab4",
+    "start_frame_sha256": "ef75a04b07d01da000701706f23141ef42ecd399eff322d51d03207473dab408",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 4.0,
+    "output_file": "SC04_g1_t1.mp4",
+    "output_sha256": "e0c138bb9a8e1f13c6495d8ff9d5c45101887f421c78d5092888177779d82ed6",
+    "status": "GENERATED",
+    "shot_version": 2,
+    "cause": "",
+    "registered_at": "2026-11-08T22:54:47Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "MARA"
+    ],
+    "start_state": "SC04_g1",
+    "end_state": "SC04_g2",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "MARA waits behind the counter, looking at THEO off frame-left"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.5,
+        "description": "MARA looks at the suitcase behind her, then back at THEO off frame-left"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 2.5,
+        "end_s": 4.0,
+        "description": "MARA exhales slowly"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: she is leaving: the suitcase and her glance at it - carried by: MARA, worn brown suitcase"
+    },
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - MARA waits behind the counter, looking at THEO off frame-left?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.5s ACTION: does this happen on screen - MARA looks at the suitcase behind her, then back at THEO off frame-left?"
+    },
+    {
+      "group": "action",
+      "question": "2.5-4s ACTION: does this happen on screen - MARA exhales slowly?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): exhales slowly"
+    },
+    {
+      "group": "character",
+      "question": "MARA: does the face/body read as quiet decision (restrained)? Must NOT read as: pity."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC04_g1: Continues from the previous shot: MARA seated on her stool behind the counter, frame-right; THEO at the window, frame-left; the shutter: pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter; the jar: on the counter, full of coins."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC04_g2: Continues from the previous shot: MARA seated on her stool behind the counter, frame-right; THEO at the window, frame-left; the shutter: pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter; the jar: on the counter, full of coins."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_LISTENER:THEO",
+      "group": "spatial",
+      "question": "Is the place where THEO stands kept out of frame (never shown empty), and do MARA's eyes go just past the lens to frame-left?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does MARA look at THEO and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do MARA and THEO stay on their own sides (clerk booth (staff side) / public hall (customer side)) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC04_g1_t1",
+    "generation_id": "SC04_g1",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_LISTENER:THEO",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "e0c138bb9a8e1f13c6495d8ff9d5c45101887f421c78d5092888177779d82ed6"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}

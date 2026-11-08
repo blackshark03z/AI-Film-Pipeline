@@ -73,6 +73,16 @@ def test_auto_tool_cannot_pass_or_fail_a_content_group():
                        reviewer="auto:vision")
 
 
+
+def test_delegated_agent_reviewer_may_judge_a_content_group():
+    # film04 2026-11-09: the Owner delegated still/board/take review to the Tech Lead agent
+    ok = GroupCheck(group="action", result="PASS", level="FULL_MOTION", evidence=EVID,
+                    reviewer="agent:tech-lead.delegated-by.owner-khoikk03")
+    assert ok.by_human
+    with pytest.raises(ValidationError):
+        GroupCheck(group="action", result="PASS", level="FULL_MOTION", evidence=EVID,
+                   reviewer="agent:tech lead (delegated)")   # names keep the [A-Za-z0-9_.-] alphabet
+
 def test_auto_check_downgrades_content_groups_and_keeps_machine_ones():
     ok = auto_check("narrative", "vision", ok=True, evidence=EVID, level="SAMPLED")
     assert ok.result == "UNASSESSED" and not ok.reviewer  # "no concern" is not a narrative verdict
