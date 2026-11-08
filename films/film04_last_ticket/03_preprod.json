@@ -57,7 +57,12 @@
       },
       "video_text": "young man, early twenties, short dark wet hair, olive green rain jacket, grey backpack",
       "voice": "breathless young male voice",
-      "handle": "the young man"
+      "handle": "the young man",
+      "voice_reference": {
+        "take_id": "SC01_g2_t2",
+        "start_s": 4.0,
+        "end_s": 7.0
+      }
     }
   },
   "locations": {
@@ -1054,13 +1059,13 @@
     },
     "SC02_g1": {
       "file": "media/stills/start_SC02_g1.png",
-      "sha256": "a004f0e0f2ee67fee06239e34fc9b1c1d3e0d052b93534bf97bbb099e9a507d2",
+      "sha256": "67b77263a6bf0398a0ecfa1e098adb05db2d96edc2d5e4d1b04e136753f8931c",
       "prompt_sha256": "a10389b53a833075817dc63b519ac8283374020dafb1baedde4624f83f69fd5a",
-      "source": "ChatGPT GPM tab (wanglin08ma), v2: edit of end_SC01_g1 with her hands off the shutter",
+      "source": "v3: the Owner-approved end_SC02_g1 still reused as the start (already seated, face in the gap)",
       "credits": 0.0,
-      "registered_at": "2026-11-08T00:45:00+00:00",
-      "approved_by": "owner-khoikk03",
-      "approved_at": "2026-11-08T00:50:29+00:00"
+      "registered_at": "2026-11-08T01:34:58+00:00",
+      "approved_by": "",
+      "approved_at": ""
     },
     "end:SC02_g1": {
       "file": "media/stills/end_SC02_g1.png",

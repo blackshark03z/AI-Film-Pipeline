@@ -22,6 +22,7 @@ Section numbers: story §2, direction §3, pre-production §4, shots §5, writin
 
 - Never mark a gate PASS by hand; `NOT_RUN` is not a pass.
 - A defect is fixed in the stage that should have caught it (model, validator, test), then in the film.
-- A generation is 3-15 s and as long as its action (motion library, stop on a visible object, `film.py motion`); locked looks are never re-described in prompts; no beat may depend on an uncontrolled fall/tear/spill across a cut.
+- Each shot is 3-15 s and as long as its action, not a fixed 8 s pair; a restaged scene may add insert shots (motion library, stop on a visible object, `film.py motion`); locked looks are never re-described in prompts; no beat may depend on an uncontrolled fall/tear/spill across a cut.
+- RED beats (`film.py generability`) are restaged before stills; a RED shot blocks the plan unless it carries a `generability_waiver`.
 - Generate is paused (`OWNER_GO_LIVE: NO`): plan and validate only; no credits, uploads, purchases or publishing without the Owner.
 - Report technical PASS, product proof and Owner acceptance separately.

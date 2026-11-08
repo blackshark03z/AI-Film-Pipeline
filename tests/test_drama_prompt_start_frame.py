@@ -134,7 +134,7 @@ def test_dialogue_is_who_says_text_without_quotes(sample):  # 3f
     dialogue = _compile(unit).sections["dialogue"]
     assert "lip-synced" not in dialogue and '"' not in dialogue
     assert "The young man says in Vietnamese: Mẹ vẫn chưa ngủ à?" in dialogue
-    assert "The woman says in Vietnamese: " in dialogue
+    assert "The woman, in a low voice, says in Vietnamese: " in dialogue   # P14-05: the voice words travel with her
     plain = _compile(unit, characters=_briefs(handles=False)).sections["dialogue"]
     assert plain.startswith("HÙNG says in Vietnamese: Mẹ vẫn chưa ngủ à?")
 

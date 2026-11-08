@@ -14,6 +14,7 @@ from typing import Any
 from film_pipeline.drama import (CharacterBrief, ContinuityState, GenerationHandoff, StoryboardGate,
                                  compile_scene_prompt, preflight_scene, render_schematic_frame)
 from film_pipeline.drama.axis import axis_record
+from film_pipeline.drama.generability import generability_issues
 from film_pipeline.drama.preflight import PreflightIssue
 from film_pipeline.drama.prompt import apply_handles
 from film_pipeline.drama.comprehension import check_comprehension, lint_script
@@ -375,6 +376,10 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         _write(out / "stills" / f"start_{gid}.txt", still + "\n", out)
         issues = list(report.issues)
         issues += p.motion_target_issues(decl) + p.look_pin_issues(decl)
+        rating = None
+        if p.pre.preflight.generability:
+            rating, extra = generability_issues(decl)
+            issues += extra
         end_words: int | None = None
         if decl.end_frame:
             if p.end_clauses(decl):
@@ -387,6 +392,8 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         record["generations"][gid] = {
             "words": len(text.split()), "verdict": "BLOCKED" if any(i.severity == "BLOCK" for i in issues) else "PASS",
             "still_words": len(still.split()), "issues": [i.model_dump() for i in issues]}
+        if rating is not None:  # only when the film opts in, so films shipped before P15-01 keep their golden gate3.json
+            record["generations"][gid]["generability"] = rating.level
         if end_words is not None:  # only for end_frame shots, so other films keep their golden gate3.json
             record["generations"][gid]["end_still_words"] = end_words
     comp = p.direction.comprehension

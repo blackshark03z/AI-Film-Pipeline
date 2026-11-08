@@ -135,7 +135,10 @@ def compile_scene_prompt(unit: SceneUnit, *,
         for line in shot.lines:
             if start_frame:
                 who = name_to_handle.get(line.character) or line.character
-                dialogue.append(f"{who[0].upper() + who[1:]} says in {dialogue_language}: {line.text}")
+                # P14-05: the same voice words in every shot, so a character keeps one voice across generations
+                voice = voices.get(line.character, "").strip()
+                how = f", in {'an' if voice[:1].lower() in 'aeiou' else 'a'} {voice}," if voice else ""
+                dialogue.append(f"{who[0].upper() + who[1:]}{how} says in {dialogue_language}: {line.text}")
                 continue
             voice = f", {voices[line.character]}" \
                 if line.character in voices else ""

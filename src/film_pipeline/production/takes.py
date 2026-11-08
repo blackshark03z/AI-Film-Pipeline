@@ -156,6 +156,15 @@ def _questions(decl: Any, pre: Any, script_lines: dict[int, str]) -> list[dict[s
     for n in decl.dialogue:
         q.append({"group": "sync", "question": f"Line {n} is audible, spoken by the right character, lips match: "
                                                f"{script_lines.get(n, '(see script.fountain)')}"})
+    speakers = dict.fromkeys(script_lines.get(n, "").split(":")[0].strip() for n in decl.dialogue)
+    for name in speakers:                      # P14-05: one voice per character across generations
+        spec = pre.characters.get(name) if name else None
+        if spec is None or not spec.voice:
+            continue
+        ref = spec.voice_reference
+        same = (f"; same voice as {ref.take_id} {ref.start_s:g}-{ref.end_s:g}s?" if ref is not None
+                else "; no reference take yet (the first accepted speaking take becomes it)")
+        q.append({"group": "audio", "question": f"{name} sounds like the voice bible: {spec.voice}{same}"})
     if decl.camera is not None:
         q.append({"group": "camera", "question": f"Planned size {decl.camera.size}, {decl.camera.angle}, "
                                                  f"{decl.camera.movement}: does the take match?"})

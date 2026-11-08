@@ -24,7 +24,7 @@ review) merged and ordered by what shortens the critical path:
 
 | Phase | Items | Credits | Exit |
 |---|---|---|---|
-| A. Stop failing on design (offline) | Owner verdict SC02_g1 t2 → P15-01 generability rating (reads the feasibility part of P14-01) → P15-02 frame-delta check → P15-07 film04 restage of RED beats (**Owner approves the story changes**) → P14-05 voice bible | 0 | Every remaining film04 beat GREEN or AMBER; restaged shots planned |
+| A. Stop failing on design (offline) — done except the Owner's choices | Owner verdict SC02_g1 t2 (REJECTED, v3 planned) → P15-01 generability rating (reads the feasibility part of P14-01) → P15-02 frame-delta check → P15-07 film04 restage of RED beats (**Owner approves the story changes**) → P14-05 voice bible | 0 | Every remaining film04 beat GREEN or AMBER; restaged shots planned |
 | B. Fewer, better takes | P15-06 send reliability → P14-02 + P15-03 best-of-N stills and takes → P14-03 / P15-04 VLM judge (WARN) → P15-05 + P14-07 Flow capability probe (Omni clip edit, start frame + character refs) | probe ≤ 20 | Owner sees only drafts that pass motion QC + judge |
 | C. Shoot film04 | SC02_g1 v3 → SC06_g2 with the new loop; KPI ≤ 2 sends per accepted shot | ~140-170 | All generations ACCEPTED by the Owner |
 | D. Finish and deliver | cut, grade, titles, mix, mastercheck, versions, deliver (P4-P6 built, rehearsed in P10-05); **Owner: rights checkpoint 3, AI label, C2PA signer, final acceptance** | 0 | Master delivered, Owner accepts |
@@ -711,7 +711,7 @@ comparison with an injected transcript first (fixtures); the ASR backend (e.g. f
 → `BLOCKED: needs Owner` for that part only, as WP4 was. Evidence: DramaChain Bench's weakest automated score is shot-level
 audio-visual sync (1.49/5). Covers rows 74, 142. Done when the comparison runs on fixtures and the dailies template shows the WARNs.
 
-### P14-05 Voice bible per character — READY
+### P14-05 Voice bible per character — DONE (2026-11-08: start-frame prompts carry the voice words on every line; CharacterSpec.voice_reference; dailies ask "same voice as <take> a-b s?"; THEO = SC01_g2_t2 4-7 s, MARA after her first accepted speaking take; 4 tests. Not done: BLOCK on an empty voice for a speaker - all film03/film04 speakers have one)
 Files: `03_preprod` schema (`production/sections.py`), `drama/prompt.py` dialogue block, `continuity.py`, tests. Each speaking
 character gets a fixed voice description (age, pitch, pace, accent, timbre words) and, once a take is accepted, a reference clip
 (take id + time range). Prompts carry the same voice words in every scene; `validate` BLOCKs a speaking character without a voice
@@ -745,7 +745,7 @@ same take-log tests as the mock runner.
 Evidence: [FILM04_SHOT_QUALITY_REVIEW.md](FILM04_SHOT_QUALITY_REVIEW.md). 5 of 6 rejected takes fail on one articulated prop; 10 of
 18 sends failed in the UI; one take per review loop. Order and merge with P14: see "Completion plan" at the top.
 
-### P15-01 Generability rating per beat at Gate 2 — READY
+### P15-01 Generability rating per beat at Gate 2 — DONE (2026-11-08: drama/generability.py, `film.py generability`, gate3 issues GENERABILITY_RED/_WAIVED/_AMBER, film03 pinned off; film04: SC04_g1, SC04_g2, SC05_g1, SC05_g2 RED and BLOCK, SC01_g1/g2 RED waived, SC03_g1 + SC06 AMBER, rest GREEN; 20 tests)
 Files: new `drama/generability.py`, `production/gate_checks.py` (G2), `docs/director/DIRECTOR_PLAYBOOK.md` §2-§5, tests from film04
 takes. Rate each choreography phase GREEN / AMBER / RED from data lists (review §4: articulated prop at a partial position, pinned
 prop near a moving body, hands on small objects, pouring/granular, counting, readable text, body entering a fixed gap = RED). RED
@@ -753,7 +753,7 @@ blocks G2 unless the shot carries a restage (cut-around, prop-only insert, off-s
 feasibility rules of P14-01's sources first and fold matching ones in. Done when film04 v1 SC01_g1 and SC02_g1 v2 rate RED,
 SC01_g1 v5 and SC02_g1 v3 do not, and the playbook rule on "two 8 s generations" is amended.
 
-### P15-02 Frame-delta check on start/end stills — READY
+### P15-02 Frame-delta check on start/end stills — DONE, reduced (2026-11-08: stills.pair_check on approve: LARGE_DELTA, PINNED_PROP_DIFFERS, SAME_IMAGE; WARN only; 7 tests. Finding: on the real SC02_g1 v2 pair the pixel delta near the shutter was 0.015, the same as a harmless edit (0.01), so "a body moves next to the pinned prop" is rated from the text by P15-01, not from pixels)
 Files: `production/stills.py`, `film.py stills`, tests. Before an end still is approved: same camera and light (plate diff), pose
 distance between start and end small, no pinned/tracked prop ROI overlapping the moving body's path. Large delta = WARN in the
 review pack with the reason. Done when SC02_g1 v2's pair warns and SC01_g1 v5's does not.
@@ -777,7 +777,7 @@ Files: `tools/drama_flow_ui/flow_send.py`, tests. Upload the still inside the se
 match as a check of the slot, not as the search. Done when the picker tests pass and the next 5 live sends have no
 START_NOT_FOUND / AMBIGUOUS.
 
-### P15-07 film04 restage of RED beats — READY (after P15-01; Owner approves story changes)
+### P15-07 film04 restage of RED beats — PROPOSED, waits for the Owner ([FILM04_RESTAGE_PROPOSAL.md](FILM04_RESTAGE_PROPOSAL.md))
 SC04_g1 (glasses on a chain), SC04_g2 (shutter up + coins pour, two people), SC05_g1 (counting coins), SC05_g2 (stamp), and any
 shot where the shutter edge is near a moving body. Proposal per beat with the restage tool and credit estimate → Owner chooses →
 package edit → stills. No send before the Owner's choice.

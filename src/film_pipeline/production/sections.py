@@ -54,11 +54,26 @@ class DirectionSection(DirectionPlan):
     translations: dict[str, str] = Field(default_factory=dict)  # sidecar: English text -> second language
 
 
+class VoiceReference(ContractModel):
+    """An accepted take where the character speaks: later takes are judged against it (P14-05)."""
+
+    take_id: Ident
+    start_s: float = Field(ge=0)
+    end_s: float = Field(gt=0)
+
+    @model_validator(mode="after")
+    def _ordered(self) -> "VoiceReference":
+        if self.end_s <= self.start_s:
+            raise ValueError(f"voice reference {self.take_id}: end {self.end_s:g}s is not after start {self.start_s:g}s")
+        return self
+
+
 class CharacterSpec(ContractModel):
     look: CharacterLook
     video_text: str  # description used in video prompts (the start frame carries the face; no ethnicity words)
-    voice: str
+    voice: str       # voice bible words, compiled into every line the character speaks (P14-05)
     handle: str = ""  # how a start-frame prompt names the person, e.g. "the woman"
+    voice_reference: VoiceReference | None = None
 
 
 class LocationSpec(ContractModel):
@@ -198,6 +213,8 @@ class ShotDecl(ContractModel):
     end_pose: str = ""
     duration_s: int | None = Field(default=None, ge=3, le=15)  # None = the film header's generation_s
     tracked: TrackedMotion | None = None  # trajectory.py: the moved prop the motion QC measures
+    # generability.py: why a RED shot is allowed (restage done, or the take was already accepted); turns BLOCK into WARN
+    generability_waiver: str = ""
 
 
 def shot_seconds(decl: ShotDecl, header) -> float:

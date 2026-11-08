@@ -146,6 +146,8 @@ def main(argv: list[str] | None = None) -> int:
     cont.add_argument("--film", required=True, type=Path)
     cam = actions.add_parser("camera", help="camera & lighting plan: sizes, axis side, size runs, light consistency")
     cam.add_argument("--film", required=True, type=Path)
+    gen_r = actions.add_parser("generability", help="rate each shot GREEN/AMBER/RED for the video model, with findings and drafts")
+    gen_r.add_argument("--film", required=True, type=Path)
     ani = actions.add_parser("animatic", help="timed storyboard animatic (mp4 + srt + timing report), 0 credits")
     ani.add_argument("--film", required=True, type=Path)
     ani.add_argument("--out", type=Path, help="output directory (default: <film>/media)")
@@ -377,6 +379,15 @@ def main(argv: list[str] | None = None) -> int:
             report = camera_report(pre, shots)
             _emit(report)
             return 0 if report["ok"] else 1
+        if args.action == "generability":
+            from film_pipeline.drama.generability import rate_shot
+            shots = pkg.typed.get("shots")
+            if shots is None:
+                _emit({"error": "generability needs a valid 04_shots.json"})
+                return 2
+            _emit({d.generation_id: {k: v for k, v in rate_shot(d).model_dump().items() if k != "generation_id"}
+                   for d in shots.generations})
+            return 0
         if args.action == "animatic":
             from film_pipeline.production.animatic import build_animatic
             report = build_animatic(pkg, args.out, stills_dir=args.stills, storyboard_dir=args.storyboard,

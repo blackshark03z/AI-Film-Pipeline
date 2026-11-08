@@ -1,0 +1,119 @@
+{
+  "take_id": "SC02_g1_t2",
+  "generation_id": "SC02_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Loại t2, chạy A') of SC02_g1_t3.mp4 after the Tech Lead window zoom 0-4 s at 4 fps and film.py motion (PINNED_PROP_MOVED, 22 px at 1.6 s).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "With no hand near it, the pinned shutter rises at 0.75-1.75 s while she sits down, drops at 2-2.5 s and covers her forehead to the end. Second take with the same defect.",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Loại t2, chạy A') of SC02_g1_t3.mp4 after the Tech Lead window zoom 0-4 s at 4 fps and film.py motion (PINNED_PROP_MOVED, 22 px at 1.6 s).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Speech 3-5 s.",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    }
+  ],
+  "cause": "STAGING",
+  "cause_note": "A body lowering its face into a fixed gap is beyond the model: it moves the gap (the shutter) instead of the body, with or without hands. Same failure twice -> restage, not reword: v3 starts already seated with her face in the gap (no body travel against the pinned prop). Pipeline: P15-01 rates 'body entering a fixed gap' RED; P15-02 warns on the start/end delta.",
+  "output_sha256": "2638210f3c9965b73b7bb327da33fd47602ce2666aedb2da96ac7de5f4e15ce7"
+}

@@ -139,11 +139,11 @@
       "credits": 6.0,
       "output_file": "SC02_g1_t3.mp4",
       "output_sha256": "2638210f3c9965b73b7bb327da33fd47602ce2666aedb2da96ac7de5f4e15ce7",
-      "status": "GENERATED",
+      "status": "REJECTED",
       "shot_version": 2,
-      "cause": "",
+      "cause": "STAGING",
       "registered_at": "2026-11-08T00:55:00Z",
-      "review_file": "dailies/SC02_g1_t2.review.json"
+      "review_file": "reviews/SC02_g1_t2.qc.json"
     }
   ]
 }

@@ -30,6 +30,8 @@ def clone(tmp_path):
     pre.pop("stills", None)
     # gate mechanics only: the end-state sentence (P13-03) puts three not-yet-restaged shots over the word limit
     pre["preflight"]["end_state_in_prompt"] = False
+    # likewise P15-01: SC04/SC05 are RED and not yet restaged, which blocks the plan
+    pre["preflight"]["generability"] = False
     (root / "03_preprod.json").write_text(json.dumps(pre, ensure_ascii=False, indent=2), encoding="utf-8")
     return root
 

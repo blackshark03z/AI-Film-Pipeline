@@ -41,6 +41,8 @@ class PreflightLimits(ContractModel):
     # "full" re-describes looks and set (text-only routes and films shipped before P13-04);
     # "start_frame" prompts motion only, the start image carries looks and set
     prompt_style: Literal["full", "start_frame"] = "start_frame"
+    # rate each shot GREEN/AMBER/RED for the video model (generability.py); off only for films shipped before P15-01
+    generability: bool = True
     timing: SceneTiming = Field(default_factory=SceneTiming)
     feasibility: FeasibilityLimits = Field(default_factory=FeasibilityLimits)
 

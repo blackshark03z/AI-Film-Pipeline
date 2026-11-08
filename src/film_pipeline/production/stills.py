@@ -202,4 +202,61 @@ def approve_still(pkg: Any, gid: str, by: str, *, now: str | None = None) -> dic
         raise ValueError(f"{gid}: cannot approve, {reason}")
     record = _records(pkg)[gid].model_copy(update={"approved_by": by.strip(), "approved_at": now or _now()})
     _write_record(Path(pkg.root), gid, record)
-    return {"generation_id": gid, "approved_by": record.approved_by, "file": record.file}
+    out: dict[str, Any] = {"generation_id": gid, "approved_by": record.approved_by, "file": record.file}
+    try:
+        pair = pair_check_for(pkg, gid[4:] if kind_of(gid) == "end" else gid)
+    except (OSError, ValueError, KeyError):   # an unreadable partner still is reported by state_of, not here
+        pair = None
+    if pair is not None:
+        out["pair_check"] = pair             # WARN only (P15-02); the approval above stands
+    return out
+
+
+# --- P15-02: start/end still pair check --------------------------------------------------------------------------
+# Measured on film04 pairs (grey 160x90, mean abs difference 0-255): accepted pairs differ by 5-8 overall; a pinned
+# shutter drawn the same in both stills differs by 3-4 inside its ROI. A pixel delta cannot see "a body moves next to
+# the pinned prop" (SC02_g1 v2 scored like a harmless edit); that beat is rated from the text by drama/generability.py.
+PAIR_GLOBAL_MAX = 15.0       # above this the camera, light or set changed: the model must invent the transition
+PAIR_PINNED_ROI_MAX = 10.0   # a prop pinned `still` must look the same in both stills
+
+
+def _grey(image: Path, size: tuple[int, int] = (160, 90)):
+    import numpy as np
+    from PIL import Image
+    with Image.open(image) as pic:
+        return np.asarray(pic.convert("L").resize(size, Image.BILINEAR), dtype=float)
+
+
+def pair_check(start: Path, end: Path, tracked: Any = None) -> dict[str, Any]:
+    """Compare a start and an end still; WARN findings only, never an approval (P15-02)."""
+    a, b = _grey(Path(start)), _grey(Path(end))
+    diff = abs(a - b)
+    out: dict[str, Any] = {"global_diff": round(float(diff.mean()), 2), "findings": []}
+    if out["global_diff"] > PAIR_GLOBAL_MAX:
+        out["findings"].append({"check": "LARGE_DELTA", "severity": "WARN", "detail": (
+            f"start and end differ by {out['global_diff']:g} (> {PAIR_GLOBAL_MAX:g}): camera, light or set changed; "
+            "large differences force an invented transition, where objects distort")})
+    if tracked is not None:
+        h, w = diff.shape
+        x0, y0, x1, y1 = tracked.roi
+        roi = diff[int(y0 * h):max(int(y1 * h), int(y0 * h) + 1), int(x0 * w):max(int(x1 * w), int(x0 * w) + 1)]
+        out["roi_diff"] = round(float(roi.mean()), 2)
+        if tracked.direction == "still" and out["roi_diff"] > PAIR_PINNED_ROI_MAX:
+            out["findings"].append({"check": "PINNED_PROP_DIFFERS", "severity": "WARN", "detail": (
+                f"{tracked.object} is pinned still but differs by {out['roi_diff']:g} inside its ROI "
+                f"(> {PAIR_PINNED_ROI_MAX:g}): the two stills disagree about it")})
+    if out["global_diff"] == 0:
+        out["findings"].append({"check": "SAME_IMAGE", "severity": "INFO", "detail": (
+            "start and end are the same image: the prompt alone carries the motion (film04 SC02_g1 v3)")})
+    return out
+
+
+def pair_check_for(pkg: Any, gid: str) -> dict[str, Any] | None:
+    """Pair check of a generation's registered start and end stills, or None when either is missing."""
+    records = _records(pkg)
+    start, end = records.get(gid), records.get(end_key(gid))
+    if start is None or end is None:
+        return None
+    root = Path(pkg.root)
+    decl = next((d for d in pkg.typed["shots"].generations if d.generation_id == gid), None)
+    return pair_check(root / start.file, root / end.file, getattr(decl, "tracked", None))

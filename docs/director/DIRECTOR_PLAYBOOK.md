@@ -243,6 +243,23 @@ numbers**, `[]` for a silent shot; every scripted line must be assigned exactly 
 `previous_generation_id` marks a handoff; the next generation is only sent after the previous take's end state is
 verified (§8).
 
+### Generability: rate each beat before stills
+
+film04 lost ~14 h to beats the video model cannot do (`docs/production/FILM04_SHOT_QUALITY_REVIEW.md` §4). `film.py
+generability --film DIR` rates every shot from its phases; the plan records the level in `gate3.json`.
+
+- **GREEN** (1 draft): faces, looks, glances, dialogue, small head and hand gestures, holds, light changes.
+- **AMBER** (2 drafts): walking in or out, sitting or standing with nothing pinned nearby, placing a large object,
+  a door that only opens, two people with a body action.
+- **RED** (restage first): a mechanism stopping part way (shutter, window, drawer), a pinned prop with a body moving
+  near it, a body entering a fixed gap, hands on small objects (coins, glasses, stamps, tickets), pouring, counting,
+  text that must read.
+
+Restage a RED beat: cut around it (before and after in two GREEN shots); a prop-only insert with no hands; move it
+off screen and carry it with sound; or frame the prop out of the shot. A RED shot blocks the plan
+(`GENERABILITY_RED`) unless the shot carries a `generability_waiver` (the restage is done, or the take was already
+accepted); then it is a WARN (`GENERABILITY_RED_WAIVED`).
+
 ## 6. Writing shots the generator can obey
 
 1. **SRT / script → faithful action** (Owner rule, `docs/sot/film/05_PROMPT_COMPILER.md` in the root repo). Read the
