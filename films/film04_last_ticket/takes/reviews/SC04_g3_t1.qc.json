@@ -1,0 +1,142 @@
+{
+  "take_id": "SC04_g3_t1",
+  "generation_id": "SC04_g3",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:48": "Yes: MARA speaks to THEO."
+      }
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "FAIL: the declared end state is missing. The last frame shows THEO's hand lifting the full jar in frame; the jar is not on its side and the coins are not spread. SC04_g4 starts from this end frame and SC05 already shows the jar on its side, empty.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "OTS over THEO onto MARA is correct; MARA speaks to THEO.",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:THEO": "Yes: THEO's shoulder fills the near frame-left.",
+        "REL_GAZE": "Yes: MARA looks at THEO, not into the lens.",
+        "REL_BARRIER": "Yes: the shutter stays up."
+      }
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g3_t1.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g3_t1.jpg plus the full-res last frame; loudness -24.2 LUFS; autoqc 0 warnings; PASSED send bound by prompt.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:48",
+    "REL_LISTENER:THEO",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "5a76787e6ef9cfb8a608e5fbba845a1c9a78384e9fe625ac7f72240062d6d573"
+}
