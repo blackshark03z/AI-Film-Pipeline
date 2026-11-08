@@ -294,11 +294,17 @@ def test_upload_mode_slot_records_upload_newest_and_names_the_failure(monkeypatc
     async def newest(_page, _still, over, k):
         seen.append((over, k))
         return (150, 148)
+    ups = []
+
+    async def upload(_page, f):
+        ups.append(f.name)
+        return True
+    monkeypatch.setattr(fs, "_upload_in_picker", upload)
     monkeypatch.setattr(fs, "_picker_newest", newest)
     monkeypatch.setattr(fs, "slot_diff", lambda data, _still: 0.2)
     page, rec = _SlotPage(), {}
     assert asyncio.run(fs._fill_frame_slot(page, "start", "", Path("s.png"), rec, newest_k=2)) is None
-    assert rec["start_found_by"] == "upload_newest" and seen == [((150, 148), 2)]
+    assert rec["start_found_by"] == "upload_newest" and seen == [((150, 148), 2)] and ups == ["s.png"]
 
     async def nothing(*_a, **_k):
         return None
@@ -312,3 +318,37 @@ def test_upload_frames_parses_without_a_start_token():
     assert args.upload_frames and args.start == "" and args.end_file == "e.png"
     with pytest.raises(SystemExit):
         fs.parse_args(["p.txt", "o.mp4"])
+
+
+def test_upload_mode_uploads_once_inside_the_picker_after_a_clearing_click(monkeypatch):
+    """Video mode has no composer "+": the still is uploaded from the slot picker; when the first slot click only
+    cleared an old frame (no picker open), the second click opens it and the upload happens exactly once."""
+    calls = []
+
+    async def upload(_page, f):
+        calls.append(f.name)
+        return len(calls) > 1   # first call: no picker visible
+
+    async def newest(*_a):
+        return (150, 148)
+    monkeypatch.setattr(fs, "_upload_in_picker", upload)
+    monkeypatch.setattr(fs, "_picker_newest", newest)
+    monkeypatch.setattr(fs, "slot_diff", lambda data, _still: 0.2)
+    rec = {}
+    assert asyncio.run(fs._fill_frame_slot(_SlotPage(), "start", "", Path("s.png"), rec, newest_k=1)) is None
+    assert calls == ["s.png", "s.png"] and rec["start_found_by"] == "upload_newest"
+
+
+def test_upload_mode_with_no_picker_at_all_fails_before_submit(monkeypatch):
+    async def upload(_page, _f):
+        return False
+    monkeypatch.setattr(fs, "_upload_in_picker", upload)
+    assert asyncio.run(fs._fill_frame_slot(_SlotPage(), "start", "", Path("s.png"), {}, newest_k=1)) == "START_NOT_FOUND upload"
+
+
+def test_pre_submit_error_costs_no_credit():
+    from types import SimpleNamespace
+    from film_pipeline.production.generate import credit_ledger
+    led = credit_ledger(SimpleNamespace(takes=[]), {"SC02_g1_t5": {"result": "PRE_SUBMIT_ERROR TimeoutError",
+                                                                   "expected_credits": 5.0}})
+    assert led["pre_submit"] == ["SC02_g1_t5"] and led["spent"] == 0

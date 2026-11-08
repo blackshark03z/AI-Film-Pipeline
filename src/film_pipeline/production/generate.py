@@ -264,7 +264,7 @@ def _generability_gate(decl: Any, sent: dict[str, dict[str, Any]], log: Any, pro
 
 # results the sender returns before pressing Enter on the prompt (tools/drama_flow_ui/flow_send.py): nothing was submitted
 PRE_SUBMIT_RESULTS = ("START_NOT_FOUND", "END_NOT_FOUND", "START_NOT_SET", "END_NOT_SET", "ATTACH_NOT_FOUND",
-                      "SETTINGS_NOT_SET", "SEND_FAILED")
+                      "SETTINGS_NOT_SET", "SEND_FAILED", "PRE_SUBMIT_ERROR")
 
 
 def credit_ledger(log: Any, sent: dict[str, dict[str, Any]]) -> dict[str, Any]:

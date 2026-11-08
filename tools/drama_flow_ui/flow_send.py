@@ -175,9 +175,15 @@ async def _fill_frame_slot(page, which: str, tok: str, still: Path | None, rec: 
     name = which.upper()
     slot = await _slot_xy(page, which)
     xy = None
+    uploaded = False
     for _ in range(2):
         await page.mouse.click(*slot)
         await page.wait_for_timeout(1500)
+        if newest_k is not None and not uploaded:
+            # Video mode has no composer "+" (2026-11-08): upload from inside this slot's picker
+            uploaded = await _upload_in_picker(page, Path(still))
+            if not uploaded:   # picker not open: the first click only cleared an old frame
+                continue
         over = await _list_xy(page)
         if newest_k is not None:
             xy = await _picker_newest(page, Path(still), over, newest_k)
@@ -585,6 +591,18 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
     return None
 
 
+async def _upload_in_picker(page, f: Path) -> bool:
+    """Upload one local file through the open frame picker's "Tải nội dung" button; False when no picker is open."""
+    btn = page.locator("text=Tải nội dung >> visible=true")
+    if not await btn.count():
+        return False
+    async with page.expect_file_chooser(timeout=15000) as fc:
+        await btn.last.click()
+    await (await fc.value).set_files([str(f)])
+    await page.wait_for_timeout(15000)
+    return True
+
+
 async def _upload(page, f) -> None:
     """Upload one local file through the composer "+" > "Tải nội dung" file chooser."""
     async with page.expect_file_chooser(timeout=15000) as fc:
@@ -641,44 +659,48 @@ async def run(args) -> dict:
                                   "status": resp.status, "kept": wanted, "_body": body})
         page.on("response", on_response)
 
-        for f in args.upload:
-            await _upload(page, f)
-        uploaded = [f for f in (args.start_file, args.end_file) if f] if args.upload_frames else []
-        for f in uploaded:   # start first, so the end still is the newest picker item
-            await _upload(page, f)
-        rec["frames_uploaded"] = [Path(f).name for f in uploaded]
-        if args.model or args.duration is not None:   # before the frame slots: a mode change can clear them
-            failed = await _set_composer_settings(page, args.model, args.duration, rec)
-            if failed:
-                rec["result"] = failed
-                return rec
-        for which, tok, still in (("start", args.start, args.start_file), ("end", args.end, args.end_file)):
-            if tok or (args.upload_frames and still):   # "Khung hình" mode: image into the start / end frame slot (start first)
-                failed = await _fill_frame_slot(page, which, tok, Path(still) if still else None, rec,
-                                                newest_k=len(uploaded) if args.upload_frames else None)
+        try:   # nothing is submitted before the prompt Enter: any failure here costs no credits
+            for f in args.upload:
+                await _upload(page, f)
+            # frame stills are uploaded inside their slot picker (_fill_frame_slot), each then the newest picker item
+            uploaded = [f for f in (args.start_file, args.end_file) if f] if args.upload_frames else []
+            rec["frames_uploaded"] = [Path(f).name for f in uploaded]
+            if args.model or args.duration is not None:   # before the frame slots: a mode change can clear them
+                failed = await _set_composer_settings(page, args.model, args.duration, rec)
                 if failed:
                     rec["result"] = failed
                     return rec
-        for title in args.attach:
-            await page.mouse.click(*await _plus_xy(page))
-            await page.wait_for_timeout(1500)
-            if title.startswith(("tok:", "file:")):   # picker item by thumbnail token, or by the pixels of a local copy
-                over = await _list_xy(page)
-                over = over if over != START_LIST_XY else ATTACH_LIST_XY
-                # token tails change between page loads (2026-11-08: tok:4a20dabf of the approved film04 still was gone)
-                xy = (await _picker_find(page, title[4:], over) if title.startswith("tok:")
-                      else await _picker_find_image(page, Path(title[5:]), over))
-                if xy is None:
-                    rec["result"] = f"ATTACH_NOT_FOUND {title}"
-                    return rec
-                await page.mouse.click(*xy)
-            else:
-                await page.locator(f"text={title} >> visible=true").first.click()
-            await page.wait_for_timeout(800)
-            add = page.get_by_text("Thêm vào câu lệnh", exact=True)
-            if await add.count():   # image mode attaches on the click itself
-                await add.click()
-            await page.wait_for_timeout(1500)
+            for which, tok, still in (("start", args.start, args.start_file), ("end", args.end, args.end_file)):
+                if tok or (args.upload_frames and still):   # "Khung hình" mode: image into the start / end frame slot (start first)
+                    failed = await _fill_frame_slot(page, which, tok, Path(still) if still else None, rec,
+                                                    newest_k=1 if args.upload_frames else None)
+                    if failed:
+                        rec["result"] = failed
+                        return rec
+            for title in args.attach:
+                await page.mouse.click(*await _plus_xy(page))
+                await page.wait_for_timeout(1500)
+                if title.startswith(("tok:", "file:")):   # picker item by thumbnail token, or by the pixels of a local copy
+                    over = await _list_xy(page)
+                    over = over if over != START_LIST_XY else ATTACH_LIST_XY
+                    # token tails change between page loads (2026-11-08: tok:4a20dabf of the approved film04 still was gone)
+                    xy = (await _picker_find(page, title[4:], over) if title.startswith("tok:")
+                          else await _picker_find_image(page, Path(title[5:]), over))
+                    if xy is None:
+                        rec["result"] = f"ATTACH_NOT_FOUND {title}"
+                        return rec
+                    await page.mouse.click(*xy)
+                else:
+                    await page.locator(f"text={title} >> visible=true").first.click()
+                await page.wait_for_timeout(800)
+                add = page.get_by_text("Thêm vào câu lệnh", exact=True)
+                if await add.count():   # image mode attaches on the click itself
+                    await add.click()
+                await page.wait_for_timeout(1500)
+        except Exception as e:  # noqa: BLE001 - recorded as a pre-submit result, not a lost send
+            rec["result"] = f"PRE_SUBMIT_ERROR {type(e).__name__}"
+            rec["error"] = str(e).splitlines()[0][:200] if str(e) else ""
+            return rec
 
         box = page.locator("textarea, [contenteditable='true']").first
         await box.click()
