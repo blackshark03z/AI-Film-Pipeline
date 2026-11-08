@@ -489,6 +489,13 @@ phase 0 "standing ... with her hands at her sides, sits down on her stool"; phas
 (was "without lifting the shutter"). New start still: ChatGPT edit of the old one, hands off the shutter, edge and
 catches on the same row as the approved end still. Registered NOT approved (end still and storyboard keep their
 approval). Plan PASS (171 words). Next: Owner approves the v2 start still; upload, one 6 s send, `film.py motion`.
+Owner approved the v2 start still ("Duyệt, gửi đi"). Send PASSED -> SC02_g1_t3.mp4 (6.01 s), take SC02_g1_t2, 6 credits.
+QC: `film.py motion` FLAG PINNED_PROP_MOVED 22 px at 1.6 s (the new check caught it; autoqc 0 warnings). With no hand
+on it, the shutter still rises at 0.75-1.75 s to show her face, drops back at 2-2.5 s and covers her forehead to the
+end. Second take with the same defect: lowering a body until the face enters a fixed gap is beyond the model; it
+moves the gap instead. Proposed v3: no body travel against the pinned prop inside the shot. Start already seated with
+her face in the gap (the approved end still as start frame), 5 s: glance at the clock and back, speak, hold. She sits
+down across the cut from SC01_g2 (camera B, behind her), which costs a small standing-to-seated jump. Waits for Owner.
 Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
 `film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
 catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.
