@@ -15,6 +15,24 @@ canary videos use Omni Flash at 360p (Owner, 2026-11-07). P11 (Codex review foll
 (98aeab3), P11-06 still decode (db60d67), P11-07 `edit --init` / `generators --init` (52b14cf), P11-08 rehearsal restore check
 (e666c5d). The loop restarts when the Owner flips the go-live line or adds a READY item.
 
+## Completion plan (Tech Lead, 2026-11-08)
+
+**Done =** film04 delivered from its package with `film.py` only and accepted by the Owner, at a take rate a second film can
+repeat. State: 2 of 12 generations accepted, 9 takes, 80 of 171.2 credits (cap 256.8), 14 h. Why it is slow and what the model
+can and cannot do: [FILM04_SHOT_QUALITY_REVIEW.md](FILM04_SHOT_QUALITY_REVIEW.md). P14 (external comparison) and P15 (film04
+review) merged and ordered by what shortens the critical path:
+
+| Phase | Items | Credits | Exit |
+|---|---|---|---|
+| A. Stop failing on design (offline) | Owner verdict SC02_g1 t2 → P15-01 generability rating (reads the feasibility part of P14-01) → P15-02 frame-delta check → P15-07 film04 restage of RED beats (**Owner approves the story changes**) → P14-05 voice bible | 0 | Every remaining film04 beat GREEN or AMBER; restaged shots planned |
+| B. Fewer, better takes | P15-06 send reliability → P14-02 + P15-03 best-of-N stills and takes → P14-03 / P15-04 VLM judge (WARN) → P15-05 + P14-07 Flow capability probe (Omni clip edit, start frame + character refs) | probe ≤ 20 | Owner sees only drafts that pass motion QC + judge |
+| C. Shoot film04 | SC02_g1 v3 → SC06_g2 with the new loop; KPI ≤ 2 sends per accepted shot | ~140-170 | All generations ACCEPTED by the Owner |
+| D. Finish and deliver | cut, grade, titles, mix, mastercheck, versions, deliver (P4-P6 built, rehearsed in P10-05); **Owner: rights checkpoint 3, AI label, C2PA signer, final acceptance** | 0 | Master delivered, Owner accepts |
+| E. After ship | P14-04 dialogue ASR (**Owner: install**), P14-06 DramaChain taxonomy, P14-08 API stub, rest of P14-01 | 0 | — |
+
+Budget risk: restaging may add insert shots; best-of-2 by default keeps phase C inside the cap, best-of-3 only for restaged RED
+beats. The playbook rule "one scene = two 8 s generations" yields to P13-06 durations and P15-07 inserts (amend in P15-01).
+
 ## Phase P10 — Ship readiness (Tech Lead plan, 2026-11-07), closed
 
 P0–P9 built every stage offline; film04 is authored to gate 2 + plan. **Ship** = a new film goes from package to a delivered
@@ -721,3 +739,45 @@ are the fragile part of the system. Define what an API route would need to satis
 hash, route/model in the take log, credits/cost) and add a stub adapter that refuses to send. No keys, no network, no paid account;
 using a paid API (e.g. BytePlus ModelArk) remains an Owner decision (handoff 2026-10-31: backup only). Done when the stub passes the
 same take-log tests as the mock runner.
+
+## P15 — Found by the film04 shot quality review (Tech Lead, 2026-11-08)
+
+Evidence: [FILM04_SHOT_QUALITY_REVIEW.md](FILM04_SHOT_QUALITY_REVIEW.md). 5 of 6 rejected takes fail on one articulated prop; 10 of
+18 sends failed in the UI; one take per review loop. Order and merge with P14: see "Completion plan" at the top.
+
+### P15-01 Generability rating per beat at Gate 2 — READY
+Files: new `drama/generability.py`, `production/gate_checks.py` (G2), `docs/director/DIRECTOR_PLAYBOOK.md` §2-§5, tests from film04
+takes. Rate each choreography phase GREEN / AMBER / RED from data lists (review §4: articulated prop at a partial position, pinned
+prop near a moving body, hands on small objects, pouring/granular, counting, readable text, body entering a fixed gap = RED). RED
+blocks G2 unless the shot carries a restage (cut-around, prop-only insert, off-screen + sound, prop out of frame). Read the
+feasibility rules of P14-01's sources first and fold matching ones in. Done when film04 v1 SC01_g1 and SC02_g1 v2 rate RED,
+SC01_g1 v5 and SC02_g1 v3 do not, and the playbook rule on "two 8 s generations" is amended.
+
+### P15-02 Frame-delta check on start/end stills — READY
+Files: `production/stills.py`, `film.py stills`, tests. Before an end still is approved: same camera and light (plate diff), pose
+distance between start and end small, no pinned/tracked prop ROI overlapping the moving body's path. Large delta = WARN in the
+review pack with the reason. Done when SC02_g1 v2's pair warns and SC01_g1 v5's does not.
+
+### P15-03 Best-of-N takes at 360p — READY (after P15-06)
+Files: `film.py generate --drafts N`, take log, review pack. N sends of one intent (N=1 GREEN, 2 AMBER, 3 restaged RED), each a
+take; automatic QC runs on all; the review pack shows a draft table with QC results; only the Owner accepts. Budget counts only
+sends that produced a video (fixes the P13-06 overcount). Done on a mock runner with 3 drafts.
+
+### P15-04 = P14-03 (VLM judge), extended — READY (after P14-02)
+Add to P14-03's checklist: end-still match on the last second, tracked-prop position vs the end still, look bible per visible
+character. WARN and ranking only.
+
+### P15-05 Flow capability probe: clip edit and character references — LIVE-routine (test videos, ≤ 20 credits)
+Covers P14-07's Flow part. 0-credit UI read first: does Flow offer an edit on an Omni 1.2 clip; can a start frame and character
+references go in one send. Then at most two 360p sends: (a) edit SC02_g1 t2 "keep everything else the same, the shutter does not
+move"; (b) a THEO shot with start frame + 2 refs. Record MEASURED results in the capability manifest and the playbook.
+
+### P15-06 Send reliability — READY
+Files: `tools/drama_flow_ui/flow_send.py`, tests. Upload the still inside the send so it is the newest picker item; keep the pixel
+match as a check of the slot, not as the search. Done when the picker tests pass and the next 5 live sends have no
+START_NOT_FOUND / AMBIGUOUS.
+
+### P15-07 film04 restage of RED beats — READY (after P15-01; Owner approves story changes)
+SC04_g1 (glasses on a chain), SC04_g2 (shutter up + coins pour, two people), SC05_g1 (counting coins), SC05_g2 (stamp), and any
+shot where the shutter edge is near a moving body. Proposal per beat with the restage tool and credit estimate → Owner chooses →
+package edit → stills. No send before the Owner's choice.
