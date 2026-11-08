@@ -1158,13 +1158,13 @@
     },
     "SC02_g1": {
       "file": "media/stills/start_SC02_g1.png",
-      "sha256": "67b77263a6bf0398a0ecfa1e098adb05db2d96edc2d5e4d1b04e136753f8931c",
-      "prompt_sha256": "a10389b53a833075817dc63b519ac8283374020dafb1baedde4624f83f69fd5a",
-      "source": "v3: the Owner-approved end_SC02_g1 still reused as the start (already seated, face in the gap)",
+      "sha256": "be9778683c2f320207c9d660f4b315776bcfb8f17719582b67e5fe59d9de93a6",
+      "prompt_sha256": "6b8de555371987efc70465a5cf8f8fff524bdd40ceefab7c1fb7e3fbf67e7fe1",
+      "source": "ChatGPT GPM tab (wanglin08ma), new tab, v4 OTS over THEO: edit of the approved v3 still, try 2 (THEO moved to the gap)",
       "credits": 0.0,
-      "registered_at": "2026-11-08T01:34:58+00:00",
-      "approved_by": "owner-khoikk03",
-      "approved_at": "2026-11-08T02:08:21+00:00"
+      "registered_at": "2026-11-08T04:08:43+00:00",
+      "approved_by": "",
+      "approved_at": ""
     },
     "end:SC02_g1": {
       "file": "media/stills/end_SC02_g1.png",
@@ -1175,6 +1175,16 @@
       "registered_at": "2026-11-08T00:18:39+00:00",
       "approved_by": "owner-khoikk03",
       "approved_at": "2026-11-08T00:27:30+00:00"
+    },
+    "SC02_g2": {
+      "file": "media/stills/start_SC02_g2.png",
+      "sha256": "a4f62cb4543ee961f5f72119d88cf33af9bcaa1498a6dc54cef316e45d9d342c",
+      "prompt_sha256": "c6d5d1a1a0ca35260dc243cd7c148a950d36595f340bc9b9f97816b38741b0be",
+      "source": "reuse of the Owner-approved end_SC01_g2 still (same camera B setup and state SC01_end = SC02_g2)",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T04:06:00+00:00",
+      "approved_by": "",
+      "approved_at": ""
     }
   }
 }
