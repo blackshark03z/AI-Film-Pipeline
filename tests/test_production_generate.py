@@ -349,3 +349,30 @@ def test_a_shot_with_its_own_duration_is_priced_and_sent_with_it(tmp_path):
     p = G.build_payload(pkg, "SC01_g1", stills_dir=still(tmp_path), start_token="tok:abc")
     assert p["duration_s"] == 12 and p["expected_credits"] == 14
     assert p["argv"][-4:] == ["--model", "Omni 1.2 Flash", "--duration", "12"]
+
+
+def _receipt(folder, rid, result, credits=12.0):
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / f"{rid}.intent.json").write_text(json.dumps(
+        {"film_id": "film03_front_desk", "take_id": rid, "sent": True, "result": result, "expected_credits": credits}),
+        encoding="utf-8")
+
+
+def test_credit_ledger_matches_receipts_to_takes_by_output_file_and_skips_pre_submit_failures(tmp_path):
+    pkg = film(tmp_path, 100)
+    folder = T.takes_dir(pkg.root) / "intents"
+    _receipt(folder, "SC01_g1_t1", "START_NOT_FOUND tok:abc")   # never submitted: 0 credits
+    _receipt(folder, "SC01_g1_t2", "UNBOUND")                   # submitted, no take: reserved
+    _receipt(folder, "SC01_g1_t3", "PASSED")                    # became take SC01_g1_t1 (file SC01_g1_t3.mp4)
+    log = T.load_log(pkg.root, pkg.header.film_id)
+    log.takes.append(T.TakeEntry(take_id="SC01_g1_t1", generation_id="SC01_g1", prompt_sha256="a" * 64, route="r",
+                                 model="m", credits=12.0, output_file="SC01_g1_t3.mp4", output_sha256="b" * 64,
+                                 status="REJECTED", shot_version=1))
+    T.save_log(pkg.root, log)
+    sent = G._sent_receipts(pkg.root, pkg.header.film_id, {})
+    ledger = G.credit_ledger(T.load_log(pkg.root, pkg.header.film_id), sent)
+    assert ledger["logged"] == 12.0 and ledger["unresolved"] == {"SC01_g1_t2": 12.0}
+    assert ledger["pre_submit"] == ["SC01_g1_t1"] and ledger["spent"] == 24.0
+    payload = G.generate(pkg, "SC01_g1", dry_run=True, stills_dir=still(tmp_path), start_token="tok:abc",
+                         backlog=backlog(tmp_path))["payload"]
+    assert payload["credits_spent"] == 24.0 and payload["take_id"] == "SC01_g1_t4"

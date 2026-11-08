@@ -797,7 +797,15 @@ Trigger: Owner on take SC02_g1_t3 (MARA speaks to an empty counter): "cô ấy �
 đảm bảo". Same unanchored-listener pattern in SC02_g2, SC03_g2, SC04_g1, SC05_g1. Order: P16-01 -> 02 -> 03 -> 04 -> 05 -> 06 ->
 07a -> 08 -> 09 (LIVE) -> 07b -> 10. Done-criteria live in the plan table; each item here is one loop round.
 
-### P16-01 Ledger reconcile — READY
+### P16-01 Ledger reconcile — DONE except the Owner's t3 verdict (2026-11-08)
+film04: 19 sent receipts. 10 became takes (matched by output file; take ids are offset from receipt ids, e.g. take
+SC01_g1_t4 = receipt SC01_g1_t10 AMBIGUOUS, bound by hand). 6 stopped before submit (START_NOT_FOUND: frame not found in the
+picker, prompt never entered, 0 credits). 3 were submitted and never became a take: SC01_g1_t1 UNBOUND, t3 AMBIGUOUS, t5
+UNBOUND (12 each, reserved until checked in Flow). Credits: 85 logged + 36 unresolved = 121 of 256.8, 135.8 left.
+Fix: `generate.credit_ledger` matches receipts to takes by output file and skips pre-submit failures (`PRE_SUBMIT_RESULTS`);
+before it, `generate` counted 170 (every receipt id missing from the take ids was charged again). Test
+`test_credit_ledger_matches_receipts_to_takes_by_output_file_and_skips_pre_submit_failures`. Open: Owner verdict on
+SC02_g1_t3 (status GENERATED); the 3 unresolved sends can be released only after checking Flow for their clips.
 ### P16-02 Interaction-contract schema + checks — READY (after P16-01)
 ### P16-03 One placement source for still + video prompts; explicit camera.size wins — READY (after P16-02)
 ### P16-04 Relation review questions with required QC evidence — READY (after P16-02)

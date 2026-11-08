@@ -149,14 +149,13 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
 
     prices = {g.generation_id: flow_credits(shot_seconds(g, pkg.header)) for g in shots.generations}
     sent = _sent_receipts(root, pkg.header.film_id, prices)
-    logged = {t.take_id for t in log.takes}
     # a send that did not end in a registered take still used its number (and probably its credits): never reuse it
     used = [len(log.for_generation(generation_id))] + [
         int(m.group(1)) for tid in sent if tid.startswith(f"{generation_id}_t") and (m := _RECEIPT_NUMBER.search(tid))]
     number = max(used) + 1
     take_id = f"{generation_id}_t{number}"
     out = root / "media" / "takes" / f"{take_id}.mp4"
-    spent = sum(t.credits for t in log.takes) + sum(r["expected_credits"] for tid, r in sent.items() if tid not in logged)
+    spent = credit_ledger(log, sent)["spent"]
     pending = [tid for tid, r in sent.items() if r.get("result") == "PENDING" and tid.startswith(f"{generation_id}_t")]
     if pending:
         blockers.append(_blocker("SEND_PENDING", f"{', '.join(pending)} was sent and never reported back; check Flow for the "
@@ -202,6 +201,28 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
         payload["end_frame"] = {"file": str(end_still), "exists": end_still.is_file(),
                                 "sha256": sha256_file(end_still) if end_still.is_file() else ""}
     return payload
+
+
+# results the sender returns before pressing Enter on the prompt (tools/drama_flow_ui/flow_send.py): nothing was submitted
+PRE_SUBMIT_RESULTS = ("START_NOT_FOUND", "END_NOT_FOUND", "START_NOT_SET", "END_NOT_SET", "ATTACH_NOT_FOUND",
+                      "SETTINGS_NOT_SET", "SEND_FAILED")
+
+
+def credit_ledger(log: Any, sent: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    """Credits used = registered takes + receipts that were submitted but never became a take (UNBOUND, AMBIGUOUS,
+    TIMEOUT, PENDING ...: the clip may exist in Flow and was probably charged).
+    A receipt is matched to its take by the take's output file (a take's id can differ from its receipt's id: the
+    receipt numbers every send, the take log numbers registered takes). Pre-submit failures cost nothing."""
+    # by output file only: take ids and receipt ids share one namespace with different numbering, so matching on the
+    # take id would mark a lost send (receipt SC01_g1_t1, UNBOUND) as registered by an unrelated take SC01_g1_t1
+    registered = {Path(t.output_file).stem for t in log.takes}
+    unresolved = {tid: r["expected_credits"] for tid, r in sent.items()
+                  if tid not in registered and not str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS)}
+    pre_submit = sorted(tid for tid, r in sent.items()
+                        if tid not in registered and str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS))
+    logged = sum(t.credits for t in log.takes)
+    return {"logged": logged, "unresolved": unresolved, "pre_submit": pre_submit,
+            "spent": logged + sum(unresolved.values())}
 
 
 def _sent_receipts(root: Path, film_id: str, prices: dict[str, float]) -> dict[str, dict[str, Any]]:
