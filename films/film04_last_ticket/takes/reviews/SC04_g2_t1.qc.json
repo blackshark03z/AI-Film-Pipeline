@@ -1,0 +1,139 @@
+{
+  "take_id": "SC04_g2_t1",
+  "generation_id": "SC04_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "THEO waits, the shutter rises and the green lamp light reaches him; he straightens with relief.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "Relief reads as a soft smile at the end; not triumphant.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "Deviation accepted: the frame widens slightly mid-shot and the green lamp enters frame-right; the shutter's lower edge crosses the top of frame at ~1.7 s instead of staying off screen. The beat still reads; SC04_g3 starts from this end frame, so continuity follows it.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "Eyes stay frame-right toward MARA, near but not into the lens.",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:MARA": "Yes: MARA is off frame-right; THEO's eyeline holds on her.",
+        "REL_GAZE": "Yes: frame-right of the lens throughout.",
+        "REL_BARRIER": "Yes: the shutter goes up during the shot as written and is up at the end."
+      }
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "Rain and the shutter rattle; no dialogue.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Delegated Tech Lead review 2026-11-09 of SC04_g2_t2.mp4 (chat: 'Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình'); Tech Lead evidence: 6-frame contact sheet media/review/qc_SC04_g2_t2.jpg; loudness -23.4 LUFS; autoqc 0 warnings; t1 FLOW_FAILED, t2 bound by prompt via flow_reconcile. Identity: THEO matches SC03 (wet dark hair, olive rain jacket, backpack). Continuity: coin jar full, rainy street behind, as in SC03_g1.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "The rattle lands with the shutter movement; no spoken line.",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_LISTENER:MARA",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "58e87f61dabf658e172c543eddd6cda23b971ebe17a50712a258870b763ebb76"
+}
