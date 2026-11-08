@@ -12,9 +12,7 @@
   "credit_cap": 256.79999999999995,
   "start_frame_sha256": "26aa0fc07f38d6d8c03ff02eac68a5020624e888d2cb9f5c6ff130ef206f2f43",
   "start_frame_source": "end frame of SC05_g2_t1",
-  "blockers": [
-    "SEND_CAP"
-  ],
+  "blockers": [],
   "dry_run": true,
   "sent": false,
   "owner_go_live": false

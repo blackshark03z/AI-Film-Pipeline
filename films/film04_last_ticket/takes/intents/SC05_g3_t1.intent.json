@@ -16,7 +16,9 @@
   "dry_run": false,
   "sent": true,
   "owner_go_live": true,
-  "result": "UNBOUND",
+  "result": "FLOW_FAILED",
   "take_registered": false,
-  "result_note": "2026-11-09: Flow tile gone without a clip after 18 s; reconcile NOT_IN_GALLERY."
+  "result_note": "2026-11-09: Flow tile gone without a clip after 18 s; reconcile NOT_IN_GALLERY.",
+  "result_original": "UNBOUND",
+  "relabel_note": "2026-11-09: relabelled FLOW_FAILED (Owner: 'Không tính, sửa đi'). Same signature as SC05_g3_t2, where a page watcher saw 100% then 'Không thành công': flow_send bound at ~18 s while the job still ran, the tile was later removed, reconcile NOT_IN_GALLERY. Credits still counted."
 }

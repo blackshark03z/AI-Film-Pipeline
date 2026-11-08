@@ -8,17 +8,12 @@
   "model": "Omni 1.2 Flash 360p",
   "duration_s": 6,
   "expected_credits": 6.0,
-  "credits_spent": 172.0,
+  "credits_spent": 188.0,
   "credit_cap": 256.79999999999995,
   "start_frame_sha256": "90d63a1aeec3bbe1009b84e54bd2b8a450768ca9354ce8f46c54d02ca2b5e651",
   "start_frame_source": "end frame of SC03_g1_t1",
-  "blockers": [
-    "SEND_CAP"
-  ],
-  "dry_run": false,
+  "blockers": [],
+  "dry_run": true,
   "sent": false,
-  "owner_go_live": true,
-  "refused": [
-    "SEND_CAP"
-  ]
+  "owner_go_live": false
 }

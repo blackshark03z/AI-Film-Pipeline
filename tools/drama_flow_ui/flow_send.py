@@ -19,7 +19,7 @@ Custody (WP1b):
   4. the video under that exact tile is downloaded and hashed.
 With --upload-frames the start (and end) still is uploaded inside the send (--start-file / --end-file, start first so
 the end is the newest) and picked as the newest picker item, checked by pixels; --start/--end tokens are then not needed.
-Result: PASSED, BLOCKED, SEND_FAILED, AMBIGUOUS, UNBOUND or TIMEOUT, written as a JSON
+Result: PASSED, BLOCKED, SEND_FAILED, FLOW_FAILED, AMBIGUOUS, UNBOUND or TIMEOUT, written as a JSON
 manifest next to OUT_MP4 (``<stem>.take.json``). Every send spends credits.
 Never reads cookies, never closes the browser.
 """
@@ -414,6 +414,26 @@ JS_MARKED_TOKEN = r"""() => { const c = document.querySelector('[data-vp-n]');
     return m ? m[1] : null }"""
 
 
+# Flow job state on the gallery page: a running job shows "NN%" (0-99), a rejected one "Không thành công"
+JS_JOB_STATE = r"""() => { const t = document.body.innerText;
+  return {running: /^\s*\d{1,2}%\s*$/m.test(t),
+          failed: (t.match(/Không thành công/g) || []).length}; }"""
+
+
+async def flow_failed(page, failed_before: int, wait_s: float) -> bool:
+    """True once the gallery shows one more "Không thành công" tile than before the send (polled up to wait_s)."""
+    end = time.time() + wait_s
+    while True:
+        try:
+            if (await page.evaluate(JS_JOB_STATE))["failed"] > failed_before:
+                return True
+        except Exception:  # noqa: BLE001 - page navigating; try again
+            pass
+        if time.time() >= end:
+            return False
+        await page.wait_for_timeout(3000)
+
+
 async def video_count(page) -> int:
     """Number of video tiles in the (virtualised) gallery, each counted once by
     its grid position; scrolled through top to bottom, then back to the top."""
@@ -642,6 +662,7 @@ async def run(args) -> dict:
         await page.evaluate(JS_TOP)
         await page.wait_for_timeout(1500)
         baseline = set(await page.evaluate(JS_TOKENS))
+        failed_before = (await page.evaluate(JS_JOB_STATE))["failed"]
         # P12-01: the video count and the front media id BEFORE the send; a lazy
         # thumbnail can make an old clip look new by token, a media id never changes
         pre = None if args.image else await front_snapshot(page, page.url)
@@ -728,6 +749,12 @@ async def run(args) -> dict:
             new = set(await page.evaluate(JS_TOKENS)) - baseline
             pending = await page.evaluate(
                 "(p) => document.body.innerText.includes(p)", probe)
+            job = await page.evaluate(JS_JOB_STATE)
+            if job["failed"] > failed_before:
+                rec["result"], rec["elapsed_s"] = "FLOW_FAILED", round(time.time() - t0)
+                return rec
+            # film04: binding at 18 s while the new tile still read "47%" gave UNBOUND; wait for the job to end
+            pending = pending or job["running"]
             if new and not pending:
                 break
             if not new and not pending and time.time() - t0 > 30:
@@ -764,6 +791,9 @@ async def run(args) -> dict:
             # front video is now second and the new front video's detail page
             # holds the whole sent prompt (DETAIL_PROMPT_MATCH).
             token = await detail_bind(page, pre, prompt, rec)
+            if token is None and await flow_failed(page, failed_before, 90):
+                rec["result"] = "FLOW_FAILED"
+                return rec
             if token is None:
                 tail = await page.evaluate(
                     "document.body.innerText.slice(0, 1500)")

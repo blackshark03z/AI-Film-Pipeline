@@ -212,3 +212,15 @@ def test_film_without_the_opt_in_has_no_generability_blockers(tmp_path):
     (pkg.root / "03_preprod.json").write_text(json.dumps(pre), encoding="utf-8")
     done, found = dry(reload(pkg.root), tmp_path)
     assert not set(found) & GATE and "attempts" not in done["payload"]
+
+
+def test_flow_failed_send_does_not_use_the_cap(tmp_path):
+    # film04 SC05_g3: Flow rendered to 100% then marked the job "Không thành công" and removed it (no clip);
+    # Owner 2026-11-09 "Không tính, sửa đi". Its credits stay in the ledger.
+    pkg = film(tmp_path, GREEN_TEXT)
+    sent(pkg, 1, result="FLOW_FAILED")
+    done, found = dry(pkg, tmp_path)
+    assert not set(found) & GATE and done["payload"]["attempts"]["this_version"] == 0
+    assert done["payload"]["credits_spent"] == 8.0
+    sent(pkg, 2, result="UNBOUND")
+    assert dry(pkg, tmp_path)[1] == ["SEND_CAP"]

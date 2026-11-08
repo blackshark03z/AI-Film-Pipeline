@@ -234,10 +234,12 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
 def _generability_gate(decl: Any, sent: dict[str, dict[str, Any]], log: Any, prompt_sha: str, cost: float,
                        blockers: list[dict[str, Any]], today: date) -> dict[str, Any]:
     """Blockers from the generability rating (drama/generability.py); returns the payload's `attempts` block.
-    A send counts once it was submitted (receipt sent, result not a pre-submit failure); a version bump keeps the history."""
+    A send counts once it was submitted (receipt sent, result not a pre-submit failure); a version bump keeps the history.
+    FLOW_FAILED (Flow itself rejected the clip, no output) does not use up the cap: Owner 2026-11-09 "Không tính, sửa đi";
+    its credits still count in the ledger."""
     gid, level = decl.generation_id, rate_shot(decl).level
     mine = [r for tid, r in sent.items() if r.get("generation_id", tid.rsplit("_t", 1)[0]) == gid
-            and not str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS)]
+            and not str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS + FLOW_FAILED_RESULTS)]
     here = [r for r in mine if r.get("shot_version", 1) == decl.version]
     attempts = {"this_version": len(here), "all_versions": len(mine), "cap": DRAFTS[level], "level": level}
     reuse = (decl.accepted_take_reuse or "").strip()
@@ -272,6 +274,8 @@ def _generability_gate(decl: Any, sent: dict[str, dict[str, Any]], log: Any, pro
 # results the sender returns before pressing Enter on the prompt (tools/drama_flow_ui/flow_send.py): nothing was submitted
 PRE_SUBMIT_RESULTS = ("START_NOT_FOUND", "END_NOT_FOUND", "START_NOT_SET", "END_NOT_SET", "ATTACH_NOT_FOUND",
                       "SETTINGS_NOT_SET", "SEND_FAILED", "PRE_SUBMIT_ERROR")
+# submitted, but Flow marked the job "Không thành công" and removed it: no clip; not counted against the send cap
+FLOW_FAILED_RESULTS = ("FLOW_FAILED",)
 
 
 def credit_ledger(log: Any, sent: dict[str, dict[str, Any]]) -> dict[str, Any]:
