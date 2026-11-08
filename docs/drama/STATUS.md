@@ -24,5 +24,10 @@ Prove the interaction contract on one exchange (SC01_g2 -> SC02_g1 -> SC02_g2), 
 - uv run --frozen pytest -q tests/test_flow_send_picker.py tests/test_flow_reconcile.py tests/test_production_generability_gate.py tests/test_production_film04.py
 - uv run --frozen pytest -q -k "generate or ledger or flow" --ignore=tests/test_upload_state_machine_008.py
 
+## 2026-11-09
+- P15-07 decided by the Tech Lead (Owner: "Tự quyết định kỹ thuật, đừng hỏi mình, tiếp tục"): choice 2 amended, see
+  docs/production/FILM04_RESTAGE_PROPOSAL.md. P16-07b done offline (89f9503): SC03-SC06 = 11 generations, no RED.
+- Owner delegates technical decisions; still/board/take approvals and live sends stay with the Owner.
+
 ## Next step
 P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE). Then Owner's P15-07 restage choice -> P16-07b rollout SC03-SC06 -> P16-10 shoot.
