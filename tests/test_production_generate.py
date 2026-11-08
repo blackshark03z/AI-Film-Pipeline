@@ -89,14 +89,22 @@ def test_dry_run_builds_the_exact_payload_and_sends_nothing(tmp_path):
     assert p["take_id"] == "SC01_g1_t1" and p["output"].endswith("SC01_g1_t1.mp4")
     assert p["route"] == "start_frame+Khung hinh" and p["model"] == "Omni 1.2 Flash 360p" and p["expected_credits"] == 8
     assert p["duration_s"] == 8 and p["argv"][-4:] == ["--model", "Omni 1.2 Flash", "--duration", "8"]
-    assert p["argv"][2:5] == [p["prompt_file"], p["output"], "--start"] and "--start-file" in p["argv"]
+    assert p["argv"][2:6] == [p["prompt_file"], p["output"], "--upload-frames", "--start-file"]
+    assert "--start" not in p["argv"] and "--end" not in p["argv"] and "--end-file" not in p["argv"]
     assert p["start_frame"]["exists"] and p["start_frame"]["sha256"] == T.sha256_text("png-bytes")
     assert not (Path(p["output"])).exists()  # nothing rendered
 
 
+def test_start_token_keeps_the_token_route(tmp_path):
+    p = G.build_payload(film(tmp_path), "SC01_g1", stills_dir=still(tmp_path), start_token="tok:abc")
+    argv = p["argv"]
+    assert argv[argv.index("--start") + 1] == "tok:abc" and "--start-file" in argv and "--upload-frames" not in argv
+    assert "the start still is uploaded to the Flow gallery (its tail is --start-token)" in p["preconditions"]
+
+
 def test_dry_run_reports_live_only_blockers_but_is_not_ready(tmp_path):
     done = G.generate(film(tmp_path), "SC01_g1", dry_run=True, stills_dir=still(tmp_path), backlog=backlog(tmp_path))
-    assert codes(done["payload"]) == ["START_TOKEN_MISSING", "BUDGET_NOT_SET"] and not done["ready_to_send"]
+    assert codes(done["payload"]) == ["BUDGET_NOT_SET"] and not done["ready_to_send"]
     assert all(b["live_only"] for b in done["payload"]["blockers"])
     ready = G.generate(film(tmp_path / "b", estimate=100), "SC01_g1", dry_run=True,
                        stills_dir=still(tmp_path / "b"), start_token="tok:abc", backlog=backlog(tmp_path))
@@ -180,8 +188,8 @@ def test_live_refuses_on_budget_token_or_blockers_even_with_go(tmp_path):
                            backlog=go, runner=runner)
     assert [r["code"] for r in no_budget["refused"]] == ["BUDGET_NOT_SET"]
     no_token = G.generate(film(tmp_path / "t", 100), "SC01_g1", dry_run=False, stills_dir=still(tmp_path / "t"),
-                          backlog=go, runner=runner)
-    assert [r["code"] for r in no_token["refused"]] == ["START_TOKEN_MISSING"]
+                          backlog=go, runner=FakeRunner())
+    assert "refused" not in no_token and no_token["sent"]   # no token: the stills are uploaded inside the send
     pkg = film(tmp_path / "c", 20)  # cap 30: one 12-credit take fits, two do not
     accept(pkg, "SC01_g1", credits=24.0)
     over = G.generate(pkg, "SC01_g1", dry_run=False, stills_dir=still(tmp_path / "c"), start_token="tok:a", backlog=go,

@@ -3,7 +3,9 @@
 ``build_payload`` derives everything from the package as it is *now* (it re-plans, so a stale prompt file can never be
 sent): the prompt text and its hash, the start-frame still and its hash, the output name `<gid>_t<N>.mp4` (N = next take of
 that generation), the exact argv for `tools/drama_flow_ui/flow_send.py` (start-frame route: the still goes into the
-"Khung hinh" slot with `--start tok:<tail of the uploaded still> --start-file <png>`), the model and expected credits.
+"Khung hinh" slot; with `--start-token` as `--start tok:<tail of the uploaded still> --start-file <png>`, without it as
+`--upload-frames --start-file <png>` [`--end-file <png>`]: flow_send uploads the stills inside the send), the model and
+expected credits.
 
 Blockers keep a send from being safe; they are listed in the payload either way:
 
@@ -14,7 +16,7 @@ Blockers keep a send from being safe; they are listed in the payload either way:
 * generability (only when the film opts in): a shot that reuses an accepted take, a RED shot without a valid Owner
   exception (version, prompt hash, expiry, attempts and credits), the per-version send cap, an AMBER second send while the
   first take waits for review
-* live only: no `--start-token`, no budget in `film.json`, or the take would push credits past the cap (`budget.cap_factor`
+* live only: no budget in `film.json`, or the take would push credits past the cap (`budget.cap_factor`
   x estimate, counting every take already logged, rejected ones included)
 
 ``generate(dry_run=True)`` never touches Flow: it writes `takes/intents/<take>.intent.json` (idempotent for an unchanged
@@ -171,10 +173,7 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     cap = pkg.header.budget.credits_cap
     seconds = shot_seconds(decl, pkg.header)
     cost = flow_credits(seconds)
-    if not start_token:
-        blockers.append(_blocker("START_TOKEN_MISSING", "pass --start-token tok:<tail> of the start still uploaded to Flow",
-                                 live_only=True))
-    if decl.end_frame and not end_token:
+    if start_token and decl.end_frame and not end_token:   # upload route (no start token) uploads the end still too
         blockers.append(_blocker("END_TOKEN_MISSING", "pass --end-token tok:<tail> of the end still uploaded to Flow",
                                  live_only=True))
     if pkg.header.rehearsal:
@@ -187,14 +186,26 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     attempts = None
     if pre.preflight.generability:
         attempts = _generability_gate(decl, sent, log, sha256_text(prompt), cost, blockers, today or date.today())
-    argv = [sys.executable, str(FLOW_SEND), str(prompt_file), str(out), "--start", start_token or PLACEHOLDER_TOKEN,
-            "--start-file", str(still),
-            "--model", FLOW_MODEL, "--duration", str(int(seconds))]
-    preconditions = ["Flow composer is on Omni 1.2 Flash, 360p, video mode (flow_send sets model and duration)",
-                     "the start still is uploaded to the Flow gallery (its tail is --start-token)"]
-    if end_still is not None:
+    # token route (a start token is given): the stills are already in the Flow gallery. Upload route (no start token):
+    # flow_send uploads them inside the send, so they are the newest picker items and only a pixel check is needed.
+    upload = not start_token
+    argv = [sys.executable, str(FLOW_SEND), str(prompt_file), str(out)]
+    if upload:
+        argv += ["--upload-frames", "--start-file", str(still)]
+        preconditions = ["Flow composer is on Omni 1.2 Flash, 360p, video mode (flow_send sets model and duration)",
+                         "flow_send uploads the start (and end) still inside the send; the newest picker item must "
+                         "match it by pixels"]
+    else:
+        argv += ["--start", start_token, "--start-file", str(still)]
+        preconditions = ["Flow composer is on Omni 1.2 Flash, 360p, video mode (flow_send sets model and duration)",
+                         "the start still is uploaded to the Flow gallery (its tail is --start-token)"]
+        if end_still is not None:
+            preconditions.append("the end still is uploaded to the Flow gallery (its tail is --end-token)")
+    argv += ["--model", FLOW_MODEL, "--duration", str(int(seconds))]
+    if not upload and end_still is not None:
         argv += ["--end", end_token or PLACEHOLDER_END_TOKEN, "--end-file", str(end_still)]
-        preconditions.append("the end still is uploaded to the Flow gallery (its tail is --end-token)")
+    if upload and end_still is not None:
+        argv += ["--end-file", str(end_still)]
     preconditions.append("GPM / Flow browser stays open; no cookies or captchas touched")
     payload = {"film_id": pkg.header.film_id, "generation_id": generation_id, "take_id": take_id,
             "shot_version": decl.version, "prompt_file": str(prompt_file), "prompt_sha256": sha256_text(prompt),

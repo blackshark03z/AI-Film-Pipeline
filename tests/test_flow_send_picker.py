@@ -242,3 +242,73 @@ def test_slider_presses_from_home():
         except ValueError:
             continue
         raise AssertionError(f"{bad} accepted")
+
+
+# --- P16-08: frames uploaded inside the send --------------------------------------------------------------------
+
+def _scores(monkeypatch, table):
+    monkeypatch.setattr(fs, "slot_diff", lambda data, _still: table.get(data.decode(), 40.0))
+
+
+def test_newest_one_is_found_at_the_top_even_when_the_picker_opened_mid_list(monkeypatch):
+    _scores(monkeypatch, {"start": 0.5})
+    page = _VirtualListPage(["start"] + [f"plate{i}" for i in range(20)], top=12)
+    assert asyncio.run(fs._picker_newest(page, Path("s.png"), fs.START_LIST_XY, 1)) == (142, 100)
+
+
+def test_an_uploaded_still_outside_the_newest_k_fails_without_scrolling_down(monkeypatch):
+    _scores(monkeypatch, {"start": 0.5})
+    page = _VirtualListPage(["plate0", "plate1", "start"], top=0)
+    downs = []
+    real = page.mouse.wheel
+
+    async def wheel(dx, dy):
+        downs.append(dy)
+        await real(dx, dy)
+    page.mouse.wheel = wheel
+    assert asyncio.run(fs._picker_newest(page, Path("s.png"), fs.START_LIST_XY, 2)) is None
+    assert all(dy < 0 for dy in downs)   # only the scroll to the top
+
+
+def test_with_two_uploads_the_end_is_first_and_the_start_second(monkeypatch):
+    # each still scores low only against its own thumbnail
+    monkeypatch.setattr(fs, "slot_diff", lambda data, still: 0.5 if data.decode() == Path(still).stem else 40.0)
+    page = _VirtualListPage(["end", "start", "plate"], top=0)
+    assert asyncio.run(fs._picker_newest(page, Path("end.png"), fs.START_LIST_XY, 2)) == (142, 100)
+    assert asyncio.run(fs._picker_newest(page, Path("start.png"), fs.START_LIST_XY, 2)) == (142, 148)
+
+
+def test_a_near_twin_within_k_is_refused_but_a_duplicate_upload_is_taken(monkeypatch):
+    _scores(monkeypatch, {"start": 0.5, "twin": 2.0})
+    page = _VirtualListPage(["start", "twin", "plate"], top=0)
+    assert asyncio.run(fs._picker_newest(page, Path("s.png"), fs.START_LIST_XY, 2)) is None
+    _scores(monkeypatch, {"start": 0.5, "start2": 0.6})
+    monkeypatch.setattr(fs, "same_image", lambda a, b: True)
+    page = _VirtualListPage(["start", "start2", "plate"], top=0)
+    assert asyncio.run(fs._picker_newest(page, Path("s.png"), fs.START_LIST_XY, 2)) == (142, 100)
+
+
+def test_upload_mode_slot_records_upload_newest_and_names_the_failure(monkeypatch):
+    seen = []
+
+    async def newest(_page, _still, over, k):
+        seen.append((over, k))
+        return (150, 148)
+    monkeypatch.setattr(fs, "_picker_newest", newest)
+    monkeypatch.setattr(fs, "slot_diff", lambda data, _still: 0.2)
+    page, rec = _SlotPage(), {}
+    assert asyncio.run(fs._fill_frame_slot(page, "start", "", Path("s.png"), rec, newest_k=2)) is None
+    assert rec["start_found_by"] == "upload_newest" and seen == [((150, 148), 2)]
+
+    async def nothing(*_a, **_k):
+        return None
+    monkeypatch.setattr(fs, "_picker_newest", nothing)
+    assert asyncio.run(fs._fill_frame_slot(_SlotPage(), "start", "", Path("s.png"), {}, newest_k=1)) == "START_NOT_FOUND upload"
+    assert asyncio.run(fs._fill_frame_slot(_SlotPage(), "end", "", Path("e.png"), {}, newest_k=1)) == "END_NOT_FOUND upload"
+
+
+def test_upload_frames_parses_without_a_start_token():
+    args = fs.parse_args(["p.txt", "o.mp4", "--upload-frames", "--start-file", "s.png", "--end-file", "e.png"])
+    assert args.upload_frames and args.start == "" and args.end_file == "e.png"
+    with pytest.raises(SystemExit):
+        fs.parse_args(["p.txt", "o.mp4"])

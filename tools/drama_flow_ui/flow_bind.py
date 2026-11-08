@@ -68,3 +68,41 @@ def decide_front(n_before: int, n_after: int, front_id_before: str | None,
                 "why": "detail page does not hold the whole sent prompt"}
     return {"result": "BOUND", "media_id": mid, "binding": "DETAIL_PROMPT_MATCH",
             "why": "one more video, old front now second, prompt equal"}
+
+
+def id_matches_tail(media_id: str, tail: str) -> bool:
+    """A take manifest keeps only the last 8 characters of a media id (``media_id_tail``): match by suffix."""
+    return bool(media_id) and bool(tail) and media_id.lower().endswith(tail.lower())
+
+
+def is_known(media_id: str, known: set[str]) -> bool:
+    """``known`` holds full media ids or 8-char tails; a media id is known when it equals one or ends with one."""
+    return any(media_id.lower() == k.lower() or id_matches_tail(media_id, k) for k in known)
+
+
+def reconcile(prompt: str, details: list[dict], known_media_ids: set[str]) -> dict:
+    """Bind a send that ended UNBOUND/AMBIGUOUS from the gallery detail pages (newest first).
+
+    A candidate is a clip whose media id is not already registered and whose detail page holds the WHOLE prompt.
+    Returns BOUND (exactly one candidate: ``media_id``, ``index``), AMBIGUOUS (``media_ids``) or NOT_IN_GALLERY
+    (``why``); ``already_registered`` lists the media ids that matched the prompt but were known."""
+    candidates: list[tuple[int, str]] = []
+    registered: list[str] = []
+    for i, d in enumerate(details):
+        mid = media_id_from_url((d or {}).get("url", ""))
+        if not mid or not prompt_on_page(prompt, (d or {}).get("text", "")):
+            continue
+        if is_known(mid, known_media_ids):
+            if mid not in registered:
+                registered.append(mid)
+        elif mid not in [c[1] for c in candidates]:
+            candidates.append((i, mid))
+    out: dict = {"already_registered": registered}
+    if len(candidates) == 1:
+        out.update(result="BOUND", media_id=candidates[0][1], index=candidates[0][0])
+    elif candidates:
+        out.update(result="AMBIGUOUS", media_ids=[c[1] for c in candidates])
+    else:
+        out.update(result="NOT_IN_GALLERY",
+                   why=f"no unregistered clip among {len(details)} scanned holds the whole prompt")
+    return out

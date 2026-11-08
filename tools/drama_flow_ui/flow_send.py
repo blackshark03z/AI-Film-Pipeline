@@ -4,7 +4,7 @@ Usage (repo root):
   python tools/drama_flow_ui/flow_send.py PROMPT_FILE OUT_MP4 [--attach TITLE|tok:TAIL ...]
                                           [--upload FILE ...] [--timeout 600]
                                           [--image] [--start tok:TAIL] [--start-file F]
-                                          [--end tok:TAIL] [--end-file F]
+                                          [--end tok:TAIL] [--end-file F] [--upload-frames]
                                           [--model NAME] [--duration SECONDS]
 
 Custody (WP1b):
@@ -17,6 +17,8 @@ Custody (WP1b):
      (images only). A video with no network match is bound from its detail
      page (``DETAIL_PROMPT_MATCH``, see ``flow_bind.py``);
   4. the video under that exact tile is downloaded and hashed.
+With --upload-frames the start (and end) still is uploaded inside the send (--start-file / --end-file, start first so
+the end is the newest) and picked as the newest picker item, checked by pixels; --start/--end tokens are then not needed.
 Result: PASSED, BLOCKED, SEND_FAILED, AMBIGUOUS, UNBOUND or TIMEOUT, written as a JSON
 manifest next to OUT_MP4 (``<stem>.take.json``). Every send spends credits.
 Never reads cookies, never closes the browser.
@@ -161,11 +163,15 @@ async def _list_xy(page) -> tuple[float, float]:
     return statistics.median(c[0] for c in centres), statistics.median(c[1] for c in centres)
 
 
-async def _fill_frame_slot(page, which: str, tok: str, still: Path | None, rec: dict) -> str | None:
+async def _fill_frame_slot(page, which: str, tok: str, still: Path | None, rec: dict,
+                           newest_k: int | None = None) -> str | None:
     """Put a gallery image into the start or end "Khung hình" slot; None = done, else the failure result.
 
     By position: after a failed job the slot still holds the old frame; the first click then only clears it, so
-    click again."""
+    click again.
+
+    ``newest_k`` set = upload mode: the still was uploaded in this send, so it is one of the newest k picker items
+    (pixels check only those, no search)."""
     name = which.upper()
     slot = await _slot_xy(page, which)
     xy = None
@@ -173,16 +179,20 @@ async def _fill_frame_slot(page, which: str, tok: str, still: Path | None, rec: 
         await page.mouse.click(*slot)
         await page.wait_for_timeout(1500)
         over = await _list_xy(page)
-        xy = await _picker_find(page, tok[4:], over)
-        rec[f"{which}_found_by"] = "token_tail"
-        if xy is None and still:   # tail changed: use pixels
-            xy = await _picker_find_image(page, Path(still), over)
-            rec[f"{which}_found_by"] = "pixels"
+        if newest_k is not None:
+            xy = await _picker_newest(page, Path(still), over, newest_k)
+            rec[f"{which}_found_by"] = "upload_newest"
+        else:
+            xy = await _picker_find(page, tok[4:], over)
+            rec[f"{which}_found_by"] = "token_tail"
+            if xy is None and still:   # tail changed: use pixels
+                xy = await _picker_find_image(page, Path(still), over)
+                rec[f"{which}_found_by"] = "pixels"
         if xy is not None:
             break
     await page.wait_for_timeout(500)
     if xy is None:
-        return f"{name}_NOT_FOUND {tok}"
+        return f"{name}_NOT_FOUND upload" if newest_k is not None else f"{name}_NOT_FOUND {tok}"
     await page.mouse.click(*xy)
     await page.wait_for_timeout(800)
     add = page.get_by_text("Thêm vào câu lệnh", exact=True)
@@ -274,6 +284,31 @@ async def _picker_find_image(page, still: Path, over: tuple[int, int],
         await page.mouse.move(*over)
         await page.mouse.wheel(0, 250)
         await page.wait_for_timeout(500)
+    return None
+
+
+async def _picker_newest(page, still: Path, over: tuple[int, int], k: int):
+    """Upload mode: the still was uploaded in this send, so it is among the newest k picker items (top of the list).
+
+    Scroll to the top, read the visible thumbnails once (no wheel down), keep the first k by (y, x) and score them by
+    pixels. The best must score <= SLOT_DIFF_MAX and be the only one within PICKER_MARGIN of that bound, unless its
+    competitor is the same image (one still uploaded twice). Otherwise None: an uploaded still outside the newest k
+    is a failure, never something to search for."""
+    await _picker_to_top(page, over)
+    await page.wait_for_timeout(300)
+    thumbs = sorted(await page.evaluate(JS_PICKER_THUMBS), key=lambda t: (t[1], t[0]))[:k]
+    scored = []
+    for x, y, data in thumbs:
+        try:
+            scored.append((slot_diff(bytes(data), still), x, y, bytes(data)))
+        except Exception:  # noqa: BLE001 - undecodable thumbnail
+            continue
+    scored.sort(key=lambda s: s[:3])
+    if not scored or scored[0][0] > SLOT_DIFF_MAX:
+        return None
+    close = [s for s in scored if s[0] <= SLOT_DIFF_MAX + PICKER_MARGIN]
+    if len(close) == 1 or all(same_image(c[3], scored[0][3]) for c in close[1:]):
+        return scored[0][1], scored[0][2]
     return None
 
 
@@ -550,6 +585,17 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
     return None
 
 
+async def _upload(page, f) -> None:
+    """Upload one local file through the composer "+" > "Tải nội dung" file chooser."""
+    async with page.expect_file_chooser(timeout=15000) as fc:
+        await page.mouse.click(*await _plus_xy(page))
+        await page.wait_for_timeout(1200)
+        await page.get_by_text("Tải nội dung", exact=False).last.click()
+    await (await fc.value).set_files([f])
+    await page.wait_for_timeout(15000)
+    await page.keyboard.press("Escape")
+
+
 async def run(args) -> dict:
     from patchright.async_api import async_playwright
     prompt = Path(args.prompt_file).read_text(encoding="utf-8").strip()
@@ -596,21 +642,20 @@ async def run(args) -> dict:
         page.on("response", on_response)
 
         for f in args.upload:
-            async with page.expect_file_chooser(timeout=15000) as fc:
-                await page.mouse.click(*await _plus_xy(page))
-                await page.wait_for_timeout(1200)
-                await page.get_by_text("Tải nội dung", exact=False).last.click()
-            await (await fc.value).set_files([f])
-            await page.wait_for_timeout(15000)
-            await page.keyboard.press("Escape")
+            await _upload(page, f)
+        uploaded = [f for f in (args.start_file, args.end_file) if f] if args.upload_frames else []
+        for f in uploaded:   # start first, so the end still is the newest picker item
+            await _upload(page, f)
+        rec["frames_uploaded"] = [Path(f).name for f in uploaded]
         if args.model or args.duration is not None:   # before the frame slots: a mode change can clear them
             failed = await _set_composer_settings(page, args.model, args.duration, rec)
             if failed:
                 rec["result"] = failed
                 return rec
         for which, tok, still in (("start", args.start, args.start_file), ("end", args.end, args.end_file)):
-            if tok:   # "Khung hình" mode: image into the start / end frame slot (start first)
-                failed = await _fill_frame_slot(page, which, tok, Path(still) if still else None, rec)
+            if tok or (args.upload_frames and still):   # "Khung hình" mode: image into the start / end frame slot (start first)
+                failed = await _fill_frame_slot(page, which, tok, Path(still) if still else None, rec,
+                                                newest_k=len(uploaded) if args.upload_frames else None)
                 if failed:
                     rec["result"] = failed
                     return rec
@@ -738,8 +783,7 @@ async def run(args) -> dict:
         await pw.stop()   # disconnect only; browser and tab stay open
 
 
-def main() -> None:
-    sys.stdout.reconfigure(encoding="utf-8")
+def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser()
     ap.add_argument("prompt_file")
     ap.add_argument("out")
@@ -756,13 +800,31 @@ def main() -> None:
                     help="tok:TAIL of a gallery image for the end frame")
     ap.add_argument("--end-file", default="",
                     help="local copy of the end frame: the filled end slot must match it")
+    ap.add_argument("--upload-frames", action="store_true",
+                    help="upload --start-file / --end-file inside the send (start first) and pick them as the newest "
+                         "picker items by pixels; --start / --end tokens are not needed")
     ap.add_argument("--model", default="",
                     help="composer model name (dropdown text must start with it), e.g. 'Omni 1.2 Flash'")
     ap.add_argument("--duration", type=int, default=None,
                     help="clip length in seconds (3-15), set on the settings slider")
     ap.add_argument("--image", action="store_true",
                     help="composer is in image mode; save the output image")
-    args = ap.parse_args()
+    return ap
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    ap = build_parser()
+    args = ap.parse_args(argv)
+    if not args.start and not args.upload_frames:
+        ap.error("--start tok:TAIL is required unless --upload-frames is given")
+    if args.upload_frames and not args.start_file:
+        ap.error("--upload-frames needs --start-file")
+    return args
+
+
+def main() -> None:
+    sys.stdout.reconfigure(encoding="utf-8")
+    args = parse_args()
     rec = asyncio.run(run(args))
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)

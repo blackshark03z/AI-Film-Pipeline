@@ -852,7 +852,14 @@ approved end_SC01_g2 still (same camera B, state SC01_end = SC02_g2). Both regis
 review sheet media/review/P16-07a_pilot_stills.jpg. Owner approved both (2026-11-08, 'Approve both').
 SC02_g1 `tracked.roi` re-measured on the v4 still: [0.46,0.05,0.66,0.55] (shutter slats, clear of THEO's head).
 P16-07a DONE. Next: P16-08.
-### P16-08 Send reliability offline (= P15-06) — READY
+### P16-08 Send reliability offline (= P15-06) — DONE offline (2026-11-08); live proof in P16-09
+`flow_send.py --upload-frames`: the start (then end) still is uploaded inside the send; `_picker_newest` checks only the
+newest k picker items by pixels (no list search, no wheel down) -> `START_NOT_FOUND upload` (pre-submit, 0 credits).
+`generate` without `--start-token` now emits the upload route (token route kept). Reconcile: `flow_bind.reconcile` +
+`flow_reconcile.py` (read-only gallery walk, 0 credits) bind UNBOUND/AMBIGUOUS receipts by whole prompt + unknown
+media id; `--download` saves `<receipt>.mp4` for `takes --register`. Limit: receipts hold only prompt_sha256, so a
+receipt whose plan prompt changed since reports NO_PROMPT/PROMPT_CHANGED (film04 SC01_g1 t1/t3/t5 likely). 13 new tests.
+Done-criterion from P15-06 (5 live sends without START_NOT_FOUND/AMBIGUOUS) is measured from P16-09 on.
 ### P16-09 Live pilot: SC02_g1 then SC02_g2, 360p Omni Flash, adjacent cuts — LIVE, Owner review
 ### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for P16-09 and the Owner's P15-07 choice
 ### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE
