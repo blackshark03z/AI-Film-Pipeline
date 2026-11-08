@@ -849,7 +849,9 @@ Pilot prompts trimmed to <= 215 words (SC01_g2 214, SC02_g1 ~211, SC02_g2 ~214).
 Stills (2026-11-08, Owner: 'Dùng chatgpt vẽ ảnh, trên cùng profile (mở tab mới)'): SC02_g1 v4 = ChatGPT edit of the
 approved v3 still in a new GPM tab, try 2 (try 1 put THEO beside the glass, kept in history). SC02_g2 v2 = reuse of the
 approved end_SC01_g2 still (same camera B, state SC01_end = SC02_g2). Both registered UNAPPROVED, 0 credits;
-review sheet media/review/P16-07a_pilot_stills.jpg. Waits for Owner approval.
+review sheet media/review/P16-07a_pilot_stills.jpg. Owner approved both (2026-11-08, 'Approve both').
+SC02_g1 `tracked.roi` re-measured on the v4 still: [0.46,0.05,0.66,0.55] (shutter slats, clear of THEO's head).
+P16-07a DONE. Next: P16-08.
 ### P16-08 Send reliability offline (= P15-06) — READY
 ### P16-09 Live pilot: SC02_g1 then SC02_g2, 360p Omni Flash, adjacent cuts — LIVE, Owner review
 ### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for P16-09 and the Owner's P15-07 choice
