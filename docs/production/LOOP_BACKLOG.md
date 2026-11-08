@@ -915,3 +915,5 @@ audio+sync groups even with no dialogue). SC05_g3 t1+t2 both rejected by Flow af
 (watcher: 100% at 44 s, then "Không thành công", tile removed) -> AMBER cap spent, BLOCKED.
 Open defect: flow_send reports these as UNBOUND/AMBIGUOUS; it should detect "Không thành công" as
 FLOW_FAILED. 5 of 11 film04 sends hit it. Blocked: SC03_g2 (so SC04 chain), SC05_g3.
+P16-10 DONE 2026-11-09: all 15 generations ACCEPTED (SC04 chain under delegated review); rough assembly
+media/cut/rough_cut.mp4 (84.7 s). Ledger 223/256.8. Next: mix, grade, titles, deliver.
