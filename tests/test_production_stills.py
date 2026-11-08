@@ -55,7 +55,7 @@ def root(tmp_path):
 
 @pytest.fixture()
 def end_root(tmp_path):
-    """film04 as shipped: SC01_g1 and SC01_g2 have end_frame (shutter on the catches; THEO bent at the gap)."""
+    """film04 as shipped: SC01_g1 (and later shots as they are restaged) have end_frame."""
     target = tmp_path / "film04_end"
     target.mkdir()
     for name in FILES:
@@ -272,16 +272,24 @@ def test_cli_list_register_approve(root, tmp_path):
 END = "end:SC01_g1"
 
 
+def _end_frame_gids(root, with_end=True):
+    """Generations of the film data with (or without) end_frame, so these tests follow restaging."""
+    shots = json.loads((root / "04_shots.json").read_text(encoding="utf-8"))["generations"]
+    return [g["generation_id"] for g in shots if bool(g.get("end_frame")) == with_end]
+
+
 def test_end_still_prompt_is_an_edit_instruction_only_for_end_frame_shots(end_root):
     prompts = S.still_prompts(pkg_of(end_root))
-    assert [k for k in prompts if k.startswith("end:")] == [END, "end:SC01_g2"]  # SC01_g2 v2 added an end frame
+    ends = ["end:" + g for g in _end_frame_gids(end_root)]
+    assert END in ends and [k for k in prompts if k.startswith("end:")] == ends
     assert prompts[END].startswith("Edit the given image, the first frame of this shot. Change only this: ")
     assert prompts[END].endswith("Keep everything else the same: framing, people, faces, clothes, light.")
     assert "its bottom edge resting on the brass shutter catches" in prompts[END] and "MARA" not in prompts[END]
     rows = {r["generation_id"]: r for r in S.list_stills(pkg_of(end_root))}
     assert rows[END]["kind"] == "end" and rows[END]["needs_still"] and rows[END]["prompt_file"] == "stills/end_SC01_g1.txt"
     assert rows["SC01_g1"]["kind"] == "start" and rows["SC01_g1"]["prompt_file"] == "stills/start_SC01_g1.txt"
-    assert len(rows) == 14
+    starts = [k for k in prompts if not k.startswith("end:")]
+    assert len(rows) == len(starts) + len(ends) and len(ends) >= 1
 
 
 def test_end_still_register_approve_stale_cycle(end_root, tmp_path):
@@ -309,7 +317,7 @@ def test_end_still_register_approve_stale_cycle(end_root, tmp_path):
 
 def test_end_still_only_for_end_frame_shots_and_bots_cannot_approve(end_root, tmp_path):
     with pytest.raises(ValueError, match="unknown generation"):
-        S.register_still(pkg_of(end_root), "end:SC02_g1", png(tmp_path, "x.png"))
+        S.register_still(pkg_of(end_root), "end:" + _end_frame_gids(end_root, False)[0], png(tmp_path, "x.png"))
     S.register_still(pkg_of(end_root), END, png(tmp_path, "end.png"))
     with pytest.raises(ValueError, match="reviewer's name"):
         S.approve_still(pkg_of(end_root), END, "")

@@ -274,6 +274,11 @@ verified (§8).
    ~15 cm gap under the shutter; asked for THEO's face in the gap, the end-still edit raised the shutter). Make the
    end still, then redraw the start still from it, and check that unchanged props sit at the same height in both
    (shutter edge row 315 vs 317 here; the old start was 389) before asking for approval.
+   **Anchor a prop's state to the set, never to a body that moves** (film04 SC02_g1, before any take): the shutter
+   state read "on the catches at her chest height", and the shot has her sit down; "her chest" moves with her, so the
+   prompt invites the shutter to follow. It now reads "on the brass catches, a face-high gap left above the counter".
+   Check every camera that holds the prop: a lowered shutter at a standing clerk's chest hides her face from the hall,
+   so she sits (SC02_g1) and the conversation plays through the gap.
 6. **Words that cost credits.** Police + race themes together triggered refunded "reputational risk" blocks (film01,
    film03): no race words in video prose (the start frame carries the look) and drop "police" from the prose of the
    video prompt (`.soft.txt`), dialogue unchanged. Photoreal character refs are refused by some providers; the

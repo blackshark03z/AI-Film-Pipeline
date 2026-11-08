@@ -236,21 +236,29 @@
         "generation_id": "SC02_g1",
         "phases": [
           {
-            "kind": "SETUP",
+            "kind": "ACTION",
             "start_s": 0.0,
             "end_s": 2.0,
-            "description": "MARA looks at the clock, then at him over her glasses"
+            "motion": "sit_down",
+            "description": "MARA lets go of the shutter's bottom edge and sits down on her stool behind the counter, which brings her face level with the open gap under the shutter"
           },
           {
             "kind": "ACTION",
             "start_s": 2.0,
+            "end_s": 3.0,
+            "motion": "turn_head",
+            "description": "she glances at the wall clock and back at him over her glasses"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 3.0,
             "end_s": 5.0,
             "description": "she speaks without lifting the shutter"
           },
           {
             "kind": "HOLD",
             "start_s": 5.0,
-            "end_s": 8.0,
+            "end_s": 6.0,
             "description": "she holds a level look"
           }
         ],
@@ -286,10 +294,10 @@
       "camera": {
         "size": "MEDIUM_CLOSE",
         "angle": "EYE_LEVEL",
-        "height": "EYE",
+        "height": "CHEST",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "single on MARA"
+        "composition": "single on MARA through the open gap under the lowered shutter"
       },
       "camera_position": "A",
       "readout": [
@@ -300,7 +308,10 @@
             "shutter"
           ]
         }
-      ]
+      ],
+      "duration_s": 6,
+      "end_frame": true,
+      "end_pose": "she sits on her stool behind the counter, her face level with the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches just above her head; she looks out through the gap over her round glasses; her hands rest on the counter"
     },
     {
       "generation_id": "SC02_g2",

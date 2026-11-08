@@ -594,7 +594,7 @@
         "THEO": "outside the glass door, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height"
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter"
       },
       "looks": {
         "MARA": "mara_cardigan",
@@ -610,7 +610,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height",
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -627,7 +627,7 @@
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height",
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -640,11 +640,11 @@
     },
     "SC02_g2": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height",
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -657,11 +657,11 @@
     },
     "SC02_end": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height",
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -674,11 +674,11 @@
     },
     "SC03_g1": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height",
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter",
         "the jar:": "in THEO's hands"
       },
       "looks": {
@@ -691,11 +691,11 @@
     },
     "SC03_g2": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height",
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter",
         "the jar:": "on the counter, full of coins"
       },
       "looks": {
@@ -708,11 +708,11 @@
     },
     "SC03_end": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height",
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter",
         "the jar:": "on the counter, full of coins"
       },
       "looks": {
@@ -725,11 +725,11 @@
     },
     "SC04_g1": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height",
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter",
         "the jar:": "on the counter, full of coins"
       },
       "looks": {
@@ -742,11 +742,11 @@
     },
     "SC04_g2": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
-        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches at her chest height",
+        "the shutter:": "pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter",
         "the jar:": "on the counter, full of coins"
       },
       "looks": {
@@ -759,7 +759,7 @@
     },
     "SC04_end": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
@@ -777,7 +777,7 @@
     },
     "SC05_g1": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
@@ -795,7 +795,7 @@
     },
     "SC05_g2": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
@@ -814,7 +814,7 @@
     },
     "SC05_end": {
       "positions": {
-        "MARA": "behind the counter, frame-right",
+        "MARA": "seated on her stool behind the counter, frame-right",
         "THEO": "at the window, frame-left"
       },
       "props": {
@@ -1051,6 +1051,26 @@
       "registered_at": "2026-11-07T23:21:04+00:00",
       "approved_by": "owner-khoikk03",
       "approved_at": "2026-11-07T23:55:05+00:00"
+    },
+    "SC02_g1": {
+      "file": "media/stills/start_SC02_g1.png",
+      "sha256": "5df0c5226f0c2cdc7b693b25d82ccfb8aa750a125da977175af5ff7b36d4f59a",
+      "prompt_sha256": "a10389b53a833075817dc63b519ac8283374020dafb1baedde4624f83f69fd5a",
+      "source": "reuse of the approved end still of SC01_g1 (same camera A, shutter on the catches)",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T00:18:38+00:00",
+      "approved_by": "",
+      "approved_at": ""
+    },
+    "end:SC02_g1": {
+      "file": "media/stills/end_SC02_g1.png",
+      "sha256": "67b77263a6bf0398a0ecfa1e098adb05db2d96edc2d5e4d1b04e136753f8931c",
+      "prompt_sha256": "d9556a14b6a535ab402aceebafde970b798833e8a758f495a7eb2bc93ee9a3ef",
+      "source": "ChatGPT GPM tab (wanglin08ma), edit of end_SC01_g1: MARA seated, face in the gap",
+      "credits": 0.0,
+      "registered_at": "2026-11-08T00:18:39+00:00",
+      "approved_by": "",
+      "approved_at": ""
     }
   }
 }

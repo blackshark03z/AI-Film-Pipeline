@@ -465,6 +465,15 @@ still, take the best (test_flow_send_picker). Third run PASSED -> SC01_g2_t4.mp4
 0-1.5 s, crosses to the counter, appears in the gap at 3.3 s, speech 4-7 s (-28 dB), quiet hold 7-8 s. Waits for Owner.
 Follow-up: `generate` budget counts a failed intent (START_NOT_FOUND, nothing submitted) at its expected credits
 (credits_spent 124 -> 140 for one 8-credit take); a pre-submit failure should count 0.
+Owner accepted SC01_g2_t2 ("Nhận, tiếp tục", 2026-11-08; all groups PASS, human:owner-khoikk03). SC01 is done.
+SC02_g1 restaged before any take: from camera A (hall) the shutter on its catches hides a standing MARA's face, so
+she lets go of the edge and sits on her stool (sit_down 0-2), glances at the clock (turn_head 2-3), speaks 3-5, holds
+5-6 = 6 s; camera height CHEST, end_frame with her face in the gap. MARA is "seated on her stool" in every state
+SC02_g2..SC05_end. Shutter state text anchored to the set ("a face-high gap left above the counter", was "at her
+chest height"; playbook §7.5). Start still = the approved end still of SC01_g1 (same camera, 0 credits); end still
+drawn in ChatGPT from it (shutter edge and catches on the same row, tray/clock/lamp unchanged). Both registered, NOT
+approved; storyboard SC02_S1 PENDING. Plan: SC02_g1 BLOCKED only on the storyboard. Stills tests now read the
+end-frame shots from the film data. Next: Owner approves start/end SC02_g1 + storyboard SC02_S1; upload, one 6 s send.
 Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
 `film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
 catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.

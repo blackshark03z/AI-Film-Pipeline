@@ -107,11 +107,11 @@
       "credits": 8.0,
       "output_file": "SC01_g2_t4.mp4",
       "output_sha256": "1cb204d371328312db1604a47c8267e56f9198c7201d5669ccaf1bfc8bd2f788",
-      "status": "GENERATED",
+      "status": "ACCEPTED",
       "shot_version": 2,
       "cause": "",
       "registered_at": "2026-11-08T00:09:52Z",
-      "review_file": "dailies/SC01_g2_t2.review.json"
+      "review_file": "reviews/SC01_g2_t2.qc.json"
     }
   ]
 }

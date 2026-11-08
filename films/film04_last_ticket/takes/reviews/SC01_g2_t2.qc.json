@@ -1,0 +1,119 @@
+{
+  "take_id": "SC01_g2_t2",
+  "generation_id": "SC01_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO runs in from the rain with the jar and reaches her window after closing.",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "THEO keeps the olive green rain jacket and the jar the whole shot; MARA unchanged, back to camera.",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Door left, counter and window centre, MARA frame-right; he comes round the frame into the gap.",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Door 0-1.5 s, crosses the hall, appears at the gap at 3.3 s, speaks, holds; once each.",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Shutter edge holds its height the whole shot (t1 defect gone).",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Locked OTS from behind MARA as planned.",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Matches the approved stills; he ends bent a little lower than the end still (accepted by Owner).",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "No loop or repeat; 7.96 s.",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Speech 4-7 s, quiet hold 7-8 s, rain room tone.",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Mouth moves during the speech window.",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 of SC01_g2_t4.mp4 (chat: 'Nhận, tiếp tục'); Tech Lead evidence: strip 0.67 s, door zoom 0-2.5 s at 4 fps, last frame vs approved end still, loudness per second (speech 4-7 s), autoqc 0 warnings.",
+      "reviewer": "human:owner-khoikk03",
+      "note": "640x360 Omni 1.2 Flash, no artefacts seen.",
+      "waiver": null
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "output_sha256": "1cb204d371328312db1604a47c8267e56f9198c7201d5669ccaf1bfc8bd2f788"
+}
