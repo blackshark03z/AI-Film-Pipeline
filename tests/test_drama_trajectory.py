@@ -90,6 +90,19 @@ def test_the_wrong_declared_direction_is_no_motion(tmp_path):
     assert "NO_MOTION" in names(result)
 
 
+def test_a_pinned_prop_that_goes_up_and_back_is_flagged(tmp_path):
+    # film04 SC02_g1 t1: the shutter pinned as unchanged was pushed up at 0.75 s and dropped back at 3 s
+    up_and_back = lambda t: ramp(t, 0.75, 1.25, 80, 30) if t < 3 else ramp(t, 3.0, 3.75, 30, 80)  # noqa: E731
+    result = judged(make_clip(tmp_path / "f.mp4", up_and_back), direction="still")
+    assert names(result) == ["PINNED_PROP_MOVED"] and result["findings"][0]["severity"] == "P0"
+    assert result["peak"] > 20 and result["peak_t"] >= 0.75
+
+
+def test_a_pinned_prop_that_stays_put_passes(tmp_path):
+    result = judged(make_clip(tmp_path / "g.mp4", lambda t: 40), direction="still")
+    assert names(result) == []
+
+
 def test_judge_motion_on_a_plain_curve():
     good = [(i / 2, min(i, 10) * 1.0) for i in range(20)]
     assert judge_motion(good, direction="down", action=(0.0, 5.0))["findings"] == []

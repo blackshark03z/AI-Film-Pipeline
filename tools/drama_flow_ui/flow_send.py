@@ -100,17 +100,28 @@ JS_PICKER_CENTRES = r"""() => [...document.images].map(i => i.getBoundingClientR
 SLOT_DIFF_MAX = 4.0      # mean abs grey diff at 64x36; the same still scores 0-1,
                          # a sibling still of the same room 7 (film04 plate), others >= 40
 PICKER_MARGIN = 3.0      # the best picker match must beat the runner-up by this much
+SAME_STILL_MAX = 1.0     # ...unless the two are one still uploaded twice (their own diff at most this)
+
+
+def _grey(data: bytes):
+    import cv2
+    import numpy as np
+    img = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
+    return cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), (64, 36)).astype(float)
 
 
 def slot_diff(data: bytes, still: Path) -> float:
-    import cv2
-    import numpy as np
+    return float(abs(_grey(data) - _grey(Path(still).read_bytes())).mean())
 
-    def grey(img):
-        return cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY),
-                          (64, 36)).astype(float)
-    a = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
-    return float(np.abs(grey(a) - grey(cv2.imread(str(still)))).mean())
+
+def same_image(a: bytes, b: bytes) -> bool:
+    """Two picker thumbnails of one still uploaded twice: equal bytes, or pixels within SAME_STILL_MAX."""
+    if a == b:
+        return True
+    try:
+        return float(abs(_grey(a) - _grey(b)).mean()) <= SAME_STILL_MAX
+    except Exception:  # noqa: BLE001 - undecodable thumbnail
+        return False
 
 JS_VIDEO_AT =r"""([x, y]) => { const v = [...document.querySelectorAll('video')]
     .find(v => { const r = v.getBoundingClientRect();
@@ -253,9 +264,11 @@ async def _picker_find_image(page, still: Path, over: tuple[int, int],
                 continue
         scored.sort(key=lambda s: s[:3])
         if scored and scored[0][0] <= SLOT_DIFF_MAX:
-            # a runner-up with the same thumbnail bytes is the same still uploaded twice (film04 SC01_g2 t2/t3: two
-            # copies of the v2 start, both 1.7, START_NOT_FOUND); either copy is right, so take the best
-            if len(scored) == 1 or scored[1][0] >= scored[0][0] + PICKER_MARGIN or scored[1][3] == scored[0][3]:
+            # a runner-up that is the same image is the same still uploaded twice (film04 SC01_g2 t2/t3: two copies
+            # of the v2 start, both 1.7; SC02_g1 t1: its start reuses end_SC01_g1, thumbnails 2 bytes apart);
+            # either copy is right, so take the best
+            if (len(scored) == 1 or scored[1][0] >= scored[0][0] + PICKER_MARGIN
+                    or same_image(scored[1][3], scored[0][3])):
                 return scored[0][1], scored[0][2]
             return None   # two near-identical candidates: refuse
         await page.mouse.move(*over)

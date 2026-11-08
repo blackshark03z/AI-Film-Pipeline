@@ -474,6 +474,16 @@ chest height"; playbook §7.5). Start still = the approved end still of SC01_g1 
 drawn in ChatGPT from it (shutter edge and catches on the same row, tray/clock/lamp unchanged). Both registered, NOT
 approved; storyboard SC02_S1 PENDING. Plan: SC02_g1 BLOCKED only on the storyboard. Stills tests now read the
 end-frame shots from the film data. Next: Owner approves start/end SC02_g1 + storyboard SC02_S1; upload, one 6 s send.
+Owner approved start/end SC02_g1 + storyboard SC02_S1 ("Duyệt, gửi đi", 2026-11-08). First send: START_NOT_FOUND (no
+submit): the start reuses end_SC01_g1, already in the gallery; the two thumbnails scored 1.4 each but were 2 bytes
+apart, so the byte rule missed. `flow_send.same_image` now compares the two candidates' pixels (<= SAME_STILL_MAX).
+Second send PASSED -> SC02_g1_t2.mp4 (6.04 s), take SC02_g1_t1 GENERATED, 6 credits; autoqc 0 warnings.
+Tech Lead QC: P0 action. She pushes the pinned shutter up at 0.75-1.25 s (her hands start hooked under its edge), it
+stays up to 3 s, then drops back to the catches over her forehead (end-frame snap). Speech 3-5 s is fine.
+Pipeline gap: autoqc and `film.py motion` measured only props declared to move. `tracked.direction: "still"` +
+`trajectory.judge_still` flag a pinned prop that moves (PINNED_PROP_MOVED, P0); SC02_g1 declares the shutter still;
+on t1 it FLAGs 30 px at 3.2 s. Proposed v2 (after the Owner's rejection): start still with her hands already off the
+shutter (standing, hands at her sides), the sit-down phase without any word about the shutter edge.
 Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
 `film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
 catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.

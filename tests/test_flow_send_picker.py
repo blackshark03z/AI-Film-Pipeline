@@ -55,6 +55,20 @@ def test_image_search_takes_a_second_upload_of_the_same_still_but_refuses_a_clos
     assert asyncio.run(fs._picker_find_image(page, Path("start.jpg"), fs.START_LIST_XY, scrolls=0)) is None
 
 
+def test_same_image_compares_pixels_not_only_bytes(tmp_path):
+    # film04 SC02_g1 t1: the start reuses end_SC01_g1; Flow served the two uploads 2 bytes apart (119392 / 119394)
+    cv2 = pytest.importorskip("cv2")
+    import numpy as np
+    img = np.full((90, 160, 3), 60, np.uint8)
+    img[20:60, 40:120] = 200
+    a = cv2.imencode(".png", img)[1].tobytes()
+    b = cv2.imencode(".png", img, [cv2.IMWRITE_PNG_COMPRESSION, 9])[1].tobytes() + b"\0\0"
+    other = img.copy()
+    other[20:60, 40:120] = 120
+    assert fs.same_image(a, a) and fs.same_image(a, b)
+    assert not fs.same_image(a, cv2.imencode(".png", other)[1].tobytes()) and not fs.same_image(a, b"junk")
+
+
 # --- P13-05: start and end slots -------------------------------------------------------------------------------
 
 import json  # noqa: E402

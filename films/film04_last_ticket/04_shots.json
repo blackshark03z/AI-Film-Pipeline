@@ -311,7 +311,18 @@
       ],
       "duration_s": 6,
       "end_frame": true,
-      "end_pose": "she sits on her stool behind the counter, her face level with the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches just above her head; she looks out through the gap over her round glasses; her hands rest on the counter"
+      "end_pose": "she sits on her stool behind the counter, her face level with the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches just above her head; she looks out through the gap over her round glasses; her hands rest on the counter",
+      "tracked": {
+        "object": "shutter",
+        "roi": [
+          0.44,
+          0.05,
+          0.65,
+          0.5
+        ],
+        "axis": "y",
+        "direction": "still"
+      }
     },
     {
       "generation_id": "SC02_g2",

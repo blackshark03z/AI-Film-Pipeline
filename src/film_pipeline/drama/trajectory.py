@@ -5,7 +5,7 @@ Nothing here marks a take as good.
 
 * ``motion_curve``  dense optical flow (Farneback) inside a region of interest; cumulative displacement along one axis.
 * ``judge_motion``  signs the curve by the declared direction and checks it for no motion, reversal and motion outside
-                    the ACTION window.
+                    the ACTION window; direction "still" flags any travel of a prop that must not move.
 """
 from __future__ import annotations
 
@@ -62,10 +62,27 @@ def motion_curve(clip: Path, roi: tuple[float, float, float, float], axis: Liter
     return curve
 
 
-def judge_motion(curve: list[tuple[float, float]], *, direction: Literal["down", "up", "left", "right"],
+def judge_still(curve: list[tuple[float, float]], *, min_travel_px: float = 4.0) -> dict:
+    """Findings for a prop that must not move: any travel past `min_travel_px` either way (film04 SC02_g1 t1: the
+    pinned shutter was pushed up at 0.75 s and dropped back at 3 s; autoqc saw nothing)."""
+    if not curve:
+        return {"findings": [], "peak_t": 0.0, "peak": 0.0, "final": 0.0, "curve": []}
+    peak_t, peak = max(curve, key=lambda p: abs(p[1]))
+    findings = []
+    if abs(peak) > min_travel_px:
+        findings.append({"check": "PINNED_PROP_MOVED", "severity": "P0",
+                         "detail": f"a prop pinned as unchanged moved {abs(peak):.1f}px at {peak_t:.1f}s "
+                                   f"(final {curve[-1][1]:.1f}px)"})
+    return {"findings": findings, "peak_t": round(peak_t, 3), "peak": round(abs(peak), 2),
+            "final": round(curve[-1][1], 2), "curve": [(round(t, 3), round(d, 2)) for t, d in curve]}
+
+
+def judge_motion(curve: list[tuple[float, float]], *, direction: Literal["down", "up", "left", "right", "still"],
                  action: tuple[float, float], reversal_frac: float = 0.15, outside_frac: float = 0.10,
                  min_travel_px: float = 4.0) -> dict:
     """Findings for a displacement curve; the declared direction is positive. FLAG material, not an acceptance."""
+    if direction == "still":
+        return judge_still(curve, min_travel_px=min_travel_px)
     sign = _SIGN[direction]
     signed = [(t, sign * d) for t, d in curve]
     findings: list[dict[str, str]] = []

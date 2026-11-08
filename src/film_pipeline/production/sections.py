@@ -152,12 +152,13 @@ class PreprodSection(ContractModel):
 
 
 class TrackedMotion(ContractModel):
-    """A moved prop the trajectory QC measures (see drama/trajectory.py): where to look and which way it moves."""
+    """A prop the trajectory QC measures (see drama/trajectory.py): where to look and which way it moves.
+    direction "still": the prop must not move at all (film04 SC02_g1 t1: the pinned shutter went up and came back)."""
 
     object: Ident
     roi: tuple[float, float, float, float]  # x0, y0, x1, y1 as fractions of the frame
     axis: Literal["x", "y"]
-    direction: Literal["down", "up", "left", "right"]
+    direction: Literal["down", "up", "left", "right", "still"]
 
     @model_validator(mode="after")
     def _roi_ok(self) -> "TrackedMotion":
