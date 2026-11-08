@@ -240,7 +240,7 @@
             "start_s": 0.0,
             "end_s": 2.0,
             "motion": "sit_down",
-            "description": "MARA lets go of the shutter's bottom edge and sits down on her stool behind the counter, which brings her face level with the open gap under the shutter"
+            "description": "MARA, standing behind the counter with her hands at her sides, sits down on her stool, which brings her face level with the open gap above the counter"
           },
           {
             "kind": "ACTION",
@@ -253,7 +253,7 @@
             "kind": "ACTION",
             "start_s": 3.0,
             "end_s": 5.0,
-            "description": "she speaks without lifting the shutter"
+            "description": "she speaks to him through the gap"
           },
           {
             "kind": "HOLD",
@@ -322,7 +322,10 @@
         ],
         "axis": "y",
         "direction": "still"
-      }
+      },
+      "version": 2,
+      "repair_of": "SC02_g1@v1",
+      "repair_reason": "t1: she pushed the pinned shutter up (start still had her fingers under its edge; the action said she lets go of the edge); v2 starts with her hands at her sides, no action line names the shutter"
     },
     {
       "generation_id": "SC02_g2",
@@ -1583,6 +1586,110 @@
         }
       ],
       "duration_s": 8
+    },
+    {
+      "generation_id": "SC02_g1",
+      "scene_id": "SC02",
+      "coverage": "SINGLE",
+      "subject": "MARA",
+      "foreground": "",
+      "visible": [
+        "MARA"
+      ],
+      "start_state": "SC02_g1",
+      "end_state": "SC02_g2",
+      "previous_generation_id": "SC01_g2",
+      "choreography": {
+        "generation_id": "SC02_g1",
+        "phases": [
+          {
+            "kind": "ACTION",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "motion": "sit_down",
+            "description": "MARA lets go of the shutter's bottom edge and sits down on her stool behind the counter, which brings her face level with the open gap under the shutter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 3.0,
+            "motion": "turn_head",
+            "description": "she glances at the wall clock and back at him over her glasses"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 3.0,
+            "end_s": 5.0,
+            "description": "she speaks without lifting the shutter"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 6.0,
+            "description": "she holds a level look"
+          }
+        ],
+        "once_actions": [
+          "speaks"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "MARA",
+            "emotion_intent": "firm, not unkind",
+            "visible_cues": [
+              "level gaze over her glasses",
+              "mouth set"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "contempt"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        22
+      ],
+      "design_refs": [
+        "MARA_look@1",
+        "MARA_costume@1",
+        "MARA_hair@1",
+        "loc_ticket_office_night@1",
+        "prop_shutter@1",
+        "prop_jar@1"
+      ],
+      "camera": {
+        "size": "MEDIUM_CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "CHEST",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "single on MARA through the open gap under the lowered shutter"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "she refuses: the window is closed",
+          "evidence": [
+            "MARA",
+            "shutter"
+          ]
+        }
+      ],
+      "duration_s": 6,
+      "end_frame": true,
+      "end_pose": "she sits on her stool behind the counter, her face level with the open gap under the lowered shutter, whose bottom edge stays on the brass shutter catches just above her head; she looks out through the gap over her round glasses; her hands rest on the counter",
+      "tracked": {
+        "object": "shutter",
+        "roi": [
+          0.44,
+          0.05,
+          0.65,
+          0.5
+        ],
+        "axis": "y",
+        "direction": "still"
+      }
     }
   ]
 }

@@ -484,6 +484,11 @@ Pipeline gap: autoqc and `film.py motion` measured only props declared to move. 
 `trajectory.judge_still` flag a pinned prop that moves (PINNED_PROP_MOVED, P0); SC02_g1 declares the shutter still;
 on t1 it FLAGs 30 px at 3.2 s. Proposed v2 (after the Owner's rejection): start still with her hands already off the
 shutter (standing, hands at her sides), the sit-down phase without any word about the shutter edge.
+Owner rejected t1 ("Loại t1, làm bản 2"): ingested (action P0, cause START_FRAME). `retake --pickup SC02_g1` -> v2:
+phase 0 "standing ... with her hands at her sides, sits down on her stool"; phase 2 "she speaks to him through the gap"
+(was "without lifting the shutter"). New start still: ChatGPT edit of the old one, hands off the shutter, edge and
+catches on the same row as the approved end still. Registered NOT approved (end still and storyboard keep their
+approval). Plan PASS (171 words). Next: Owner approves the v2 start still; upload, one 6 s send, `film.py motion`.
 Open, Owner: approve start/end SC01_g1 + storyboard; then upload both stills, one 4 s send (about 4 credits, YES->NO),
 `film.py motion` before the eye review. Later stills of the window (SC01_g2..SC05_g2) and the location plates must show the
 catches (`film.py impact --design prop_shutter`). Planning budget still uses the 12-credit basis per generation.

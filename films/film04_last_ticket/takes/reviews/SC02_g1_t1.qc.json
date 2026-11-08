@@ -1,0 +1,119 @@
+{
+  "take_id": "SC02_g1_t1",
+  "generation_id": "SC02_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "character",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "spatial",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Loại t1, làm bản 2') of SC02_g1_t2.mp4 after the Tech Lead strip (0.5 s), window zoom 0-4 s at 4 fps and film.py motion (PINNED_PROP_MOVED, 30 px at 3.2 s).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "She pushes the pinned shutter up at 0.75-1.25 s instead of only sitting down; it stays up to 3 s, then drops back onto the catches over her forehead. The shutter must stay on the catches until SC04.",
+      "waiver": null
+    },
+    {
+      "group": "motion",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "camera",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "visual",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "temporal",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Owner review 2026-11-08 (chat: 'Loại t1, làm bản 2') of SC02_g1_t2.mp4 after the Tech Lead strip (0.5 s), window zoom 0-4 s at 4 fps and film.py motion (PINNED_PROP_MOVED, 30 px at 3.2 s).",
+      "reviewer": "human:owner-khoikk03",
+      "note": "Speech 3-5 s.",
+      "waiver": null
+    },
+    {
+      "group": "sync",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    },
+    {
+      "group": "technical",
+      "result": "UNASSESSED",
+      "severity": null,
+      "level": null,
+      "evidence": "",
+      "reviewer": "",
+      "note": "",
+      "waiver": null
+    }
+  ],
+  "cause": "START_FRAME",
+  "cause_note": "The start still had her fingers hooked under the shutter edge and the action said she 'lets go of the shutter's bottom edge': hands on the edge plus a verb about the edge read as pushing it. Fixed: v2 start still with her hands off the shutter, the sit-down text names no shutter; QC tracked.direction 'still' flags a pinned prop that moves.",
+  "output_sha256": "90d95226c4201726f2b72d31c76578cf51ec50a7a4a7bc0234efad5437e23e82"
+}

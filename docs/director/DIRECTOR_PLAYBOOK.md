@@ -279,6 +279,11 @@ verified (§8).
    prompt invites the shutter to follow. It now reads "on the brass catches, a face-high gap left above the counter".
    Check every camera that holds the prop: a lowered shutter at a standing clerk's chest hides her face from the hall,
    so she sits (SC02_g1) and the conversation plays through the gap.
+   **No hands on a pinned prop, no verb near it** (SC02_g1 t1: the start still had her fingers under the shutter's
+   edge and the action said she "lets go of the shutter's bottom edge"; she pushed it up). In the start still, hands
+   are off every prop the shot pins; action lines do not name the pinned prop, not even negated ("without lifting
+   the shutter" names lifting). Declare the pinned prop `tracked` with `direction: "still"` so `film.py motion`
+   measures it.
 6. **Words that cost credits.** Police + race themes together triggered refunded "reputational risk" blocks (film01,
    film03): no race words in video prose (the start frame carries the look) and drop "police" from the prose of the
    video prompt (`.soft.txt`), dialogue unchanged. Photoreal character refs are refused by some providers; the
