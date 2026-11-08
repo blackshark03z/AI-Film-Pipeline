@@ -16,7 +16,6 @@ Prove the interaction contract on one exchange (SC01_g2 -> SC02_g1 -> SC02_g2), 
 - Test sends: 360p Omni 1.2 Flash; OWNER_GO_LIVE flipped YES/NO in one shell with an EXIT trap.
 
 ## Open defects
-- P16-11: generate trusts a storyboard approval by file hash only; boards were stale vs SC02 v4/v2 (re-rendered, re-approved).
 - MARA hair reads lighter in SC02_g1_t4 than in SC01_g2/SC02_g2 (accepted by Owner; watch identity in SC03+).
 - generate payload start_frame.source text is stale ("end frame of ..."); stale end:SC02_g1 still record.
 - tests/test_upload_state_machine_008.py fails collection (No module named 'tests'), pre-existing.
@@ -26,4 +25,4 @@ Prove the interaction contract on one exchange (SC01_g2 -> SC02_g1 -> SC02_g2), 
 - uv run --frozen pytest -q -k "generate or ledger or flow" --ignore=tests/test_upload_state_machine_008.py
 
 ## Next step
-P16-11 (offline), then Owner's P15-07 restage choice -> P16-07b rollout SC03-SC06 -> P16-10 shoot.
+P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE). Then Owner's P15-07 restage choice -> P16-07b rollout SC03-SC06 -> P16-10 shoot.

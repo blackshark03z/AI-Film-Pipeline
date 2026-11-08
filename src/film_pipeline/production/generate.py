@@ -137,6 +137,13 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     # another shot's preflight or prompt length (e.g. one that waits for this take) is not a reason to hold this one back
     own = [p for p in result.problems if _problem_subject(p) in (None, generation_id)]
     blockers += [_blocker("PACKAGE_PROBLEM", p) for p in own]
+    # an approval covers the shot decl the board was drawn from; a later decl change voids it (re-plan, re-approve)
+    from film_pipeline.drama.storyboard import StoryboardGate
+    board_shot, fingerprint = result.boards[generation_id]
+    stale = StoryboardGate(plan_out / "storyboard").stale(board_shot, fingerprint)
+    if stale:
+        blockers.append(_blocker("STORYBOARD_STALE", f"{stale}: run film.py plan again and have the Owner re-approve "
+                                 f"the board"))
     prompt_file = plan_out / "prompts" / f"{generation_id}.txt"
     prompt = prompt_file.read_text(encoding="utf-8").strip()
 

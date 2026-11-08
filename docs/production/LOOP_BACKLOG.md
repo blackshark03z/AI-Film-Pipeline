@@ -873,6 +873,14 @@ take SC02_g2_t1 registered, 8 credits, autoqc 0 warnings. Review: media/review/c
 boundary_SC02_g1__SC02_g2.png. Owner accepted SC02_g2_t1 ("Accept"). Pilot exchange proven.
 Open defect: generate checks a storyboard approval only against the file hash, not against the current shot decl
 (SC02_g1 v4 went out under the v3-era board approval) -> plan/generate must flag a board older than its shot.
-### P16-11 Storyboard staleness: plan/generate flag a board approval older than its shot decl — READY
+### P16-11 Storyboard staleness: plan/generate flag a board approval older than its shot decl — DONE (2026-11-08)
+Each storyboard frame records `fingerprint` = `<gid>@v<version>:<sha256 of the drawn shot>` (coverage, size, subject,
+foreground, axis, timing, lines, action, caption; drama/storyboard.py `shot_fingerprint`). `plan` registers it; a new
+fingerprint resets the frame to PENDING. `generate` (dry-run and live) BLOCKs STORYBOARD_STALE when the approved
+frame's fingerprint differs from the current decl's; it re-renders and approves nothing. Legacy frames (no fingerprint,
+film01-03) keep the hash-only rule; a legacy frame redrawn byte-identical adopts the fingerprint and keeps its review.
+film04 migration: SC01_S2 (SC01_g2 v2), SC02_S1 (SC02_g1 v4), SC02_S2 (SC02_g2 v2) redraw byte-identical from the
+current decls -> fingerprints backfilled, Owner approvals kept (media/plan/storyboard/storyboard.json, not in Git).
+Tests: tests/test_storyboard_staleness.py (7); film03 golden unchanged.
 ### P16-07b Rollout SC03-SC06 merged with P15-07 — waits for the Owner's P15-07 choice
 ### P16-10 Shoot SC03-SC06; later projection detector, reference route probe, VLM judge (advisory), voice/sound evidence — LIVE

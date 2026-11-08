@@ -12,7 +12,8 @@ from pathlib import Path
 from typing import Any
 
 from film_pipeline.drama import (CharacterBrief, ContinuityState, GenerationHandoff, StoryboardGate,
-                                 compile_scene_prompt, preflight_scene, render_schematic_frame)
+                                 compile_scene_prompt, preflight_scene, render_schematic_frame,
+                                 shot_fingerprint)
 from film_pipeline.drama.axis import axis_record
 from film_pipeline.drama.generability import generability_issues
 from film_pipeline.drama.preflight import PreflightIssue
@@ -328,10 +329,12 @@ def _write(path: Path, text: str, root: Path) -> None:
 
 
 class PlanResult:
-    """`record` = the gate3 json; `problems` = every BLOCK found (empty = the plan is clean)."""
+    """`record` = the gate3 json; `problems` = every BLOCK found (empty = the plan is clean); `boards` = generation id ->
+    (storyboard shot id, shot fingerprint of the current decl)."""
 
-    def __init__(self, record: dict[str, Any], problems: list[str]) -> None:
-        self.record, self.problems = record, problems
+    def __init__(self, record: dict[str, Any], problems: list[str],
+                 boards: dict[str, tuple[str, str]] | None = None) -> None:
+        self.record, self.problems, self.boards = record, problems, boards or {}
 
     @property
     def ok(self) -> bool:
@@ -355,13 +358,18 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     temporal = p.temporal()
 
     gate = StoryboardGate(out / "storyboard")
+    boards: dict[str, tuple[str, str]] = {}
+    for decl in p.shots.generations:
+        unit = p.unit_for(decl)
+        boards[decl.generation_id] = (unit.shots[0].shot_id,
+                                      shot_fingerprint(decl.generation_id, decl.version, unit, unit.shots[0]))
     if storyboard:
         for decl in p.shots.generations:
             unit = p.unit_for(decl)
             shot = unit.shots[0]
             rel = f"{decl.generation_id}.png"
             render_schematic_frame(unit, shot, out / "storyboard" / rel, width=640)
-            gate.register(unit.scene_id, shot.shot_id, rel)
+            gate.register(unit.scene_id, shot.shot_id, rel, boards[decl.generation_id][1])
             if approve_storyboard:
                 from film_pipeline.production.rehearsal import refuse_bot
                 refuse_bot(Path(pkg.root), approve_storyboard)
@@ -456,4 +464,4 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
               for gid in record["generations"]}
     _write(out / PLAN_META, json.dumps({"planned_from": plan_inputs_sha(pkg.root), "problems": problems,
                                         "word_budget": budget}, ensure_ascii=False, indent=2), out)
-    return PlanResult(record, problems)
+    return PlanResult(record, problems, boards)

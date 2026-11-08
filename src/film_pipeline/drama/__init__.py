@@ -66,7 +66,7 @@ from .scene_bible import (
     check_environment,
     check_temporal,
 )
-from .storyboard import StoryboardGate, render_schematic_frame
+from .storyboard import StoryboardGate, render_schematic_frame, shot_fingerprint
 from .comprehension import (
     Carrier,
     CharacterIntro,
@@ -96,7 +96,7 @@ __all__ = [
     "handoff_sheet",
     "Script", "ScriptElement", "ScriptScene", "count_vi_syllables",
     "parse_fountain",
-    "StoryboardGate", "render_schematic_frame",
+    "StoryboardGate", "render_schematic_frame", "shot_fingerprint",
     "GenerationChoreography", "PerformanceCue", "Phase", "check_repetition",
     "LocationLook", "OccupancyEvent", "RuleIssue", "SceneOccupancy",
     "StoryTime", "check_environment", "check_temporal",

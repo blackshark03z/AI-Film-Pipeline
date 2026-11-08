@@ -9,9 +9,14 @@ the decision survives sessions and can be reviewed in Git.
 where, shot size, eyeline, time marks, line) with Pillow; it costs no
 provider credit. A painted frame from any tool can replace it — the gate
 only cares about the approved file hash.
+
+A frame also records the fingerprint of the shot it was drawn from (``shot_fingerprint``). An approval holds only for
+that fingerprint: a changed shot decl (new version, other coverage, size, subject, lines ...) makes the approval stale
+even when nobody re-ran the plan. Frames without a fingerprint (boards from before P16-11) keep the hash-only rule.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -35,6 +40,15 @@ class StoryboardFrame(ContractModel):
     reviewer: str = ""
     reviewed_at: str = ""
     note: str = ""
+    fingerprint: str = ""      # shot_fingerprint() of the decl the frame was drawn from ("" = legacy frame)
+
+
+def shot_fingerprint(generation_id: str, shot_version: int, unit: SceneUnit, shot: CoverageShot) -> str:
+    """`<generation>@v<version>:<sha256>` of everything the board draws (coverage, size, subject, foreground, axis,
+    timing, lines, action and the caption)."""
+    drawn = {"scene_id": unit.scene_id, "shot": shot.model_dump(mode="json"), "caption": shot.describe(unit.axis_book)}
+    digest = hashlib.sha256(json.dumps(drawn, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
+    return f"{generation_id}@v{shot_version}:{digest}"
 
 
 class StoryboardBoard(ContractModel):
@@ -62,16 +76,20 @@ class StoryboardGate:
                     None)
 
     def register(self, scene_id: str, shot_id: str,
-                 image_path: str) -> StoryboardFrame:
-        """(Re)register a frame; a new image always resets to PENDING.
+                 image_path: str, fingerprint: str = "") -> StoryboardFrame:
+        """(Re)register a frame; a new image or a new shot fingerprint always resets to PENDING.
 
-        The same image (same path and hash) keeps its review: re-running the plan must not drop the Owner's approval."""
+        The same image (same path and hash) of the same shot keeps its review: re-running the plan must not drop the
+        Owner's approval. A legacy frame (no fingerprint) whose image is redrawn byte-for-byte adopts the fingerprint:
+        the Owner approved exactly this drawing."""
         sha = hash_file(self.root / image_path)
         old = self.frame(shot_id)
-        if old is not None and old.sha256 == sha and old.image_path == image_path and old.scene_id == scene_id:
+        if old is not None and old.sha256 == sha and old.image_path == image_path and old.scene_id == scene_id                 and (not old.fingerprint or old.fingerprint == fingerprint):
+            if fingerprint:
+                old.fingerprint = fingerprint
             return old
         frame = StoryboardFrame(
-            scene_id=scene_id, shot_id=shot_id, image_path=image_path, sha256=sha)
+            scene_id=scene_id, shot_id=shot_id, image_path=image_path, sha256=sha, fingerprint=fingerprint)
         self.board.frames = [f for f in self.board.frames
                              if f.shot_id != shot_id] + [frame]
         return frame
@@ -89,6 +107,16 @@ class StoryboardGate:
         frame.reviewed_at = datetime.now(timezone.utc).isoformat(
             timespec="seconds")
         return frame
+
+    def stale(self, shot_id: str, fingerprint: str) -> str | None:
+        """Why the frame's approval does not cover the shot as declared now (None = it does, or a legacy frame)."""
+        frame = self.frame(shot_id)
+        if frame is None or frame.status != "APPROVED" or not frame.fingerprint or frame.fingerprint == fingerprint:
+            return None
+        def short(fp: str) -> str:
+            head, _, digest = fp.partition(":")
+            return f"{head}:{digest[:12]}"
+        return f"{shot_id}: the storyboard was approved for {short(frame.fingerprint)} but the shot is now {short(fingerprint)}"
 
     def problems(self, units: list[SceneUnit], *,
                  require_all_shots: bool = False) -> list[str]:
