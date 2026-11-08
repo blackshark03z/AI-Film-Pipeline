@@ -1,0 +1,219 @@
+{
+  "take": {
+    "take_id": "SC04_g4_t1",
+    "generation_id": "SC04_g4",
+    "prompt_sha256": "a52c4bf6c1143d1fc95697e19a0b6726db54f04f687780217d3d2457c4c3dda2",
+    "start_frame_sha256": "fb0f200f4d87988263e000c6c86658d920b76aafced8f491a015b49a90110869",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 4.0,
+    "output_file": "SC04_g4_t1.mp4",
+    "output_sha256": "611e0f0476d6f4b3480ab140a2a21c105aee7cf7e979eb87e2d97318f8a81cd3",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-08T23:17:03Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "REACTION",
+    "visible": [],
+    "start_state": "SC04_g4",
+    "end_state": "SC04_end",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.5,
+        "description": "the jar lies on its side with the coins spread across the counter, nobody in frame, no hands"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.5,
+        "end_s": 4.0,
+        "description": "everything stays still; only the green lamp light shifts slowly across the coins"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: the coins are out of the jar, on the counter - carried by: wooden counter, felt coin tray"
+    },
+    {
+      "group": "action",
+      "question": "0-1.5s SETUP: does this happen on screen - the jar lies on its side with the coins spread across the counter, nobody in frame, no hands?"
+    },
+    {
+      "group": "action",
+      "question": "1.5-4s ACTION: does this happen on screen - everything stays still; only the green lamp light shifts slowly across the coins?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): only the green lamp light shifts"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size INSERT, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC04_g4: Continues from the previous shot: MARA seated on her stool behind the counter, frame-right; THEO at the window, frame-left; the shutter: up; the jar: on its side on the counter, empty; the coins: spread across the counter."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC04_end: Continues from the previous shot: MARA seated on her stool behind the counter, frame-right; THEO at the window, frame-left; the shutter: up; the jar: on its side on the counter, empty; the coins: spread across the counter."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do MARA and THEO stay on their own sides (clerk booth (staff side) / public hall (customer side)) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC04_g4_t1",
+    "generation_id": "SC04_g4",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_BARRIER"
+    ],
+    "output_sha256": "611e0f0476d6f4b3480ab140a2a21c105aee7cf7e979eb87e2d97318f8a81cd3"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}
