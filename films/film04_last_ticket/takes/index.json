@@ -192,6 +192,54 @@
       "cause": "",
       "registered_at": "2026-11-08T04:51:02Z",
       "review_file": "reviews/SC02_g2_t1.qc.json"
+    },
+    {
+      "take_id": "SC03_g1_t1",
+      "generation_id": "SC03_g1",
+      "prompt_sha256": "2b410fcca856e63db6e49f08f6dcce0e312200f6ff619a7b6336ea8b702ef869",
+      "start_frame_sha256": "45b79517f56caf782b17cda6fce22bca8f9ed1a526137b9b5617e8d5edf4f760",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 6.0,
+      "output_file": "SC03_g1_t3.mp4",
+      "output_sha256": "e076e86c7733789458239e93145c99f449a18d85fb19fa01722f87f9d76e5e18",
+      "status": "GENERATED",
+      "shot_version": 2,
+      "cause": "",
+      "registered_at": "2026-11-08T21:52:39Z",
+      "review_file": "dailies/SC03_g1_t1.review.json"
+    },
+    {
+      "take_id": "SC05_g1_t1",
+      "generation_id": "SC05_g1",
+      "prompt_sha256": "e06d097a52e2f7e4adb2803147e5d7b9b9e1099cdb6e4e25fa83618891c9a064",
+      "start_frame_sha256": "d592a97b176e8135449a93ba08b3c85f489bfa37fbdd08f4d0d56be6b1215ca2",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 5.0,
+      "output_file": "SC05_g1_t1.mp4",
+      "output_sha256": "35b72f2a4fa3fa3046612370ac5250ccabd1fdb36488f94f13c5553b580eb105",
+      "status": "GENERATED",
+      "shot_version": 2,
+      "cause": "",
+      "registered_at": "2026-11-08T22:05:42Z",
+      "review_file": "dailies/SC05_g1_t1.review.json"
+    },
+    {
+      "take_id": "SC06_g1_t1",
+      "generation_id": "SC06_g1",
+      "prompt_sha256": "573c59886fdc2ba26fd408a9691212d907b4cea5bddc2ecda7e9636b67739bb5",
+      "start_frame_sha256": "ea1ffeb338205625593ce59aa5193f9581e91e3de94f026017e290f92c785ac2",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 6.0,
+      "output_file": "SC06_g1_t1.mp4",
+      "output_sha256": "8372b405886fe342ce5f38f4af52d84f43f82200306fc150cf112c4e59462924",
+      "status": "GENERATED",
+      "shot_version": 2,
+      "cause": "",
+      "registered_at": "2026-11-08T22:05:42Z",
+      "review_file": "dailies/SC06_g1_t1.review.json"
     }
   ]
 }

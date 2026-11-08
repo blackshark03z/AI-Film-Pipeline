@@ -362,3 +362,37 @@ def test_newest_ignores_small_page_images_outside_the_list_column(monkeypatch):
     _scores(monkeypatch, {"start": 0.4})
     page = _Page(["start", "plate", "other"], top=0)
     assert asyncio.run(fs._picker_newest(page, Path("s.png"), (162, 300), 1)) == (142, 100)
+
+
+def test_no_flow_tab_is_a_pre_submit_error(monkeypatch, tmp_path):
+    # 2026-11-09 film04 SC03_g1 t1: no Flow tab -> StopIteration crash, the receipt read NO_MANIFEST and used an AMBER send
+    import types
+    from types import SimpleNamespace
+
+    class _Ctx:
+        pages = [SimpleNamespace(url="https://chatgpt.com/")]
+
+    class _Browser:
+        contexts = [_Ctx()]
+
+    class _PW:
+        class chromium:  # noqa: N801
+            @staticmethod
+            async def connect_over_cdp(*_a, **_k):
+                return _Browser()
+
+        async def stop(self):
+            return None
+
+    class _Starter:
+        async def start(self):
+            return _PW()
+
+    fake = types.ModuleType("patchright.async_api")
+    fake.async_playwright = lambda: _Starter()
+    monkeypatch.setitem(sys.modules, "patchright.async_api", fake)
+    prompt = tmp_path / "p.txt"
+    prompt.write_text("a prompt", encoding="utf-8")
+    args = SimpleNamespace(prompt_file=str(prompt), out=str(tmp_path / "o.mp4"), attach=[], start="", end="", upload=[])
+    rec = asyncio.run(fs.run(args))
+    assert rec["result"] == "PRE_SUBMIT_ERROR NO_FLOW_TAB"

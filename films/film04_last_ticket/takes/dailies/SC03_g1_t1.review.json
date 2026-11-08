@@ -1,0 +1,262 @@
+{
+  "take": {
+    "take_id": "SC03_g1_t1",
+    "generation_id": "SC03_g1",
+    "prompt_sha256": "2b410fcca856e63db6e49f08f6dcce0e312200f6ff619a7b6336ea8b702ef869",
+    "start_frame_sha256": "45b79517f56caf782b17cda6fce22bca8f9ed1a526137b9b5617e8d5edf4f760",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC03_g1_t3.mp4",
+    "output_sha256": "e076e86c7733789458239e93145c99f449a18d85fb19fa01722f87f9d76e5e18",
+    "status": "GENERATED",
+    "shot_version": 2,
+    "cause": "",
+    "registered_at": "2026-11-08T21:52:39Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "OTS",
+    "visible": [
+      "THEO",
+      "MARA"
+    ],
+    "start_state": "SC03_g1",
+    "end_state": "SC03_g2",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.5,
+        "description": "THEO stands at the window, the jar held to his chest, looking at MARA"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.5,
+        "end_s": 3.5,
+        "description": "THEO sets the jar on the counter, hands flat beside it"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 3.5,
+        "end_s": 6.0,
+        "description": "THEO speaks to MARA"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: he offers all he has, a jar of coins, across the counter - carried by: THEO, wooden counter"
+    },
+    {
+      "group": "action",
+      "question": "0-1.5s SETUP: does this happen on screen - THEO stands at the window, the jar held to his chest, looking at MARA?"
+    },
+    {
+      "group": "action",
+      "question": "1.5-3.5s ACTION: does this happen on screen - THEO sets the jar on the counter, hands flat beside it?"
+    },
+    {
+      "group": "action",
+      "question": "3.5-6s ACTION: does this happen on screen - THEO speaks to MARA?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): sets the jar on the counter"
+    },
+    {
+      "group": "character",
+      "question": "THEO: does the face/body read as tired honesty (moderate)? Must NOT read as: anger."
+    },
+    {
+      "group": "sync",
+      "question": "Line 34 is audible, spoken by the right character, lips match: THEO: Mine's declined. This is all I have."
+    },
+    {
+      "group": "audio",
+      "question": "THEO sounds like the voice bible: breathless young male voice; same voice as SC01_g2_t2 4-7s?"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size MEDIUM, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC03_g1: Continues from the previous shot: MARA seated on her stool behind the counter, frame-right; THEO at the window, frame-left; the shutter: pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter; the jar: in THEO's hands."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC03_g2: Continues from the previous shot: MARA seated on her stool behind the counter, frame-right; THEO at the window, frame-left; the shutter: pulled down, its bottom edge resting on the brass shutter catches, a face-high gap left above the counter; the jar: on the counter, full of coins."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_ADDRESS:34",
+      "group": "narrative",
+      "question": "Line 34: does THEO clearly speak to MARA (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:MARA",
+      "group": "spatial",
+      "question": "Is MARA's shoulder and back of head in the near frame-right for the whole clip, recognisably MARA?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does THEO look at MARA and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do MARA and THEO stay on their own sides (clerk booth (staff side) / public hall (customer side)) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC03_g1_t1",
+    "generation_id": "SC03_g1",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:34",
+      "REL_LISTENER:MARA",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "e076e86c7733789458239e93145c99f449a18d85fb19fa01722f87f9d76e5e18"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}

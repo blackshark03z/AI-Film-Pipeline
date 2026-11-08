@@ -631,7 +631,10 @@ async def run(args) -> dict:
     try:
         browser = await pw.chromium.connect_over_cdp(CDP, timeout=30000)
         ctx = browser.contexts[0]
-        page = next(p for p in ctx.pages if "flow.google" in p.url)
+        page = next((p for p in ctx.pages if "flow.google" in p.url), None)
+        if page is None:   # 2026-11-09 SC03_g1 t1: no Flow tab crashed here and the receipt counted as a send
+            rec["result"] = "PRE_SUBMIT_ERROR NO_FLOW_TAB"
+            return rec
         rec["project"] = page.url.rsplit("/", 1)[-1][:36]
         # the click coordinates above are calibrated for 1280x720 CSS px; a GPM window of another size shifts them
         await page.set_viewport_size({"width": 1280, "height": 720})
