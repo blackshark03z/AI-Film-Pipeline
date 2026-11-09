@@ -957,7 +957,17 @@
           "mode": "OTS_FOREGROUND"
         }
       },
-      "gaze_target": "THEO"
+      "gaze_target": "THEO",
+      "generability_exception": {
+        "authorized_by": "owner-khoikk03",
+        "owner_words": "Cho phép, quay lại",
+        "shot_version": 2,
+        "prompt_sha256": "35012112391d2105c0735c83041a06628ac88031f48411a005eb609d9a94d7a8",
+        "max_attempts": 3,
+        "max_credits": 12,
+        "expires": "2026-11-16",
+        "reason": "POURING is RED; the Owner wants THEO's deliberate pour seen (OBJECT_NO_AGENT fix). Best of up to 3."
+      }
     },
     {
       "generation_id": "SC04_g4",
