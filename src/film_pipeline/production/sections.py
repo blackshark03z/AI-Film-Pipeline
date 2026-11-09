@@ -27,6 +27,7 @@ from film_pipeline.production.interaction import ListenerAnchor
 from film_pipeline.production.planning import RightsEntry
 from film_pipeline.production.set_layout import Readout, SetLayout
 from film_pipeline.production.story import StorySection
+from film_pipeline.providers.route import RouteSpec
 
 
 # ids become file names (prompts/<id>.txt) and dict keys: no separators, dots or spaces
@@ -241,6 +242,8 @@ class ShotDecl(ContractModel):
     # continuity.py: why this cut deliberately skips time/movement (the changes happened off screen); non-empty turns
     # the cross-cut spatial hand-off BLOCK into a WARN
     handoff_ellipsis: str = ""
+    # providers/route.py: this shot's video route (provider + model + tier); None = the film.json `route`
+    route: RouteSpec | None = None
 
 
 def shot_seconds(decl: ShotDecl, header) -> float:

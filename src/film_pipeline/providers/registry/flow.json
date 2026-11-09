@@ -1,0 +1,35 @@
+{
+  "entries": [
+    {
+      "provider": "flow",
+      "model": "omni-1.2-flash",
+      "display_name": "Omni 1.2 Flash 360p",
+      "aliases": ["Omni 1.2 Flash"],
+      "adapter": "flow_ui",
+      "transport": "browser_cookie",
+      "api_model": "Omni 1.2 Flash",
+      "duration_s": [3, 15],
+      "tiers": {"TEST": "360p"},
+      "frame_roles": ["first_frame", "last_frame"],
+      "max_refs": 0,
+      "native_audio": "true",
+      "price": {"kind": "tiered_per_second", "unit": "credits", "rate": 1, "threshold_s": 10, "rate_above": 2},
+      "error_map": {
+        "prefix": {
+          "START_NOT_FOUND": "NOT_SUBMITTED", "END_NOT_FOUND": "NOT_SUBMITTED", "START_NOT_SET": "NOT_SUBMITTED",
+          "END_NOT_SET": "NOT_SUBMITTED", "ATTACH_NOT_FOUND": "NOT_SUBMITTED", "SETTINGS_NOT_SET": "NOT_SUBMITTED",
+          "SEND_FAILED": "NOT_SUBMITTED", "PRE_SUBMIT_ERROR": "NOT_SUBMITTED",
+          "FLOW_FAILED": "PROVIDER_FAILED"
+        },
+        "default": "AMBIGUOUS"
+      },
+      "charged_on": ["PROVIDER_FAILED", "AMBIGUOUS", "PASSED"],
+      "notes": [
+        "price measured in Flow 2026-11-08: 1 credit/s to 10 s, then 2 credits/s (planning.flow_credits)",
+        "start-frame route (Khung hinh); the ingredients/reference route is not wired, so max_refs is 0",
+        "every result other than PASSED and the pre-submit/FLOW_FAILED prefixes is AMBIGUOUS (UNBOUND, TIMEOUT, PENDING, NO_VIDEO_UNDER_TILE, DOWNLOAD_FAILED, SENDER_EXIT_n, MANIFEST_HASH_MISMATCH, NO_MANIFEST): submitted, probably charged",
+        "FLOW_FAILED is charged in the ledger but does not use a generability send (Owner 2026-11-09)"
+      ]
+    }
+  ]
+}
