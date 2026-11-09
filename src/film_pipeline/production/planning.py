@@ -33,7 +33,7 @@ from pydantic import Field
 from film_pipeline.core import ContractModel
 
 CREDITS_PER_GENERATION = 12.0  # film03: "19 charged x 12"; images are 0 credits (old Omni 1.1 history basis)
-# the budget and retake estimates below keep this 1.1 basis; a single send is priced by `flow_credits`
+# the retake factors keep this 1.1 basis (a ratio); the budget prices each shot with `flow_credits` (P17-03)
 
 
 def flow_credits(seconds: float) -> float:
@@ -86,10 +86,12 @@ def _chains(shots: Any) -> list[list[str]]:
 def budget(pkg: Any) -> dict[str, Any]:
     shots = pkg.typed.get("shots")
     count = len(shots.generations) if shots is not None else 0
-    base = count * CREDITS_PER_GENERATION
+    # P17-03: price each shot as Flow charges it now (Omni 1.2 Flash 360p, by length), not 12 per generation
+    from film_pipeline.production.sections import shot_seconds
+    base = sum(flow_credits(shot_seconds(g, pkg.header)) for g in shots.generations) if shots is not None else 0.0
     expected, high = base * mean(RETAKE_FACTORS.values()), base * max(RETAKE_FACTORS.values())
     header = pkg.header.budget
-    out = {"generations": count, "credits_per_generation": CREDITS_PER_GENERATION,
+    out = {"generations": count, "credits_per_generation": round(base / count, 2) if count else 0.0,
            "retake_factor": {"mean": round(mean(RETAKE_FACTORS.values()), 3), "max": round(max(RETAKE_FACTORS.values()), 3),
                              "by_film": {k: round(v, 3) for k, v in RETAKE_FACTORS.items()}},
            "base_credits": round(base, 1), "expected_credits": round(expected, 1), "high_credits": round(high, 1),
@@ -101,7 +103,7 @@ def budget(pkg: Any) -> dict[str, Any]:
     elif header.credits_estimate < expected:
         out["findings"].append({"check": "BUDGET_BELOW_EXPECTED", "severity": "WARN",
                                 "detail": f"estimate {header.credits_estimate} < expected {out['expected_credits']} "
-                                          f"({count} generations x {CREDITS_PER_GENERATION:g} x retake)"})
+                                          f"({count} generations, {base:g} credits by length x retake)"})
     return out
 
 

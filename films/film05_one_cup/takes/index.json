@@ -1,0 +1,69 @@
+{
+  "film_id": "film05_one_cup",
+  "takes": [
+    {
+      "take_id": "SC01_g1_t1",
+      "generation_id": "SC01_g1",
+      "prompt_sha256": "8fdd61bd374f56a37c2fcbba768efcb39815e0e819c43d37dba6df57682590d4",
+      "start_frame_sha256": "4e2ea5985170efe61b6936267126e70cb15739e01fcb1ce3613ee2718b04b927",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 8.0,
+      "output_file": "SC01_g1_t1.mp4",
+      "output_sha256": "522f9b71587b19c77b336179f56730d62dec2db9c0312797033c5dbbd27d5ef6",
+      "status": "ACCEPTED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-09T04:54:47Z",
+      "review_file": "reviews/SC01_g1_t1.qc.json"
+    },
+    {
+      "take_id": "SC01_g2_t1",
+      "generation_id": "SC01_g2",
+      "prompt_sha256": "8dd106b915d0047eaf3a96ad7ca4b2235e33807768c8f1c59c2e6cf0c4e1b276",
+      "start_frame_sha256": "61e1e817f4631c8c4a42d5d93e5c4a0031a9cab9ead9489943e977fa7503c0ee",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 7.0,
+      "output_file": "SC01_g2_t1.mp4",
+      "output_sha256": "75c73f6ba8ce9e0f95bb00db8af3aee6a413d7716be13677f073fc63dbe66b1e",
+      "status": "ACCEPTED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-09T05:03:59Z",
+      "review_file": "reviews/SC01_g2_t1.qc.json"
+    },
+    {
+      "take_id": "SC02_g1_t1",
+      "generation_id": "SC02_g1",
+      "prompt_sha256": "3119662d190dbcc55f0888559fc9adf12a1ed805093df16f9e9af09d28c3b3cf",
+      "start_frame_sha256": "b61f0870f32377cbd598e459144383f0ef2585fce9189f350ed9698df7e3e0e7",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 6.0,
+      "output_file": "SC02_g1_t1.mp4",
+      "output_sha256": "3b56eb641c42d7417070b38f821322b1d320bccf6f4debf3ba1fff5a5cd8de7f",
+      "status": "ACCEPTED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-09T05:08:27Z",
+      "review_file": "reviews/SC02_g1_t1.qc.json"
+    },
+    {
+      "take_id": "SC02_g2_t1",
+      "generation_id": "SC02_g2",
+      "prompt_sha256": "0aa8e7c5a8154658a7fc6f0c7f534f8f68eee9eac9e6afac292a97fadd44e79c",
+      "start_frame_sha256": "1869118ef84b3e2d36af2641b12fc1b0565a73ab074ff1cc6e0089e2716e6e9c",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 7.0,
+      "output_file": "SC02_g2_t2.mp4",
+      "output_sha256": "04cb0e9eba7f53f0058c6fb224e6a9300f5fe2b012909a9b0778c397f731e03a",
+      "status": "ACCEPTED",
+      "shot_version": 2,
+      "cause": "",
+      "registered_at": "2026-11-09T06:08:45Z",
+      "review_file": "reviews/SC02_g2_t1.qc.json"
+    }
+  ]
+}

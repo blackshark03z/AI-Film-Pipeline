@@ -1,0 +1,79 @@
+{
+  "concept": "A daughter comes at dawn to hand back the spare key to her father's kitchen before she moves abroad, and finds he has already made her a cup of tea.",
+  "theme": "Leaving is not the same as losing someone; a door kept open is a kind of love that asks for nothing.",
+  "genre": "Quiet family drama (short, contained, one kitchen, a few minutes)",
+  "audience": {
+    "who": "General online audience watching short dramas in English; anyone who has left home or watched someone leave.",
+    "expectation": "A small, recognisable family moment with a warm turn and no speeches."
+  },
+  "premise": "At dawn Iris Brennan stands in her father Hal's kitchen in her coat, the spare key on the table between them, to say goodbye before she starts a new job in Lisbon.",
+  "central_conflict": "Iris wants to leave cleanly, key returned and goodbye said; Hal wants her to know she can always come back, without asking her to stay.",
+  "logline": {
+    "text": "Before she moves to Lisbon, Iris Brennan comes at dawn to return the spare key to her father's kitchen, but her father Hal will not take it back.",
+    "protagonist": "IRIS",
+    "goal": "return the spare key",
+    "obstacle": "her father Hal will not take it back"
+  },
+  "structure": [
+    {
+      "id": "ACT1",
+      "name": "The key",
+      "beats": [
+        {"id": "B1", "function": "SETUP", "scene_ids": ["SC01"], "summary": "Iris stands in her coat in her father's kitchen at dawn, the spare key on the table; Hal says she could have posted it, she says she wanted to say goodbye properly."},
+        {"id": "B2", "function": "INCITING", "scene_ids": ["SC02"], "summary": "Hal asks where it is this time; Iris answers Lisbon, a real job, starting Monday."}
+      ]
+    },
+    {
+      "id": "ACT2",
+      "name": "Her mother",
+      "beats": [
+        {"id": "B3", "function": "ESCALATION", "scene_ids": ["SC03"], "summary": "Hal says her mother said the same about Leeds; Iris answers that she came back, and that she is not her."},
+        {"id": "B4", "function": "CRISIS", "scene_ids": ["SC04"], "summary": "Hal looks at the key a long moment and tells her to keep it: the lock never changed. Beside the key, a second mug of tea is steaming."}
+      ]
+    },
+    {
+      "id": "ACT3",
+      "name": "One cup",
+      "beats": [
+        {"id": "B5", "function": "CLIMAX", "scene_ids": ["SC05"], "summary": "Iris sees the steaming mug and understands he made her tea before she knocked."},
+        {"id": "B6", "function": "RESOLUTION", "scene_ids": ["SC06"], "summary": "Iris sits down across from him: one cup, then she goes. Hal nods."}
+      ]
+    }
+  ],
+  "plot": "Iris has brought back the spare key (SC01). She tells her father she is moving to Lisbon (SC02). He compares her to her mother, who left and came back; she says she is not her (SC03). He tells her to keep the key, and the second mug shows he expected her (SC04). She sees the tea he made (SC05) and sits down for one cup before she goes (SC06).",
+  "subplots": [],
+  "characters": {
+    "IRIS": {
+      "id": "IRIS",
+      "name": "Iris Brennan",
+      "role": "protagonist",
+      "want": "To return the key, say goodbye and leave without a scene.",
+      "need": "To accept that leaving does not close the door behind her.",
+      "flaw": "She treats every departure as final, so it cannot hurt later.",
+      "arc_change": "From standing in her coat with the key on the table to sitting down for one cup with the key left where it is.",
+      "change_scene_id": "SC06"
+    },
+    "HAL": {
+      "id": "HAL",
+      "name": "Hal Brennan",
+      "role": "supporting",
+      "want": "For his daughter to know she can come back.",
+      "need": "To let her go without making her feel guilty.",
+      "flaw": "He reaches for the old comparison with her mother.",
+      "arc_change": "From the sharp remark about her mother to giving her the key back.",
+      "change_scene_id": "SC04"
+    }
+  },
+  "scenes": {
+    "SC01": {"purpose": "Establish the kitchen, the key on the table and why Iris is there.", "conflict": "Iris wants a clean goodbye; Hal meets her with a dry remark.", "outcome": "Iris says she came to say goodbye properly.", "value": "closeness", "shift": "-"},
+    "SC02": {"purpose": "State where she is going and how final it is.", "conflict": "Hal's 'this time' against Iris's real job.", "outcome": "Lisbon, starting Monday.", "value": "closeness", "shift": "-"},
+    "SC03": {"purpose": "Bring the mother into the room and push the conflict to its sharpest.", "conflict": "Hal compares her to her mother; Iris refuses the comparison.", "outcome": "Iris says she is not her mother.", "value": "closeness", "shift": "-"},
+    "SC04": {"purpose": "Turn the film: Hal stops arguing and gives the key back.", "conflict": "Hal weighs holding on against letting her go.", "outcome": "He tells her to keep the key; the second mug shows he expected her.", "value": "closeness", "shift": "+"},
+    "SC05": {"purpose": "Let Iris see what the audience saw.", "conflict": "Her clean goodbye against the tea he made her.", "outcome": "She names it: he made her tea.", "value": "closeness", "shift": "+"},
+    "SC06": {"purpose": "Close on the decision as an action, not a speech.", "conflict": "Staying a little against leaving now.", "outcome": "She sits down for one cup; he nods.", "value": "closeness", "shift": "+"}
+  },
+  "source_note": "Original script written for this film on a common motif only (a grown child returns a house key before moving away); names, places, events and dialogue are new.",
+  "rewrite_log": [
+    {"version": 1, "date": "2026-11-09", "reason": "First draft for P17-01 (stability run), written to the generability rules: seated or standing people, props placed before the film starts and never handled, one room.", "changed": "films/film05_one_cup/script.fountain"}
+  ]
+}

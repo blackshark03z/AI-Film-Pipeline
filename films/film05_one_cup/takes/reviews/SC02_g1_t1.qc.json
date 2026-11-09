@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g1_t1",
+  "generation_id": "SC02_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:23": "yes, HAL faces IRIS frame-left and gestures toward her while asking"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:IRIS": "yes, camel coat shoulder and dark bob in near frame-left the whole clip",
+        "REL_GAZE": "yes, HAL looks toward IRIS just left of lens, never into it"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); 8-frame contact sheet sheet_SC02_g1_t1.jpg + Vosk STT 'where is it this time' 1.7-2.5 s, 6.0 s, -23.8 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:23",
+    "REL_LISTENER:IRIS",
+    "REL_GAZE"
+  ],
+  "output_sha256": "3b56eb641c42d7417070b38f821322b1d320bccf6f4debf3ba1fff5a5cd8de7f"
+}

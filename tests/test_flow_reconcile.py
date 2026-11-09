@@ -53,3 +53,16 @@ def test_media_id_tails_match_by_suffix():
     assert fb.id_matches_tail(A, "aaaaaaaa") and not fb.id_matches_tail(A, "bbbbbbbb")
     assert not fb.id_matches_tail(A, "") and not fb.id_matches_tail("", "aaaaaaaa")
     assert fb.is_known(A, {"zzzzzzzz", "AAAAAAAA"}) and fb.is_known(A, {A}) and not fb.is_known(A, set())
+
+
+def test_a_rerun_does_not_hide_its_own_earlier_binding(tmp_path):
+    """P17-04 (film05 SC01_g1_t1): a BOUND run without --download, then a re-run with --download, came back
+    NOT_IN_GALLERY because the first run's media id counted as already registered."""
+    import json
+    from flow_reconcile import known_ids
+    (tmp_path / "SC01_g1_t1.reconcile.json").write_text(
+        json.dumps({"receipt_id": "SC01_g1_t1", "result": "BOUND", "media_id": "aaa"}), encoding="utf-8")
+    (tmp_path / "SC02_g1_t1.reconcile.json").write_text(
+        json.dumps({"receipt_id": "SC02_g1_t1", "result": "BOUND", "media_id": "bbb"}), encoding="utf-8")
+    assert known_ids(None, tmp_path, frozenset({"SC01_g1_t1"})) == {"bbb"}
+    assert known_ids(None, tmp_path) == {"aaa", "bbb"}

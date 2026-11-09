@@ -923,7 +923,7 @@ media/cut/rough_cut.mp4 (84.7 s). Ledger 223/256.8. Next: mix, grade, titles, de
 **Feature freeze.** From 2026-11-09, no new pipeline feature until P17-01 passes. Items P14-* and P15-* that are still open are DEFERRED.
 Only fixes for defects that film05 exposes are allowed. Each such fix is traced to the stage that missed the defect (PRODUCTION_PROCESS_V2 rule).
 
-### P17-01 film05: stability run, end to end under OWNER_POLICY.md — READY
+### P17-01 film05: stability run, end to end under OWNER_POLICY.md — IN_PROGRESS (film05_one_cup)
 - **Scope:** a new short drama.
   - 2 characters, 1 location, about 60–90 s, 8–12 generations.
   - Total budget cap 256.8 credits; 360p Omni Flash.
@@ -937,3 +937,28 @@ Only fixes for defects that film05 exposes are allowed. Each such fix is traced 
 - **Outcome:** record a scorecard in docs/drama/STATUS.md.
   - PASS: the system is declared stable.
   - FAIL: every miss becomes a P17-0x fix item, and the run repeats once.
+
+### P17-02 Plan: chained-cut STATE check compared a hidden-prop end with a visible-prop start — DONE (2026-11-09)
+- **Defect (film05 SC01_g2, plan stage):** a prop state naming a person who is out of frame is dropped from a shot's start (it would summon a stranger), but it was kept in the previous shot's end, so every chained single raised a false STATE BLOCK.
+- **Fix:** `production/plan.py` `handoff_for` strips the same hidden props from `previous_end`. Test: `tests/test_plan_handoff_hidden_props.py`.
+
+### P17-03 Planning budget used flat 8 s per generation — DONE (2026-11-09)
+- **Defect (film05 plan, budget):** `budget()` priced each generation at a flat rate, not at its duration. A 69 s film read as BUDGET_BELOW_EXPECTED.
+- **Fix:** `production/planning.py` sums `flow_credits(shot_seconds(g))`. Test: `tests/test_production_planning.py` (film03 now 128 base).
+
+### P17-04 Reconcile re-run hid its own earlier binding — DONE (2026-11-09)
+- **Defect (film05 SC01_g1, recovery):** a `--download` re-run for a receipt that was already reconciled counted its own media id as "known", which gave NOT_IN_GALLERY.
+- **Fix:** `tools/drama_flow_ui/flow_reconcile.py` `known_ids(..., skip=ids being reconciled)`. Test: `tests/test_flow_reconcile.py`.
+
+### P17-05 flow_send stopped waiting before the clip existed — FIXED offline, live check in film05 (2026-11-09)
+- **Defect (film05 send stage):**
+  - Re-issued thumbnails counted as "new tiles", and Omni Flash shows no pending signal, so the wait loop ended at 38–59 s.
+  - SC01_g1 gave UNBOUND ("no new video"); SC01_g2 gave AMBIGUOUS (video count 37→30, flaky); SC02_g2 v1 gave UNBOUND ("no media id for the front video": the tile was still rendering).
+  - SC01_g1 and SC01_g2 were recovered by `flow_reconcile`.
+  - SC02_g2 v1's job never appeared in the gallery, and no failed tile appeared. It was re-sent as v2 with the same prompt; the v1 send still counts in the scorecard.
+- **Fix:** `flow_send.py`: after detail_bind returns one of those two UNBOUND reasons, keep polling every 15 s until the send timeout and bind again.
+- **Open:** `video_count` is still flaky, and a missed bind is still recovered by reconcile.
+
+### P17-06 takes --register numbers take ids by count, not by send receipt — OPEN (logged, not fixed)
+- **Defect (film05 SC02_g2):** v1's receipt SC02_g2_t1 produced no clip. The v2 send (receipt and file SC02_g2_t2) was registered as take SC02_g2_t1, so a take id and a receipt id now name two different sends.
+- **Impact:** credits still count per receipt; review and cut use the take id. No block, but the audit trail is confusing.

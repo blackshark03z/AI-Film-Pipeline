@@ -45,8 +45,9 @@ def test_retake_factors_follow_the_three_kpi_ledgers():
 def test_film03_budget_matches_the_arithmetic():
     b = budget(load_package(FILM03))
     mean = sum(RETAKE_FACTORS.values()) / 3
-    assert b["generations"] == 16 and b["base_credits"] == 192.0
-    assert b["expected_credits"] == pytest.approx(192 * mean, abs=0.1) and b["high_credits"] == pytest.approx(268.8)
+    # P17-03: 16 shots of 8 s priced by flow_credits (Omni 1.2 Flash 360p: 8 credits each)
+    assert b["generations"] == 16 and b["base_credits"] == 128.0
+    assert b["expected_credits"] == pytest.approx(128 * mean, abs=0.1) and b["high_credits"] == pytest.approx(128 * 1.4)
     assert b["cap_credits"] == pytest.approx(b["expected_credits"] * 1.5, abs=0.1)
     assert [f["check"] for f in b["findings"]] == ["BUDGET_NOT_SET"] and b["owner_estimate"] is None
 

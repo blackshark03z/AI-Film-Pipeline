@@ -137,10 +137,15 @@ class _Plan:
         prev = self.by_id[decl.previous_generation_id]
         verified = (prev.generation_id in self.verified_handoffs
                     or end_state_verified(self.takes_dir, prev.generation_id, decl.generation_id, self.attestations))
+        previous_end = self.cut(self.state(prev.end_state), decl.visible)
+        if self.pre.preflight.interaction_contract:
+            # P17-02: compare like with like - build() drops props placed on people out of this frame from the start
+            previous_end = self.without_props_of(
+                previous_end, hidden_names(self.pre, decl, self.gen_index[decl.generation_id]))
         return GenerationHandoff(
             previous_generation_id=prev.generation_id, previous_action=self.action_text(prev),
             previous_start=self.state(prev.start_state),
-            previous_end=self.cut(self.state(prev.end_state), decl.visible),
+            previous_end=previous_end,
             end_state_verified=verified)
 
     def build(self, decl: ShotDecl, gate: StoryboardGate):

@@ -797,6 +797,17 @@ async def run(args) -> dict:
             # front video is now second and the new front video's detail page
             # holds the whole sent prompt (DETAIL_PROMPT_MATCH).
             token = await detail_bind(page, pre, prompt, rec)
+            # P17-05 (film05 SC01_g1, SC02_g2): re-issued thumbnails ended the wait at 38-59 s, before the clip had
+            # a tile (or while its tile had no detail page yet); keep polling until the send timeout, then bind again
+            while (token is None and rec["detail_bind"].get("why") in ("no new video", "no media id for the front video")
+                   and time.time() - t0 < args.timeout):
+                await page.wait_for_timeout(15000)
+                if (await page.evaluate(JS_JOB_STATE))["failed"] > failed_before:
+                    break
+                if await video_count(page) > pre["n"]:
+                    rec.pop("result", None)
+                    token = await detail_bind(page, pre, prompt, rec)
+            rec["elapsed_s"] = round(time.time() - t0)
             if token is None and await flow_failed(page, failed_before, 90):
                 rec["result"] = "FLOW_FAILED"
                 return rec

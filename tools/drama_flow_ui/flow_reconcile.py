@@ -30,8 +30,11 @@ def _sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def known_ids(manifests: Path | None, out_dir: Path) -> set[str]:
-    """Media id tails of registered take manifests plus the media ids of earlier BOUND reconcile results."""
+def known_ids(manifests: Path | None, out_dir: Path, skip: frozenset[str] = frozenset()) -> set[str]:
+    """Media id tails of registered take manifests plus the media ids of earlier BOUND reconcile results.
+
+    P17-04: results of the receipts in `skip` (the ones being reconciled now) are left out, so a re-run with
+    --download can bind the same clip again instead of hiding it from itself."""
     known: set[str] = set()
     if manifests and Path(manifests).is_dir():
         for m in sorted(Path(manifests).glob("*.take.json")):
@@ -41,6 +44,8 @@ def known_ids(manifests: Path | None, out_dir: Path) -> set[str]:
     if out_dir.is_dir():
         for r in sorted(out_dir.glob("*.reconcile.json")):
             body = json.loads(r.read_text(encoding="utf-8"))
+            if body.get("receipt_id") in skip:
+                continue
             if body.get("result") == "BOUND" and body.get("media_id"):
                 known.add(body["media_id"])
     return known
@@ -105,7 +110,7 @@ async def run(args) -> dict[str, dict]:
     manifests = Path(args.manifests) if args.manifests else film / "media" / "takes"
     prompts = Path(args.prompts) if args.prompts else film / "media" / "plan" / "prompts"
     out_dir.mkdir(parents=True, exist_ok=True)
-    known = known_ids(manifests, out_dir)
+    known = known_ids(manifests, out_dir, frozenset(args.ids))
     results: dict[str, dict] = {}
     todo: dict[str, str] = {}
     for rid in args.ids:
