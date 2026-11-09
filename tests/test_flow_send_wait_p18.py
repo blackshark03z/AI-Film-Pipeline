@@ -405,14 +405,25 @@ def test_an_own_tile_still_there_at_the_deadline_is_never_a_vanished_job(tmp_pat
     assert res["result"] == "UNBOUND" and res["own_tile"] == "OK" and not res.get("provider_no_clip")
 
 
-def test_submit_tile_takes_only_a_new_media_id_in_front(monkeypatch):
+def test_submit_tile_takes_only_a_new_unfinished_tile_in_front(monkeypatch):
+    # film05 SC02_g2 v4 (23:32): a pixel check before the submit fired on the start-frame upload, so the send had no
+    # identity; finished-or-not is now read 8 s after the submit: our clip cannot be finished yet, a stray can
     async def sigs(_page, k=8):
         return [np.zeros(fs.TILE_SIG_SIZE[::-1])]
     monkeypatch.setattr(fs, "gallery_signatures", sigs)
-    for front, want, why in ((MID_OWN, MID_OWN, None), (MID_OLD, None, "OLD_TILE_IN_FRONT"),
-                             (MID_STRAY, None, "OLD_TILE_IN_FRONT")):
+
+    class _Front:
+        def __init__(self, text):
+            self.text = text
+
+        async def evaluate(self, js, *_a):
+            return self.text if js == fs.JS_FRONT_TILE_TEXT else None
+    for front, text, want, why in ((MID_OWN, "", MID_OWN, None),
+                                   (MID_OWN, "play_circle 360p", None, "STRAY_IN_FRONT"),
+                                   (MID_OLD, "play_circle 360p", None, "OLD_TILE_IN_FRONT"),
+                                   (MID_STRAY, "", None, "OLD_TILE_IN_FRONT")):
         async def nth(_page, _n, _home, mid=front):
             return _detail(mid)
         monkeypatch.setattr(fs, "read_nth_detail", nth)
-        own = asyncio.run(fs.submit_tile(None, "home", [MID_OLD], {MID_STRAY[-8:]}))
+        own = asyncio.run(fs.submit_tile(_Front(text), "home", [MID_OLD], {MID_STRAY[-8:]}))
         assert own["media_id"] == want and own.get("why") == why

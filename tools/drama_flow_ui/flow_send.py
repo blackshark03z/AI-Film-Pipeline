@@ -542,21 +542,37 @@ async def front_snapshot(page, home: str, scan: int = 6) -> dict:
 
 
 FAILED_TEXT = "Không thành công"
+# the newest video tile's text: a finished clip shows its play icon and resolution ("play_circle 360p")
+JS_FRONT_TILE_TEXT = r"""() => { const cs = [...document.querySelectorAll('flow-grid-tile-container')]
+    .filter(c => c.querySelector('flow-video-tile'))
+    .map(c => { const r = c.getBoundingClientRect(); return [r.top, r.left, c] })
+    .sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    return cs.length ? (cs[0][2].innerText || '').slice(0, 120) : null }"""
+FINISHED_TILE_RE = re.compile(r"play_circle|\b\d{3,4}p\b")
 
 
 async def submit_tile(page, home: str, before_ids: list[str], known: set[str]) -> dict:
     """P18-07: this send's own tile, read right after the submit. Flow puts a new job first, so the newest video tile
     is ours when its media id existed neither before the send (`before_ids`) nor as a registered take; its media id
     and pixels are the send's identity. Anything else (an old clip still in front, no tile yet) leaves the identity
-    unknown and the bind falls back to the prompt match."""
+    unknown and the bind falls back to the prompt match. A new tile that is already a finished clip 8 s after the
+    submit cannot be this send's (Omni Flash takes 45 s+): it is an earlier job that finished meanwhile (a stray).
+    film05 SC02_g2 v4: a pixel check before the submit fired on every send (the start-frame upload changes the
+    gallery), so finished-or-not is read after the submit instead."""
+    await page.evaluate(JS_TOP)
+    front_text = await page.evaluate(JS_FRONT_TILE_TEXT)
+    finished = bool(FINISHED_TILE_RE.search(front_text or ""))
     d = await read_nth_detail(page, 0, home)
     mid = fb.media_id_from_url(d["url"]) if d else None
     sigs = await gallery_signatures(page, k=1)
-    own = {"media_id": None, "pixels": [round(float(sigs[0].mean()), 1)] if sigs else []}
+    own = {"media_id": None, "pixels": [round(float(sigs[0].mean()), 1)] if sigs else [],
+           "front_text": " ".join((front_text or "").split())[:60]}
     if not mid:
         own["why"] = "NO_TILE"
     elif mid in before_ids or fb.is_known(mid, known):
         own["why"] = "OLD_TILE_IN_FRONT"
+    elif finished:
+        own.update(why="STRAY_IN_FRONT", stray_tail=mid[-8:])
     else:
         own.update(media_id=mid, failed_at_submit=FAILED_TEXT in (d.get("text") or ""))
     return own
@@ -947,14 +963,6 @@ async def run(args) -> dict:
             rec["error"] = str(e).splitlines()[0][:200] if str(e) else ""
             return rec
 
-        if pre is not None:
-            # P18-07: a tile whose pixels changed during the composer setup is a job that finished meanwhile (an
-            # earlier send); then the newest tile after the submit may be that one, so no own identity is taken.
-            # Pixels only: opening a detail page here would reload the page and lose the composer state.
-            try:
-                pre["front_changed"] = new_tiles(pre.get("signatures") or [], await gallery_signatures(page, k=2)) > 0
-            except Exception:  # noqa: BLE001 - unknown counts as changed: the bind falls back to the prompt match
-                pre["front_changed"] = True
         box = page.locator("textarea, [contenteditable='true']").first
         # Codex 2026-11-09: re-read the failed-tile count right before the submit, so a job that failed during the
         # snapshot and composer setup is not taken for this send's failure
@@ -974,8 +982,7 @@ async def run(args) -> dict:
             try:
                 import flow_reconcile as fr   # local: flow_reconcile imports this module
                 known = fr.known_ids(out.parent, out.parent, frozenset({out.stem}))
-                pre["own"] = ({"media_id": None, "why": "FRONT_CHANGED_BEFORE_SUBMIT"} if pre.get("front_changed")
-                              else await submit_tile(page, page.url, pre.get("before_ids", []), known))
+                pre["own"] = await submit_tile(page, page.url, pre.get("before_ids", []), known)
             except Exception as e:  # noqa: BLE001 - the identity only narrows the bind; the send goes on without it
                 pre["own"] = {"media_id": None, "why": f"ERROR {type(e).__name__}"}
             own = pre["own"]
