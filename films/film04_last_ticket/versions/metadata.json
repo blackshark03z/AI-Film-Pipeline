@@ -19,19 +19,25 @@
     "ai_generated": true,
     "digital_source_type": "trainedAlgorithmicMedia",
     "synthetic_persons": true,
-    "generators": "Google Flow Omni 1.2 Flash",
+    "generators": "Google Flow Omni 1.2 Flash; ChatGPT image generation (start stills)",
     "generator_records": [
       {
         "provider": "Google",
         "model": "Flow Omni 1.2 Flash",
         "role": "",
         "settings": ""
+      },
+      {
+        "provider": "ChatGPT",
+        "model": "image generation (start stills)",
+        "role": "",
+        "settings": ""
       }
     ],
     "ai_label": "always",
     "text": {
-      "en": "Generated with AI: Google Flow Omni 1.2 Flash Synthetic characters: faces and voices are AI-generated.",
-      "vi": "Tạo bằng AI: Google Flow Omni 1.2 Flash Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra."
+      "en": "Generated with AI: Google Flow Omni 1.2 Flash; ChatGPT image generation (start stills) Synthetic characters: faces and voices are AI-generated.",
+      "vi": "Tạo bằng AI: Google Flow Omni 1.2 Flash; ChatGPT image generation (start stills) Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra."
     }
   },
   "credits": {
@@ -39,7 +45,17 @@
       "MARA",
       "THEO"
     ],
-    "sound_attributions": [],
+    "sound_attributions": [
+      "Bowesy (Freesound, CC0; credit not required)",
+      "Norman_Hittle (Freesound, CC0; credit not required)",
+      "OtisJames (Freesound, CC0; credit not required)",
+      "jankooiker (Freesound, CC0; credit not required)",
+      "mcpable (Freesound, CC0; credit not required)",
+      "nicola_ariutti (Freesound, CC0; credit not required)",
+      "qubodup (Freesound, CC0; credit not required)",
+      "skyumori (Freesound, CC0; credit not required)",
+      "uniuniversal (Freesound, CC0; credit not required)"
+    ],
     "fiction_line": "A work of fiction. All characters are fictional."
   },
   "runtime_s": 86.708331,
@@ -50,7 +66,7 @@
       "width": 1280,
       "height": 720,
       "fps": 24.0,
-      "sha256": "577261958202b2799b48d4097cbf7fab83ffc26eece86edd602e9c779994b3ee"
+      "sha256": "20e0fdde5066b6778486c40c04be9084362b1b8d6a8b77b89c6e457b3f215ee8"
     },
     {
       "name": "portrait_9x16",
@@ -58,7 +74,7 @@
       "width": 720,
       "height": 1280,
       "fps": 24.0,
-      "sha256": "aac5bf30211a2bbef7c05ed3d43a7639275b0e4bbb9e82e7b7000e71ccc1a692",
+      "sha256": "981b716522db90c29460aca593b0522a16b5d4f1ab6e774ee974cc1685f6e01d",
       "upscale": 1.78,
       "ai_label": {
         "text": "AI-generated",

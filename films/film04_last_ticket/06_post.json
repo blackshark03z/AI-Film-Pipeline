@@ -26,7 +26,7 @@
     "locked_against": "f0a499fa50bd1d14da2ad872fe3f6edbe0d72bfa3b879069e539e4cc7cbba3ae"
   },
   "mix": {
-    "output_sha256": "577261958202b2799b48d4097cbf7fab83ffc26eece86edd602e9c779994b3ee",
+    "output_sha256": "20e0fdde5066b6778486c40c04be9084362b1b8d6a8b77b89c6e457b3f215ee8",
     "cut_sha256": "f1d7e541853f52e17e38c5cd0b3a324ba4fe26ddcfbb421364aecdf341bd6b2a",
     "report": "audio/mix.json",
     "ok": true,
@@ -34,7 +34,7 @@
   },
   "master_qc": {
     "report": "qc/master_qc.json",
-    "sha256": "577261958202b2799b48d4097cbf7fab83ffc26eece86edd602e9c779994b3ee",
+    "sha256": "20e0fdde5066b6778486c40c04be9084362b1b8d6a8b77b89c6e457b3f215ee8",
     "ok": true,
     "locked_against": "f0a499fa50bd1d14da2ad872fe3f6edbe0d72bfa3b879069e539e4cc7cbba3ae"
   },

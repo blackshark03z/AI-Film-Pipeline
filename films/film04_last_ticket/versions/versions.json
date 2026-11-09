@@ -8,7 +8,7 @@
       "width": 1280,
       "height": 720,
       "fps": 24.0,
-      "sha256": "577261958202b2799b48d4097cbf7fab83ffc26eece86edd602e9c779994b3ee"
+      "sha256": "20e0fdde5066b6778486c40c04be9084362b1b8d6a8b77b89c6e457b3f215ee8"
     },
     {
       "name": "portrait_9x16",
@@ -16,7 +16,7 @@
       "width": 720,
       "height": 1280,
       "fps": 24.0,
-      "sha256": "aac5bf30211a2bbef7c05ed3d43a7639275b0e4bbb9e82e7b7000e71ccc1a692",
+      "sha256": "981b716522db90c29460aca593b0522a16b5d4f1ab6e774ee974cc1685f6e01d",
       "upscale": 1.78,
       "ai_label": {
         "text": "AI-generated",

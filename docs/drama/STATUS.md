@@ -72,4 +72,9 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   dialogue stem with Vosk small-en (model ~/.cache/vosk/vosk-model-small-en-us-0.15; vosk is not in the uv env, so set
   AFP_STT_PYTHON to a python that has it), word recall >= 0.8 passes, homophones/near-spellings tolerated; a stem miss
   gets a second opinion on the raw take (+-1 s). film04: 10/10 lines PASS, mean recall 0.98 -> qc/dialogue_stt.json.
-  Still open: SFX_UNSOURCED, RIGHTS_PENDING (Owner).
+- SFX sourced (2026-11-09): editornghiepdu.vn rejected for now (needs Owner account + 1M VND + Premiere panel). All 9
+  film04 effects now come from Freesound CC0 HQ previews (no login), trimmed/faded to each shot into audio/sfx/<slug>.wav
+  (media, not committed) and recorded in audio/assets.json (CC0-1.0, cleared, source URL + author). Re-ran mix
+  (9 placed, -14.3 LUFS, TP -1.7), mastercheck PASS, versions, deliver (0 blocks), lock fresh, dialoguecheck 10/10.
+  Still open: RIGHTS_PENDING (Owner); THUMB_REJECTED WARN for SC05_g3 (dark frames, pre-existing); the SFX are not
+  yet judged by ear.

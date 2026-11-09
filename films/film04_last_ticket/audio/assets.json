@@ -1,0 +1,157 @@
+{
+  "assets": [
+    {
+      "asset": "audio/sfx/shutter_rolling_down.wav",
+      "kind": "sfx",
+      "license": "CC0-1.0",
+      "status": "cleared",
+      "source_url": "https://freesound.org/s/335364/",
+      "sha256": "40deefc144f38d2a1817276f35b2ee9146160bd4f7ae54758bac81556a35401b",
+      "attribution": "nicola_ariutti (Freesound, CC0; credit not required)",
+      "note": "Freesound HQ preview 335364_1433145-hq.mp3 1.0-4.6s, trimmed and faded for the shot",
+      "usage": [
+        {
+          "start_s": 3.0,
+          "end_s": null,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "asset": "audio/sfx/door_opening.wav",
+      "kind": "sfx",
+      "license": "CC0-1.0",
+      "status": "cleared",
+      "source_url": "https://freesound.org/s/104533/",
+      "sha256": "a1448d0fd9e2f0b0bdcc0119caeb2703a00a92c091b3cca375971230fb47c953",
+      "attribution": "skyumori (Freesound, CC0; credit not required)",
+      "note": "Freesound HQ preview 104533_1525198-hq.mp3 whole, trimmed and faded for the shot",
+      "usage": [
+        {
+          "start_s": 6.958,
+          "end_s": null,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "asset": "audio/sfx/glass_jar_set_on_wood.wav",
+      "kind": "sfx",
+      "license": "CC0-1.0",
+      "status": "cleared",
+      "source_url": "https://freesound.org/s/171939/",
+      "sha256": "a3c9a9ff78fdc6b515d2bcb0c724595a377c5981b8114bb117390d20e6babe7b",
+      "attribution": "qubodup (Freesound, CC0; credit not required)",
+      "note": "Freesound HQ preview 171939_71257-hq.mp3 whole, trimmed and faded for the shot",
+      "usage": [
+        {
+          "start_s": 27.875,
+          "end_s": null,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "asset": "audio/sfx/shutter_rattling_up_off_screen.wav",
+      "kind": "sfx",
+      "license": "CC0-1.0",
+      "status": "cleared",
+      "source_url": "https://freesound.org/s/617980/",
+      "sha256": "f6d820339563575da8793d7c9d4a877e166164c581df501816e1c8a6cfae3963",
+      "attribution": "uniuniversal (Freesound, CC0; credit not required)",
+      "note": "Freesound HQ preview 617980_13601611-hq.mp3 3.0-6.8s, trimmed and faded for the shot",
+      "usage": [
+        {
+          "start_s": 43.833,
+          "end_s": null,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "asset": "audio/sfx/coins_pouring_onto_wood.wav",
+      "kind": "sfx",
+      "license": "CC0-1.0",
+      "status": "cleared",
+      "source_url": "https://freesound.org/s/395824/",
+      "sha256": "cff875517ddc6383c528b203009f5a957baf1d501a4db18a732e2f73991f1c98",
+      "attribution": "Norman_Hittle (Freesound, CC0; credit not required)",
+      "note": "Freesound HQ preview 395824_1549917-hq.mp3 whole, trimmed and faded for the shot",
+      "usage": [
+        {
+          "start_s": 47.833,
+          "end_s": null,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "asset": "audio/sfx/room_tone_a_faint_coin_settling.wav",
+      "kind": "sfx",
+      "license": "CC0-1.0",
+      "status": "cleared",
+      "source_url": "https://freesound.org/s/131935/",
+      "sha256": "021f1d8f9d83015bb9e952c8c0cfc29cc1b7e94c3b15efd5f2546530b605c0f7",
+      "attribution": "mcpable (Freesound, CC0; credit not required)",
+      "note": "Freesound HQ preview 131935_1542102-hq.mp3 0.4-4.2s, trimmed and faded for the shot",
+      "usage": [
+        {
+          "start_s": 51.833,
+          "end_s": null,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "asset": "audio/sfx/a_heavy_thump_off_screen.wav",
+      "kind": "sfx",
+      "license": "CC0-1.0",
+      "status": "cleared",
+      "source_url": "https://freesound.org/s/215162/",
+      "sha256": "8b468a06d938b7dd04547e5778c3fa2eff0db7b46865cee54faecebf6dbd3129",
+      "attribution": "OtisJames (Freesound, CC0; credit not required)",
+      "note": "Freesound HQ preview 215162_4027196-hq.mp3 whole, trimmed and faded for the shot",
+      "usage": [
+        {
+          "start_s": 60.833,
+          "end_s": null,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "asset": "audio/sfx/train_approaching.wav",
+      "kind": "sfx",
+      "license": "CC0-1.0",
+      "status": "cleared",
+      "source_url": "https://freesound.org/s/237939/",
+      "sha256": "65130c81a179111824b2a7bb9fc13adbbe419463f72d278464709c9954d8f278",
+      "attribution": "jankooiker (Freesound, CC0; credit not required)",
+      "note": "Freesound HQ preview 237939_1203876-hq.mp3 30.0-35.8s, trimmed and faded for the shot",
+      "usage": [
+        {
+          "start_s": 70.792,
+          "end_s": null,
+          "note": ""
+        }
+      ]
+    },
+    {
+      "asset": "audio/sfx/train_doors_sliding_open.wav",
+      "kind": "sfx",
+      "license": "CC0-1.0",
+      "status": "cleared",
+      "source_url": "https://freesound.org/s/522127/",
+      "sha256": "572ce6d73fc297428573d580b14f22749e39d8ed8a26bb9d014d56b08bf7de61",
+      "attribution": "Bowesy (Freesound, CC0; credit not required)",
+      "note": "Freesound HQ preview 522127_8219380-hq.mp3 whole, trimmed and faded for the shot",
+      "usage": [
+        {
+          "start_s": 76.75,
+          "end_s": null,
+          "note": ""
+        }
+      ]
+    }
+  ]
+}

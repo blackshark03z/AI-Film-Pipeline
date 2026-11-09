@@ -1,7 +1,7 @@
 {
   "film_id": "film04_last_ticket",
   "video": "films\\film04_last_ticket\\media\\cut\\mixed.mp4",
-  "sha256": "577261958202b2799b48d4097cbf7fab83ffc26eece86edd602e9c779994b3ee",
+  "sha256": "20e0fdde5066b6778486c40c04be9084362b1b8d6a8b77b89c6e457b3f215ee8",
   "spec": {
     "width": 1280,
     "height": 720,
@@ -41,8 +41,8 @@
     "exposure_off_share": 0.0,
     "body_luma_mean": 32.64,
     "colour_worst_after": 27.945,
-    "integrated_lufs": -14.7,
-    "peak_dbfs": -1.8,
+    "integrated_lufs": -14.3,
+    "peak_dbfs": -1.7,
     "clipped_passages": 0,
     "cues_checked": 10,
     "median_offset_s": 0.0
