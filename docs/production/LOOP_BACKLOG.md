@@ -1047,8 +1047,14 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
 - **Tests:** `tests/test_production_master_qc.py` (`test_duplicated_frames_warn` unchanged, new
   `test_a_calm_shot_is_not_a_duplicated_frame`).
 
-### P18-05 `tests/test_session_reuse_010.py` — OPEN
-- 4 tests fail on base before the provider merge (11, 15, 16, 20). Find why; fix the code or the stale test.
+### P18-05 `tests/test_session_reuse_010.py` — DONE (2026-11-09): stale test import
+- Tests 11, 15, 16, 20 import `authority` from `test_upload_state_machine_008`, which imported
+  `from tests.test_upload_classifier_008 import ...`. `tests/` is not a package and the repo root is not on
+  `sys.path` (pytest `pythonpath = ["src"]`, rootdir-relative imports only), so that module failed to import:
+  `ModuleNotFoundError: No module named 'tests'` (also the long-standing collection error of
+  `test_upload_state_machine_008.py`). The code under test was right.
+- **Fix:** the import uses the same flat style as every other test (`from test_upload_classifier_008 import ...`).
+  `test_session_reuse_010.py` 25/25, `test_upload_state_machine_008.py` collects and passes.
 
 ### P18-06 Live proof — OPEN
 - Resend 2–3 film05 shots (360p Omni Flash, ~6 cr each) under OWNER_POLICY; measure the in-send bind rate and

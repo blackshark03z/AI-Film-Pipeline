@@ -22,7 +22,7 @@ from film_pipeline.providers.flow_upload_classifier import (
     QUALIFIED_PENDING, TRUE_AMBIGUOUS, UNOBSERVABLE,
     classify_upload_response, pending_fingerprint_matches,
     QualifiedUploadPending, UploadResponseAmbiguous)
-from tests.test_upload_classifier_008 import (
+from test_upload_classifier_008 import (
     FROZEN_FINGERPRINT, LIVE_PENDING_SKELETON, build_payload)
 from mutation_authority import (
     AUTHORITY_LATCHED_CLOSED, AUTHORITY_OPEN,
