@@ -1,0 +1,25 @@
+{
+  "film_id": "film06_six_am",
+  "takes": [
+    {
+      "take_id": "SC01_g1_t1",
+      "generation_id": "SC01_g1",
+      "prompt_sha256": "d738e8ae53c427576618ab0aa83dff0a9ecd6ca32901f82ef0a5ce2128d3a85d",
+      "start_frame_sha256": "ab5a6ab5d8c1627abaf76f2ce88a0c8738098b46db92e5866154e4e7f5a545e9",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 7.0,
+      "output_file": "SC01_g1_t1.mp4",
+      "output_sha256": "6696d45c787270245dea6438722d1cbd21cec5678687e97444c044ef14d31745",
+      "status": "ACCEPTED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-09T18:08:06Z",
+      "review_file": "reviews/SC01_g1_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
+    }
+  ]
+}
