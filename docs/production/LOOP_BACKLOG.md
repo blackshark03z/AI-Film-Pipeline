@@ -917,3 +917,23 @@ Open defect: flow_send reports these as UNBOUND/AMBIGUOUS; it should detect "Kh�
 FLOW_FAILED. 5 of 11 film04 sends hit it. Blocked: SC03_g2 (so SC04 chain), SC05_g3.
 P16-10 DONE 2026-11-09: all 15 generations ACCEPTED (SC04 chain under delegated review); rough assembly
 media/cut/rough_cut.mp4 (84.7 s). Ledger 223/256.8. Next: mix, grade, titles, deliver.
+
+## P17 Stability proof (Tech Lead, 2026-11-09)
+
+**Feature freeze.** From 2026-11-09, no new pipeline feature until P17-01 passes. Items P14-* and P15-* that are still open are DEFERRED.
+Only fixes for defects that film05 exposes are allowed. Each such fix is traced to the stage that missed the defect (PRODUCTION_PROCESS_V2 rule).
+
+### P17-01 film05: stability run, end to end under OWNER_POLICY.md — READY
+- **Scope:** a new short drama.
+  - 2 characters, 1 location, about 60–90 s, 8–12 generations.
+  - Total budget cap 256.8 credits; 360p Omni Flash.
+  - Story drafted by the Tech Lead with the film-director playbook. The Owner may veto the meaning later.
+- **Run:** plan → stills → boards → shoot → assemble → deliver. Approvals are delegated as set out in OWNER_POLICY.md.
+- **Pass criteria (all must hold):**
+  1. zero new pipeline code, apart from a logged defect fix;
+  2. at least 70% of shots accepted on the first send, and no shot over its generability cap;
+  3. no manual rescue of the Flow UI (no hand-driven picker or upload fixes);
+  4. spend within ±15% of the plan's expected credits.
+- **Outcome:** record a scorecard in docs/drama/STATUS.md.
+  - PASS: the system is declared stable.
+  - FAIL: every miss becomes a P17-0x fix item, and the run repeats once.
