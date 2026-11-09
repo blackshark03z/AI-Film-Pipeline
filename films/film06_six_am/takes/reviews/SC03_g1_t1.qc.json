@@ -1,0 +1,140 @@
+{
+  "take_id": "SC03_g1_t1",
+  "generation_id": "SC03_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:34": "yes, RUTH asks toward frame-right where SAM sits"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes, SAM's seat never shown; RUTH's eyes go just past the lens to frame-right",
+        "REL_GAZE": "yes, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; speaks L06 'Why... now?' (vosk why@0.0 now@2.0, a held pause between the words, reads as deliberate); eyes frame-right to SAM off frame; envelope untouched; no drift; 5 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:34",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "55d0e5fca5accdf8dc8239d12d2ac5fa4c7189584e61879540fb9bbf771bb9fd"
+}
