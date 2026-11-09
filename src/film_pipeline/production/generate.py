@@ -171,8 +171,10 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     prices = {g.generation_id: _fallback_price(pkg.header, g) for g in shots.generations}
     sent = _sent_receipts(root, pkg.header.film_id, prices)
     # a send that did not end in a registered take still used its number (and probably its credits): never reuse it
+    # P18-02: a take named after its clip stem (an imported SC01_g1_t2.mp4 as the first take) holds that number too
+    names = list(sent) + [n for t in log.for_generation(generation_id) for n in (t.take_id, Path(t.output_file).stem)]
     used = [len(log.for_generation(generation_id))] + [
-        int(m.group(1)) for tid in sent if tid.startswith(f"{generation_id}_t") and (m := _RECEIPT_NUMBER.search(tid))]
+        int(m.group(1)) for tid in names if tid.startswith(f"{generation_id}_t") and (m := _RECEIPT_NUMBER.search(tid))]
     number = max(used) + 1
     take_id = f"{generation_id}_t{number}"
     out = root / "media" / "takes" / f"{take_id}.mp4"

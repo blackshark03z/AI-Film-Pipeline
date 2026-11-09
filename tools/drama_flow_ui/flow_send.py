@@ -454,7 +454,7 @@ def wait_verdict(elapsed: float, timeout: float, running: bool, failed_new: bool
     """One step of the video wait: FAILED (a new failed tile), BIND (a tile with new pixels, no job running, at least
     WAIT_MIN_S in; or the timeout) or WAIT. No early BLOCKED: Omni Flash shows no pending signal, so a quiet page
     is not a block (a refused prompt stays in the composer: SEND_FAILED)."""
-    if failed_new:
+    if failed_new and not running:  # a failed tile while a job still renders may be another job's (Codex 2026-11-09)
         return "FAILED"
     if elapsed >= timeout:
         return "BIND"
@@ -606,6 +606,7 @@ async def _video_wait_and_bind(page, ctx, args, prompt: str, out: Path, rec: dic
         except Exception:  # noqa: BLE001 - page navigating; poll again
             job, fresh = {"running": True, "failed": failed_before}, 0
         wait["fresh_max"] = max(wait["fresh_max"], fresh)
+        wait["running"] = bool(job["running"])
         verdict = wait_verdict(time.time() - t0, args.timeout, job["running"], job["failed"] > failed_before, fresh)
     wait["verdict"], wait["at_s"] = verdict, round(time.time() - t0)
     # a FAILED page still gets one bind scan: the failed tile is page-wide (Codex review 2026-11-09)
@@ -614,6 +615,11 @@ async def _video_wait_and_bind(page, ctx, args, prompt: str, out: Path, rec: dic
         rec["elapsed_s"] = round(time.time() - t0)
         return rec
     rec["elapsed_s"] = round(time.time() - t0)
+    if wait.get("running"):
+        # Codex 2026-11-09: a job still rendering at the deadline may yet deliver this clip; a provider-failure label
+        # here would auto-resend and pay twice, so it stays an unbound charged send for P17-07 to settle later
+        rec["result"], rec["job_running"] = "UNBOUND", True
+        return rec
     if verdict == "FAILED" or await flow_failed(page, failed_before, 30):
         rec["result"] = "FLOW_FAILED"
         return rec
@@ -864,6 +870,9 @@ async def run(args) -> dict:
             return rec
 
         box = page.locator("textarea, [contenteditable='true']").first
+        # Codex 2026-11-09: re-read the failed-tile count right before the submit, so a job that failed during the
+        # snapshot and composer setup is not taken for this send's failure
+        failed_before = (await page.evaluate(JS_JOB_STATE))["failed"]
         await box.click()
         await box.fill(prompt)
         await page.wait_for_timeout(500)

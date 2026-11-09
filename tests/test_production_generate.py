@@ -160,6 +160,14 @@ def test_take_numbers_follow_the_log(tmp_path):
     assert done["payload"]["take_id"] == "SC01_g1_t2" and done["payload"]["credits_spent"] == 12
 
 
+def test_an_imported_take_named_after_its_clip_holds_its_number(tmp_path):
+    # Codex 2026-11-09: SC01_g1_t2.mp4 registered as the first take is take t2; the next send is t3, not t2 again
+    pkg = film(tmp_path, 100)
+    accept(pkg, "SC01_g1", n=2)
+    done = G.generate(pkg, "SC01_g1", dry_run=True, stills_dir=still(tmp_path), backlog=backlog(tmp_path))
+    assert done["payload"]["take_id"] == "SC01_g1_t3"
+
+
 def test_problems_of_another_shot_do_not_hold_this_one_back():
     # film04: once end states joined the prompt, later shots ran over the word limit and blocked SC01_g1's send
     assert G._problem_subject("SC03_g1 preflight BLOCKED") == "SC03_g1"

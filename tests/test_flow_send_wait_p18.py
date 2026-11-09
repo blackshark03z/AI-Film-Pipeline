@@ -62,13 +62,16 @@ def test_wait_verdict_replays_the_film05_timelines():
     assert fs.wait_verdict(80, 600, running=False, failed_new=False, fresh=1) == "BIND"
     assert fs.wait_verdict(41, 600, running=False, failed_new=True, fresh=0) == "FAILED"    # SC03_g1 t1
     assert fs.wait_verdict(600, 600, running=False, failed_new=False, fresh=0) == "BIND"    # vanished job: last scan
+    # Codex 2026-11-09: a failed tile while a job still renders may be another job's; wait for the running one
+    assert fs.wait_verdict(41, 600, running=True, failed_new=True, fresh=0) == "WAIT"
 
 
 class _Page:
     """Fake Flow gallery: job state and screenshot per poll come from scripted lists."""
     url = "https://labs.google/fx/tools/flow/project/p"
 
-    def __init__(self, shots, failed=None):
+    def __init__(self, shots, failed=None, running=False):
+        self.running = running
         self.shots, self.failed, self.mouse = list(shots), list(failed or []), SimpleNamespace(move=self._noop)
         self.png, self.rects = shots[0]
 
@@ -77,7 +80,7 @@ class _Page:
 
     async def evaluate(self, js, *_a):
         if js == fs.JS_JOB_STATE:
-            return {"running": False, "failed": self.failed.pop(0) if self.failed else 0}
+            return {"running": self.running, "failed": self.failed.pop(0) if self.failed else 0}
         if js == fs.JS_VIDEO_RECTS:
             if self.shots:
                 self.png, self.rects = self.shots.pop(0)
@@ -282,3 +285,20 @@ def test_an_error_before_the_prompt_is_typed_is_a_pre_submit_error(tmp_path, mon
                           str(tmp_path / "s.png"), "--model", "Omni 1.2 Flash", "--duration", "7"])
     rec = asyncio.run(fs.run(args))
     assert rec["result"] == "PRE_SUBMIT_ERROR TimeoutError" and "screenshot" in rec["error"]
+
+
+def test_a_job_still_running_at_the_deadline_is_never_a_provider_failure(tmp_path, monkeypatch):
+    # Codex 2026-11-09: FLOW_FAILED_NO_CLIP would auto-resend and pay twice while the first job may still deliver
+    old = [_frame(i) for i in range(3)]
+
+    async def no_fail(*_a):
+        return False
+    monkeypatch.setattr(fs, "flow_failed", no_fail)
+    others = [_detail(MID_OLD)] + [{"url": f"https://x/edit/cccccccc-2222-3333-4444-55555555000{i}", "text": "other"}
+                                   for i in range(5)]
+    _patch(monkeypatch, [others], clock=_clock(60))
+    rec: dict = {}
+    page = _Page([_gallery(old)] * 20, running=True)
+    res = asyncio.run(fs._video_wait_and_bind(page, None, SimpleNamespace(timeout=600), PROMPT,
+                                              tmp_path / "X_t1.mp4", rec, _pre(old), 1000.0, 0))
+    assert res["result"] == "UNBOUND" and res["job_running"] and not res.get("provider_no_clip")
