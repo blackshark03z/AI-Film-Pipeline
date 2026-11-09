@@ -1,0 +1,140 @@
+{
+  "take_id": "SC05_g2_t1",
+  "generation_id": "SC05_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:59": "yes, RUTH speaks toward frame-right where SAM sits"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "thin edge of SAM's hair at frame-right edge from 3.5 s; consistent with his seat",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes, SAM's seat never shown empty (only a thin edge of his hair at frame-right later); RUTH's eyes go just past the lens to frame-right after the look down",
+        "REL_GAZE": "yes, looks down at the envelope then at SAM, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: RUTH seated close against red booth back; looks down at the envelope 0.5-2.5 s (long moment), lifts eyes to SAM, speaks L11 3.7-4.7 s (STT exact 'my cook quits on friday'); envelope untouched; from 3.5 s a thin edge of SAM's hair appears at the far frame-right edge (consistent with his seat, never an empty seat) - noted, not a fail; no drift; 8 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:59",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "e2d9e38d9c58ae082b39090bc96a220793f76b875a7f5c22924178482e1c38a5"
+}
