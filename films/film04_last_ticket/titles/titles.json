@@ -1,0 +1,133 @@
+{
+  "film_id": "film04_last_ticket",
+  "ok": true,
+  "sidecars": {
+    "en": "films\\film04_last_ticket\\titles\\film04_last_ticket.en.srt",
+    "vi": "films\\film04_last_ticket\\titles\\film04_last_ticket.vi.srt"
+  },
+  "credits": "titles/credits.json",
+  "cues": [
+    {
+      "event_id": "SC01_g2",
+      "line_no": 15,
+      "character": "THEO",
+      "text": "One ticket to Halden. Please.",
+      "start_s": 4.6,
+      "end_s": 6.95,
+      "source": "override",
+      "abs_start_s": 11.558,
+      "abs_end_s": 13.908
+    },
+    {
+      "event_id": "SC02_g1",
+      "line_no": 22,
+      "character": "MARA",
+      "text": "We closed at half past ten.",
+      "start_s": 1.7,
+      "end_s": 3.4,
+      "source": "override",
+      "abs_start_s": 16.617,
+      "abs_end_s": 18.317
+    },
+    {
+      "event_id": "SC02_g2",
+      "line_no": 27,
+      "character": "THEO",
+      "text": "The machine only takes cards.",
+      "start_s": 3.15,
+      "end_s": 4.75,
+      "source": "override",
+      "abs_start_s": 23.025,
+      "abs_end_s": 24.625
+    },
+    {
+      "event_id": "SC03_g1",
+      "line_no": 34,
+      "character": "THEO",
+      "text": "Mine's declined. This is all I have.",
+      "start_s": 3.4,
+      "end_s": 5.6,
+      "source": "override",
+      "abs_start_s": 31.275,
+      "abs_end_s": 33.475
+    },
+    {
+      "event_id": "SC03_g2",
+      "line_no": 39,
+      "character": "MARA",
+      "text": "Last train's ten-fifty.",
+      "start_s": 4.25,
+      "end_s": 5.85,
+      "source": "override",
+      "abs_start_s": 38.125,
+      "abs_end_s": 39.725
+    },
+    {
+      "event_id": "SC04_g3",
+      "line_no": 48,
+      "character": "MARA",
+      "text": "Pour it out. We'll count it.",
+      "start_s": 1.35,
+      "end_s": 3.2,
+      "source": "override",
+      "abs_start_s": 49.183,
+      "abs_end_s": 51.033
+    },
+    {
+      "event_id": "SC05_g1",
+      "line_no": 57,
+      "character": "MARA",
+      "text": "Fourteen eighty. Exactly the fare.",
+      "start_s": 1.7,
+      "end_s": 4.5,
+      "source": "override",
+      "abs_start_s": 57.492,
+      "abs_end_s": 60.292
+    },
+    {
+      "event_id": "SC05_g3",
+      "line_no": 62,
+      "character": "THEO",
+      "text": "Thank you.",
+      "start_s": 3.7,
+      "end_s": 4.4,
+      "source": "override",
+      "abs_start_s": 67.492,
+      "abs_end_s": 68.192
+    },
+    {
+      "event_id": "SC06_g1",
+      "line_no": 71,
+      "character": "THEO",
+      "text": "You're coming too?",
+      "start_s": 4.6,
+      "end_s": 5.9,
+      "source": "override",
+      "abs_start_s": 75.35,
+      "abs_end_s": 76.65
+    },
+    {
+      "event_id": "SC06_g2",
+      "line_no": 76,
+      "character": "MARA",
+      "text": "Last train. Last shift.",
+      "start_s": 1.9,
+      "end_s": 4.5,
+      "source": "override",
+      "abs_start_s": 78.608,
+      "abs_end_s": 81.208
+    }
+  ],
+  "reframed": [],
+  "problems": [],
+  "summary": {
+    "cues": 10,
+    "languages": [
+      "en",
+      "vi"
+    ],
+    "reframed": 0,
+    "blocks": 0,
+    "warnings": 0
+  }
+}

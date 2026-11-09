@@ -66,6 +66,27 @@
       "take_id": "SC05_g3_t1"
     },
     {
+      "event_id": "SC06_card",
+      "kind": "CARD",
+      "take_id": "",
+      "generation_id": "",
+      "src_in_s": 0.0,
+      "src_out_s": null,
+      "card_lines": [
+        "10:50 p.m."
+      ],
+      "card_duration_s": 2.0,
+      "transition": {
+        "type": "CUT",
+        "duration_s": 0.0
+      },
+      "audio": {
+        "j_cut_s": 0.0,
+        "l_cut_s": 0.0
+      },
+      "note": "script marker: context card before the platform (second location)"
+    },
+    {
       "event_id": "SC06_g1",
       "kind": "TAKE",
       "take_id": "SC06_g1_t1"

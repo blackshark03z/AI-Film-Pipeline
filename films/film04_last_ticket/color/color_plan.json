@@ -1,0 +1,7 @@
+{
+  "references": {},
+  "skip": ["SC04_g2", "SC04_g4"],
+  "max_gain": 0.25,
+  "tolerance": 6.0,
+  "look": ""
+}

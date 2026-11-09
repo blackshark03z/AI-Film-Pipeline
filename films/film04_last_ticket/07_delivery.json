@@ -1,1 +1,10 @@
-{}
+{
+  "delivery": {
+    "manifest": "delivery/MANIFEST.json",
+    "manifest_sha256": "fe4e558f4947a4757275e9e1378453684726c89eb5f5b59ef5054adc6571bb7b",
+    "release_ready": false,
+    "files": 32,
+    "ai_label": "always",
+    "locked_against": "40a2d5540583c98097383230f88d53dc1bfedaeacb9bcc159b10904c45b600ee"
+  }
+}

@@ -43,3 +43,11 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   spread (SC04_g4) -> neat stacks (SC05_g1), an intended time skip.
   Open: mix/loudness (LRA wide, SC04 quiet shots -41/-44 LUFS), grade, titles/SRT, deliver; dialogue not
   machine-checked (no STT). Next: fine cut + mix (film.py mix/grade/titles), then deliver.
+- film04 FINISHED (local delivery) 2026-11-09: 10:50 p.m. CARD added before SC06; grade (skip SC04_g2/SC04_g4: deliberate
+  green lamp light); titles with explicit titles/cues.json (cue windows from the dialogue-stem activity, EN+VI SRT);
+  mix -14.6 LUFS / -1.7 dBTP; picture locked by agent:tech-lead.delegated-by.owner-khoikk03 (OWNER_POLICY.md);
+  mastercheck PASS (WARN: 7.6% duplicated frames, SC04_g2 colour left 28 levels off by design); versions 9:16;
+  `film.py deliver` ok -> films/film04_last_ticket/delivery/ (masters 16x9 + 9x16, 86.7 s), release_ready false:
+  RIGHTS_PENDING for characters/location (asset rights not cleared) - publishing stays the Owner's.
+  Open: 9:16 crop is centred on every shot (no tags/reframe boxes); SFX_UNSOURCED (take sound kept); "Generated with AI"
+  not translated in the VI SRT title; dialogue words not machine-checked (no STT).

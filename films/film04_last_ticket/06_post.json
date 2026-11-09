@@ -1,1 +1,52 @@
-{}
+{
+  "color": {
+    "report": "color/color.json",
+    "ok": true,
+    "summary": {
+      "shots": 15,
+      "corrected": 13,
+      "worst_before": 37.601,
+      "worst_after": 28.042
+    },
+    "locked_against": "40a2d5540583c98097383230f88d53dc1bfedaeacb9bcc159b10904c45b600ee"
+  },
+  "titles": {
+    "report": "titles/titles.json",
+    "ok": true,
+    "summary": {
+      "cues": 10,
+      "languages": [
+        "en",
+        "vi"
+      ],
+      "reframed": 0,
+      "blocks": 0,
+      "warnings": 0
+    },
+    "locked_against": "40a2d5540583c98097383230f88d53dc1bfedaeacb9bcc159b10904c45b600ee"
+  },
+  "mix": {
+    "output_sha256": "935d491df305e30a15d6a4a48807271db652f72cbb998787ca34db5248a44390",
+    "cut_sha256": "c979bb871cec4590ca56110bda957010edd3895b8d8573053a95d64bab9b198e",
+    "report": "audio/mix.json",
+    "ok": true,
+    "locked_against": "40a2d5540583c98097383230f88d53dc1bfedaeacb9bcc159b10904c45b600ee"
+  },
+  "master_qc": {
+    "report": "qc/master_qc.json",
+    "sha256": "935d491df305e30a15d6a4a48807271db652f72cbb998787ca34db5248a44390",
+    "ok": true,
+    "locked_against": "40a2d5540583c98097383230f88d53dc1bfedaeacb9bcc159b10904c45b600ee"
+  },
+  "versions": {
+    "report": "versions/versions.json",
+    "ok": true,
+    "summary": {
+      "portrait_segments": 18,
+      "thumbnails": 2,
+      "blocks": 0,
+      "warnings": 17
+    },
+    "locked_against": "40a2d5540583c98097383230f88d53dc1bfedaeacb9bcc159b10904c45b600ee"
+  }
+}

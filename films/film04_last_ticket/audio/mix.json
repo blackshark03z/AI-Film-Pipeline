@@ -1,0 +1,242 @@
+{
+  "film_id": "film04_last_ticket",
+  "cut": "films\\film04_last_ticket\\media\\cut\\titled_cut.mp4",
+  "cut_sha256": "c979bb871cec4590ca56110bda957010edd3895b8d8573053a95d64bab9b198e",
+  "output": "films\\film04_last_ticket\\media\\cut\\mixed.mp4",
+  "output_sha256": "935d491df305e30a15d6a4a48807271db652f72cbb998787ca34db5248a44390",
+  "total_s": 86.666664,
+  "plan": {
+    "ambience_lufs": -40.0,
+    "sfx_gain_db": -6.0,
+    "duck_threshold_db": -50.0,
+    "duck_ratio": 8.0,
+    "duck_attack_ms": 20.0,
+    "duck_release_ms": 400.0,
+    "min_duck_depth_db": 6.0,
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "lufs_tolerance": 1.0,
+    "music": []
+  },
+  "stems": {
+    "dialogue": "films\\film04_last_ticket\\audio\\stems\\dialogue.wav",
+    "ambience": "films\\film04_last_ticket\\audio\\stems\\ambience.wav",
+    "sfx": "films\\film04_last_ticket\\audio\\stems\\sfx.wav",
+    "music": "films\\film04_last_ticket\\audio\\stems\\music.wav"
+  },
+  "ambience": [
+    {
+      "scene_id": "SC01",
+      "location": "ticket_office_night",
+      "room_tone": "rain on glass",
+      "start_s": 3.0,
+      "end_s": 14.916666,
+      "tone": [
+        "pink",
+        6000,
+        0
+      ]
+    },
+    {
+      "scene_id": "SC02",
+      "location": "ticket_office_night",
+      "room_tone": "rain on glass",
+      "start_s": 14.916666,
+      "end_s": 27.874999,
+      "tone": [
+        "pink",
+        6000,
+        0
+      ]
+    },
+    {
+      "scene_id": "SC03",
+      "location": "ticket_office_night",
+      "room_tone": "rain on glass",
+      "start_s": 27.874999,
+      "end_s": 39.874999,
+      "tone": [
+        "pink",
+        6000,
+        0
+      ]
+    },
+    {
+      "scene_id": "SC04",
+      "location": "ticket_office_night",
+      "room_tone": "rain on glass",
+      "start_s": 39.874999,
+      "end_s": 55.791665,
+      "tone": [
+        "pink",
+        6000,
+        0
+      ]
+    },
+    {
+      "scene_id": "SC05",
+      "location": "ticket_office_night",
+      "room_tone": "rain on glass",
+      "start_s": 55.791665,
+      "end_s": 68.749998,
+      "tone": [
+        "pink",
+        6000,
+        0
+      ]
+    },
+    {
+      "scene_id": "SC06",
+      "location": "platform_night",
+      "room_tone": "light rain, distant train",
+      "start_s": 70.749998,
+      "end_s": 82.666664,
+      "tone": [
+        "pink",
+        6000,
+        0
+      ]
+    }
+  ],
+  "sfx": [
+    {
+      "event_id": "SC01_g1",
+      "text": "shutter rolling down",
+      "slug": "shutter_rolling_down",
+      "at_s": 3.0,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC01_g2",
+      "text": "door opening",
+      "slug": "door_opening",
+      "at_s": 6.958333,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC03_g1",
+      "text": "glass jar set on wood",
+      "slug": "glass_jar_set_on_wood",
+      "at_s": 27.874999,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC04_g2",
+      "text": "shutter rattling up, off screen",
+      "slug": "shutter_rattling_up_off_screen",
+      "at_s": 43.833332,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC04_g3",
+      "text": "coins clattering on wood, off screen",
+      "slug": "coins_clattering_on_wood_off_screen",
+      "at_s": 47.833332,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC04_g4",
+      "text": "room tone, a faint coin settling",
+      "slug": "room_tone_a_faint_coin_settling",
+      "at_s": 51.791665,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC05_g2",
+      "text": "a heavy thump, off screen",
+      "slug": "a_heavy_thump_off_screen",
+      "at_s": 60.791665,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC06_g1",
+      "text": "train approaching",
+      "slug": "train_approaching",
+      "at_s": 70.749998,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC06_g2",
+      "text": "train doors sliding open",
+      "slug": "train_doors_sliding_open",
+      "at_s": 76.708331,
+      "asset": "",
+      "sha256": ""
+    }
+  ],
+  "music": [],
+  "duck": {
+    "frames": 249,
+    "depth_db": 19.82,
+    "wanted_db": 6.0
+  },
+  "loudness": {
+    "before": {
+      "integrated_lufs": -25.1,
+      "peak_dbfs": -0.4
+    },
+    "after": {
+      "integrated_lufs": -14.6,
+      "peak_dbfs": -1.7
+    },
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "ok": true
+  },
+  "problems": [
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC01_g1: 'shutter rolling down' has no asset audio/sfx/shutter_rolling_down.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC01_g2: 'door opening' has no asset audio/sfx/door_opening.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC03_g1: 'glass jar set on wood' has no asset audio/sfx/glass_jar_set_on_wood.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC04_g2: 'shutter rattling up, off screen' has no asset audio/sfx/shutter_rattling_up_off_screen.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC04_g3: 'coins clattering on wood, off screen' has no asset audio/sfx/coins_clattering_on_wood_off_screen.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC04_g4: 'room tone, a faint coin settling' has no asset audio/sfx/room_tone_a_faint_coin_settling.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC05_g2: 'a heavy thump, off screen' has no asset audio/sfx/a_heavy_thump_off_screen.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC06_g1: 'train approaching' has no asset audio/sfx/train_approaching.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC06_g2: 'train doors sliding open' has no asset audio/sfx/train_doors_sliding_open.wav; the take's own sound stays"
+    }
+  ],
+  "ok": true
+}

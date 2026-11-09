@@ -1,0 +1,618 @@
+{
+  "film_id": "film04_last_ticket",
+  "plan": {
+    "references": {},
+    "skip": [
+      "SC04_g2",
+      "SC04_g4"
+    ],
+    "max_gain": 0.25,
+    "tolerance": 6.0,
+    "look": ""
+  },
+  "shots": [
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "take_id": "SC01_g1_t5",
+      "reference": "median",
+      "measured": {
+        "r": 56.531,
+        "g": 42.422,
+        "b": 15.592,
+        "luma": 43.485
+      },
+      "reference_stats": {
+        "r": 49.126,
+        "g": 36.87,
+        "b": 17.084,
+        "luma": 38.047
+      },
+      "deviation_before": 7.405,
+      "exposure_ev": -0.193,
+      "wb_shift": -0.334,
+      "gains": [
+        0.86901,
+        0.86912,
+        1.09569
+      ],
+      "skipped": "",
+      "after": {
+        "r": 47.934,
+        "g": 35.495,
+        "b": 16.487,
+        "luma": 36.767
+      },
+      "deviation_after": 1.375,
+      "matched": true
+    },
+    {
+      "generation_id": "SC01_g2",
+      "scene_id": "SC01",
+      "take_id": "SC01_g2_t2",
+      "reference": "median",
+      "measured": {
+        "r": 41.72,
+        "g": 31.319,
+        "b": 18.576,
+        "luma": 32.61
+      },
+      "reference_stats": {
+        "r": 49.126,
+        "g": 36.87,
+        "b": 17.084,
+        "luma": 38.047
+      },
+      "deviation_before": 7.406,
+      "exposure_ev": 0.222,
+      "wb_shift": 0.357,
+      "gains": [
+        1.17752,
+        1.17724,
+        0.91968
+      ],
+      "skipped": "",
+      "after": {
+        "r": 48.166,
+        "g": 35.507,
+        "b": 16.681,
+        "luma": 36.839
+      },
+      "deviation_after": 1.363,
+      "matched": true
+    },
+    {
+      "generation_id": "SC02_g1",
+      "scene_id": "SC02",
+      "take_id": "SC02_g1_t4",
+      "reference": "median",
+      "measured": {
+        "r": 59.894,
+        "g": 41.377,
+        "b": 14.916,
+        "luma": 43.403
+      },
+      "reference_stats": {
+        "r": 50.525,
+        "g": 36.481,
+        "b": 17.282,
+        "luma": 38.081
+      },
+      "deviation_before": 9.369,
+      "exposure_ev": -0.189,
+      "wb_shift": -0.458,
+      "gains": [
+        0.84357,
+        0.88167,
+        1.15862
+      ],
+      "skipped": "",
+      "after": {
+        "r": 49.275,
+        "g": 35.11,
+        "b": 16.566,
+        "luma": 36.782
+      },
+      "deviation_after": 1.371,
+      "matched": true
+    },
+    {
+      "generation_id": "SC02_g2",
+      "scene_id": "SC02",
+      "take_id": "SC02_g2_t1",
+      "reference": "median",
+      "measured": {
+        "r": 41.155,
+        "g": 31.586,
+        "b": 19.648,
+        "luma": 32.758
+      },
+      "reference_stats": {
+        "r": 50.525,
+        "g": 36.481,
+        "b": 17.282,
+        "luma": 38.081
+      },
+      "deviation_before": 9.37,
+      "exposure_ev": 0.217,
+      "wb_shift": 0.481,
+      "gains": [
+        1.22768,
+        1.15497,
+        0.87958
+      ],
+      "skipped": "",
+      "after": {
+        "r": 49.691,
+        "g": 35.171,
+        "b": 16.882,
+        "luma": 36.937
+      },
+      "deviation_after": 1.31,
+      "matched": true
+    },
+    {
+      "generation_id": "SC03_g1",
+      "scene_id": "SC03",
+      "take_id": "SC03_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 42.136,
+        "g": 29.349,
+        "b": 17.429,
+        "luma": 31.207
+      },
+      "reference_stats": {
+        "r": 55.484,
+        "g": 37.12,
+        "b": 18.536,
+        "luma": 39.682
+      },
+      "deviation_before": 13.348,
+      "exposure_ev": 0.347,
+      "wb_shift": 0.308,
+      "gains": [
+        1.25,
+        1.25,
+        1.06351
+      ],
+      "skipped": "",
+      "after": {
+        "r": 51.739,
+        "g": 35.211,
+        "b": 18.136,
+        "luma": 37.492
+      },
+      "deviation_after": 3.745,
+      "matched": true
+    },
+    {
+      "generation_id": "SC03_g2",
+      "scene_id": "SC03",
+      "take_id": "SC03_g2_t1",
+      "reference": "median",
+      "measured": {
+        "r": 68.833,
+        "g": 44.891,
+        "b": 19.643,
+        "luma": 48.158
+      },
+      "reference_stats": {
+        "r": 55.484,
+        "g": 37.12,
+        "b": 18.536,
+        "luma": 39.682
+      },
+      "deviation_before": 13.349,
+      "exposure_ev": -0.279,
+      "wb_shift": -0.227,
+      "gains": [
+        0.80607,
+        0.82689,
+        0.94364
+      ],
+      "skipped": "",
+      "after": {
+        "r": 54.265,
+        "g": 35.66,
+        "b": 17.868,
+        "luma": 38.331
+      },
+      "deviation_after": 1.46,
+      "matched": true
+    },
+    {
+      "generation_id": "SC04_g1",
+      "scene_id": "SC04",
+      "take_id": "SC04_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 90.0,
+        "g": 48.878,
+        "b": 13.163,
+        "luma": 55.042
+      },
+      "reference_stats": {
+        "r": 73.641,
+        "g": 47.115,
+        "b": 22.396,
+        "luma": 50.97
+      },
+      "deviation_before": 16.359,
+      "exposure_ev": -0.111,
+      "wb_shift": -1.056,
+      "gains": [
+        0.81823,
+        0.96393,
+        1.25
+      ],
+      "skipped": "",
+      "after": {
+        "r": 72.336,
+        "g": 45.663,
+        "b": 15.703,
+        "luma": 49.171
+      },
+      "deviation_after": 6.693,
+      "matched": false
+    },
+    {
+      "generation_id": "SC04_g2",
+      "scene_id": "SC04",
+      "take_id": "SC04_g2_t1",
+      "reference": "median",
+      "measured": {
+        "r": 45.599,
+        "g": 37.661,
+        "b": 24.306,
+        "luma": 38.384
+      },
+      "reference_stats": {
+        "r": 73.641,
+        "g": 47.115,
+        "b": 22.396,
+        "luma": 50.97
+      },
+      "deviation_before": 28.042,
+      "exposure_ev": 0.409,
+      "wb_shift": 0.81,
+      "gains": null,
+      "skipped": "plan",
+      "after": {
+        "r": 45.599,
+        "g": 37.661,
+        "b": 24.306,
+        "luma": 38.384
+      },
+      "deviation_after": 28.042,
+      "matched": false
+    },
+    {
+      "generation_id": "SC04_g3",
+      "scene_id": "SC04",
+      "take_id": "SC04_g3_t2",
+      "reference": "median",
+      "measured": {
+        "r": 70.627,
+        "g": 45.353,
+        "b": 20.487,
+        "luma": 48.931
+      },
+      "reference_stats": {
+        "r": 73.641,
+        "g": 47.115,
+        "b": 22.396,
+        "luma": 50.97
+      },
+      "deviation_before": 3.014,
+      "exposure_ev": 0.059,
+      "wb_shift": -0.068,
+      "gains": [
+        1.04267,
+        1.03885,
+        1.09318
+      ],
+      "skipped": "",
+      "after": {
+        "r": 72.62,
+        "g": 45.637,
+        "b": 21.987,
+        "luma": 49.666
+      },
+      "deviation_after": 1.478,
+      "matched": true
+    },
+    {
+      "generation_id": "SC04_g4",
+      "scene_id": "SC04",
+      "take_id": "SC04_g4_t1",
+      "reference": "median",
+      "measured": {
+        "r": 76.654,
+        "g": 52.874,
+        "b": 24.67,
+        "luma": 55.893
+      },
+      "reference_stats": {
+        "r": 73.641,
+        "g": 47.115,
+        "b": 22.396,
+        "luma": 50.97
+      },
+      "deviation_before": 5.759,
+      "exposure_ev": -0.133,
+      "wb_shift": 0.082,
+      "gains": null,
+      "skipped": "plan",
+      "after": {
+        "r": 76.654,
+        "g": 52.874,
+        "b": 24.67,
+        "luma": 55.893
+      },
+      "deviation_after": 5.759,
+      "matched": true
+    },
+    {
+      "generation_id": "SC05_g1",
+      "scene_id": "SC05",
+      "take_id": "SC05_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 77.479,
+        "g": 48.938,
+        "b": 21.442,
+        "luma": 53.02
+      },
+      "reference_stats": {
+        "r": 39.878,
+        "g": 28.346,
+        "b": 19.383,
+        "luma": 30.151
+      },
+      "deviation_before": 37.601,
+      "exposure_ev": -0.814,
+      "wb_shift": -0.813,
+      "gains": [
+        0.75,
+        0.75,
+        0.90397
+      ],
+      "skipped": "",
+      "after": {
+        "r": 56.79,
+        "g": 35.217,
+        "b": 18.536,
+        "luma": 38.599
+      },
+      "deviation_after": 16.912,
+      "matched": false
+    },
+    {
+      "generation_id": "SC05_g2",
+      "scene_id": "SC05",
+      "take_id": "SC05_g2_t1",
+      "reference": "median",
+      "measured": {
+        "r": 34.92,
+        "g": 28.231,
+        "b": 19.383,
+        "luma": 29.014
+      },
+      "reference_stats": {
+        "r": 39.878,
+        "g": 28.346,
+        "b": 19.383,
+        "luma": 30.151
+      },
+      "deviation_before": 4.958,
+      "exposure_ev": 0.055,
+      "wb_shift": 0.192,
+      "gains": [
+        1.14198,
+        1.00407,
+        1.0
+      ],
+      "skipped": "",
+      "after": {
+        "r": 38.937,
+        "g": 26.964,
+        "b": 18.801,
+        "luma": 28.92
+      },
+      "deviation_after": 1.382,
+      "matched": true
+    },
+    {
+      "generation_id": "SC05_g3",
+      "scene_id": "SC05",
+      "take_id": "SC05_g3_t1",
+      "reference": "median",
+      "measured": {
+        "r": 39.878,
+        "g": 28.346,
+        "b": 17.363,
+        "luma": 30.005
+      },
+      "reference_stats": {
+        "r": 39.878,
+        "g": 28.346,
+        "b": 19.383,
+        "luma": 30.151
+      },
+      "deviation_before": 2.02,
+      "exposure_ev": 0.007,
+      "wb_shift": -0.159,
+      "gains": [
+        1.0,
+        1.0,
+        1.11634
+      ],
+      "skipped": "",
+      "after": {
+        "r": 38.853,
+        "g": 27.032,
+        "b": 18.568,
+        "luma": 28.934
+      },
+      "deviation_after": 1.314,
+      "matched": true
+    },
+    {
+      "generation_id": "SC06_g1",
+      "scene_id": "SC06",
+      "take_id": "SC06_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 50.329,
+        "g": 35.584,
+        "b": 21.831,
+        "luma": 37.726
+      },
+      "reference_stats": {
+        "r": 54.831,
+        "g": 36.342,
+        "b": 20.618,
+        "luma": 39.137
+      },
+      "deviation_before": 4.502,
+      "exposure_ev": 0.053,
+      "wb_shift": 0.206,
+      "gains": [
+        1.08945,
+        1.0213,
+        0.94444
+      ],
+      "skipped": "",
+      "after": {
+        "r": 53.663,
+        "g": 34.935,
+        "b": 19.988,
+        "luma": 37.837
+      },
+      "deviation_after": 1.407,
+      "matched": true
+    },
+    {
+      "generation_id": "SC06_g2",
+      "scene_id": "SC06",
+      "take_id": "SC06_g2_t1",
+      "reference": "median",
+      "measured": {
+        "r": 59.332,
+        "g": 37.1,
+        "b": 19.406,
+        "luma": 40.549
+      },
+      "reference_stats": {
+        "r": 54.831,
+        "g": 36.342,
+        "b": 20.618,
+        "luma": 39.137
+      },
+      "deviation_before": 4.501,
+      "exposure_ev": -0.051,
+      "wb_shift": -0.201,
+      "gains": [
+        0.92414,
+        0.97957,
+        1.06245
+      ],
+      "skipped": "",
+      "after": {
+        "r": 53.677,
+        "g": 35.043,
+        "b": 19.716,
+        "luma": 37.898
+      },
+      "deviation_after": 1.299,
+      "matched": true
+    }
+  ],
+  "corrections": {
+    "SC01_g1_t5": [
+      0.86901,
+      0.86912,
+      1.09569
+    ],
+    "SC01_g2_t2": [
+      1.17752,
+      1.17724,
+      0.91968
+    ],
+    "SC02_g1_t4": [
+      0.84357,
+      0.88167,
+      1.15862
+    ],
+    "SC02_g2_t1": [
+      1.22768,
+      1.15497,
+      0.87958
+    ],
+    "SC03_g1_t1": [
+      1.25,
+      1.25,
+      1.06351
+    ],
+    "SC03_g2_t1": [
+      0.80607,
+      0.82689,
+      0.94364
+    ],
+    "SC04_g1_t1": [
+      0.81823,
+      0.96393,
+      1.25
+    ],
+    "SC04_g3_t2": [
+      1.04267,
+      1.03885,
+      1.09318
+    ],
+    "SC05_g1_t1": [
+      0.75,
+      0.75,
+      0.90397
+    ],
+    "SC05_g2_t1": [
+      1.14198,
+      1.00407,
+      1.0
+    ],
+    "SC05_g3_t1": [
+      1.0,
+      1.0,
+      1.11634
+    ],
+    "SC06_g1_t1": [
+      1.08945,
+      1.0213,
+      0.94444
+    ],
+    "SC06_g2_t1": [
+      0.92414,
+      0.97957,
+      1.06245
+    ]
+  },
+  "problems": [
+    {
+      "code": "OUT_OF_RANGE",
+      "severity": "WARN",
+      "detail": "SC04_g1: still 6.693 levels from the median reference after a gain clamped to +-0.25"
+    },
+    {
+      "code": "OUT_OF_RANGE",
+      "severity": "WARN",
+      "detail": "SC05_g1: still 16.912 levels from the median reference after a gain clamped to +-0.25"
+    }
+  ],
+  "ok": true,
+  "summary": {
+    "shots": 15,
+    "corrected": 13,
+    "worst_before": 37.601,
+    "worst_after": 28.042
+  }
+}
