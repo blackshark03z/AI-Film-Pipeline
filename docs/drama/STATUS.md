@@ -1,4 +1,4 @@
-# Drama handoff — P18 Flow route hardening (2026-11-09)
+# Drama handoff — P18 Flow route hardening (2026-11-09, P18-01..09)
 
 ## Goal
 Make the Google Flow route run plan -> delivery with no manual step and reliable in-send binding (MiniMax/Vilao parked).
@@ -20,36 +20,42 @@ Make the Google Flow route run plan -> delivery with no manual step and reliable
   auto-resend, no double spend); a failed tile while a job renders is not this send's failure, baseline re-read right
   before submit; the take-number allocator counts registered ids/stems.
 
-## P18 scorecard
-| Measure | Before (film05 P17-01) | After (P18-06) |
+## P18 scorecard (cumulative, every live send since 9bea690)
+| Measure | Before (film05 P17-01) | After P18 (5 sends, 2026-11-09) |
 |---|---|---|
-| Bound inside the send | 5/13 sends (38%) | 2/2 submitted sends (100%), RECONCILE_PROMPT_MATCH |
-| Manual step | none, but flow_reconcile carried 5 binds | none |
-| Provider failures | 3/13, each needed a version bump + board re-approval | 0 this run; auto-resend proven offline only |
-| Defects found live | — | 1: screenshot hang (PRE_SUBMIT_ERROR, 0 credits, fixed 521d297) |
+| Bound inside the send | 5/13 sends (38%) | 4/4 submitted sends (100%), all RECONCILE_PROMPT_MATCH |
+| Manual step / flow_reconcile needed | 5 binds carried by flow_reconcile | none |
+| Provider failures | 3/13, each a version bump + board re-approval | 0; auto-resend proven offline only |
+| Sends lost before the submit | — | 1 (PRE_SUBMIT_ERROR, 0 credits, fixed 521d297) |
+| Send time (submit -> saved clip) | 38-59 s token wait, then reconcile minutes later | 122-136 s |
 
-Incident log (`films/film05_one_cup/takes/send_log.jsonl`):
-- 16:24 SC02_g2_t3 PRE_SUBMIT_ERROR TimeoutError, 0 credits.
-- 16:28-16:33 SC02_g2_t4 PASSED, wait BIND at 51 s, 127 s total, 7 credits.
-- 16:33-16:37 SC05_g1_t3 PASSED, 122 s total, 6 credits.
+Incident log (`films/film05_one_cup/takes/send_log.jsonl`, credits in brackets):
+- 16:24 SC02_g2_t3 PRE_SUBMIT_ERROR TimeoutError [0]: `page.screenshot` hang on the GPM tab (fixed 521d297).
+- 16:28-16:33 SC02_g2_t4 PASSED in-send, 127 s [7].
+- 16:33-16:37 SC05_g1_t3 PASSED in-send, 122 s [6].
+- 23:30-23:34 SC02_g2_t5 PASSED in-send, 128 s [7]. P18-07 took no own identity: the pre-submit pixel check
+  fired on the start-frame upload (fixed 9f27434).
+- 23:41-23:45 SC05_g1_t4 PASSED in-send, 136 s [6]. The own tile read "play_circle 0% ..." 8 s after the submit with
+  the media id bound later, but the play-icon rule called it a stray (fixed 8479445: own = new tile showing a %).
 
-Delegated review: both new takes beat the cut takes (t4: HAL wholly off frame-right; t3: STT hears "you made me",
-t2 gave "he made me"). Swapped in; re-lock, grade, titles, mix, mastercheck ok (duplicate_ratio 0.48%), versions and
-deliver 0 blocks; dialoguecheck 8 PASS / 1 WARN ("tea" heard as "t" by Vosk small). film05 spend 97 -> 110 (cap 123).
+P18-07..09 (after the first handoff): stray-job guard c04a59e + live fixes 9f27434 / 8479445; camera angle/height in
+the still prompt bbc14a3; film05 low-angle v4 singles 727b62b (IRIS reads as standing; deliver 0 blocks,
+dialoguecheck 8 PASS / 1 WARN). film05 spend 123/123: the cap is reached, any further film05 send is blocked.
 
 ## Open defects
 - Auto-resend and FLOW_FAILED_NO_CLIP are not proven live (no provider failure happened).
-- Omni Flash shows no progress % most of the time, so the "job still running" guard only helps when one is visible;
-  a stray job of an earlier unbound send could still be taken for this send's failure.
-- IRIS reads as standing in some SC02 frames: the framing comes from the start still; needs new low-angle stills.
-- Vosk small misses short words ("tea").
+- The P18-07 own-tile identity (8479445) is not proven live end to end: the film05 cap is reached. When it holds, a
+  stray clip or stray failure cannot be taken for the send's; when it is missing, the prompt match + Codex guards apply.
+- SC05_g1 "tea": Vosk small hears "t" (raw take "you made me", master "he made me").
 
 ## Test commands
-- uv run --frozen pytest -q tests/test_flow_send_wait_p18.py tests/test_production_generate.py tests/test_production_takes.py tests/test_production_master_qc.py
+- P18-07..09 check: uv run --frozen pytest -q tests/test_production_*.py tests/test_flow_*.py tests/test_plan_handoff_hidden_props.py (on 727b62b: 932 passed, 1 skipped)
+- uv run --frozen pytest -q tests/test_flow_send_wait_p18.py tests/test_production_generate.py tests/test_production_takes.py tests/test_production_master_qc.py tests/test_production_camera.py
 - Full: uv run --frozen pytest -q --ignore=tests/test_upload_state_machine_008.py (on 4aa2f9e: 2176 passed, 202 skipped; 1 fail = test_v2_010a_dola_re_001::test_05_invariants, which needs a clean tree and saw STATUS.md mid-edit; passes once committed)
 
 ## Next step
-1. Prove auto-resend live on the next film's first provider failure (read send_log.jsonl).
+1. On the next film's sends, check `own_tile_at_submit` in each take manifest (media id taken, matches the bound
+   clip) and, on the first provider failure, the auto-resend line in send_log.jsonl.
 2. Start the next film on the Flow route; the chain needs no manual step.
 
 ---

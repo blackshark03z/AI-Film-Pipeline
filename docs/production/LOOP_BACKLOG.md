@@ -1101,8 +1101,9 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
 - Delegated review: t5 and t4 read as standing (t4/t3 read as seated); swapped in, re-lock, grade, titles, mix,
   mastercheck ok, versions, deliver 0 blocks; dialoguecheck 8 PASS / 1 WARN (SC05 "tea").
 
-### P18-09 Cumulative scorecard — OPEN
-- STATUS: in-send bind rate across every live send since 9bea690, plus the incidents; short report.
+### P18-09 Cumulative scorecard — DONE (2026-11-09)
+- docs/drama/STATUS.md: in-send bind 4/4 submitted sends since 9bea690 (film05 before: 5/13), 0 provider
+  failures, 1 pre-submit error (0 credits); incident log with times.
 
 
 ## P19 Scale proof of the P18 Flow sender (Tech Lead, 2026-11-09)
