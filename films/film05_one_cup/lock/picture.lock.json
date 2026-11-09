@@ -1,9 +1,9 @@
 {
   "film_id": "film05_one_cup",
-  "locked_at": "2026-11-09T06:52:20+00:00",
+  "locked_at": "2026-11-09T08:39:48+00:00",
   "locked_by": "agent:tech-lead.delegated-by.owner-khoikk03",
-  "reason": "picture lock under OWNER_POLICY.md delegation (Owner: 'Bạn tự duyệt...', 'Bắt đầu film05'); 10 accepted takes, 75.75 s, screen sides hold; WARN: IRIS close singles framed at table height read as seated before SC06 sit-down",
-  "edl_sha256": "62668a861292f05d6a61c568a4ba7ab7dcb0116fa12c74e656a7a9ad88280f2b",
+  "reason": "re-lock under OWNER_POLICY.md delegation: SC05_g1 v2 take t2 replaces t1 (shot version 2); otherwise unchanged",
+  "edl_sha256": "420602a9912b9afcaeff77bf697d383a35754f7355484dd2b21f17ae87ff41be",
   "frame_sha256": "e128690f967dc26a248055f813c5ac3262a4ad7ed4057cf22a5b5ba589781f78",
   "events": [
     {
@@ -49,7 +49,7 @@
     {
       "event_id": "SC05_g1",
       "reach_back": false,
-      "sha256": "5ee415d4ad21568ec24cd671c2639df25dfa2948fd723be49a4a3c5c281ce386"
+      "sha256": "4143eaad0cda1438c7be69ee57f407f64181c7bd00a7ead4dfb5f17f769e7034"
     },
     {
       "event_id": "SC06_g1",
@@ -66,9 +66,12 @@
     "SC03_g2_t1": "65db7e855c8ab7f83d05f3f4d433e5018934e2b84975b705a65d014d16625a4f",
     "SC04_g1_t1": "4c72160a822391d0e5699823df8456165efba4e4bc277fec5bc3a896b9c21cf0",
     "SC04_g2_t1": "7177bf1bc7fd02c27cba00f1be9197bb7d7b4c72bfea1080692f62b1227adffd",
-    "SC05_g1_t1": "9635a0b8f7cf2d80072a144a00e704f38657bf78c0a5a44f1310a39b3f785285",
+    "SC05_g1_t2": "10c635e51e8570c1acb622f30d21958eb59530c36c7a0879e5374b6fbc2ad6ad",
     "SC06_g1_t1": "0eb62cd0372b0e2ca0c35babcdfd1ec4d518bd751dfc911850c762a93a8d17bc"
   },
-  "supersedes": "",
-  "changed_events": []
+  "supersedes": "62668a861292f05d6a61c568a4ba7ab7dcb0116fa12c74e656a7a9ad88280f2b",
+  "changed_events": [
+    "SC05_g1",
+    "SC06_g1"
+  ]
 }

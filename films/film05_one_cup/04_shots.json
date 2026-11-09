@@ -797,12 +797,12 @@
           {
             "kind": "ACTION",
             "start_s": 2.0,
-            "end_s": 3.5,
+            "end_s": 4.5,
             "description": "IRIS speaks to HAL, almost a whisper"
           },
           {
             "kind": "HOLD",
-            "start_s": 3.5,
+            "start_s": 4.5,
             "end_s": 6.0,
             "description": "IRIS looks up at HAL, her face softening"
           }
@@ -856,7 +856,7 @@
         }
       ],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "addressees": {
         "52": [
           "HAL"

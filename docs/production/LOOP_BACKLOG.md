@@ -968,7 +968,7 @@ Only fixes for defects that film05 exposes are allowed. Each such fix is traced 
   3. `provider_no_clip` needs a scan of at least 6 detail pages.
   4. A `reconcile_bind` error is recorded instead of raised.
   5. A timestamp with a timezone offset no longer crashes `settled()`.
-- **Live check:** on the next real send.
+- **Live check DONE (2026-11-09 15:33, film05 SC05_g1 v2, 6 credits):** the detail bind gave AMBIGUOUS (45→39), then `reconcile_bind` bound the clip on its first try and saved it (RECONCILE_PROMPT_MATCH).
 
 ### P17-06 takes --register numbers take ids by count, not by send receipt — OPEN (logged, not fixed)
 - **Defect (film05 SC02_g2):** v1's receipt SC02_g2_t1 produced no clip. The v2 send (receipt and file SC02_g2_t2) was registered as take SC02_g2_t1, so a take id and a receipt id now name two different sends.

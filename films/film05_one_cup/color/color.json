@@ -291,19 +291,19 @@
     {
       "generation_id": "SC05_g1",
       "scene_id": "SC05",
-      "take_id": "SC05_g1_t1",
+      "take_id": "SC05_g1_t2",
       "reference": "median",
       "measured": {
-        "r": 82.912,
-        "g": 62.351,
-        "b": 52.469,
-        "luma": 66.008
+        "r": 84.405,
+        "g": 64.004,
+        "b": 53.1,
+        "luma": 67.554
       },
       "reference_stats": {
-        "r": 82.912,
-        "g": 62.351,
-        "b": 52.469,
-        "luma": 66.009
+        "r": 84.405,
+        "g": 64.004,
+        "b": 53.1,
+        "luma": 67.554
       },
       "deviation_before": 0.0,
       "exposure_ev": 0.0,
@@ -311,10 +311,10 @@
       "gains": null,
       "skipped": "single shot",
       "after": {
-        "r": 82.912,
-        "g": 62.351,
-        "b": 52.469,
-        "luma": 66.008
+        "r": 84.405,
+        "g": 64.004,
+        "b": 53.1,
+        "luma": 67.554
       },
       "deviation_after": 0.0,
       "matched": true
