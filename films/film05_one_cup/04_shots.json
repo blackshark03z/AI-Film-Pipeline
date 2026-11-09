@@ -380,7 +380,7 @@
         }
       ],
       "duration_s": 7,
-      "version": 2,
+      "version": 3,
       "addressees": {
         "26": [
           "HAL"
@@ -390,7 +390,7 @@
         "HAL": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "HAL sits just off frame-right across the table",
+          "placement": "HAL sits off frame-right, wholly out of shot",
           "established_by": "SC01_g1"
         }
       },
@@ -798,7 +798,7 @@
             "kind": "ACTION",
             "start_s": 2.0,
             "end_s": 4.5,
-            "description": "IRIS speaks to HAL, almost a whisper"
+            "description": "IRIS speaks to HAL, soft but clear"
           },
           {
             "kind": "HOLD",
@@ -856,7 +856,7 @@
         }
       ],
       "duration_s": 6,
-      "version": 2,
+      "version": 3,
       "addressees": {
         "52": [
           "HAL"

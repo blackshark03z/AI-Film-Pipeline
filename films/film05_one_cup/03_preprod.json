@@ -1185,12 +1185,12 @@
     "SC02_g2": {
       "file": "media/stills/start_SC02_g2.png",
       "sha256": "1869118ef84b3e2d36af2641b12fc1b0565a73ab074ff1cc6e0089e2716e6e9c",
-      "prompt_sha256": "1849428c377d4fe1005c8ac1de26ba3b9d374757590e0a1279b061b19adae489",
-      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "prompt_sha256": "4bc0401d57dc4e0f89f34f45c98dab1e88ae5871c5afbb5fac1e8998f666e298",
+      "source": "same image as v2 (no HAL in frame; matches the v3 still prompt 'HAL wholly out of shot')",
       "credits": 0.0,
-      "registered_at": "2026-11-09T04:42:45+00:00",
+      "registered_at": "2026-11-09T09:22:32+00:00",
       "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
-      "approved_at": "2026-11-09T04:42:46+00:00"
+      "approved_at": "2026-11-09T09:22:36+00:00"
     },
     "SC03_g1": {
       "file": "media/stills/start_SC03_g1.png",

@@ -1,9 +1,9 @@
 {
   "film_id": "film05_one_cup",
-  "cut": "films\\film05_one_cup\\media\\cut\\rough_cut.mp4",
-  "cut_sha256": "a182cc98a8d093336f80f5c165bc8200fdbf8aef2989d79e3cfe3abd83376ebf",
+  "cut": "films\\film05_one_cup\\media\\cut\\titled_cut.mp4",
+  "cut_sha256": "6b73574c69e84138675054adee995805b81c79b235c8c3fcd778984d73e4fc18",
   "output": "films\\film05_one_cup\\media\\cut\\mixed.mp4",
-  "output_sha256": "e24c680f53c30e20e2206f041d4a782760018ab80b7408f6c29246129404fc91",
+  "output_sha256": "e9b5b1a371b7d2d9ed15426bc05be2c603885ed1d8a34cb193485f9a2cf128ad",
   "total_s": 75.749998,
   "plan": {
     "ambience_lufs": -40.0,
@@ -42,7 +42,7 @@
       "location": "kitchen_dawn",
       "room_tone": "quiet kitchen hum, a clock ticking",
       "start_s": 17.958333,
-      "end_s": 30.874999,
+      "end_s": 30.916666,
       "tone": [
         "brown",
         900,
@@ -53,8 +53,8 @@
       "scene_id": "SC03",
       "location": "kitchen_dawn",
       "room_tone": "quiet kitchen hum, a clock ticking",
-      "start_s": 30.874999,
-      "end_s": 45.874999,
+      "start_s": 30.916666,
+      "end_s": 45.916666,
       "tone": [
         "brown",
         900,
@@ -65,8 +65,8 @@
       "scene_id": "SC04",
       "location": "kitchen_dawn",
       "room_tone": "quiet kitchen hum, a clock ticking",
-      "start_s": 45.874999,
-      "end_s": 57.791665,
+      "start_s": 45.916666,
+      "end_s": 57.833332,
       "tone": [
         "brown",
         900,
@@ -77,7 +77,7 @@
       "scene_id": "SC05",
       "location": "kitchen_dawn",
       "room_tone": "quiet kitchen hum, a clock ticking",
-      "start_s": 57.791665,
+      "start_s": 57.833332,
       "end_s": 63.791665,
       "tone": [
         "brown",
@@ -101,17 +101,17 @@
   "sfx": [],
   "music": [],
   "duck": {
-    "frames": 94,
-    "depth_db": 23.56,
+    "frames": 98,
+    "depth_db": 23.54,
     "wanted_db": 6.0
   },
   "loudness": {
     "before": {
-      "integrated_lufs": -26.0,
+      "integrated_lufs": -25.8,
       "peak_dbfs": -6.1
     },
     "after": {
-      "integrated_lufs": -14.8,
+      "integrated_lufs": -14.7,
       "peak_dbfs": -1.7
     },
     "target_lufs": -14.0,

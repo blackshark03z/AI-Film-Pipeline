@@ -18,7 +18,7 @@
     {
       "event_id": "SC02_g2",
       "kind": "TAKE",
-      "take_id": "SC02_g2_t1"
+      "take_id": "SC02_g2_t4"
     },
     {
       "event_id": "SC03_g1",
@@ -43,7 +43,7 @@
     {
       "event_id": "SC05_g1",
       "kind": "TAKE",
-      "take_id": "SC05_g1_t2"
+      "take_id": "SC05_g1_t3"
     },
     {
       "event_id": "SC06_g1",

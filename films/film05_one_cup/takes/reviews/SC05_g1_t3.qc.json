@@ -1,0 +1,140 @@
+{
+  "take_id": "SC05_g1_t3",
+  "generation_id": "SC05_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:52": "yes, IRIS lifts her eyes to HAL frame-right and says line 52 softly but clearly (STT hears 'you made me')"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HAL": "yes, HAL's place off frame-right; only a soft edge at the very right in the last second, never shown empty",
+        "REL_GAZE": "yes, key, then mug, then HAL; never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "line still spoken 3.3-3.9 s despite the wider speak phase; 'tea' is short in both takes",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-06 live send, bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH); 6-frame contact sheet vs SC05_g1_t2: same framing, identity, mugs and steam, IRIS turns to HAL off frame; v3 speak phase 'soft but clear': Vosk STT 'you made me t' at 3.18-3.66 s vs 'he made me t' on t2 (pronoun now intelligible). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:52",
+    "REL_LISTENER:HAL",
+    "REL_GAZE"
+  ],
+  "output_sha256": "544a5faae120d7304bd18c3019fe306805ebdfc7cafc0563ea2827c846824b24"
+}

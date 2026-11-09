@@ -1,10 +1,10 @@
 {
   "delivery": {
     "manifest": "delivery/MANIFEST.json",
-    "manifest_sha256": "17a95e712bb9d98a238de0bb3530c7ebb428e1ec3c97e2198aae44cc05500916",
+    "manifest_sha256": "c1226c81860fb3b3ce189f56dad3f18a03f36e7209a5cc6089d44de816ef99cf",
     "release_ready": false,
-    "files": 33,
+    "files": 34,
     "ai_label": "always",
-    "locked_against": "420602a9912b9afcaeff77bf697d383a35754f7355484dd2b21f17ae87ff41be"
+    "locked_against": "4cab8e7df8a525a479779a7689f436b243fbc389f5dddcf340fb1d522c08d57a"
   }
 }

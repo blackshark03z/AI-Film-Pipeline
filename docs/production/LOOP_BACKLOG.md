@@ -1056,6 +1056,19 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
 - **Fix:** the import uses the same flat style as every other test (`from test_upload_classifier_008 import ...`).
   `test_session_reuse_010.py` 25/25, `test_upload_state_machine_008.py` collects and passes.
 
-### P18-06 Live proof — OPEN
-- Resend 2–3 film05 shots (360p Omni Flash, ~6 cr each) under OWNER_POLICY; measure the in-send bind rate and
-  incident handling; swap a take into the cut only if the delegated review says it is better, then re-deliver.
+### P18-06 Live proof — DONE (2026-11-09)
+- Resent SC02_g2 (v3: HAL wholly off frame-right) and SC05_g1 (v3: line 52 "soft but clear") at 360p Omni 1.2 Flash
+  under OWNER_POLICY, one OWNER_GO_LIVE=YES per send with an EXIT trap back to NO.
+- Sends (`films/film05_one_cup/takes/send_log.jsonl`):
+  - SC02_g2_t3 16:24 — PRE_SUBMIT_ERROR TimeoutError, 0 credits: `page.screenshot` hangs on the GPM tab inside
+    `front_snapshot`. New defect, fixed in 521d297 (CDP `Page.captureScreenshot` JPEG via `viewport_png`; a
+    pre-submit crash returns `PRE_SUBMIT_ERROR <Type>` instead of a charged NO_MANIFEST). Receipt corrected.
+  - SC02_g2_t4 16:28 — PASSED, RECONCILE_PROMPT_MATCH in-send; wait BIND at 51 s (3 polls), 127 s, 7 credits.
+  - SC05_g1_t3 16:33 — PASSED, RECONCILE_PROMPT_MATCH in-send; 122 s, 6 credits.
+- In-send bind rate: 2/2 submitted sends (film05 before P18: 5/13). No provider failure occurred, so the
+  auto-resend path is proven offline only (tests/test_production_generate.py).
+- Delegated review: both new takes better than the cut takes (t4: HAL out of shot; t3: STT hears "you made me"
+  where t2 gave "he made me"). Swapped in, re-locked, graded, titled, mixed, mastercheck ok (duplicate_ratio
+  0.48%), versions and deliver 0 blocks; dialoguecheck 8 PASS / 1 WARN (Vosk small hears "tea" as "t").
+- Deferred: IRIS reads as standing in some SC02 frames; the framing comes from the start still, so a fix needs
+  new low-angle start stills (no send spent on it).

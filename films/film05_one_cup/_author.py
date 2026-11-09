@@ -302,7 +302,7 @@ gens = [
     gen("SC05_g1", "SINGLE", "IRIS", "", ["IRIS"],
         [("SETUP", 0.0, 1.0, "IRIS looks down at the table", ""),
          ("ACTION", 1.0, 2.0, "IRIS's eyes move from the key to the steaming mug", "glance"),
-         ("ACTION", 2.0, 4.5, "IRIS speaks to HAL, almost a whisper", ""),   # v2: was 2-3.5 s, 'tea' clipped
+         ("ACTION", 2.0, 4.5, "IRIS speaks to HAL, soft but clear", ""),   # v2: was 2-3.5 s, 'tea' clipped; v3: no whisper
          ("HOLD", 4.5, 6.0, "IRIS looks up at HAL, her face softening", "")],
         ["IRIS speaks to HAL"],
         [perf("IRIS", "moved, surprised", ["eyes soften", "lips part"], misread="laughter")],
@@ -344,7 +344,12 @@ for g in gens:
 # v1 sends that made no Flow clip (no video tile, no failed tile left; reconcile NOT_IN_GALLERY): SC02_g2 2026-11-09 12:09,
 # SC04_g1 2026-11-09; v2 = same prompt
 # SC05_g1 v2 (2026-11-09): speak phase 2-4.5 s after dialoguecheck heard "t" for "tea" in t1
-VERSIONS = {"SC02_g2": 2, "SC04_g1": 2, "SC05_g1": 2}
+# P18-06 (2026-11-09): SC02_g2 v3 keeps HAL wholly out of shot (t1: his soft profile edged into frame-right from 3 s);
+# SC05_g1 v3 drops "almost a whisper" (dialoguecheck heard "t" for "tea" in t1 and t2)
+for g in gens:
+    if g["generation_id"] == "SC02_g2":
+        g["listener_anchors"]["HAL"] = {**OFF_RIGHT, "placement": "HAL sits off frame-right, wholly out of shot"}
+VERSIONS = {"SC02_g2": 3, "SC04_g1": 2, "SC05_g1": 3}
 for g in gens:
     g["version"] = VERSIONS.get(g["generation_id"], 1)
 # SC06_g1 ends seated

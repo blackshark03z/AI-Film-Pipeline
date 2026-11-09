@@ -5,10 +5,10 @@
     "summary": {
       "shots": 10,
       "corrected": 8,
-      "worst_before": 11.325,
+      "worst_before": 7.685,
       "worst_after": 1.502
     },
-    "locked_against": "420602a9912b9afcaeff77bf697d383a35754f7355484dd2b21f17ae87ff41be"
+    "locked_against": "4cab8e7df8a525a479779a7689f436b243fbc389f5dddcf340fb1d522c08d57a"
   },
   "titles": {
     "report": "titles/titles.json",
@@ -23,20 +23,20 @@
       "blocks": 0,
       "warnings": 0
     },
-    "locked_against": "420602a9912b9afcaeff77bf697d383a35754f7355484dd2b21f17ae87ff41be"
+    "locked_against": "4cab8e7df8a525a479779a7689f436b243fbc389f5dddcf340fb1d522c08d57a"
   },
   "mix": {
-    "output_sha256": "e24c680f53c30e20e2206f041d4a782760018ab80b7408f6c29246129404fc91",
-    "cut_sha256": "a182cc98a8d093336f80f5c165bc8200fdbf8aef2989d79e3cfe3abd83376ebf",
+    "output_sha256": "e9b5b1a371b7d2d9ed15426bc05be2c603885ed1d8a34cb193485f9a2cf128ad",
+    "cut_sha256": "6b73574c69e84138675054adee995805b81c79b235c8c3fcd778984d73e4fc18",
     "report": "audio/mix.json",
     "ok": true,
-    "locked_against": "420602a9912b9afcaeff77bf697d383a35754f7355484dd2b21f17ae87ff41be"
+    "locked_against": "4cab8e7df8a525a479779a7689f436b243fbc389f5dddcf340fb1d522c08d57a"
   },
   "master_qc": {
     "report": "qc/master_qc.json",
-    "sha256": "e24c680f53c30e20e2206f041d4a782760018ab80b7408f6c29246129404fc91",
+    "sha256": "e9b5b1a371b7d2d9ed15426bc05be2c603885ed1d8a34cb193485f9a2cf128ad",
     "ok": true,
-    "locked_against": "420602a9912b9afcaeff77bf697d383a35754f7355484dd2b21f17ae87ff41be"
+    "locked_against": "4cab8e7df8a525a479779a7689f436b243fbc389f5dddcf340fb1d522c08d57a"
   },
   "versions": {
     "report": "versions/versions.json",
@@ -47,7 +47,7 @@
       "blocks": 0,
       "warnings": 0
     },
-    "locked_against": "420602a9912b9afcaeff77bf697d383a35754f7355484dd2b21f17ae87ff41be"
+    "locked_against": "4cab8e7df8a525a479779a7689f436b243fbc389f5dddcf340fb1d522c08d57a"
   },
   "dialogue_stt": {
     "report": "qc/dialogue_stt.json",
@@ -58,6 +58,6 @@
       "warn": 1,
       "mean_recall": 0.972
     },
-    "locked_against": "420602a9912b9afcaeff77bf697d383a35754f7355484dd2b21f17ae87ff41be"
+    "locked_against": "4cab8e7df8a525a479779a7689f436b243fbc389f5dddcf340fb1d522c08d57a"
   }
 }

@@ -15,7 +15,11 @@
       "shot_version": 1,
       "cause": "",
       "registered_at": "2026-11-09T04:54:47Z",
-      "review_file": "reviews/SC01_g1_t1.qc.json"
+      "review_file": "reviews/SC01_g1_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC01_g2_t1",
@@ -31,7 +35,11 @@
       "shot_version": 1,
       "cause": "",
       "registered_at": "2026-11-09T05:03:59Z",
-      "review_file": "reviews/SC01_g2_t1.qc.json"
+      "review_file": "reviews/SC01_g2_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC02_g1_t1",
@@ -47,7 +55,11 @@
       "shot_version": 1,
       "cause": "",
       "registered_at": "2026-11-09T05:08:27Z",
-      "review_file": "reviews/SC02_g1_t1.qc.json"
+      "review_file": "reviews/SC02_g1_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC02_g2_t1",
@@ -63,7 +75,11 @@
       "shot_version": 2,
       "cause": "",
       "registered_at": "2026-11-09T06:08:45Z",
-      "review_file": "reviews/SC02_g2_t1.qc.json"
+      "review_file": "reviews/SC02_g2_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC03_g1_t1",
@@ -79,7 +95,11 @@
       "shot_version": 1,
       "cause": "",
       "registered_at": "2026-11-09T06:18:25Z",
-      "review_file": "reviews/SC03_g1_t1.qc.json"
+      "review_file": "reviews/SC03_g1_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC03_g2_t1",
@@ -95,7 +115,11 @@
       "shot_version": 1,
       "cause": "",
       "registered_at": "2026-11-09T06:23:12Z",
-      "review_file": "reviews/SC03_g2_t1.qc.json"
+      "review_file": "reviews/SC03_g2_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC04_g1_t1",
@@ -111,7 +135,11 @@
       "shot_version": 2,
       "cause": "",
       "registered_at": "2026-11-09T06:35:00Z",
-      "review_file": "reviews/SC04_g1_t1.qc.json"
+      "review_file": "reviews/SC04_g1_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC04_g2_t1",
@@ -127,7 +155,11 @@
       "shot_version": 1,
       "cause": "",
       "registered_at": "2026-11-09T06:40:34Z",
-      "review_file": "reviews/SC04_g2_t1.qc.json"
+      "review_file": "reviews/SC04_g2_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC05_g1_t1",
@@ -143,7 +175,11 @@
       "shot_version": 1,
       "cause": "",
       "registered_at": "2026-11-09T06:43:43Z",
-      "review_file": "reviews/SC05_g1_t1.qc.json"
+      "review_file": "reviews/SC05_g1_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC06_g1_t1",
@@ -159,7 +195,11 @@
       "shot_version": 1,
       "cause": "",
       "registered_at": "2026-11-09T06:50:13Z",
-      "review_file": "reviews/SC06_g1_t1.qc.json"
+      "review_file": "reviews/SC06_g1_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     },
     {
       "take_id": "SC05_g1_t2",
@@ -175,7 +215,51 @@
       "shot_version": 2,
       "cause": "",
       "registered_at": "2026-11-09T08:38:17Z",
-      "review_file": "reviews/SC05_g1_t2.qc.json"
+      "review_file": "reviews/SC05_g1_t2.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
+    },
+    {
+      "take_id": "SC02_g2_t4",
+      "generation_id": "SC02_g2",
+      "prompt_sha256": "4ff6308da9ccc44528fd77f53fd73570dbaff1873a46441ce97f43143e66f9c6",
+      "start_frame_sha256": "1869118ef84b3e2d36af2641b12fc1b0565a73ab074ff1cc6e0089e2716e6e9c",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 7.0,
+      "output_file": "SC02_g2_t4.mp4",
+      "output_sha256": "5d3f252bb3d553a9359eaa30398dab4f0d57727c5bd5b0aba75ea5219a916f77",
+      "status": "ACCEPTED",
+      "shot_version": 3,
+      "cause": "",
+      "registered_at": "2026-11-09T09:33:12Z",
+      "review_file": "reviews/SC02_g2_t4.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
+    },
+    {
+      "take_id": "SC05_g1_t3",
+      "generation_id": "SC05_g1",
+      "prompt_sha256": "5d1e7e1a14cd1d93a6f8111104565a21a2ce0c945728366aa70c2cddd0bf7d02",
+      "start_frame_sha256": "779043934c9001cd0e25743304259c4332caaa0cc12bc34a6b2ebd91950e0fbb",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 6.0,
+      "output_file": "SC05_g1_t3.mp4",
+      "output_sha256": "544a5faae120d7304bd18c3019fe306805ebdfc7cafc0563ea2827c846824b24",
+      "status": "ACCEPTED",
+      "shot_version": 3,
+      "cause": "",
+      "registered_at": "2026-11-09T09:37:10Z",
+      "review_file": "reviews/SC05_g1_t3.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     }
   ]
 }

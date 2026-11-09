@@ -1,7 +1,7 @@
 {
   "film_id": "film05_one_cup",
   "video": "films\\film05_one_cup\\media\\cut\\mixed.mp4",
-  "sha256": "e24c680f53c30e20e2206f041d4a782760018ab80b7408f6c29246129404fc91",
+  "sha256": "e9b5b1a371b7d2d9ed15426bc05be2c603885ed1d8a34cb193485f9a2cf128ad",
   "spec": {
     "width": 1280,
     "height": 720,
@@ -21,6 +21,7 @@
     "freeze_warn_s": 2.0,
     "freeze_fail_s": 4.0,
     "dup_ratio_warn": 0.05,
+    "dup_diff": 0.02,
     "silence_noise_db": -50.0,
     "silence_warn_s": 3.0,
     "clip_level": 32700,
@@ -37,11 +38,12 @@
     "size": "1280x720",
     "planned_s": 75.749998,
     "frames": 1818,
-    "duplicate_ratio": 0.2661,
+    "duplicate_ratio": 0.0048,
+    "low_motion_ratio": 0.2636,
     "exposure_off_share": 0.0,
-    "body_luma_mean": 52.79,
+    "body_luma_mean": 51.26,
     "colour_worst_after": 1.502,
-    "integrated_lufs": -14.8,
+    "integrated_lufs": -14.7,
     "peak_dbfs": -1.7,
     "clipped_passages": 0,
     "cues_checked": 9,
@@ -49,25 +51,11 @@
   },
   "findings": [
     {
-      "group": "technical",
-      "code": "DUPLICATED_FRAMES",
-      "severity": "WARN",
-      "detail": "26.6% of the body frames repeat the previous one (> 5%)",
-      "at_s": null
-    },
-    {
       "group": "sync",
       "code": "CUE_NO_SPEECH",
       "severity": "WARN",
       "detail": "no clear speech under the cue at 25.32 s",
       "at_s": 25.317
-    },
-    {
-      "group": "sync",
-      "code": "CUE_NO_SPEECH",
-      "severity": "WARN",
-      "detail": "no clear speech under the cue at 38.98 s",
-      "at_s": 38.975
     },
     {
       "group": "sync",
@@ -80,12 +68,12 @@
   "checks": [
     {
       "group": "technical",
-      "result": "WARN",
+      "result": "PASS",
       "severity": null,
       "level": "CUT",
       "evidence": "qc/master_qc.json",
       "reviewer": "auto:master_qc",
-      "note": "DUPLICATED_FRAMES: 26.6% of the body frames repeat the previous one (> 5%)",
+      "note": "",
       "waiver": null,
       "answers": {}
     },
@@ -107,7 +95,7 @@
       "level": "CUT",
       "evidence": "qc/master_qc.json",
       "reviewer": "auto:master_qc",
-      "note": "CUE_NO_SPEECH: no clear speech under the cue at 25.32 s; CUE_NO_SPEECH: no clear speech under the cue at 38.98 s; CUE_NO_SPEECH: no clear speech under the cue at 67.39 s",
+      "note": "CUE_NO_SPEECH: no clear speech under the cue at 25.32 s; CUE_NO_SPEECH: no clear speech under the cue at 67.39 s",
       "waiver": null,
       "answers": {}
     },
