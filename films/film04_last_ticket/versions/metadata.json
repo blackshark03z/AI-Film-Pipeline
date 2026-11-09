@@ -42,7 +42,7 @@
     "sound_attributions": [],
     "fiction_line": "A work of fiction. All characters are fictional."
   },
-  "runtime_s": 86.666664,
+  "runtime_s": 86.708331,
   "versions": [
     {
       "name": "master_16x9",
@@ -50,7 +50,7 @@
       "width": 1280,
       "height": 720,
       "fps": 24.0,
-      "sha256": "935d491df305e30a15d6a4a48807271db652f72cbb998787ca34db5248a44390"
+      "sha256": "577261958202b2799b48d4097cbf7fab83ffc26eece86edd602e9c779994b3ee"
     },
     {
       "name": "portrait_9x16",
@@ -58,12 +58,12 @@
       "width": 720,
       "height": 1280,
       "fps": 24.0,
-      "sha256": "435522c61691c8b9ce078ad4fc2a708e3b520f3b0b940fa1a9028937675cf3c7",
+      "sha256": "5a578fc2abe01747a3222770ea07fff5324a9ecfb7ea83a3d53aed84a9a2be9f",
       "upscale": 1.78,
       "ai_label": {
         "text": "AI-generated",
         "start_s": 3.0,
-        "end_s": 82.666664,
+        "end_s": 82.708331,
         "x": 24,
         "y": 1020
       }

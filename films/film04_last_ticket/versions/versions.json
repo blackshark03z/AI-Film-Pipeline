@@ -8,7 +8,7 @@
       "width": 1280,
       "height": 720,
       "fps": 24.0,
-      "sha256": "935d491df305e30a15d6a4a48807271db652f72cbb998787ca34db5248a44390"
+      "sha256": "577261958202b2799b48d4097cbf7fab83ffc26eece86edd602e9c779994b3ee"
     },
     {
       "name": "portrait_9x16",
@@ -16,12 +16,12 @@
       "width": 720,
       "height": 1280,
       "fps": 24.0,
-      "sha256": "435522c61691c8b9ce078ad4fc2a708e3b520f3b0b940fa1a9028937675cf3c7",
+      "sha256": "5a578fc2abe01747a3222770ea07fff5324a9ecfb7ea83a3d53aed84a9a2be9f",
       "upscale": 1.78,
       "ai_label": {
         "text": "AI-generated",
         "start_s": 3.0,
-        "end_s": 82.666664,
+        "end_s": 82.708331,
         "x": 24,
         "y": 1020
       },
@@ -134,9 +134,9 @@
           "event_id": "SC04_g3",
           "mode": "crop",
           "start_frame": 1148,
-          "end_frame": 1243,
+          "end_frame": 1244,
           "start_s": 47.833,
-          "end_s": 51.792,
+          "end_s": 51.833,
           "focus": 0.5,
           "focus_source": "center",
           "crop_x": 438,
@@ -145,10 +145,10 @@
         {
           "event_id": "SC04_g4",
           "mode": "crop",
-          "start_frame": 1243,
-          "end_frame": 1339,
-          "start_s": 51.792,
-          "end_s": 55.792,
+          "start_frame": 1244,
+          "end_frame": 1340,
+          "start_s": 51.833,
+          "end_s": 55.833,
           "focus": 0.5,
           "focus_source": "center",
           "crop_x": 438,
@@ -157,10 +157,10 @@
         {
           "event_id": "SC05_g1",
           "mode": "crop",
-          "start_frame": 1339,
-          "end_frame": 1459,
-          "start_s": 55.792,
-          "end_s": 60.792,
+          "start_frame": 1340,
+          "end_frame": 1460,
+          "start_s": 55.833,
+          "end_s": 60.833,
           "focus": 0.5,
           "focus_source": "center",
           "crop_x": 438,
@@ -169,10 +169,10 @@
         {
           "event_id": "SC05_g2",
           "mode": "crop",
-          "start_frame": 1459,
-          "end_frame": 1531,
-          "start_s": 60.792,
-          "end_s": 63.792,
+          "start_frame": 1460,
+          "end_frame": 1532,
+          "start_s": 60.833,
+          "end_s": 63.833,
           "focus": 0.5,
           "focus_source": "center",
           "crop_x": 438,
@@ -181,10 +181,10 @@
         {
           "event_id": "SC05_g3",
           "mode": "crop",
-          "start_frame": 1531,
-          "end_frame": 1650,
-          "start_s": 63.792,
-          "end_s": 68.75,
+          "start_frame": 1532,
+          "end_frame": 1651,
+          "start_s": 63.833,
+          "end_s": 68.792,
           "focus": 0.5,
           "focus_source": "center",
           "crop_x": 438,
@@ -193,18 +193,18 @@
         {
           "event_id": "SC06_card",
           "mode": "fit",
-          "start_frame": 1650,
-          "end_frame": 1698,
-          "start_s": 68.75,
-          "end_s": 70.75
+          "start_frame": 1651,
+          "end_frame": 1699,
+          "start_s": 68.792,
+          "end_s": 70.792
         },
         {
           "event_id": "SC06_g1",
           "mode": "crop",
-          "start_frame": 1698,
-          "end_frame": 1841,
-          "start_s": 70.75,
-          "end_s": 76.708,
+          "start_frame": 1699,
+          "end_frame": 1842,
+          "start_s": 70.792,
+          "end_s": 76.75,
           "focus": 0.5,
           "focus_source": "center",
           "crop_x": 438,
@@ -213,10 +213,10 @@
         {
           "event_id": "SC06_g2",
           "mode": "crop",
-          "start_frame": 1841,
-          "end_frame": 1984,
-          "start_s": 76.708,
-          "end_s": 82.667,
+          "start_frame": 1842,
+          "end_frame": 1985,
+          "start_s": 76.75,
+          "end_s": 82.708,
           "focus": 0.5,
           "focus_source": "center",
           "crop_x": 438,
@@ -225,10 +225,10 @@
         {
           "event_id": "end",
           "mode": "fit",
-          "start_frame": 1984,
-          "end_frame": 2080,
-          "start_s": 82.667,
-          "end_s": 86.667
+          "start_frame": 1985,
+          "end_frame": 2081,
+          "start_s": 82.708,
+          "end_s": 86.708
         }
       ]
     }
@@ -242,10 +242,10 @@
       "moment": "Mara's eyes go to the suitcase behind her, then to Theo, and she lets out a breath",
       "device": "reaction",
       "fact_id": "mara_is_leaving",
-      "luma": 44.3,
+      "luma": 44.4,
       "contrast": 29.2,
       "burned_text": false,
-      "sha256": "173dc99560aaad0d5aed58fd2eb2e2679cfccd02dd791e5d5530502479494c3e"
+      "sha256": "52314189e68889741c5aafb4e5c404810099eacacdf351eebb922d61cdfa96f9"
     },
     {
       "file": "versions/thumbs/thumb_02.jpg",
@@ -347,7 +347,7 @@
       "code": "THUMB_REJECTED",
       "severity": "WARN",
       "detail": "SC05_g3 (the ticket lies on the counter after the heavy thump): all candidate frames are too dark, too bright or flat",
-      "at_s": 63.792
+      "at_s": 63.833
     }
   ],
   "summary": {

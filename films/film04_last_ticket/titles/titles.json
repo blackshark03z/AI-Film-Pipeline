@@ -67,11 +67,11 @@
       "line_no": 48,
       "character": "MARA",
       "text": "Pour it out. We'll count it.",
-      "start_s": 1.35,
-      "end_s": 3.2,
+      "start_s": 0.9,
+      "end_s": 2.4,
       "source": "override",
-      "abs_start_s": 49.183,
-      "abs_end_s": 51.033
+      "abs_start_s": 48.733,
+      "abs_end_s": 50.233
     },
     {
       "event_id": "SC05_g1",
@@ -81,8 +81,8 @@
       "start_s": 1.7,
       "end_s": 4.5,
       "source": "override",
-      "abs_start_s": 57.492,
-      "abs_end_s": 60.292
+      "abs_start_s": 57.533,
+      "abs_end_s": 60.333
     },
     {
       "event_id": "SC05_g3",
@@ -92,8 +92,8 @@
       "start_s": 3.7,
       "end_s": 4.4,
       "source": "override",
-      "abs_start_s": 67.492,
-      "abs_end_s": 68.192
+      "abs_start_s": 67.533,
+      "abs_end_s": 68.233
     },
     {
       "event_id": "SC06_g1",
@@ -103,8 +103,8 @@
       "start_s": 4.6,
       "end_s": 5.9,
       "source": "override",
-      "abs_start_s": 75.35,
-      "abs_end_s": 76.65
+      "abs_start_s": 75.392,
+      "abs_end_s": 76.692
     },
     {
       "event_id": "SC06_g2",
@@ -114,8 +114,8 @@
       "start_s": 1.9,
       "end_s": 4.5,
       "source": "override",
-      "abs_start_s": 78.608,
-      "abs_end_s": 81.208
+      "abs_start_s": 78.65,
+      "abs_end_s": 81.25
     }
   ],
   "reframed": [],

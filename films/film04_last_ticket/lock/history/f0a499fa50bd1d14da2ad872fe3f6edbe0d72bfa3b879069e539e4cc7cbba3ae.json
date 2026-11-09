@@ -1,0 +1,118 @@
+{
+  "film_id": "film04_last_ticket",
+  "locked_at": "2026-11-09T01:41:45+00:00",
+  "locked_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+  "reason": "SC04_g3 v2 reshoot under Owner RED exception: THEO pours the jar (take SC04_g3_t3 / file t4)",
+  "edl_sha256": "f0a499fa50bd1d14da2ad872fe3f6edbe0d72bfa3b879069e539e4cc7cbba3ae",
+  "frame_sha256": "c7727592b519c8ed3dc744e0173e25fc6bf0702bdc34167e7cb38c50edf5ac6b",
+  "events": [
+    {
+      "event_id": "SC01_g1",
+      "reach_back": false,
+      "sha256": "efeb8471896beff9c0a6f5bb626b79956119c315823148ff45ee3d7979850972"
+    },
+    {
+      "event_id": "SC01_g2",
+      "reach_back": false,
+      "sha256": "2046173f10a017e036864a01b876bbf27ad084aac4000111a344dede0a589dda"
+    },
+    {
+      "event_id": "SC02_g1",
+      "reach_back": false,
+      "sha256": "b9ab84593562d3e0c8dd11a329a6c6fd242081196200b32f0505f980f78ca9a4"
+    },
+    {
+      "event_id": "SC02_g2",
+      "reach_back": false,
+      "sha256": "b115b074424f91323ccd8939d1e82e50dde6bd5880935c24fea5b24bdf08aeef"
+    },
+    {
+      "event_id": "SC03_g1",
+      "reach_back": false,
+      "sha256": "acbabdc23c12c70e9bac293ec148b0f8baa92f7b52956ec6cc23c35a50285456"
+    },
+    {
+      "event_id": "SC03_g2",
+      "reach_back": false,
+      "sha256": "4dda92b3d1db2c44f3482ee33ef57af838165380a637fa56bc279610ef500d6c"
+    },
+    {
+      "event_id": "SC04_g1",
+      "reach_back": false,
+      "sha256": "608a9648af8d43a9a26625e0f6141f8d14748b58af44aebc25597e30dfda2872"
+    },
+    {
+      "event_id": "SC04_g2",
+      "reach_back": false,
+      "sha256": "9ab137c7e31add4a73239aebee428a19dde342cf22b812cef04ddb4539aff1c6"
+    },
+    {
+      "event_id": "SC04_g3",
+      "reach_back": false,
+      "sha256": "4e28f5db12d889a444776b99a835574f2252b1e0badbe6081caa675b9716caaf"
+    },
+    {
+      "event_id": "SC04_g4",
+      "reach_back": false,
+      "sha256": "1f1e4fc5c42820d5002abb8a2015ae7ac3cf2cdb7db352ed7daa0efff93b8a77"
+    },
+    {
+      "event_id": "SC05_g1",
+      "reach_back": false,
+      "sha256": "c1b059da3ee39b450d9e974093c1cd92ada0aa053301ce729684e8a0482d0539"
+    },
+    {
+      "event_id": "SC05_g2",
+      "reach_back": false,
+      "sha256": "dc2addc11e8c2c04194e8452901bddd868166d8b06415cc82fae42e6d7aac122"
+    },
+    {
+      "event_id": "SC05_g3",
+      "reach_back": false,
+      "sha256": "68cbd69f277b5dd01ba55a7c8a2f94103278f90a4ffe61f5d4b53467a44d373d"
+    },
+    {
+      "event_id": "SC06_card",
+      "reach_back": false,
+      "sha256": "34362cfef3d0de91bb3c8d8aae53e9a21225cf62509ffe1c6aa1c28ab1cd425c"
+    },
+    {
+      "event_id": "SC06_g1",
+      "reach_back": false,
+      "sha256": "5bc002c90da411fcccb8a5ee16f221eb2649552ff3d67283e67bf88ed64cb304"
+    },
+    {
+      "event_id": "SC06_g2",
+      "reach_back": false,
+      "sha256": "e8c871d2e9ec18f63453f623dc4950ac3d746ffc96a9857071274f956f2809ea"
+    }
+  ],
+  "sources": {
+    "SC01_g1_t5": "743c0f914730511905108c08df9323886bb6b579c7fd103e742ee1642a8bca16",
+    "SC01_g2_t2": "1cb204d371328312db1604a47c8267e56f9198c7201d5669ccaf1bfc8bd2f788",
+    "SC02_g1_t4": "27d825e8b5bcbeea13fdfa331467354800cbefca474c1b1d47774cbdf90fdf67",
+    "SC02_g2_t1": "211c6656a05959042c8d487c9b79d25afe496e534cd14f1231c0046aa063ba80",
+    "SC03_g1_t1": "e076e86c7733789458239e93145c99f449a18d85fb19fa01722f87f9d76e5e18",
+    "SC03_g2_t1": "376105879fb81ac0d420bdbf7e68f8c3111b668e3fe436922ebf8bd94320cba2",
+    "SC04_g1_t1": "e0c138bb9a8e1f13c6495d8ff9d5c45101887f421c78d5092888177779d82ed6",
+    "SC04_g2_t1": "58e87f61dabf658e172c543eddd6cda23b971ebe17a50712a258870b763ebb76",
+    "SC04_g3_t3": "363febcb80bd105c48eda644cd595fa2a413d95b7e21e6fb0e66695962c045b5",
+    "SC04_g4_t1": "611e0f0476d6f4b3480ab140a2a21c105aee7cf7e979eb87e2d97318f8a81cd3",
+    "SC05_g1_t1": "35b72f2a4fa3fa3046612370ac5250ccabd1fdb36488f94f13c5553b580eb105",
+    "SC05_g2_t1": "1aa7ca0dcde3edc27201e4bfc9c13e2c5cd337f92270fe35d6813c35b32dd5cd",
+    "SC05_g3_t1": "46fd834979b83d5b9a430fca54cfa4be0d143e4a3f7f2063b5b822b7cd9d4024",
+    "SC06_g1_t1": "8372b405886fe342ce5f38f4af52d84f43f82200306fc150cf112c4e59462924",
+    "SC06_g2_t1": "6ee2a98eead3370f3b5225b719fdd84cc7da00ea295d79c91aad7fb109f8984e"
+  },
+  "supersedes": "40a2d5540583c98097383230f88d53dc1bfedaeacb9bcc159b10904c45b600ee",
+  "changed_events": [
+    "SC04_g3",
+    "SC04_g4",
+    "SC05_g1",
+    "SC05_g2",
+    "SC05_g3",
+    "SC06_card",
+    "SC06_g1",
+    "SC06_g2"
+  ]
+}

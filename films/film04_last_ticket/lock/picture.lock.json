@@ -1,9 +1,9 @@
 {
   "film_id": "film04_last_ticket",
-  "locked_at": "2026-11-09T01:11:55+00:00",
+  "locked_at": "2026-11-09T01:41:45+00:00",
   "locked_by": "agent:tech-lead.delegated-by.owner-khoikk03",
-  "reason": "film04 fine cut: 15 accepted takes + 10:50 card; OWNER_POLICY.md delegation",
-  "edl_sha256": "40a2d5540583c98097383230f88d53dc1bfedaeacb9bcc159b10904c45b600ee",
+  "reason": "SC04_g3 v2 reshoot under Owner RED exception: THEO pours the jar (take SC04_g3_t3 / file t4)",
+  "edl_sha256": "f0a499fa50bd1d14da2ad872fe3f6edbe0d72bfa3b879069e539e4cc7cbba3ae",
   "frame_sha256": "c7727592b519c8ed3dc744e0173e25fc6bf0702bdc34167e7cb38c50edf5ac6b",
   "events": [
     {
@@ -49,7 +49,7 @@
     {
       "event_id": "SC04_g3",
       "reach_back": false,
-      "sha256": "3922b650b85e172af376ecb8472742dc69566612fe846535299a083ed2499054"
+      "sha256": "4e28f5db12d889a444776b99a835574f2252b1e0badbe6081caa675b9716caaf"
     },
     {
       "event_id": "SC04_g4",
@@ -96,7 +96,7 @@
     "SC03_g2_t1": "376105879fb81ac0d420bdbf7e68f8c3111b668e3fe436922ebf8bd94320cba2",
     "SC04_g1_t1": "e0c138bb9a8e1f13c6495d8ff9d5c45101887f421c78d5092888177779d82ed6",
     "SC04_g2_t1": "58e87f61dabf658e172c543eddd6cda23b971ebe17a50712a258870b763ebb76",
-    "SC04_g3_t2": "c4d95f4130c499a7ecdbada728a373059bedf85331724ae90eafa435eafafbc8",
+    "SC04_g3_t3": "363febcb80bd105c48eda644cd595fa2a413d95b7e21e6fb0e66695962c045b5",
     "SC04_g4_t1": "611e0f0476d6f4b3480ab140a2a21c105aee7cf7e979eb87e2d97318f8a81cd3",
     "SC05_g1_t1": "35b72f2a4fa3fa3046612370ac5250ccabd1fdb36488f94f13c5553b580eb105",
     "SC05_g2_t1": "1aa7ca0dcde3edc27201e4bfc9c13e2c5cd337f92270fe35d6813c35b32dd5cd",
@@ -104,6 +104,15 @@
     "SC06_g1_t1": "8372b405886fe342ce5f38f4af52d84f43f82200306fc150cf112c4e59462924",
     "SC06_g2_t1": "6ee2a98eead3370f3b5225b719fdd84cc7da00ea295d79c91aad7fb109f8984e"
   },
-  "supersedes": "",
-  "changed_events": []
+  "supersedes": "40a2d5540583c98097383230f88d53dc1bfedaeacb9bcc159b10904c45b600ee",
+  "changed_events": [
+    "SC04_g3",
+    "SC04_g4",
+    "SC05_g1",
+    "SC05_g2",
+    "SC05_g3",
+    "SC06_card",
+    "SC06_g1",
+    "SC06_g2"
+  ]
 }

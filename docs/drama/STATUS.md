@@ -51,3 +51,10 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   RIGHTS_PENDING for characters/location (asset rights not cleared) - publishing stays the Owner's.
   Open: 9:16 crop is centred on every shot (no tags/reframe boxes); SFX_UNSOURCED (take sound kept); "Generated with AI"
   not translated in the VI SRT title; dialogue words not machine-checked (no STT).
+- film04 SC04_g3 v2 reshoot 2026-11-09: Owner flagged the pour (jar knocked over, coins spill by themselves). Cause:
+  restage text had no agent for the prop change; fix = continuity OBJECT_NO_AGENT (484473c). v2 has THEO tip and pour
+  the jar with both hands; POURING is RED, Owner granted the exception ("Cho phép, quay lại", max 3 sends / 12 cr).
+  t3 FLOW_FAILED (not counted), t4 (log take SC04_g3_t3) ACCEPTED by agent:tech-lead (delegated). Re-cut, re-lock,
+  grade/titles/mix, mastercheck PASS (-14.7 LUFS, sync PASS), deliver ok (86.7 s); old delivery kept as
+  delivery.superseded-20261109T014451541729Z. Ledger ~231/256.8 cr. Open items unchanged (9:16 centre crop,
+  SFX_UNSOURCED, VI SRT credit line, no STT, RIGHTS_PENDING).

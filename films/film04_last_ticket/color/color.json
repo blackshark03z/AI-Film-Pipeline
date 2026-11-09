@@ -233,27 +233,27 @@
         "luma": 55.042
       },
       "reference_stats": {
-        "r": 73.641,
-        "g": 47.115,
-        "b": 22.396,
-        "luma": 50.97
+        "r": 73.544,
+        "g": 47.377,
+        "b": 22.928,
+        "luma": 51.175
       },
-      "deviation_before": 16.359,
-      "exposure_ev": -0.111,
-      "wb_shift": -1.056,
+      "deviation_before": 16.456,
+      "exposure_ev": -0.105,
+      "wb_shift": -1.092,
       "gains": [
-        0.81823,
-        0.96393,
+        0.81716,
+        0.96929,
         1.25
       ],
       "skipped": "",
       "after": {
-        "r": 72.336,
-        "g": 45.663,
-        "b": 15.703,
-        "luma": 49.171
+        "r": 72.225,
+        "g": 45.937,
+        "b": 15.724,
+        "luma": 49.344
       },
-      "deviation_after": 6.693,
+      "deviation_after": 7.204,
       "matched": false
     },
     {
@@ -268,14 +268,14 @@
         "luma": 38.384
       },
       "reference_stats": {
-        "r": 73.641,
-        "g": 47.115,
-        "b": 22.396,
-        "luma": 50.97
+        "r": 73.544,
+        "g": 47.377,
+        "b": 22.928,
+        "luma": 51.175
       },
-      "deviation_before": 28.042,
-      "exposure_ev": 0.409,
-      "wb_shift": 0.81,
+      "deviation_before": 27.945,
+      "exposure_ev": 0.415,
+      "wb_shift": 0.774,
       "gains": null,
       "skipped": "plan",
       "after": {
@@ -284,42 +284,42 @@
         "b": 24.306,
         "luma": 38.384
       },
-      "deviation_after": 28.042,
+      "deviation_after": 27.945,
       "matched": false
     },
     {
       "generation_id": "SC04_g3",
       "scene_id": "SC04",
-      "take_id": "SC04_g3_t2",
+      "take_id": "SC04_g3_t3",
       "reference": "median",
       "measured": {
-        "r": 70.627,
-        "g": 45.353,
-        "b": 20.487,
-        "luma": 48.931
+        "r": 70.435,
+        "g": 45.875,
+        "b": 21.549,
+        "luma": 49.34
       },
       "reference_stats": {
-        "r": 73.641,
-        "g": 47.115,
-        "b": 22.396,
-        "luma": 50.97
+        "r": 73.544,
+        "g": 47.377,
+        "b": 22.928,
+        "luma": 51.175
       },
-      "deviation_before": 3.014,
-      "exposure_ev": 0.059,
-      "wb_shift": -0.068,
+      "deviation_before": 3.109,
+      "exposure_ev": 0.053,
+      "wb_shift": -0.027,
       "gains": [
-        1.04267,
-        1.03885,
-        1.09318
+        1.04414,
+        1.03274,
+        1.06399
       ],
       "skipped": "",
       "after": {
-        "r": 72.62,
-        "g": 45.637,
-        "b": 21.987,
-        "luma": 49.666
+        "r": 72.478,
+        "g": 45.932,
+        "b": 22.512,
+        "luma": 49.885
       },
-      "deviation_after": 1.478,
+      "deviation_after": 1.445,
       "matched": true
     },
     {
@@ -334,14 +334,14 @@
         "luma": 55.893
       },
       "reference_stats": {
-        "r": 73.641,
-        "g": 47.115,
-        "b": 22.396,
-        "luma": 50.97
+        "r": 73.544,
+        "g": 47.377,
+        "b": 22.928,
+        "luma": 51.175
       },
-      "deviation_before": 5.759,
-      "exposure_ev": -0.133,
-      "wb_shift": 0.082,
+      "deviation_before": 5.497,
+      "exposure_ev": -0.127,
+      "wb_shift": 0.046,
       "gains": null,
       "skipped": "plan",
       "after": {
@@ -350,7 +350,7 @@
         "b": 24.67,
         "luma": 55.893
       },
-      "deviation_after": 5.759,
+      "deviation_after": 5.497,
       "matched": true
     },
     {
@@ -561,14 +561,14 @@
       0.94364
     ],
     "SC04_g1_t1": [
-      0.81823,
-      0.96393,
+      0.81716,
+      0.96929,
       1.25
     ],
-    "SC04_g3_t2": [
-      1.04267,
-      1.03885,
-      1.09318
+    "SC04_g3_t3": [
+      1.04414,
+      1.03274,
+      1.06399
     ],
     "SC05_g1_t1": [
       0.75,
@@ -600,7 +600,7 @@
     {
       "code": "OUT_OF_RANGE",
       "severity": "WARN",
-      "detail": "SC04_g1: still 6.693 levels from the median reference after a gain clamped to +-0.25"
+      "detail": "SC04_g1: still 7.204 levels from the median reference after a gain clamped to +-0.25"
     },
     {
       "code": "OUT_OF_RANGE",
@@ -613,6 +613,6 @@
     "shots": 15,
     "corrected": 13,
     "worst_before": 37.601,
-    "worst_after": 28.042
+    "worst_after": 27.945
   }
 }
