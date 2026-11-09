@@ -1394,5 +1394,176 @@
     }
   ],
   "risk_fallbacks": {},
-  "stills": {}
+  "stills": {
+    "SC01_g1": {
+      "file": "media/stills/start_SC01_g1.png",
+      "sha256": "ab5a6ab5d8c1627abaf76f2ce88a0c8738098b46db92e5866154e4e7f5a545e9",
+      "prompt_sha256": "2d3b02ce6299d3be2a45047935a1b8584323b8bcaf443dcbfaf32d110a141690",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:28:10+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:28:11+00:00"
+    },
+    "SC01_g2": {
+      "file": "media/stills/start_SC01_g2.png",
+      "sha256": "48c98b91d8518b0afe360e39ea6e923dba0790e1554c0d540424317223c4fd0f",
+      "prompt_sha256": "75d0e3a4431d12327e08c39493668ae1247a396a9b9927d9442233b67ecf3339",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:28:11+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:28:12+00:00"
+    },
+    "SC02_g1": {
+      "file": "media/stills/start_SC02_g1.png",
+      "sha256": "bed7f9b99c118a56307cde1e771f0d9163878983c0939933cd85c4b633af6018",
+      "prompt_sha256": "2c19bbf8638625b863b541ec9a7a9de6fd4ad61d07a276c7469fff20617c9e00",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:28:13+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:28:14+00:00"
+    },
+    "SC02_g2": {
+      "file": "media/stills/start_SC02_g2.png",
+      "sha256": "ff62603455379c9e4a48d2295cf7b161f316f640dd79bd4be89829c3b81ea44a",
+      "prompt_sha256": "01ce83d8379de5a1abcd6196f98efbe20d5bbec1591990d6c97d93abb0757b28",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:35:48+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:35:48+00:00"
+    },
+    "SC02_g3": {
+      "file": "media/stills/start_SC02_g3.png",
+      "sha256": "c5f1e157482a8e05eda19ed8d2745ee7ee080397744ea14d2756fab4e180c631",
+      "prompt_sha256": "dd3e6d1f93d624a50c97143d95b170ef918ffc1c26a164e7c56da877b68943c3",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:35:49+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:35:50+00:00"
+    },
+    "SC02_g4": {
+      "file": "media/stills/start_SC02_g4.png",
+      "sha256": "2e3b139e6269e519df035eb1bfd59384f13002d550662131b4ed24c1c1623670",
+      "prompt_sha256": "b73d75435a619dc35205615256b23a8027d871ea7177c71ba9e9e8d01dc938a4",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:35:51+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:35:52+00:00"
+    },
+    "SC03_g1": {
+      "file": "media/stills/start_SC03_g1.png",
+      "sha256": "a35bb17a14147d2340934ce5ecc5171b489a7d3d1944302f549b0e02b95f8031",
+      "prompt_sha256": "1257661f579b53033defb107671cd0ced1d4704aa0cbb4592867f5f8a3f02f13",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:45:06+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:45:07+00:00"
+    },
+    "SC03_g2": {
+      "file": "media/stills/start_SC03_g2.png",
+      "sha256": "8b198d4ca0fb188d24762cbe53190ddc3e30c4e0120b48761ca9ed676fcf7278",
+      "prompt_sha256": "dd3e6d1f93d624a50c97143d95b170ef918ffc1c26a164e7c56da877b68943c3",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:45:08+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:45:09+00:00"
+    },
+    "SC04_g1": {
+      "file": "media/stills/start_SC04_g1.png",
+      "sha256": "440d2b748172e129b385b8fe2b9f78c0bfcc4381d019550d00be3250bb38e719",
+      "prompt_sha256": "1257661f579b53033defb107671cd0ced1d4704aa0cbb4592867f5f8a3f02f13",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:45:10+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:45:11+00:00"
+    },
+    "SC04_g2": {
+      "file": "media/stills/start_SC04_g2.png",
+      "sha256": "0c1fa78e18d3d65c3f7d5fa2f0ec5a356107a5e2919722093e221276c26b71af",
+      "prompt_sha256": "60811a0e119a11ed6513b0e3368ce580fec9dcb1c8421838e40cb6ec90506a9e",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:45:11+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:45:12+00:00"
+    },
+    "SC04_g3": {
+      "file": "media/stills/start_SC04_g3.png",
+      "sha256": "d41530dd41903af1b0d443c7f302eb09128340758e5a91fbdb1a499c9f253539",
+      "prompt_sha256": "3847373a0019088240150b021272bddad76255a75298d089ae7d9abca537d5be",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:54:29+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:54:30+00:00"
+    },
+    "SC05_g1": {
+      "file": "media/stills/start_SC05_g1.png",
+      "sha256": "312b15d42840d3b9079cfc4df0838368e08c72ff1e0e384c14c0daa8579d287c",
+      "prompt_sha256": "a16497734b5af2132e308392d29525d2d42e1f33c66ee08dd0aa5cb786cf272a",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:54:31+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:54:32+00:00"
+    },
+    "SC05_g2": {
+      "file": "media/stills/start_SC05_g2.png",
+      "sha256": "d41784036ba33a66f1ceaa48e28a08cfbd956b0406ee63c9969d8a51f95a0e54",
+      "prompt_sha256": "ef89c613a4b67015f34814f3f06d0e3f1c2bb416722188a75b417777aee90c7d",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T17:54:33+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T17:54:33+00:00"
+    },
+    "SC06_g1": {
+      "file": "media/stills/start_SC06_g1.png",
+      "sha256": "34c88d1c26e1a40dde4cd016f5163972c0c4a0a4056535bba4adf0a5004ca014",
+      "prompt_sha256": "dd3e6d1f93d624a50c97143d95b170ef918ffc1c26a164e7c56da877b68943c3",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T18:03:47+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T18:03:47+00:00"
+    },
+    "SC06_g2": {
+      "file": "media/stills/start_SC06_g2.png",
+      "sha256": "16295b852005ed3dd6e2b1af618f8546dae30b61b15c0eb8be064e596d2f6e85",
+      "prompt_sha256": "1257661f579b53033defb107671cd0ced1d4704aa0cbb4592867f5f8a3f02f13",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T18:03:48+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T18:03:49+00:00"
+    },
+    "SC07_g1": {
+      "file": "media/stills/start_SC07_g1.png",
+      "sha256": "a7bd0656d6f7a15b56e9dffad292721056fcd5b9e95f25261ed7e9ffb64e5289",
+      "prompt_sha256": "3847373a0019088240150b021272bddad76255a75298d089ae7d9abca537d5be",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T18:03:50+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T18:03:51+00:00"
+    },
+    "SC07_g2": {
+      "file": "media/stills/start_SC07_g2.png",
+      "sha256": "ba6c827f0b87f83943f7c4ed0e4d005b7b2ad06b3f6d908b6354d6eed55efb80",
+      "prompt_sha256": "c8f6483dc0c08ab07314f359c68e16ca034f9f021687f18590c9c0fd8e2a61e5",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
+      "credits": 0.0,
+      "registered_at": "2026-11-09T18:03:51+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-09T18:03:52+00:00"
+    }
+  }
 }
