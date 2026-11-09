@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g3_t1",
+  "generation_id": "SC02_g3",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:27": "yes, SAM speaks toward frame-left where RUTH sits"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "thin edge of RUTH's hair at frame-left edge in some frames; consistent with her seat",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes, RUTH's seat is never shown empty (only a thin edge of her hair at frame-left at times); SAM's eyes go just past the lens to frame-left",
+        "REL_GAZE": "yes, SAM looks frame-left at RUTH, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated close against red booth back; speaks L05 2.2-5.4 s (vosk 'it's in the on below all of it and some more' = 'It's in the envelope. All of it, and some more'); envelope untouched; a thin edge of RUTH's hair/shoulder appears at the far frame-left edge in some frames (consistent with her seat, never an empty seat) - noted, not a fail; no drift.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:27",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "b0a88b17b9db429d47eba4af164952d0481902dd1d09a4603a829d8203c98eae"
+}

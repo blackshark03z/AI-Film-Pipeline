@@ -1,0 +1,269 @@
+{
+  "take": {
+    "take_id": "SC02_g3_t1",
+    "generation_id": "SC02_g3",
+    "prompt_sha256": "f9145501f4c2144e5a7a1f3248b4ed3103f7f6620e9533c0ac53e7c1eaf33cb8",
+    "start_frame_sha256": "c5f1e157482a8e05eda19ed8d2745ee7ee080397744ea14d2756fab4e180c631",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 8.0,
+    "output_file": "SC02_g3_t1.mp4",
+    "output_sha256": "b0a88b17b9db429d47eba4af164952d0481902dd1d09a4603a829d8203c98eae",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-09T18:29:29Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "SAM"
+    ],
+    "start_state": "SC02_g3",
+    "end_state": "SC02_g4",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "SAM looks at RUTH"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.0,
+        "description": "SAM glances down at the table and back up to RUTH"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 2.0,
+        "end_s": 7.0,
+        "description": "SAM speaks to RUTH"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 7.0,
+        "end_s": 8.0,
+        "description": "SAM waits, eyes on RUTH"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: the money is in the envelope - carried by: SAM"
+    },
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - SAM looks at RUTH?"
+    },
+    {
+      "group": "action",
+      "question": "1-2s ACTION: does this happen on screen - SAM glances down at the table and back up to RUTH?"
+    },
+    {
+      "group": "action",
+      "question": "2-7s ACTION: does this happen on screen - SAM speaks to RUTH?"
+    },
+    {
+      "group": "action",
+      "question": "7-8s HOLD: does this happen on screen - SAM waits, eyes on RUTH?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): SAM speaks to RUTH"
+    },
+    {
+      "group": "character",
+      "question": "SAM: does the face/body read as earnest, anxious (restrained)? Must NOT read as: anger."
+    },
+    {
+      "group": "sync",
+      "question": "Line 27 is audible, spoken by the right character, lips match: SAM: It's in the envelope. All of it, and some more."
+    },
+    {
+      "group": "audio",
+      "question": "SAM sounds like the voice bible: quiet, unsteady young male voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC02_g3: Continues from the previous shot: RUTH seated in the booth across the table, frame-left; SAM seated in the booth across the table, frame-right; the envelope: a thick white envelope lying flat in the middle of the table; the mug: a white coffee mug on the table in front of RUTH."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC02_g4: Continues from the previous shot: RUTH seated in the booth across the table, frame-left; SAM seated in the booth across the table, frame-right; the envelope: a thick white envelope lying flat in the middle of the table; the mug: a white coffee mug on the table in front of RUTH."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_ADDRESS:27",
+      "group": "narrative",
+      "question": "Line 27: does SAM clearly speak to RUTH (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:RUTH",
+      "group": "spatial",
+      "question": "Is the place where RUTH stands kept out of frame (never shown empty), and do SAM's eyes go just past the lens to frame-left?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does SAM look at RUTH and never into the lens?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC02_g3_t1",
+    "generation_id": "SC02_g3",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:27",
+      "REL_LISTENER:RUTH",
+      "REL_GAZE"
+    ],
+    "output_sha256": "b0a88b17b9db429d47eba4af164952d0481902dd1d09a4603a829d8203c98eae"
+  },
+  "auto_evidence": {
+    "note": "autoqc not requested (no --clips directory)",
+    "warnings": []
+  }
+}
