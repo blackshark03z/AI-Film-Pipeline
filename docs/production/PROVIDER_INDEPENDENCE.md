@@ -40,13 +40,49 @@ Source: the official docs at platform.minimax.io:
 - Our drama route depends on dialogue audio in the take; `dialoguecheck` reads the dialogue stem.
 - If H3 returns silent video, dialogue shots need a separate TTS and lip-sync stage, which is a large addition. If so, H3 is first useful for non-dialogue shots: inserts, reactions, establishing shots and action.
 
-**"Vilao API":** no public information was found. It is presumably a gateway or reseller. We need from the Owner:
-- the base URL and docs;
-- the model id it uses for H3;
-- its pricing and billing unit;
-- whether requests pass through in MiniMax's own format or in an OpenAI-style format.
+### Vilao (vilao.ai), read 2026-11-09 from the model list, the model page and docs/api-reference
 
-The key lives in an environment variable and is never committed.
+Vilao is a **P2P marketplace**, not MiniMax itself. Independent sellers resell models behind one OpenAI-compatible gateway. The site itself warns that the same model differs in quality from one seller to another.
+
+**Video API**
+- Gateway endpoints (OpenAI Videos shape):
+  - `POST https://api.vilao.ai/v1/videos`
+  - `GET /v1/videos/{id}?model=…`
+  - `GET /v1/videos/{id}/content?model=…`
+- Per-seller endpoint, e.g. H3 seller OMNiBiU: `POST https://api.vilao.ai/p/omh3/v1/videos`, with `"model": "h3-480p"`.
+- Auth: `Authorization: Bearer <VILAO_KEY>`.
+- A zero balance blocks a request before it reaches the provider.
+- Errors: 402 balance, 403 model access, 404, 429 rate limit, 5xx.
+
+**Pricing:** per request, in VND, with no per-second price shown. Requests and success rates are the marketplace's own figures at the time of reading.
+
+| Model | Seller | Model id | Price/request | Requests | OK |
+|---|---|---|---|---|---|
+| Minimax H3 480P ("5 modes", 5–15 s) | OMNiBiU | `h3-480p` | 4.158 ₫ (−10% promo, list 4.620 ₫) | 10 | 70% |
+| Minimax H3 768P | OMNiBiU | `h3-768p` | 5.198 ₫ | 0 | — |
+| Minimax H3 1088P ("image refs + optional audio") | OMNiBiU | `h3-1088p` | 6.930 ₫ | 0 | — |
+| Minimax H3 1440P | OMNiBiU | `h3-1440p` | 10.395 ₫ | 0 | — |
+| Veo-3.1 | Codex | — | 3.000 ₫ | 3.3K | 84% |
+| gemini-omni-flash-preview | Codex | — | 5.000 ₫ | 283 | 89% |
+| Omni Flash | tech-ccmax ("acc") | — | 3.400 ₫ | 36 | 33% |
+| Seedance 2.5 | tech-ccmax | — | 13.000–46.500 ₫ (5–30 s) | ~0 | — |
+
+Also listed: Grok Imagine Video, and Higgsfield character swap.
+
+**Unknown until a probe**
+- How this seller maps first frame, last frame, reference images and reference audio onto the OpenAI-shape body.
+- Whether output has audio or dialogue.
+- Whether a failed request is charged.
+- Rate limits.
+- Where our uploaded stills go: the seller is a third party.
+
+**Risk**
+- Sellers tagged "acc" are likely shared provider accounts, so supply and terms-of-service status can change without notice.
+- Low request counts mean reliability is unproven.
+- For these reasons Vilao is treated as a **second provider route behind the adapter**, not as a replacement for Flow.
+- Reaching MiniMax's official API directly (§1 above) stays the stable fallback.
+
+The key lives in an environment variable (`VILAO_API_KEY`) and is never committed.
 
 ### Fit against our pain points
 
@@ -132,7 +168,7 @@ Feature freeze (P17) is respected. Phase A is built in its own worktree and bran
 | Phase | Work | Cost | Gate |
 |---|---|---|---|
 | A (offline) | Items 1–6 above. FlowUiAdapter has identical behaviour (existing tests and rehearsal stay green). MiniMaxAdapter tested against a mock server. Registry entries for Omni 1.2 Flash and H3 Lite/Highspeed. | 0 | Tests green; diff reviewed by Codex read-only |
-| B (live probe) | 3–5 H3-Lite 480P sends reusing film04 approved stills: first frame, first+last frame, reference images (identity), and one dialogue line (audio?) | ≈ $1–2 | **Owner:** Vilao key + spend OK |
+| B (live probe) | 3–5 Vilao `h3-480p` sends (≈4.2k ₫ each, ≈20–25k ₫ total) reusing film04 approved stills: first frame, first+last frame, reference images (identity), and one dialogue line (audio?) | ≈ 25k ₫ | **Owner:** Vilao key + top-up |
 | C (A/B) | 4 film04 shots on H3 vs the accepted Flow takes, same review checklist | ≈ $2–5 | Results decide routing |
 | D | Per-shot routing in film06 | — | After P17 verdict |
 
