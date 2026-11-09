@@ -876,20 +876,20 @@
           {
             "kind": "SETUP",
             "start_s": 0.0,
-            "end_s": 1.0,
+            "end_s": 0.5,
             "description": "MARA looks at THEO through the open window, lamp light on her face"
           },
           {
             "kind": "ACTION",
-            "start_s": 1.0,
-            "end_s": 3.5,
+            "start_s": 0.5,
+            "end_s": 2.5,
             "description": "MARA speaks to THEO through the open window"
           },
           {
             "kind": "CONSEQUENCE",
-            "start_s": 3.5,
+            "start_s": 2.5,
             "end_s": 4.0,
-            "description": "below the frame edge the jar goes over and the coins clatter across the counter, heard more than seen"
+            "description": "THEO tips the jar with both hands and pours the coins out across the counter"
           }
         ],
         "once_actions": [
@@ -909,7 +909,7 @@
         ]
       },
       "sfx": [
-        "coins clattering on wood, off screen"
+        "coins pouring onto wood"
       ],
       "dialogue": [
         48
@@ -945,8 +945,8 @@
         }
       ],
       "duration_s": 4,
-      "version": 1,
-      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): new shot: MARA speaks through the now open window.",
+      "version": 2,
+      "repair_reason": "P16-07b restage (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09): new shot: MARA speaks through the now open window. v2 2026-11-09: the pour needs its agent. v1 said 'the jar goes over' with no one doing it; takes showed an accident or MARA pouring. Script: MARA tells THEO 'Pour it out', so THEO pours, deliberately (Owner note; continuity OBJECT_NO_AGENT).",
       "addressees": {
         "48": [
           "THEO"

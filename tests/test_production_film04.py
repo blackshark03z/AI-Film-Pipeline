@@ -46,7 +46,7 @@ def plan(tmp_path_factory):
 
 def test_loads_clean_with_the_four_authored_stages(pkg):
     assert pkg.issues == []
-    assert set(pkg.typed) == {"story", "direction", "preprod", "shots"}
+    assert set(pkg.typed) == {"story", "direction", "preprod", "shots", "edit"}  # 05_edit.json: the assembly EDL
     assert len(pkg.script.scenes) == 6 and len(pkg.typed["shots"].generations) == 15
     assert pkg.header.profile == "drama" and pkg.header.generation_s == 8
 
@@ -69,14 +69,16 @@ def test_plan_has_only_the_pending_storyboard_left(plan):
     # P16-07b: SC03..SC06 are restaged and on the interaction contract (FILM04_RESTAGE_PROPOSAL, decided 2026-11-09):
     # none is RED, so only the storyboard blocks and generability warns
     # P16-12: SC06_g1 has an end frame where MARA arrives, so no shot warns LOOK_NOT_PINNED any more
-    assert checks == {("STORYBOARD", "BLOCK"),
+    # SC04_g3 v2 (2026-11-09): the pour now names its agent (THEO pours, continuity OBJECT_NO_AGENT); pouring is RED
+    # and waits for an Owner exception or a restage, so it is the one RED shot
+    assert checks == {("STORYBOARD", "BLOCK"), ("GENERABILITY_RED", "BLOCK"),
                       ("GENERABILITY_RED_REUSE", "WARN"), ("GENERABILITY_AMBER", "WARN")}, checks
     per_gen = {g: {(i["check"], i["severity"]) for i in v["issues"]} for g, v in g3["generations"].items()}
     for gid, issues in per_gen.items():  # every shot: only the storyboard blocks, generability and the look pin warn
         blocks = {c for c, sev in issues if sev == "BLOCK"}
-        assert blocks <= {"STORYBOARD"}, (gid, issues)
+        assert blocks <= ({"STORYBOARD", "GENERABILITY_RED"} if gid == "SC04_g3" else {"STORYBOARD"}), (gid, issues)
         assert all(c.startswith("GENERABILITY_") or c == "LOOK_NOT_PINNED" for c, sev in issues if sev == "WARN"), (gid, issues)
-    assert not any(i["check"] == "GENERABILITY_RED" for v in g3["generations"].values() for i in v["issues"])
+    assert {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "GENERABILITY_RED"} == {"SC04_g3"}
     warned = {g for g, v in g3["generations"].items() for i in v["issues"] if i["check"] == "LOOK_NOT_PINNED"}
     assert warned == set()
     assert len(g3["generations"]) == 15

@@ -77,6 +77,14 @@ def _names_character(texts: list[str], who: str) -> bool:
     return any(who.lower() in t for t in texts)
 
 
+# a person doing the change: a cast name, a pronoun ("she lays the letter") or a role noun ("the woman pours ...")
+_AGENT_WORDS = {"he", "she", "they", "his", "her", "their", "woman", "man", "girl", "boy", "someone"}
+
+
+def _names_agent(text: str, cast: set[str]) -> bool:
+    return any(c in text for c in cast) or bool(_AGENT_WORDS & set(re.findall(r"[a-z]+", text)))
+
+
 def _generation_changes(gid: str, decl: Any, start: ContinuityState, end: ContinuityState, cast: set[str],
                         out: list[RuleIssue]) -> None:
     choreo = decl.choreography
@@ -87,11 +95,20 @@ def _generation_changes(gid: str, decl: Any, start: ContinuityState, end: Contin
         before, after = start.props.get(key), end.props.get(key)
         if before == after:
             continue
+        move = f"{before!r} -> {after!r}" if before is not None and after is not None else (
+            f"appears ({after!r})" if before is None else f"disappears (was {before!r})")
         if not _names_prop(caused, _prop_name(key), before, after, cast):
-            move = f"{before!r} -> {after!r}" if before is not None and after is not None else (
-                f"appears ({after!r})" if before is None else f"disappears (was {before!r})")
             _issue(out, "OBJECT_NO_CAUSE", "BLOCK",
                    f"{gid}: {_prop_name(key)} {move} with no ACTION/CONSEQUENCE phase naming it")
+            continue
+        # film04 SC04_g3: "below the frame edge the jar goes over" named the jar but nobody doing it; the model
+        # staged an accident (and once the woman's own pour) where the script meant THEO pouring the coins out.
+        # The phase that changes a prop must name who does it.
+        naming = [t for t in caused if _names_prop([t], _prop_name(key), before, after, cast)]
+        if not any(_names_agent(t, cast) for t in naming):
+            _issue(out, "OBJECT_NO_AGENT", "BLOCK",
+                   f"{gid}: {_prop_name(key)} {move}, but the phase that changes it names nobody doing it; "
+                   f"write who handles it and how (e.g. 'THEO lifts the jar and pours the coins out')")
 
     for who in sorted(set(start.positions) & set(end.positions)):
         if start.positions[who] == end.positions[who] or _names_character(caused, who):

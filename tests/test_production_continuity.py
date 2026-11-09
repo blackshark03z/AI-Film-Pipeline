@@ -73,6 +73,33 @@ def test_the_causing_action_clears_it(tmp_path):
     assert "OBJECT_NO_CAUSE" not in checks(issues(pkg, False))
 
 
+
+def test_prop_change_with_nobody_doing_it_blocks(tmp_path):
+    # film04 SC04_g3: "below the frame edge the jar goes over" named the jar but no hand; the model staged an
+    # accident where the script meant THEO pouring the coins out. The causing phase must name who does it.
+    def teleport(pre):
+        for state in ("SC01_g2", "SC01_end", "SC02_g1", "SC02_g2"):
+            pre["states"][state]["props"][LETTER] = "crumpled, in the waste bin"
+
+    def agentless(shots):
+        gen(shots, "SC01_g1")["choreography"]["phases"][2]["description"] = "the letter falls into the waste bin"
+    found = issues(clone(tmp_path, pre=teleport, shots=agentless), False)
+    hit = [i for i in found if i.check == "OBJECT_NO_AGENT"]
+    assert hit and hit[0].severity == "BLOCK" and "SC01_g1" in hit[0].detail
+    assert "OBJECT_NO_CAUSE" not in checks(found)
+
+
+@pytest.mark.parametrize("text", ["NORA drops the letter in the waste bin", "she drops the letter in the waste bin",
+                                  "the woman drops the letter in the waste bin"])
+def test_a_named_agent_or_pronoun_clears_no_agent(tmp_path, text):
+    def teleport(pre):
+        for state in ("SC01_g2", "SC01_end", "SC02_g1", "SC02_g2"):
+            pre["states"][state]["props"][LETTER] = "crumpled, in the waste bin"
+
+    def agent(shots):
+        gen(shots, "SC01_g1")["choreography"]["phases"][2]["description"] = text
+    assert "OBJECT_NO_AGENT" not in checks(issues(clone(tmp_path, pre=teleport, shots=agent), False))
+
 def test_setup_phase_is_not_a_cause(tmp_path):
     def teleport(pre):
         pre["states"]["SC03_g2"]["props"][LETTER] = "in the waste bin"
