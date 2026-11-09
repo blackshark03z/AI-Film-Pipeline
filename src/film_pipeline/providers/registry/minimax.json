@@ -1,0 +1,100 @@
+{
+  "entries": [
+    {
+      "provider": "minimax",
+      "model": "h3-lite",
+      "display_name": "MiniMax H3-Lite",
+      "adapter": "minimax",
+      "transport": "official_api",
+      "api_model": "MiniMax-H3-Lite",
+      "base_url": "https://api.minimax.io",
+      "auth_env": "MINIMAX_API_KEY",
+      "duration_s": [4, 15],
+      "tiers": {"TEST": "480P", "FINAL": "768P"},
+      "aspects": ["16:9", "9:16", "1:1", "adaptive"],
+      "frame_roles": ["first_frame", "last_frame"],
+      "max_refs": 9,
+      "mix_frames_and_refs": false,
+      "native_audio": "unknown",
+      "prompt_limit_chars": 7000,
+      "price": {"kind": "per_second", "unit": "USD", "rates": {"480P": 0.025, "768P": 0.04}},
+      "error_map": {
+        "exact": {
+          "1026": "REJECTED_POLICY", "http_422": "NOT_SUBMITTED", "http_400": "NOT_SUBMITTED",
+          "http_401": "NOT_SUBMITTED", "http_403": "NOT_SUBMITTED", "http_404": "NOT_SUBMITTED",
+          "http_429": "NOT_SUBMITTED", "transport_refused": "NOT_SUBMITTED",
+          "status_succeeded": "PASSED", "status_failed": "PROVIDER_FAILED", "status_cancelled": "PROVIDER_FAILED"
+        },
+        "default": "AMBIGUOUS"
+      },
+      "charged_on": ["PASSED"],
+      "request_fields": {"content_image_key": "image_url", "duration": "duration", "resolution": "resolution", "ratio": "ratio"},
+      "unverified": ["api_model id", "native_audio", "content[] image key and data-URL acceptance", "ratio field name", "query error shape", "rate limits"],
+      "notes": ["failed tasks and moderation rejections (HTTP 422 code 1026) are not charged (platform.minimax.io pricing)"]
+    },
+    {
+      "provider": "minimax",
+      "model": "h3-highspeed",
+      "display_name": "MiniMax H3-Highspeed",
+      "adapter": "minimax",
+      "transport": "official_api",
+      "api_model": "MiniMax-H3-Highspeed",
+      "base_url": "https://api.minimax.io",
+      "auth_env": "MINIMAX_API_KEY",
+      "duration_s": [4, 15],
+      "tiers": {"TEST": "480P", "FINAL": "768P"},
+      "aspects": ["16:9", "9:16", "1:1", "adaptive"],
+      "frame_roles": ["first_frame", "last_frame"],
+      "max_refs": 9,
+      "mix_frames_and_refs": false,
+      "native_audio": "unknown",
+      "prompt_limit_chars": 7000,
+      "price": {"kind": "per_second", "unit": "USD", "rates": {"480P": 0.04, "768P": 0.06}},
+      "error_map": {
+        "exact": {
+          "1026": "REJECTED_POLICY", "http_422": "NOT_SUBMITTED", "http_400": "NOT_SUBMITTED",
+          "http_401": "NOT_SUBMITTED", "http_403": "NOT_SUBMITTED", "http_404": "NOT_SUBMITTED",
+          "http_429": "NOT_SUBMITTED", "transport_refused": "NOT_SUBMITTED",
+          "status_succeeded": "PASSED", "status_failed": "PROVIDER_FAILED", "status_cancelled": "PROVIDER_FAILED"
+        },
+        "default": "AMBIGUOUS"
+      },
+      "charged_on": ["PASSED"],
+      "request_fields": {"content_image_key": "image_url", "duration": "duration", "resolution": "resolution", "ratio": "ratio"},
+      "unverified": ["api_model id", "native_audio", "content[] image key and data-URL acceptance", "ratio field name", "query error shape", "rate limits"],
+      "notes": ["failed tasks and moderation rejections (HTTP 422 code 1026) are not charged (platform.minimax.io pricing)"]
+    },
+    {
+      "provider": "minimax",
+      "model": "h3",
+      "display_name": "MiniMax H3",
+      "adapter": "minimax",
+      "transport": "official_api",
+      "api_model": "MiniMax-H3",
+      "base_url": "https://api.minimax.io",
+      "auth_env": "MINIMAX_API_KEY",
+      "duration_s": [4, 15],
+      "tiers": {"TEST": "768P", "FINAL": "2K"},
+      "aspects": ["16:9", "9:16", "1:1", "adaptive"],
+      "frame_roles": ["first_frame", "last_frame"],
+      "max_refs": 9,
+      "mix_frames_and_refs": false,
+      "native_audio": "unknown",
+      "prompt_limit_chars": 7000,
+      "price": {"kind": "per_second", "unit": "USD", "rates": {"768P": 0.08, "2K": 0.13}},
+      "error_map": {
+        "exact": {
+          "1026": "REJECTED_POLICY", "http_422": "NOT_SUBMITTED", "http_400": "NOT_SUBMITTED",
+          "http_401": "NOT_SUBMITTED", "http_403": "NOT_SUBMITTED", "http_404": "NOT_SUBMITTED",
+          "http_429": "NOT_SUBMITTED", "transport_refused": "NOT_SUBMITTED",
+          "status_succeeded": "PASSED", "status_failed": "PROVIDER_FAILED", "status_cancelled": "PROVIDER_FAILED"
+        },
+        "default": "AMBIGUOUS"
+      },
+      "charged_on": ["PASSED"],
+      "request_fields": {"content_image_key": "image_url", "duration": "duration", "resolution": "resolution", "ratio": "ratio"},
+      "unverified": ["api_model id", "native_audio", "content[] image key and data-URL acceptance", "ratio field name", "query error shape", "rate limits"],
+      "notes": ["failed tasks and moderation rejections (HTTP 422 code 1026) are not charged (platform.minimax.io pricing)"]
+    }
+  ]
+}

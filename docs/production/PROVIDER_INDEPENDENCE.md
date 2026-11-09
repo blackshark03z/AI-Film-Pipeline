@@ -172,4 +172,41 @@ Feature freeze (P17) is respected. Phase A is built in its own worktree and bran
 | C (A/B) | 4 film04 shots on H3 vs the accepted Flow takes, same review checklist | ≈ $2–5 | Results decide routing |
 | D | Per-shot routing in film06 | — | After P17 verdict |
 
+### Phase A: done (offline, 0 cost), branch `provider-adapters-a`, not merged
+
+Built 2026-11-09 in worktree `AFP-provider-a`. Waits for the Owner's word after P17-01 reports. Nothing was sent live.
+
+| Item | Where | What it does |
+|---|---|---|
+| 1 Request | `providers/request.py` | `GenerationRequest`: prompt + sha, duration, aspect, tier TEST/FINAL, `first_frame`/`last_frame` (path + sha256), `references[]` with roles, `audio_mode`. `generate.build_payload` builds it and stores it in the payload as `request`. |
+| 2 Adapters | `providers/flow_ui_adapter.py`, `providers/http_adapters.py` | **`FlowUiAdapter`**: today's argv and preconditions, moved unchanged; `generate.py` sends through it, with the same results and ledger. **`OpenAIVideosAdapter`** (Vilao): `POST {base}/v1/videos`, `GET …/{id}?model=`, `GET …/{id}/content?model=`, Bearer `VILAO_API_KEY`. **`MiniMaxAdapter`**: `POST /v2/video_generation`, `GET /v2/query/video_generation/{task_id}`, `content[]` roles, code 1026 → REJECTED_POLICY. Both use stdlib `urllib` and are tested only against a fake transport and a 127.0.0.1 mock server. |
+| 3 Registry | `providers/capability.py`, `providers/registry/{flow,minimax,vilao}.json` | Flow Omni 1.2 Flash (3–15 s, 1 cr/s to 10 s then 2 cr/s); MiniMax H3-Lite, H3-Highspeed and H3 (USD per second); Vilao `h3-480p` (4158 ₫) and `h3-768p` (5198 ₫) per request. Each entry holds the error map, `charged_on` and `unverified`. Route preflight: `providers/route.py`. |
+| 4 Results | registry `error_map` | NOT_SUBMITTED, REJECTED_POLICY, PROVIDER_FAILED, AMBIGUOUS, PASSED. Flow PRE_SUBMIT_* → NOT_SUBMITTED; FLOW_FAILED → PROVIDER_FAILED (charged, not a send); every other result → AMBIGUOUS (charged). A test pins the film03/film04 ledgers to the pre-adapter code (film04: 159 logged, 231 spent). |
+| 5 Money | `production/money.py`, `Budget.caps` / `cap_for` | `money_ledger`: one line per unit (credits, USD, VND). The cap applies per unit: credits from `credits_estimate × cap_factor`, other units from `budget.caps`. A unit with no cap → BUDGET_NOT_SET. `credit_ledger` keeps its old shape. |
+| 6 Data model | `TakeEntry`, intent receipts | New fields `provider` (default `flow`), `provider_job_id`, `cost_unit`, `cost_amount`. Receipts also carry `provider_model`, `tier` and `expected_cost`. Old JSON still loads. An API take binds by (provider, job id); the receipt records the job id as soon as the job is submitted. |
+| 7 Generability | `drama/generability.py` | `rate_shot(decl, provider, model)`. The rules are evidence for `flow/omni-1.2-flash` only; any other model rates UNKNOWN (MODEL_UNRATED: one exploratory send). Send caps count only sends on the same (provider, model). |
+| 8 Routing | `FilmHeader.route`, `ShotDecl.route` | The film's default route is `flow/omni-1.2-flash/TEST`; a shot may override it. Preflight checks the routed entry for duration, tier, aspect, frame roles, number of refs, frames mixed with refs, and prompt length (BLOCK). A dialogue shot on `native_audio` unknown → WARN; on false → BLOCK. |
+
+**Still UNVERIFIED (phase B probe settles these):**
+- **Vilao:**
+  - how frames and references map onto the body (`request_fields`: `input_reference`, `last_frame`, `reference_images`);
+  - `size_by_aspect`;
+  - `frame_roles` and `max_refs` (set conservatively to 0);
+  - native audio;
+  - whether a failed or moderated request is charged (assumed charged);
+  - moderation error codes;
+  - rate limits.
+- **MiniMax:**
+  - the API model ids (`MiniMax-H3-Lite` and the others);
+  - the `content[]` image key (`image_url`) and whether data URLs are accepted;
+  - the `ratio` field name;
+  - the error shape at query time;
+  - native audio;
+  - rate limits.
+- **Not built in phase A:**
+  - resuming a PENDING API job from its receipt's job id (today SEND_PENDING still blocks, as on Flow);
+  - per-provider prompt dialects (item 9);
+  - stills adapters (item 10);
+  - gate3 preflight (`generability_issues`) still rates with the Flow default; only `generate` uses the routed model.
+
 Phase B answers the native audio question. If H3 is silent, it is routed to non-dialogue shots until a TTS and lip-sync stage is decided. That stage is a product decision for the Owner.

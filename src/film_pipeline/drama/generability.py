@@ -94,6 +94,11 @@ _COMPILED = tuple((rid, lvl, re.compile(rx), why) for rid, lvl, rx, why in RULES
 # send cap per shot version (generate.py SEND_CAP); RED sends nothing without an Owner exception
 DRAFTS = {"GREEN": 1, "AMBER": 2, "UNKNOWN": 1, "RED": 0}
 
+# the rules above are evidence about one model (film04 on Flow Omni 1.2 Flash). Ratings are keyed by (provider, model):
+# any other model has no evidence yet, so every shot on it is UNKNOWN (one exploratory send per version, then review)
+RULES_MODEL = ("flow", "omni-1.2-flash")
+RATED_MODELS: dict[tuple[str, str], str] = {RULES_MODEL: "docs/production/FILM04_SHOT_QUALITY_REVIEW.md"}
+
 
 class Finding(ContractModel):
     rule: str
@@ -110,9 +115,17 @@ class GenerabilityRating(ContractModel):
     waiver: str = ""
 
 
-def rate_shot(decl) -> GenerabilityRating:
-    """Rate one ShotDecl from its choreography phases, its tracked prop and who is visible."""
+def rate_shot(decl, provider: str = RULES_MODEL[0], model: str = RULES_MODEL[1]) -> GenerabilityRating:
+    """Rate one ShotDecl from its choreography phases, its tracked prop and who is visible, for (provider, model).
+    A model without rated evidence (``RATED_MODELS``) rates UNKNOWN (finding MODEL_UNRATED)."""
     findings: list[Finding] = []
+    if (provider, model) not in RATED_MODELS:
+        waiver = (getattr(decl, "generability_waiver", "") or "").strip()
+        return GenerabilityRating(
+            generation_id=decl.generation_id, level="UNKNOWN", drafts=DRAFTS["UNKNOWN"], waiver=waiver,
+            findings=[Finding(rule="MODEL_UNRATED", level="UNKNOWN", phase="whole shot",
+                              reason=f"{provider}/{model} has no generability evidence yet: one exploratory send, "
+                                     f"then review")])
 
     def add(rule: str, level: str, phase, reason: str) -> None:
         window = f"{phase.start_s:g}-{phase.end_s:g} s"
@@ -160,10 +173,11 @@ def rate_shot(decl) -> GenerabilityRating:
                               drafts=DRAFTS[level], waiver=waiver)
 
 
-def generability_issues(decl) -> tuple[GenerabilityRating, list[PreflightIssue]]:
+def generability_issues(decl, provider: str = RULES_MODEL[0], model: str = RULES_MODEL[1]
+                        ) -> tuple[GenerabilityRating, list[PreflightIssue]]:
     """gate3 issues: RED BLOCKs unless the shot reuses an accepted take or has an exception for its version (then WARN);
     AMBER and UNKNOWN WARN; GREEN says nothing. A legacy waiver only adds a WARN."""
-    rating = rate_shot(decl)
+    rating = rate_shot(decl, provider, model)
     issues: list[PreflightIssue] = []
     if rating.waiver:
         issues.append(PreflightIssue(check="GENERABILITY_WAIVER_LEGACY", severity="WARN",

@@ -41,7 +41,7 @@ class TakeEntry(ContractModel):
     start_frame_sha256: str = Field(default="", pattern=r"^([0-9a-f]{64})?$")  # "" = no start frame used
     route: str = Field(min_length=1)  # e.g. "start_frame+Khung hinh", "ingredients"
     model: str = Field(min_length=1)
-    credits: float = Field(ge=0)
+    credits: float = Field(ge=0)  # Flow credits; 0 for a take paid in another unit (cost_amount / cost_unit)
     output_file: str = Field(min_length=1)
     output_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     status: TakeStatus = "GENERATED"
@@ -49,6 +49,16 @@ class TakeEntry(ContractModel):
     cause: str = ""  # failure cause from the review of a REJECTED take (qc_model.Cause)
     registered_at: str = ""
     review_file: str = ""  # relative to the takes directory once a template or review exists
+    # provider adapters (docs/production/PROVIDER_INDEPENDENCE.md): every take before them is a Flow take
+    provider: str = Field(default="flow", min_length=1)
+    provider_job_id: str = ""  # API routes bind the take by job id; Flow binds by prompt text and media id ("")
+    cost_unit: Literal["credits", "USD", "VND"] = "credits"
+    cost_amount: float | None = Field(default=None, ge=0)  # None = `credits` (a Flow take)
+
+    @property
+    def cost(self) -> dict[str, Any]:
+        amount = self.credits if self.cost_amount is None else self.cost_amount
+        return {"amount": amount, "unit": self.cost_unit, "provider": self.provider}
 
 
 class TakeLog(ContractModel):
@@ -104,8 +114,10 @@ def save_log(film_root: Path, log: TakeLog) -> Path:
 
 def register_take(film_root: Path, film_id: str, generation_id: str, clip: Path, *, prompt_text: str, route: str,
                   model: str, credits: float, start_frame: Path | None = None, known_generations: set[str] | None = None,
-                  shot_version: int = 1) -> tuple[TakeEntry, bool]:
-    """Add a rendered clip to the log. Returns (entry, created); the same bytes registered twice is not a new take."""
+                  shot_version: int = 1, provider: str = "flow", provider_job_id: str = "",
+                  cost_unit: str = "credits", cost_amount: float | None = None) -> tuple[TakeEntry, bool]:
+    """Add a rendered clip to the log. Returns (entry, created); the same bytes registered twice is not a new take, and
+    neither is the same (provider, provider_job_id): an API job binds exactly one take."""
     if known_generations is not None and generation_id not in known_generations:
         raise ValueError(f"unknown generation {generation_id!r}")
     clip = Path(clip)
@@ -117,6 +129,12 @@ def register_take(film_root: Path, film_id: str, generation_id: str, clip: Path,
         raise ValueError(f"start frame {start_frame} not found")
     log = load_log(film_root, film_id)
     digest = sha256_file(clip)
+    if provider_job_id:
+        bound = bind_by_job_id(log, provider, provider_job_id)
+        if bound is not None:
+            if bound.output_sha256 != digest:
+                raise ValueError(f"{provider} job {provider_job_id} is already take {bound.take_id} with other bytes")
+            return bound, False
     for existing in log.takes:
         if existing.output_sha256 == digest:
             if existing.generation_id != generation_id:
@@ -126,10 +144,18 @@ def register_take(film_root: Path, film_id: str, generation_id: str, clip: Path,
         take_id=f"{generation_id}_t{len(log.for_generation(generation_id)) + 1}", generation_id=generation_id,
         prompt_sha256=sha256_text(prompt_text), start_frame_sha256=sha256_file(start_frame) if start_frame else "",
         route=route, model=model, credits=credits, output_file=clip.name, output_sha256=digest,
-        shot_version=shot_version, registered_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
+        shot_version=shot_version, registered_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        provider=provider, provider_job_id=provider_job_id, cost_unit=cost_unit, cost_amount=cost_amount)
     log.takes.append(entry)
     save_log(film_root, log)
     return entry, True
+
+
+def bind_by_job_id(log: TakeLog, provider: str, provider_job_id: str) -> TakeEntry | None:
+    """The take an API job already produced, if any (API routes bind by job id, never by prompt text)."""
+    if not provider_job_id:
+        return None
+    return next((t for t in log.takes if t.provider == provider and t.provider_job_id == provider_job_id), None)
 
 
 def _questions(decl: Any, pre: Any, script_lines: dict[int, str]) -> list[dict[str, str]]:

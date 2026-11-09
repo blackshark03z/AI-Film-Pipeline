@@ -15,6 +15,7 @@ from film_pipeline.core import ContractModel
 from film_pipeline.drama.script import Script, parse_fountain
 from film_pipeline.production.narration import NARRATION_SECTIONS
 from film_pipeline.production.sections import TYPED_SECTIONS, check_references
+from film_pipeline.providers.route import RouteSpec
 
 Profile = Literal["drama", "narration"]
 GateState = Literal["PASS", "BLOCK", "OWNER_PENDING", "NOT_RUN"]
@@ -45,10 +46,17 @@ SCRIPT_FILE = "script.fountain"
 class Budget(ContractModel):
     credits_estimate: float | None = Field(default=None, ge=0)
     cap_factor: float = Field(default=1.5, gt=0)
+    # per-film cap in a money unit other than Flow credits (provider routes priced in USD or VND); a unit with no cap
+    # here cannot be spent live (BUDGET_NOT_SET)
+    caps: dict[Literal["USD", "VND"], float] = Field(default_factory=dict)
 
     @property
     def credits_cap(self) -> float | None:
         return None if self.credits_estimate is None else self.credits_estimate * self.cap_factor
+
+    def cap_for(self, unit: str) -> float | None:
+        """The film's cap in ``unit``: Flow credits come from the estimate x cap_factor, others from ``caps``."""
+        return self.credits_cap if unit == "credits" else self.caps.get(unit)  # type: ignore[call-overload]
 
 
 class DisclosureSettings(ContractModel):
@@ -79,6 +87,10 @@ class FilmHeader(ContractModel):
     resolution: str = "1280x720"
     generation_s: int = Field(default=8, gt=0)
     budget: Budget = Field(default_factory=Budget)
+    # video route; a shot's own `route` overrides it. Unset = providers/routes.json: production (Flow) or, for an
+    # `experiment` film, the experiment default (Vilao omh3 h3-480p)
+    route: RouteSpec = Field(default_factory=RouteSpec)
+    experiment: bool = False
     disclosure: DisclosureSettings = Field(default_factory=DisclosureSettings)
     delegated_reviewers: list[DelegatedReviewer] = Field(default_factory=list)
     rehearsal: bool = False  # offline dress rehearsal copy (production/rehearsal.py): synthetic footage, never releasable

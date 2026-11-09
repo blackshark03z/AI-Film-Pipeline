@@ -1,0 +1,70 @@
+{
+  "entries": [
+    {
+      "provider": "vilao",
+      "model": "h3-480p",
+      "display_name": "Vilao OMNiBiU Minimax H3 480P",
+      "aliases": ["omh3/h3-480p"],
+      "adapter": "openai_videos",
+      "transport": "gateway",
+      "api_model": "h3-480p",
+      "base_url": "https://api.vilao.ai/p/omh3",
+      "auth_env": "VILAO_API_KEY",
+      "duration_s": [5, 15],
+      "tiers": {"TEST": "480p"},
+      "aspects": ["16:9", "9:16"],
+      "frame_roles": ["first_frame", "last_frame"],
+      "max_refs": 0,
+      "native_audio": "unknown",
+      "price": {"kind": "per_request", "unit": "VND", "rates": {"480p": 4158}},
+      "error_map": {
+        "exact": {
+          "http_400": "NOT_SUBMITTED", "http_401": "NOT_SUBMITTED", "http_402": "NOT_SUBMITTED",
+          "http_403": "NOT_SUBMITTED", "http_404": "NOT_SUBMITTED", "http_429": "NOT_SUBMITTED",
+          "transport_refused": "NOT_SUBMITTED",
+          "moderation_blocked": "REJECTED_POLICY", "content_policy_violation": "REJECTED_POLICY",
+          "status_completed": "PASSED", "status_failed": "PROVIDER_FAILED", "status_cancelled": "PROVIDER_FAILED"
+        },
+        "default": "AMBIGUOUS"
+      },
+      "charged_on": ["PASSED", "PROVIDER_FAILED", "REJECTED_POLICY", "AMBIGUOUS"],
+      "request_fields": {"first_frame": "input_reference", "last_frame": "last_frame", "reference_image": "reference_images", "seconds": "seconds", "size": "size"},
+      "size_by_aspect": {"480p": {"16:9": "854x480", "9:16": "480x854"}},
+      "unverified": ["request_fields (first/last frame and reference mapping onto the OpenAI-shape body)", "frame_roles", "max_refs", "size_by_aspect", "native_audio", "charged_on (whether a failed request is charged; assumed charged)", "moderation error codes", "rate limits"],
+      "notes": ["P2P marketplace seller OMNiBiU; 4158 VND per request on 2026-11-09 (-10% promo, list 4620)", "a zero balance blocks the request before the provider (HTTP 402)"]
+    },
+    {
+      "provider": "vilao",
+      "model": "h3-768p",
+      "display_name": "Vilao OMNiBiU Minimax H3 768P",
+      "aliases": ["omh3/h3-768p"],
+      "adapter": "openai_videos",
+      "transport": "gateway",
+      "api_model": "h3-768p",
+      "base_url": "https://api.vilao.ai/p/omh3",
+      "auth_env": "VILAO_API_KEY",
+      "duration_s": [5, 15],
+      "tiers": {"TEST": "768p", "FINAL": "768p"},
+      "aspects": ["16:9", "9:16"],
+      "frame_roles": ["first_frame", "last_frame"],
+      "max_refs": 0,
+      "native_audio": "unknown",
+      "price": {"kind": "per_request", "unit": "VND", "rates": {"768p": 5198}},
+      "error_map": {
+        "exact": {
+          "http_400": "NOT_SUBMITTED", "http_401": "NOT_SUBMITTED", "http_402": "NOT_SUBMITTED",
+          "http_403": "NOT_SUBMITTED", "http_404": "NOT_SUBMITTED", "http_429": "NOT_SUBMITTED",
+          "transport_refused": "NOT_SUBMITTED",
+          "moderation_blocked": "REJECTED_POLICY", "content_policy_violation": "REJECTED_POLICY",
+          "status_completed": "PASSED", "status_failed": "PROVIDER_FAILED", "status_cancelled": "PROVIDER_FAILED"
+        },
+        "default": "AMBIGUOUS"
+      },
+      "charged_on": ["PASSED", "PROVIDER_FAILED", "REJECTED_POLICY", "AMBIGUOUS"],
+      "request_fields": {"first_frame": "input_reference", "last_frame": "last_frame", "reference_image": "reference_images", "seconds": "seconds", "size": "size"},
+      "size_by_aspect": {"768p": {"16:9": "1366x768", "9:16": "768x1366"}},
+      "unverified": ["request_fields (first/last frame and reference mapping onto the OpenAI-shape body)", "frame_roles", "max_refs", "size_by_aspect", "native_audio", "charged_on (whether a failed request is charged; assumed charged)", "moderation error codes", "rate limits"],
+      "notes": ["P2P marketplace seller OMNiBiU; 5198 VND per request on 2026-11-09", "no requests recorded for this model at reading time"]
+    }
+  ]
+}

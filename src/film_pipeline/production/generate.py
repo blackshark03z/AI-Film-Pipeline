@@ -23,27 +23,39 @@ Blockers keep a send from being safe; they are listed in the payload either way:
 payload) and returns the payload. Without ``dry_run`` it refuses unless the backlog header says ``OWNER_GO_LIVE: YES`` **and**
 there are no blockers; only then it calls the runner (default: `flow_send.py`), and a PASSED clip is registered in the take
 log. The receipt is written *before* the send and updated with the result, so an interrupted send leaves evidence. Every
-real send spends credits; the video model is always Omni 1.2 Flash at 360p.
+real send spends money.
+
+Provider adapters (docs/production/PROVIDER_INDEPENDENCE.md, phase A): the payload carries a provider-neutral
+``GenerationRequest`` and the route (`film.json` ``route``, a shot's own ``route`` overrides it; default Flow Omni 1.2
+Flash TEST). The route's registry entry prices the send in its own unit and its preflight (`providers/route.py`) adds
+ROUTE_* blockers and warnings. A Flow route goes through ``FlowUiAdapter`` (same argv, results and ledger as before);
+an API route (MiniMax, an OpenAI-style gateway) submits, polls and downloads through its HTTP adapter and binds the take
+by job id.
 """
 from __future__ import annotations
 
 import json
 import re
-import subprocess
-import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
 from film_pipeline.drama.generability import DRAFTS, rate_shot
 from film_pipeline.production.plan import plan_package
+from film_pipeline.production.money import (credit_ledger, money_ledger, receipt_amount, receipt_charged,
+                                            receipt_result, receipt_unit)
 from film_pipeline.production.planning import flow_credits
 from film_pipeline.production.sections import shot_seconds
 from film_pipeline.production.takes import (load_log, register_take, sha256_file, sha256_text, takes_dir)
+from film_pipeline.providers.capability import DEFAULT_MODEL, DEFAULT_PROVIDER, ModelCapability, get_capability
+from film_pipeline.providers.http_adapters import make_adapter
+from film_pipeline.providers.flow_ui_adapter import FlowUiAdapter, default_runner  # noqa: F401 - re-exported
+from film_pipeline.providers.request import FrameRef, GenerationRequest
+from film_pipeline.providers.route import RouteSpec, resolve_route, route_defaults, route_issues
 
 ROOT = Path(__file__).resolve().parents[3]
 BACKLOG = ROOT / "docs" / "production" / "LOOP_BACKLOG.md"
-FLOW_SEND = ROOT / "tools" / "drama_flow_ui" / "flow_send.py"
+FLOW_SEND = ROOT / "tools" / "drama_flow_ui" / "flow_send.py"  # == flow_ui_adapter.FLOW_SEND
 ROUTE = "start_frame+Khung hinh"
 ROUTE_END = "start_frame+end_frame+Khung hinh"
 MODEL = "Omni 1.2 Flash 360p"
@@ -64,15 +76,6 @@ def owner_go_live(backlog: Path | None = None) -> bool:
     except OSError:
         return False
     return found == ["YES"]   # exactly one header line, and it says YES
-
-
-def default_runner(argv: list[str], out: Path) -> dict[str, Any]:  # pragma: no cover - spends credits; P3-05 only
-    """Run the sender and return its manifest plus `returncode`; `generate` refuses a manifest that does not belong to
-    this send (the output must not exist before the send, so an old manifest cannot be mistaken for a new one)."""
-    done = subprocess.run(argv, check=False)
-    manifest = out.with_suffix(".take.json")
-    body = json.loads(manifest.read_text(encoding="utf-8")) if manifest.is_file() else {"result": "NO_MANIFEST"}
-    return {**body, "returncode": done.returncode}
 
 
 def _blocker(code: str, detail: str, live_only: bool = False) -> dict[str, Any]:
@@ -161,7 +164,10 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     still = _start_still(pkg, generation_id, stills_dir, blockers)
     end_still = _frame_still(pkg, generation_id, stills_dir, blockers, "end") if decl.end_frame else None
 
-    prices = {g.generation_id: flow_credits(shot_seconds(g, pkg.header)) for g in shots.generations}
+    route = resolve_route(pkg.header, decl)
+    cap = _capability(route)
+    unit = cap.price.unit
+    prices = {g.generation_id: _fallback_price(pkg.header, g) for g in shots.generations}
     sent = _sent_receipts(root, pkg.header.film_id, prices)
     # a send that did not end in a registered take still used its number (and probably its credits): never reuse it
     used = [len(log.for_generation(generation_id))] + [
@@ -169,7 +175,8 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     number = max(used) + 1
     take_id = f"{generation_id}_t{number}"
     out = root / "media" / "takes" / f"{take_id}.mp4"
-    spent = credit_ledger(log, sent)["spent"]
+    ledger = money_ledger(log, sent)
+    spent = ledger.get(unit, {}).get("spent", 0.0)
     pending = [tid for tid, r in sent.items() if r.get("result") == "PENDING" and tid.startswith(f"{generation_id}_t")]
     if pending:
         blockers.append(_blocker("SEND_PENDING", f"{', '.join(pending)} was sent and never reported back; check Flow for the "
@@ -177,52 +184,69 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     if out.exists() or out.with_suffix(".take.json").exists():
         blockers.append(_blocker("OUTPUT_EXISTS", f"{out} (or its manifest) already exists; it is evidence and is not "
                                  f"overwritten", live_only=True))
-    cap = pkg.header.budget.credits_cap
+    cap_amount = pkg.header.budget.cap_for(unit)
     seconds = shot_seconds(decl, pkg.header)
-    cost = flow_credits(seconds)
-    if start_token and decl.end_frame and not end_token:   # upload route (no start token) uploads the end still too
+    cost = _price(cap, seconds, route.tier)
+    flow = cap.adapter == "flow_ui"
+    if flow and start_token and decl.end_frame and not end_token:   # upload route (no start token) uploads the end still too
         blockers.append(_blocker("END_TOKEN_MISSING", "pass --end-token tok:<tail> of the end still uploaded to Flow",
                                  live_only=True))
+    in_unit = "" if unit == "credits" else f" {unit}"
+    day = (today or date.today()).isoformat()
+    daily = route_defaults().daily_caps.get(unit)
+    if daily is not None and not pkg.header.rehearsal:
+        spent_today = _spent_on(sent, unit, day)
+        if spent_today + cost > daily:
+            blockers.append(_blocker("BUDGET_DAILY_EXCEEDED", f"{spent_today:g} spent on {day} + {cost:g} > daily cap "
+                                     f"{daily:g}{in_unit}", live_only=True))
     if pkg.header.rehearsal:
         pass  # a rehearsal spends nothing: no budget to check (credits are recorded as 0)
-    elif cap is None:
-        blockers.append(_blocker("BUDGET_NOT_SET", "film.json budget.credits_estimate is empty", live_only=True))
-    elif spent + cost > cap:
-        blockers.append(_blocker("BUDGET_EXCEEDED", f"{spent:g} spent + {cost:g} > cap {cap:g}",
+    elif cap_amount is None and daily is not None and pkg.header.experiment:
+        pass  # an experiment film without its own cap in this unit is held by the daily cap
+    elif cap_amount is None:
+        blockers.append(_blocker("BUDGET_NOT_SET", "film.json budget.credits_estimate is empty" if unit == "credits"
+                                 else f"film.json budget.caps.{unit} is empty", live_only=True))
+    elif spent + cost > cap_amount:
+        blockers.append(_blocker("BUDGET_EXCEEDED", f"{spent:g} spent + {cost:g} > cap {cap_amount:g}{in_unit}",
                                  live_only=True))
     attempts = None
     if pre.preflight.generability:
-        attempts = _generability_gate(decl, sent, log, sha256_text(prompt), cost, blockers, today or date.today())
-    # token route (a start token is given): the stills are already in the Flow gallery. Upload route (no start token):
-    # flow_send uploads them inside the send, so they are the newest picker items and only a pixel check is needed.
-    upload = not start_token
-    argv = [sys.executable, str(FLOW_SEND), str(prompt_file), str(out)]
-    if upload:
-        argv += ["--upload-frames", "--start-file", str(still)]
-        preconditions = ["Flow composer is on Omni 1.2 Flash, 360p, video mode (flow_send sets model and duration)",
-                         "flow_send uploads the start (and end) still inside the send; the newest picker item must "
-                         "match it by pixels"]
+        attempts = _generability_gate(decl, sent, log, sha256_text(prompt), cost, blockers, today or date.today(),
+                                      route=route, unit=unit)
+    request = GenerationRequest(
+        film_id=pkg.header.film_id, generation_id=generation_id, take_id=take_id, prompt=prompt,
+        prompt_sha256=sha256_text(prompt), duration_s=int(seconds), aspect=pkg.header.aspect, tier=route.tier,
+        first_frame=FrameRef(path=str(still), sha256=sha256_file(still) if still.is_file() else ""),
+        last_frame=(FrameRef(path=str(end_still), sha256=sha256_file(end_still) if end_still.is_file() else "")
+                    if end_still is not None else None),
+        audio_mode="NATIVE_DIALOGUE" if decl.dialogue else "AMBIENT" if decl.sfx else "SILENT", output=str(out))
+    warnings: list[dict[str, Any]] = []
+    for issue in route_issues(request, cap):
+        if issue.severity == "BLOCK":
+            blockers.append(_blocker(issue.code, issue.detail))
+        else:
+            warnings.append({"code": issue.code, "detail": issue.detail})
+    if flow:
+        argv, preconditions = FlowUiAdapter(cap).build_argv(request, prompt_file=prompt_file, start_token=start_token,
+                                                            end_token=end_token)
+        route_name = ROUTE_END if end_still is not None else ROUTE
     else:
-        argv += ["--start", start_token, "--start-file", str(still)]
-        preconditions = ["Flow composer is on Omni 1.2 Flash, 360p, video mode (flow_send sets model and duration)",
-                         "the start still is uploaded to the Flow gallery (its tail is --start-token)"]
-        if end_still is not None:
-            preconditions.append("the end still is uploaded to the Flow gallery (its tail is --end-token)")
-    argv += ["--model", FLOW_MODEL, "--duration", str(int(seconds))]
-    if not upload and end_still is not None:
-        argv += ["--end", end_token or PLACEHOLDER_END_TOKEN, "--end-file", str(end_still)]
-    if upload and end_still is not None:
-        argv += ["--end-file", str(end_still)]
-    preconditions.append("GPM / Flow browser stays open; no cookies or captchas touched")
+        argv = []
+        preconditions = [f"{cap.auth_env} is set in the environment (never written to a file)",
+                         f"{cap.provider}/{cap.model} UNVERIFIED: {', '.join(cap.unverified) or 'nothing'}"]
+        route_name = "api:" + "+".join(request.frame_roles)
     payload = {"film_id": pkg.header.film_id, "generation_id": generation_id, "take_id": take_id,
             "shot_version": decl.version, "prompt_file": str(prompt_file), "prompt_sha256": sha256_text(prompt),
             "prompt_words": len(prompt.split()), "start_frame": {"source": start_source, "file": str(still),
                                                                 "exists": still.is_file(),
                                                                 "sha256": sha256_file(still) if still.is_file() else ""},
-            "route": ROUTE_END if end_still is not None else ROUTE, "model": MODEL, "duration_s": int(seconds),
-            "expected_credits": 0.0 if pkg.header.rehearsal else cost, "credits_spent": spent,
-            "credit_cap": cap, "output": str(out), "argv": argv,
-            "preconditions": preconditions, "blockers": blockers}
+            "route": route_name, "model": MODEL if flow else cap.display_name, "duration_s": int(seconds),
+            "expected_credits": (0.0 if pkg.header.rehearsal else cost) if unit == "credits" else 0.0,
+            "credits_spent": ledger["credits"]["spent"], "credit_cap": pkg.header.budget.credits_cap,
+            "output": str(out), "argv": argv, "preconditions": preconditions, "blockers": blockers,
+            "provider": cap.provider, "provider_model": cap.model, "tier": route.tier, "cost_unit": unit,
+            "expected_cost": 0.0 if pkg.header.rehearsal else cost, "spent_in_unit": spent, "cap_in_unit": cap_amount,
+            "warnings": warnings, "request": request.model_dump(mode="json")}
     if attempts is not None:
         payload["attempts"] = attempts
     if end_still is not None:
@@ -231,15 +255,62 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     return payload
 
 
+def _spent_on(sent: dict[str, dict[str, Any]], unit: str, day: str) -> float:
+    """What this film's receipts sent on ``day`` cost (or reserve) in ``unit``."""
+    return sum(receipt_amount(r) for r in sent.values()
+               if r.get("sent_on") == day and receipt_unit(r) == unit and receipt_charged(r))
+
+
+def _capability(route: RouteSpec) -> ModelCapability:
+    try:
+        return route.capability()
+    except KeyError as exc:
+        raise ValueError(f"route {route.provider}/{route.model} is not in the capability registry") from exc
+
+
+def _price(cap: ModelCapability, seconds: float, tier: str) -> float:
+    """The registry price of one send; a tier the model does not offer prices 0 (the route preflight blocks it)."""
+    try:
+        return cap.price_of(seconds, tier)
+    except ValueError:
+        return 0.0
+
+
+def _fallback_price(header: Any, decl: Any) -> dict[str, Any]:
+    """What an unreadable receipt of `decl` reserves: its route's price, unit and identity."""
+    route = resolve_route(header, decl)
+    try:
+        cap = _capability(route)
+    except ValueError:  # another shot's bad route is that shot's error (its own build_payload raises), not this one's
+        return {"expected_credits": flow_credits(shot_seconds(decl, header))}
+    amount = _price(cap, shot_seconds(decl, header), route.tier)
+    if cap.price.unit == "credits":
+        return {"expected_credits": amount}
+    return {"expected_credits": 0.0, "expected_cost": amount, "cost_unit": cap.price.unit, "provider": cap.provider,
+            "provider_model": cap.model}
+
+
+def _receipt_route(receipt: dict[str, Any]) -> tuple[str, str]:
+    """(provider, model) of a receipt; one from before provider adapters is a Flow Omni 1.2 Flash send."""
+    provider = str(receipt.get("provider") or DEFAULT_PROVIDER)
+    model = str(receipt.get("provider_model") or (DEFAULT_MODEL if provider == DEFAULT_PROVIDER else ""))
+    return provider, model
+
+
 def _generability_gate(decl: Any, sent: dict[str, dict[str, Any]], log: Any, prompt_sha: str, cost: float,
-                       blockers: list[dict[str, Any]], today: date) -> dict[str, Any]:
-    """Blockers from the generability rating (drama/generability.py); returns the payload's `attempts` block.
-    A send counts once it was submitted (receipt sent, result not a pre-submit failure); a version bump keeps the history.
-    FLOW_FAILED (Flow itself rejected the clip, no output) does not use up the cap: Owner 2026-11-09 "Không tính, sửa đi";
-    its credits still count in the ledger."""
-    gid, level = decl.generation_id, rate_shot(decl).level
-    mine = [r for tid, r in sent.items() if r.get("generation_id", tid.rsplit("_t", 1)[0]) == gid
-            and not str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS + FLOW_FAILED_RESULTS)]
+                       blockers: list[dict[str, Any]], today: date, *, route: RouteSpec | None = None,
+                       unit: str = "credits") -> dict[str, Any]:
+    """Blockers from the generability rating (drama/generability.py) of the routed (provider, model); returns the
+    payload's `attempts` block. A send counts once it was submitted (receipt sent, normalized result not NOT_SUBMITTED)
+    on the same (provider, model); a version bump keeps the history. PROVIDER_FAILED (Flow's FLOW_FAILED: the provider
+    rejected the clip, no output) and REJECTED_POLICY do not use up the cap: Owner 2026-11-09 "Không tính, sửa đi";
+    their cost still counts in the ledger where the registry charges it."""
+    route = route or RouteSpec()
+    key = (route.provider, route.model)
+    gid, level = decl.generation_id, rate_shot(decl, *key).level
+    ours = {tid: r for tid, r in sent.items() if r.get("generation_id", tid.rsplit("_t", 1)[0]) == gid
+            and _receipt_route(r) == key}
+    mine = [r for r in ours.values() if receipt_result(r) not in NOT_AN_ATTEMPT]
     here = [r for r in mine if r.get("shot_version", 1) == decl.version]
     attempts = {"this_version": len(here), "all_versions": len(mine), "cap": DRAFTS[level], "level": level}
     reuse = (decl.accepted_take_reuse or "").strip()
@@ -257,11 +328,11 @@ def _generability_gate(decl: Any, sent: dict[str, dict[str, Any]], log: Any, pro
                                          f"{exc.prompt_sha256[:12]}; this is v{decl.version} prompt {prompt_sha[:12]}"))
             if today > exc.expires:
                 blockers.append(_blocker("EXCEPTION_EXPIRED", f"the exception expired on {exc.expires}"))
-            # FLOW_FAILED sends do not use an attempt but were charged: they still spend the exception's credits
-            charged = [r for tid, r in sent.items() if r.get("generation_id", tid.rsplit("_t", 1)[0]) == gid
-                       and r.get("shot_version", 1) == decl.version
-                       and not str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS)]
-            used = sum(float(r.get("expected_credits") or 0) for r in charged)
+            # FLOW_FAILED sends do not use an attempt but were charged: they still spend the exception's budget
+            # (max_credits is in the route's unit)
+            charged = [r for r in ours.values() if r.get("shot_version", 1) == decl.version
+                       and receipt_unit(r) == unit and receipt_charged(r)]
+            used = sum(receipt_amount(r) for r in charged)
             if len(here) >= exc.max_attempts or used + cost > exc.max_credits:
                 blockers.append(_blocker("EXCEPTION_SPENT", f"{len(here)}/{exc.max_attempts} sends, {used:g} + {cost:g} "
                                          f"credits vs {exc.max_credits:g}"))
@@ -275,47 +346,42 @@ def _generability_gate(decl: Any, sent: dict[str, dict[str, Any]], log: Any, pro
     return attempts
 
 
-# results the sender returns before pressing Enter on the prompt (tools/drama_flow_ui/flow_send.py): nothing was submitted
+# normalized results that do not use a generability send (nothing submitted, or the provider/moderation refused it)
+NOT_AN_ATTEMPT = ("NOT_SUBMITTED", "PROVIDER_FAILED", "REJECTED_POLICY")
+# Flow's raw vocabulary, kept for readers; the registry (providers/registry/flow.json error_map) is the source and a
+# test pins the two together. Results the sender returns before pressing Enter on the prompt
+# (tools/drama_flow_ui/flow_send.py): nothing was submitted -> NOT_SUBMITTED
 PRE_SUBMIT_RESULTS = ("START_NOT_FOUND", "END_NOT_FOUND", "START_NOT_SET", "END_NOT_SET", "ATTACH_NOT_FOUND",
                       "SETTINGS_NOT_SET", "SEND_FAILED", "PRE_SUBMIT_ERROR")
-# submitted, but Flow marked the job "Không thành công" and removed it: no clip; not counted against the send cap
+# submitted, but Flow marked the job "Không thành công" and removed it: no clip -> PROVIDER_FAILED (charged, not a send)
 FLOW_FAILED_RESULTS = ("FLOW_FAILED",)
 
 
-def credit_ledger(log: Any, sent: dict[str, dict[str, Any]]) -> dict[str, Any]:
-    """Credits used = registered takes + receipts that were submitted but never became a take (UNBOUND, AMBIGUOUS,
-    TIMEOUT, PENDING ...: the clip may exist in Flow and was probably charged).
-    A receipt is matched to its take by the take's output file (a take's id can differ from its receipt's id: the
-    receipt numbers every send, the take log numbers registered takes). Pre-submit failures cost nothing."""
-    # by output file only: take ids and receipt ids share one namespace with different numbering, so matching on the
-    # take id would mark a lost send (receipt SC01_g1_t1, UNBOUND) as registered by an unrelated take SC01_g1_t1
-    registered = {Path(t.output_file).stem for t in log.takes}
-    unresolved = {tid: r["expected_credits"] for tid, r in sent.items()
-                  if tid not in registered and not str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS)}
-    pre_submit = sorted(tid for tid, r in sent.items()
-                        if tid not in registered and str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS))
-    logged = sum(t.credits for t in log.takes)
-    return {"logged": logged, "unresolved": unresolved, "pre_submit": pre_submit,
-            "spent": logged + sum(unresolved.values())}
-
-
-def _sent_receipts(root: Path, film_id: str, prices: dict[str, float]) -> dict[str, dict[str, Any]]:
+def _sent_receipts(root: Path, film_id: str, prices: dict[str, Any]) -> dict[str, dict[str, Any]]:
     """Intent receipts of real sends (take id -> receipt). An unreadable receipt counts as a pending send, priced at
-    its shot's `flow_credits` (`prices`: generation id -> credits)."""
+    its shot's price (`prices`: generation id -> Flow credits, or the `_fallback_price` fields of its route)."""
     out: dict[str, dict[str, Any]] = {}
     folder = takes_dir(root) / "intents"
     if not folder.is_dir():
         return out
     for path in sorted(folder.glob("*.intent.json")):
         take_id = path.name[:-len(".intent.json")]
-        fallback = prices.get(take_id.rsplit("_t", 1)[0], flow_credits(8))
+        price = prices.get(take_id.rsplit("_t", 1)[0], flow_credits(8))
+        price = price if isinstance(price, dict) else {"expected_credits": float(price)}
         try:
             body = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
-            out[take_id] = {"sent": True, "result": "PENDING", "expected_credits": fallback}
+            out[take_id] = {"sent": True, "result": "PENDING", **price}
             continue
         if body.get("sent") and body.get("film_id", film_id) == film_id:
-            out[take_id] = {**body, "expected_credits": float(body.get("expected_credits") or fallback)}
+            if receipt_unit(body) == "credits":
+                # a Flow receipt without a price: its shot's Flow price (or 8 s if the shot now routes elsewhere)
+                fallback = flow_credits(8) if "cost_unit" in price else float(price["expected_credits"])
+                out[take_id] = {**body, "expected_credits": float(body.get("expected_credits") or fallback)}
+            else:
+                same = price.get("cost_unit") == receipt_unit(body)
+                out[take_id] = {**body, "expected_cost": float(body.get("expected_cost")
+                                                               or (price.get("expected_cost", 0.0) if same else 0.0))}
     return out
 
 
@@ -323,7 +389,8 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
     path = takes_dir(root) / "intents" / f"{payload['take_id']}.intent.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     keep = ("film_id", "generation_id", "take_id", "shot_version", "prompt_sha256", "route", "model",
-            "duration_s", "expected_credits", "credits_spent", "credit_cap")
+            "duration_s", "expected_credits", "credits_spent", "credit_cap", "provider", "provider_model", "tier",
+            "cost_unit", "expected_cost")
     receipt = {k: payload[k] for k in keep}
     receipt["start_frame_sha256"] = payload["start_frame"]["sha256"]
     receipt["start_frame_source"] = payload["start_frame"]["source"]
@@ -331,6 +398,13 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
         receipt["end_frame_sha256"] = payload["end_frame"]["sha256"]
     receipt["blockers"] = [b["code"] for b in payload["blockers"]]
     receipt.update(extra)
+    if receipt.get("sent") and receipt.get("cost_unit", "credits") != "credits":
+        # the day of a send rules the daily cap; a later rewrite (the result) keeps the first day
+        try:
+            first = json.loads(path.read_text(encoding="utf-8")).get("sent_on") if path.is_file() else None
+        except (OSError, ValueError):
+            first = None
+        receipt["sent_on"] = first or date.today().isoformat()
     path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return path
 
@@ -338,10 +412,14 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
 def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Path | None = None,
              stills_dir: Path | None = None, start_token: str | None = None, backlog: Path | None = None,
              runner: Runner | None = None, end_token: str | None = None,
-             today: date | None = None) -> dict[str, Any]:
+             today: date | None = None, adapter: Any | None = None) -> dict[str, Any]:
+    """``runner`` replaces flow_send on a Flow route; ``adapter`` replaces the HTTP adapter on an API route (tests and
+    rehearsals: on a rehearsal package an explicit runner/adapter is a mock and records cost 0)."""
     payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
                             end_token=end_token, today=today)
     root = Path(pkg.root)
+    cap = get_capability(payload["provider"], payload["provider_model"])
+    flow = cap.adapter == "flow_ui"
     live_blocked = [b for b in payload["blockers"] if not b["live_only"] or not dry_run]
     if dry_run:
         # a dry run reports the live-only blockers too, but they do not make the dry run itself fail
@@ -349,18 +427,26 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
         return {"sent": False, "dry_run": True, "ready_to_send": not payload["blockers"], "payload": payload,
                 "receipt": str(receipt)}
     # the go-live flag guards the provider; a rehearsal package with an explicit (mock) runner never reaches one
-    mock = bool(pkg.header.rehearsal and runner is not None)
+    mock = bool(pkg.header.rehearsal and (runner if flow else adapter) is not None)
     go = mock or owner_go_live(backlog)
     refusals = ([] if go else [_blocker("OWNER_GO_LIVE_NO", "the backlog header does not say OWNER_GO_LIVE: YES")])
     refusals += live_blocked
+    if not flow:
+        adapter = adapter or make_adapter(cap)
+        health = adapter.health()
+        if not health.routable:
+            refusals.append(_blocker("PROVIDER_NOT_READY", f"{cap.provider}: {health.state} {health.diagnostic_code}",
+                                     live_only=True))
     if refusals:
         receipt = _write_receipt(root, payload, dry_run=False, sent=False, owner_go_live=go,
                                  refused=[r["code"] for r in refusals])
         return {"sent": False, "dry_run": False, "refused": refusals, "payload": payload, "receipt": str(receipt)}
     receipt = _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
+    if not flow:
+        return _generate_api(pkg, payload, adapter, mock, receipt)
     out = Path(payload["output"])
     try:
-        manifest = (runner or default_runner)(payload["argv"], out)
+        manifest = FlowUiAdapter(cap, runner=runner).send(payload["argv"], out)
     except BaseException:
         _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING",
                        note="the sender raised before reporting; check Flow before resending")
@@ -381,4 +467,46 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     result["manifest_result"] = outcome
     _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=outcome,
                    take_registered=bool(result.get("take")))
+    return result
+
+
+def _generate_api(pkg: Any, payload: dict[str, Any], adapter: Any, mock: bool, receipt: Path) -> dict[str, Any]:
+    """An API route: submit, record the job id on the receipt at once (an interrupted poll leaves the binding), poll,
+    download, register the take bound to its job id. The receipt's ``result`` is the normalized result; the provider's
+    own outcome is ``provider_result``."""
+    root = Path(pkg.root)
+    request = GenerationRequest.model_validate(payload["request"])
+    job: dict[str, str] = {}
+
+    def submitted(job_id: str) -> None:
+        job["id"] = job_id
+        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING",
+                       provider_job_id=job_id)
+
+    try:
+        outcome = adapter.run(request, on_submitted=submitted)
+    except BaseException:
+        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING",
+                       provider_job_id=job.get("id", ""),
+                       note="the adapter raised before reporting; poll the job id before resending")
+        raise
+    out = Path(payload["output"])
+    result: dict[str, Any] = {"sent": True, "dry_run": False, "payload": payload, "manifest_result": outcome.result,
+                              "provider_result": outcome.raw_result, "provider_job_id": outcome.provider_job_id,
+                              "receipt": str(receipt)}
+    final = outcome.result
+    if final == "PASSED" and not (out.is_file() and outcome.sha256 and outcome.sha256 == sha256_file(out)):
+        final = "AMBIGUOUS"  # the job says done but the bytes on disk are not the ones downloaded
+    if final == "PASSED":
+        entry, _ = register_take(root, pkg.header.film_id, payload["generation_id"], out,
+                                 prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
+                                 route=payload["route"], model=payload["model"], credits=0.0,
+                                 start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"],
+                                 provider=payload["provider"], provider_job_id=outcome.provider_job_id,
+                                 cost_unit=payload["cost_unit"], cost_amount=0.0 if mock else payload["expected_cost"])
+        result["take"] = entry.model_dump(mode="json")
+    result["manifest_result"] = final
+    _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=final,
+                   provider_result=outcome.raw_result, provider_job_id=outcome.provider_job_id,
+                   take_registered=bool(result.get("take")), **({"note": outcome.detail} if outcome.detail else {}))
     return result
