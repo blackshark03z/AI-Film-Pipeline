@@ -1,0 +1,265 @@
+{
+  "take": {
+    "take_id": "SC04_g1_t1",
+    "generation_id": "SC04_g1",
+    "prompt_sha256": "bb0f7fa4382a6b9b3acc2bf8f39218a09e68c2ca11f36722f477529a6a5cc3fb",
+    "start_frame_sha256": "b22692e17576de830960eb16128cbc4d866b51462d803244c519ba969c9cb646",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 8.0,
+    "output_file": "SC04_g1_t2.mp4",
+    "output_sha256": "4c72160a822391d0e5699823df8456165efba4e4bc277fec5bc3a896b9c21cf0",
+    "status": "GENERATED",
+    "shot_version": 2,
+    "cause": "",
+    "registered_at": "2026-11-09T06:35:00Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "HAL"
+    ],
+    "start_state": "SC04_g1",
+    "end_state": "SC04_g2",
+    "phases": [
+      {
+        "kind": "HOLD",
+        "start_s": 0.0,
+        "end_s": 3.0,
+        "description": "HAL looks at the key on the table for a long moment, quite still"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 3.0,
+        "end_s": 4.0,
+        "description": "HAL raises his eyes to IRIS"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 4.0,
+        "end_s": 7.0,
+        "description": "HAL speaks to IRIS, gently"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 7.0,
+        "end_s": 8.0,
+        "description": "HAL's face softens"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: he gives the key back to her - carried by: HAL"
+    },
+    {
+      "group": "action",
+      "question": "0-3s HOLD: does this happen on screen - HAL looks at the key on the table for a long moment, quite still?"
+    },
+    {
+      "group": "action",
+      "question": "3-4s ACTION: does this happen on screen - HAL raises his eyes to IRIS?"
+    },
+    {
+      "group": "action",
+      "question": "4-7s ACTION: does this happen on screen - HAL speaks to IRIS, gently?"
+    },
+    {
+      "group": "action",
+      "question": "7-8s HOLD: does this happen on screen - HAL's face softens?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): HAL speaks to IRIS"
+    },
+    {
+      "group": "character",
+      "question": "HAL: does the face/body read as letting go, tender (restrained)? Must NOT read as: tears."
+    },
+    {
+      "group": "sync",
+      "question": "Line 43 is audible, spoken by the right character, lips match: HAL: Keep the key. The lock never changed."
+    },
+    {
+      "group": "audio",
+      "question": "HAL sounds like the voice bible: low gravelly male voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC04_g1: Continues from the previous shot: IRIS standing across the table, frame-left; HAL seated at the table, frame-right; the key: flat on the table in front of the empty chair; the mugs: two white mugs on the table, the second one steaming beside the key; the empty chair: pulled out from the table on the left."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC04_g2: Continues from the previous shot: IRIS standing across the table, frame-left; HAL seated at the table, frame-right; the key: flat on the table in front of the empty chair; the mugs: two white mugs on the table, the second one steaming beside the key; the empty chair: pulled out from the table on the left."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_ADDRESS:43",
+      "group": "narrative",
+      "question": "Line 43: does HAL clearly speak to IRIS (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:IRIS",
+      "group": "spatial",
+      "question": "Is the place where IRIS stands kept out of frame (never shown empty), and do HAL's eyes go just past the lens to frame-left?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does HAL look at IRIS and never into the lens?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC04_g1_t1",
+    "generation_id": "SC04_g1",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:43",
+      "REL_LISTENER:IRIS",
+      "REL_GAZE"
+    ],
+    "output_sha256": "4c72160a822391d0e5699823df8456165efba4e4bc277fec5bc3a896b9c21cf0"
+  },
+  "auto_evidence": {
+    "note": "autoqc not requested (no --clips directory)",
+    "warnings": []
+  }
+}

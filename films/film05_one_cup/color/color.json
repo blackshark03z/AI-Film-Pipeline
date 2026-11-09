@@ -1,0 +1,404 @@
+{
+  "film_id": "film05_one_cup",
+  "plan": {
+    "references": {},
+    "skip": [],
+    "max_gain": 0.25,
+    "tolerance": 6.0,
+    "look": ""
+  },
+  "shots": [
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "take_id": "SC01_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 69.236,
+        "g": 53.849,
+        "b": 47.396,
+        "luma": 56.654
+      },
+      "reference_stats": {
+        "r": 75.559,
+        "g": 56.767,
+        "b": 49.362,
+        "luma": 60.228
+      },
+      "deviation_before": 6.323,
+      "exposure_ev": 0.088,
+      "wb_shift": 0.067,
+      "gains": [
+        1.09133,
+        1.05419,
+        1.04148
+      ],
+      "skipped": "",
+      "after": {
+        "r": 74.592,
+        "g": 55.372,
+        "b": 48.55,
+        "luma": 58.966
+      },
+      "deviation_after": 1.395,
+      "matched": true
+    },
+    {
+      "generation_id": "SC01_g2",
+      "scene_id": "SC01",
+      "take_id": "SC01_g2_t1",
+      "reference": "median",
+      "measured": {
+        "r": 81.881,
+        "g": 59.686,
+        "b": 51.329,
+        "luma": 63.801
+      },
+      "reference_stats": {
+        "r": 75.559,
+        "g": 56.767,
+        "b": 49.362,
+        "luma": 60.228
+      },
+      "deviation_before": 6.322,
+      "exposure_ev": -0.083,
+      "wb_shift": -0.06,
+      "gains": [
+        0.92279,
+        0.95109,
+        0.96168
+      ],
+      "skipped": "",
+      "after": {
+        "r": 74.489,
+        "g": 55.376,
+        "b": 48.413,
+        "luma": 58.937
+      },
+      "deviation_after": 1.391,
+      "matched": true
+    },
+    {
+      "generation_id": "SC02_g1",
+      "scene_id": "SC02",
+      "take_id": "SC02_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 62.408,
+        "g": 44.111,
+        "b": 33.997,
+        "luma": 47.271
+      },
+      "reference_stats": {
+        "r": 73.733,
+        "g": 50.94,
+        "b": 38.159,
+        "luma": 54.863
+      },
+      "deviation_before": 11.325,
+      "exposure_ev": 0.215,
+      "wb_shift": 0.074,
+      "gains": [
+        1.18147,
+        1.15481,
+        1.12242
+      ],
+      "skipped": "",
+      "after": {
+        "r": 72.453,
+        "g": 49.619,
+        "b": 37.306,
+        "luma": 53.585
+      },
+      "deviation_after": 1.321,
+      "matched": true
+    },
+    {
+      "generation_id": "SC02_g2",
+      "scene_id": "SC02",
+      "take_id": "SC02_g2_t1",
+      "reference": "median",
+      "measured": {
+        "r": 85.057,
+        "g": 57.769,
+        "b": 42.321,
+        "luma": 62.455
+      },
+      "reference_stats": {
+        "r": 73.733,
+        "g": 50.94,
+        "b": 38.159,
+        "luma": 54.863
+      },
+      "deviation_before": 11.324,
+      "exposure_ev": -0.187,
+      "wb_shift": -0.057,
+      "gains": [
+        0.86687,
+        0.88179,
+        0.90166
+      ],
+      "skipped": "",
+      "after": {
+        "r": 72.532,
+        "g": 49.584,
+        "b": 37.187,
+        "luma": 53.567
+      },
+      "deviation_after": 1.356,
+      "matched": true
+    },
+    {
+      "generation_id": "SC03_g1",
+      "scene_id": "SC03",
+      "take_id": "SC03_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 61.734,
+        "g": 48.654,
+        "b": 45.29,
+        "luma": 51.192
+      },
+      "reference_stats": {
+        "r": 65.98,
+        "g": 50.725,
+        "b": 44.876,
+        "luma": 53.546
+      },
+      "deviation_before": 4.246,
+      "exposure_ev": 0.065,
+      "wb_shift": 0.109,
+      "gains": [
+        1.06878,
+        1.04257,
+        0.99086
+      ],
+      "skipped": "",
+      "after": {
+        "r": 64.734,
+        "g": 49.344,
+        "b": 44.106,
+        "luma": 52.238
+      },
+      "deviation_after": 1.381,
+      "matched": true
+    },
+    {
+      "generation_id": "SC03_g2",
+      "scene_id": "SC03",
+      "take_id": "SC03_g2_t1",
+      "reference": "median",
+      "measured": {
+        "r": 70.225,
+        "g": 52.797,
+        "b": 44.462,
+        "luma": 55.9
+      },
+      "reference_stats": {
+        "r": 65.98,
+        "g": 50.725,
+        "b": 44.876,
+        "luma": 53.546
+      },
+      "deviation_before": 4.245,
+      "exposure_ev": -0.062,
+      "wb_shift": -0.103,
+      "gains": [
+        0.93955,
+        0.96076,
+        1.00931
+      ],
+      "skipped": "",
+      "after": {
+        "r": 64.976,
+        "g": 49.456,
+        "b": 43.868,
+        "luma": 52.352
+      },
+      "deviation_after": 1.269,
+      "matched": true
+    },
+    {
+      "generation_id": "SC04_g1",
+      "scene_id": "SC04",
+      "take_id": "SC04_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 68.666,
+        "g": 54.799,
+        "b": 49.72,
+        "luma": 57.381
+      },
+      "reference_stats": {
+        "r": 76.35,
+        "g": 55.056,
+        "b": 46.136,
+        "luma": 58.939
+      },
+      "deviation_before": 7.684,
+      "exposure_ev": 0.039,
+      "wb_shift": 0.261,
+      "gains": [
+        1.1119,
+        1.00469,
+        0.92792
+      ],
+      "skipped": "",
+      "after": {
+        "r": 75.185,
+        "g": 53.554,
+        "b": 45.183,
+        "luma": 57.548
+      },
+      "deviation_after": 1.502,
+      "matched": true
+    },
+    {
+      "generation_id": "SC04_g2",
+      "scene_id": "SC04",
+      "take_id": "SC04_g2_t1",
+      "reference": "median",
+      "measured": {
+        "r": 84.035,
+        "g": 55.313,
+        "b": 42.553,
+        "luma": 60.498
+      },
+      "reference_stats": {
+        "r": 76.35,
+        "g": 55.056,
+        "b": 46.136,
+        "luma": 58.939
+      },
+      "deviation_before": 7.685,
+      "exposure_ev": -0.038,
+      "wb_shift": -0.255,
+      "gains": [
+        0.90855,
+        0.99535,
+        1.0842
+      ],
+      "skipped": "",
+      "after": {
+        "r": 75.18,
+        "g": 53.716,
+        "b": 45.218,
+        "luma": 57.665
+      },
+      "deviation_after": 1.34,
+      "matched": true
+    },
+    {
+      "generation_id": "SC05_g1",
+      "scene_id": "SC05",
+      "take_id": "SC05_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 82.912,
+        "g": 62.351,
+        "b": 52.469,
+        "luma": 66.008
+      },
+      "reference_stats": {
+        "r": 82.912,
+        "g": 62.351,
+        "b": 52.469,
+        "luma": 66.009
+      },
+      "deviation_before": 0.0,
+      "exposure_ev": 0.0,
+      "wb_shift": 0.0,
+      "gains": null,
+      "skipped": "single shot",
+      "after": {
+        "r": 82.912,
+        "g": 62.351,
+        "b": 52.469,
+        "luma": 66.008
+      },
+      "deviation_after": 0.0,
+      "matched": true
+    },
+    {
+      "generation_id": "SC06_g1",
+      "scene_id": "SC06",
+      "take_id": "SC06_g1_t1",
+      "reference": "median",
+      "measured": {
+        "r": 69.779,
+        "g": 52.108,
+        "b": 44.868,
+        "luma": 55.342
+      },
+      "reference_stats": {
+        "r": 69.779,
+        "g": 52.108,
+        "b": 44.868,
+        "luma": 55.342
+      },
+      "deviation_before": 0.0,
+      "exposure_ev": 0.0,
+      "wb_shift": 0.0,
+      "gains": null,
+      "skipped": "single shot",
+      "after": {
+        "r": 69.779,
+        "g": 52.108,
+        "b": 44.868,
+        "luma": 55.342
+      },
+      "deviation_after": 0.0,
+      "matched": true
+    }
+  ],
+  "corrections": {
+    "SC01_g1_t1": [
+      1.09133,
+      1.05419,
+      1.04148
+    ],
+    "SC01_g2_t1": [
+      0.92279,
+      0.95109,
+      0.96168
+    ],
+    "SC02_g1_t1": [
+      1.18147,
+      1.15481,
+      1.12242
+    ],
+    "SC02_g2_t1": [
+      0.86687,
+      0.88179,
+      0.90166
+    ],
+    "SC03_g1_t1": [
+      1.06878,
+      1.04257,
+      0.99086
+    ],
+    "SC03_g2_t1": [
+      0.93955,
+      0.96076,
+      1.00931
+    ],
+    "SC04_g1_t1": [
+      1.1119,
+      1.00469,
+      0.92792
+    ],
+    "SC04_g2_t1": [
+      0.90855,
+      0.99535,
+      1.0842
+    ]
+  },
+  "problems": [],
+  "ok": true,
+  "summary": {
+    "shots": 10,
+    "corrected": 8,
+    "worst_before": 11.325,
+    "worst_after": 1.502
+  }
+}

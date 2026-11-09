@@ -1,0 +1,126 @@
+{
+  "film_id": "film05_one_cup",
+  "ok": true,
+  "sidecars": {
+    "en": "films\\film05_one_cup\\titles\\film05_one_cup.en.srt",
+    "vi": "films\\film05_one_cup\\titles\\film05_one_cup.vi.srt"
+  },
+  "credits": "titles/credits.json",
+  "cues": [
+    {
+      "event_id": "SC01_g1",
+      "line_no": 15,
+      "character": "HAL",
+      "text": "You could have posted it.",
+      "start_s": 3.6,
+      "end_s": 5.4,
+      "source": "override",
+      "abs_start_s": 6.6,
+      "abs_end_s": 8.4
+    },
+    {
+      "event_id": "SC01_g2",
+      "line_no": 18,
+      "character": "IRIS",
+      "text": "I wanted to say goodbye, Dad. Properly.",
+      "start_s": 1.9,
+      "end_s": 5.6,
+      "source": "override",
+      "abs_start_s": 12.9,
+      "abs_end_s": 16.6
+    },
+    {
+      "event_id": "SC02_g1",
+      "line_no": 23,
+      "character": "HAL",
+      "text": "Where is it this time?",
+      "start_s": 1.6,
+      "end_s": 3.2,
+      "source": "override",
+      "abs_start_s": 19.558,
+      "abs_end_s": 21.158
+    },
+    {
+      "event_id": "SC02_g2",
+      "line_no": 26,
+      "character": "IRIS",
+      "text": "Lisbon. A real job. I start Monday.",
+      "start_s": 1.4,
+      "end_s": 6.3,
+      "source": "override",
+      "abs_start_s": 25.317,
+      "abs_end_s": 30.217
+    },
+    {
+      "event_id": "SC03_g1",
+      "line_no": 33,
+      "character": "HAL",
+      "text": "Your mother said that about Leeds.",
+      "start_s": 3.4,
+      "end_s": 5.4,
+      "source": "override",
+      "abs_start_s": 34.275,
+      "abs_end_s": 36.275
+    },
+    {
+      "event_id": "SC03_g2",
+      "line_no": 36,
+      "character": "IRIS",
+      "text": "And she came back. I'm not her, Dad.",
+      "start_s": 1.1,
+      "end_s": 4.6,
+      "source": "override",
+      "abs_start_s": 38.975,
+      "abs_end_s": 42.475
+    },
+    {
+      "event_id": "SC04_g1",
+      "line_no": 43,
+      "character": "HAL",
+      "text": "Keep the key. The lock never changed.",
+      "start_s": 4.4,
+      "end_s": 7.6,
+      "source": "override",
+      "abs_start_s": 50.275,
+      "abs_end_s": 53.475
+    },
+    {
+      "event_id": "SC05_g1",
+      "line_no": 52,
+      "character": "IRIS",
+      "text": "You made me tea.",
+      "start_s": 3.2,
+      "end_s": 4.6,
+      "source": "override",
+      "abs_start_s": 60.992,
+      "abs_end_s": 62.392
+    },
+    {
+      "event_id": "SC06_g1",
+      "line_no": 59,
+      "character": "IRIS",
+      "text": "One cup. Then I go.",
+      "start_s": 3.6,
+      "end_s": 5.9,
+      "source": "override",
+      "abs_start_s": 67.392,
+      "abs_end_s": 69.692
+    }
+  ],
+  "reframed": [],
+  "problems": [],
+  "summary": {
+    "cues": 9,
+    "languages": [
+      "en",
+      "vi"
+    ],
+    "reframed": 0,
+    "blocks": 0,
+    "warnings": 0
+  },
+  "clean_render": {
+    "output": "media/cut/titled_cut.clean.mp4",
+    "sha256": "d942e2d66a923f4e51d51c64bbb06e24bf8e92e6e01fe2ec54eaa42b06762c53"
+  }
+}

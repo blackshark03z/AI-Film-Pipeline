@@ -1,0 +1,212 @@
+{
+  "take": {
+    "take_id": "SC04_g2_t1",
+    "generation_id": "SC04_g2",
+    "prompt_sha256": "fed6c570165858ba375da1b0b78639a36e3e043b4252485b63ee86e7861bfea7",
+    "start_frame_sha256": "0cb69b80db05e9404dfd7d9c6568120bbacff8d3c555fab8c14e48f17f76fad8",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 4.0,
+    "output_file": "SC04_g2_t1.mp4",
+    "output_sha256": "7177bf1bc7fd02c27cba00f1be9197bb7d7b4c72bfea1080692f62b1227adffd",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-09T06:40:34Z",
+    "review_file": ""
+  },
+  "shot": {
+    "coverage": "REACTION",
+    "visible": [],
+    "start_state": "SC04_g2",
+    "end_state": "SC04_end",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.5,
+        "description": "the brass key lies flat beside the second white mug on the wooden table, nobody in frame, no hands"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.5,
+        "end_s": 4.0,
+        "description": "everything stays still; only thin steam rises from the mug in the dawn light"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: he made her a cup of tea before she came - carried by: second white mug, steaming, brass key"
+    },
+    {
+      "group": "action",
+      "question": "0-1.5s SETUP: does this happen on screen - the brass key lies flat beside the second white mug on the wooden table, nobody in frame, no hands?"
+    },
+    {
+      "group": "action",
+      "question": "1.5-4s ACTION: does this happen on screen - everything stays still; only thin steam rises from the mug in the dawn light?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): only thin steam rises from the mug"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size INSERT, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC04_g2: Continues from the previous shot: IRIS standing across the table, frame-left; HAL seated at the table, frame-right; the key: flat on the table in front of the empty chair; the mugs: two white mugs on the table, the second one steaming beside the key; the empty chair: pulled out from the table on the left."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC04_end: Continues from the previous shot: IRIS standing across the table, frame-left; HAL seated at the table, frame-right; the key: flat on the table in front of the empty chair; the mugs: two white mugs on the table, the second one steaming beside the key; the empty chair: pulled out from the table on the left."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC04_g2_t1",
+    "generation_id": "SC04_g2",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [],
+    "output_sha256": "7177bf1bc7fd02c27cba00f1be9197bb7d7b4c72bfea1080692f62b1227adffd"
+  },
+  "auto_evidence": {
+    "note": "autoqc not requested (no --clips directory)",
+    "warnings": []
+  }
+}

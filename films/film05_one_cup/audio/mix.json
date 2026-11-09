@@ -1,0 +1,123 @@
+{
+  "film_id": "film05_one_cup",
+  "cut": "films\\film05_one_cup\\media\\cut\\rough_cut.mp4",
+  "cut_sha256": "50252f833c58068dbc8207d2bc6c7981aab92e7cb5fcfd8bfa1ad04abf4a5386",
+  "output": "films\\film05_one_cup\\media\\cut\\mixed.mp4",
+  "output_sha256": "4dd3ff907e522ecb5e5089bdabe6ea4b590577de4d8a0d40aa014c2a68d26370",
+  "total_s": 75.749998,
+  "plan": {
+    "ambience_lufs": -40.0,
+    "sfx_gain_db": -6.0,
+    "duck_threshold_db": -50.0,
+    "duck_ratio": 8.0,
+    "duck_attack_ms": 20.0,
+    "duck_release_ms": 400.0,
+    "min_duck_depth_db": 6.0,
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "lufs_tolerance": 1.0,
+    "music": []
+  },
+  "stems": {
+    "dialogue": "films\\film05_one_cup\\audio\\stems\\dialogue.wav",
+    "ambience": "films\\film05_one_cup\\audio\\stems\\ambience.wav",
+    "sfx": "films\\film05_one_cup\\audio\\stems\\sfx.wav",
+    "music": "films\\film05_one_cup\\audio\\stems\\music.wav"
+  },
+  "ambience": [
+    {
+      "scene_id": "SC01",
+      "location": "kitchen_dawn",
+      "room_tone": "quiet kitchen hum, a clock ticking",
+      "start_s": 3.0,
+      "end_s": 17.958333,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC02",
+      "location": "kitchen_dawn",
+      "room_tone": "quiet kitchen hum, a clock ticking",
+      "start_s": 17.958333,
+      "end_s": 30.874999,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC03",
+      "location": "kitchen_dawn",
+      "room_tone": "quiet kitchen hum, a clock ticking",
+      "start_s": 30.874999,
+      "end_s": 45.874999,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC04",
+      "location": "kitchen_dawn",
+      "room_tone": "quiet kitchen hum, a clock ticking",
+      "start_s": 45.874999,
+      "end_s": 57.791665,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC05",
+      "location": "kitchen_dawn",
+      "room_tone": "quiet kitchen hum, a clock ticking",
+      "start_s": 57.791665,
+      "end_s": 63.791665,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC06",
+      "location": "kitchen_dawn",
+      "room_tone": "quiet kitchen hum, a clock ticking",
+      "start_s": 63.791665,
+      "end_s": 71.749998,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    }
+  ],
+  "sfx": [],
+  "music": [],
+  "duck": {
+    "frames": 94,
+    "depth_db": 23.57,
+    "wanted_db": 6.0
+  },
+  "loudness": {
+    "before": {
+      "integrated_lufs": -26.0,
+      "peak_dbfs": -6.1
+    },
+    "after": {
+      "integrated_lufs": -14.8,
+      "peak_dbfs": -1.7
+    },
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "ok": true
+  },
+  "problems": [],
+  "ok": true
+}

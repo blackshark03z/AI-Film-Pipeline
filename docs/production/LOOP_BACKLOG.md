@@ -923,7 +923,7 @@ media/cut/rough_cut.mp4 (84.7 s). Ledger 223/256.8. Next: mix, grade, titles, de
 **Feature freeze.** From 2026-11-09, no new pipeline feature until P17-01 passes. Items P14-* and P15-* that are still open are DEFERRED.
 Only fixes for defects that film05 exposes are allowed. Each such fix is traced to the stage that missed the defect (PRODUCTION_PROCESS_V2 rule).
 
-### P17-01 film05: stability run, end to end under OWNER_POLICY.md — IN_PROGRESS (film05_one_cup)
+### P17-01 film05: stability run, end to end under OWNER_POLICY.md — DONE (2026-11-09, PASS on all 4 criteria with flags; scorecard in docs/drama/STATUS.md)
 - **Scope:** a new short drama.
   - 2 characters, 1 location, about 60–90 s, 8–12 generations.
   - Total budget cap 256.8 credits; 360p Omni Flash.
@@ -962,3 +962,16 @@ Only fixes for defects that film05 exposes are allowed. Each such fix is traced 
 ### P17-06 takes --register numbers take ids by count, not by send receipt — OPEN (logged, not fixed)
 - **Defect (film05 SC02_g2):** v1's receipt SC02_g2_t1 produced no clip. The v2 send (receipt and file SC02_g2_t2) was registered as take SC02_g2_t1, so a take id and a receipt id now name two different sends.
 - **Impact:** credits still count per receipt; review and cut use the take id. No block, but the audit trail is confusing.
+
+### P17-07 A Flow job that vanishes is counted as a send against the cap — OPEN (logged, not fixed)
+- **Defect (film05 SC02_g2 12:09, SC04_g1 13:23, 2026-11-09):**
+  - Flow started the job, then it left no video tile and no lasting "Không thành công" tile.
+  - flow_send recorded UNBOUND or AMBIGUOUS, which uses the send cap; only FLOW_FAILED is exempt.
+  - Workaround used: shot v2 with the same prompt, one counted attempt each. Both shots are scored "not accepted on first send".
+- **Fix to make:** after reconcile proves NOT_IN_GALLERY and the gallery shows no new video for the prompt, record the send as FLOW_FAILED (provider failure: credits counted, cap not used).
+
+### Flow reliability incidents (film05, 2026-11-09)
+- 12:09 SC02_g2 v1: job vanished (no clip, no failed tile).
+- 13:11 SC03_g1 t1: FLOW_FAILED ("Không thành công" tile seen, later gone).
+- 13:23 SC04_g1 v1: job vanished.
+- flow_send bound 5 of 13 sends by itself. Another 5 were bound by `flow_reconcile` (SC01_g1, SC01_g2, SC03_g2, SC04_g2, SC06_g1; automated, no manual UI). The other 3 were the provider failures above.

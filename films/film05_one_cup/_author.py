@@ -341,8 +341,9 @@ for g in gens:
         g["previous_generation_id"] = CHAIN[gid]
     if gid in CHAIN.values():
         g["end_state"] = [k for k, v in CHAIN.items() if v == gid][0]
-# v1 sent 2026-11-09 12:09 made no Flow job (no tile, no failed tile; reconcile NOT_IN_GALLERY): same prompt as v2
-VERSIONS = {"SC02_g2": 2}
+# v1 sends that made no Flow clip (no video tile, no failed tile left; reconcile NOT_IN_GALLERY): SC02_g2 2026-11-09 12:09,
+# SC04_g1 2026-11-09; v2 = same prompt
+VERSIONS = {"SC02_g2": 2, "SC04_g1": 2}
 for g in gens:
     g["version"] = VERSIONS.get(g["generation_id"], 1)
 # SC06_g1 ends seated

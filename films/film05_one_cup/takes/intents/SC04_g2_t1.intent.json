@@ -1,0 +1,21 @@
+{
+  "film_id": "film05_one_cup",
+  "generation_id": "SC04_g2",
+  "take_id": "SC04_g2_t1",
+  "shot_version": 1,
+  "prompt_sha256": "fed6c570165858ba375da1b0b78639a36e3e043b4252485b63ee86e7861bfea7",
+  "route": "start_frame+Khung hinh",
+  "model": "Omni 1.2 Flash 360p",
+  "duration_s": 4,
+  "expected_credits": 4.0,
+  "credits_spent": 73.0,
+  "credit_cap": 123.0,
+  "start_frame_sha256": "0cb69b80db05e9404dfd7d9c6568120bbacff8d3c555fab8c14e48f17f76fad8",
+  "start_frame_source": "end frame of SC04_g1_t1",
+  "blockers": [],
+  "dry_run": false,
+  "sent": true,
+  "owner_go_live": true,
+  "result": "AMBIGUOUS",
+  "take_registered": false
+}
