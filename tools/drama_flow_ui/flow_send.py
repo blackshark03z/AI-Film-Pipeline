@@ -542,26 +542,28 @@ async def front_snapshot(page, home: str, scan: int = 6) -> dict:
 
 
 FAILED_TEXT = "Không thành công"
-# the newest video tile's text: a finished clip shows its play icon and resolution ("play_circle 360p")
+# the newest video tile's text: a job still rendering shows its progress (live SC05_g1 v4, 8 s after the submit:
+# "play_circle 0% The given image is the first frame..."; a finished clip shows no percentage)
 JS_FRONT_TILE_TEXT = r"""() => { const cs = [...document.querySelectorAll('flow-grid-tile-container')]
     .filter(c => c.querySelector('flow-video-tile'))
     .map(c => { const r = c.getBoundingClientRect(); return [r.top, r.left, c] })
     .sort((a, b) => a[0] - b[0] || a[1] - b[1]);
     return cs.length ? (cs[0][2].innerText || '').slice(0, 120) : null }"""
-FINISHED_TILE_RE = re.compile(r"play_circle|\b\d{3,4}p\b")
+RENDERING_TILE_RE = re.compile(r"(?m)^\s*\d{1,2}%\s*$|\b\d{1,2}%")
 
 
 async def submit_tile(page, home: str, before_ids: list[str], known: set[str]) -> dict:
     """P18-07: this send's own tile, read right after the submit. Flow puts a new job first, so the newest video tile
     is ours when its media id existed neither before the send (`before_ids`) nor as a registered take; its media id
     and pixels are the send's identity. Anything else (an old clip still in front, no tile yet) leaves the identity
-    unknown and the bind falls back to the prompt match. A new tile that is already a finished clip 8 s after the
-    submit cannot be this send's (Omni Flash takes 45 s+): it is an earlier job that finished meanwhile (a stray).
+    unknown and the bind falls back to the prompt match. Only a tile still rendering (a progress percentage) is
+    taken: a new tile that is already a finished clip 8 s after the submit cannot be this send's (Omni Flash takes
+    45 s+); it is an earlier job that finished meanwhile (a stray).
     film05 SC02_g2 v4: a pixel check before the submit fired on every send (the start-frame upload changes the
     gallery), so finished-or-not is read after the submit instead."""
     await page.evaluate(JS_TOP)
     front_text = await page.evaluate(JS_FRONT_TILE_TEXT)
-    finished = bool(FINISHED_TILE_RE.search(front_text or ""))
+    rendering = bool(RENDERING_TILE_RE.search(front_text or ""))
     d = await read_nth_detail(page, 0, home)
     mid = fb.media_id_from_url(d["url"]) if d else None
     sigs = await gallery_signatures(page, k=1)
@@ -571,7 +573,7 @@ async def submit_tile(page, home: str, before_ids: list[str], known: set[str]) -
         own["why"] = "NO_TILE"
     elif mid in before_ids or fb.is_known(mid, known):
         own["why"] = "OLD_TILE_IN_FRONT"
-    elif finished:
+    elif not rendering:   # a new tile already finished 8 s after the submit is not this send's job
         own.update(why="STRAY_IN_FRONT", stray_tail=mid[-8:])
     else:
         own.update(media_id=mid, failed_at_submit=FAILED_TEXT in (d.get("text") or ""))

@@ -407,7 +407,8 @@ def test_an_own_tile_still_there_at_the_deadline_is_never_a_vanished_job(tmp_pat
 
 def test_submit_tile_takes_only_a_new_unfinished_tile_in_front(monkeypatch):
     # film05 SC02_g2 v4 (23:32): a pixel check before the submit fired on the start-frame upload, so the send had no
-    # identity; finished-or-not is now read 8 s after the submit: our clip cannot be finished yet, a stray can
+    # identity. SC05_g1 v4 (23:43): 8 s after the submit the own tile read 'play_circle 0% ...' and its media id
+    # (5e84dd42) was the clip bound later; a tile with no percentage is already finished, so not this send's
     async def sigs(_page, k=8):
         return [np.zeros(fs.TILE_SIG_SIZE[::-1])]
     monkeypatch.setattr(fs, "gallery_signatures", sigs)
@@ -418,10 +419,11 @@ def test_submit_tile_takes_only_a_new_unfinished_tile_in_front(monkeypatch):
 
         async def evaluate(self, js, *_a):
             return self.text if js == fs.JS_FRONT_TILE_TEXT else None
-    for front, text, want, why in ((MID_OWN, "", MID_OWN, None),
-                                   (MID_OWN, "play_circle 360p", None, "STRAY_IN_FRONT"),
+    rendering = "favorite redo more_vert play_circle 0% The given image is the first frame. A single"  # live, 23:43
+    for front, text, want, why in ((MID_OWN, rendering, MID_OWN, None),
+                                   (MID_OWN, "play_circle Woman speaks to old man", None, "STRAY_IN_FRONT"),
                                    (MID_OLD, "play_circle 360p", None, "OLD_TILE_IN_FRONT"),
-                                   (MID_STRAY, "", None, "OLD_TILE_IN_FRONT")):
+                                   (MID_STRAY, rendering, None, "OLD_TILE_IN_FRONT")):
         async def nth(_page, _n, _home, mid=front):
             return _detail(mid)
         monkeypatch.setattr(fs, "read_nth_detail", nth)
