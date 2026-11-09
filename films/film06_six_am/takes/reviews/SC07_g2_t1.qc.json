@@ -1,0 +1,137 @@
+{
+  "take_id": "SC07_g2_t1",
+  "generation_id": "SC07_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes, RUTH is in frame-left the whole clip, seated, recognisably RUTH",
+        "REL_GAZE": "yes, both look at each other across the table, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: master, both seated across the booth table (RUTH frame-left, SAM frame-right), lamp above, rain streaking the window, envelope untouched in the middle; SAM smiles and nods 2-4 s, RUTH holds; no speech (vosk picked a single 'huh' at 0.0 s = breath/ambience, no line); no drift; 7 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "dcad5a839e7febcd71006810d3f3cc4bff5d37d31f8baa0329722f7940e31d06"
+}
