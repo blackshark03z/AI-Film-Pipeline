@@ -1034,9 +1034,18 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
     normalized, binding, bound_in_send, elapsed, incident, auto_resend).
 - **Tests:** `tests/test_production_generate.py` (4 P18-03 tests), `tests/test_flow_send_wait_p18.py` (vanished).
 
-### P18-04 Duplicated frames in the film05 master (26.8%) — OPEN
-- Source cadence (Omni Flash) or our assemble/grade/mix/versions chain? Check takes against the master; fix the
-  stage that adds them and add a mastercheck check.
+### P18-04 Duplicated frames in the film05 master (26.8%) — DONE (2026-11-09): neither source nor chain, the check
+- **Finding:** every film05 take is 24/1 fps from Omni Flash with 0 repeated frames (max pixel diff ≤ 2 at 160x90:
+  0% on 10 takes, 1.1% SC06_g1). rough/graded/titled/mixed/master keep 24 fps and 1818 frames; the only exact repeats
+  in the cut are the opening and closing cards (exempt static windows). The master body has 0.0% frames with diff 0.
+  `DUPLICATED_FRAMES` counted frames with diff ≤ `freeze_diff` (0.08 at 32x18) = calm footage (SC01_g1 86%, SC02_g1
+  61%, SC03_g2 65%), not repeats. So the stage that missed it is mastercheck itself; the chain needs no fix.
+- **Fix (`production/master_qc.py`):** a duplicate is a repeat of the previous frame, diff ≤ `dup_diff` 0.02 (an x264
+  re-encoded repeat measures ≤ 0.012; calm motion ≥ 0.03). The old share is kept as metric `low_motion_ratio`.
+  film05 master: duplicate_ratio 0.42%, low_motion 26.6%, no WARN; film04 0.16%. A real 12→24 fps doubling still
+  warns (50%).
+- **Tests:** `tests/test_production_master_qc.py` (`test_duplicated_frames_warn` unchanged, new
+  `test_a_calm_shot_is_not_a_duplicated_frame`).
 
 ### P18-05 `tests/test_session_reuse_010.py` — OPEN
 - 4 tests fail on base before the provider merge (11, 15, 16, 20). Find why; fix the code or the stale test.

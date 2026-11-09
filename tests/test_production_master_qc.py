@@ -92,6 +92,15 @@ def test_duplicated_frames_warn(tmp_path):
 
 
 @needs_ffmpeg
+def test_a_calm_shot_is_not_a_duplicated_frame(tmp_path):
+    # P18-04: film05 read 26.8% "duplicated frames" with 0 repeats; calm footage moves a little in every frame
+    vf = r"select=eq(n\,0),loop=loop=200:size=1,setpts=N/24/TB,gblur=sigma=20,scroll=h=0.00079"   # ~1 px per frame
+    record = Q.check_master(master(tmp_path / "calm.mp4", seconds=6.0, vf=vf))
+    assert ("DUPLICATED_FRAMES", "WARN") not in findings(record) and record.metrics["duplicate_ratio"] < 0.05
+    assert "low_motion_ratio" in record.metrics
+
+
+@needs_ffmpeg
 def test_exposure_extremes_warn(tmp_path):
     for name, vf in (("dark", "eq=brightness=-0.5"), ("bright", "eq=brightness=0.5")):   # mean luma 16.7 / 236.5
         record = Q.check_master(master(tmp_path / f"{name}.mp4", seconds=6.0, vf=vf))

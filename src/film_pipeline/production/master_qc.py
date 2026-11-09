@@ -59,6 +59,10 @@ class MasterSpec(ContractModel):
     freeze_warn_s: float = 2.0
     freeze_fail_s: float = 4.0
     dup_ratio_warn: float = 0.05
+    # P18-04: a duplicated frame is a REPEAT of the previous one (after an x264 re-encode it differs by <= 0.012 at
+    # 32x18), not a calm one: film05 read 26.8% "duplicates" at freeze_diff but 0.0% repeats; every Omni Flash take is
+    # 24 fps with no repeats, so the old warning measured low motion (kept as the low_motion_ratio metric)
+    dup_diff: float = 0.02
     silence_noise_db: float = -50.0
     silence_warn_s: float = 3.0
     clip_level: int = 32700
@@ -197,8 +201,9 @@ def video_checks(series: dict[str, Any], fps: float, spec: MasterSpec, windows: 
                 findings.append(Finding(group="technical", code="FREEZE", severity="WARN", at_s=round(a, 3),
                                         detail=f"picture frozen for {b - a:.2f} s at {a:.2f} s"))
     live = [i for i in range(1, n) if not any(a <= i / fps < b for a, b in exempt)]
-    dups = sum(1 for i in live if diff[i] <= spec.freeze_diff)
+    dups = sum(1 for i in live if diff[i] <= spec.dup_diff)
     ratio = dups / len(live) if live else 0.0
+    calm = sum(1 for i in live if diff[i] <= spec.freeze_diff) / len(live) if live else 0.0
     if ratio > spec.dup_ratio_warn:
         findings.append(Finding(group="technical", code="DUPLICATED_FRAMES", severity="WARN",
                                 detail=f"{ratio:.1%} of the body frames repeat the previous one (> {spec.dup_ratio_warn:.0%})"))
@@ -209,7 +214,8 @@ def video_checks(series: dict[str, Any], fps: float, spec: MasterSpec, windows: 
         findings.append(Finding(group="color", code="EXPOSURE_RANGE", severity="WARN",
                                 detail=f"{share:.1%} of the body frames are crushed (<{spec.exposure_low:g}) or blown out "
                                        f"(>{spec.exposure_high:g}) on mean luma"))
-    metrics = {"frames": n, "duplicate_ratio": round(ratio, 4), "exposure_off_share": round(share, 4),
+    metrics = {"frames": n, "duplicate_ratio": round(ratio, 4), "low_motion_ratio": round(calm, 4),
+               "exposure_off_share": round(share, 4),
                "body_luma_mean": round(statistics.fmean(body), 2) if body else None}
     return findings, metrics
 
