@@ -212,6 +212,8 @@ class _Plan:
         location = loc_spec.look
         view = (f" {loc_spec.layout.view_text(decl.camera_position)}"
                 if decl.camera_position and loc_spec.layout is not None else "")
+        angle = decl.camera.still_view() if decl.camera is not None else ""
+        view += f" {angle}" if angle else ""
         # film04 SC01_g1: the still showed MARA seated while the shot says she stands, hand on the cord
         setup = next((p.description for p in decl.choreography.phases if p.kind == "SETUP"), "")
         pose = f" First instant: {setup}." if setup and self.pre.still_templates.pose else ""

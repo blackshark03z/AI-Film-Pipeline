@@ -37,7 +37,15 @@ from pydantic import Field, model_validator
 from film_pipeline.core import ContractModel
 from film_pipeline.drama.scene_bible import RuleIssue
 
-PROMPT_FIELDS = ("size",)  # the only camera field that reaches a prompt today (via the coverage type)
+# camera fields that reach a prompt: size (via the coverage type) and, P18-08, a non-default angle / height in the
+# start-frame still prompt (`still_view`); film05 SC02_g2: an eye-level close single put the table top at IRIS's chest,
+# so she read as seated while the shot says she stands
+PROMPT_FIELDS = ("size", "angle", "height")
+_ANGLE_VIEW = {"LOW": "low angle, the camera looking up at the subject",
+               "HIGH": "high angle, the camera looking down at the subject",
+               "DUTCH": "tilted dutch angle", "OVERHEAD": "overhead view straight down"}
+_HEIGHT_VIEW = {"LOW": "camera near the floor", "WAIST": "camera at waist height", "CHEST": "camera at chest height",
+                "HIGH": "camera above head height"}
 
 Size = Literal["EXTREME_WIDE", "WIDE", "MEDIUM", "MEDIUM_CLOSE", "CLOSE", "INSERT"]
 Angle = Literal["EYE_LEVEL", "HIGH", "LOW", "DUTCH", "OVERHEAD"]
@@ -87,6 +95,12 @@ class CameraSetup(ContractModel):
         if self.side == "REVERSE" and not self.crossing_note.strip():
             raise ValueError("camera side REVERSE crosses the line of action and needs a crossing_note")
         return self
+
+    def still_view(self) -> str:
+        """P18-08: the start-frame still's camera angle and height, '' at the default eye level (the Flow route takes
+        its framing from the start frame, so this is where angle and height can reach the picture)."""
+        parts = [v for v in (_ANGLE_VIEW.get(self.angle), _HEIGHT_VIEW.get(self.height)) if v]
+        return f"Camera: {', '.join(parts)}." if parts else ""
 
     def prompt_hint(self) -> str:
         """Optional prompt text for a route that can take it (not used by the Flow route)."""

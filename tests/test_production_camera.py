@@ -48,7 +48,7 @@ def test_film03_camera_and_lighting_plan_is_clean():
     report = camera_report(pkg.typed["preprod"], pkg.typed["shots"])
     assert report["ok"] and report["issues"] == []
     assert len(report["shots"]) == 16 and set(report["scenes"]) == {f"SC0{n}" for n in range(1, 9)}
-    assert report["prompt_fields"] == list(PROMPT_FIELDS) == ["size"]
+    assert report["prompt_fields"] == list(PROMPT_FIELDS) == ["size", "angle", "height"]
 
 
 def test_declared_sizes_match_the_size_the_prompt_actually_uses():
@@ -248,7 +248,7 @@ def test_cli_camera(tmp_path):
     ok = subprocess.run([sys.executable, str(tool), "camera", "--film", str(FILM03)],
                         capture_output=True, text=True, encoding="utf-8")
     body = json.loads(ok.stdout)
-    assert ok.returncode == 0 and body["ok"] and len(body["shots"]) == 16 and body["prompt_fields"] == ["size"]
+    assert ok.returncode == 0 and body["ok"] and len(body["shots"]) == 16 and body["prompt_fields"] == ["size", "angle", "height"]
 
     def master_close(shots):
         gen(shots, "SC01_g1")["camera"]["size"] = "CLOSE"
@@ -256,3 +256,10 @@ def test_cli_camera(tmp_path):
     bad = subprocess.run([sys.executable, str(tool), "camera", "--film", str(tmp_path)],
                          capture_output=True, text=True, encoding="utf-8")
     assert bad.returncode == 1 and not json.loads(bad.stdout)["ok"]
+
+
+def test_still_view_names_a_non_default_angle_and_height_only():
+    # P18-08 film05 SC02_g2: eye level put the table at IRIS's chest; she read as seated although she stands
+    assert CameraSetup(size="CLOSE").still_view() == ""
+    assert CameraSetup(size="CLOSE", angle="LOW", height="WAIST").still_view() == (
+        "Camera: low angle, the camera looking up at the subject, camera at waist height.")
