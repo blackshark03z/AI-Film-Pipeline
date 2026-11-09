@@ -90,6 +90,7 @@
   "platform_note": "set the platform's own AI / synthetic-content label at upload; nothing was published",
   "thumbnails": [
     "versions/thumbs/thumb_01.jpg",
-    "versions/thumbs/thumb_02.jpg"
+    "versions/thumbs/thumb_02.jpg",
+    "versions/thumbs/thumb_03.jpg"
   ]
 }

@@ -96,6 +96,22 @@ def test_frame_stats_tell_black_from_picture(tmp_path):
     assert V.THUMB_MIN_LUMA < luma < V.THUMB_MAX_LUMA and spread > V.THUMB_MIN_CONTRAST
 
 
+@needs_ffmpeg
+def test_a_low_key_frame_with_contrast_is_lifted_into_range_but_black_is_not(tmp_path):
+    night = tmp_path / "night.mp4"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc2=size=640x360:rate=24:duration=1",
+                    "-vf", "lutyuv=y=val*0.3", "-pix_fmt", "yuv420p", str(night)], check=True)
+    raw = V.grab_frame(night, 0.5, tmp_path / "raw.jpg")
+    luma, spread = V.frame_stats(raw)
+    assert V.THUMB_LIFT_FLOOR <= luma < V.THUMB_MIN_LUMA and spread >= V.THUMB_MIN_CONTRAST   # rejected before the lift
+    luma, spread = V.frame_stats(V.grab_frame(night, 0.5, tmp_path / "lifted.jpg", extra_vf=V.THUMB_LIFT))
+    assert V.THUMB_MIN_LUMA <= luma <= V.THUMB_MAX_LUMA and spread >= V.THUMB_MIN_CONTRAST
+    black = tmp_path / "b.jpg"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "color=c=black:size=320x180:d=1", "-frames:v", "1",
+                    str(black)], check=True)
+    assert V.frame_stats(black)[1] < V.THUMB_MIN_CONTRAST                                        # flat: never lifted
+
+
 def film(tmp_path: Path):
     root = tmp_path / "film"
     root.mkdir()

@@ -43,9 +43,9 @@
     "ok": true,
     "summary": {
       "portrait_segments": 18,
-      "thumbnails": 2,
+      "thumbnails": 3,
       "blocks": 0,
-      "warnings": 1
+      "warnings": 0
     },
     "locked_against": "f0a499fa50bd1d14da2ad872fe3f6edbe0d72bfa3b879069e539e4cc7cbba3ae"
   },

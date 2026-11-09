@@ -247,6 +247,7 @@
       "luma": 44.4,
       "contrast": 29.2,
       "burned_text": false,
+      "lifted": false,
       "sha256": "52314189e68889741c5aafb4e5c404810099eacacdf351eebb922d61cdfa96f9"
     },
     {
@@ -260,22 +261,30 @@
       "luma": 34.7,
       "contrast": 25.6,
       "burned_text": false,
+      "lifted": false,
       "sha256": "d318b59970332eda4dd1a0d12c152ed3090dd71bdcea5d51b942d17ac16a5422"
+    },
+    {
+      "file": "versions/thumbs/thumb_03.jpg",
+      "at_s": 66.312,
+      "event_id": "SC05_g3",
+      "scene": "SC05",
+      "moment": "the ticket lies on the counter after the heavy thump",
+      "device": "insert",
+      "fact_id": null,
+      "luma": 51.9,
+      "contrast": 30.0,
+      "burned_text": false,
+      "lifted": true,
+      "sha256": "25535b4c9ef06106f5cdff7a60a39d457a3c74979b108a0e9dbd16394b7d3ad3"
     }
   ],
   "metadata": "versions/metadata.json",
-  "problems": [
-    {
-      "code": "THUMB_REJECTED",
-      "severity": "WARN",
-      "detail": "SC05_g3 (the ticket lies on the counter after the heavy thump): all candidate frames are too dark, too bright or flat",
-      "at_s": 63.833
-    }
-  ],
+  "problems": [],
   "summary": {
     "portrait_segments": 18,
-    "thumbnails": 2,
+    "thumbnails": 3,
     "blocks": 0,
-    "warnings": 1
+    "warnings": 0
   }
 }

@@ -32,6 +32,8 @@ PORTRAIT_H = 1280
 PORTRAIT_W = 720
 DEVICE_RANK = {"hold": 0, "push": 1, "reaction": 2, "insert": 3}
 THUMB_MIN_LUMA, THUMB_MAX_LUMA, THUMB_MIN_CONTRAST = 28.0, 225.0, 14.0
+# a low-key (night) frame with real contrast is lifted for the thumbnail instead of rejected; flat or black frames stay out
+THUMB_LIFT_FLOOR, THUMB_LIFT = 15.0, "eq=gamma=1.45:brightness=0.02"
 THUMB_OFFSETS = (0.5, 0.35, 0.65, 0.2, 0.8)
 MAX_THUMBS = 6
 
@@ -256,10 +258,11 @@ def emphasis_moments(pkg: Any) -> list[dict[str, Any]]:
     return out
 
 
-def grab_frame(video: Path, at_s: float, out: Path, width: int = 1280) -> Path:
+def grab_frame(video: Path, at_s: float, out: Path, width: int = 1280, extra_vf: str = "") -> Path:
     out.parent.mkdir(parents=True, exist_ok=True)
+    vf = f"scale={width}:-2:flags=lanczos" + (f",{extra_vf}" if extra_vf else "")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{at_s:.3f}", "-i", str(video), "-frames:v", "1",
-                    "-vf", f"scale={width}:-2:flags=lanczos", "-q:v", "2", str(out)], check=True)
+                    "-vf", vf, "-q:v", "2", str(out)], check=True)
     return out
 
 
@@ -299,6 +302,11 @@ def thumbnails(pkg: Any, source: Path, plan: dict[str, Any], section: Any, out_d
             for at_s, _ in tries:
                 path = grab_frame(source, at_s, out_dir / f"thumb_{len(chosen) + 1:02d}.jpg")
                 luma, spread = frame_stats(path)
+                lifted = False
+                if THUMB_LIFT_FLOOR <= luma < THUMB_MIN_LUMA and spread >= THUMB_MIN_CONTRAST:
+                    path = grab_frame(source, at_s, path, extra_vf=THUMB_LIFT)
+                    luma, spread = frame_stats(path)
+                    lifted = True
                 if luma < THUMB_MIN_LUMA or luma > THUMB_MAX_LUMA or spread < THUMB_MIN_CONTRAST:
                     path.unlink(missing_ok=True)
                     continue
@@ -306,7 +314,7 @@ def thumbnails(pkg: Any, source: Path, plan: dict[str, Any], section: Any, out_d
                 chosen.append({"file": str(path.relative_to(Path(pkg.root))).replace("\\", "/"), "at_s": round(at_s, 3),
                                "event_id": placed["event_id"], "scene": m["scene"], "moment": m["moment"], "device": m["device"],
                                "fact_id": m["fact_id"], "luma": round(luma, 1), "contrast": round(spread, 1),
-                               "burned_text": burned, "sha256": sha256_file(path)})
+                               "burned_text": burned, "lifted": lifted, "sha256": sha256_file(path)})
                 used.add(placed["event_id"])
                 if burned:
                     problems.append(_problem("THUMB_BURNED_TEXT", "WARN",

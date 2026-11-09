@@ -76,5 +76,7 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   film04 effects now come from Freesound CC0 HQ previews (no login), trimmed/faded to each shot into audio/sfx/<slug>.wav
   (media, not committed) and recorded in audio/assets.json (CC0-1.0, cleared, source URL + author). Re-ran mix
   (9 placed, -14.3 LUFS, TP -1.7), mastercheck PASS, versions, deliver (0 blocks), lock fresh, dialoguecheck 10/10.
-  Still open: RIGHTS_PENDING (Owner); THUMB_REJECTED WARN for SC05_g3 (dark frames, pre-existing); the SFX are not
+- Thumbnails: low-key frames (luma 15-28) with real contrast are now lifted (eq gamma 1.45, "lifted": true) instead of
+  rejected; film04 SC05_g3 thumb luma 25 -> 52, THUMB_REJECTED gone (3 thumbs). Black/flat frames still rejected.
+  Still open: RIGHTS_PENDING (Owner); the SFX are not
   yet judged by ear.
