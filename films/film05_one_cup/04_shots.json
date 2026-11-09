@@ -364,8 +364,8 @@
       ],
       "camera": {
         "size": "CLOSE",
-        "angle": "EYE_LEVEL",
-        "height": "EYE",
+        "angle": "LOW",
+        "height": "WAIST",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
         "composition": "close single on IRIS standing, the dawn window behind her, HAL out of frame to the right"
@@ -380,7 +380,7 @@
         }
       ],
       "duration_s": 7,
-      "version": 3,
+      "version": 4,
       "addressees": {
         "26": [
           "HAL"
@@ -839,8 +839,8 @@
       ],
       "camera": {
         "size": "CLOSE",
-        "angle": "EYE_LEVEL",
-        "height": "EYE",
+        "angle": "LOW",
+        "height": "WAIST",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
         "composition": "close single on IRIS standing, the dawn window behind her, HAL out of frame to the right"
@@ -856,7 +856,7 @@
         }
       ],
       "duration_s": 6,
-      "version": 3,
+      "version": 4,
       "addressees": {
         "52": [
           "HAL"

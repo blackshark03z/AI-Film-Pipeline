@@ -349,7 +349,12 @@ for g in gens:
 for g in gens:
     if g["generation_id"] == "SC02_g2":
         g["listener_anchors"]["HAL"] = {**OFF_RIGHT, "placement": "HAL sits off frame-right, wholly out of shot"}
-VERSIONS = {"SC02_g2": 3, "SC04_g1": 2, "SC05_g1": 3}
+# P18-08 (2026-11-09): SC02_g2 v4 is shot from HAL's seated eye line (low angle, waist height): at eye level the table
+# top sat at IRIS's chest in the still and every take, so she read as seated although she stands until SC06
+for g in gens:
+    if g["generation_id"] in ("SC02_g2", "SC05_g1"):   # SC05_g1 v4: the same eye-level close single on IRIS standing
+        g["camera"].update(angle="LOW", height="WAIST")
+VERSIONS = {"SC02_g2": 4, "SC04_g1": 2, "SC05_g1": 4}
 for g in gens:
     g["version"] = VERSIONS.get(g["generation_id"], 1)
 # SC06_g1 ends seated

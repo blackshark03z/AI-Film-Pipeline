@@ -90,62 +90,62 @@
         "luma": 47.271
       },
       "reference_stats": {
-        "r": 69.441,
-        "g": 48.15,
-        "b": 36.044,
-        "luma": 51.802
+        "r": 65.649,
+        "g": 47.023,
+        "b": 38.355,
+        "luma": 50.357
       },
-      "deviation_before": 7.033,
-      "exposure_ev": 0.132,
-      "wb_shift": 0.07,
+      "deviation_before": 4.358,
+      "exposure_ev": 0.091,
+      "wb_shift": -0.101,
       "gains": [
-        1.11269,
-        1.09156,
-        1.06021
+        1.05193,
+        1.06602,
+        1.12819
       ],
       "skipped": "",
       "after": {
-        "r": 68.38,
-        "g": 46.872,
-        "b": 35.217,
-        "luma": 50.603
+        "r": 64.667,
+        "g": 45.689,
+        "b": 37.369,
+        "luma": 49.123
       },
-      "deviation_after": 1.278,
+      "deviation_after": 1.334,
       "matched": true
     },
     {
       "generation_id": "SC02_g2",
       "scene_id": "SC02",
-      "take_id": "SC02_g2_t4",
+      "take_id": "SC02_g2_t5",
       "reference": "median",
       "measured": {
-        "r": 76.473,
-        "g": 52.19,
-        "b": 38.092,
-        "luma": 56.335
+        "r": 68.89,
+        "g": 49.935,
+        "b": 42.712,
+        "luma": 53.443
       },
       "reference_stats": {
-        "r": 69.441,
-        "g": 48.15,
-        "b": 36.044,
-        "luma": 51.802
+        "r": 65.649,
+        "g": 47.023,
+        "b": 38.355,
+        "luma": 50.357
       },
-      "deviation_before": 7.032,
-      "exposure_ev": -0.121,
-      "wb_shift": -0.059,
+      "deviation_before": 4.357,
+      "exposure_ev": -0.086,
+      "wb_shift": 0.086,
       "gains": [
-        0.90805,
-        0.92259,
-        0.94624
+        0.95295,
+        0.94168,
+        0.89799
       ],
       "skipped": "",
       "after": {
-        "r": 68.333,
-        "g": 46.783,
-        "b": 35.158,
-        "luma": 50.525
+        "r": 64.471,
+        "g": 45.638,
+        "b": 37.431,
+        "luma": 49.049
       },
-      "deviation_after": 1.367,
+      "deviation_after": 1.385,
       "matched": true
     },
     {
@@ -291,19 +291,19 @@
     {
       "generation_id": "SC05_g1",
       "scene_id": "SC05",
-      "take_id": "SC05_g1_t3",
+      "take_id": "SC05_g1_t4",
       "reference": "median",
       "measured": {
-        "r": 81.592,
-        "g": 61.482,
-        "b": 51.305,
-        "luma": 65.022
+        "r": 61.049,
+        "g": 42.426,
+        "b": 32.563,
+        "luma": 45.673
       },
       "reference_stats": {
-        "r": 81.592,
-        "g": 61.482,
-        "b": 51.305,
-        "luma": 65.023
+        "r": 61.049,
+        "g": 42.426,
+        "b": 32.563,
+        "luma": 45.673
       },
       "deviation_before": 0.0,
       "exposure_ev": 0.0,
@@ -311,10 +311,10 @@
       "gains": null,
       "skipped": "single shot",
       "after": {
-        "r": 81.592,
-        "g": 61.482,
-        "b": 51.305,
-        "luma": 65.022
+        "r": 61.049,
+        "g": 42.426,
+        "b": 32.563,
+        "luma": 45.673
       },
       "deviation_after": 0.0,
       "matched": true
@@ -363,14 +363,14 @@
       0.96168
     ],
     "SC02_g1_t1": [
-      1.11269,
-      1.09156,
-      1.06021
+      1.05193,
+      1.06602,
+      1.12819
     ],
-    "SC02_g2_t4": [
-      0.90805,
-      0.92259,
-      0.94624
+    "SC02_g2_t5": [
+      0.95295,
+      0.94168,
+      0.89799
     ],
     "SC03_g1_t1": [
       1.06878,

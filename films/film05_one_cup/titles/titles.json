@@ -59,8 +59,8 @@
       "start_s": 3.4,
       "end_s": 5.4,
       "source": "override",
-      "abs_start_s": 34.317,
-      "abs_end_s": 36.317
+      "abs_start_s": 34.275,
+      "abs_end_s": 36.275
     },
     {
       "event_id": "SC03_g2",
@@ -70,8 +70,8 @@
       "start_s": 1.1,
       "end_s": 4.6,
       "source": "override",
-      "abs_start_s": 39.017,
-      "abs_end_s": 42.517
+      "abs_start_s": 38.975,
+      "abs_end_s": 42.475
     },
     {
       "event_id": "SC04_g1",
@@ -81,8 +81,8 @@
       "start_s": 4.4,
       "end_s": 7.6,
       "source": "override",
-      "abs_start_s": 50.317,
-      "abs_end_s": 53.517
+      "abs_start_s": 50.275,
+      "abs_end_s": 53.475
     },
     {
       "event_id": "SC05_g1",
@@ -92,8 +92,8 @@
       "start_s": 3.2,
       "end_s": 4.6,
       "source": "override",
-      "abs_start_s": 61.033,
-      "abs_end_s": 62.433
+      "abs_start_s": 60.992,
+      "abs_end_s": 62.392
     },
     {
       "event_id": "SC06_g1",

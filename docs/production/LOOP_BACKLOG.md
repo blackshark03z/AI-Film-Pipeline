@@ -1072,7 +1072,7 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
   0.48%), versions and deliver 0 blocks; dialoguecheck 8 PASS / 1 WARN (Vosk small hears "tea" as "t").
 - Deferred: IRIS reads as standing in some SC02 frames; the framing comes from the start still, so a fix needs
   new low-angle start stills (no send spent on it).
-### P18-07 Stray-job guard — DONE (2026-11-09)
+### P18-07 Stray-job guard — DONE (2026-11-09; live fixes 9f27434, 8479445)
 - Risk: an earlier send of the same shot that ended UNBOUND (job still rendering) finishes late inside the next send;
   its clip holds the same whole prompt and is neither registered nor in `before_ids`, so the prompt match bound it;
   if it failed, its page-wide "Không thành công" tile ended the next send as FLOW_FAILED -> auto-resend.
@@ -1086,10 +1086,20 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
 - Tests: `tests/test_flow_send_wait_p18.py` (6 new, replaying the stray state). Live: P18-08 sends record
   `own_tile_at_submit`.
 
-### P18-08 film05 SC02 IRIS-standing continuity — OPEN
-- Restage the affected SC02 singles: new low-angle / table-height start stills (0 credits), delegated approval;
-  resend at 360p Omni Flash under OWNER_POLICY (more live bind / auto-resend samples); swap only if better;
-  re-deliver; film05 stays within its 123-credit cap.
+### P18-08 film05 IRIS-standing continuity — DONE (2026-11-09)
+- Cause (pipeline): camera angle/height never reached a prompt; the Flow route frames from the start still, and an
+  eye-level close single put the table top at IRIS's chest, so she read as seated before SC06. Fix bbc14a3:
+  `CameraSetup.still_view` adds a non-default angle/height to the start-frame still prompt (defaults unchanged).
+- film05: SC02_g2 v4 and SC05_g1 v4 (the same eye-level close single on IRIS standing) set to LOW angle / WAIST
+  height; new start stills drawn in the ChatGPT GPM tab (0 credits), delegated still + storyboard approval.
+- Live (one OWNER_GO_LIVE=YES per send): SC02_g2_t5 23:30-23:34 PASSED in-send, 128 s, 7 cr; SC05_g1_t4
+  23:41-23:45 PASSED in-send, 136 s, 6 cr. film05 spend 123/123 (cap reached; any further send is blocked).
+- P18-07 live findings: SC02_g2 v4 took no own identity (a pre-submit pixel check fired on the start-frame
+  upload; fixed 9f27434); SC05_g1 v4 showed the own tile 8 s after the submit as "play_circle 0% ..." with the
+  media id bound 2 min later, but the play-icon rule called it a stray (fixed 8479445: own = new tile still
+  showing a percentage). The own-tile identity is not yet proven live end to end (cap reached).
+- Delegated review: t5 and t4 read as standing (t4/t3 read as seated); swapped in, re-lock, grade, titles, mix,
+  mastercheck ok, versions, deliver 0 blocks; dialoguecheck 8 PASS / 1 WARN (SC05 "tea").
 
 ### P18-09 Cumulative scorecard — OPEN
 - STATUS: in-send bind rate across every live send since 9bea690, plus the incidents; short report.

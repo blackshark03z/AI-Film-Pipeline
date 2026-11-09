@@ -1184,13 +1184,13 @@
     },
     "SC02_g2": {
       "file": "media/stills/start_SC02_g2.png",
-      "sha256": "1869118ef84b3e2d36af2641b12fc1b0565a73ab074ff1cc6e0089e2716e6e9c",
-      "prompt_sha256": "4bc0401d57dc4e0f89f34f45c98dab1e88ae5871c5afbb5fac1e8998f666e298",
-      "source": "same image as v2 (no HAL in frame; matches the v3 still prompt 'HAL wholly out of shot')",
+      "sha256": "e7e89a07b1f96d2b5468d852092ce2ad5f1d1008031958393bea12c6719cdaf9",
+      "prompt_sha256": "ae196fafa1502e53fad250a1349b4c757b5231f02b348e97c72ffa88dd0198a9",
+      "source": "ChatGPT GPM tab (wanglin08ma)",
       "credits": 0.0,
-      "registered_at": "2026-11-09T09:22:32+00:00",
+      "registered_at": "2026-11-09T16:30:08+00:00",
       "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
-      "approved_at": "2026-11-09T09:22:36+00:00"
+      "approved_at": "2026-11-09T16:30:09+00:00"
     },
     "SC03_g1": {
       "file": "media/stills/start_SC03_g1.png",
@@ -1234,13 +1234,13 @@
     },
     "SC05_g1": {
       "file": "media/stills/start_SC05_g1.png",
-      "sha256": "779043934c9001cd0e25743304259c4332caaa0cc12bc34a6b2ebd91950e0fbb",
-      "prompt_sha256": "71d31dc6fe6c146bde79c356463ccb238aa28157641530b6436f965e6251481f",
+      "sha256": "1d31c7cda3bd1042a6127b2539e5abc2fd17cb031a360e55a4b54e6153544e07",
+      "prompt_sha256": "8355edf1e1c326437d448fbea2698e0ad0110f6711f8b2f9da29540c56a3e9af",
       "source": "ChatGPT GPM tab (wanglin08ma)",
       "credits": 0.0,
-      "registered_at": "2026-11-09T04:42:54+00:00",
+      "registered_at": "2026-11-09T16:41:21+00:00",
       "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
-      "approved_at": "2026-11-09T04:42:54+00:00"
+      "approved_at": "2026-11-09T16:41:22+00:00"
     },
     "SC06_g1": {
       "file": "media/stills/start_SC06_g1.png",

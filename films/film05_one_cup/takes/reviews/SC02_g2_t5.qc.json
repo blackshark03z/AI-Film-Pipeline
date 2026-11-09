@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g2_t5",
+  "generation_id": "SC02_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:26": "yes, IRIS faces screen-right toward HAL while saying line 26"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "minor: HAL's out-of-focus profile edges into frame-right from 3 s; reads as a dirty single, no stranger, cut to SC02_g1 OTS still matches",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HAL": "yes: HAL sits off frame-right, wholly out of shot (v3 listener anchor); at most a faint sliver of white hair at the very right edge, his seat is never shown empty",
+        "REL_GAZE": "yes, her eyes go down to HAL just past the lens frame-right, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 46 s); 6-frame contact sheet vs SC02_g2_t4: IRIS now reads as standing (camera at HAL's seated eye line, table top below her waist, lamp and window above her) where t4 put the table at her chest; identity/coat/kitchen consistent, HAL wholly out of shot, steady camera; Vosk STT 'lisbon a real job i start monday' (full line, 1.65-4.83 s). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:26",
+    "REL_LISTENER:HAL",
+    "REL_GAZE"
+  ],
+  "output_sha256": "607d9924b30e0b0299aa2195cc6717af9fe201bf86730e48092f8a45bcfee8b4"
+}

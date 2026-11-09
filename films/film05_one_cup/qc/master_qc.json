@@ -1,7 +1,7 @@
 {
   "film_id": "film05_one_cup",
   "video": "films\\film05_one_cup\\media\\cut\\mixed.mp4",
-  "sha256": "e9b5b1a371b7d2d9ed15426bc05be2c603885ed1d8a34cb193485f9a2cf128ad",
+  "sha256": "4f22b9ce15803553f1d0f47b735c6d315e40fba494abf8cabbd925333202c273",
   "spec": {
     "width": 1280,
     "height": 720,
@@ -39,11 +39,11 @@
     "planned_s": 75.749998,
     "frames": 1818,
     "duplicate_ratio": 0.0048,
-    "low_motion_ratio": 0.2636,
+    "low_motion_ratio": 0.2764,
     "exposure_off_share": 0.0,
-    "body_luma_mean": 51.26,
+    "body_luma_mean": 49.16,
     "colour_worst_after": 1.502,
-    "integrated_lufs": -14.7,
+    "integrated_lufs": -14.6,
     "peak_dbfs": -1.7,
     "clipped_passages": 0,
     "cues_checked": 9,
@@ -56,6 +56,13 @@
       "severity": "WARN",
       "detail": "no clear speech under the cue at 25.32 s",
       "at_s": 25.317
+    },
+    {
+      "group": "sync",
+      "code": "CUE_NO_SPEECH",
+      "severity": "WARN",
+      "detail": "no clear speech under the cue at 38.98 s",
+      "at_s": 38.975
     },
     {
       "group": "sync",
@@ -95,7 +102,7 @@
       "level": "CUT",
       "evidence": "qc/master_qc.json",
       "reviewer": "auto:master_qc",
-      "note": "CUE_NO_SPEECH: no clear speech under the cue at 25.32 s; CUE_NO_SPEECH: no clear speech under the cue at 67.39 s",
+      "note": "CUE_NO_SPEECH: no clear speech under the cue at 25.32 s; CUE_NO_SPEECH: no clear speech under the cue at 38.98 s; CUE_NO_SPEECH: no clear speech under the cue at 67.39 s",
       "waiver": null,
       "answers": {}
     },

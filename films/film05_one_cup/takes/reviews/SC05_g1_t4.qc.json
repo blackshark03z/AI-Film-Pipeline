@@ -1,0 +1,140 @@
+{
+  "take_id": "SC05_g1_t4",
+  "generation_id": "SC05_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:52": "yes, IRIS lifts her eyes to HAL frame-right and says line 52 softly but clearly (STT hears 'you made me')"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HAL": "yes, HAL's place off frame-right; only a soft edge at the very right in the last second, never shown empty",
+        "REL_GAZE": "yes, key, then mug, then HAL; never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "line still spoken 3.3-3.9 s despite the wider speak phase; 'tea' is short in both takes",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'); P18-08 v4 live send (low-angle start still), bound in-send by reconcile_bind (RECONCILE_PROMPT_MATCH, wait BIND at 55 s); 6-frame contact sheet + full-res frames at 1.2 s and 4 s vs SC05_g1_t3: camera at HAL's seated eye line, the empty chair's back only reaches IRIS's waist and the lamp hangs above her, so she reads as standing (t3: table top at her chest, read as seated); second mug steaming beside the brass key, identity/coat/kitchen consistent with SC02_g2_t5, eyes to HAL frame-right, never the lens; Vosk STT 'you made me t' at 3.06-3.57 s (same as t3). Better than the cut take -> accepted, reviewer agent:tech-lead.delegated-by.owner-khoikk03",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:52",
+    "REL_LISTENER:HAL",
+    "REL_GAZE"
+  ],
+  "output_sha256": "1696ceea8154b6598dce0c48e96566b800453375c1d0c1718f614d51133dc2eb"
+}
