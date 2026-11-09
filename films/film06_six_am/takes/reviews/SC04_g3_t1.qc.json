@@ -1,0 +1,140 @@
+{
+  "take_id": "SC04_g3_t1",
+  "generation_id": "SC04_g3",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:47": "yes, RUTH speaks to SAM across the table"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes, SAM's shoulder and back of head stay near frame-right all 10 s, same hair and hoodie",
+        "REL_GAZE": "yes, RUTH looks at SAM, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: OTS over SAM (dark curls, grey hoodie) near frame-right; RUTH seated across the booth speaks L09 1.4-6.0 s (STT exact 'you were eleven you came back for pie every sunday after'), warm smile; envelope untouched; no drift; 10 s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:47",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "50ce839383ea05ad03854d05be528ed4ea1f5891df52f0fd88e815cb0abeb3bc"
+}
