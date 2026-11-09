@@ -1,0 +1,241 @@
+{
+  "take": {
+    "take_id": "SC04_g2_t1",
+    "generation_id": "SC04_g2",
+    "prompt_sha256": "7cf4049b8e1387cae265d26a649c300f1dd37e01217a512c4ffccf7c27f33a50",
+    "start_frame_sha256": "0c1fa78e18d3d65c3f7d5fa2f0ec5a356107a5e2919722093e221276c26b71af",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 5.0,
+    "output_file": "SC04_g2_t1.mp4",
+    "output_sha256": "a012944a2b5976293057224b7cfa85c439eb1c5a02ceebfe3cdedead7e574600",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-09T18:52:13Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "SAM"
+    ],
+    "start_state": "SC04_g2",
+    "end_state": "SC04_g3",
+    "phases": [
+      {
+        "kind": "HOLD",
+        "start_s": 0.0,
+        "end_s": 2.5,
+        "description": "SAM stares at RUTH, frozen, lips parted"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 2.5,
+        "end_s": 3.5,
+        "description": "SAM exhales slowly"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 3.5,
+        "end_s": 5.0,
+        "description": "SAM stares on at RUTH, eyes wet"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: he never knew she knew - carried by: SAM"
+    },
+    {
+      "group": "action",
+      "question": "0-2.5s HOLD: does this happen on screen - SAM stares at RUTH, frozen, lips parted?"
+    },
+    {
+      "group": "action",
+      "question": "2.5-3.5s ACTION: does this happen on screen - SAM exhales slowly?"
+    },
+    {
+      "group": "action",
+      "question": "3.5-5s HOLD: does this happen on screen - SAM stares on at RUTH, eyes wet?"
+    },
+    {
+      "group": "character",
+      "question": "SAM: does the face/body read as stunned (restrained)? Must NOT read as: fear."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC04_g2: Continues from the previous shot: RUTH seated in the booth across the table, frame-left; SAM seated in the booth across the table, frame-right; the envelope: a thick white envelope lying flat in the middle of the table; the mug: a white coffee mug on the table in front of RUTH."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC04_g3: Continues from the previous shot: RUTH seated in the booth across the table, frame-left; SAM seated in the booth across the table, frame-right; the envelope: a thick white envelope lying flat in the middle of the table; the mug: a white coffee mug on the table in front of RUTH."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_LISTENER:RUTH",
+      "group": "spatial",
+      "question": "Is the place where RUTH stands kept out of frame (never shown empty), and do SAM's eyes go just past the lens to frame-left?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does SAM look at RUTH and never into the lens?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC04_g2_t1",
+    "generation_id": "SC04_g2",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_LISTENER:RUTH",
+      "REL_GAZE"
+    ],
+    "output_sha256": "a012944a2b5976293057224b7cfa85c439eb1c5a02ceebfe3cdedead7e574600"
+  },
+  "auto_evidence": {
+    "note": "autoqc not requested (no --clips directory)",
+    "warnings": []
+  }
+}
