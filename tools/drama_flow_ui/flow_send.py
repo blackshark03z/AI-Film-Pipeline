@@ -552,13 +552,31 @@ JS_FRONT_TILE_TEXT = r"""() => { const cs = [...document.querySelectorAll('flow-
 RENDERING_TILE_RE = re.compile(r"(?m)^\s*\d{1,2}%\s*$|\b\d{1,2}%")
 
 
+STRAY_RECHECKS = 4          # P19-02: re-reads of a new front tile that shows no percentage yet
+STRAY_RECHECK_MS = 4000
+
+
+async def _starts_rendering(page, home: str, mid: str) -> bool:
+    """P19-02: a job Flow has only just queued shows no percentage yet (film06, 5 of 17 sends: the front tile read
+    "play_circle The given image is the first frame..." 8 s after the submit, and that same media id was the clip
+    bound later), so "no percentage" alone does not mean finished. A finished clip never shows a percentage again,
+    so re-read the front tile a few times: if it starts rendering and is still the same media id, it is this send's."""
+    for _ in range(STRAY_RECHECKS):
+        await page.wait_for_timeout(STRAY_RECHECK_MS)
+        await page.evaluate(JS_TOP)
+        if RENDERING_TILE_RE.search(await page.evaluate(JS_FRONT_TILE_TEXT) or ""):
+            d = await read_nth_detail(page, 0, home)
+            return bool(d) and fb.media_id_from_url(d["url"]) == mid
+    return False
+
+
 async def submit_tile(page, home: str, before_ids: list[str], known: set[str]) -> dict:
     """P18-07: this send's own tile, read right after the submit. Flow puts a new job first, so the newest video tile
     is ours when its media id existed neither before the send (`before_ids`) nor as a registered take; its media id
     and pixels are the send's identity. Anything else (an old clip still in front, no tile yet) leaves the identity
-    unknown and the bind falls back to the prompt match. Only a tile still rendering (a progress percentage) is
-    taken: a new tile that is already a finished clip 8 s after the submit cannot be this send's (Omni Flash takes
-    45 s+); it is an earlier job that finished meanwhile (a stray).
+    unknown and the bind falls back to the prompt match. Only a tile still rendering (a progress percentage; a new
+    tile showing none is read again a few times, P19-02) is taken: a new tile that is already a finished clip 8 s
+    after the submit cannot be this send's (Omni Flash takes 45 s+); it is an earlier job that finished meanwhile.
     film05 SC02_g2 v4: a pixel check before the submit fired on every send (the start-frame upload changes the
     gallery), so finished-or-not is read after the submit instead."""
     await page.evaluate(JS_TOP)
@@ -573,7 +591,8 @@ async def submit_tile(page, home: str, before_ids: list[str], known: set[str]) -
         own["why"] = "NO_TILE"
     elif mid in before_ids or fb.is_known(mid, known):
         own["why"] = "OLD_TILE_IN_FRONT"
-    elif not rendering:   # a new tile already finished 8 s after the submit is not this send's job
+    elif not rendering and not await _starts_rendering(page, home, mid):
+        # a new tile still showing no percentage after the re-reads is a finished clip: not this send's job
         own.update(why="STRAY_IN_FRONT", stray_tail=mid[-8:])
     else:
         own.update(media_id=mid, failed_at_submit=FAILED_TEXT in (d.get("text") or ""))

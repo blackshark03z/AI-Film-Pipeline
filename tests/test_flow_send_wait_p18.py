@@ -419,6 +419,10 @@ def test_submit_tile_takes_only_a_new_unfinished_tile_in_front(monkeypatch):
 
         async def evaluate(self, js, *_a):
             return self.text if js == fs.JS_FRONT_TILE_TEXT else None
+
+        async def wait_for_timeout(self, _ms):   # P19-02: a tile with no percentage is read again first
+            pass
+    monkeypatch.setattr(fs, "STRAY_RECHECK_MS", 0)
     rendering = "favorite redo more_vert play_circle 0% The given image is the first frame. A single"  # live, 23:43
     for front, text, want, why in ((MID_OWN, rendering, MID_OWN, None),
                                    (MID_OWN, "play_circle Woman speaks to old man", None, "STRAY_IN_FRONT"),
@@ -429,3 +433,47 @@ def test_submit_tile_takes_only_a_new_unfinished_tile_in_front(monkeypatch):
         monkeypatch.setattr(fs, "read_nth_detail", nth)
         own = asyncio.run(fs.submit_tile(_Front(text), "home", [MID_OLD], {MID_STRAY[-8:]}))
         assert own["media_id"] == want and own.get("why") == why
+
+
+def test_submit_tile_waits_for_a_just_queued_own_tile_to_show_its_percentage(monkeypatch):
+    # P19-02, film06 (5 of 17 sends): 8 s after the submit the own tile read "play_circle The given image is the
+    # first frame..." with no percentage yet, so it was called a stray; the same media id was the clip bound later
+    async def sigs(_page, k=8):
+        return [np.zeros(fs.TILE_SIG_SIZE[::-1])]
+    monkeypatch.setattr(fs, "gallery_signatures", sigs)
+    monkeypatch.setattr(fs, "STRAY_RECHECK_MS", 0)
+    queued = "play_circle The given image is the first frame. A single unbroken shot"   # live, film06 SC03_g2
+    rendering = "play_circle 3% The given image is the first frame. A single unbroken shot"
+
+    class _Front:
+        def __init__(self, texts):
+            self.texts, self.waits = list(texts), 0
+
+        async def evaluate(self, js, *_a):
+            if js != fs.JS_FRONT_TILE_TEXT:
+                return None
+            return self.texts.pop(0) if len(self.texts) > 1 else self.texts[0]
+
+        async def wait_for_timeout(self, _ms):
+            self.waits += 1
+
+    def nth_of(mids):
+        seq = list(mids)
+
+        async def nth(_page, _n, _home):
+            return _detail(seq.pop(0) if len(seq) > 1 else seq[0])
+        return nth
+    # queued, then rendering on the 2nd re-read, same media id -> own
+    page = _Front([queued, queued, rendering])
+    monkeypatch.setattr(fs, "read_nth_detail", nth_of([MID_OWN]))
+    own = asyncio.run(fs.submit_tile(page, "home", [MID_OLD], set()))
+    assert own["media_id"] == MID_OWN and "why" not in own and page.waits == 2
+    # a finished clip never shows a percentage: still a stray after every re-read
+    page = _Front(["play_circle Woman speaks to old man"])
+    own = asyncio.run(fs.submit_tile(page, "home", [MID_OLD], set()))
+    assert own["media_id"] is None and own["why"] == "STRAY_IN_FRONT" and page.waits == fs.STRAY_RECHECKS
+    # the percentage belongs to a different tile that came in front meanwhile -> no identity taken
+    page = _Front([queued, rendering])
+    monkeypatch.setattr(fs, "read_nth_detail", nth_of([MID_OWN, MID_STRAY]))
+    own = asyncio.run(fs.submit_tile(page, "home", [MID_OLD], set()))
+    assert own["media_id"] is None and own["why"] == "STRAY_IN_FRONT"

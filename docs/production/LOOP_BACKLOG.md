@@ -1120,3 +1120,15 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   auto-resend incident with how it was handled.
 - **Offline done (6c4b221):** package and plan; gates 1-2 PASS, gate 3 waits only for the storyboard review; all 17
   shots GREEN.
+
+### P19-02 own-tile identity: a just-queued own tile was called a stray — DONE
+- **Seen (film06, live):** 5 of 17 sends (SC03_g2, SC04_g1, SC04_g2, SC05_g2, SC07_g2) took no own identity:
+  8 s after the submit the front tile read "play_circle The given image is the first frame..." with no percentage
+  yet, so `submit_tile` called it STRAY_IN_FRONT. In all 5 the "stray" media id was the clip bound later by the prompt
+  match, so nothing went wrong, but the P18-07 guard was off for 29% of sends.
+- **Stage that missed it:** `tools/drama_flow_ui/flow_send.py::submit_tile` treated "no percentage" as "finished".
+- **Fix:** a new front tile with no percentage is read again (up to 4 x 4 s); it is taken as the send's own only when
+  it starts showing a percentage and is still the same media id. A finished clip never shows one, so a real stray
+  stays STRAY_IN_FRONT. Test: `tests/test_flow_send_wait_p18.py::test_submit_tile_waits_for_a_just_queued_own_tile_to_show_its_percentage`.
+- **Not yet proven live:** film06 ended before the fix; the next film's sends should show no STRAY_IN_FRONT whose
+  stray_tail equals the bound media id.
