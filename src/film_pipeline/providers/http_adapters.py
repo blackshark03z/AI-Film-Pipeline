@@ -48,14 +48,29 @@ class Transport(Protocol):
                 timeout: float = 60.0) -> HttpResponse: ...
 
 
+class _StripAuthOnRedirect(urllib.request.HTTPRedirectHandler):
+    """A redirect to another host (a CDN download) never carries the Authorization header."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001 - urllib signature
+        new = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new is not None and urllib.parse.urlsplit(newurl).netloc != urllib.parse.urlsplit(req.full_url).netloc:
+            for name in [k for k in new.headers if k.lower() == "authorization"]:
+                del new.headers[name]
+            new.unredirected_hdrs.pop("Authorization", None)
+        return new
+
+
 class UrllibTransport:
     """stdlib transport: a non-2xx status is a response, not an exception."""
+
+    def __init__(self) -> None:
+        self._opener = urllib.request.build_opener(_StripAuthOnRedirect)
 
     def request(self, method: str, url: str, headers: Mapping[str, str], body: bytes | None = None,
                 timeout: float = 60.0) -> HttpResponse:
         req = urllib.request.Request(url, data=body, method=method, headers=dict(headers))
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 - https/http URLs from the registry
+            with self._opener.open(req, timeout=timeout) as resp:  # https/http URLs from the registry
                 return HttpResponse(resp.status, resp.read(), dict(resp.headers.items()))
         except urllib.error.HTTPError as exc:
             return HttpResponse(exc.code, exc.read() or b"", dict(exc.headers.items()) if exc.headers else {})
@@ -263,7 +278,13 @@ class HttpVideoAdapter:
         return out, hashlib.sha256(resp.body).hexdigest()
 
     def run(self, request: GenerationRequest, on_submitted: Callable[[str], None] | None = None) -> AdapterOutcome:
-        """Submit, poll until done (or ``timeout_s``: AMBIGUOUS, the job id stays bound), download a PASSED clip."""
+        """Submit, poll until done (or ``timeout_s``: AMBIGUOUS, the job id stays bound), download a PASSED clip.
+        Provider texts in the outcome are scrubbed of the key (a provider may echo it in an error code)."""
+        outcome = self._run(request, on_submitted)
+        return outcome.model_copy(update={"raw_result": self._scrub(outcome.raw_result),
+                                          "detail": self._scrub(outcome.detail)})
+
+    def _run(self, request: GenerationRequest, on_submitted: Callable[[str], None] | None) -> AdapterOutcome:
         if request.output_path.exists():  # checked before paying: the download could never be written
             return AdapterOutcome(raw_result="output_exists", result="NOT_SUBMITTED",
                                   detail=f"{request.output} exists; a take is evidence and is never overwritten")
@@ -356,9 +377,11 @@ class OpenAIVideosAdapter(HttpVideoAdapter):
 
     def read_status(self, job_id: str, body: Any) -> JobStatus:
         state = str((body or {}).get("status") or "").lower() if isinstance(body, dict) else ""
+        code = _error_code(body)
+        if code and code in self.cap.error_map.exact and state not in self.PENDING:
+            return JobStatus(state="done", raw=code, result=self.cap.normalize(code))
         if state in self.PENDING or not state:
             return JobStatus(state="pending", raw=state or "no_status")
-        code = _error_code(body)
         if state == "failed" and code and code in self.cap.error_map.exact:
             return JobStatus(state="done", raw=code, result=self.cap.normalize(code))
         raw = f"status_{state}"
@@ -409,9 +432,11 @@ class MiniMaxAdapter(HttpVideoAdapter):
         if not isinstance(body, dict):
             return JobStatus(state="pending", raw="no_status")
         state = str(body.get("status") or "").lower()
+        code = _error_code(body)
+        if code and code in self.cap.error_map.exact and state not in self.PENDING:
+            return JobStatus(state="done", raw=code, result=self.cap.normalize(code))
         if state in self.PENDING or not state:
             return JobStatus(state="pending", raw=state or "no_status")
-        code = _error_code(body)
         if code and code in self.cap.error_map.exact:
             return JobStatus(state="done", raw=code, result=self.cap.normalize(code))
         content = body.get("content") if isinstance(body.get("content"), dict) else {}

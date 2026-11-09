@@ -89,7 +89,7 @@ class FilmHeader(ContractModel):
     budget: Budget = Field(default_factory=Budget)
     # video route; a shot's own `route` overrides it. Unset = providers/routes.json: production (Flow) or, for an
     # `experiment` film, the experiment default (Vilao omh3 h3-480p)
-    route: RouteSpec = Field(default_factory=RouteSpec)
+    route: RouteSpec | None = None
     experiment: bool = False
     disclosure: DisclosureSettings = Field(default_factory=DisclosureSettings)
     delegated_reviewers: list[DelegatedReviewer] = Field(default_factory=list)

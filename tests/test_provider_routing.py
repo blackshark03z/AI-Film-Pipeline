@@ -104,7 +104,7 @@ def test_money_ledger_keeps_units_apart_and_follows_charged_on():
         "B_t1": {"result": "PROVIDER_FAILED", "provider": "minimax", "provider_model": "h3-lite",
                  "cost_unit": "USD", "expected_cost": 0.2},                                       # MiniMax: not charged
         "B_t2": {"result": "AMBIGUOUS", "provider": "minimax", "provider_model": "h3-lite",
-                 "cost_unit": "USD", "expected_cost": 0.2},                                       # MiniMax: not charged
+                 "cost_unit": "USD", "expected_cost": 0.2},                                       # MiniMax: reserved
         "C_t1": {"result": "PROVIDER_FAILED", "provider": "vilao", "provider_model": "h3-480p",
                  "cost_unit": "VND", "expected_cost": 4158.0, "provider_job_id": "v1"},           # Vilao: assumed charged
         "C_t2": {"result": "PASSED", "provider": "vilao", "provider_model": "h3-480p",
@@ -115,7 +115,7 @@ def test_money_ledger_keeps_units_apart_and_follows_charged_on():
                        provider="vilao", provider_job_id="v2", cost_unit="VND", cost_amount=4158.0)
     led = money_ledger(SimpleNamespace(takes=[take]), sent)
     assert led["credits"]["spent"] == 8.0 and led["credits"]["not_submitted"] == ["A_t2"]
-    assert led["USD"]["spent"] == 0.0 and led["USD"]["not_charged"] == ["B_t1", "B_t2"]
+    assert led["USD"]["spent"] == 0.2 and led["USD"]["not_charged"] == ["B_t1"] and led["USD"]["unresolved"] == {"B_t2": 0.2}
     assert led["VND"]["unresolved"] == {"C_t1": 4158.0} and led["VND"]["spent"] == 8316.0
     assert credit_ledger(SimpleNamespace(takes=[take]), sent)["spent"] == 8.0
 
@@ -350,3 +350,54 @@ def test_the_key_comes_from_env_then_from_the_key_file(tmp_path):
     with pytest.raises(ProviderNotReady) as err:
         OpenAIVideosAdapter(cap, env={"VILAO_API_KEY_FILE": str(tmp_path / "missing.txt")})._key()
     assert "missing" not in str(err.value)
+
+
+# ---- Codex review 2026-11-09 -----------------------------------------------------------------------------------
+
+def test_an_alias_route_counts_the_same_sends(tmp_path):
+    canonical = G.build_payload(_route(film(tmp_path / "a", 100), {"provider": "flow", "model": "omni-1.2-flash"}),
+                                "SC01_g1", stills_dir=still(tmp_path / "a"))
+    alias = G.build_payload(_route(film(tmp_path / "b", 100), {"provider": "flow", "model": "Omni 1.2 Flash"}),
+                            "SC01_g1", stills_dir=still(tmp_path / "b"))
+    assert canonical["provider_model"] == alias["provider_model"] == "omni-1.2-flash"
+    assert canonical["argv"][2:] == [a.replace(str(tmp_path / "b"), str(tmp_path / "a")) for a in alias["argv"][2:]]
+
+
+def test_the_daily_cap_counts_other_films(tmp_path):
+    from datetime import date
+    other = tmp_path / "films" / "other" / "takes" / "intents"
+    other.mkdir(parents=True)
+    (other / "X_t1.intent.json").write_text(json.dumps({
+        "sent": True, "result": "PASSED", "provider": "vilao", "provider_model": "h3-480p", "cost_unit": "VND",
+        "expected_cost": 48000, "sent_on": date.today().isoformat()}), encoding="utf-8")
+    root = tmp_path / "films" / "film"
+    pkg = _experiment(film(tmp_path / "films" / "x", 100))  # film() makes <arg>/film
+    import shutil
+    shutil.move(str(pkg.root), str(root))
+    pkg = load_package(root)
+    p = G.build_payload(pkg, "SC01_g1", stills_dir=still(tmp_path))
+    # 48,000 elsewhere + 4,158 here > 50,000
+    plan = root / "media" / "plan"
+    assert plan.is_dir()
+    p = G.build_payload(pkg, "SC01_g1", stills_dir=still(tmp_path), plan_out=plan)
+    assert "BUDGET_DAILY_EXCEEDED" in [b["code"] for b in p["blockers"]]
+
+
+def test_an_unreadable_receipt_keeps_its_flow_credits_after_a_reroute(tmp_path):
+    pkg = film(tmp_path, 100)
+    folder = T.takes_dir(pkg.root) / "intents"
+    folder.mkdir(parents=True)
+    (folder / "SC01_g1_t1.intent.json").write_text("{not json", encoding="utf-8")
+    pkg = _route(pkg, {"provider": "vilao", "model": "h3-480p"}, caps={"VND": 90000})
+    prices = {g.generation_id: G._fallback_price(pkg.header, g) for g in pkg.typed["shots"].generations}
+    sent = G._sent_receipts(pkg.root, pkg.header.film_id, prices)
+    led = money_ledger(T.load_log(pkg.root, pkg.header.film_id), sent)
+    assert led["credits"]["unresolved"] == {"SC01_g1_t1": 8.0} and led["VND"]["unresolved"] == {"SC01_g1_t1~VND": 4158.0}
+
+
+def test_an_experiment_header_keeps_its_route_through_a_save(tmp_path):
+    from film_pipeline.production.package import FilmHeader
+    from film_pipeline.providers.route import resolve_route
+    header = FilmHeader.model_validate({"film_id": "x", "title": "x", "profile": "drama", "experiment": True})
+    again = FilmHeader.model_validate_json(header.model_dump_json())
+    assert resolve_route(header).provider == resolve_route(again).provider == "vilao"

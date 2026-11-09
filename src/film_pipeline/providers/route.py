@@ -1,7 +1,7 @@
 """Routing (section 3 item 8) and the route preflight (item 3): does the routed model cover this shot?
 
-``film.json`` ``route`` is the film's default (provider + model + tier, default Flow Omni 1.2 Flash TEST); a shot's
-``route`` overrides it. ``route_issues`` checks a ``GenerationRequest`` against the routed entry before any spend:
+``film.json`` ``route`` is the film's default (provider + model + tier); unset, it is ``routes.json``'s production route
+(Flow Omni 1.2 Flash TEST) or, for an ``experiment`` film, the experiment route. A shot's ``route`` overrides it. ``route_issues`` checks a ``GenerationRequest`` against the routed entry before any spend:
 BLOCK when the model cannot do it (duration, tier, aspect, frame roles, reference count, prompt length, a dialogue shot
 on a model with ``native_audio`` false), WARN when nobody knows yet (dialogue on ``native_audio`` unknown).
 """
@@ -52,8 +52,7 @@ def resolve_route(header: object, decl: object | None = None) -> RouteSpec:
     own = getattr(decl, "route", None) if decl is not None else None
     if own is not None:
         return own
-    fields_set = getattr(header, "model_fields_set", set())
-    if "route" in fields_set and getattr(header, "route", None) is not None:
+    if getattr(header, "route", None) is not None:
         return header.route  # type: ignore[attr-defined]
     defaults = route_defaults()
     return defaults.experiment if getattr(header, "experiment", False) else defaults.production

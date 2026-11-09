@@ -27,10 +27,10 @@
         },
         "default": "AMBIGUOUS"
       },
-      "charged_on": ["PASSED"],
+      "charged_on": ["PASSED", "AMBIGUOUS"],
       "request_fields": {"content_image_key": "image_url", "duration": "duration", "resolution": "resolution", "ratio": "ratio"},
       "unverified": ["api_model id", "native_audio", "content[] image key and data-URL acceptance", "ratio field name", "query error shape", "rate limits"],
-      "notes": ["failed tasks and moderation rejections (HTTP 422 code 1026) are not charged (platform.minimax.io pricing)"]
+      "notes": ["failed tasks and moderation rejections (HTTP 422 code 1026) are not charged (platform.minimax.io pricing)", "AMBIGUOUS (timeout, succeeded but download failed) is reserved as charged until resolved"]
     },
     {
       "provider": "minimax",
@@ -59,10 +59,10 @@
         },
         "default": "AMBIGUOUS"
       },
-      "charged_on": ["PASSED"],
+      "charged_on": ["PASSED", "AMBIGUOUS"],
       "request_fields": {"content_image_key": "image_url", "duration": "duration", "resolution": "resolution", "ratio": "ratio"},
       "unverified": ["api_model id", "native_audio", "content[] image key and data-URL acceptance", "ratio field name", "query error shape", "rate limits"],
-      "notes": ["failed tasks and moderation rejections (HTTP 422 code 1026) are not charged (platform.minimax.io pricing)"]
+      "notes": ["failed tasks and moderation rejections (HTTP 422 code 1026) are not charged (platform.minimax.io pricing)", "AMBIGUOUS (timeout, succeeded but download failed) is reserved as charged until resolved"]
     },
     {
       "provider": "minimax",
@@ -91,10 +91,10 @@
         },
         "default": "AMBIGUOUS"
       },
-      "charged_on": ["PASSED"],
+      "charged_on": ["PASSED", "AMBIGUOUS"],
       "request_fields": {"content_image_key": "image_url", "duration": "duration", "resolution": "resolution", "ratio": "ratio"},
       "unverified": ["api_model id", "native_audio", "content[] image key and data-URL acceptance", "ratio field name", "query error shape", "rate limits"],
-      "notes": ["failed tasks and moderation rejections (HTTP 422 code 1026) are not charged (platform.minimax.io pricing)"]
+      "notes": ["failed tasks and moderation rejections (HTTP 422 code 1026) are not charged (platform.minimax.io pricing)", "AMBIGUOUS (timeout, succeeded but download failed) is reserved as charged until resolved"]
     }
   ]
 }

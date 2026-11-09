@@ -166,6 +166,7 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
 
     route = resolve_route(pkg.header, decl)
     cap = _capability(route)
+    route = RouteSpec(provider=cap.provider, model=cap.model, tier=route.tier)  # canonical id, never an alias
     unit = cap.price.unit
     prices = {g.generation_id: _fallback_price(pkg.header, g) for g in shots.generations}
     sent = _sent_receipts(root, pkg.header.film_id, prices)
@@ -195,7 +196,7 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     day = (today or date.today()).isoformat()
     daily = route_defaults().daily_caps.get(unit)
     if daily is not None and not pkg.header.rehearsal:
-        spent_today = _spent_on(sent, unit, day)
+        spent_today = _spent_on(sent, unit, day) + _spent_on_elsewhere(root, unit, day)
         if spent_today + cost > daily:
             blockers.append(_blocker("BUDGET_DAILY_EXCEEDED", f"{spent_today:g} spent on {day} + {cost:g} > daily cap "
                                      f"{daily:g}{in_unit}", live_only=True))
@@ -261,6 +262,24 @@ def _spent_on(sent: dict[str, dict[str, Any]], unit: str, day: str) -> float:
                if r.get("sent_on") == day and receipt_unit(r) == unit and receipt_charged(r))
 
 
+def _spent_on_elsewhere(root: Path, unit: str, day: str) -> float:
+    """The daily cap is per day, not per film: what the other films beside this one sent on ``day`` in ``unit``."""
+    total = 0.0
+    parent = Path(root).resolve().parent
+    for other in sorted(parent.iterdir()) if parent.is_dir() else []:
+        folder = takes_dir(other) / "intents"
+        if other.resolve() == Path(root).resolve() or not folder.is_dir():
+            continue
+        for path in folder.glob("*.intent.json"):
+            try:
+                body = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if body.get("sent") and body.get("sent_on") == day and receipt_unit(body) == unit and receipt_charged(body):
+                total += receipt_amount(body)
+    return total
+
+
 def _capability(route: RouteSpec) -> ModelCapability:
     try:
         return route.capability()
@@ -284,9 +303,10 @@ def _fallback_price(header: Any, decl: Any) -> dict[str, Any]:
     except ValueError:  # another shot's bad route is that shot's error (its own build_payload raises), not this one's
         return {"expected_credits": flow_credits(shot_seconds(decl, header))}
     amount = _price(cap, shot_seconds(decl, header), route.tier)
+    flow = flow_credits(shot_seconds(decl, header))
     if cap.price.unit == "credits":
         return {"expected_credits": amount}
-    return {"expected_credits": 0.0, "expected_cost": amount, "cost_unit": cap.price.unit, "provider": cap.provider,
+    return {"expected_credits": flow, "expected_cost": amount, "cost_unit": cap.price.unit, "provider": cap.provider,
             "provider_model": cap.model}
 
 
@@ -371,12 +391,17 @@ def _sent_receipts(root: Path, film_id: str, prices: dict[str, Any]) -> dict[str
         try:
             body = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
-            out[take_id] = {"sent": True, "result": "PENDING", **price}
+            # its unit is unknown: reserve the Flow credits it would have cost and, when the shot now routes to
+            # another unit, that route's price as well (never silently move money from one unit to another)
+            out[take_id] = {"sent": True, "result": "PENDING", "expected_credits": float(price["expected_credits"])}
+            if "cost_unit" in price:
+                out[f"{take_id}~{price['cost_unit']}"] = {"sent": True, "result": "PENDING", **price,
+                                                          "expected_credits": 0.0}
             continue
         if body.get("sent") and body.get("film_id", film_id) == film_id:
             if receipt_unit(body) == "credits":
-                # a Flow receipt without a price: its shot's Flow price (or 8 s if the shot now routes elsewhere)
-                fallback = flow_credits(8) if "cost_unit" in price else float(price["expected_credits"])
+                # a Flow receipt without a price: its shot's Flow price
+                fallback = float(price["expected_credits"])
                 out[take_id] = {**body, "expected_credits": float(body.get("expected_credits") or fallback)}
             else:
                 same = price.get("cost_unit") == receipt_unit(body)
