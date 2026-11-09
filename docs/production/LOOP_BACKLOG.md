@@ -950,25 +950,40 @@ Only fixes for defects that film05 exposes are allowed. Each such fix is traced 
 - **Defect (film05 SC01_g1, recovery):** a `--download` re-run for a receipt that was already reconciled counted its own media id as "known", which gave NOT_IN_GALLERY.
 - **Fix:** `tools/drama_flow_ui/flow_reconcile.py` `known_ids(..., skip=ids being reconciled)`. Test: `tests/test_flow_reconcile.py`.
 
-### P17-05 flow_send stopped waiting before the clip existed — FIXED offline, live check in film05 (2026-11-09)
+### P17-05 flow_send stopped waiting before the clip existed — FIXED offline (2026-11-09; root fix after film05, not yet live)
 - **Defect (film05 send stage):**
   - Re-issued thumbnails counted as "new tiles", and Omni Flash shows no pending signal, so the wait loop ended at 38–59 s.
   - SC01_g1 gave UNBOUND ("no new video"); SC01_g2 gave AMBIGUOUS (video count 37→30, flaky); SC02_g2 v1 gave UNBOUND ("no media id for the front video": the tile was still rendering).
   - SC01_g1 and SC01_g2 were recovered by `flow_reconcile`.
   - SC02_g2 v1's job never appeared in the gallery, and no failed tile appeared. It was re-sent as v2 with the same prompt; the v1 send still counts in the scorecard.
 - **Fix:** `flow_send.py`: after detail_bind returns one of those two UNBOUND reasons, keep polling every 15 s until the send timeout and bind again.
-- **Open:** `video_count` is still flaky, and a missed bind is still recovered by reconcile.
+- **Root fix (after film05):** when detail_bind fails, `flow_send.reconcile_bind` binds the same way as flow_reconcile, inside the send:
+  - It reads the newest 6 video tiles' detail pages and looks for exactly one unregistered clip that holds the whole prompt.
+  - It polls every 20 s until the send timeout, or until a new failed tile appears.
+  - It downloads the clip and records binding RECONCILE_PROMPT_MATCH.
+  - Tests: `tests/test_flow_send_picker.py` (2 new). `video_count` is still flaky, but it no longer decides the outcome.
+- **Codex gpt-6.1-sol review (read-only):** all 5 findings fixed.
+  1. Clips that existed before the send are excluded. `front_snapshot` now records the newest 6 media ids, which adds about 45 s per send.
+  2. The tile is read again before the download (MOVED if the gallery shifted).
+  3. `provider_no_clip` needs a scan of at least 6 detail pages.
+  4. A `reconcile_bind` error is recorded instead of raised.
+  5. A timestamp with a timezone offset no longer crashes `settled()`.
+- **Live check:** on the next real send.
 
 ### P17-06 takes --register numbers take ids by count, not by send receipt — OPEN (logged, not fixed)
 - **Defect (film05 SC02_g2):** v1's receipt SC02_g2_t1 produced no clip. The v2 send (receipt and file SC02_g2_t2) was registered as take SC02_g2_t1, so a take id and a receipt id now name two different sends.
 - **Impact:** credits still count per receipt; review and cut use the take id. No block, but the audit trail is confusing.
 
-### P17-07 A Flow job that vanishes is counted as a send against the cap — OPEN (logged, not fixed)
+### P17-07 A Flow job that vanishes is counted as a send against the cap — FIXED offline (2026-11-09)
 - **Defect (film05 SC02_g2 12:09, SC04_g1 13:23, 2026-11-09):**
   - Flow started the job, then it left no video tile and no lasting "Không thành công" tile.
   - flow_send recorded UNBOUND or AMBIGUOUS, which uses the send cap; only FLOW_FAILED is exempt.
   - Workaround used: shot v2 with the same prompt, one counted attempt each. Both shots are scored "not accepted on first send".
-- **Fix to make:** after reconcile proves NOT_IN_GALLERY and the gallery shows no new video for the prompt, record the send as FLOW_FAILED (provider failure: credits counted, cap not used).
+- **Fix:**
+  - `flow_reconcile` adds `provider_no_clip: true` to a NOT_IN_GALLERY result once the send has been finished for 10+ minutes (`settled()`, read from the take manifest).
+  - `generate._sent_receipts` then reads an UNBOUND / AMBIGUOUS / TIMEOUT / BLOCKED / NO_VIDEO_UNDER_TILE send as `FLOW_FAILED_NO_CLIP`: its credits count, the send cap is not used.
+  - Tests: `test_a_vanished_flow_job_proven_by_reconcile_does_not_use_the_cap`, `test_settled_needs_ten_minutes_after_the_send_ended`.
+  - From now on, a vanished job needs no version bump.
 
 ### Flow reliability incidents (film05, 2026-11-09)
 - 12:09 SC02_g2 v1: job vanished (no clip, no failed tile).

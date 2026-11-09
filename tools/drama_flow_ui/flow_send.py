@@ -465,11 +465,58 @@ async def read_nth_detail(page, n: int, home: str) -> dict | None:
     return out
 
 
-async def front_snapshot(page, home: str) -> dict:
-    """Before the send: how many videos exist and which media id is in front."""
+async def front_snapshot(page, home: str, scan: int = 6) -> dict:
+    """Before the send: how many videos exist, which media id is in front and the media ids of the newest `scan`
+    videos (P17-05, Codex review: reconcile_bind must never bind a clip that existed before this send)."""
     n = await video_count(page)
-    d = await read_nth_detail(page, 0, home) if n else None
-    return {"n": n, "front_id": fb.media_id_from_url(d["url"]) if d else None}
+    ids: list[str] = []
+    front = None
+    for i in range(min(n, scan)):
+        d = await read_nth_detail(page, i, home)
+        mid = fb.media_id_from_url(d["url"]) if d else None
+        if i == 0:
+            front = mid
+        if mid:
+            ids.append(mid)
+    return {"n": n, "front_id": front, "before_ids": ids}
+
+
+async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline: float, failed_before: int,
+                         before_ids: list[str], scan: int = 6) -> bool:
+    """P17-05: when the detail bind fails, bind like flow_reconcile does, inside the send: the newest `scan` video tiles
+    are read (detail page: media id + prompt) until exactly one clip holds the whole prompt that is neither a
+    registered take nor one of `before_ids` (videos that existed before this send), polled every 20 s until `deadline`
+    or a new failed tile. Right before the download the tile at that index is read again and must still be that clip.
+    film05: 5 of 13 sends needed flow_reconcile after the send. Returns True when it set rec["result"] (PASSED or the
+    download failure); any error is recorded and returns False, so the paid send's record is still written."""
+    import flow_reconcile as fr   # local: flow_reconcile imports this module
+    tries, res = 0, {}
+    try:
+        known = fr.known_ids(out.parent, out.parent, frozenset({out.stem})) | set(before_ids)
+        while True:
+            tries += 1
+            res = fb.reconcile(prompt, await fr.scan_gallery(page, scan), known)
+            if res["result"] == "BOUND":
+                again = await read_nth_detail(page, res["index"], page.url)
+                if again and fb.media_id_from_url(again["url"]) == res["media_id"]:
+                    failed = await fr.download_nth(page, ctx, res["index"], out)
+                    rec["reconcile_bind"] = {"tries": tries, "media_id_tail": res["media_id"][-8:],
+                                             "download": failed or "SAVED"}
+                    if failed:
+                        rec["result"] = failed
+                        return True
+                    data = out.read_bytes()
+                    rec.update(result="PASSED", binding="RECONCILE_PROMPT_MATCH", media_id_tail=res["media_id"][-8:],
+                               file=out.name, sha256=_sha(data), bytes=len(data), duration_s=probe_duration(out))
+                    return True
+                res = {"result": "MOVED", "why": "the gallery moved before the download"}
+            if time.time() >= deadline or (await page.evaluate(JS_JOB_STATE))["failed"] > failed_before:
+                rec["reconcile_bind"] = {"tries": tries, "result": res["result"]}
+                return False
+            await page.wait_for_timeout(20000)
+    except Exception as e:  # noqa: BLE001 - never lose the record of a paid send
+        rec["reconcile_bind"] = {"tries": tries, "error": f"{type(e).__name__}: {str(e)[:160]}"}
+        return False
 
 
 async def detail_bind(page, pre: dict, prompt: str, rec: dict) -> str | None:
@@ -807,6 +854,10 @@ async def run(args) -> dict:
                 if await video_count(page) > pre["n"]:
                     rec.pop("result", None)
                     token = await detail_bind(page, pre, prompt, rec)
+            if token is None and await reconcile_bind(page, ctx, prompt, out, rec, t0 + args.timeout, failed_before,
+                                                         pre.get("before_ids", [])):
+                rec["elapsed_s"] = round(time.time() - t0)
+                return rec
             rec["elapsed_s"] = round(time.time() - t0)
             if token is None and await flow_failed(page, failed_before, 90):
                 rec["result"] = "FLOW_FAILED"

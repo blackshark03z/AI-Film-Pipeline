@@ -66,3 +66,19 @@ def test_a_rerun_does_not_hide_its_own_earlier_binding(tmp_path):
         json.dumps({"receipt_id": "SC02_g1_t1", "result": "BOUND", "media_id": "bbb"}), encoding="utf-8")
     assert known_ids(None, tmp_path, frozenset({"SC01_g1_t1"})) == {"bbb"}
     assert known_ids(None, tmp_path) == {"aaa", "bbb"}
+
+
+def test_settled_needs_ten_minutes_after_the_send_ended(tmp_path):
+    import json
+    from datetime import datetime
+
+    import flow_reconcile as fr
+    m = tmp_path / "X_t1.take.json"
+    m.write_text(json.dumps({"finished": "2026-11-09T12:13:10"}), encoding="utf-8")
+    assert not fr.settled(m, now=datetime(2026, 11, 9, 12, 20, 0))
+    assert fr.settled(m, now=datetime(2026, 11, 9, 12, 23, 10))
+    assert not fr.settled(tmp_path / "missing.take.json")
+    m.write_text(json.dumps({"finished": "2026-11-09T12:00:00+00:00"}), encoding="utf-8")
+    from datetime import timezone
+    assert fr.settled(m, now=datetime(2026, 11, 9, 12, 10, 0, tzinfo=timezone.utc))
+    assert not fr.settled(m, now=datetime(2026, 11, 9, 12, 20, 0))   # aware vs naive: no crash, not settled

@@ -316,7 +316,23 @@ def _sent_receipts(root: Path, film_id: str, prices: dict[str, float]) -> dict[s
             continue
         if body.get("sent") and body.get("film_id", film_id) == film_id:
             out[take_id] = {**body, "expected_credits": float(body.get("expected_credits") or fallback)}
+            if _provider_no_clip(root, take_id) and str(body.get("result") or "") in NO_BIND_RESULTS:
+                out[take_id]["result"] = "FLOW_FAILED_NO_CLIP"
     return out
+
+
+# P17-07 (film05 SC02_g2, SC04_g1): Flow took the job, then no clip and no failed tile were left. flow_reconcile proves
+# it (NOT_IN_GALLERY 10+ min after the send, `provider_no_clip`); the send is a provider failure like FLOW_FAILED:
+# its credits count, the send cap is not used.
+NO_BIND_RESULTS = ("UNBOUND", "AMBIGUOUS", "TIMEOUT", "BLOCKED", "NO_VIDEO_UNDER_TILE")
+
+
+def _provider_no_clip(root: Path, take_id: str) -> bool:
+    path = Path(root) / "media" / "takes" / f"{take_id}.reconcile.json"
+    try:
+        return bool(json.loads(path.read_text(encoding="utf-8")).get("provider_no_clip"))
+    except (OSError, ValueError):
+        return False
 
 
 def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:

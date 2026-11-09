@@ -10,7 +10,8 @@ the receipt's ``prompt_sha256`` (a re-planned prompt is not the one that was sen
 candidates) come from take manifests (``media_id_tail``, 8 chars: matched by suffix) and from earlier BOUND results in
 --out-dir. Writes ``<out-dir>/<receipt_id>.reconcile.json``; with --download a BOUND clip is saved as
 ``<receipt_id>.mp4`` so ``film.py takes --register`` registers it under the receipt's stem (which the credit ledger
-matches). Never reads cookies, never closes the browser, persists no signed URL or token.
+matches). P17-07: NOT_IN_GALLERY at least SETTLE_S after the send ended adds ``provider_no_clip: true``; generate
+then counts that send as FLOW_FAILED (credits spent, send cap not used). Never reads cookies, never closes the browser, persists no signed URL or token.
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ import asyncio
 import hashlib
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -49,6 +51,22 @@ def known_ids(manifests: Path | None, out_dir: Path, skip: frozenset[str] = froz
             if body.get("result") == "BOUND" and body.get("media_id"):
                 known.add(body["media_id"])
     return known
+
+
+SETTLE_S = 600   # P17-07: a clip not in the gallery 10 min after its send ended is not coming
+MIN_SCAN = 6     # ... and only when at least this many newest detail pages were read
+
+
+def settled(manifest: Path, now: datetime | None = None) -> bool:
+    """True when the send's take manifest says it finished SETTLE_S or more ago (film05: Flow jobs that vanished)."""
+    try:
+        finished = datetime.fromisoformat(json.loads(manifest.read_text(encoding="utf-8"))["finished"])
+    except (OSError, ValueError, KeyError, TypeError):
+        return False
+    now = now or datetime.now(finished.tzinfo)   # the manifest writes local naive time; an offset is honoured too
+    if (now.tzinfo is None) != (finished.tzinfo is None):
+        return False
+    return (now - finished).total_seconds() >= SETTLE_S
 
 
 def load_receipt(receipts: Path, rid: str, prompts: Path) -> tuple[dict, str | None, str | None]:
@@ -140,6 +158,10 @@ async def run(args) -> dict[str, dict]:
         finally:
             await pw.stop()   # disconnect only; browser and tab stay open
     for rid, res in results.items():
+        # Codex review: only a full scan proves the clip is gone (a short or failed scan could hide it)
+        if (res["result"] == "NOT_IN_GALLERY" and res.get("scanned", 0) >= MIN_SCAN
+                and settled(manifests / f"{rid}.take.json")):
+            res["provider_no_clip"] = True
         (out_dir / f"{rid}.reconcile.json").write_text(json.dumps({"receipt_id": rid, **res}, indent=2),
                                                        encoding="utf-8")
     return results
