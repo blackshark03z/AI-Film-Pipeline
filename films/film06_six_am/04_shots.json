@@ -1,0 +1,1642 @@
+{
+  "generations": [
+    {
+      "generation_id": "SC01_g1",
+      "scene_id": "SC01",
+      "coverage": "MASTER",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH",
+        "SAM"
+      ],
+      "start_state": "SC01_g1",
+      "end_state": "SC01_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC01_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 2.0,
+            "description": "RUTH and SAM sit facing each other across the booth table, rain streaking the window"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 5.0,
+            "description": "RUTH speaks to SAM"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.0,
+            "end_s": 7.0,
+            "description": "SAM holds her look and does not answer yet"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "dry, tired",
+            "visible_cues": [
+              "level look",
+              "flat mouth"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        13
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master from the open end of the booth: RUTH seated on the left, SAM seated on the right, both against the high red booth backs, the rain-streaked window between them, the envelope and the mug on the table"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "the diner is closed and they are alone",
+          "evidence": [
+            "RUTH",
+            "SAM"
+          ]
+        }
+      ],
+      "duration_s": 7,
+      "version": 1,
+      "addressees": {
+        "13": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "VISIBLE"
+        }
+      },
+      "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC01_g2",
+      "scene_id": "SC01",
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "start_state": "SC01_g2",
+      "end_state": "SC01_end",
+      "previous_generation_id": "SC01_g1",
+      "choreography": {
+        "generation_id": "SC01_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "SAM looks across the table at RUTH"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 6.0,
+            "description": "SAM speaks to RUTH"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "SAM waits, hands in his hoodie pocket, eyes on RUTH"
+          }
+        ],
+        "once_actions": [
+          "SAM speaks to RUTH"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "nervous, determined",
+            "visible_cues": [
+              "eyes stay on her",
+              "small swallow"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        16
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on SAM seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, RUTH out of frame to the left"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "he waited for everyone to leave",
+          "evidence": [
+            "SAM"
+          ]
+        }
+      ],
+      "duration_s": 8,
+      "version": 1,
+      "addressees": {
+        "16": [
+          "RUTH"
+        ]
+      },
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH sits off frame-left across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC02_g1",
+      "scene_id": "SC02",
+      "coverage": "OTS",
+      "subject": "SAM",
+      "foreground": "RUTH",
+      "visible": [
+        "SAM",
+        "RUTH"
+      ],
+      "start_state": "SC02_g1",
+      "end_state": "SC02_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC02_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "SAM sits looking at RUTH"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 6.5,
+            "description": "SAM speaks to RUTH, slowly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.5,
+            "end_s": 8.0,
+            "description": "SAM waits, eyes on RUTH"
+          }
+        ],
+        "once_actions": [
+          "SAM speaks to RUTH"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "ashamed, steady",
+            "visible_cues": [
+              "eyes on her",
+              "tight jaw"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        21
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "MEDIUM",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over RUTH's shoulder onto SAM seated across the table: the back of RUTH's grey bun and blue shoulder at the left edge, SAM on the right against his high red booth back, the envelope on the table between them"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "he took money from her till years ago",
+          "evidence": [
+            "SAM"
+          ]
+        }
+      ],
+      "duration_s": 8,
+      "version": 1,
+      "addressees": {
+        "21": [
+          "RUTH"
+        ]
+      },
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OTS_FOREGROUND"
+        }
+      },
+      "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC02_g2",
+      "scene_id": "SC02",
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "start_state": "SC02_g2",
+      "end_state": "SC02_g3",
+      "previous_generation_id": "SC02_g1",
+      "choreography": {
+        "generation_id": "SC02_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "RUTH looks across the table at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 6.0,
+            "description": "RUTH speaks to SAM, flat and exact"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.0,
+            "end_s": 8.0,
+            "description": "RUTH holds his look, quite still"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "exact, unsurprised",
+            "visible_cues": [
+              "steady eyes",
+              "one raised eyebrow"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        24
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, SAM out of frame to the right"
+      },
+      "camera_position": "C",
+      "readout": [
+        {
+          "fact": "she remembers the exact sum",
+          "evidence": [
+            "RUTH"
+          ]
+        }
+      ],
+      "duration_s": 8,
+      "version": 1,
+      "addressees": {
+        "24": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM sits off frame-right across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC02_g3",
+      "scene_id": "SC02",
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "start_state": "SC02_g3",
+      "end_state": "SC02_g4",
+      "previous_generation_id": "SC02_g2",
+      "choreography": {
+        "generation_id": "SC02_g3",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "SAM looks at RUTH"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 2.0,
+            "description": "SAM glances down at the table and back up to RUTH",
+            "motion": "glance"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.0,
+            "end_s": 7.0,
+            "description": "SAM speaks to RUTH"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 7.0,
+            "end_s": 8.0,
+            "description": "SAM waits, eyes on RUTH"
+          }
+        ],
+        "once_actions": [
+          "SAM speaks to RUTH"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "earnest, anxious",
+            "visible_cues": [
+              "quick glance down",
+              "eyes back on her"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        27
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on SAM seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, RUTH out of frame to the left"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "the money is in the envelope",
+          "evidence": [
+            "SAM"
+          ]
+        }
+      ],
+      "duration_s": 8,
+      "version": 1,
+      "addressees": {
+        "27": [
+          "RUTH"
+        ]
+      },
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH sits off frame-left across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC02_g4",
+      "scene_id": "SC02",
+      "coverage": "REACTION",
+      "subject": "",
+      "foreground": "",
+      "visible": [],
+      "start_state": "SC02_g4",
+      "end_state": "SC02_end",
+      "previous_generation_id": "SC02_g3",
+      "choreography": {
+        "generation_id": "SC02_g4",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "the thick white envelope lies flat on the booth table, nobody in frame, no hands"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 4.0,
+            "description": "everything stays still; only the rain streaks the window beyond"
+          }
+        ],
+        "once_actions": [
+          "only the rain streaks the window"
+        ],
+        "gesture_budget": 1,
+        "performance": []
+      },
+      "sfx": [],
+      "dialogue": [],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "SHALLOW_ISOLATE",
+        "composition": "insert along the tabletop: the thick white envelope in the foreground, the rain-streaked window blurred beyond"
+      },
+      "camera_position": "D",
+      "readout": [
+        {
+          "fact": "the money is in the envelope",
+          "evidence": [
+            "envelope"
+          ]
+        }
+      ],
+      "duration_s": 4,
+      "version": 1
+    },
+    {
+      "generation_id": "SC03_g1",
+      "scene_id": "SC03",
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "start_state": "SC03_g1",
+      "end_state": "SC03_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC03_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 2.5,
+            "description": "RUTH speaks to SAM, quietly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 2.5,
+            "end_s": 5.0,
+            "description": "RUTH waits for his answer, eyes on SAM"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "searching",
+            "visible_cues": [
+              "narrowed eyes",
+              "still mouth"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        34
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, SAM out of frame to the right"
+      },
+      "camera_position": "C",
+      "readout": [
+        {
+          "fact": "she asks why he came now",
+          "evidence": [
+            "RUTH"
+          ]
+        }
+      ],
+      "duration_s": 5,
+      "version": 1,
+      "addressees": {
+        "34": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM sits off frame-right across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC03_g2",
+      "scene_id": "SC03",
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "start_state": "SC03_g2",
+      "end_state": "SC03_end",
+      "previous_generation_id": "SC03_g1",
+      "choreography": {
+        "generation_id": "SC03_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "SAM looks at RUTH"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 7.0,
+            "description": "SAM speaks to RUTH"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 7.0,
+            "end_s": 8.0,
+            "description": "SAM swallows and holds her look"
+          }
+        ],
+        "once_actions": [
+          "SAM speaks to RUTH"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "plain, sincere",
+            "visible_cues": [
+              "steady eyes",
+              "small swallow"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "joy"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        37
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on SAM seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, RUTH out of frame to the left"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "he wants to owe no one",
+          "evidence": [
+            "SAM"
+          ]
+        }
+      ],
+      "duration_s": 8,
+      "version": 1,
+      "addressees": {
+        "37": [
+          "RUTH"
+        ]
+      },
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH sits off frame-left across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC04_g1",
+      "scene_id": "SC04",
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "start_state": "SC04_g1",
+      "end_state": "SC04_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC04_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 5.5,
+            "description": "RUTH speaks to SAM, gently"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 5.5,
+            "end_s": 7.0,
+            "description": "RUTH holds his look, almost smiling"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "gentle, knowing",
+            "visible_cues": [
+              "soft eyes",
+              "corner of the mouth lifts"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "mockery"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        42
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, SAM out of frame to the right"
+      },
+      "camera_position": "C",
+      "readout": [
+        {
+          "fact": "she always knew it was him",
+          "evidence": [
+            "RUTH"
+          ]
+        }
+      ],
+      "duration_s": 7,
+      "version": 1,
+      "addressees": {
+        "42": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM sits off frame-right across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC04_g2",
+      "scene_id": "SC04",
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "start_state": "SC04_g2",
+      "end_state": "SC04_g3",
+      "previous_generation_id": "SC04_g1",
+      "choreography": {
+        "generation_id": "SC04_g2",
+        "phases": [
+          {
+            "kind": "HOLD",
+            "start_s": 0.0,
+            "end_s": 2.5,
+            "description": "SAM stares at RUTH, frozen, lips parted"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.5,
+            "end_s": 3.5,
+            "description": "SAM exhales slowly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 3.5,
+            "end_s": 5.0,
+            "description": "SAM stares on at RUTH, eyes wet"
+          }
+        ],
+        "once_actions": [],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "stunned",
+            "visible_cues": [
+              "frozen stare",
+              "lips parted"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "fear"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on SAM seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, RUTH out of frame to the left"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "he never knew she knew",
+          "evidence": [
+            "SAM"
+          ]
+        }
+      ],
+      "duration_s": 5,
+      "version": 1,
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH sits off frame-left across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC04_g3",
+      "scene_id": "SC04",
+      "coverage": "OTS",
+      "subject": "RUTH",
+      "foreground": "SAM",
+      "visible": [
+        "RUTH",
+        "SAM"
+      ],
+      "start_state": "SC04_g3",
+      "end_state": "SC04_end",
+      "previous_generation_id": "SC04_g2",
+      "choreography": {
+        "generation_id": "SC04_g3",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 8.0,
+            "description": "RUTH speaks to SAM, warmly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 8.0,
+            "end_s": 10.0,
+            "description": "RUTH holds his look, still"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "warm, matter-of-fact",
+            "visible_cues": [
+              "soft eyes",
+              "small nod"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "pity"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        47
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "MEDIUM",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over SAM's shoulder onto RUTH seated across the table: SAM's curly hair and grey hoodie shoulder at the right edge, RUTH on the left against her high red booth back, the envelope on the table between them"
+      },
+      "camera_position": "C",
+      "readout": [
+        {
+          "fact": "he kept coming back as a boy",
+          "evidence": [
+            "RUTH"
+          ]
+        }
+      ],
+      "duration_s": 10,
+      "version": 1,
+      "addressees": {
+        "47": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OTS_FOREGROUND"
+        }
+      },
+      "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC05_g1",
+      "scene_id": "SC05",
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "start_state": "SC05_g1",
+      "end_state": "SC05_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC05_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "SAM looks down at the table"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 2.5,
+            "description": "SAM raises his eyes to RUTH",
+            "motion": "glance"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.5,
+            "end_s": 4.5,
+            "description": "SAM speaks to RUTH, pleading"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.5,
+            "end_s": 6.0,
+            "description": "SAM waits, eyes on RUTH"
+          }
+        ],
+        "once_actions": [
+          "SAM speaks to RUTH"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "pleading",
+            "visible_cues": [
+              "eyes up to her",
+              "brows drawn together"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        54
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on SAM seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, RUTH out of frame to the left"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "he begs her to take the money",
+          "evidence": [
+            "SAM"
+          ]
+        }
+      ],
+      "duration_s": 6,
+      "version": 1,
+      "addressees": {
+        "54": [
+          "RUTH"
+        ]
+      },
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH sits off frame-left across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC05_g2",
+      "scene_id": "SC05",
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "start_state": "SC05_g2",
+      "end_state": "SC05_end",
+      "previous_generation_id": "SC05_g1",
+      "choreography": {
+        "generation_id": "SC05_g2",
+        "phases": [
+          {
+            "kind": "HOLD",
+            "start_s": 0.0,
+            "end_s": 2.5,
+            "description": "RUTH looks down at the table for a long moment, quite still"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 2.5,
+            "end_s": 3.5,
+            "description": "RUTH raises her eyes to SAM",
+            "motion": "glance"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 3.5,
+            "end_s": 6.5,
+            "description": "RUTH speaks to SAM, dry"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.5,
+            "end_s": 8.0,
+            "description": "RUTH holds his look"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "deciding, dry",
+            "visible_cues": [
+              "long look down",
+              "eyes up to him"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        59
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, SAM out of frame to the right"
+      },
+      "camera_position": "C",
+      "readout": [
+        {
+          "fact": "she will not take it; she needs a cook",
+          "evidence": [
+            "RUTH"
+          ]
+        }
+      ],
+      "duration_s": 8,
+      "version": 1,
+      "addressees": {
+        "59": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM sits off frame-right across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC06_g1",
+      "scene_id": "SC06",
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "start_state": "SC06_g1",
+      "end_state": "SC06_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC06_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "SAM looks at RUTH"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 3.0,
+            "description": "SAM speaks to RUTH, unsure"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 3.0,
+            "end_s": 5.0,
+            "description": "SAM waits, eyes on RUTH, barely breathing"
+          }
+        ],
+        "once_actions": [
+          "SAM speaks to RUTH"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "disbelief",
+            "visible_cues": [
+              "raised brows",
+              "still"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "joy"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        64
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on SAM seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, RUTH out of frame to the left"
+      },
+      "camera_position": "B",
+      "readout": [
+        {
+          "fact": "he cannot believe she would hire him",
+          "evidence": [
+            "SAM"
+          ]
+        }
+      ],
+      "duration_s": 5,
+      "version": 1,
+      "addressees": {
+        "64": [
+          "RUTH"
+        ]
+      },
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH sits off frame-left across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC06_g2",
+      "scene_id": "SC06",
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "start_state": "SC06_g2",
+      "end_state": "SC06_end",
+      "previous_generation_id": "SC06_g1",
+      "choreography": {
+        "generation_id": "SC06_g2",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 4.5,
+            "description": "RUTH speaks to SAM, plainly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.5,
+            "end_s": 6.0,
+            "description": "RUTH holds his look"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "plain, warm",
+            "visible_cues": [
+              "steady eyes",
+              "small nod"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "pity"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        67
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, SAM out of frame to the right"
+      },
+      "camera_position": "C",
+      "readout": [
+        {
+          "fact": "she offers him the job",
+          "evidence": [
+            "RUTH"
+          ]
+        }
+      ],
+      "duration_s": 6,
+      "version": 1,
+      "addressees": {
+        "67": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM sits off frame-right across the table, wholly out of shot",
+          "established_by": "SC01_g1"
+        }
+      },
+      "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC07_g1",
+      "scene_id": "SC07",
+      "coverage": "OTS",
+      "subject": "RUTH",
+      "foreground": "SAM",
+      "visible": [
+        "RUTH",
+        "SAM"
+      ],
+      "start_state": "SC07_g1",
+      "end_state": "SC07_g2",
+      "previous_generation_id": null,
+      "choreography": {
+        "generation_id": "SC07_g1",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 6.5,
+            "description": "RUTH speaks to SAM, dry and kind"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 6.5,
+            "end_s": 8.0,
+            "description": "RUTH holds his look, a small smile"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "dry, kind",
+            "visible_cues": [
+              "small smile",
+              "steady eyes"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "mockery"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [
+        72
+      ],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "MEDIUM",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "over SAM's shoulder onto RUTH seated across the table: SAM's curly hair and grey hoodie shoulder at the right edge, RUTH on the left against her high red booth back, the envelope on the table between them"
+      },
+      "camera_position": "C",
+      "readout": [
+        {
+          "fact": "he will keep the money and start at six",
+          "evidence": [
+            "RUTH"
+          ]
+        }
+      ],
+      "duration_s": 8,
+      "version": 1,
+      "addressees": {
+        "72": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OTS_FOREGROUND"
+        }
+      },
+      "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC07_g2",
+      "scene_id": "SC07",
+      "coverage": "MASTER",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "RUTH",
+        "SAM"
+      ],
+      "start_state": "SC07_g2",
+      "end_state": "SC07_end",
+      "previous_generation_id": "SC07_g1",
+      "choreography": {
+        "generation_id": "SC07_g2",
+        "phases": [
+          {
+            "kind": "HOLD",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "SAM and RUTH sit facing each other across the booth table"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 4.0,
+            "description": "SAM smiles and nods slowly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.0,
+            "end_s": 7.0,
+            "description": "both sit still, rain streaking the window"
+          }
+        ],
+        "once_actions": [
+          "SAM smiles and nods slowly"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "relieved, grateful",
+            "visible_cues": [
+              "slow smile",
+              "nod"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "laughter"
+          },
+          {
+            "character": "RUTH",
+            "emotion_intent": "content",
+            "visible_cues": [
+              "small smile"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "sadness"
+          }
+        ]
+      },
+      "sfx": [],
+      "dialogue": [],
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_night@1",
+        "prop_envelope@1",
+        "prop_mug@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master from the open end of the booth: RUTH seated on the left, SAM seated on the right, both against the high red booth backs, the rain-streaked window between them, the envelope and the mug on the table"
+      },
+      "camera_position": "A",
+      "readout": [
+        {
+          "fact": "he accepts",
+          "evidence": [
+            "SAM",
+            "envelope"
+          ]
+        }
+      ],
+      "duration_s": 7,
+      "version": 1,
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "VISIBLE"
+        }
+      },
+      "gaze_target": "RUTH"
+    }
+  ],
+  "history": []
+}

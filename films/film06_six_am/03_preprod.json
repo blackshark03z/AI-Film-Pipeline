@@ -1,0 +1,1398 @@
+{
+  "feasibility": {
+    "max_speakers": 2,
+    "max_in_frame": 3,
+    "max_dialogue_syllables": 28,
+    "scene_duration_s": 16.0,
+    "min_silence_s": 3.0,
+    "syllables_per_second": 2.5
+  },
+  "preflight": {
+    "max_prompt_words": 215,
+    "timing": {
+      "duration_s": 8.0,
+      "max_shots": 1,
+      "min_shot_s": 2.0,
+      "syllables_per_second": 2.5,
+      "establish_s": 1.5,
+      "reaction_s": 3.0
+    },
+    "feasibility": {
+      "max_speakers": 2,
+      "max_in_frame": 3,
+      "max_dialogue_syllables": 28,
+      "scene_duration_s": 16.0,
+      "min_silence_s": 3.0,
+      "syllables_per_second": 2.5
+    },
+    "interaction_contract": true
+  },
+  "characters": {
+    "RUTH": {
+      "look": {
+        "look_id": "ruth_apron",
+        "character": "RUTH",
+        "text": "woman in her sixties, grey hair pinned up in a loose bun, reading glasses on a cord around her neck, pale blue diner uniform dress with a white apron",
+        "invariants": [
+          "grey hair in a loose bun",
+          "reading glasses on a cord",
+          "pale blue uniform dress",
+          "white apron"
+        ],
+        "approved": true
+      },
+      "video_text": "woman in her sixties, grey hair pinned up in a loose bun, reading glasses on a cord around her neck, pale blue diner uniform dress with a white apron",
+      "voice": "dry, low female voice",
+      "handle": "the older woman"
+    },
+    "SAM": {
+      "look": {
+        "look_id": "sam_hoodie",
+        "character": "SAM",
+        "text": "man in his early twenties, short dark curly hair, thin face, damp grey hoodie with the hood down",
+        "invariants": [
+          "short dark curly hair",
+          "thin face",
+          "grey hoodie, hood down"
+        ],
+        "approved": true
+      },
+      "video_text": "man in his early twenties, short dark curly hair, thin face, damp grey hoodie with the hood down",
+      "voice": "quiet, unsteady young male voice",
+      "handle": "the young man"
+    }
+  },
+  "locations": {
+    "diner_night": {
+      "look": {
+        "look_id": "diner_night",
+        "location": "KELLER'S DINER",
+        "text": "Small closed diner at night: one booth with high red vinyl seats beside a rain-streaked window, a warm lamp hanging over the booth table, the rest of the diner dark",
+        "invariants": [
+          "high red vinyl booth seats",
+          "rain-streaked window beside the booth",
+          "warm lamp over the booth table",
+          "the rest of the diner dark"
+        ],
+        "interior": true,
+        "time_of_day": "NIGHT",
+        "weather_outside": "steady rain",
+        "environment_rules": [
+          "rain runs down the window the whole time; the light never changes"
+        ],
+        "approved": true
+      },
+      "room_tone": "quiet diner hum, a refrigerator, rain on the window",
+      "layout": {
+        "zones": [
+          {
+            "id": "booth",
+            "label": "diner booth",
+            "box": [
+              0.05,
+              0.05,
+              0.95,
+              0.95
+            ]
+          }
+        ],
+        "objects": [
+          {
+            "id": "table",
+            "label": "booth table",
+            "zone": "booth",
+            "placement": "between the two booth seats, its far end against the window",
+            "at": [
+              0.5,
+              0.5
+            ]
+          },
+          {
+            "id": "window",
+            "label": "rain-streaked window",
+            "zone": "booth",
+            "placement": "at the far end of the booth table, blue night and a red glow outside",
+            "at": [
+              0.5,
+              0.06
+            ]
+          },
+          {
+            "id": "lamp",
+            "label": "warm lamp",
+            "zone": "booth",
+            "placement": "hanging low over the middle of the booth table",
+            "at": [
+              0.5,
+              0.45
+            ]
+          },
+          {
+            "id": "seat_left",
+            "label": "high red vinyl booth seat",
+            "zone": "booth",
+            "placement": "along the left side of the table",
+            "at": [
+              0.25,
+              0.5
+            ]
+          },
+          {
+            "id": "seat_right",
+            "label": "high red vinyl booth seat",
+            "zone": "booth",
+            "placement": "along the right side of the table",
+            "at": [
+              0.75,
+              0.5
+            ]
+          },
+          {
+            "id": "envelope",
+            "label": "thick white envelope",
+            "zone": "booth",
+            "placement": "flat in the middle of the table",
+            "at": [
+              0.5,
+              0.52
+            ]
+          },
+          {
+            "id": "mug",
+            "label": "white coffee mug",
+            "zone": "booth",
+            "placement": "on the table in front of RUTH",
+            "at": [
+              0.4,
+              0.5
+            ]
+          }
+        ],
+        "cameras": [
+          {
+            "id": "A",
+            "zone": "booth",
+            "view": "Camera at the open end of the booth at seated eye level, looking along the table to the window: RUTH seated on the left, SAM seated on the right, the window between them",
+            "sees": [
+              "table",
+              "window",
+              "lamp",
+              "seat_left",
+              "seat_right",
+              "envelope",
+              "mug"
+            ],
+            "at": [
+              0.5,
+              0.92
+            ],
+            "look_at": "table"
+          },
+          {
+            "id": "B",
+            "zone": "booth",
+            "view": "Camera at the open end of the booth, just left of the table, facing SAM across the table: SAM against his high red booth back",
+            "sees": [
+              "table",
+              "window",
+              "seat_right",
+              "envelope",
+              "mug"
+            ],
+            "at": [
+              0.35,
+              0.8
+            ],
+            "look_at": "seat_right"
+          },
+          {
+            "id": "C",
+            "zone": "booth",
+            "view": "Camera at the open end of the booth, just right of the table, facing RUTH across the table: RUTH against her high red booth back",
+            "sees": [
+              "table",
+              "window",
+              "seat_left",
+              "envelope",
+              "mug"
+            ],
+            "at": [
+              0.65,
+              0.8
+            ],
+            "look_at": "seat_left"
+          },
+          {
+            "id": "D",
+            "zone": "booth",
+            "view": "Camera low and close at the table edge, looking along the tabletop at the envelope",
+            "sees": [
+              "table",
+              "envelope",
+              "window"
+            ],
+            "at": [
+              0.5,
+              0.66
+            ],
+            "look_at": "envelope"
+          }
+        ],
+        "marks": [
+          {
+            "id": "ruth_seat",
+            "at": [
+              0.28,
+              0.5
+            ],
+            "zone": "booth"
+          },
+          {
+            "id": "sam_seat",
+            "at": [
+              0.72,
+              0.5
+            ],
+            "zone": "booth"
+          }
+        ]
+      }
+    }
+  },
+  "scenes": {
+    "SC01": {
+      "location": "diner_night",
+      "axis": {
+        "scene_id": "SC01",
+        "axis_pair": [
+          "RUTH",
+          "SAM"
+        ],
+        "sides": {
+          "RUTH": "LEFT",
+          "SAM": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC01",
+        "initial": [
+          "RUTH",
+          "SAM"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC01",
+        "story_order": 1.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "MEDIUM",
+        "motivation": "a warm lamp hanging over the booth table, blue night and a red glow through the rain-streaked window",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "warm lamp hanging low over the booth table"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "rain-streaked window beside the booth, blue night with a red glow"
+          }
+        ]
+      },
+      "encounter_id": "booth_confession"
+    },
+    "SC02": {
+      "location": "diner_night",
+      "axis": {
+        "scene_id": "SC02",
+        "axis_pair": [
+          "RUTH",
+          "SAM"
+        ],
+        "sides": {
+          "RUTH": "LEFT",
+          "SAM": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC02",
+        "initial": [
+          "RUTH",
+          "SAM"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC02",
+        "story_order": 2.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "MEDIUM",
+        "motivation": "a warm lamp hanging over the booth table, blue night and a red glow through the rain-streaked window",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "warm lamp hanging low over the booth table"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "rain-streaked window beside the booth, blue night with a red glow"
+          }
+        ]
+      },
+      "encounter_id": "booth_confession"
+    },
+    "SC03": {
+      "location": "diner_night",
+      "axis": {
+        "scene_id": "SC03",
+        "axis_pair": [
+          "RUTH",
+          "SAM"
+        ],
+        "sides": {
+          "RUTH": "LEFT",
+          "SAM": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC03",
+        "initial": [
+          "RUTH",
+          "SAM"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC03",
+        "story_order": 3.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "MEDIUM",
+        "motivation": "a warm lamp hanging over the booth table, blue night and a red glow through the rain-streaked window",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "warm lamp hanging low over the booth table"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "rain-streaked window beside the booth, blue night with a red glow"
+          }
+        ]
+      },
+      "encounter_id": "booth_confession"
+    },
+    "SC04": {
+      "location": "diner_night",
+      "axis": {
+        "scene_id": "SC04",
+        "axis_pair": [
+          "RUTH",
+          "SAM"
+        ],
+        "sides": {
+          "RUTH": "LEFT",
+          "SAM": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC04",
+        "initial": [
+          "RUTH",
+          "SAM"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC04",
+        "story_order": 4.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "MEDIUM",
+        "motivation": "a warm lamp hanging over the booth table, blue night and a red glow through the rain-streaked window",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "warm lamp hanging low over the booth table"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "rain-streaked window beside the booth, blue night with a red glow"
+          }
+        ]
+      },
+      "encounter_id": "booth_confession"
+    },
+    "SC05": {
+      "location": "diner_night",
+      "axis": {
+        "scene_id": "SC05",
+        "axis_pair": [
+          "RUTH",
+          "SAM"
+        ],
+        "sides": {
+          "RUTH": "LEFT",
+          "SAM": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC05",
+        "initial": [
+          "RUTH",
+          "SAM"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC05",
+        "story_order": 5.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "MEDIUM",
+        "motivation": "a warm lamp hanging over the booth table, blue night and a red glow through the rain-streaked window",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "warm lamp hanging low over the booth table"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "rain-streaked window beside the booth, blue night with a red glow"
+          }
+        ]
+      },
+      "encounter_id": "booth_confession"
+    },
+    "SC06": {
+      "location": "diner_night",
+      "axis": {
+        "scene_id": "SC06",
+        "axis_pair": [
+          "RUTH",
+          "SAM"
+        ],
+        "sides": {
+          "RUTH": "LEFT",
+          "SAM": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC06",
+        "initial": [
+          "RUTH",
+          "SAM"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC06",
+        "story_order": 6.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "MEDIUM",
+        "motivation": "a warm lamp hanging over the booth table, blue night and a red glow through the rain-streaked window",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "warm lamp hanging low over the booth table"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "rain-streaked window beside the booth, blue night with a red glow"
+          }
+        ]
+      },
+      "encounter_id": "booth_confession"
+    },
+    "SC07": {
+      "location": "diner_night",
+      "axis": {
+        "scene_id": "SC07",
+        "axis_pair": [
+          "RUTH",
+          "SAM"
+        ],
+        "sides": {
+          "RUTH": "LEFT",
+          "SAM": "RIGHT"
+        }
+      },
+      "occupancy": {
+        "scene_id": "SC07",
+        "initial": [
+          "RUTH",
+          "SAM"
+        ],
+        "events": []
+      },
+      "story_time": {
+        "scene_id": "SC07",
+        "story_order": 7.0,
+        "transition_in": "LINEAR",
+        "marker": "",
+        "source_conflict": ""
+      },
+      "extras": "",
+      "lighting": {
+        "key_direction": "SIDE_LEFT",
+        "quality": "SOFT",
+        "colour_temp_k": 3200,
+        "contrast": "MEDIUM",
+        "motivation": "a warm lamp hanging over the booth table, blue night and a red glow through the rain-streaked window",
+        "practicals": [
+          {
+            "kind": "LAMP",
+            "note": "warm lamp hanging low over the booth table"
+          },
+          {
+            "kind": "WINDOW",
+            "note": "rain-streaked window beside the booth, blue night with a red glow"
+          }
+        ]
+      },
+      "encounter_id": "booth_confession"
+    }
+  },
+  "states": {
+    "SC01_g1": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC01_g2": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC02_g1": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC02_g2": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC02_g3": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC02_g4": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC03_g1": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC03_g2": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC04_g1": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC04_g2": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC04_g3": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC05_g1": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC05_g2": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC06_g1": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC06_g2": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC07_g1": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC07_g2": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC01_end": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC02_end": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC03_end": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC04_end": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC05_end": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC06_end": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    },
+    "SC07_end": {
+      "positions": {
+        "RUTH": "seated in the booth across the table, frame-left",
+        "SAM": "seated in the booth across the table, frame-right"
+      },
+      "props": {
+        "the envelope:": "a thick white envelope lying flat in the middle of the table",
+        "the mug:": "a white coffee mug on the table in front of RUTH"
+      },
+      "looks": {
+        "RUTH": "ruth_apron",
+        "SAM": "sam_hoodie"
+      },
+      "lighting": "",
+      "time_of_day": "",
+      "location": "",
+      "blocking": {
+        "RUTH": {
+          "mark": "ruth_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands folded on the table edge in front of her",
+          "facing": "SAM"
+        },
+        "SAM": {
+          "mark": "sam_seat",
+          "posture": "seated in the booth, back against the high red booth seat, hands in the front pocket of his hoodie",
+          "facing": "RUTH"
+        }
+      }
+    }
+  },
+  "still_templates": {
+    "framing": {
+      "MASTER": "wide shot of the whole booth",
+      "OTS": "medium over-the-shoulder shot, both people seated, the table between them",
+      "SINGLE": "close-up of one seated person, head and shoulders against the high red booth back",
+      "TWO_SHOT": "medium two-shot of both people seated across the table",
+      "REACTION": "insert close-up of the table, nobody in frame"
+    },
+    "character": "Photoreal character reference portrait, 16:9, plain warm grey studio backdrop, head and shoulders, front view, neutral expression, soft even light: {text}. No text, no logos.",
+    "plate": "Photoreal empty set plate, 16:9, seated eye-level wide view, nobody in the room: {text}. No people, no text, no logos.",
+    "pose": true
+  },
+  "accepted_overlong": {},
+  "designs": {
+    "RUTH_look": {
+      "kind": "look",
+      "version": 1,
+      "owner": "RUTH",
+      "note": "locked CharacterLook text"
+    },
+    "RUTH_costume": {
+      "kind": "costume",
+      "version": 1,
+      "owner": "RUTH",
+      "note": "pale blue diner uniform dress, white apron"
+    },
+    "SAM_look": {
+      "kind": "look",
+      "version": 1,
+      "owner": "SAM",
+      "note": "locked CharacterLook text"
+    },
+    "SAM_costume": {
+      "kind": "costume",
+      "version": 1,
+      "owner": "SAM",
+      "note": "damp grey hoodie, hood down"
+    },
+    "loc_diner_night": {
+      "kind": "location",
+      "version": 1,
+      "owner": "diner_night"
+    },
+    "prop_envelope": {
+      "kind": "prop",
+      "version": 1,
+      "prop": "the envelope"
+    },
+    "prop_mug": {
+      "kind": "prop",
+      "version": 1,
+      "prop": "the mug"
+    }
+  },
+  "rights": [
+    {
+      "subject": "RUTH",
+      "kind": "character",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional character, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "SAM",
+      "kind": "character",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional character, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "diner_night",
+      "kind": "location",
+      "status": "pending",
+      "evidence": "",
+      "note": "fictional set, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "none (room tone and SFX are generated or CC0)",
+      "kind": "music",
+      "status": "original",
+      "evidence": "films/film06_six_am has no music stage",
+      "note": "no music track in the film"
+    },
+    {
+      "subject": "script.fountain",
+      "kind": "source",
+      "status": "pending",
+      "evidence": "",
+      "note": "original script, model-written for this film; Owner to confirm originality"
+    },
+    {
+      "subject": "none (no real person's likeness)",
+      "kind": "likeness",
+      "status": "pending",
+      "evidence": "",
+      "note": "faces are generated, not modelled on a real person; Owner to confirm"
+    }
+  ],
+  "risk_fallbacks": {},
+  "stills": {}
+}

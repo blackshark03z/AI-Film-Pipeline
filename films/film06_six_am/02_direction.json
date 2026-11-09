@@ -1,0 +1,583 @@
+{
+  "vision": {
+    "tone": "Quiet, plain, close: two people seated across a diner booth after closing, the turn carried by looks and an envelope nobody touches, never by a speech.",
+    "references": [
+      "an empty diner at night seen at seated eye level, warm lamp over one booth against blue rain on the window",
+      "a low-key confession drama played in pauses and glances"
+    ]
+  },
+  "visual_rules": [
+    {
+      "rule": "Seated eye-level static camera, no dutch angles, no handheld shake.",
+      "why": "The turn comes from Ruth's face and Sam's reaction, not from the camera."
+    },
+    {
+      "rule": "Both stay seated in the booth for the whole film, and every single shows the high red booth back behind the head and the table edge in front.",
+      "why": "film05 close singles at table height read as standing or seated by chance; the booth back and the table edge make the posture readable in every frame."
+    },
+    {
+      "rule": "Keep Ruth screen-left and Sam screen-right in every shot of the booth.",
+      "why": "The table stays the distance between them and the cut never flips who is where."
+    },
+    {
+      "rule": "Nobody touches the envelope or the mug on screen.",
+      "why": "Hands on small props are the least reliable thing the video model does; the envelope tells the story by lying still."
+    },
+    {
+      "rule": "Hold on the listener after a line lands.",
+      "why": "The drama is how each takes the other's words."
+    }
+  ],
+  "reveals": [
+    {
+      "fact_id": "money_in_envelope",
+      "scene_id": "SC02"
+    },
+    {
+      "fact_id": "ruth_knew",
+      "scene_id": "SC04"
+    }
+  ],
+  "coverage_plan": {
+    "B1": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B2": [
+      "OTS",
+      "SINGLE",
+      "REACTION"
+    ],
+    "B3": [
+      "SINGLE"
+    ],
+    "B4": [
+      "SINGLE",
+      "OTS"
+    ],
+    "B5": [
+      "SINGLE"
+    ],
+    "B6": [
+      "SINGLE"
+    ],
+    "B7": [
+      "OTS",
+      "MASTER"
+    ]
+  },
+  "scenes": {
+    "SC01": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closed"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closed"
+          ],
+          "RUTH": [
+            "diner_closed"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 3
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 7.5,
+        "holds": [
+          {
+            "generation_id": "SC01_g2",
+            "seconds": 2.0,
+            "why": "hold on Sam after he says he waited"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "title card, then a hard cut into the diner"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      }
+    },
+    "SC02": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closed",
+          "sam_stole",
+          "money_in_envelope"
+        ],
+        "characters_know": {
+          "SAM": [
+            "sam_stole",
+            "money_in_envelope"
+          ],
+          "RUTH": [
+            "sam_stole",
+            "money_in_envelope"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "the thick white envelope lies alone on the table, nobody touching it",
+          "device": "insert",
+          "generation_id": "SC02_g4",
+          "fact_id": "money_in_envelope"
+        }
+      ],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 4
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 7.0,
+        "holds": [
+          {
+            "generation_id": "SC02_g2",
+            "seconds": 2.0,
+            "why": "hold on Ruth after she names the exact sum"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      }
+    },
+    "SC03": {
+      "pov": {
+        "whose": "RUTH",
+        "audience_knows": [
+          "sam_stole",
+          "money_in_envelope"
+        ],
+        "characters_know": {
+          "SAM": [
+            "sam_stole",
+            "money_in_envelope"
+          ],
+          "RUTH": [
+            "sam_stole",
+            "money_in_envelope"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 4,
+          "end": 4
+        },
+        "RUTH": {
+          "start": 3,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.5,
+        "holds": [
+          {
+            "generation_id": "SC03_g1",
+            "seconds": 2.0,
+            "why": "Ruth waits for his answer after 'Why now?'"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      }
+    },
+    "SC04": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "sam_stole",
+          "ruth_knew",
+          "came_back_sundays"
+        ],
+        "characters_know": {
+          "SAM": [
+            "sam_stole",
+            "ruth_knew",
+            "came_back_sundays"
+          ],
+          "RUTH": [
+            "sam_stole",
+            "ruth_knew",
+            "came_back_sundays"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Sam stares at Ruth, frozen, after she says she knew it was him",
+          "device": "reaction",
+          "generation_id": "SC04_g2",
+          "fact_id": "ruth_knew"
+        }
+      ],
+      "curve": {
+        "SAM": {
+          "start": 4,
+          "end": 5
+        },
+        "RUTH": {
+          "start": 3,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 7.3,
+        "holds": [
+          {
+            "generation_id": "SC04_g2",
+            "seconds": 3.0,
+            "why": "Sam's silent reaction to the reveal"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      }
+    },
+    "SC05": {
+      "pov": {
+        "whose": "RUTH",
+        "audience_knows": [
+          "ruth_knew",
+          "cook_quits"
+        ],
+        "characters_know": {
+          "SAM": [
+            "ruth_knew",
+            "cook_quits"
+          ],
+          "RUTH": [
+            "ruth_knew",
+            "cook_quits"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 5,
+          "end": 4
+        },
+        "RUTH": {
+          "start": 3,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 7.0,
+        "holds": [
+          {
+            "generation_id": "SC05_g2",
+            "seconds": 2.5,
+            "why": "Ruth's long look at the envelope before she speaks"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      }
+    },
+    "SC06": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "cook_quits",
+          "job_offer"
+        ],
+        "characters_know": {
+          "SAM": [
+            "cook_quits",
+            "job_offer"
+          ],
+          "RUTH": [
+            "cook_quits",
+            "job_offer"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 4,
+          "end": 3
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 5.5,
+        "holds": [
+          {
+            "generation_id": "SC06_g2",
+            "seconds": 2.0,
+            "why": "hold on Ruth after 'comes back'"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      }
+    },
+    "SC07": {
+      "pov": {
+        "whose": "RUTH",
+        "audience_knows": [
+          "job_offer",
+          "start_six_am"
+        ],
+        "characters_know": {
+          "SAM": [
+            "job_offer",
+            "start_six_am"
+          ],
+          "RUTH": [
+            "job_offer",
+            "start_six_am"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 2
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 1
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 7.5,
+        "holds": [
+          {
+            "generation_id": "SC07_g2",
+            "seconds": 3.0,
+            "why": "the two of them in the booth after Sam nods, rain on the window"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous time in the booth"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "end of the film, cut to the end card"
+      }
+    }
+  },
+  "comprehension": {
+    "intros": [
+      {
+        "character": "RUTH",
+        "label": "RUTH KELLER",
+        "relation": "owns the diner",
+        "needed_by": "SC01_g1",
+        "carriers": []
+      },
+      {
+        "character": "SAM",
+        "label": "SAM DOYLE",
+        "relation": "an old customer",
+        "needed_by": "SC01_g2",
+        "carriers": []
+      }
+    ],
+    "facts": [
+      {
+        "fact_id": "diner_closed",
+        "text": "The diner is closed for the night",
+        "needed_by": "SC01_g1",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC01_g1",
+            "detail": "We closed an hour ago."
+          }
+        ]
+      },
+      {
+        "fact_id": "sam_stole",
+        "text": "Ten years ago Sam took money from Ruth's till",
+        "needed_by": "SC02_g2",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC02_g1",
+            "detail": "Ten years ago, somebody took money from your till."
+          }
+        ]
+      },
+      {
+        "fact_id": "money_in_envelope",
+        "text": "The envelope holds the money he took, and more",
+        "needed_by": "SC03_g1",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC02_g3",
+            "detail": "It's in the envelope. All of it, and some more."
+          },
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC02_g4",
+            "detail": "the thick white envelope alone on the table"
+          }
+        ]
+      },
+      {
+        "fact_id": "ruth_knew",
+        "text": "Ruth always knew Sam took the money",
+        "needed_by": "SC04_g2",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC04_g1",
+            "detail": "I knew it was you. Your red bike was out front."
+          }
+        ]
+      },
+      {
+        "fact_id": "came_back_sundays",
+        "text": "As a boy Sam kept coming back to the diner every Sunday",
+        "needed_by": "SC06_g2",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC04_g3",
+            "detail": "You were eleven. You came back for pie every Sunday after."
+          }
+        ]
+      },
+      {
+        "fact_id": "cook_quits",
+        "text": "Ruth's cook quits on Friday",
+        "needed_by": "SC06_g1",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC05_g2",
+            "detail": "My cook quits on Friday."
+          }
+        ]
+      },
+      {
+        "fact_id": "job_offer",
+        "text": "Ruth offers Sam the cook's job",
+        "needed_by": "SC07_g1",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC06_g2",
+            "detail": "I'd hire somebody who comes back."
+          }
+        ]
+      },
+      {
+        "fact_id": "start_six_am",
+        "text": "Sam starts at six in the morning and keeps the money",
+        "needed_by": "SC07_g2",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC07_g1",
+            "detail": "Keep the money. Buy shoes that don't slip. Six a.m."
+          }
+        ]
+      }
+    ],
+    "tags": [
+      {
+        "character": "RUTH",
+        "generation_id": "SC01_g1",
+        "start_s": 0.3,
+        "end_s": 3.3,
+        "anchor_x": null,
+        "anchor_y": null
+      },
+      {
+        "character": "SAM",
+        "generation_id": "SC01_g2",
+        "start_s": 0.2,
+        "end_s": 3.2,
+        "anchor_x": null,
+        "anchor_y": null
+      }
+    ],
+    "cards": []
+  },
+  "translations": {
+    "SIX A.M.": "SÁU GIỜ SÁNG",
+    "owns the diner": "chủ quán ăn",
+    "an old customer": "khách quen ngày trước",
+    "We closed an hour ago.": "Quán đóng cửa một tiếng rồi.",
+    "I know. I waited till the last customer left.": "Cháu biết. Cháu đợi vị khách cuối cùng về.",
+    "Ten years ago, somebody took money from your till.": "Mười năm trước, có người lấy tiền trong quầy của cô.",
+    "Three hundred and forty dollars. On a Tuesday.": "Ba trăm bốn mươi đô. Vào một ngày thứ Ba.",
+    "It's in the envelope. All of it, and some more.": "Tiền ở trong phong bì. Đủ cả, và thêm một ít.",
+    "Why now?": "Sao lại là bây giờ?",
+    "I'm twenty-one. I want to start my life owing no one.": "Cháu hai mươi mốt tuổi. Cháu muốn bắt đầu cuộc đời mà không nợ ai.",
+    "I knew it was you. Your red bike was out front.": "Cô biết là cháu. Chiếc xe đạp đỏ của cháu dựng ngay trước cửa.",
+    "You were eleven. You came back for pie every Sunday after.": "Hồi đó cháu mười một tuổi. Sau đó Chủ nhật nào cháu cũng quay lại ăn bánh.",
+    "Please. Take it.": "Cô cầm lấy đi. Cháu xin cô.",
+    "My cook quits on Friday.": "Thứ Sáu này đầu bếp của cô nghỉ việc.",
+    "You'd hire me?": "Cô sẽ thuê cháu sao?",
+    "I'd hire somebody who comes back.": "Cô sẽ thuê người biết quay lại.",
+    "Keep the money. Buy shoes that don't slip. Six a.m.": "Giữ lấy tiền. Mua đôi giày không trơn. Sáu giờ sáng.",
+    "A short drama. All characters are fictional.": "Phim ngắn. Mọi nhân vật đều là hư cấu.",
+    "Video, images and voices generated with AI.": "Video, hình ảnh và giọng nói được tạo bằng AI."
+  }
+}

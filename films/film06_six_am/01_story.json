@@ -1,0 +1,81 @@
+{
+  "concept": "A young man waits in a closed diner at night to pay back the money he stole from its till as a boy, and the owner tells him she always knew.",
+  "theme": "Owing someone is not settled by money; coming back is what counts.",
+  "genre": "Quiet drama (short, contained, one diner booth, a few minutes)",
+  "audience": {
+    "who": "General online audience watching short dramas in English; anyone who has carried an old wrong for years.",
+    "expectation": "A small, recognisable moment of confession with a warm turn and no speeches."
+  },
+  "premise": "After closing time Sam Doyle sits across a booth table from Ruth Keller, the diner's owner, with an envelope of money between them: what he took from her till ten years ago.",
+  "central_conflict": "Sam wants to pay his debt and walk away clean; Ruth does not want his money, she wants him to come back.",
+  "logline": {
+    "text": "Ten years after he robbed her till, Sam Doyle waits in Ruth Keller's closed diner to pay back the money, but Ruth will not take it.",
+    "protagonist": "SAM",
+    "goal": "pay back the money",
+    "obstacle": "Ruth will not take it"
+  },
+  "structure": [
+    {
+      "id": "ACT1",
+      "name": "The envelope",
+      "beats": [
+        {"id": "B1", "function": "SETUP", "scene_ids": ["SC01"], "summary": "In the closed diner at night Ruth sits across a booth table from Sam; he waited until the last customer left."},
+        {"id": "B2", "function": "INCITING", "scene_ids": ["SC02"], "summary": "Sam confesses that someone took money from her till ten years ago; Ruth names the exact sum; Sam says it is all in the envelope."}
+      ]
+    },
+    {
+      "id": "ACT2",
+      "name": "She knew",
+      "beats": [
+        {"id": "B3", "function": "ESCALATION", "scene_ids": ["SC03"], "summary": "Ruth asks why now; Sam says he wants to start his life owing no one."},
+        {"id": "B4", "function": "MIDPOINT", "scene_ids": ["SC04"], "summary": "Ruth says she knew it was him all along: his red bike was out front, and he came back for pie every Sunday after."},
+        {"id": "B5", "function": "CRISIS", "scene_ids": ["SC05"], "summary": "Sam begs her to take the money; Ruth looks at the envelope and says her cook quits on Friday."}
+      ]
+    },
+    {
+      "id": "ACT3",
+      "name": "Six a.m.",
+      "beats": [
+        {"id": "B6", "function": "CLIMAX", "scene_ids": ["SC06"], "summary": "Sam asks if she would hire him; Ruth says she would hire somebody who comes back."},
+        {"id": "B7", "function": "RESOLUTION", "scene_ids": ["SC07"], "summary": "Ruth tells him to keep the money, buy shoes that don't slip, six a.m.; Sam smiles and nods, the envelope untouched."}
+      ]
+    }
+  ],
+  "plot": "Sam has waited for the diner to close (SC01). He confesses the old theft and says the money is in the envelope (SC02). He wants to owe no one (SC03). Ruth reveals she always knew (SC04). He begs her to take it; she mentions her cook is quitting (SC05). She would hire someone who comes back (SC06). She tells him to keep the money and start at six a.m. (SC07).",
+  "subplots": [],
+  "characters": {
+    "SAM": {
+      "id": "SAM",
+      "name": "Sam Doyle",
+      "role": "protagonist",
+      "want": "To pay back what he stole and leave with nothing owed.",
+      "need": "To accept being forgiven instead of buying his way clear.",
+      "flaw": "He thinks every wrong can be settled with money and then forgotten.",
+      "arc_change": "From pushing the envelope on her to smiling at the job she offers, the envelope left where it is.",
+      "change_scene_id": "SC07"
+    },
+    "RUTH": {
+      "id": "RUTH",
+      "name": "Ruth Keller",
+      "role": "supporting",
+      "want": "For the boy who came back every Sunday to keep coming back.",
+      "need": "To tell him she knew without shaming him.",
+      "flaw": "She keeps her kindness hidden behind dry, exact remarks.",
+      "arc_change": "From the dry 'We closed an hour ago' to offering him a job.",
+      "change_scene_id": "SC05"
+    }
+  },
+  "scenes": {
+    "SC01": {"purpose": "Establish the closed diner, the booth, the envelope and the late hour.", "conflict": "Ruth wants to close up; Sam has waited to speak to her alone.", "outcome": "Sam says he waited until the last customer left.", "value": "trust", "shift": "-"},
+    "SC02": {"purpose": "Confess the old theft and show the money.", "conflict": "Sam's careful 'somebody' against Ruth's exact memory of the sum.", "outcome": "The money is in the envelope, with more.", "value": "trust", "shift": "-"},
+    "SC03": {"purpose": "Say why he came.", "conflict": "Ruth's doubt against Sam's wish to owe no one.", "outcome": "Sam says he wants to start his life owing no one.", "value": "trust", "shift": "-"},
+    "SC04": {"purpose": "Turn the film: Ruth always knew.", "conflict": "Sam's secret against what Ruth saw ten years ago.", "outcome": "She knew, and he kept coming back for pie.", "value": "trust", "shift": "+"},
+    "SC05": {"purpose": "Push the money one last time.", "conflict": "Sam needs her to take it; Ruth will not.", "outcome": "Ruth answers with her cook quitting on Friday.", "value": "trust", "shift": "+"},
+    "SC06": {"purpose": "Make the offer explicit.", "conflict": "Sam cannot believe she would trust him.", "outcome": "She would hire somebody who comes back.", "value": "trust", "shift": "+"},
+    "SC07": {"purpose": "Close on the decision as a look, not a speech.", "conflict": "The money against the job.", "outcome": "Sam smiles and nods; the envelope stays on the table.", "value": "trust", "shift": "+"}
+  },
+  "source_note": "Original script written for this film on a common motif only (a grown child pays back an old theft); names, places, events and dialogue are new.",
+  "rewrite_log": [
+    {"version": 1, "date": "2026-11-09", "reason": "First draft for P19-01 (scale run of the P18 Flow sender), written to the generability rules: both people seated in one booth for the whole film so posture never changes or reads ambiguously, the envelope placed before the film starts and never handled, one location.", "changed": "films/film06_six_am/script.fountain"}
+  ]
+}
