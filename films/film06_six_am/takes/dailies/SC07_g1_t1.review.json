@@ -1,0 +1,260 @@
+{
+  "take": {
+    "take_id": "SC07_g1_t1",
+    "generation_id": "SC07_g1",
+    "prompt_sha256": "866bb3a6496e39f8f428886d0b6aaefa026294fa95e298059de5bb2870fdf748",
+    "start_frame_sha256": "a7bd0656d6f7a15b56e9dffad292721056fcd5b9e95f25261ed7e9ffb64e5289",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 8.0,
+    "output_file": "SC07_g1_t1.mp4",
+    "output_sha256": "af8730bb7d594ada180a461aa6644211142d352de131f6155dc66b257ef1e96b",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-09T19:26:53Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "OTS",
+    "visible": [
+      "RUTH",
+      "SAM"
+    ],
+    "start_state": "SC07_g1",
+    "end_state": "SC07_g2",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "RUTH looks at SAM"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 6.5,
+        "description": "RUTH speaks to SAM, dry and kind"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 6.5,
+        "end_s": 8.0,
+        "description": "RUTH holds his look, a small smile"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "narrative",
+      "question": "Viewer reads: he will keep the money and start at six - carried by: RUTH"
+    },
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - RUTH looks at SAM?"
+    },
+    {
+      "group": "action",
+      "question": "1-6.5s ACTION: does this happen on screen - RUTH speaks to SAM, dry and kind?"
+    },
+    {
+      "group": "action",
+      "question": "6.5-8s HOLD: does this happen on screen - RUTH holds his look, a small smile?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): RUTH speaks to SAM"
+    },
+    {
+      "group": "character",
+      "question": "RUTH: does the face/body read as dry, kind (restrained)? Must NOT read as: mockery."
+    },
+    {
+      "group": "sync",
+      "question": "Line 72 is audible, spoken by the right character, lips match: RUTH: Keep the money. Buy shoes that don't slip. Six a.m."
+    },
+    {
+      "group": "audio",
+      "question": "RUTH sounds like the voice bible: dry, low female voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size MEDIUM, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC07_g1: Continues from the previous shot: RUTH seated in the booth across the table, frame-left; SAM seated in the booth across the table, frame-right; the envelope: a thick white envelope lying flat in the middle of the table; the mug: a white coffee mug on the table in front of RUTH."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC07_g2: Continues from the previous shot: RUTH seated in the booth across the table, frame-left; SAM seated in the booth across the table, frame-right; the envelope: a thick white envelope lying flat in the middle of the table; the mug: a white coffee mug on the table in front of RUTH."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_ADDRESS:72",
+      "group": "narrative",
+      "question": "Line 72: does RUTH clearly speak to SAM (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:SAM",
+      "group": "spatial",
+      "question": "Is SAM's shoulder and back of head in the near frame-right for the whole clip, recognisably SAM?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does RUTH look at SAM and never into the lens?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC07_g1_t1",
+    "generation_id": "SC07_g1",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:72",
+      "REL_LISTENER:SAM",
+      "REL_GAZE"
+    ],
+    "output_sha256": "af8730bb7d594ada180a461aa6644211142d352de131f6155dc66b257ef1e96b"
+  },
+  "auto_evidence": {
+    "note": "autoqc not requested (no --clips directory)",
+    "warnings": []
+  }
+}
