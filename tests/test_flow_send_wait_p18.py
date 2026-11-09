@@ -86,8 +86,23 @@ class _Page:
             return 1.375
         return ""
 
-    async def screenshot(self):
-        return self.png
+    @property
+    def context(self):
+        page = self
+
+        class _Cdp:
+            async def send(self, method, _params):
+                import base64
+                assert method == "Page.captureScreenshot" and _params["format"] == "jpeg"
+                return {"data": base64.b64encode(page.png).decode()}
+
+            async def detach(self):
+                return None
+
+        class _Ctx:
+            async def new_cdp_session(self, _page):
+                return _Cdp()
+        return _Ctx()
 
     async def wait_for_timeout(self, _ms):
         return None
@@ -201,3 +216,69 @@ def test_a_vanished_job_is_a_provider_failure_after_a_full_scan_ten_minutes_in(t
     res = asyncio.run(fs._video_wait_and_bind(_Page([_gallery(old)] * 20), None, SimpleNamespace(timeout=600), PROMPT,
                                               tmp_path / "X_t1.mp4", rec, _pre(old), 1000.0, 0))
     assert res["result"] == "FLOW_FAILED_NO_CLIP" and res["provider_no_clip"] and res["reconcile_bind"]["scanned"] == 6
+
+
+def test_no_screenshot_means_no_pixels_never_a_crash(monkeypatch):
+    # P18-06 live (film05 SC02_g2 v3): page.screenshot waited 30 s for fonts and the exception ended the send
+    class _Cdp:
+        async def send(self, *_a):
+            raise TimeoutError("captureScreenshot")
+
+        async def detach(self):
+            return None
+
+    class _Ctx:
+        async def new_cdp_session(self, _page):
+            return _Cdp()
+
+    class _NoShot(_Page):
+        context = _Ctx()
+    assert asyncio.run(fs.gallery_signatures(_NoShot([_gallery([_frame(1)])]))) == []
+    # with no baseline pixels every tile reads as new: the wait binds at WAIT_MIN_S and reconcile_bind decides
+    assert fs.new_tiles([], _sigs([_frame(1)])) == 1
+
+
+def test_an_error_before_the_prompt_is_typed_is_a_pre_submit_error(tmp_path, monkeypatch):
+    # P18-06 live: the crash in front_snapshot left the receipt NO_MANIFEST, which the ledger reads as a paid send
+    class _Kb:
+        async def press(self, *_a):
+            return None
+
+    class _Flow(_Page):
+        url = "https://flow.google.com/project/p"
+        keyboard = _Kb()
+
+        async def set_viewport_size(self, *_a):
+            return None
+
+    flow = _Flow([_gallery([_frame(1)])])
+
+    class _Browser:
+        contexts = [SimpleNamespace(pages=[flow])]
+
+    class _Chromium:
+        async def connect_over_cdp(self, *_a, **_k):
+            return _Browser()
+
+    class _Pw:
+        chromium = _Chromium()
+
+        async def stop(self):
+            return None
+
+    class _Start:
+        async def start(self):
+            return _Pw()
+
+    async def boom(*_a, **_k):
+        raise TimeoutError("Page.screenshot: Timeout 30000ms exceeded.")
+
+    import patchright.async_api as pa
+    monkeypatch.setattr(pa, "async_playwright", lambda: _Start())
+    monkeypatch.setattr(fs, "front_snapshot", boom)
+    prompt = tmp_path / "p.txt"
+    prompt.write_text(PROMPT, encoding="utf-8")
+    args = fs.parse_args([str(prompt), str(tmp_path / "SC02_g2_t3.mp4"), "--upload-frames", "--start-file",
+                          str(tmp_path / "s.png"), "--model", "Omni 1.2 Flash", "--duration", "7"])
+    rec = asyncio.run(fs.run(args))
+    assert rec["result"] == "PRE_SUBMIT_ERROR TimeoutError" and "screenshot" in rec["error"]

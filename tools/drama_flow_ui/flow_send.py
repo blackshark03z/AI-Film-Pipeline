@@ -472,7 +472,25 @@ async def gallery_signatures(page, k: int = 8) -> list:
     if not rects:
         return []
     dpr = await page.evaluate("window.devicePixelRatio") or 1.0
-    return tile_signatures(await page.screenshot(), rects, float(dpr))
+    png = await viewport_png(page)
+    return tile_signatures(png, rects, float(dpr)) if png else []
+
+
+async def viewport_png(page, timeout_s: float = 15.0) -> bytes | None:
+    """A viewport screenshot (JPEG bytes) over CDP, or None. P18-06 (film05 SC02_g2 v3): `page.screenshot` waited 30 s for fonts on
+    the GPM Flow tab and the exception ended the send; pixels only steer the wait, so a missing shot never fails one."""
+    import base64
+    try:
+        cdp = await page.context.new_cdp_session(page)
+        try:
+            # JPEG: on the GPM Flow tab a PNG capture hung for 20 s while JPEG returned in ~1 s (2026-11-09)
+            shot = await asyncio.wait_for(cdp.send("Page.captureScreenshot", {"format": "jpeg", "quality": 85}),
+                                          timeout_s)
+        finally:
+            await cdp.detach()
+        return base64.b64decode(shot["data"])
+    except Exception:  # noqa: BLE001 - no pixels: every tile reads as new and reconcile_bind decides alone
+        return None
 
 
 async def flow_failed(page, failed_before: int, wait_s: float) -> bool:
@@ -776,7 +794,12 @@ async def run(args) -> dict:
         failed_before = (await page.evaluate(JS_JOB_STATE))["failed"]
         # P12-01: the video count and the front media id BEFORE the send; a lazy
         # thumbnail can make an old clip look new by token, a media id never changes
-        pre = None if args.image else await front_snapshot(page, page.url)
+        try:
+            pre = None if args.image else await front_snapshot(page, page.url)
+        except Exception as e:  # noqa: BLE001 - P18-06: before the prompt is typed nothing is sent (0 credits)
+            rec["result"] = f"PRE_SUBMIT_ERROR {type(e).__name__}"
+            rec["error"] = str(e).splitlines()[0][:200] if str(e) else ""
+            return rec
         bodies: list[str] = []
 
         trace: list[dict] = []   # P3-05: where does a video result arrive? paths only, never bodies or signed URLs
