@@ -10,6 +10,7 @@ The Tech Lead may tighten it or record what was done under it.
 - "Mặc định: approve mọi quyền"
 - "Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình"
 - When asked to put this into a policy file, the Owner answered: "Được"
+- Later on 2026-11-09, after supplying the Vilao key: "Với các thử nghiệm, mặc định minimax h3 480p"
 
 ## Delegated to the agent (Tech Lead)
 
@@ -22,7 +23,10 @@ The Tech Lead may tighten it or record what was done under it.
      - continuity against the adjacent accepted cut.
    - Review frames as a contact sheet. Reject a take that fails any required check.
 2. **Live sends.**
-   - Allowed for test and production takes at **360p, Omni 1.2 Flash** only.
+   - **Experiments** (probes, A/B tests, new-route tests) default to **MiniMax H3 480P via Vilao** (`omh3/h3-480p`),
+     through the provider adapter once it exists. Tech Lead cap: 50k VND per day of experiments unless the Owner raises it.
+   - Film takes on the Flow route stay at **360p, Omni 1.2 Flash**. A film already in production keeps its route
+     to the end (film05 = P17-01 stability run stays on Flow).
    - Set `OWNER_GO_LIVE: YES` in `LOOP_BACKLOG.md` for one send at a time, with a trap that returns it to `NO` in the same shell command.
 3. **Caps.**
    - Generability attempts per shot version: GREEN 1, AMBER 2, RED 0. Restage instead of retrying.
@@ -39,7 +43,7 @@ The Tech Lead may tighten it or record what was done under it.
 - Publishing, uploading anywhere public, or sharing outside this machine.
 - `git push`.
 - Purchases, new accounts, and plan or credit top-ups.
-- Raising the credit cap, or any resolution or model above 360p Omni Flash.
+- Raising a credit or VND cap, or any resolution or model other than 360p Omni Flash (Flow) and H3 480P (Vilao, experiments).
 - Changing the story's meaning: cutting a scene, changing an ending, or adding characters.
 - Starting a new film.
 
