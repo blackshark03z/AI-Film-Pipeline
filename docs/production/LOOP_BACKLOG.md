@@ -990,3 +990,44 @@ Only fixes for defects that film05 exposes are allowed. Each such fix is traced 
 - 13:11 SC03_g1 t1: FLOW_FAILED ("Không thành công" tile seen, later gone).
 - 13:23 SC04_g1 v1: job vanished.
 - flow_send bound 5 of 13 sends by itself. Another 5 were bound by `flow_reconcile` (SC01_g1, SC01_g2, SC03_g2, SC04_g2, SC06_g1; automated, no manual UI). The other 3 were the provider failures above.
+
+## P18 Flow route hardening (Tech Lead, 2026-11-09)
+
+Goal: a film runs plan → delivery with no manual step, and every non-failed Flow send binds inside `flow_send`.
+MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with a test.
+
+### P18-01 In-send bind rate — DONE (2026-11-09)
+- **Defect (film05 send stage):** flow_send bound 5/13 sends itself. The token wait ended at 38–59 s on re-issued
+  thumbnails (SC01_g1: 16 "new" tokens, no new clip); `video_count` read 37→30, 32→41, 34→41, 35→46, 45→39 on
+  galleries that had gained exactly one clip, so `detail_bind` (count-based) gave AMBIGUOUS; SC03_g2 bound a token by
+  network match and found no video under it; SC02_g2 v1's tile was still rendering.
+- **Fix (`tools/drama_flow_ui/flow_send.py`), video sends only:**
+  - No tokens, titles or video count. `front_snapshot` reads the newest 6 detail pages (media ids) and the pixel
+    signatures of the first 8 video tiles.
+  - Wait: every 10 s the tiles are compared by pixels (`new_tiles`, re-issued thumbnail ≈ same pixels);
+    `wait_verdict`: FAILED on a new failed tile, BIND on a new-pixel tile with no job running and ≥45 s, or at the
+    timeout. No early BLOCKED on a quiet page.
+  - Bind: `reconcile_bind` only (media id + whole prompt, not registered, not in the gallery before the send).
+    A bound clip whose tile has no `<video>` yet is retried every 20 s until the timeout (`download_retries`).
+  - Removed: `detail_bind`, `video_count` (count-based), token/network bind for videos.
+- **Tests:** `tests/test_flow_send_wait_p18.py` (6, replay film05 page states). Live proof in P18-06.
+
+### P18-02 (P17-06) Take id follows the receipt — OPEN
+- Take ids are numbered by register count (take SC02_g2_t1 = file SC02_g2_t2.mp4). The take id must follow the
+  receipt/file stem; historical film04/film05 takes keep their ids (a mapping, no renumbering).
+
+### P18-03 Provider-failure handling — OPEN
+- 3/13 film05 sends were Flow failures (FLOW_FAILED or a vanished job). `generate` resends once automatically after a
+  provider failure (no version bump, no board re-approval), within "3 provider failures on one shot → restage".
+  Every incident is logged with its time (reliability log).
+
+### P18-04 Duplicated frames in the film05 master (26.8%) — OPEN
+- Source cadence (Omni Flash) or our assemble/grade/mix/versions chain? Check takes against the master; fix the
+  stage that adds them and add a mastercheck check.
+
+### P18-05 `tests/test_session_reuse_010.py` — OPEN
+- 4 tests fail on base before the provider merge (11, 15, 16, 20). Find why; fix the code or the stale test.
+
+### P18-06 Live proof — OPEN
+- Resend 2–3 film05 shots (360p Omni Flash, ~6 cr each) under OWNER_POLICY; measure the in-send bind rate and
+  incident handling; swap a take into the cut only if the delegated review says it is better, then re-deliver.

@@ -14,9 +14,11 @@ Custody (WP1b):
   3. the output is the ONE new token absent from the baseline; it is
      network-bound when a decoded response frame holds both that token and
      the prompt text (``NETWORK_PROMPT_MATCH``), else ``NEW_TILE_ONLY``
-     (images only). A video with no network match is bound from its detail
-     page (``DETAIL_PROMPT_MATCH``, see ``flow_bind.py``);
-  4. the video under that exact tile is downloaded and hashed.
+     (images only);
+  4. the image under that exact tile is saved and hashed.
+Videos (P18-01) never use tokens, titles or the video count: the wait ends on a tile whose PIXELS are new and the
+clip is bound by its detail page media id + whole prompt, not registered and not in the gallery before the send
+(``RECONCILE_PROMPT_MATCH``, see ``reconcile_bind``), then downloaded and hashed.
 With --upload-frames the start (and end) still is uploaded inside the send (--start-file / --end-file, start first so
 the end is the newest) and picked as the newest picker item, checked by pixels; --start/--end tokens are then not needed.
 Result: PASSED, BLOCKED, SEND_FAILED, FLOW_FAILED, AMBIGUOUS, UNBOUND or TIMEOUT, written as a JSON
@@ -389,17 +391,6 @@ JS_SCROLL_STEP = r"""(y) => { let moved = false;
             const was = e.scrollTop; e.scrollTop = y; if (e.scrollTop !== was) moved = true } });
     return moved }"""
 
-# video containers with their absolute grid position (scroller-relative), so a
-# recycled virtual-list node or a repeated title never counts twice
-JS_VIDEO_GRID = r"""() => [...document.querySelectorAll('flow-grid-tile-container')]
-    .filter(c => c.querySelector('flow-video-tile')).map(c => {
-        let s = c.parentElement;
-        while (s && !(s.clientHeight > 300 && s.scrollHeight > s.clientHeight + 50
-                      && getComputedStyle(s).overflowY !== 'visible')) s = s.parentElement;
-        const r = c.getBoundingClientRect(), sr = s ? s.getBoundingClientRect() : {top: 0};
-        return [Math.round((r.top - sr.top + (s ? s.scrollTop : 0)) / 8),
-                Math.round(r.left / 8), c.getAttribute('aria-label') || ''] })"""
-
 # mark the n-th video tile of the grid at scroll 0 (top-to-bottom, left-to-right)
 JS_MARK_NTH = r"""(n) => { document.querySelectorAll('[data-vp-n]').forEach(e => e.removeAttribute('data-vp-n'));
     const cs = [...document.querySelectorAll('flow-grid-tile-container')]
@@ -420,6 +411,68 @@ JS_JOB_STATE = r"""() => { const t = document.body.innerText;
           failed: (t.match(/Không thành công/g) || []).length}; }"""
 
 
+# P18-01: the first K video tiles of the gallery at scroll 0 (top-to-bottom, left-to-right), CSS px rects in the viewport
+JS_VIDEO_RECTS = r"""(k) => [...document.querySelectorAll('flow-grid-tile-container')]
+    .filter(c => c.querySelector('flow-video-tile')).map(c => c.getBoundingClientRect())
+    .filter(r => r.width > 20 && r.height > 20 && r.bottom > 0 && r.top < innerHeight)
+    .sort((a, b) => a.top - b.top || a.left - b.left).slice(0, k)
+    .map(r => [r.x, r.y, r.width, r.height])"""
+
+TILE_SIG_SIZE = (32, 18)   # grey thumbnail signature (w, h)
+TILE_SAME_MAX = 6.0        # mean abs grey diff: a re-issued thumbnail (same frame, new token) scores ~0-3
+WAIT_MIN_S = 45            # Omni Flash 360p clips took 80-140 s on film05; never bind before this
+WAIT_POLL_S = 10
+
+
+def tile_signatures(png: bytes, rects: list, dpr: float) -> list:
+    """Grey signatures of the tiles at `rects` (CSS px) in a viewport screenshot (device px = CSS px * dpr)."""
+    import cv2
+    import numpy as np
+    img = cv2.imdecode(np.frombuffer(png, np.uint8), cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        return []
+    h, w = img.shape[:2]
+    sigs = []
+    for x, y, rw, rh in rects:
+        x0, y0 = max(0, int(x * dpr)), max(0, int(y * dpr))
+        x1, y1 = min(w, int((x + rw) * dpr)), min(h, int((y + rh) * dpr))
+        if x1 - x0 < 8 or y1 - y0 < 8:
+            continue
+        sigs.append(cv2.resize(img[y0:y1, x0:x1], TILE_SIG_SIZE, interpolation=cv2.INTER_AREA).astype(float))
+    return sigs
+
+
+def new_tiles(baseline: list, current: list, tol: float = TILE_SAME_MAX) -> int:
+    """How many current tiles match no baseline tile by pixels (P18-01: a re-issued thumbnail keeps its pixels but gets
+    a new token; film05 SC01_g1/SC01_g2/SC05_g1 ended the token wait at 38-59 s on such tiles)."""
+    return sum(1 for c in current if not any(float(abs(c - b).mean()) <= tol for b in baseline))
+
+
+def wait_verdict(elapsed: float, timeout: float, running: bool, failed_new: bool, fresh: int) -> str:
+    """One step of the video wait: FAILED (a new failed tile), BIND (a tile with new pixels, no job running, at least
+    WAIT_MIN_S in; or the timeout) or WAIT. No early BLOCKED: Omni Flash shows no pending signal, so a quiet page
+    is not a block (a refused prompt stays in the composer: SEND_FAILED)."""
+    if failed_new:
+        return "FAILED"
+    if elapsed >= timeout:
+        return "BIND"
+    if running:
+        return "WAIT"
+    return "BIND" if fresh and elapsed >= WAIT_MIN_S else "WAIT"
+
+
+async def gallery_signatures(page, k: int = 8) -> list:
+    """Pixel signatures of the first k video tiles (gallery at scroll 0, mouse parked off the grid)."""
+    await page.evaluate(JS_TOP)
+    await page.mouse.move(2, 2)
+    await page.wait_for_timeout(800)
+    rects = await page.evaluate(JS_VIDEO_RECTS, k)
+    if not rects:
+        return []
+    dpr = await page.evaluate("window.devicePixelRatio") or 1.0
+    return tile_signatures(await page.screenshot(), rects, float(dpr))
+
+
 async def flow_failed(page, failed_before: int, wait_s: float) -> bool:
     """True once the gallery shows one more "Không thành công" tile than before the send (polled up to wait_s)."""
     end = time.time() + wait_s
@@ -432,21 +485,6 @@ async def flow_failed(page, failed_before: int, wait_s: float) -> bool:
         if time.time() >= end:
             return False
         await page.wait_for_timeout(3000)
-
-
-async def video_count(page) -> int:
-    """Number of video tiles in the (virtualised) gallery, each counted once by
-    its grid position; scrolled through top to bottom, then back to the top."""
-    seen: set[tuple[int, int]] = set()
-    for y in range(0, 40000, 400):
-        moved = await page.evaluate(JS_SCROLL_STEP, y)
-        await page.wait_for_timeout(600)
-        seen.update((a, b) for a, b, _ in await page.evaluate(JS_VIDEO_GRID))
-        if not moved and y > 0:
-            break
-    await page.evaluate(JS_TOP)
-    await page.wait_for_timeout(500)
-    return len(seen)
 
 
 async def read_nth_detail(page, n: int, home: str) -> dict | None:
@@ -468,17 +506,19 @@ async def read_nth_detail(page, n: int, home: str) -> dict | None:
 async def front_snapshot(page, home: str, scan: int = 6) -> dict:
     """Before the send: how many videos exist, which media id is in front and the media ids of the newest `scan`
     videos (P17-05, Codex review: reconcile_bind must never bind a clip that existed before this send)."""
-    n = await video_count(page)
+    # P18-01: no video_count here (film05: 37->30, 32->41 on an unchanged gallery); read until a tile is missing
     ids: list[str] = []
     front = None
-    for i in range(min(n, scan)):
+    for i in range(scan):
         d = await read_nth_detail(page, i, home)
-        mid = fb.media_id_from_url(d["url"]) if d else None
+        if d is None:
+            break
+        mid = fb.media_id_from_url(d["url"])
         if i == 0:
             front = mid
         if mid:
             ids.append(mid)
-    return {"n": n, "front_id": front, "before_ids": ids}
+    return {"front_id": front, "before_ids": ids, "signatures": await gallery_signatures(page)}
 
 
 async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline: float, failed_before: int,
@@ -490,7 +530,7 @@ async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline:
     film05: 5 of 13 sends needed flow_reconcile after the send. Returns True when it set rec["result"] (PASSED or the
     download failure); any error is recorded and returns False, so the paid send's record is still written."""
     import flow_reconcile as fr   # local: flow_reconcile imports this module
-    tries, res = 0, {}
+    tries, retries, res = 0, 0, {}
     try:
         known = fr.known_ids(out.parent, out.parent, frozenset({out.stem})) | set(before_ids)
         while True:
@@ -501,7 +541,13 @@ async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline:
                 if again and fb.media_id_from_url(again["url"]) == res["media_id"]:
                     failed = await fr.download_nth(page, ctx, res["index"], out)
                     rec["reconcile_bind"] = {"tries": tries, "media_id_tail": res["media_id"][-8:],
-                                             "download": failed or "SAVED"}
+                                             "download": failed or "SAVED", "download_retries": retries}
+                    if failed and time.time() < deadline:
+                        # P18-01 (film05 SC02_g2 v1, SC03_g2): the bound clip's tile can still be rendering (no
+                        # <video> under it yet); its media id is known, so poll again instead of ending the send
+                        retries += 1
+                        await page.wait_for_timeout(20000)
+                        continue
                     if failed:
                         rec["result"] = failed
                         return True
@@ -519,36 +565,44 @@ async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline:
         return False
 
 
-async def detail_bind(page, pre: dict, prompt: str, rec: dict) -> str | None:
-    """P12-01: bind the new front video tile; returns its thumbnail token.
+async def _video_wait_and_bind(page, ctx, args, prompt: str, out: Path, rec: dict, pre: dict, t0: float,
+                               failed_before: int) -> dict:
+    """P18-01: wait for and bind a video send by identity only -- never by token, title or video count.
 
-    Proof, not position: one more tile than before, the old front tile now
-    second (same media id), the new front tile is a different media id and
-    its detail page holds the whole sent prompt."""
-    home = page.url
-    n_after = await video_count(page)
-    front = second = None
-    if n_after == pre["n"] + 1:
-        front = await read_nth_detail(page, 0, home)
-        if pre["n"]:
-            second = await read_nth_detail(page, 1, home)
-    verdict = fb.decide_front(pre["n"], n_after, pre["front_id"], front, second, prompt)
-    rec["detail_bind"] = {"n_before": pre["n"], "n_after": n_after,
-                          **{k: (v[-8:] if k == "media_id" else v) for k, v in verdict.items()}}
-    if verdict["result"] != "BOUND":
-        rec["result"] = verdict["result"]
-        return None
-    await page.evaluate(JS_MARK_NTH, 0)
-    for _ in range(6):   # the thumbnail of a finished tile can load late
-        tok = await page.evaluate(JS_MARKED_TOKEN)
-        if tok:
-            rec["binding"] = verdict["binding"]
-            rec["media_id_tail"] = verdict["media_id"][-8:]
-            return tok
-        await page.wait_for_timeout(5000)
-        await page.evaluate(JS_MARK_NTH, 0)
-    rec["result"], rec["detail_bind"]["why"] = "UNBOUND", "bound tile has no thumbnail token"
-    return None
+    Wait: every WAIT_POLL_S the first video tiles are compared by pixels with the ones before the send (a re-issued
+    thumbnail keeps its pixels); see `wait_verdict`. Bind: `reconcile_bind` (detail page media id + whole prompt, not
+    a registered take, not a clip that existed before the send), polled until the send timeout. film05: flow_send
+    bound 5/13 sends itself because the token wait ended at 38-59 s and `video_count` read 37->30, 32->41."""
+    wait = {"polls": 0, "fresh_max": 0}
+    rec["wait"] = wait
+    verdict = "WAIT"
+    while verdict == "WAIT":
+        await page.wait_for_timeout(WAIT_POLL_S * 1000)
+        wait["polls"] += 1
+        try:
+            job = await page.evaluate(JS_JOB_STATE)
+            fresh = new_tiles(pre.get("signatures") or [], await gallery_signatures(page))
+        except Exception:  # noqa: BLE001 - page navigating; poll again
+            job, fresh = {"running": True, "failed": failed_before}, 0
+        wait["fresh_max"] = max(wait["fresh_max"], fresh)
+        verdict = wait_verdict(time.time() - t0, args.timeout, job["running"], job["failed"] > failed_before, fresh)
+    wait["verdict"], wait["at_s"] = verdict, round(time.time() - t0)
+    # a FAILED page still gets one bind scan: the failed tile is page-wide (Codex review 2026-11-09)
+    deadline = t0 + args.timeout if verdict == "BIND" else 0.0
+    if await reconcile_bind(page, ctx, prompt, out, rec, deadline, failed_before, pre.get("before_ids", [])):
+        rec["elapsed_s"] = round(time.time() - t0)
+        return rec
+    rec["elapsed_s"] = round(time.time() - t0)
+    if verdict == "FAILED" or await flow_failed(page, failed_before, 30):
+        rec["result"] = "FLOW_FAILED"
+        return rec
+    last = (rec.get("reconcile_bind") or {}).get("result")
+    rec["result"] = ("AMBIGUOUS" if last == "AMBIGUOUS" else
+                     "TIMEOUT" if not wait["fresh_max"] and verdict == "BIND" else "UNBOUND")
+    tail = await page.evaluate("document.body.innerText.slice(0, 1500)")
+    rec["page_hint"] = [ln for ln in tail.splitlines()
+                        if re.search(r"(?i)không|lỗi|policy|chính sách|thất bại|error", ln)][:5]
+    return rec
 
 
 def probe_duration(path: Path) -> float | None:
@@ -788,6 +842,9 @@ async def run(args) -> dict:
             rec["result"] = "SEND_FAILED"
             return rec
 
+        if not args.image:
+            return await _video_wait_and_bind(page, ctx, args, prompt, out, rec, pre, t0, failed_before)
+
         probe = prompt[:30]
         new: set[str] = set()
         failed_seen = False
@@ -836,38 +893,6 @@ async def run(args) -> dict:
             token, rec["binding"] = next(iter(bound)), "NETWORK_PROMPT_MATCH"
         elif len(new) == 1 and not bound and args.image:
             token, rec["binding"] = next(iter(new)), "NEW_TILE_ONLY"
-        elif not args.image and not bound:
-            # film03: four failed video jobs each "found" one new tile -- an
-            # older take's re-issued thumbnail -- and saved that take again;
-            # P3-05: Omni Flash never puts the prompt on the network. A video
-            # is kept only when the gallery has exactly one more video, the old
-            # front video is now second and the new front video's detail page
-            # holds the whole sent prompt (DETAIL_PROMPT_MATCH).
-            token = await detail_bind(page, pre, prompt, rec)
-            # P17-05 (film05 SC01_g1, SC02_g2): re-issued thumbnails ended the wait at 38-59 s, before the clip had
-            # a tile (or while its tile had no detail page yet); keep polling until the send timeout, then bind again
-            while (token is None and rec["detail_bind"].get("why") in ("no new video", "no media id for the front video")
-                   and time.time() - t0 < args.timeout):
-                await page.wait_for_timeout(15000)
-                if (await page.evaluate(JS_JOB_STATE))["failed"] > failed_before:
-                    break
-                if await video_count(page) > pre["n"]:
-                    rec.pop("result", None)
-                    token = await detail_bind(page, pre, prompt, rec)
-            if token is None and await reconcile_bind(page, ctx, prompt, out, rec, t0 + args.timeout, failed_before,
-                                                         pre.get("before_ids", [])):
-                rec["elapsed_s"] = round(time.time() - t0)
-                return rec
-            rec["elapsed_s"] = round(time.time() - t0)
-            if token is None and await flow_failed(page, failed_before, 90):
-                rec["result"] = "FLOW_FAILED"
-                return rec
-            if token is None:
-                tail = await page.evaluate(
-                    "document.body.innerText.slice(0, 1500)")
-                rec["page_hint"] = [ln for ln in tail.splitlines()
-                                    if re.search(r"(?i)không|lỗi|policy|chính sách|thất bại|error", ln)][:5]
-                return rec
         else:
             rec["result"] = "AMBIGUOUS"
             rec["bound_tiles"] = len(bound)
