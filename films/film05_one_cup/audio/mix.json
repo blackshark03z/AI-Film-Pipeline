@@ -1,9 +1,9 @@
 {
   "film_id": "film05_one_cup",
   "cut": "films\\film05_one_cup\\media\\cut\\rough_cut.mp4",
-  "cut_sha256": "50252f833c58068dbc8207d2bc6c7981aab92e7cb5fcfd8bfa1ad04abf4a5386",
+  "cut_sha256": "a182cc98a8d093336f80f5c165bc8200fdbf8aef2989d79e3cfe3abd83376ebf",
   "output": "films\\film05_one_cup\\media\\cut\\mixed.mp4",
-  "output_sha256": "4dd3ff907e522ecb5e5089bdabe6ea4b590577de4d8a0d40aa014c2a68d26370",
+  "output_sha256": "e24c680f53c30e20e2206f041d4a782760018ab80b7408f6c29246129404fc91",
   "total_s": 75.749998,
   "plan": {
     "ambience_lufs": -40.0,
@@ -102,7 +102,7 @@
   "music": [],
   "duck": {
     "frames": 94,
-    "depth_db": 23.57,
+    "depth_db": 23.56,
     "wanted_db": 6.0
   },
   "loudness": {

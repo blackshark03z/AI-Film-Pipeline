@@ -28,6 +28,13 @@ Verdict: **PASS with flags.** The pipeline itself is stable: planning, stills, b
 - 3 of 13 sends were provider failures.
 - flow_send's own binding works on less than half of the sends; reconcile is carrying it.
 
+## After the scorecard: live check of P17-05 and P17-07 (e50ca60)
+- SC05_g1 v2 sent at 15:33 for 6 credits. The speak phase was widened to 2–4.5 s, because dialoguecheck heard "t" for "tea".
+- The detail bind gave AMBIGUOUS again (video count 45→39). `reconcile_bind` then bound the clip inside the send on its first try (RECONCILE_PROMPT_MATCH) and saved it, with no separate flow_reconcile run. **P17-05 is live-verified.** P17-07 had no vanished job to prove it this time.
+- The new take matches t1: Flow kept the line at 3.3–3.9 s, and Vosk still hears "t", which looks like a small-model miss.
+- t2 is accepted and replaces t1 in the cut, so the cut matches shot v2. Then: re-cut, re-lock, grade, titles, mix, mastercheck ok, versions, deliver 0 blocks.
+- Spend: the 6 credits sit outside the P17-01 run. P17-01 itself spent 91 (+11%); film05 total is now 97.
+
 ## Decisions + why
 - Vanished-job workaround: v2 with the same prompt and a re-approved board. The peer Tech Lead says a vanished job is a provider failure and must not reset the cap; the real fix is P17-07.
 - Cues are timed from Vosk word timings. The audio-window cues spanned whole clips.
@@ -35,7 +42,7 @@ Verdict: **PASS with flags.** The pipeline itself is stable: planning, stills, b
 - The cut is accepted with one WARN: IRIS's close singles at table height read as if she is seated before SC06.
 
 ## Open defects
-- P17-05: flow_send's wait loop still ends early on re-issued thumbnails, and `video_count` is flaky (37→30). Reconcile recovers the clip.
+- P17-05 / P17-07: fixed in e50ca60. The in-send bind is live-verified; a vanished job is not proven live yet.
 - P17-06: a take id is numbered by register count, not by receipt. Example: take SC02_g2_t1 is file SC02_g2_t2.mp4.
 - P17-07: a vanished Flow job uses up the send cap.
 - 26.8% duplicated frames in the master. Not investigated; probably the Omni Flash frame cadence.
@@ -44,9 +51,8 @@ Verdict: **PASS with flags.** The pipeline itself is stable: planning, stills, b
 - uv run --frozen pytest -q tests/test_plan_handoff_hidden_props.py tests/test_production_planning.py tests/test_flow_reconcile.py tests/test_flow_bind.py tests/test_flow_send_picker.py tests/test_production_film04.py tests/test_production_generability_gate.py
 
 ## Next step
-1. Fix P17-07: classify a vanished job as FLOW_FAILED.
-2. Fix P17-05 at the root: make reconcile the bind path inside flow_send.
-3. Then decide whether the feature freeze ends.
+1. Decide whether the feature freeze ends. P17-01 passed, and P17-05 and P17-07 are fixed.
+2. Still open: P17-06 (take id vs receipt), 26.8% duplicated frames, and a better STT model for short words.
 
 ---
 

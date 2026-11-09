@@ -1,0 +1,140 @@
+{
+  "take_id": "SC05_g1_t2",
+  "generation_id": "SC05_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:52": "yes, IRIS lifts her eyes to HAL frame-right and whispers line 52"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HAL": "yes, HAL's place off frame-right; only a soft edge at the very right in the last second, never shown empty",
+        "REL_GAZE": "yes, key, then mug, then HAL; never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "line still spoken 3.3-3.9 s despite the wider speak phase; 'tea' is short in both takes",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); v2 send bound in-send by reconcile_bind (P17-05 live check); 8-frame contact sheet sheet_SC05_g1_t2.jpg + Vosk STT 'he made me t' 3.3-3.8 s (small model; same 't' as t1), 6.0 s, -23.3 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:52",
+    "REL_LISTENER:HAL",
+    "REL_GAZE"
+  ],
+  "output_sha256": "10c635e51e8570c1acb622f30d21958eb59530c36c7a0879e5374b6fbc2ad6ad"
+}
