@@ -1072,3 +1072,25 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
   0.48%), versions and deliver 0 blocks; dialoguecheck 8 PASS / 1 WARN (Vosk small hears "tea" as "t").
 - Deferred: IRIS reads as standing in some SC02 frames; the framing comes from the start still, so a fix needs
   new low-angle start stills (no send spent on it).
+### P18-07 Stray-job guard — DONE (2026-11-09)
+- Risk: an earlier send of the same shot that ended UNBOUND (job still rendering) finishes late inside the next send;
+  its clip holds the same whole prompt and is neither registered nor in `before_ids`, so the prompt match bound it;
+  if it failed, its page-wide "Không thành công" tile ended the next send as FLOW_FAILED -> auto-resend.
+- Fix (`tools/drama_flow_ui/flow_send.py`): right before the submit the front tiles' pixels are compared with the
+  snapshot (`front_changed`: a job finished during setup -> no identity taken); 8 s after the submit `submit_tile`
+  reads the newest tile: a media id that is neither pre-existing nor registered is the send's own tile
+  (`own_tile_at_submit`: media id tail + pixels). With it, `own_tile_only` binds only that media id (other prompt
+  matches -> `stray_media_tails`), the bind polls until the own tile binds or shows the failure, a page-wide failed
+  tile is recorded as `stray_failures`, FLOW_FAILED needs the own tile failed, and an own tile still present is
+  never a vanished job (UNBOUND). Without an identity the P18-01 prompt match + Codex guards still apply.
+- Tests: `tests/test_flow_send_wait_p18.py` (6 new, replaying the stray state). Live: P18-08 sends record
+  `own_tile_at_submit`.
+
+### P18-08 film05 SC02 IRIS-standing continuity — OPEN
+- Restage the affected SC02 singles: new low-angle / table-height start stills (0 credits), delegated approval;
+  resend at 360p Omni Flash under OWNER_POLICY (more live bind / auto-resend samples); swap only if better;
+  re-deliver; film05 stays within its 123-credit cap.
+
+### P18-09 Cumulative scorecard — OPEN
+- STATUS: in-send bind rate across every live send since 9bea690, plus the incidents; short report.
+

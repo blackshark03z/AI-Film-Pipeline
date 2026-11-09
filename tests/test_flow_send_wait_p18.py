@@ -302,3 +302,117 @@ def test_a_job_still_running_at_the_deadline_is_never_a_provider_failure(tmp_pat
     res = asyncio.run(fs._video_wait_and_bind(page, None, SimpleNamespace(timeout=600), PROMPT,
                                               tmp_path / "X_t1.mp4", rec, _pre(old), 1000.0, 0))
     assert res["result"] == "UNBOUND" and res["job_running"] and not res.get("provider_no_clip")
+
+# P18-07 stray-job guard. Recorded state it replays: film05 runs one send at a time; an earlier send of the same shot
+# that ended UNBOUND while its job still rendered (Codex 2026-11-09) finishes late during the next send, so the gallery
+# holds two unregistered clips with the same whole prompt, and its failure, if it fails, is a page-wide failed tile.
+MID_OWN, MID_STRAY = "dddddddd-2222-3333-4444-5555000000aa", "eeeeeeee-2222-3333-4444-5555000000bb"
+
+
+def _failed(mid):
+    return {"url": f"https://labs.google/fx/tools/flow/project/p/edit/{mid}", "text": "x " + PROMPT + " " + fs.FAILED_TEXT}
+
+
+def _patch_scans(monkeypatch, scans, clock):
+    """Each gallery scan returns the next recorded list; a detail re-read reads the current list."""
+    state = {"now": [], "it": iter(scans)}
+
+    async def scan(_page, _n):
+        state["now"] = next(state["it"], state["now"])
+        return state["now"]
+
+    async def nth(_page, n, _home):
+        return state["now"][n] if n < len(state["now"]) else None
+
+    async def download(_page, _ctx, n, out):
+        if fs.FAILED_TEXT in state["now"][n]["text"] or state["now"][n]["text"].startswith("rendering"):
+            return "NO_VIDEO_UNDER_TILE"
+        out.write_bytes(state["now"][n]["url"][-8:].encode())
+        return None
+    monkeypatch.setattr(fr, "scan_gallery", scan)
+    monkeypatch.setattr(fr, "download_nth", download)
+    monkeypatch.setattr(fs, "read_nth_detail", nth)
+    monkeypatch.setattr(fs.time, "time", clock)
+
+
+def _pre_own(old, own=MID_OWN):
+    return {**_pre(old), "own": {"media_id": own}}
+
+
+def test_own_tile_only_binds_the_send_s_own_clip_never_a_stray():
+    stray_only = [_detail(MID_STRAY), _detail(MID_OLD)]
+    res = fs.own_tile_only({"result": "BOUND", "media_id": MID_STRAY, "index": 0}, stray_only, MID_OWN, PROMPT)
+    assert res["result"] == "NOT_IN_GALLERY" and res["strays"] == [MID_STRAY]
+    both = [_detail(MID_OWN), _detail(MID_STRAY), _detail(MID_OLD)]
+    res = fs.own_tile_only({"result": "AMBIGUOUS", "media_ids": [MID_OWN, MID_STRAY]}, both, MID_OWN, PROMPT)
+    assert res == {"result": "BOUND", "media_id": MID_OWN, "index": 0, "strays": [MID_STRAY]}
+    assert fs.own_tile_state(both, MID_OWN) == "OK" and fs.own_tile_state(stray_only, MID_OWN) == "MISSING"
+    assert fs.own_tile_state([_failed(MID_OWN)], MID_OWN) == "FAILED"
+
+
+def test_a_stray_clip_finishing_first_is_not_bound_the_own_clip_is(tmp_path, monkeypatch):
+    # the stray (same prompt, not registered, not there before the send) finishes first; without the own media id
+    # the prompt match alone would have bound it as this send's clip
+    old = [_frame(i) for i in range(3)]
+    shots = [_gallery([_frame(8)] + old[:2])] * 20
+    scans = [[{"url": _detail(MID_OWN)["url"], "text": "rendering"}, _detail(MID_STRAY), _detail(MID_OLD)],
+             [_detail(MID_OWN), _detail(MID_STRAY), _detail(MID_OLD)]]
+    _patch_scans(monkeypatch, scans, _clock(5))
+    rec: dict = {}
+    out = tmp_path / "SC02_g2_t5.mp4"
+    res = asyncio.run(fs._video_wait_and_bind(_Page(shots), None, SimpleNamespace(timeout=600), PROMPT, out, rec,
+                                              _pre_own(old), 1000.0, 0))
+    assert res["result"] == "PASSED" and res["media_id_tail"] == MID_OWN[-8:]
+    assert out.read_bytes() == MID_OWN[-8:].encode() and res["stray_media_tails"] == [MID_STRAY[-8:]]
+
+
+def test_a_stray_job_failing_late_is_not_this_send_s_failure(tmp_path, monkeypatch):
+    # a failed tile appears (the stray's) while the own tile is fine: keep waiting, then bind the own clip
+    old = [_frame(i) for i in range(3)]
+    shots = [_gallery(old)] * 3 + [_gallery([_frame(8)] + old[:2])] * 20
+    stray_failed = _failed(MID_STRAY)
+    scans = [[{"url": _detail(MID_OWN)["url"], "text": "rendering " + PROMPT}, stray_failed, _detail(MID_OLD)],
+             [_detail(MID_OWN), stray_failed, _detail(MID_OLD)]]
+    _patch_scans(monkeypatch, scans, _clock(5))
+    rec: dict = {}
+    page = _Page(shots, failed=[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    res = asyncio.run(fs._video_wait_and_bind(page, None, SimpleNamespace(timeout=600), PROMPT,
+                                              tmp_path / "X_t2.mp4", rec, _pre_own(old), 1000.0, 0))
+    assert res["result"] == "PASSED" and res["media_id_tail"] == MID_OWN[-8:] and res["stray_failures"] == 1
+
+
+def test_the_own_tile_failing_is_flow_failed(tmp_path, monkeypatch):
+    old = [_frame(i) for i in range(3)]
+    _patch_scans(monkeypatch, [[_failed(MID_OWN), _detail(MID_OLD)]], _clock(5))
+    page = _Page([_gallery(old)] * 6, failed=[0, 0, 1, 1, 1, 1])
+    res = asyncio.run(fs._video_wait_and_bind(page, None, SimpleNamespace(timeout=600), PROMPT,
+                                              tmp_path / "X_t2.mp4", {}, _pre_own(old), 1000.0, 0))
+    assert res["result"] == "FLOW_FAILED" and res["own_tile"] == "FAILED"
+
+
+def test_an_own_tile_still_there_at_the_deadline_is_never_a_vanished_job(tmp_path, monkeypatch):
+    # P18-03 would call 6 scanned pages without the prompt a vanished job; the own tile is there, so it is not
+    old = [_frame(i) for i in range(3)]
+    others = [{"url": _detail(MID_OWN)["url"], "text": "rendering"}] + [
+        {"url": f"https://x/edit/cccccccc-2222-3333-4444-55555555000{i}", "text": "other"} for i in range(5)]
+    _patch_scans(monkeypatch, [others], _clock(60))
+
+    async def no_fail(*_a):
+        return False
+    monkeypatch.setattr(fs, "flow_failed", no_fail)
+    res = asyncio.run(fs._video_wait_and_bind(_Page([_gallery(old)] * 20), None, SimpleNamespace(timeout=600), PROMPT,
+                                              tmp_path / "X_t2.mp4", {}, _pre_own(old), 1000.0, 0))
+    assert res["result"] == "UNBOUND" and res["own_tile"] == "OK" and not res.get("provider_no_clip")
+
+
+def test_submit_tile_takes_only_a_new_media_id_in_front(monkeypatch):
+    async def sigs(_page, k=8):
+        return [np.zeros(fs.TILE_SIG_SIZE[::-1])]
+    monkeypatch.setattr(fs, "gallery_signatures", sigs)
+    for front, want, why in ((MID_OWN, MID_OWN, None), (MID_OLD, None, "OLD_TILE_IN_FRONT"),
+                             (MID_STRAY, None, "OLD_TILE_IN_FRONT")):
+        async def nth(_page, _n, _home, mid=front):
+            return _detail(mid)
+        monkeypatch.setattr(fs, "read_nth_detail", nth)
+        own = asyncio.run(fs.submit_tile(None, "home", [MID_OLD], {MID_STRAY[-8:]}))
+        assert own["media_id"] == want and own.get("why") == why

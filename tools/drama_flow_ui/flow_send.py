@@ -541,8 +541,51 @@ async def front_snapshot(page, home: str, scan: int = 6) -> dict:
     return {"front_id": front, "before_ids": ids, "signatures": await gallery_signatures(page)}
 
 
+FAILED_TEXT = "Không thành công"
+
+
+async def submit_tile(page, home: str, before_ids: list[str], known: set[str]) -> dict:
+    """P18-07: this send's own tile, read right after the submit. Flow puts a new job first, so the newest video tile
+    is ours when its media id existed neither before the send (`before_ids`) nor as a registered take; its media id
+    and pixels are the send's identity. Anything else (an old clip still in front, no tile yet) leaves the identity
+    unknown and the bind falls back to the prompt match."""
+    d = await read_nth_detail(page, 0, home)
+    mid = fb.media_id_from_url(d["url"]) if d else None
+    sigs = await gallery_signatures(page, k=1)
+    own = {"media_id": None, "pixels": [round(float(sigs[0].mean()), 1)] if sigs else []}
+    if not mid:
+        own["why"] = "NO_TILE"
+    elif mid in before_ids or fb.is_known(mid, known):
+        own["why"] = "OLD_TILE_IN_FRONT"
+    else:
+        own.update(media_id=mid, failed_at_submit=FAILED_TEXT in (d.get("text") or ""))
+    return own
+
+
+def own_tile_only(res: dict, details: list[dict], own_id: str, prompt: str) -> dict:
+    """P18-07: with the send's own media id known, only that tile binds; any other unregistered clip holding the
+    prompt is a stray (an earlier unbound job of the same shot finishing late) and is reported, never bound."""
+    ids = [fb.media_id_from_url((d or {}).get("url", "")) for d in details]
+    strays = [m for m in (res.get("media_ids") or [res.get("media_id")]) if m and m != own_id]
+    own_text = (details[ids.index(own_id)] or {}).get("text", "") if own_id in ids else ""
+    if FAILED_TEXT in own_text:
+        return {"result": "NOT_IN_GALLERY", "why": "own tile failed", "strays": strays}
+    if own_id in ids and fb.prompt_on_page(prompt, own_text):
+        return {"result": "BOUND", "media_id": own_id, "index": ids.index(own_id), "strays": strays}
+    return {"result": "NOT_IN_GALLERY", "why": "own tile not among the scanned clips", "strays": strays}
+
+
+def own_tile_state(details: list[dict], own_id: str) -> str:
+    """FAILED (own tile shows the failure), OK (own tile present, not failed) or MISSING."""
+    for d in details:
+        if fb.media_id_from_url((d or {}).get("url", "")) == own_id:
+            return "FAILED" if FAILED_TEXT in ((d or {}).get("text") or "") else "OK"
+    return "MISSING"
+
+
 async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline: float, failed_before: int,
-                         before_ids: list[str], scan: int = 6) -> bool:
+                         before_ids: list[str], scan: int = 6, own_id: str | None = None,
+                         seen: list | None = None) -> bool:
     """P17-05: when the detail bind fails, bind like flow_reconcile does, inside the send: the newest `scan` video tiles
     are read (detail page: media id + prompt) until exactly one clip holds the whole prompt that is neither a
     registered take nor one of `before_ids` (videos that existed before this send), polled every 20 s until `deadline`
@@ -556,7 +599,15 @@ async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline:
         while True:
             tries += 1
             details = await fr.scan_gallery(page, scan)
+            if seen is not None:
+                seen[:] = details
             res = fb.reconcile(prompt, details, known)
+            if own_id:
+                res = own_tile_only(res, details, own_id, prompt)
+                for m in res.get("strays", []):
+                    tails = rec.setdefault("stray_media_tails", [])
+                    if m[-8:] not in tails:
+                        tails.append(m[-8:])
             if res["result"] == "BOUND":
                 again = await read_nth_detail(page, res["index"], page.url)
                 if again and fb.media_id_from_url(again["url"]) == res["media_id"]:
@@ -577,7 +628,10 @@ async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline:
                                file=out.name, sha256=_sha(data), bytes=len(data), duration_s=probe_duration(out))
                     return True
                 res = {"result": "MOVED", "why": "the gallery moved before the download"}
-            if time.time() >= deadline or (await page.evaluate(JS_JOB_STATE))["failed"] > failed_before:
+            # P18-07: with the own tile known only its own failure ends the poll; a page-wide count can be a stray's
+            failed_now = (own_tile_state(details, own_id) == "FAILED" if own_id else
+                          (await page.evaluate(JS_JOB_STATE))["failed"] > failed_before)
+            if time.time() >= deadline or failed_now:
                 rec["reconcile_bind"] = {"tries": tries, "result": res["result"], "scanned": len(details)}
                 return False
             await page.wait_for_timeout(20000)
@@ -596,23 +650,17 @@ async def _video_wait_and_bind(page, ctx, args, prompt: str, out: Path, rec: dic
     bound 5/13 sends itself because the token wait ended at 38-59 s and `video_count` read 37->30, 32->41."""
     wait = {"polls": 0, "fresh_max": 0}
     rec["wait"] = wait
-    verdict = "WAIT"
-    while verdict == "WAIT":
-        await page.wait_for_timeout(WAIT_POLL_S * 1000)
-        wait["polls"] += 1
-        try:
-            job = await page.evaluate(JS_JOB_STATE)
-            fresh = new_tiles(pre.get("signatures") or [], await gallery_signatures(page))
-        except Exception:  # noqa: BLE001 - page navigating; poll again
-            job, fresh = {"running": True, "failed": failed_before}, 0
-        wait["fresh_max"] = max(wait["fresh_max"], fresh)
-        wait["running"] = bool(job["running"])
-        verdict = wait_verdict(time.time() - t0, args.timeout, job["running"], job["failed"] > failed_before, fresh)
-    wait["verdict"], wait["at_s"] = verdict, round(time.time() - t0)
-    # a FAILED page still gets one bind scan: the failed tile is page-wide (Codex review 2026-11-09)
-    deadline = t0 + args.timeout if verdict == "BIND" else 0.0
-    if await reconcile_bind(page, ctx, prompt, out, rec, deadline, failed_before, pre.get("before_ids", [])):
+    own_id = ((pre or {}).get("own") or {}).get("media_id")
+    seen: list = []
+    verdict = await _wait_for_verdict(page, args, pre, t0, failed_before, wait)
+    # a FAILED page still gets one bind scan: the failed tile is page-wide (Codex review 2026-11-09). P18-07: with the
+    # own tile known, a page-wide failed tile proves nothing; the bind polls on until the own tile binds or fails
+    deadline = t0 + args.timeout if verdict == "BIND" or own_id else 0.0
+    if await reconcile_bind(page, ctx, prompt, out, rec, deadline, failed_before, pre.get("before_ids", []),
+                            own_id=own_id, seen=seen):
         rec["elapsed_s"] = round(time.time() - t0)
+        if verdict == "FAILED":
+            rec["stray_failures"] = 1   # the failed tile was another job's: this send's own clip bound
         return rec
     rec["elapsed_s"] = round(time.time() - t0)
     if wait.get("running"):
@@ -620,7 +668,19 @@ async def _video_wait_and_bind(page, ctx, args, prompt: str, out: Path, rec: dic
         # here would auto-resend and pay twice, so it stays an unbound charged send for P17-07 to settle later
         rec["result"], rec["job_running"] = "UNBOUND", True
         return rec
-    if verdict == "FAILED" or await flow_failed(page, failed_before, 30):
+    if own_id:
+        # P18-07: with the own tile known, only that tile can prove a provider failure
+        state = own_tile_state(seen, own_id)
+        rec["own_tile"] = state
+        if state == "FAILED":
+            rec["result"] = "FLOW_FAILED"
+            return rec
+        if verdict == "FAILED":
+            rec["stray_failures"] = 1
+        if state == "OK":   # own job still there, no clip yet: never a vanished job
+            rec["result"] = "UNBOUND"
+            return rec
+    elif verdict == "FAILED" or await flow_failed(page, failed_before, 30):
         rec["result"] = "FLOW_FAILED"
         return rec
     rb = rec.get("reconcile_bind") or {}
@@ -637,6 +697,24 @@ async def _video_wait_and_bind(page, ctx, args, prompt: str, out: Path, rec: dic
     rec["page_hint"] = [ln for ln in tail.splitlines()
                         if re.search(r"(?i)không|lỗi|policy|chính sách|thất bại|error", ln)][:5]
     return rec
+
+
+async def _wait_for_verdict(page, args, pre: dict, t0: float, failed_before: int, wait: dict) -> str:
+    """Poll the gallery every WAIT_POLL_S until `wait_verdict` says FAILED or BIND (see there)."""
+    verdict = "WAIT"
+    while verdict == "WAIT":
+        await page.wait_for_timeout(WAIT_POLL_S * 1000)
+        wait["polls"] += 1
+        try:
+            job = await page.evaluate(JS_JOB_STATE)
+            fresh = new_tiles(pre.get("signatures") or [], await gallery_signatures(page))
+        except Exception:  # noqa: BLE001 - page navigating; poll again
+            job, fresh = {"running": True, "failed": failed_before}, 0
+        wait["fresh_max"] = max(wait["fresh_max"], fresh)
+        wait["running"] = bool(job["running"])
+        verdict = wait_verdict(time.time() - t0, args.timeout, job["running"], job["failed"] > failed_before, fresh)
+    wait["verdict"], wait["at_s"] = verdict, round(time.time() - t0)
+    return verdict
 
 
 def probe_duration(path: Path) -> float | None:
@@ -869,6 +947,14 @@ async def run(args) -> dict:
             rec["error"] = str(e).splitlines()[0][:200] if str(e) else ""
             return rec
 
+        if pre is not None:
+            # P18-07: a tile whose pixels changed during the composer setup is a job that finished meanwhile (an
+            # earlier send); then the newest tile after the submit may be that one, so no own identity is taken.
+            # Pixels only: opening a detail page here would reload the page and lose the composer state.
+            try:
+                pre["front_changed"] = new_tiles(pre.get("signatures") or [], await gallery_signatures(page, k=2)) > 0
+            except Exception:  # noqa: BLE001 - unknown counts as changed: the bind falls back to the prompt match
+                pre["front_changed"] = True
         box = page.locator("textarea, [contenteditable='true']").first
         # Codex 2026-11-09: re-read the failed-tile count right before the submit, so a job that failed during the
         # snapshot and composer setup is not taken for this send's failure
@@ -885,6 +971,15 @@ async def run(args) -> dict:
             return rec
 
         if not args.image:
+            try:
+                import flow_reconcile as fr   # local: flow_reconcile imports this module
+                known = fr.known_ids(out.parent, out.parent, frozenset({out.stem}))
+                pre["own"] = ({"media_id": None, "why": "FRONT_CHANGED_BEFORE_SUBMIT"} if pre.get("front_changed")
+                              else await submit_tile(page, page.url, pre.get("before_ids", []), known))
+            except Exception as e:  # noqa: BLE001 - the identity only narrows the bind; the send goes on without it
+                pre["own"] = {"media_id": None, "why": f"ERROR {type(e).__name__}"}
+            own = pre["own"]
+            rec["own_tile_at_submit"] = {k: (v[-8:] if k == "media_id" and v else v) for k, v in own.items()}
             return await _video_wait_and_bind(page, ctx, args, prompt, out, rec, pre, t0, failed_before)
 
         probe = prompt[:30]
