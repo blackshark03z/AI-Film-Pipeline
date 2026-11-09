@@ -1,0 +1,140 @@
+{
+  "take_id": "SC01_g2_t1",
+  "generation_id": "SC01_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:16": "yes, SAM speaks the line toward frame-left where RUTH sits off frame"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes, RUTH's seat is never shown; SAM's eyes go just past the lens to frame-left (RUTH is seated, not standing)",
+        "REL_GAZE": "yes, eyes off-lens to frame-left all 8 s, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Làm film06'); Sheet: SAM seated in booth, head and shoulders against red booth back, speaks L02 1.5-4.9 s (STT exact), then listens; envelope and mug stable; no identity drift. -25.6 LUFS.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:16",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "4ba882654b7ed7758f640da8acf1d43ff8ad82b0b86ece9dc6ad39fd52a7a445"
+}
