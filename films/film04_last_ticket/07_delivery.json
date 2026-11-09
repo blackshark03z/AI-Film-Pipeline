@@ -1,7 +1,7 @@
 {
   "delivery": {
     "manifest": "delivery/MANIFEST.json",
-    "manifest_sha256": "e0fb355f8eae031cc8c6cd42469ff6fc96967a0586d589c1cbd6088181f03967",
+    "manifest_sha256": "5f28f7d35427bd8e51ae4bcf07a18cf8e905a7f53b0e9fa843da31f3d55a3cc4",
     "release_ready": false,
     "files": 34,
     "ai_label": "always",

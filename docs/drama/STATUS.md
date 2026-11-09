@@ -66,5 +66,7 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   (5) an `agent:` reviewer must be listed in film.json `delegated_reviewers` (with the Owner's words) or ingest refuses.
 - film04 polish: VI SRT title line "Generated with AI" -> "Tạo bằng AI" (titles.t_title translated only the name and hid
   other title lines; now uses LABELS or reports TRANSLATION_MISSING); 9:16 window per shot from titles/portrait_focus.json
-  (new, moves only the 9:16 crop), set from a contact sheet. Re-delivered. Still open: burned 16:9 subtitles are cut in
-  the 9:16 (PORTRAIT_BURNED_TEXT, needs cues re-laid for 9:16), SFX_UNSOURCED, no STT, RIGHTS_PENDING.
+  (new, moves only the 9:16 crop), set from a contact sheet. Re-delivered. 9:16 subtitles: `titles --render --clean-copy` renders
+  media/cut/titled_cut.clean.mp4 (no cues, sha in titles.json clean_render); `versions` crops it, re-lays the 10 cues for
+  9:16 and takes the sound from the master (rehearsal chain uses --clean-copy). Still open: SFX_UNSOURCED, no STT,
+  RIGHTS_PENDING.

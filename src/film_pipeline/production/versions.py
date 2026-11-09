@@ -8,7 +8,10 @@ platform compliance). Nothing here publishes anything: it writes files under ``v
   has said where the subject is, a human checks it). Two tagged faces further apart than the window warn
   (``PORTRAIT_SPREAD``). Title, end card and CARD events cannot be cropped without losing words: they are fitted to the width
   on black. The sound is copied untouched. Burned-in cues sit across the whole 16:9 frame, so a crop loses part of them
-  (``PORTRAIT_BURNED_TEXT``): pass a clean ``portrait_source`` with the same clock, or ship the sidecar SRTs with it.
+  (``PORTRAIT_BURNED_TEXT``). The fix: ``film.py titles --render --clean-copy`` also renders the cut with no cues and records
+  it in ``titles/titles.json`` (``clean_render``, sha-bound); ``versions`` then crops that clean picture and burns the cues
+  again, laid out for the 9:16 frame (``cues_relaid``). The sound always comes from the 16:9 master. An explicit
+  ``portrait_source`` works the same way.
 * **Thumbnails** - candidate frames from the director's emphasis moments (reveal moments first, then hold / push / reaction /
   insert), taken from the master at a moment with no tag or cue burned over it when one exists in the event, rejected when
   nearly black or blown out.
@@ -146,8 +149,10 @@ def portrait_label_png(path: Path, text: str, *, box: bool = True) -> Path:
     return Path(path)
 
 
-def portrait_graph(segments: list[dict[str, Any]], height: int, label_window: tuple[float, float] | None = None) -> str:
-    """`label_window` (start_s, end_s) overlays input 1 (the label PNG) on the concatenated picture for that window."""
+def portrait_graph(segments: list[dict[str, Any]], height: int, label_window: tuple[float, float] | None = None,
+                   overlays: list[tuple[int, float, float]] | None = None) -> str:
+    """`label_window` (start_s, end_s) overlays input 1 (the label PNG) on the concatenated picture for that window;
+    `overlays` adds more full-frame PNG inputs as (input index, start_s, end_s) (the 9:16 dialogue cues)."""
     parts, labels = [], []
     for k, s in enumerate(segments):
         trim = f"[0:v]trim=start_frame={s['start_frame']}:end_frame={s['end_frame']},setpts=PTS-STARTPTS"
@@ -158,19 +163,69 @@ def portrait_graph(segments: list[dict[str, Any]], height: int, label_window: tu
         parts.append(f"{trim},{shape},setsar=1[s{k}]")
         labels.append(f"[s{k}]")
     head = ";".join(parts) + ";" + "".join(labels) + f"concat=n={len(segments)}:v=1:a=0"
-    if label_window is None:
+    layers = ([(1, *label_window)] if label_window is not None else []) + list(overlays or [])
+    if not layers:
         return head + "[v]"
-    return head + (f"[c];[c][1:v]overlay=0:0:shortest=1:enable='between(t,{label_window[0]:.3f},{label_window[1]:.3f})'[v]")
+    chain, prev = head + "[o0]", "o0"
+    for k, (idx, a, b) in enumerate(layers):
+        nxt = "v" if k == len(layers) - 1 else f"o{k + 1}"
+        chain += f";[{prev}][{idx}:v]overlay=0:0:shortest=1:enable='between(t,{a:.3f},{b:.3f})'[{nxt}]"
+        prev = nxt
+    return chain
+
+
+PORTRAIT_CUE_SIZE, PORTRAIT_CUE_MAX_W, PORTRAIT_CUE_BOTTOM = 38, 640, PORTRAIT_H - 290  # above the AI label and platform UI
+
+
+def portrait_cue_png(path: Path, text: str) -> Path:
+    """A dialogue cue drawn for the 9:16 frame: wrapped to the portrait width, centred, on a translucent box."""
+    from PIL import Image, ImageDraw, ImageFont
+    from film_pipeline.drama.post import DEFAULT_FONTS
+    img = Image.new("RGBA", (PORTRAIT_W, PORTRAIT_H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype(DEFAULT_FONTS[0], PORTRAIT_CUE_SIZE)
+    lines: list[str] = []
+    for para in text.splitlines() or [""]:
+        line = ""
+        for word in para.split():
+            trial = f"{line} {word}".strip()
+            if line and draw.textlength(trial, font=font) > PORTRAIT_CUE_MAX_W:
+                lines.append(line)
+                line = word
+            else:
+                line = trial
+        lines.append(line)
+    step = int(PORTRAIT_CUE_SIZE * 1.25)
+    top = PORTRAIT_CUE_BOTTOM - step * len(lines)
+    for k, line in enumerate(lines):
+        w = draw.textlength(line, font=font)
+        x, y = (PORTRAIT_W - w) / 2, top + k * step
+        x0, y0, x1, y1 = draw.textbbox((x, y), line, font=font)
+        draw.rectangle((x0 - 10, y0 - 6, x1 + 10, y1 + 6), fill=(0, 0, 0, 150))
+        draw.text((x, y), line, font=font, fill=(255, 255, 255, 245))
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    img.save(path)
+    return Path(path)
 
 
 def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, height: int, fps: float,
-                    label: tuple[Path, float, float] | None = None) -> Path:
-    """`label` = (PNG, start_s, end_s): the AI label burned over the body of the 9:16 picture."""
+                    label: tuple[Path, float, float] | None = None, cues: list[tuple[Path, float, float]] | None = None,
+                    audio_from: Path | None = None) -> Path:
+    """`label` = (PNG, start_s, end_s): the AI label burned over the body of the 9:16 picture; `cues` = more (PNG, start_s,
+    end_s) layers; `audio_from` = the file whose sound is copied (default: the source)."""
     out.parent.mkdir(parents=True, exist_ok=True)
     inputs = ["-i", str(source)] + (["-loop", "1", "-i", str(label[0])] if label else [])
-    graph = portrait_graph(segments, height, (label[1], label[2]) if label else None)
+    first = 2 if label else 1
+    for png, _, _ in cues or []:
+        inputs += ["-loop", "1", "-i", str(png)]
+    overlays = [(first + k, a, b) for k, (_, a, b) in enumerate(cues or [])]
+    audio = "0:a?"
+    if audio_from is not None and Path(audio_from) != Path(source):
+        inputs += ["-i", str(audio_from)]
+        audio = f"{first + len(overlays)}:a?"
+    graph = portrait_graph(segments, height, (label[1], label[2]) if label else None, overlays)
     subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", graph,
-                    "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+                    "-map", "[v]", "-map", audio, "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
                     "-r", f"{fps:g}", "-c:a", "copy", "-movflags", "+faststart", str(out)], check=True)
     return out
 
@@ -328,10 +383,19 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
     reframes = ti.load_reframes(pkg.root).events
     titles_path = ti.titles_dir(pkg.root) / "titles.json"
     titles_report = json.loads(titles_path.read_text(encoding="utf-8")) if titles_path.is_file() else None
-    source = Path(portrait_source) if portrait_source else master
+    clean = Path(portrait_source) if portrait_source else None
+    recorded = (titles_report or {}).get("clean_render") or {}
+    if clean is None and recorded:
+        candidate = Path(pkg.root) / recorded.get("output", "")
+        if candidate.is_file() and sha256_file(candidate) == recorded.get("sha256"):
+            clean = candidate
+        else:
+            problems.append(_problem("PORTRAIT_CLEAN_STALE", "WARN", f"titles.json names a clean render {recorded.get('output')} "
+                                     "that is missing or changed since; cropping the master instead"))
+    source = clean or master
     segments, found = portrait_segments(plan, section, reframes, width, height, fps, load_portrait_focus(pkg.root))
     problems += found
-    if titles_report and titles_report.get("cues") and portrait_source is None:
+    if titles_report and titles_report.get("cues") and clean is None:
         problems.append(_problem("PORTRAIT_BURNED_TEXT", "WARN",
                                  "the master carries burned-in dialogue cues across the 16:9 frame; the 9:16 crop loses part of them "
                                  "(use --portrait-source with a clean cut or ship the sidecar SRTs)"))
@@ -342,7 +406,13 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
         label_info = {"text": BODY_LABEL, "start_s": plan["title_s"], "end_s": plan["body_end_s"],
                       "x": PORTRAIT_LABEL_X, "y": PORTRAIT_LABEL_Y}
         label = (portrait_label_png(out / "portrait_label.png", BODY_LABEL), plan["title_s"], plan["body_end_s"])
-    portrait = render_portrait(source, segments, out / f"{pkg.header.film_id}_9x16.mp4", height, fps, label)
+    cue_layers: list[tuple[Path, float, float]] = []
+    if clean is not None:  # the clean picture has no cues: burn them again, laid out for 9:16
+        for k, row in enumerate(r for r in (titles_report or {}).get("cues", []) if "abs_start_s" in r):
+            cue_layers.append((portrait_cue_png(out / "cues" / f"cue_{k:02d}.png", row["text"]),
+                               row["abs_start_s"], row["abs_end_s"]))
+    portrait = render_portrait(source, segments, out / f"{pkg.header.film_id}_9x16.mp4", height, fps, label,
+                               cue_layers, audio_from=master)
     thumbs, found = thumbnails(pkg, master, plan, section, out / "thumbs", titles_report)
     problems += found
     p_w, p_h, p_fps = probe_size(portrait)
@@ -350,7 +420,8 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
                  "sha256": sha256_file(master)},
                 {"name": "portrait_9x16", "file": str(portrait.relative_to(Path(pkg.root))).replace("\\", "/"), "width": p_w,
                  "height": p_h, "fps": p_fps, "sha256": sha256_file(portrait), "upscale": round(PORTRAIT_H / height, 2),
-                 "ai_label": label_info, "segments": segments}]
+                 "ai_label": label_info, "source": "clean" if clean is not None else "master",
+                 "cues_relaid": len(cue_layers), "segments": segments}]
     if (p_w, p_h) != (PORTRAIT_W, PORTRAIT_H):
         problems.append(_problem("PORTRAIT_SIZE", "BLOCK", f"portrait render is {p_w}x{p_h}, expected {PORTRAIT_W}x{PORTRAIT_H}"))
     draft, found = metadata_draft(pkg, plan, [{k: v for k, v in x.items() if k != "segments"} for x in versions], generators=generators)

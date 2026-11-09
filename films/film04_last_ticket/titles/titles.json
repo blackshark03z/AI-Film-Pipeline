@@ -129,5 +129,9 @@
     "reframed": 0,
     "blocks": 0,
     "warnings": 0
+  },
+  "clean_render": {
+    "output": "media/cut/titled_cut.clean.mp4",
+    "sha256": "f984aebac974c547874062436567f6903a2cb29ca83cd5e5d6e47c075b376657"
   }
 }

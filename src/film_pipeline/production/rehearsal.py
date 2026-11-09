@@ -188,7 +188,7 @@ def rehearse(src: Path, dest: Path, *, stop_on_fail: bool = True) -> dict[str, A
         ("cut", ["cut", "--film", film, "--render", "--out", str(cut_dir / "cut.mp4")]),
         ("lock", ["lock", "--film", film, "--lock", "--by", BOT, "--reason", STAMP]),
         ("grade", ["grade", "--film", film, "--render", "--out", str(cut_dir / "graded.mp4")]),
-        ("titles", ["titles", "--film", film, "--generators-file", gen, "--render", "--color", "--out", str(cut_dir / "titled_cut.mp4")]),
+        ("titles", ["titles", "--film", film, "--generators-file", gen, "--render", "--color", "--clean-copy", "--out", str(cut_dir / "titled_cut.mp4")]),
         ("mix", ["mix", "--film", film, "--cut", str(cut_dir / "titled_cut.mp4"), "--out", str(cut_dir / "mixed.mp4")]),
         ("mastercheck", ["mastercheck", "--film", film, "--cut-report", str(cut_dir / "titled_cut.cut.json")]),
         ("versions", ["versions", "--film", film, "--cut-report", str(cut_dir / "titled_cut.cut.json"), "--generators-file", gen]),

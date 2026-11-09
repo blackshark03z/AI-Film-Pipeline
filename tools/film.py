@@ -219,6 +219,8 @@ def main(argv: list[str] | None = None) -> int:
     tt.add_argument("--render", action="store_true", help="also render the cut with credits, burned-in cues and reframes")
     tt.add_argument("--out", type=Path, help="titled cut (default <film>/media/cut/titled_cut.mp4)")
     tt.add_argument("--color", action="store_true", help="also apply the colour match of color/color.json")
+    tt.add_argument("--clean-copy", action="store_true",
+                    help="with --render: also render <out>.clean.mp4 with no burned cues (versions re-lays the cues for 9:16)")
     mq = actions.add_parser("mastercheck", help="technical QC of a rendered master (black/freeze/duplicate frames, format, loudness, clipping, sync, colour, faststart) -> qc/master_qc.json")
     mq.add_argument("--film", required=True, type=Path)
     mq.add_argument("--video", type=Path, help="the master (default <film>/media/cut/mixed.mp4)")
@@ -621,6 +623,25 @@ def main(argv: list[str] | None = None) -> int:
                     _emit({"error": str(exc)})
                     return 1
                 report["render"] = {k: rendered[k] for k in ("output", "output_sha256", "total_s", "path")}
+                if args.clean_copy:
+                    out_path = Path(rendered["output"])
+                    clean_out = out_path.with_name(out_path.stem + ".clean.mp4")
+                    try:
+                        clean = ed_mod.render_cut(pkg, pkg.typed["edit"], clean_out, clips_dir=args.clips, cues=[],
+                                                  reframes=prepared["reframes"],
+                                                  end_lines=prepared["credits"][pkg.header.language], **extra)
+                    except (ValueError, KeyError) as exc:
+                        _emit({"error": f"clean copy: {exc}"})
+                        return 1
+                    try:
+                        rel = Path(clean["output"]).resolve().relative_to(Path(pkg.root).resolve()).as_posix()
+                    except ValueError:
+                        rel = str(Path(clean["output"]).resolve())
+                    report["clean_render"] = {"output": rel, "sha256": clean["output_sha256"]}
+                    titles_json = ti_mod.titles_dir(pkg.root) / "titles.json"
+                    stored = json.loads(titles_json.read_text(encoding="utf-8"))
+                    stored["clean_render"] = report["clean_render"]
+                    titles_json.write_text(json.dumps(stored, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             _emit(report)
             return 0 if report["ok"] else 1
         if args.action == "sounds":

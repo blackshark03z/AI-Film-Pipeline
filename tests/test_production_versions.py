@@ -201,3 +201,37 @@ def test_portrait_focus_moves_only_the_9x16_window(tmp_path):
     (tmp_path / "titles" / "portrait_focus.json").write_text('{"events": {"a": 1.5}}', encoding="utf-8")
     with pytest.raises(ValueError, match="0..1"):
         V.load_portrait_focus(tmp_path)
+
+
+def test_the_graph_chains_the_label_and_the_cue_overlays():
+    segs, _ = V.portrait_segments(PLAN, section(), {}, 1280, 720, 24.0)
+    graph = V.portrait_graph(segs, 720, (3.0, 12.0), [(2, 4.0, 5.0), (3, 6.0, 7.5)])
+    assert "[o0][1:v]overlay" in graph and "[o1][2:v]overlay" in graph and "[o2][3:v]overlay" in graph
+    assert graph.endswith("enable='between(t,6.000,7.500)'[v]")
+
+
+@needs_ffmpeg
+def test_a_clean_copy_gets_its_cues_relaid_for_9x16(tmp_path):
+    # film04: the 16:9 cues burned into the master were cut off by the 9:16 crop (PORTRAIT_BURNED_TEXT)
+    root, clips = film(tmp_path), tmp_path / "clips"
+    register(root, clips, ["SC02_g1", "SC03_g1", "SC04_g2"])
+    (root / "05_edit.json").write_text(EditSection(events=[EditEvent(event_id="a", take_id="SC02_g1_t1"),
+                                                           EditEvent(event_id="b", take_id="SC03_g1_t1")]).model_dump_json(),
+                                       encoding="utf-8")
+    cut = root / "media" / "cut" / "titled_cut.mp4"
+    done = run("titles", "--film", str(root), "--clips", str(clips), "--render", "--clean-copy", "--out", str(cut))
+    body = json.loads(done.stdout)
+    assert done.returncode == 0 and body["clean_render"]["output"] == "media/cut/titled_cut.clean.mp4"
+    assert run("mix", "--film", str(root), "--cut", str(cut), "--out", str(root / "media" / "cut" / "mixed.mp4")).returncode == 0
+    titles = json.loads((root / "titles" / "titles.json").read_text(encoding="utf-8"))
+    body = json.loads(run("versions", "--film", str(root), "--cut-report", str(cut.with_suffix(".cut.json"))).stdout)
+    portrait = next(v for v in body["versions"] if v["name"] == "portrait_9x16")
+    assert portrait["source"] == "clean" and portrait["cues_relaid"] == len(titles["cues"]) > 0
+    assert "PORTRAIT_BURNED_TEXT" not in {p["code"] for p in body["problems"]}
+    audio = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=codec_name", "-of", "csv=p=0",
+                            str(root / portrait["file"])], capture_output=True, text=True).stdout.strip()
+    assert audio == "aac"
+    (root / "media" / "cut" / "titled_cut.clean.mp4").write_bytes(b"changed")
+    body = json.loads(run("versions", "--film", str(root), "--cut-report", str(cut.with_suffix(".cut.json"))).stdout)
+    codes = {p["code"] for p in body["problems"]}
+    assert "PORTRAIT_CLEAN_STALE" in codes and "PORTRAIT_BURNED_TEXT" in codes

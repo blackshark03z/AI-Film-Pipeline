@@ -16,7 +16,7 @@
       "width": 720,
       "height": 1280,
       "fps": 24.0,
-      "sha256": "a6a5694be55ea5bc9fa2bb88247e6977b788d5a9faa9f8503938bf9afbf1accd",
+      "sha256": "aac5bf30211a2bbef7c05ed3d43a7639275b0e4bbb9e82e7b7000e71ccc1a692",
       "upscale": 1.78,
       "ai_label": {
         "text": "AI-generated",
@@ -25,6 +25,8 @@
         "x": 24,
         "y": 1020
       },
+      "source": "clean",
+      "cues_relaid": 10,
       "segments": [
         {
           "event_id": "title",
@@ -264,11 +266,6 @@
   "metadata": "versions/metadata.json",
   "problems": [
     {
-      "code": "PORTRAIT_BURNED_TEXT",
-      "severity": "WARN",
-      "detail": "the master carries burned-in dialogue cues across the 16:9 frame; the 9:16 crop loses part of them (use --portrait-source with a clean cut or ship the sidecar SRTs)"
-    },
-    {
       "code": "THUMB_REJECTED",
       "severity": "WARN",
       "detail": "SC05_g3 (the ticket lies on the counter after the heavy thump): all candidate frames are too dark, too bright or flat",
@@ -279,6 +276,6 @@
     "portrait_segments": 18,
     "thumbnails": 2,
     "blocks": 0,
-    "warnings": 2
+    "warnings": 1
   }
 }
