@@ -185,3 +185,19 @@ def test_a_vanished_job_times_out_after_one_last_scan(tmp_path, monkeypatch):
     res = asyncio.run(fs._video_wait_and_bind(page, None, SimpleNamespace(timeout=600), PROMPT,
                                               tmp_path / "X_t1.mp4", rec, _pre(old), 1000.0, 0))
     assert res["result"] == "TIMEOUT" and res["wait"]["fresh_max"] == 0 and not (tmp_path / "X_t1.mp4").exists()
+
+
+def test_a_vanished_job_is_a_provider_failure_after_a_full_scan_ten_minutes_in(tmp_path, monkeypatch):
+    # P18-03: proven inside the send (as flow_reconcile's P17-07 does 10 min later), so generate can resend at once
+    old = [_frame(i) for i in range(3)]
+
+    async def no_fail(*_a):
+        return False
+    monkeypatch.setattr(fs, "flow_failed", no_fail)
+    others = [_detail(MID_OLD)] + [{"url": f"https://x/edit/cccccccc-2222-3333-4444-55555555000{i}", "text": "other"}
+                                   for i in range(5)]
+    _patch(monkeypatch, [others], clock=_clock(60))
+    rec: dict = {}
+    res = asyncio.run(fs._video_wait_and_bind(_Page([_gallery(old)] * 20), None, SimpleNamespace(timeout=600), PROMPT,
+                                              tmp_path / "X_t1.mp4", rec, _pre(old), 1000.0, 0))
+    assert res["result"] == "FLOW_FAILED_NO_CLIP" and res["provider_no_clip"] and res["reconcile_bind"]["scanned"] == 6

@@ -451,12 +451,21 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
     return path
 
 
+AUTO_RESEND = 1                         # P18-03: automatic resends after a provider failure, per generate call
+PROVIDER_FAILURES_BEFORE_RESTAGE = 3    # OWNER_POLICY.md: after 3 provider failures on one shot, restage
+
+
 def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Path | None = None,
              stills_dir: Path | None = None, start_token: str | None = None, backlog: Path | None = None,
              runner: Runner | None = None, end_token: str | None = None,
-             today: date | None = None, adapter: Any | None = None) -> dict[str, Any]:
+             today: date | None = None, adapter: Any | None = None, auto_resend: int = AUTO_RESEND) -> dict[str, Any]:
     """``runner`` replaces flow_send on a Flow route; ``adapter`` replaces the HTTP adapter on an API route (tests and
-    rehearsals: on a rehearsal package an explicit runner/adapter is a mock and records cost 0)."""
+    rehearsals: on a rehearsal package an explicit runner/adapter is a mock and records cost 0).
+
+    P18-03: a Flow send that ends PROVIDER_FAILED (FLOW_FAILED, or a job proven vanished inside the send) is sent again
+    up to ``auto_resend`` times -- same shot version, same prompt, no board re-approval -- while the shot version has
+    fewer than PROVIDER_FAILURES_BEFORE_RESTAGE provider failures (OWNER_POLICY: 3 on one shot -> restage). The resend
+    is an ordinary send through every gate (go-live, budget, cap). Each send is logged in takes/send_log.jsonl."""
     payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
                             end_token=end_token, today=today)
     root = Path(pkg.root)
@@ -509,7 +518,44 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     result["manifest_result"] = outcome
     _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=outcome,
                    take_registered=bool(result.get("take")))
+    normalized = cap.normalize(outcome)
+    incident = normalized == "PROVIDER_FAILED"
+    failures = _provider_failures(root, pkg.header.film_id, generation_id, payload["shot_version"]) if incident else 0
+    resend = incident and auto_resend > 0 and failures < PROVIDER_FAILURES_BEFORE_RESTAGE
+    log_send(root, payload, manifest, outcome, normalized, auto_resend=resend, provider_failures=failures)
+    if incident and not resend and failures >= PROVIDER_FAILURES_BEFORE_RESTAGE:
+        result["restage_needed"] = (f"{generation_id} v{payload['shot_version']}: {failures} provider failures; "
+                                    f"restage or simplify the prompt and record why (OWNER_POLICY)")
+    if resend:
+        result["auto_resend"] = generate(pkg, generation_id, dry_run=False, plan_out=plan_out, stills_dir=stills_dir,
+                                         start_token=start_token, backlog=backlog, runner=runner, end_token=end_token,
+                                         today=today, adapter=adapter, auto_resend=auto_resend - 1)
     return result
+
+
+def _provider_failures(root: Path, film_id: str, generation_id: str, version: int) -> int:
+    """Sends of this shot version whose normalized result is PROVIDER_FAILED (the one just written included)."""
+    sent = _sent_receipts(root, film_id, {})
+    return sum(1 for tid, r in sent.items() if r.get("generation_id", tid.rsplit("_t", 1)[0]) == generation_id
+               and r.get("shot_version", 1) == version and receipt_result(r) == "PROVIDER_FAILED")
+
+
+def log_send(root: Path, payload: dict[str, Any], manifest: dict[str, Any], outcome: str, normalized: str,
+             **extra: Any) -> Path:
+    """P18-03 reliability log: one JSON line per Flow send in takes/send_log.jsonl (time, receipt, result, binding,
+    elapsed); ``incident`` marks a provider failure. Nothing secret: no token, URL or prompt text."""
+    path = takes_dir(root) / "send_log.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    line = {"at": datetime.now().astimezone().isoformat(timespec="seconds"), "take_id": payload["take_id"],
+            "generation_id": payload["generation_id"], "shot_version": payload["shot_version"],
+            "provider": payload["provider"], "model": payload["provider_model"], "result": outcome,
+            "normalized": normalized, "incident": normalized == "PROVIDER_FAILED",
+            "binding": manifest.get("binding", ""), "bound_in_send": outcome == "PASSED",
+            "elapsed_s": manifest.get("elapsed_s"), "started": manifest.get("started", ""),
+            "finished": manifest.get("finished", ""), **extra}
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(line, ensure_ascii=False) + "\n")
+    return path
 
 
 def _generate_api(pkg: Any, payload: dict[str, Any], adapter: Any, mock: bool, receipt: Path) -> dict[str, Any]:

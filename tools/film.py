@@ -185,6 +185,8 @@ def main(argv: list[str] | None = None) -> int:
     gn.add_argument("--start-token", help="tok:<tail> of the start still uploaded to Flow (live only)")
     gn.add_argument("--end-token", help="tok:<tail> of the end still uploaded to Flow (live only; shots with end_frame)")
     gn.add_argument("--backlog", type=Path, help="file holding the OWNER_GO_LIVE line (default: the loop backlog)")
+    gn.add_argument("--no-auto-resend", action="store_true",
+                    help="do not resend once after a provider failure (P18-03; default: resend once)")
     st = actions.add_parser("stills", help="start stills: list their state, --register an image made elsewhere, --approve it")
     st.add_argument("--film", required=True, type=Path)
     st.add_argument("--register", metavar="GENERATION_ID|end:GENERATION_ID")
@@ -433,14 +435,18 @@ def main(argv: list[str] | None = None) -> int:
             from film_pipeline.production.generate import generate
             try:
                 done = generate(pkg, args.gid, dry_run=args.dry_run, plan_out=args.plan_out, stills_dir=args.stills,
-                                start_token=args.start_token, backlog=args.backlog, end_token=args.end_token)
+                                start_token=args.start_token, backlog=args.backlog, end_token=args.end_token,
+                                auto_resend=0 if args.no_auto_resend else 1)
             except ValueError as exc:
                 _emit({"error": str(exc)})
                 return 2
             _emit(done)
             if args.dry_run:
                 return 0
-            return 0 if done["sent"] and done.get("manifest_result") == "PASSED" else 1
+            last = done
+            while last.get("auto_resend"):   # P18-03: the outcome is the last send's
+                last = last["auto_resend"]
+            return 0 if last["sent"] and last.get("manifest_result") == "PASSED" else 1
         if args.action == "stills":
             from film_pipeline.production import stills as st_mod
             if "preprod" not in pkg.typed or "shots" not in pkg.typed:

@@ -422,6 +422,8 @@ TILE_SIG_SIZE = (32, 18)   # grey thumbnail signature (w, h)
 TILE_SAME_MAX = 6.0        # mean abs grey diff: a re-issued thumbnail (same frame, new token) scores ~0-3
 WAIT_MIN_S = 45            # Omni Flash 360p clips took 80-140 s on film05; never bind before this
 WAIT_POLL_S = 10
+VANISHED_AFTER_S = 600     # flow_reconcile.SETTLE_S: no clip this long after the submit -> the job vanished
+MIN_SCAN = 6               # flow_reconcile.MIN_SCAN: ... and only after this many newest detail pages were read
 
 
 def tile_signatures(png: bytes, rects: list, dpr: float) -> list:
@@ -535,7 +537,8 @@ async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline:
         known = fr.known_ids(out.parent, out.parent, frozenset({out.stem})) | set(before_ids)
         while True:
             tries += 1
-            res = fb.reconcile(prompt, await fr.scan_gallery(page, scan), known)
+            details = await fr.scan_gallery(page, scan)
+            res = fb.reconcile(prompt, details, known)
             if res["result"] == "BOUND":
                 again = await read_nth_detail(page, res["index"], page.url)
                 if again and fb.media_id_from_url(again["url"]) == res["media_id"]:
@@ -557,7 +560,7 @@ async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline:
                     return True
                 res = {"result": "MOVED", "why": "the gallery moved before the download"}
             if time.time() >= deadline or (await page.evaluate(JS_JOB_STATE))["failed"] > failed_before:
-                rec["reconcile_bind"] = {"tries": tries, "result": res["result"]}
+                rec["reconcile_bind"] = {"tries": tries, "result": res["result"], "scanned": len(details)}
                 return False
             await page.wait_for_timeout(20000)
     except Exception as e:  # noqa: BLE001 - never lose the record of a paid send
@@ -596,7 +599,14 @@ async def _video_wait_and_bind(page, ctx, args, prompt: str, out: Path, rec: dic
     if verdict == "FAILED" or await flow_failed(page, failed_before, 30):
         rec["result"] = "FLOW_FAILED"
         return rec
-    last = (rec.get("reconcile_bind") or {}).get("result")
+    rb = rec.get("reconcile_bind") or {}
+    last = rb.get("result")
+    if (verdict == "BIND" and rec["elapsed_s"] >= VANISHED_AFTER_S and last == "NOT_IN_GALLERY"
+            and rb.get("scanned", 0) >= MIN_SCAN):
+        # P18-03 (film05 SC02_g2 12:09, SC04_g1 13:23): the job vanished -- no clip holds the prompt among the newest
+        # MIN_SCAN videos 10 min after the submit; a provider failure, proven inside the send (as P17-07 does later)
+        rec["result"], rec["provider_no_clip"] = "FLOW_FAILED_NO_CLIP", True
+        return rec
     rec["result"] = ("AMBIGUOUS" if last == "AMBIGUOUS" else
                      "TIMEOUT" if not wait["fresh_max"] and verdict == "BIND" else "UNBOUND")
     tail = await page.evaluate("document.body.innerText.slice(0, 1500)")

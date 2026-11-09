@@ -384,3 +384,61 @@ def test_credit_ledger_matches_receipts_to_takes_by_output_file_and_skips_pre_su
     payload = G.generate(pkg, "SC01_g1", dry_run=True, stills_dir=still(tmp_path), start_token="tok:abc",
                          backlog=backlog(tmp_path))["payload"]
     assert payload["credits_spent"] == 24.0 and payload["take_id"] == "SC01_g1_t4"
+
+
+# ------------------------------------------------------------------ P18-03 provider failures
+
+
+class ScriptedRunner(FakeRunner):
+    def __init__(self, results):
+        super().__init__()
+        self.results = list(results)
+
+    def __call__(self, argv, out):
+        self.result = self.results.pop(0)
+        return super().__call__(argv, out)
+
+
+def _send_log(pkg):
+    path = Path(pkg.root) / "takes" / "send_log.jsonl"
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+
+
+def test_a_provider_failure_is_resent_once_with_no_version_bump(tmp_path):
+    # film05: 3/13 sends were Flow failures; SC02_g2/SC04_g1 were bumped to v2 by hand to resend the same prompt
+    pkg = film(tmp_path, 100)
+    runner = ScriptedRunner(["FLOW_FAILED", "PASSED"])
+    done = live(pkg, tmp_path, runner)
+    assert done["manifest_result"] == "FLOW_FAILED" and len(runner.calls) == 2
+    again = done["auto_resend"]
+    assert again["manifest_result"] == "PASSED" and again["payload"]["take_id"] == "SC01_g1_t2"
+    assert again["payload"]["shot_version"] == done["payload"]["shot_version"] == 1
+    take = T.load_log(pkg.root, pkg.header.film_id).get("SC01_g1_t2")
+    assert take.output_file == "SC01_g1_t2.mp4"
+    log = _send_log(pkg)
+    assert [(e["take_id"], e["result"], e["incident"], e["auto_resend"]) for e in log] == [
+        ("SC01_g1_t1", "FLOW_FAILED", True, True), ("SC01_g1_t2", "PASSED", False, False)]
+    assert log[0]["at"] and log[1]["bound_in_send"]
+
+
+def test_only_one_automatic_resend_and_a_vanished_job_counts_as_a_provider_failure(tmp_path):
+    pkg = film(tmp_path, 100)
+    runner = ScriptedRunner(["FLOW_FAILED_NO_CLIP", "FLOW_FAILED"])
+    done = live(pkg, tmp_path, runner)
+    assert len(runner.calls) == 2 and "auto_resend" not in done["auto_resend"]
+    assert [e["incident"] for e in _send_log(pkg)] == [True, True]
+
+
+def test_the_third_provider_failure_asks_for_a_restage_instead_of_a_resend(tmp_path):
+    pkg = film(tmp_path, 100)
+    live(pkg, tmp_path, ScriptedRunner(["FLOW_FAILED", "FLOW_FAILED"]))
+    runner = ScriptedRunner(["FLOW_FAILED", "PASSED"])
+    third = live(pkg, tmp_path, runner)
+    assert len(runner.calls) == 1 and "auto_resend" not in third and "restage" in third["restage_needed"]
+
+
+def test_an_ambiguous_send_is_not_resent(tmp_path):
+    pkg = film(tmp_path, 100)
+    runner = ScriptedRunner(["UNBOUND", "PASSED"])
+    done = live(pkg, tmp_path, runner, auto_resend=1)
+    assert len(runner.calls) == 1 and "auto_resend" not in done and not _send_log(pkg)[0]["incident"]

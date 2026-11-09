@@ -1020,10 +1020,19 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
 - **Tests:** `tests/test_production_takes.py` (`test_take_id_follows_the_receipt_stem_not_the_register_count`,
   `test_historical_film05_takes_keep_their_ids_and_map_to_their_receipt`).
 
-### P18-03 Provider-failure handling — OPEN
-- 3/13 film05 sends were Flow failures (FLOW_FAILED or a vanished job). `generate` resends once automatically after a
-  provider failure (no version bump, no board re-approval), within "3 provider failures on one shot → restage".
-  Every incident is logged with its time (reliability log).
+### P18-03 Provider-failure handling — DONE (2026-11-09)
+- 3/13 film05 sends were Flow failures (FLOW_FAILED or a vanished job); two were resent by a manual v2 bump.
+- **Fix:**
+  - `flow_send`: a job with no clip among the newest 6 detail pages 600 s after the submit ends
+    `FLOW_FAILED_NO_CLIP` (`provider_no_clip: true`) inside the send; the registry maps the FLOW_FAILED prefix to
+    PROVIDER_FAILED (charged, no send cap).
+  - `generate(auto_resend=1)`: after a PROVIDER_FAILED send it sends once more through every gate (go-live, budget,
+    cap), same shot version and prompt, no board re-approval, while the shot version has < 3 provider failures; at 3
+    it returns `restage_needed` (OWNER_POLICY). AMBIGUOUS/UNBOUND are not resent. CLI `--no-auto-resend` turns it off;
+    the CLI exit code is the last send's.
+  - Reliability log: every Flow send appends a line to `<film>/takes/send_log.jsonl` (time, receipt, result,
+    normalized, binding, bound_in_send, elapsed, incident, auto_resend).
+- **Tests:** `tests/test_production_generate.py` (4 P18-03 tests), `tests/test_flow_send_wait_p18.py` (vanished).
 
 ### P18-04 Duplicated frames in the film05 master (26.8%) — OPEN
 - Source cadence (Omni Flash) or our assemble/grade/mix/versions chain? Check takes against the master; fix the
