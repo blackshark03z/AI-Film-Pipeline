@@ -1,0 +1,137 @@
+{
+  "film_id": "film05_one_cup",
+  "video": "films\\film05_one_cup\\media\\cut\\mixed.mp4",
+  "sha256": "4dd3ff907e522ecb5e5089bdabe6ea4b590577de4d8a0d40aa014c2a68d26370",
+  "spec": {
+    "width": 1280,
+    "height": 720,
+    "fps": 24.0,
+    "vcodec": "h264",
+    "acodec": "aac",
+    "pix_fmt": "yuv420p",
+    "target_lufs": -14.0,
+    "lufs_tol": 1.5,
+    "true_peak_max": -1.0,
+    "duration_tol_s": 0.25,
+    "av_tol_s": 0.15,
+    "black_luma": 12.0,
+    "max_black_s": 0.5,
+    "warn_black_s": 0.2,
+    "freeze_diff": 0.08,
+    "freeze_warn_s": 2.0,
+    "freeze_fail_s": 4.0,
+    "dup_ratio_warn": 0.05,
+    "silence_noise_db": -50.0,
+    "silence_warn_s": 3.0,
+    "clip_level": 32700,
+    "clip_run": 3,
+    "sync_max_offset_s": 0.3,
+    "active_db": -45.0,
+    "exposure_low": 20.0,
+    "exposure_high": 235.0,
+    "exposure_share_warn": 0.05
+  },
+  "metrics": {
+    "duration_s": 75.75,
+    "fps": 24.0,
+    "size": "1280x720",
+    "planned_s": 75.749998,
+    "frames": 1818,
+    "duplicate_ratio": 0.2679,
+    "exposure_off_share": 0.0,
+    "body_luma_mean": 52.43,
+    "colour_worst_after": 1.502,
+    "integrated_lufs": -14.8,
+    "peak_dbfs": -1.7,
+    "clipped_passages": 0,
+    "cues_checked": 9,
+    "median_offset_s": 0.0
+  },
+  "findings": [
+    {
+      "group": "technical",
+      "code": "DUPLICATED_FRAMES",
+      "severity": "WARN",
+      "detail": "26.8% of the body frames repeat the previous one (> 5%)",
+      "at_s": null
+    },
+    {
+      "group": "sync",
+      "code": "CUE_NO_SPEECH",
+      "severity": "WARN",
+      "detail": "no clear speech under the cue at 25.32 s",
+      "at_s": 25.317
+    },
+    {
+      "group": "sync",
+      "code": "CUE_NO_SPEECH",
+      "severity": "WARN",
+      "detail": "no clear speech under the cue at 38.98 s",
+      "at_s": 38.975
+    },
+    {
+      "group": "sync",
+      "code": "CUE_NO_SPEECH",
+      "severity": "WARN",
+      "detail": "no clear speech under the cue at 67.39 s",
+      "at_s": 67.392
+    }
+  ],
+  "checks": [
+    {
+      "group": "technical",
+      "result": "WARN",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "DUPLICATED_FRAMES: 26.8% of the body frames repeat the previous one (> 5%)",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "WARN",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "CUE_NO_SPEECH: no clear speech under the cue at 25.32 s; CUE_NO_SPEECH: no clear speech under the cue at 38.98 s; CUE_NO_SPEECH: no clear speech under the cue at 67.39 s",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "color",
+      "result": "PASS",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "delivery",
+      "result": "PASS",
+      "severity": null,
+      "level": "CUT",
+      "evidence": "qc/master_qc.json",
+      "reviewer": "auto:master_qc",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ]
+}

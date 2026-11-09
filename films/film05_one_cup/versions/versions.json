@@ -1,0 +1,194 @@
+{
+  "film_id": "film05_one_cup",
+  "ok": true,
+  "versions": [
+    {
+      "name": "master_16x9",
+      "file": "films\\film05_one_cup\\media\\cut\\mixed.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": 24.0,
+      "sha256": "4dd3ff907e522ecb5e5089bdabe6ea4b590577de4d8a0d40aa014c2a68d26370"
+    },
+    {
+      "name": "portrait_9x16",
+      "file": "versions/film05_one_cup_9x16.mp4",
+      "width": 720,
+      "height": 1280,
+      "fps": 24.0,
+      "sha256": "7579c1050ffcebc6a0b5cf897fe08637ae006a1a990e87b3a6aba78c41f732bf",
+      "upscale": 1.78,
+      "ai_label": {
+        "text": "AI-generated",
+        "start_s": 3.0,
+        "end_s": 71.749998,
+        "x": 24,
+        "y": 1020
+      },
+      "source": "clean",
+      "cues_relaid": 9,
+      "segments": [
+        {
+          "event_id": "title",
+          "mode": "fit",
+          "start_frame": 0,
+          "end_frame": 72,
+          "start_s": 0.0,
+          "end_s": 3.0
+        },
+        {
+          "event_id": "SC01_g1",
+          "mode": "crop",
+          "start_frame": 72,
+          "end_frame": 264,
+          "start_s": 3.0,
+          "end_s": 11.0,
+          "focus": 0.7,
+          "focus_source": "portrait_focus",
+          "crop_x": 694,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC01_g2",
+          "mode": "crop",
+          "start_frame": 264,
+          "end_frame": 431,
+          "start_s": 11.0,
+          "end_s": 17.958,
+          "focus": 0.33,
+          "focus_source": "portrait_focus",
+          "crop_x": 220,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC02_g1",
+          "mode": "crop",
+          "start_frame": 431,
+          "end_frame": 574,
+          "start_s": 17.958,
+          "end_s": 23.917,
+          "focus": 0.7,
+          "focus_source": "portrait_focus",
+          "crop_x": 694,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC02_g2",
+          "mode": "crop",
+          "start_frame": 574,
+          "end_frame": 741,
+          "start_s": 23.917,
+          "end_s": 30.875,
+          "focus": 0.33,
+          "focus_source": "portrait_focus",
+          "crop_x": 220,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC03_g1",
+          "mode": "crop",
+          "start_frame": 741,
+          "end_frame": 909,
+          "start_s": 30.875,
+          "end_s": 37.875,
+          "focus": 0.72,
+          "focus_source": "portrait_focus",
+          "crop_x": 720,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC03_g2",
+          "mode": "crop",
+          "start_frame": 909,
+          "end_frame": 1101,
+          "start_s": 37.875,
+          "end_s": 45.875,
+          "focus": 0.31,
+          "focus_source": "portrait_focus",
+          "crop_x": 194,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC04_g1",
+          "mode": "crop",
+          "start_frame": 1101,
+          "end_frame": 1292,
+          "start_s": 45.875,
+          "end_s": 53.833,
+          "focus": 0.73,
+          "focus_source": "portrait_focus",
+          "crop_x": 732,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC04_g2",
+          "mode": "crop",
+          "start_frame": 1292,
+          "end_frame": 1387,
+          "start_s": 53.833,
+          "end_s": 57.792,
+          "focus": 0.55,
+          "focus_source": "portrait_focus",
+          "crop_x": 502,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC05_g1",
+          "mode": "crop",
+          "start_frame": 1387,
+          "end_frame": 1531,
+          "start_s": 57.792,
+          "end_s": 63.792,
+          "focus": 0.31,
+          "focus_source": "portrait_focus",
+          "crop_x": 194,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC06_g1",
+          "mode": "crop",
+          "start_frame": 1531,
+          "end_frame": 1722,
+          "start_s": 63.792,
+          "end_s": 71.75,
+          "focus": 0.3,
+          "focus_source": "portrait_focus",
+          "crop_x": 182,
+          "crop_w": 404
+        },
+        {
+          "event_id": "end",
+          "mode": "fit",
+          "start_frame": 1722,
+          "end_frame": 1818,
+          "start_s": 71.75,
+          "end_s": 75.75
+        }
+      ]
+    }
+  ],
+  "thumbnails": [
+    {
+      "file": "versions/thumbs/thumb_01.jpg",
+      "at_s": 55.812,
+      "event_id": "SC04_g2",
+      "scene": "SC04",
+      "moment": "the brass key lies beside a second white mug with steam rising from it",
+      "device": "insert",
+      "fact_id": "hal_made_tea",
+      "luma": 57.0,
+      "contrast": 43.6,
+      "burned_text": false,
+      "lifted": false,
+      "sha256": "55c38c7b84e9f29dcc5312fb6edfbadc70d08d8ef4c7371039ebd61537271cda"
+    }
+  ],
+  "metadata": "versions/metadata.json",
+  "problems": [],
+  "summary": {
+    "portrait_segments": 12,
+    "thumbnails": 1,
+    "blocks": 0,
+    "warnings": 0
+  }
+}

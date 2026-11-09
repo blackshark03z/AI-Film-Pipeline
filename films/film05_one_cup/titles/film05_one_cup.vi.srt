@@ -1,0 +1,47 @@
+1
+00:00:00,000 --> 00:00:03,000
+MỘT TÁCH TRÀ
+Tạo bằng AI
+
+2
+00:00:06,600 --> 00:00:08,400
+Con gửi bưu điện cũng được mà.
+
+3
+00:00:12,900 --> 00:00:16,600
+Con muốn chào bố. Cho đàng hoàng.
+
+4
+00:00:19,558 --> 00:00:21,158
+Lần này là đi đâu?
+
+5
+00:00:25,317 --> 00:00:30,217
+Lisbon. Một công việc thật sự. Thứ Hai con bắt đầu.
+
+6
+00:00:34,275 --> 00:00:36,275
+Mẹ con cũng từng nói thế về Leeds.
+
+7
+00:00:38,975 --> 00:00:42,475
+Và mẹ đã quay về. Con không phải mẹ, bố ạ.
+
+8
+00:00:50,275 --> 00:00:53,475
+Giữ lấy chìa. Ổ khóa chưa bao giờ đổi.
+
+9
+00:01:00,992 --> 00:01:02,392
+Bố pha trà cho con.
+
+10
+00:01:07,392 --> 00:01:09,692
+Một tách thôi. Rồi con đi.
+
+11
+00:01:11,750 --> 00:01:15,750
+Nhân vật: IRIS · HAL
+Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra.
+Tạo bằng AI: Google Flow Omni 1.2 Flash
+Tác phẩm hư cấu. Mọi nhân vật đều là hư cấu.

@@ -1,0 +1,140 @@
+{
+  "take_id": "SC04_g1_t1",
+  "generation_id": "SC04_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:43": "yes, HAL raises his eyes to IRIS frame-left and says line 43 to her, gently"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:IRIS": "yes, IRIS's place stays off frame-left, never shown empty; his look goes just past the lens frame-left",
+        "REL_GAZE": "yes, key then IRIS, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); clip SC04_g1_t2.mp4 (v2 receipt t2; v1 t1 made no Flow clip, provider failure 13:23); 8-frame contact sheet sheet_SC04_g1_t2.jpg + Vosk STT 'keep the key the lock never changed' 4.5-6.9 s, 8.0 s, -23.5 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:43",
+    "REL_LISTENER:IRIS",
+    "REL_GAZE"
+  ],
+  "output_sha256": "4c72160a822391d0e5699823df8456165efba4e4bc277fec5bc3a896b9c21cf0"
+}

@@ -396,3 +396,85 @@ def test_no_flow_tab_is_a_pre_submit_error(monkeypatch, tmp_path):
     args = SimpleNamespace(prompt_file=str(prompt), out=str(tmp_path / "o.mp4"), attach=[], start="", end="", upload=[])
     rec = asyncio.run(fs.run(args))
     assert rec["result"] == "PRE_SUBMIT_ERROR NO_FLOW_TAB"
+
+
+
+class _Page:
+    """Fake Flow page for reconcile_bind: no failed tile, waits return at once."""
+    url = "https://labs.google/fx/tools/flow/project/p"
+
+    async def evaluate(self, *_a):
+        return {"running": False, "failed": 0}
+
+    async def wait_for_timeout(self, _ms):
+        return None
+
+
+PROMPT_R = "The old man looks down at the brass key and speaks to the woman."
+MID_NEW, MID_OLD = "11111111-2222-3333-4444-5555aaaaaaaa", "11111111-2222-3333-4444-5555bbbbbbbb"
+
+
+def _detail(mid):
+    return {"url": f"https://labs.google/fx/tools/flow/project/p/edit/{mid}", "text": "x " + PROMPT_R}
+
+
+def _patch(monkeypatch, rounds, at_index=None, saved=None):
+    import flow_reconcile as fr
+    it = iter(rounds)
+
+    async def scan(_page, _n):
+        return next(it)
+
+    async def download(_page, _ctx, n, out):
+        out.write_bytes(b"video")
+        if saved is not None:
+            saved.append(n)
+        return None
+
+    async def nth(_page, n, _home):
+        return at_index(n) if at_index else None
+
+    monkeypatch.setattr(fr, "scan_gallery", scan)
+    monkeypatch.setattr(fr, "download_nth", download)
+    monkeypatch.setattr(fs, "read_nth_detail", nth)
+
+
+def test_reconcile_bind_saves_the_one_new_clip_that_holds_the_prompt(tmp_path, monkeypatch):
+    # P17-05: film05 needed flow_reconcile after 5 of 13 sends; flow_send now binds the same way inside the send
+    import time
+    saved: list = []
+    _patch(monkeypatch, [[], [_detail(MID_NEW)]], at_index=lambda n: _detail(MID_NEW), saved=saved)
+    rec: dict = {"result": "UNBOUND"}
+    out = tmp_path / "SC03_g1_t1.mp4"
+    assert asyncio.run(fs.reconcile_bind(_Page(), None, PROMPT_R, out, rec, time.time() + 60, 0, []))
+    assert rec["result"] == "PASSED" and rec["binding"] == "RECONCILE_PROMPT_MATCH"
+    assert rec["reconcile_bind"]["tries"] == 2 and saved == [0] and out.read_bytes() == b"video"
+
+
+def test_reconcile_bind_never_takes_a_clip_that_existed_before_the_send(tmp_path, monkeypatch):
+    # Codex review: an older unresolved retake with the same prompt must not pass as this send's clip
+    _patch(monkeypatch, [[_detail(MID_OLD)]])
+    rec: dict = {"result": "UNBOUND"}
+    assert not asyncio.run(fs.reconcile_bind(_Page(), None, PROMPT_R, tmp_path / "X_t2.mp4", rec, 0.0, 0, [MID_OLD]))
+    assert rec["result"] == "UNBOUND" and rec["reconcile_bind"]["result"] == "NOT_IN_GALLERY"
+
+
+def test_reconcile_bind_does_not_download_when_the_gallery_moved(tmp_path, monkeypatch):
+    # Codex review: another clip landed in front between the scan and the download
+    _patch(monkeypatch, [[_detail(MID_NEW)]], at_index=lambda n: _detail(MID_OLD))
+    rec: dict = {"result": "UNBOUND"}
+    out = tmp_path / "X_t1.mp4"
+    assert not asyncio.run(fs.reconcile_bind(_Page(), None, PROMPT_R, out, rec, 0.0, 0, []))
+    assert rec["reconcile_bind"]["result"] == "MOVED" and not out.exists()
+
+
+def test_reconcile_bind_records_an_error_instead_of_raising(tmp_path, monkeypatch):
+    import flow_reconcile as fr
+
+    async def boom(_page, _n):
+        raise RuntimeError("page closed")
+
+    monkeypatch.setattr(fr, "scan_gallery", boom)
+    rec: dict = {"result": "UNBOUND"}
+    assert not asyncio.run(fs.reconcile_bind(_Page(), None, PROMPT_R, tmp_path / "X_t1.mp4", rec, 0.0, 0, []))
+    assert rec["result"] == "UNBOUND" and rec["reconcile_bind"]["error"].startswith("RuntimeError")

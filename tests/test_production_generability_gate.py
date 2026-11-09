@@ -228,3 +228,18 @@ def test_flow_failed_send_does_not_use_the_cap(tmp_path):
     assert done["payload"]["credits_spent"] == 8.0
     sent(pkg, 2, result="UNBOUND")
     assert dry(pkg, tmp_path)[1] == ["SEND_CAP"]
+
+
+def test_a_vanished_flow_job_proven_by_reconcile_does_not_use_the_cap(tmp_path):
+    # P17-07 (film05 SC02_g2, SC04_g1): flow_send said UNBOUND / AMBIGUOUS, the job left no clip and no failed tile;
+    # flow_reconcile found nothing 10+ min later (provider_no_clip) -> a provider failure: credits count, cap unused.
+    pkg = film(tmp_path, GREEN_TEXT)
+    sent(pkg, 1, result="AMBIGUOUS")
+    assert dry(pkg, tmp_path)[1] == ["SEND_CAP"]   # unproven: may still be a clip in the gallery
+    takes = pkg.root / "media" / "takes"
+    takes.mkdir(parents=True, exist_ok=True)
+    (takes / f"{GID}_t1.reconcile.json").write_text(json.dumps(
+        {"receipt_id": f"{GID}_t1", "result": "NOT_IN_GALLERY", "provider_no_clip": True}), encoding="utf-8")
+    done, found = dry(pkg, tmp_path)
+    assert not set(found) & GATE and done["payload"]["attempts"]["this_version"] == 0
+    assert done["payload"]["credits_spent"] == 8.0

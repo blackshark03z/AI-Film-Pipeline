@@ -1,0 +1,33 @@
+{
+  "film_id": "film05_one_cup",
+  "title": "One Cup",
+  "profile": "drama",
+  "language": "en",
+  "aspect": "16:9",
+  "fps": 24,
+  "resolution": "1280x720",
+  "generation_s": 8,
+  "budget": {
+    "credits_estimate": 82.0,
+    "cap_factor": 1.5
+  },
+  "disclosure": {
+    "ai_label": "always"
+  },
+  "delegated_reviewers": [
+    {
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "owner_words": "Bắt đầu film05 (Owner, 2026-11-09, reply to 'Bắt đầu film05 làm bài kiểm tra ổn định không?'); OWNER_POLICY.md: \"Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình\" / \"Thoải mái đi, đừng hỏi quyền. Tuy nhiên cấu hình tạo video thử nghiệm cứ dùng 360p, omni flash cho tiết kiệm nhé\"",
+      "granted": "2026-11-09"
+    }
+  ],
+  "rehearsal": false,
+  "gates": {
+    "1": "NOT_RUN",
+    "2": "NOT_RUN",
+    "3": "NOT_RUN",
+    "4": "NOT_RUN",
+    "5": "NOT_RUN",
+    "6": "NOT_RUN"
+  }
+}

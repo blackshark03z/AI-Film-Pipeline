@@ -1,0 +1,78 @@
+{
+  "film_id": "film05_one_cup",
+  "status": "DRAFT_NOT_PUBLISHED",
+  "source_language": "en",
+  "title": {
+    "source": "One Cup",
+    "vi": "MỘT TÁCH TRÀ"
+  },
+  "description": "Before she moves to Lisbon, Iris Brennan comes at dawn to return the spare key to her father's kitchen, but her father Hal will not take it back.",
+  "description_note": "drafted from the logline; the Owner writes the final copy",
+  "tags": [
+    "AI film",
+    "AI generated",
+    "short film",
+    "Quiet family drama (short, contained, one kitchen, a few minutes)",
+    "Leaving is not the same as losing someone; a door kept open is a kind of love that asks for nothing."
+  ],
+  "ai_disclosure": {
+    "ai_generated": true,
+    "digital_source_type": "trainedAlgorithmicMedia",
+    "synthetic_persons": true,
+    "generators": "Google Flow Omni 1.2 Flash",
+    "generator_records": [
+      {
+        "provider": "Google",
+        "model": "Flow Omni 1.2 Flash",
+        "role": "",
+        "settings": ""
+      }
+    ],
+    "ai_label": "always",
+    "text": {
+      "en": "Generated with AI: Google Flow Omni 1.2 Flash Synthetic characters: faces and voices are AI-generated.",
+      "vi": "Tạo bằng AI: Google Flow Omni 1.2 Flash Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra."
+    }
+  },
+  "credits": {
+    "characters": [
+      "IRIS",
+      "HAL"
+    ],
+    "sound_attributions": [],
+    "fiction_line": "A work of fiction. All characters are fictional."
+  },
+  "runtime_s": 75.749998,
+  "versions": [
+    {
+      "name": "master_16x9",
+      "file": "films\\film05_one_cup\\media\\cut\\mixed.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": 24.0,
+      "sha256": "4dd3ff907e522ecb5e5089bdabe6ea4b590577de4d8a0d40aa014c2a68d26370"
+    },
+    {
+      "name": "portrait_9x16",
+      "file": "versions/film05_one_cup_9x16.mp4",
+      "width": 720,
+      "height": 1280,
+      "fps": 24.0,
+      "sha256": "7579c1050ffcebc6a0b5cf897fe08637ae006a1a990e87b3a6aba78c41f732bf",
+      "upscale": 1.78,
+      "ai_label": {
+        "text": "AI-generated",
+        "start_s": 3.0,
+        "end_s": 71.749998,
+        "x": 24,
+        "y": 1020
+      },
+      "source": "clean",
+      "cues_relaid": 9
+    }
+  ],
+  "platform_note": "set the platform's own AI / synthetic-content label at upload; nothing was published",
+  "thumbnails": [
+    "versions/thumbs/thumb_01.jpg"
+  ]
+}

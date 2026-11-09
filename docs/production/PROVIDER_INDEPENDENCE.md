@@ -210,3 +210,15 @@ Built 2026-11-09 in worktree `AFP-provider-a`. Waits for the Owner's word after 
   - gate3 preflight (`generability_issues`) still rates with the Flow default; only `generate` uses the routed model.
 
 Phase B answers the native audio question. If H3 is silent, it is routed to non-dialogue shots until a TTS and lip-sync stage is decided. That stage is a product decision for the Owner.
+
+## Phase B log
+
+**2026-11-09, probe 1.** Request: SC03_g2 start frame plus its compiled prompt, sent as an OpenAI-shape multipart POST.
+- Fields: `model=h3-480p`, `prompt`, `seconds=6`, `size=864x480`, `input_reference=<jpg>`.
+- Key check: `GET /v1/models` lists `h3-480p` with options `seconds 5–15` and `sizes 864x480 | 480x864`, at 4158 VND per request.
+- Both sends were refused at create with **HTTP 401**, and no task was created:
+  - seller endpoint `/p/omh3/v1/videos`: "Registered platform buyer identity is required";
+  - gateway endpoint `/v1/videos`: the same text, reported as an "upstream provider" error.
+- Reading: the seller requires a buyer identity that this Vilao account has not registered. This is an account-side step, not a request-format issue.
+- **Blocked on the Owner**: account identity verification, or ask Vilao/seller support.
+- Probe script (outside the repo): scratchpad `vilao_probe.py`.

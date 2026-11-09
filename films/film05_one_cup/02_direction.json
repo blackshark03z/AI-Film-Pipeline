@@ -1,0 +1,110 @@
+{
+  "vision": {
+    "tone": "Quiet, plain, close: two people at a kitchen table, the feeling carried by looks and one cup of tea, never by a speech.",
+    "references": [
+      "a small kitchen at dawn seen at eye level, blue window light against a warm lamp",
+      "a low-key family drama played in pauses and glances"
+    ]
+  },
+  "visual_rules": [
+    {"rule": "Eye-level static camera, no dutch angles, no handheld shake.", "why": "The turn comes from the father's face, not from the camera."},
+    {"rule": "Keep Iris screen-left and Hal screen-right in every shot of the kitchen.", "why": "The table stays the distance between them and the cut never flips who is where."},
+    {"rule": "Nobody touches the key or the mugs on screen.", "why": "Hands on small props are the least reliable thing the video model does; the props tell the story by lying still."},
+    {"rule": "Hold on the listener after a line lands.", "why": "The drama is how each takes the other's words."}
+  ],
+  "reveals": [
+    {"fact_id": "hal_made_tea", "scene_id": "SC04"}
+  ],
+  "coverage_plan": {
+    "B1": ["MASTER", "SINGLE"],
+    "B2": ["OTS", "SINGLE"],
+    "B3": ["SINGLE", "OTS"],
+    "B4": ["SINGLE", "REACTION"],
+    "B5": ["SINGLE"],
+    "B6": ["MASTER"]
+  },
+  "scenes": {
+    "SC01": {
+      "pov": {"whose": "IRIS", "audience_knows": ["key_returned"], "characters_know": {"IRIS": ["key_returned"], "HAL": ["key_returned"]}},
+      "emphasis": [],
+      "curve": {"IRIS": {"start": 2, "end": 2}, "HAL": {"start": 2, "end": 2}},
+      "pacing": {"target_avg_shot_s": 7.5, "holds": [{"generation_id": "SC01_g2", "seconds": 2.0, "why": "hold on Iris after 'Properly' before her father answers"}]},
+      "transition_in": {"kind": "CUT", "reason": "title card, then a hard cut into the kitchen"},
+      "transition_out": {"kind": "CUT", "reason": "continuous time in the kitchen"}
+    },
+    "SC02": {
+      "pov": {"whose": "HAL", "audience_knows": ["key_returned", "moving_to_lisbon"], "characters_know": {"IRIS": ["key_returned", "moving_to_lisbon"], "HAL": ["key_returned"]}},
+      "emphasis": [],
+      "curve": {"IRIS": {"start": 2, "end": 3}, "HAL": {"start": 2, "end": 3}},
+      "pacing": {"target_avg_shot_s": 7.0, "holds": [{"generation_id": "SC02_g2", "seconds": 2.0, "why": "hold on Iris after 'I start Monday'"}]},
+      "transition_in": {"kind": "CUT", "reason": "continuous time in the kitchen"},
+      "transition_out": {"kind": "CUT", "reason": "continuous time in the kitchen"}
+    },
+    "SC03": {
+      "pov": {"whose": "IRIS", "audience_knows": ["key_returned", "moving_to_lisbon", "mother_came_back"], "characters_know": {"IRIS": ["moving_to_lisbon", "mother_came_back"], "HAL": ["moving_to_lisbon", "mother_came_back"]}},
+      "emphasis": [],
+      "curve": {"IRIS": {"start": 3, "end": 4}, "HAL": {"start": 3, "end": 4}},
+      "pacing": {"target_avg_shot_s": 8.0, "holds": [{"generation_id": "SC03_g2", "seconds": 2.5, "why": "hold on Iris after 'I'm not her, Dad'"}]},
+      "transition_in": {"kind": "CUT", "reason": "continuous time in the kitchen"},
+      "transition_out": {"kind": "CUT", "reason": "continuous time in the kitchen"}
+    },
+    "SC04": {
+      "pov": {"whose": "HAL", "audience_knows": ["moving_to_lisbon", "mother_came_back", "keep_the_key", "hal_made_tea"], "characters_know": {"HAL": ["keep_the_key", "hal_made_tea"], "IRIS": ["keep_the_key"]}},
+      "emphasis": [{"moment": "the brass key lies beside a second white mug with steam rising from it", "device": "insert", "generation_id": "SC04_g2", "fact_id": "hal_made_tea"}],
+      "curve": {"IRIS": {"start": 4, "end": 3}, "HAL": {"start": 4, "end": 2}},
+      "pacing": {"target_avg_shot_s": 6.0, "holds": [{"generation_id": "SC04_g1", "seconds": 3.0, "why": "Hal's long look at the key before he speaks"}]},
+      "transition_in": {"kind": "CUT", "reason": "continuous time in the kitchen"},
+      "transition_out": {"kind": "CUT", "reason": "continuous time in the kitchen"}
+    },
+    "SC05": {
+      "pov": {"whose": "IRIS", "audience_knows": ["keep_the_key", "hal_made_tea"], "characters_know": {"IRIS": ["keep_the_key", "hal_made_tea"], "HAL": ["hal_made_tea"]}},
+      "emphasis": [],
+      "curve": {"IRIS": {"start": 3, "end": 3}, "HAL": {"start": 2, "end": 2}},
+      "pacing": {"target_avg_shot_s": 6.0, "holds": [{"generation_id": "SC05_g1", "seconds": 2.0, "why": "her look from the key to the mug before she speaks"}]},
+      "transition_in": {"kind": "CUT", "reason": "continuous time in the kitchen"},
+      "transition_out": {"kind": "CUT", "reason": "continuous time in the kitchen"}
+    },
+    "SC06": {
+      "pov": {"whose": "HAL", "audience_knows": ["keep_the_key", "hal_made_tea"], "characters_know": {"IRIS": ["keep_the_key", "hal_made_tea"], "HAL": ["keep_the_key", "hal_made_tea"]}},
+      "emphasis": [],
+      "curve": {"IRIS": {"start": 3, "end": 2}, "HAL": {"start": 2, "end": 1}},
+      "pacing": {"target_avg_shot_s": 9.0, "holds": [{"generation_id": "SC06_g1", "seconds": 2.5, "why": "the two of them at the table after Hal nods"}]},
+      "transition_in": {"kind": "CUT", "reason": "continuous time in the kitchen"},
+      "transition_out": {"kind": "CUT", "reason": "end of the film, cut to the end card"}
+    }
+  },
+  "comprehension": {
+    "intros": [
+      {"character": "HAL", "label": "HAL BRENNAN", "relation": "her father", "needed_by": "SC01_g1", "carriers": []},
+      {"character": "IRIS", "label": "IRIS BRENNAN", "relation": "his daughter", "needed_by": "SC01_g2", "carriers": []}
+    ],
+    "facts": [
+      {"fact_id": "key_returned", "text": "Iris has brought back the spare key to her father's house", "needed_by": "SC01_g1", "carriers": [{"kind": "VISUAL", "generation_id": "SC01_g1", "detail": "the brass key on the table in front of her and Hal's look at it"}, {"kind": "DIALOGUE", "generation_id": "SC01_g1", "detail": "You could have posted it."}]},
+      {"fact_id": "moving_to_lisbon", "text": "Iris is moving to Lisbon for a job that starts Monday", "needed_by": "SC03_g1", "carriers": [{"kind": "DIALOGUE", "generation_id": "SC02_g2", "detail": "Lisbon. A real job. I start Monday."}]},
+      {"fact_id": "mother_came_back", "text": "Iris's mother once left for Leeds and came back", "needed_by": "SC04_g1", "carriers": [{"kind": "DIALOGUE", "generation_id": "SC03_g1", "detail": "Your mother said that about Leeds."}, {"kind": "DIALOGUE", "generation_id": "SC03_g2", "detail": "And she came back."}]},
+      {"fact_id": "keep_the_key", "text": "Hal tells Iris to keep the key", "needed_by": "SC05_g1", "carriers": [{"kind": "DIALOGUE", "generation_id": "SC04_g1", "detail": "Keep the key. The lock never changed."}]},
+      {"fact_id": "hal_made_tea", "text": "Hal made Iris a cup of tea before she arrived", "needed_by": "SC05_g1", "carriers": [{"kind": "VISUAL", "generation_id": "SC04_g2", "detail": "the second white mug steaming beside the key"}, {"kind": "DIALOGUE", "generation_id": "SC05_g1", "detail": "You made me tea."}]}
+    ],
+    "tags": [
+      {"character": "HAL", "generation_id": "SC01_g1", "start_s": 0.3, "end_s": 3.3, "anchor_x": null, "anchor_y": null},
+      {"character": "IRIS", "generation_id": "SC01_g2", "start_s": 0.2, "end_s": 3.2, "anchor_x": null, "anchor_y": null}
+    ],
+    "cards": []
+  },
+  "translations": {
+    "ONE CUP": "MỘT TÁCH TRÀ",
+    "her father": "bố cô",
+    "his daughter": "con gái ông",
+    "You could have posted it.": "Con gửi bưu điện cũng được mà.",
+    "I wanted to say goodbye, Dad. Properly.": "Con muốn chào bố. Cho đàng hoàng.",
+    "Where is it this time?": "Lần này là đi đâu?",
+    "Lisbon. A real job. I start Monday.": "Lisbon. Một công việc thật sự. Thứ Hai con bắt đầu.",
+    "Your mother said that about Leeds.": "Mẹ con cũng từng nói thế về Leeds.",
+    "And she came back. I'm not her, Dad.": "Và mẹ đã quay về. Con không phải mẹ, bố ạ.",
+    "Keep the key. The lock never changed.": "Giữ lấy chìa. Ổ khóa chưa bao giờ đổi.",
+    "You made me tea.": "Bố pha trà cho con.",
+    "One cup. Then I go.": "Một tách thôi. Rồi con đi.",
+    "A short drama. All characters are fictional.": "Phim ngắn. Mọi nhân vật đều là hư cấu.",
+    "Video, images and voices generated with AI.": "Video, hình ảnh và giọng nói được tạo bằng AI."
+  }
+}

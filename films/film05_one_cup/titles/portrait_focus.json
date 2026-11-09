@@ -1,0 +1,15 @@
+{
+  "note": "9:16 window centre per event (x, fraction of the 16:9 width) on the speaker's face, read from the rough-cut contact sheet (frame at 60% of each event) by agent:tech-lead.delegated-by.owner-khoikk03, 2026-11-09. The window is 0.32 of the width.",
+  "events": {
+    "SC01_g1": 0.7,
+    "SC01_g2": 0.33,
+    "SC02_g1": 0.7,
+    "SC02_g2": 0.33,
+    "SC03_g1": 0.72,
+    "SC03_g2": 0.31,
+    "SC04_g1": 0.73,
+    "SC04_g2": 0.55,
+    "SC05_g1": 0.31,
+    "SC06_g1": 0.3
+  }
+}

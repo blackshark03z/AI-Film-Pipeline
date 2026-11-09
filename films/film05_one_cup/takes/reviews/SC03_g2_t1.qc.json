@@ -1,0 +1,140 @@
+{
+  "take_id": "SC03_g2_t1",
+  "generation_id": "SC03_g2",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:36": "yes, IRIS faces HAL frame-right and speaks line 36 to him"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HAL": "yes, HAL's white hair and navy cardigan shoulder fill the near frame-right for the whole clip",
+        "REL_GAZE": "yes, eyes on HAL, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send NO_VIDEO_UNDER_TILE, clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC03_g2_t1.jpg + Vosk STT 'and she came back i'm not her dad' 1.2-3.9 s, 8.0 s, -25.9 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:36",
+    "REL_LISTENER:HAL",
+    "REL_GAZE"
+  ],
+  "output_sha256": "65db7e855c8ab7f83d05f3f4d433e5018934e2b84975b705a65d014d16625a4f"
+}

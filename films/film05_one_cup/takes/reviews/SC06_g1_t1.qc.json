@@ -1,0 +1,140 @@
+{
+  "take_id": "SC06_g1_t1",
+  "generation_id": "SC06_g1",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:59": "yes, IRIS seated frame-left faces HAL and says line 59 to him"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HAL": "yes, HAL seated frame-right for the whole clip",
+        "REL_GAZE": "yes, IRIS looks at HAL in profile, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "sit-down reads in one move 1-2.5 s; HAL's nod is small",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "delegated review under OWNER_POLICY.md (Owner: 'Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình'; 'Bắt đầu film05'); flow_send AMBIGUOUS (video count 37->45), clip recovered by flow_reconcile --download; 8-frame contact sheet sheet_SC06_g1_t1.jpg + Vosk STT 'one cup then i go' 3.7-5.2 s, 8.0 s, -29.4 LUFS",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:59",
+    "REL_LISTENER:HAL",
+    "REL_GAZE"
+  ],
+  "output_sha256": "0eb62cd0372b0e2ca0c35babcdfd1ec4d518bd751dfc911850c762a93a8d17bc"
+}

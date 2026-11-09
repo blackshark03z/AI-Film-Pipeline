@@ -1,0 +1,121 @@
+{
+  "film_id": "film05_one_cup",
+  "ok": true,
+  "engine": "vosk-small-en-us-0.15",
+  "rows": [
+    {
+      "event_id": "SC01_g1",
+      "line_no": 15,
+      "character": "HAL",
+      "expected": "You could have posted it.",
+      "heard": "you could have posted it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g2",
+      "line_no": 18,
+      "character": "IRIS",
+      "expected": "I wanted to say goodbye, Dad. Properly.",
+      "heard": "i wanted to say goodbye dad properly",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g1",
+      "line_no": 23,
+      "character": "HAL",
+      "expected": "Where is it this time?",
+      "heard": "where is it this time",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g2",
+      "line_no": 26,
+      "character": "IRIS",
+      "expected": "Lisbon. A real job. I start Monday.",
+      "heard": "lisbon a real job i start monday",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g1",
+      "line_no": 33,
+      "character": "HAL",
+      "expected": "Your mother said that about Leeds.",
+      "heard": "your mother said that about leads",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g2",
+      "line_no": 36,
+      "character": "IRIS",
+      "expected": "And she came back. I'm not her, Dad.",
+      "heard": "and she came back i'm not her dad",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g1",
+      "line_no": 43,
+      "character": "HAL",
+      "expected": "Keep the key. The lock never changed.",
+      "heard": "keep the key the lock never changed",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g1",
+      "line_no": 52,
+      "character": "IRIS",
+      "expected": "You made me tea.",
+      "heard": "you made me t",
+      "source": "stem",
+      "recall": 0.75,
+      "missing": [
+        "tea"
+      ],
+      "verdict": "WARN"
+    },
+    {
+      "event_id": "SC06_g1",
+      "line_no": 59,
+      "character": "IRIS",
+      "expected": "One cup. Then I go.",
+      "heard": "one cup then i go",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    }
+  ],
+  "problems": [
+    {
+      "code": "DIALOGUE_STT_MISMATCH",
+      "severity": "WARN",
+      "detail": "SC05_g1 line 52: heard 'you made me t' for 'You made me tea.' (missing: tea)"
+    }
+  ],
+  "summary": {
+    "lines": 9,
+    "pass": 8,
+    "warn": 1,
+    "mean_recall": 0.972
+  }
+}
