@@ -743,6 +743,7 @@ async def run(args) -> dict:
 
         probe = prompt[:30]
         new: set[str] = set()
+        failed_seen = False
         while time.time() - t0 < args.timeout:
             await page.wait_for_timeout(10000)
             await page.evaluate(JS_TOP)
@@ -751,8 +752,10 @@ async def run(args) -> dict:
                 "(p) => document.body.innerText.includes(p)", probe)
             job = await page.evaluate(JS_JOB_STATE)
             if job["failed"] > failed_before:
-                rec["result"], rec["elapsed_s"] = "FLOW_FAILED", round(time.time() - t0)
-                return rec
+                # a failed tile is page-wide: it may be an older job. Stop waiting, but only call this send
+                # FLOW_FAILED when no new clip can be bound to its prompt (Codex review 2026-11-09)
+                failed_seen = True
+                break
             # film04: binding at 18 s while the new tile still read "47%" gave UNBOUND; wait for the job to end
             pending = pending or job["running"]
             if new and not pending:
@@ -767,6 +770,9 @@ async def run(args) -> dict:
             entry["has_prompt"] = prompt[:30] in body or json.dumps(prompt[:30])[1:-1] in body
             entry["has_new_token"] = any(t in body for t in new)
         rec["net_trace"] = trace
+        if not new and failed_seen:
+            rec["result"] = "FLOW_FAILED"
+            return rec
         if not new:
             tail = await page.evaluate(
                 "document.body.innerText.slice(0, 1500)")

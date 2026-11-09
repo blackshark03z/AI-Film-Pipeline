@@ -74,7 +74,13 @@ def test_the_causing_action_clears_it(tmp_path):
 
 
 
-def test_prop_change_with_nobody_doing_it_blocks(tmp_path):
+@pytest.mark.parametrize("text", [
+    "the letter falls into the waste bin",
+    # Codex review 2026-11-09: the actor must be in the sentence that changes the prop, as a whole word, not a possessive
+    "the letter falls into the waste bin. NORA looks away",
+    "the letter falls into a panorama of the waste bin",
+    "her letter falls into the waste bin"])
+def test_prop_change_with_nobody_doing_it_blocks(tmp_path, text):
     # film04 SC04_g3: "below the frame edge the jar goes over" named the jar but no hand; the model staged an
     # accident where the script meant THEO pouring the coins out. The causing phase must name who does it.
     def teleport(pre):
@@ -82,7 +88,7 @@ def test_prop_change_with_nobody_doing_it_blocks(tmp_path):
             pre["states"][state]["props"][LETTER] = "crumpled, in the waste bin"
 
     def agentless(shots):
-        gen(shots, "SC01_g1")["choreography"]["phases"][2]["description"] = "the letter falls into the waste bin"
+        gen(shots, "SC01_g1")["choreography"]["phases"][2]["description"] = text
     found = issues(clone(tmp_path, pre=teleport, shots=agentless), False)
     hit = [i for i in found if i.check == "OBJECT_NO_AGENT"]
     assert hit and hit[0].severity == "BLOCK" and "SC01_g1" in hit[0].detail

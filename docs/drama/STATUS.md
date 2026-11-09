@@ -58,3 +58,13 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   grade/titles/mix, mastercheck PASS (-14.7 LUFS, sync PASS), deliver ok (86.7 s); old delivery kept as
   delivery.superseded-20261109T014451541729Z. Ledger ~231/256.8 cr. Open items unchanged (9:16 centre crop,
   SFX_UNSOURCED, VI SRT credit line, no STT, RIGHTS_PENDING).
+- Codex gpt-6.1-sol review of the 2026-11-09 code (read-only), all 5 findings fixed:
+  (1) flow_send: a page-wide "Không thành công" no longer ends the send as FLOW_FAILED; it stops the wait and the send is
+  FLOW_FAILED only if no new clip binds to its prompt (no offline test: needs a live Flow page);
+  (2) generate: FLOW_FAILED sends skip the RED attempt count but still spend the exception's max_credits;
+  (3+4) continuity OBJECT_NO_AGENT checks the sentence that changes the prop, cast names as whole words, no possessives;
+  (5) an `agent:` reviewer must be listed in film.json `delegated_reviewers` (with the Owner's words) or ingest refuses.
+- film04 polish: VI SRT title line "Generated with AI" -> "Tạo bằng AI" (titles.t_title translated only the name and hid
+  other title lines; now uses LABELS or reports TRANSLATION_MISSING); 9:16 window per shot from titles/portrait_focus.json
+  (new, moves only the 9:16 crop), set from a contact sheet. Re-delivered. Still open: burned 16:9 subtitles are cut in
+  the 9:16 (PORTRAIT_BURNED_TEXT, needs cues re-laid for 9:16), SFX_UNSOURCED, no STT, RIGHTS_PENDING.

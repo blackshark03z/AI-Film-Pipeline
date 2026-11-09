@@ -1,9 +1,9 @@
 {
   "delivery": {
     "manifest": "delivery/MANIFEST.json",
-    "manifest_sha256": "8286a927aa574293abfcf7109698d07fa9755bb26c19a425659e0bf1919fb5ce",
+    "manifest_sha256": "e0fb355f8eae031cc8c6cd42469ff6fc96967a0586d589c1cbd6088181f03967",
     "release_ready": false,
-    "files": 33,
+    "files": 34,
     "ai_label": "always",
     "locked_against": "f0a499fa50bd1d14da2ad872fe3f6edbe0d72bfa3b879069e539e4cc7cbba3ae"
   }

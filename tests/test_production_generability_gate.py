@@ -164,6 +164,10 @@ def test_spent_exception_is_refused(tmp_path):
     pre_submit = film(tmp_path / "c", RED_TEXT, generability_exception=exception(max_attempts=1))
     sent(pre_submit, 1, result="START_NOT_FOUND")  # nothing was submitted: not an attempt
     assert dry(pre_submit, tmp_path / "c")[1] == []
+    # Codex review 2026-11-09: a FLOW_FAILED send is not an attempt but was charged: it spends the credit allowance
+    failed = film(tmp_path / "d", RED_TEXT, generability_exception=exception(max_attempts=3, max_credits=12))
+    sent(failed, 1, result="FLOW_FAILED")  # 8 charged + 8 more > 12
+    assert dry(failed, tmp_path / "d")[1] == ["EXCEPTION_SPENT"]
 
 
 def test_unknown_allows_one_send_then_the_cap(tmp_path):

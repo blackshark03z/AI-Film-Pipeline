@@ -58,6 +58,15 @@ class DisclosureSettings(ContractModel):
     ai_label: Literal["always", "title_card"] = "always"
 
 
+class DelegatedReviewer(ContractModel):
+    """`film.json` `delegated_reviewers`: an `agent:` reviewer the Owner let judge content for this film, with the words that
+    granted it. A review signed `agent:...` that is not listed here is refused at ingest (Codex review 2026-11-09)."""
+
+    reviewer: str = Field(pattern=r"^agent:[A-Za-z0-9_.\-]+$")
+    owner_words: str = Field(min_length=1)
+    granted: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
+
+
 class FilmHeader(ContractModel):
     """Contents of `film.json`."""
 
@@ -71,6 +80,7 @@ class FilmHeader(ContractModel):
     generation_s: int = Field(default=8, gt=0)
     budget: Budget = Field(default_factory=Budget)
     disclosure: DisclosureSettings = Field(default_factory=DisclosureSettings)
+    delegated_reviewers: list[DelegatedReviewer] = Field(default_factory=list)
     rehearsal: bool = False  # offline dress rehearsal copy (production/rehearsal.py): synthetic footage, never releasable
     gates: dict[str, GateState] = Field(default_factory=lambda: {k: "NOT_RUN" for k in GATE_NAMES})
 

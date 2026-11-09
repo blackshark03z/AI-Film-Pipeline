@@ -45,6 +45,23 @@ def refuse_bot(film_root: Path, *names: str) -> None:
                          f"a real review needs a named person")
 
 
+def refuse_undelegated(film_root: Path, *names: str) -> None:
+    """Raise ``ValueError`` if an ``agent:`` reviewer is not in ``film.json`` ``delegated_reviewers``: an agent may judge
+    content only where the Owner delegated it, never by naming itself."""
+    agents = {str(n) for n in names if str(n).startswith("agent:")}
+    if not agents:
+        return
+    try:
+        listed = json.loads((Path(film_root) / "film.json").read_text(encoding="utf-8")).get("delegated_reviewers") or []
+    except (OSError, ValueError, AttributeError):
+        listed = []
+    allowed = {d.get("reviewer") for d in listed if isinstance(d, dict)}
+    unknown = sorted(agents - allowed)
+    if unknown:
+        raise ValueError(f"{', '.join(unknown)} is not a delegated reviewer of this film (film.json delegated_reviewers); "
+                         f"only the Owner grants that")
+
+
 # ------------------------------------------------------------------ mock runner
 
 def mock_runner(argv: list[str], out: Path) -> dict[str, Any]:

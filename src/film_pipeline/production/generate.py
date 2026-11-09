@@ -257,7 +257,11 @@ def _generability_gate(decl: Any, sent: dict[str, dict[str, Any]], log: Any, pro
                                          f"{exc.prompt_sha256[:12]}; this is v{decl.version} prompt {prompt_sha[:12]}"))
             if today > exc.expires:
                 blockers.append(_blocker("EXCEPTION_EXPIRED", f"the exception expired on {exc.expires}"))
-            used = sum(float(r.get("expected_credits") or 0) for r in here)
+            # FLOW_FAILED sends do not use an attempt but were charged: they still spend the exception's credits
+            charged = [r for tid, r in sent.items() if r.get("generation_id", tid.rsplit("_t", 1)[0]) == gid
+                       and r.get("shot_version", 1) == decl.version
+                       and not str(r.get("result") or "").startswith(PRE_SUBMIT_RESULTS)]
+            used = sum(float(r.get("expected_credits") or 0) for r in charged)
             if len(here) >= exc.max_attempts or used + cost > exc.max_credits:
                 blockers.append(_blocker("EXCEPTION_SPENT", f"{len(here)}/{exc.max_attempts} sends, {used:g} + {cost:g} "
                                          f"credits vs {exc.max_credits:g}"))

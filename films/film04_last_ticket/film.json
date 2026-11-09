@@ -11,6 +11,13 @@
     "credits_estimate": 171.2,
     "cap_factor": 1.5
   },
+  "delegated_reviewers": [
+    {
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "owner_words": "Bạn tự duyệt still, board và take (ký là agent:tech-lead, ủy quyền của mình), được gửi 360p Omni Flash, hỏi ChatGPT khi cần cố vấn, đừng dừng để hỏi mình",
+      "granted": "2026-11-09"
+    }
+  ],
   "gates": {
     "1": "NOT_RUN",
     "2": "NOT_RUN",

@@ -22,6 +22,13 @@ def film(*args):
     return done.returncode, json.loads(done.stdout)
 
 
+def blank_clone(tmp_path):
+    """film04 with its EDL emptied: the real film04 has an assembled 05_edit.json since 7aee958; a draft needs a blank one."""
+    root = clone(tmp_path)
+    (root / "05_edit.json").write_text("{}", encoding="utf-8")
+    return root
+
+
 def accept(root, upto):
     pkg = load_package(root)
     for entry in register_all(root, pkg, upto=upto):
@@ -30,7 +37,7 @@ def accept(root, upto):
 
 
 def test_edit_draft_takes_the_latest_accepted_take_per_generation_in_shot_order(tmp_path):
-    root = clone(tmp_path)
+    root = blank_clone(tmp_path)
     pkg = accept(root, 3)
     gids = [d.generation_id for d in pkg.typed["shots"].generations]
     draft = DR.edit_draft(pkg)
@@ -41,7 +48,7 @@ def test_edit_draft_takes_the_latest_accepted_take_per_generation_in_shot_order(
 
 
 def test_edit_draft_skips_rejected_and_older_shot_versions_and_picks_the_newest_accepted(tmp_path):
-    root = clone(tmp_path)
+    root = blank_clone(tmp_path)
     pkg = accept(root, 1)
     gid = pkg.typed["shots"].generations[0].generation_id
     clip = root / "media" / "takes" / "second.mp4"
@@ -61,9 +68,9 @@ def test_edit_draft_skips_rejected_and_older_shot_versions_and_picks_the_newest_
 
 
 def test_edit_draft_never_overwrites_a_real_edl_but_replaces_an_empty_one(tmp_path):
-    root = clone(tmp_path)
+    root = blank_clone(tmp_path)
     pkg = accept(root, 1)
-    assert (root / "05_edit.json").read_text(encoding="utf-8").strip() in ("{}", "")  # film04 ships a blank EDL
+    assert (root / "05_edit.json").read_text(encoding="utf-8").strip() in ("{}", "")  # blank_clone empties the EDL
     assert DR.edit_draft(pkg)["events"]
     (root / "05_edit.json").write_text(json.dumps({"events": [{"event_id": "a", "take_id": "X_g1_t1"}]}), encoding="utf-8")
     with pytest.raises(ValueError, match="already has events"):
@@ -74,10 +81,10 @@ def test_edit_draft_never_overwrites_a_real_edl_but_replaces_an_empty_one(tmp_pa
 
 
 def test_cli_edit_init_writes_a_valid_edl_whose_title_carries_the_ai_label(tmp_path):
-    root = clone(tmp_path)
+    root = blank_clone(tmp_path)
     accept(root, 2)
     code, body = film("edit", "--film", str(root), "--init")
-    assert code == 0 and body["events"] == 2 and len(body["missing_takes"]) == 10
+    assert code == 0 and body["events"] == 2 and len(body["missing_takes"]) == 13  # 15 generations since P16-07b
     written = json.loads((root / "05_edit.json").read_text(encoding="utf-8"))
     assert "missing" not in written  # the report is not part of the EDL (extra keys are forbidden)
     section = load_package(root).typed["edit"]
@@ -87,7 +94,7 @@ def test_cli_edit_init_writes_a_valid_edl_whose_title_carries_the_ai_label(tmp_p
 
 
 def test_generators_draft_names_the_video_tool_from_the_takes_and_the_image_tool_from_the_stills(tmp_path):
-    root = clone(tmp_path)
+    root = blank_clone(tmp_path)
     accept(root, 1)
     records = DR.generators_draft(load_package(root))
     assert records == [{"role": "video+audio", "name": "r", "model": "m", "settings": "r"}]
@@ -97,7 +104,7 @@ def test_generators_draft_names_the_video_tool_from_the_takes_and_the_image_tool
 
 def test_generators_draft_adds_the_image_tool_of_registered_stills(tmp_path):
     from film_pipeline.production import stills as S
-    root = clone(tmp_path)
+    root = blank_clone(tmp_path)
     pkg = accept(root, 1)
     gid = pkg.typed["shots"].generations[0].generation_id
     PIL = pytest.importorskip("PIL.Image")
@@ -110,7 +117,7 @@ def test_generators_draft_adds_the_image_tool_of_registered_stills(tmp_path):
 
 
 def test_generators_draft_refuses_when_nothing_names_a_tool_and_never_overwrites(tmp_path):
-    root = clone(tmp_path)
+    root = blank_clone(tmp_path)
     with pytest.raises(ValueError, match="no take and no registered still"):
         DR.generators_draft(load_package(root))
     accept(root, 1)

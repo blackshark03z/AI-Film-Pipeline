@@ -77,12 +77,19 @@ def _names_character(texts: list[str], who: str) -> bool:
     return any(who.lower() in t for t in texts)
 
 
-# a person doing the change: a cast name, a pronoun ("she lays the letter") or a role noun ("the woman pours ...")
-_AGENT_WORDS = {"he", "she", "they", "his", "her", "their", "woman", "man", "girl", "boy", "someone"}
+# a person doing the change: a cast name, a subject pronoun ("she lays the letter") or a role noun ("the woman pours
+# ..."). Possessives are not agents: "her letter falls into the bin" names nobody doing it.
+_AGENT_WORDS = {"he", "she", "they", "woman", "man", "girl", "boy", "someone"}
 
 
 def _names_agent(text: str, cast: set[str]) -> bool:
-    return any(c in text for c in cast) or bool(_AGENT_WORDS & set(re.findall(r"[a-z]+", text)))
+    words = set(re.findall(r"[a-z]+", text))
+    # whole words only: cast "nora" must not match "panorama"
+    return any(re.search("(?<![a-z])" + re.escape(c) + "(?![a-z])", text) for c in cast) or bool(_AGENT_WORDS & words)
+
+
+def _sentences(texts: list[str]) -> list[str]:
+    return [s.strip() for t in texts for s in re.split(r"[.;!?]+", t) if s.strip()]
 
 
 def _generation_changes(gid: str, decl: Any, start: ContinuityState, end: ContinuityState, cast: set[str],
@@ -103,8 +110,9 @@ def _generation_changes(gid: str, decl: Any, start: ContinuityState, end: Contin
             continue
         # film04 SC04_g3: "below the frame edge the jar goes over" named the jar but nobody doing it; the model
         # staged an accident (and once the woman's own pour) where the script meant THEO pouring the coins out.
-        # The phase that changes a prop must name who does it.
-        naming = [t for t in caused if _names_prop([t], _prop_name(key), before, after, cast)]
+        # The sentence that changes a prop must name who does it.
+        # per sentence: "the letter falls into the bin. nora looks away." names an actor, but not for the fall
+        naming = [t for t in _sentences(caused) if _names_prop([t], _prop_name(key), before, after, cast)]
         if not any(_names_agent(t, cast) for t in naming):
             _issue(out, "OBJECT_NO_AGENT", "BLOCK",
                    f"{gid}: {_prop_name(key)} {move}, but the phase that changes it names nobody doing it; "

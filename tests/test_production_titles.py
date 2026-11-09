@@ -10,7 +10,8 @@ import pytest
 from film_pipeline.production import sound_rights as S
 from film_pipeline.production import takes as T
 from film_pipeline.production import titles as TI
-from film_pipeline.production.edit import EditEvent, EditSection, Reframe, TagEvent, Transition, reframe_filter, render_cut
+from film_pipeline.production.edit import (EditEvent, EditSection, Reframe, TagEvent, TextLine, Transition, reframe_filter,
+                                           render_cut)
 from film_pipeline.production.package import load_package
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -200,6 +201,23 @@ def test_a_missing_translation_blocks_that_language_only(tmp_path):
     assert only_en["ok"]
     assert codes(TI.prepare(pkg, clips_dir=clips, langs=("de",)), "BLOCK") == ["LANGUAGE_UNSUPPORTED"]
 
+
+
+@needs_ffmpeg
+def test_title_lines_under_the_name_are_translated_or_reported(tmp_path):
+    # film04: the VI sidecar kept "Generated with AI" under the title in English and nothing reported it
+    root, clips = make_film(tmp_path, {"SC01_g1": {}})
+    title = [TextLine(text="The Front Desk", size=64), TextLine(text="Generated with AI", size=26)]
+    write_edl(root, EditSection(events=[ev("a", "SC01_g1")], title=title))
+    pkg = load_package(root)
+    report = TI.write_outputs(pkg, TI.prepare(pkg, clips_dir=clips))
+    assert report["ok"], report
+    vi = srt_blocks(Path(report["sidecars"]["vi"]))
+    assert vi[0][2].splitlines()[1] == "Tạo bằng AI"
+    write_edl(root, EditSection(events=[ev("a", "SC01_g1")], title=title[:1] + [TextLine(text="Nobody translated this")]))
+    pkg = load_package(root)
+    report = TI.write_outputs(pkg, TI.prepare(pkg, clips_dir=clips))
+    assert codes(report, "BLOCK") == ["TRANSLATION_MISSING"] and list(report["sidecars"]) == ["en"]
 
 # ------------------------------------------------------------------ reframe
 

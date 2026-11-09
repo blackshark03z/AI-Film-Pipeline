@@ -187,3 +187,17 @@ def test_a_tag_moves_the_crop_and_a_clean_source_drops_the_burned_text_warning(t
     assert seg["focus_source"] == "tag" and seg["crop_x"] > 700
     missing = run("versions", "--film", str(root), "--video", str(tmp_path / "none.mp4"))
     assert missing.returncode == 2
+
+
+def test_portrait_focus_moves_only_the_9x16_window(tmp_path):
+    # film04: every 9:16 segment was centred (PORTRAIT_FOCUS_UNKNOWN); a reviewer's x per event fixes it without a reframe
+    segs, problems = V.portrait_segments(PLAN, section(), {}, 1280, 720, 24.0, {"a": 0.8})
+    a = next(s for s in segs if s["event_id"] == "a")
+    assert a["focus_source"] == "portrait_focus" and a["focus"] == 0.8 and a["crop_x"] == 822  # 0.8 * 1280 - 404 / 2
+    assert "a" not in {p["detail"].split(":")[0] for p in problems}
+    (tmp_path / "titles").mkdir()
+    (tmp_path / "titles" / "portrait_focus.json").write_text('{"events": {"a": 0.3}}', encoding="utf-8")
+    assert V.load_portrait_focus(tmp_path) == {"a": 0.3}
+    (tmp_path / "titles" / "portrait_focus.json").write_text('{"events": {"a": 1.5}}', encoding="utf-8")
+    with pytest.raises(ValueError, match="0..1"):
+        V.load_portrait_focus(tmp_path)

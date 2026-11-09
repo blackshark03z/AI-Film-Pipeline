@@ -282,10 +282,18 @@ def sidecar_events(pkg: Any, section: EditSection, plan: dict[str, Any], rows: l
 
     title, _ = resolved_cards(pkg, section)
     start = {e["event_id"]: e["start_s"] for e in plan["events"]}
-    def t_title(text: str) -> str:   # the title is a name: an upper-case translation key counts, none is no error
-        return tr(text) or tr(text.upper()) or text
+    # the pipeline's own label strings (e.g. "Generated with AI" under the title) translate from LABELS
+    source = pkg.header.language
+    built_in = {LABELS[source][k]: LABELS[lang][k] for k in LABELS.get(source, {}) if k in LABELS.get(lang, {})}
 
-    events = [(0.0, section.title_s, "\n".join(t_title(x) for x, _ in title))]
+    def t_title(i: int, text: str) -> str:
+        # the first line is the film's name: an upper-case translation key counts, none is no error.
+        # Lines under it are ordinary text: film04's VI SRT kept "Generated with AI" in English unreported.
+        if i == 0:
+            return tr(text) or tr(text.upper()) or text
+        return built_in.get(text) or t(text)
+
+    events = [(0.0, section.title_s, "\n".join(t_title(i, x) for i, (x, _) in enumerate(title)))]
     for event, placed in zip(section.events, plan["events"]):
         if event.kind == "CARD":
             events.append((placed["start_s"], placed["end_s"], "\n".join(t(l) for l in event.card_lines)))

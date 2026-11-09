@@ -16,7 +16,7 @@
       "width": 720,
       "height": 1280,
       "fps": 24.0,
-      "sha256": "5a578fc2abe01747a3222770ea07fff5324a9ecfb7ea83a3d53aed84a9a2be9f",
+      "sha256": "a6a5694be55ea5bc9fa2bb88247e6977b788d5a9faa9f8503938bf9afbf1accd",
       "upscale": 1.78,
       "ai_label": {
         "text": "AI-generated",
@@ -41,9 +41,9 @@
           "end_frame": 167,
           "start_s": 3.0,
           "end_s": 6.958,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.55,
+          "focus_source": "portrait_focus",
+          "crop_x": 502,
           "crop_w": 404
         },
         {
@@ -54,7 +54,7 @@
           "start_s": 6.958,
           "end_s": 14.917,
           "focus": 0.5,
-          "focus_source": "center",
+          "focus_source": "portrait_focus",
           "crop_x": 438,
           "crop_w": 404
         },
@@ -65,9 +65,9 @@
           "end_frame": 477,
           "start_s": 14.917,
           "end_s": 19.875,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.52,
+          "focus_source": "portrait_focus",
+          "crop_x": 464,
           "crop_w": 404
         },
         {
@@ -77,9 +77,9 @@
           "end_frame": 669,
           "start_s": 19.875,
           "end_s": 27.875,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.4,
+          "focus_source": "portrait_focus",
+          "crop_x": 310,
           "crop_w": 404
         },
         {
@@ -89,9 +89,9 @@
           "end_frame": 813,
           "start_s": 27.875,
           "end_s": 33.875,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.45,
+          "focus_source": "portrait_focus",
+          "crop_x": 374,
           "crop_w": 404
         },
         {
@@ -101,9 +101,9 @@
           "end_frame": 957,
           "start_s": 33.875,
           "end_s": 39.875,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.63,
+          "focus_source": "portrait_focus",
+          "crop_x": 604,
           "crop_w": 404
         },
         {
@@ -114,7 +114,7 @@
           "start_s": 39.875,
           "end_s": 43.833,
           "focus": 0.5,
-          "focus_source": "center",
+          "focus_source": "portrait_focus",
           "crop_x": 438,
           "crop_w": 404
         },
@@ -125,9 +125,9 @@
           "end_frame": 1148,
           "start_s": 43.833,
           "end_s": 47.833,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.47,
+          "focus_source": "portrait_focus",
+          "crop_x": 400,
           "crop_w": 404
         },
         {
@@ -138,7 +138,7 @@
           "start_s": 47.833,
           "end_s": 51.833,
           "focus": 0.5,
-          "focus_source": "center",
+          "focus_source": "portrait_focus",
           "crop_x": 438,
           "crop_w": 404
         },
@@ -149,9 +149,9 @@
           "end_frame": 1340,
           "start_s": 51.833,
           "end_s": 55.833,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.48,
+          "focus_source": "portrait_focus",
+          "crop_x": 412,
           "crop_w": 404
         },
         {
@@ -162,7 +162,7 @@
           "start_s": 55.833,
           "end_s": 60.833,
           "focus": 0.5,
-          "focus_source": "center",
+          "focus_source": "portrait_focus",
           "crop_x": 438,
           "crop_w": 404
         },
@@ -173,9 +173,9 @@
           "end_frame": 1532,
           "start_s": 60.833,
           "end_s": 63.833,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.45,
+          "focus_source": "portrait_focus",
+          "crop_x": 374,
           "crop_w": 404
         },
         {
@@ -185,9 +185,9 @@
           "end_frame": 1651,
           "start_s": 63.833,
           "end_s": 68.792,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.42,
+          "focus_source": "portrait_focus",
+          "crop_x": 336,
           "crop_w": 404
         },
         {
@@ -205,9 +205,9 @@
           "end_frame": 1842,
           "start_s": 70.792,
           "end_s": 76.75,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.4,
+          "focus_source": "portrait_focus",
+          "crop_x": 310,
           "crop_w": 404
         },
         {
@@ -217,9 +217,9 @@
           "end_frame": 1985,
           "start_s": 76.75,
           "end_s": 82.708,
-          "focus": 0.5,
-          "focus_source": "center",
-          "crop_x": 438,
+          "focus": 0.58,
+          "focus_source": "portrait_focus",
+          "crop_x": 540,
           "crop_w": 404
         },
         {
@@ -264,81 +264,6 @@
   "metadata": "versions/metadata.json",
   "problems": [
     {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC01_g1: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC01_g2: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC02_g1: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC02_g2: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC03_g1: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC03_g2: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC04_g1: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC04_g2: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC04_g3: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC04_g4: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC05_g1: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC05_g2: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC05_g3: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC06_g1: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
-      "code": "PORTRAIT_FOCUS_UNKNOWN",
-      "severity": "WARN",
-      "detail": "SC06_g2: no tag or reframe says where the subject is; the crop is centred, check it"
-    },
-    {
       "code": "PORTRAIT_BURNED_TEXT",
       "severity": "WARN",
       "detail": "the master carries burned-in dialogue cues across the 16:9 frame; the 9:16 crop loses part of them (use --portrait-source with a clean cut or ship the sidecar SRTs)"
@@ -354,6 +279,6 @@
     "portrait_segments": 18,
     "thumbnails": 2,
     "blocks": 0,
-    "warnings": 17
+    "warnings": 2
   }
 }

@@ -3,7 +3,8 @@ platform compliance). Nothing here publishes anything: it writes files under ``v
 
 * **9:16 version** - cut from the 16:9 master, segment by segment on the master's own clock (``cut_report["planned"]``): a TAKE
   event is cropped to a 9:16 window of the frame centred on where the face is - the identity-tag anchor of the event when it has
-  tags, else the centre of its ``titles/reframe.json`` box, else the middle of the frame (``PORTRAIT_FOCUS_UNKNOWN``: nobody
+  tags, else its ``titles/portrait_focus.json`` x (``{"events": {event_id: x 0..1}}``, set by a reviewer looking at the
+  frame; it moves only the 9:16 window, never the 16:9 picture), else the centre of its ``titles/reframe.json`` box, else the middle of the frame (``PORTRAIT_FOCUS_UNKNOWN``: nobody
   has said where the subject is, a human checks it). Two tagged faces further apart than the window warn
   (``PORTRAIT_SPREAD``). Title, end card and CARD events cannot be cropped without losing words: they are fitted to the width
   on black. The sound is copied untouched. Burned-in cues sit across the whole 16:9 frame, so a crop loses part of them
@@ -61,7 +62,20 @@ def probe_size(video: Path) -> tuple[int, int, float]:
 
 # ------------------------------------------------------------------ 9:16
 
-def focus_for(event_id: str, section: Any, reframes: dict[str, Any], crop_frac: float) -> tuple[float, str, list[dict[str, Any]]]:
+def load_portrait_focus(root: Path) -> dict[str, float]:
+    """``titles/portrait_focus.json`` -> {event_id: x centre as a fraction of the frame width}; missing file -> {}."""
+    path = Path(root) / "titles" / "portrait_focus.json"
+    if not path.is_file():
+        return {}
+    events = json.loads(path.read_text(encoding="utf-8")).get("events", {})
+    bad = {k: v for k, v in events.items() if not isinstance(v, (int, float)) or not 0.0 <= v <= 1.0}
+    if bad:
+        raise ValueError(f"portrait_focus.json: x must be a number in 0..1: {bad}")
+    return {k: float(v) for k, v in events.items()}
+
+
+def focus_for(event_id: str, section: Any, reframes: dict[str, Any], crop_frac: float,
+              focus: dict[str, float] | None = None) -> tuple[float, str, list[dict[str, Any]]]:
     """(x centre as a fraction of the frame width, where it came from, problems)."""
     tags = [t for t in section.tags if t.event_id == event_id]
     if tags:
@@ -72,6 +86,8 @@ def focus_for(event_id: str, section: Any, reframes: dict[str, Any], crop_frac: 
                                      f"{event_id}: tagged faces span {max(xs) - min(xs):.2f} of the frame, the 9:16 window is "
                                      f"{crop_frac:.2f}: one of them is cut off"))
         return (max(xs) + min(xs)) / 2, "tag", problems
+    if focus and event_id in focus:
+        return focus[event_id], "portrait_focus", []
     box = reframes.get(event_id)
     if box is not None:
         return box.x + box.w / 2, "reframe", []
@@ -80,7 +96,7 @@ def focus_for(event_id: str, section: Any, reframes: dict[str, Any], crop_frac: 
 
 
 def portrait_segments(plan: dict[str, Any], section: Any, reframes: dict[str, Any], width: int, height: int, fps: float,
-                      ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+                      focus: dict[str, float] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Partition the master's clock into segments, each cropped around its focus or fitted. Frames, so the video keeps its length."""
     crop_w = int(height * 9 / 16) // 2 * 2
     crop_frac = crop_w / width
@@ -100,7 +116,7 @@ def portrait_segments(plan: dict[str, Any], section: Any, reframes: dict[str, An
         seg = {"event_id": event_id, "mode": mode, "start_frame": f0, "end_frame": f1,
                "start_s": round(f0 / fps, 3), "end_s": round(f1 / fps, 3)}
         if mode == "crop":
-            cx, source, found = focus_for(event_id, section, reframes, crop_frac)
+            cx, source, found = focus_for(event_id, section, reframes, crop_frac, focus)
             problems += found
             left = min(max(int(round(cx * width - crop_w / 2)), 0), width - crop_w) // 2 * 2
             seg.update(focus=round(cx, 3), focus_source=source, crop_x=left, crop_w=crop_w)
@@ -313,7 +329,7 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
     titles_path = ti.titles_dir(pkg.root) / "titles.json"
     titles_report = json.loads(titles_path.read_text(encoding="utf-8")) if titles_path.is_file() else None
     source = Path(portrait_source) if portrait_source else master
-    segments, found = portrait_segments(plan, section, reframes, width, height, fps)
+    segments, found = portrait_segments(plan, section, reframes, width, height, fps, load_portrait_focus(pkg.root))
     problems += found
     if titles_report and titles_report.get("cues") and portrait_source is None:
         problems.append(_problem("PORTRAIT_BURNED_TEXT", "WARN",

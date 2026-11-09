@@ -123,6 +123,24 @@ def test_ingest_accepts_a_fully_human_reviewed_take(tmp_path):
     assert T.load_log(pkg.root, pkg.header.film_id).get(entry.take_id).status == "ACCEPTED"
 
 
+
+def test_an_agent_reviewer_must_be_delegated_in_film_json(tmp_path):
+    # Codex review 2026-11-09: "agent:" was self-declared; any name could judge content and ACCEPT a take
+    import json
+    pkg = film(tmp_path)
+    entry, _ = register(pkg, tmp_path)
+    sheet = passing_review(T.dailies_template(pkg, entry))
+    for c in sheet["qc"]["checks"]:
+        c["reviewer"] = "agent:tech-lead.delegated-by.owner-khoikk03"
+    with pytest.raises(ValueError, match="not a delegated reviewer"):
+        T.ingest_review(pkg.root, pkg.header.film_id, json.loads(json.dumps(sheet)))
+    head = json.loads((pkg.root / "film.json").read_text(encoding="utf-8"))
+    head["delegated_reviewers"] = [{"reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+                                    "owner_words": "Bạn tự duyệt", "granted": "2026-11-09"}]
+    (pkg.root / "film.json").write_text(json.dumps(head, ensure_ascii=False), encoding="utf-8")
+    assert load_package(pkg.root).header.delegated_reviewers[0].owner_words == "Bạn tự duyệt"
+    assert T.ingest_review(pkg.root, pkg.header.film_id, sheet)["status"] == "ACCEPTED"
+
 def test_ingest_partial_and_rejecting_reviews_set_the_status(tmp_path):
     pkg = film(tmp_path)
     entry, _ = register(pkg, tmp_path)
