@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal
@@ -141,7 +142,7 @@ def register_take(film_root: Path, film_id: str, generation_id: str, clip: Path,
                 raise ValueError(f"these bytes are already take {existing.take_id} of {existing.generation_id}")
             return existing, False
     entry = TakeEntry(
-        take_id=f"{generation_id}_t{len(log.for_generation(generation_id)) + 1}", generation_id=generation_id,
+        take_id=next_take_id(log, generation_id, clip), generation_id=generation_id,
         prompt_sha256=sha256_text(prompt_text), start_frame_sha256=sha256_file(start_frame) if start_frame else "",
         route=route, model=model, credits=credits, output_file=clip.name, output_sha256=digest,
         shot_version=shot_version, registered_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -149,6 +150,26 @@ def register_take(film_root: Path, film_id: str, generation_id: str, clip: Path,
     log.takes.append(entry)
     save_log(film_root, log)
     return entry, True
+
+
+def next_take_id(log: TakeLog, generation_id: str, clip: Path) -> str:
+    """P18-02 (P17-06): a take is named after its send receipt, i.e. the clip's stem (``SC02_g2_t2.mp4`` -> take
+    ``SC02_g2_t2``), so a take id and a receipt id name the same send. A clip not named ``<generation>_t<n>`` or whose
+    stem is already a take id gets the next free number. Takes registered before this rule keep their ids
+    (film05 take SC02_g2_t1 = file SC02_g2_t2.mp4); ``receipt_id`` maps them."""
+    used = {t.take_id for t in log.takes}
+    stem = Path(clip).stem
+    if re.fullmatch(rf"{re.escape(generation_id)}_t\d+", stem) and stem not in used:
+        return stem
+    n = len(log.for_generation(generation_id)) + 1
+    while f"{generation_id}_t{n}" in used:
+        n += 1
+    return f"{generation_id}_t{n}"
+
+
+def receipt_id(entry: TakeEntry) -> str:
+    """The send receipt (intent / take manifest stem) a take came from: its output file's stem."""
+    return Path(entry.output_file).stem
 
 
 def bind_by_job_id(log: TakeLog, provider: str, provider_job_id: str) -> TakeEntry | None:

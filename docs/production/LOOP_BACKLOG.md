@@ -1012,9 +1012,13 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
   - Removed: `detail_bind`, `video_count` (count-based), token/network bind for videos.
 - **Tests:** `tests/test_flow_send_wait_p18.py` (6, replay film05 page states). Live proof in P18-06.
 
-### P18-02 (P17-06) Take id follows the receipt — OPEN
-- Take ids are numbered by register count (take SC02_g2_t1 = file SC02_g2_t2.mp4). The take id must follow the
-  receipt/file stem; historical film04/film05 takes keep their ids (a mapping, no renumbering).
+### P18-02 (P17-06) Take id follows the receipt — DONE (2026-11-09)
+- Take ids were numbered by register count (take SC02_g2_t1 = file SC02_g2_t2.mp4).
+- **Fix (`production/takes.py`):** `next_take_id` names a new take after its clip stem (= send receipt) when it is
+  `<generation>_t<n>` and free, else the next free number. `receipt_id(entry)` maps any take (old ones included) to
+  its receipt. Historical film04/film05 takes keep their ids; the ledger already matched by file stem.
+- **Tests:** `tests/test_production_takes.py` (`test_take_id_follows_the_receipt_stem_not_the_register_count`,
+  `test_historical_film05_takes_keep_their_ids_and_map_to_their_receipt`).
 
 ### P18-03 Provider-failure handling — OPEN
 - 3/13 film05 sends were Flow failures (FLOW_FAILED or a vanished job). `generate` resends once automatically after a

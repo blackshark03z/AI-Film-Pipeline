@@ -64,6 +64,28 @@ def test_register_numbers_takes_per_generation_and_dedupes_by_bytes(tmp_path):
         "SC01_g1_t1", "SC01_g1_t2", "SC01_g2_t1"]
 
 
+def test_take_id_follows_the_receipt_stem_not_the_register_count(tmp_path):
+    # P18-02 (P17-06, film05 SC02_g2): receipt t1 produced no clip; file SC02_g2_t2.mp4 was registered as take t1
+    pkg = film(tmp_path)
+    kw = dict(prompt_text="the sent prompt", route="start_frame+Khung hinh", model="veo-omni-flash", credits=7,
+              known_generations=KNOWN | {"SC02_g1"})
+    first, _ = T.register_take(pkg.root, pkg.header.film_id, "SC01_g1", clip(tmp_path, "SC01_g1_t2.mp4", b"a"), **kw)
+    assert first.take_id == "SC01_g1_t2" and T.receipt_id(first) == "SC01_g1_t2"
+    # a clip not named after a receipt, or whose stem is taken, gets the next free number
+    odd, _ = T.register_take(pkg.root, pkg.header.film_id, "SC01_g1", clip(tmp_path, "SC01_g1_extra.mp4", b"b"), **kw)
+    assert odd.take_id == "SC01_g1_t3"
+    other = tmp_path / "o"
+    other.mkdir()
+    dup, _ = T.register_take(pkg.root, pkg.header.film_id, "SC01_g1", clip(other, "SC01_g1_t2.mp4", b"c"), **kw)
+    assert dup.take_id == "SC01_g1_t4"
+
+
+def test_historical_film05_takes_keep_their_ids_and_map_to_their_receipt():
+    log = T.load_log(Path(__file__).resolve().parents[1] / "films" / "film05_one_cup", "film05_one_cup")
+    take = log.get("SC02_g2_t1")
+    assert take.output_file == "SC02_g2_t2.mp4" and T.receipt_id(take) == "SC02_g2_t2"
+
+
 def test_register_records_provenance_hashes(tmp_path):
     pkg = film(tmp_path)
     still = clip(tmp_path, "start.png", b"png")
