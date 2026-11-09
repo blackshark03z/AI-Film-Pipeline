@@ -40,7 +40,7 @@ The Tech Lead may tighten it or record what was done under it.
 
 ## Still reserved to the Owner (stop and ask)
 
-- Publishing, uploading anywhere public, or sharing outside this machine.
+- Publishing, uploading anywhere public, or sharing outside this machine (sending frames/references to an authorised generation provider — Flow, Vilao H3 — is part of a send, not sharing).
 - `git push`.
 - Purchases, new accounts, and plan or credit top-ups.
 - Raising a credit or VND cap, or any resolution or model other than 360p Omni Flash (Flow) and H3 480P (Vilao, experiments).
