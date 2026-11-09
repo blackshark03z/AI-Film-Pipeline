@@ -223,6 +223,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="with --render: also render <out>.clean.mp4 with no burned cues (versions re-lays the cues for 9:16)")
     mq = actions.add_parser("mastercheck", help="technical QC of a rendered master (black/freeze/duplicate frames, format, loudness, clipping, sync, colour, faststart) -> qc/master_qc.json")
     mq.add_argument("--film", required=True, type=Path)
+    dc = actions.add_parser("dialoguecheck", help="advisory STT check that the actors said the scripted lines (Vosk, en only) -> qc/dialogue_stt.json")
+    dc.add_argument("--film", required=True, type=Path)
     mq.add_argument("--video", type=Path, help="the master (default <film>/media/cut/mixed.mp4)")
     mq.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
     vs = actions.add_parser("versions", help="9:16 version of the master, thumbnail candidates, metadata draft with AI disclosure -> versions/ (nothing is published)")
@@ -545,6 +547,13 @@ def main(argv: list[str] | None = None) -> int:
                    "checks": {c.group: c.result for c in record.checks},
                    "findings": [f.model_dump(mode="json") for f in record.findings]})
             return 0 if record.ok else 1
+        if args.action == "dialoguecheck":
+            from film_pipeline.production import dialogue_stt as ds_mod
+            from film_pipeline.production.mix import stamp_post_item
+            report = ds_mod.check(pkg)
+            stamp_post_item(pkg, "dialogue_stt", {"report": "qc/dialogue_stt.json", "ok": report["ok"], "summary": report["summary"]})
+            _emit(report)
+            return 0
         if args.action == "deliver":
             from film_pipeline.production import deliver as dl_mod
             if args.accept is not None:

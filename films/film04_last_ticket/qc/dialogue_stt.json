@@ -1,0 +1,126 @@
+{
+  "film_id": "film04_last_ticket",
+  "ok": true,
+  "engine": "vosk-small-en-us-0.15",
+  "rows": [
+    {
+      "event_id": "SC01_g2",
+      "line_no": 15,
+      "character": "THEO",
+      "expected": "One ticket to Halden. Please.",
+      "heard": "one ticket to hold on please",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "halden"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g1",
+      "line_no": 22,
+      "character": "MARA",
+      "expected": "We closed at half past ten.",
+      "heard": "we closed at half past ten",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g2",
+      "line_no": 27,
+      "character": "THEO",
+      "expected": "The machine only takes cards.",
+      "heard": "the machine only takes cards",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g1",
+      "line_no": 34,
+      "character": "THEO",
+      "expected": "Mine's declined. This is all I have.",
+      "heard": "minds declined this is all i have",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g2",
+      "line_no": 39,
+      "character": "MARA",
+      "expected": "Last train's ten-fifty.",
+      "heard": "last train's ten fifty",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g3",
+      "line_no": 48,
+      "character": "MARA",
+      "expected": "Pour it out. We'll count it.",
+      "heard": "pour it out will count it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g1",
+      "line_no": 57,
+      "character": "MARA",
+      "expected": "Fourteen eighty. Exactly the fare.",
+      "heard": "fourteen eighty exactly the fair",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g3",
+      "line_no": 62,
+      "character": "THEO",
+      "expected": "Thank you.",
+      "heard": "thank you",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g1",
+      "line_no": 71,
+      "character": "THEO",
+      "expected": "You're coming too?",
+      "heard": "you're coming to",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g2",
+      "line_no": 76,
+      "character": "MARA",
+      "expected": "Last train. Last shift.",
+      "heard": "last train last shift",
+      "source": "take",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    }
+  ],
+  "problems": [],
+  "summary": {
+    "lines": 10,
+    "pass": 10,
+    "warn": 0,
+    "mean_recall": 0.98
+  }
+}

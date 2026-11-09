@@ -68,5 +68,8 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   other title lines; now uses LABELS or reports TRANSLATION_MISSING); 9:16 window per shot from titles/portrait_focus.json
   (new, moves only the 9:16 crop), set from a contact sheet. Re-delivered. 9:16 subtitles: `titles --render --clean-copy` renders
   media/cut/titled_cut.clean.mp4 (no cues, sha in titles.json clean_render); `versions` crops it, re-lays the 10 cues for
-  9:16 and takes the sound from the master (rehearsal chain uses --clean-copy). Still open: SFX_UNSOURCED, no STT,
-  RIGHTS_PENDING.
+  9:16 and takes the sound from the master (rehearsal chain uses --clean-copy). - Dialogue STT check (advisory, WARN only): `film.py dialoguecheck --film F` transcribes each cue from the
+  dialogue stem with Vosk small-en (model ~/.cache/vosk/vosk-model-small-en-us-0.15; vosk is not in the uv env, so set
+  AFP_STT_PYTHON to a python that has it), word recall >= 0.8 passes, homophones/near-spellings tolerated; a stem miss
+  gets a second opinion on the raw take (+-1 s). film04: 10/10 lines PASS, mean recall 0.98 -> qc/dialogue_stt.json.
+  Still open: SFX_UNSOURCED, RIGHTS_PENDING (Owner).
