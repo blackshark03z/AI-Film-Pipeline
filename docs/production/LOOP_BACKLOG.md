@@ -1094,3 +1094,18 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
 ### P18-09 Cumulative scorecard — OPEN
 - STATUS: in-send bind rate across every live send since 9bea690, plus the incidents; short report.
 
+
+## P19 Scale proof of the P18 Flow sender (Tech Lead, 2026-11-09)
+
+Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bind ở quy mô lớn không?": "Làm film06".
+
+### P19-01 film06 "Six A.M.": end to end on the Flow route — IN PROGRESS
+- **Scope:** an original quiet drama, 2 characters, 1 location (a diner booth), 17 generations / 118 s planned,
+  360p Omni 1.2 Flash, cap 256.8 credits (plan: expected 140.3, cap 210.4). Both characters stay seated the whole
+  film and every single keeps the booth back in frame (film05 seated/standing ambiguity).
+- **Run:** story → direction → preprod/shots → plan → stills → boards → shoot → assemble → deliver, approvals
+  delegated per OWNER_POLICY.md, one send at a time under the OWNER_GO_LIVE trap.
+- **Pass criteria:** the 4 P17-01 criteria, plus the in-send bind rate (target ≥ 90% of submitted sends) and every
+  auto-resend incident with how it was handled.
+- **Offline done (6c4b221):** package and plan; gates 1-2 PASS, gate 3 waits only for the storyboard review; all 17
+  shots GREEN.
