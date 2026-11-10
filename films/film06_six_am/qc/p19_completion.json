@@ -1,0 +1,87 @@
+{
+  "film_id": "film06_six_am",
+  "source_base": "65d7467494362c5606f75a6ca7104ff0e312e4bc",
+  "status": "LOCAL_FINISHING_VERIFIED_OWNER_PENDING",
+  "new_generation_requests": 0,
+  "new_uploads": 0,
+  "purchases": 0,
+  "protected_receipt_plan_files_unchanged": 62,
+  "delivery_manifest_sha256": "6767ebe44d06ed308d97474c08c27f673964d50f6d4d0799eb0ca0ea6ceaca85",
+  "duration_s": 124.625,
+  "masters_full_decode": "PASS",
+  "package_files_verified": 33,
+  "relocated_package_status": "PASS",
+  "portrait_source": "clean",
+  "portrait_cues_relaid": 14,
+  "portrait_full_width_masters": [
+    "SC01_g1",
+    "SC07_g2"
+  ],
+  "dialogue_stt": {
+    "lines": 14,
+    "pass": 14,
+    "warn": 0,
+    "mean_recall": 0.972
+  },
+  "release_ready": false,
+  "remaining_release_findings": [
+    {
+      "code": "RIGHTS_PENDING",
+      "severity": "WARN",
+      "detail": "character RUTH: pending"
+    },
+    {
+      "code": "RIGHTS_PENDING",
+      "severity": "WARN",
+      "detail": "character SAM: pending"
+    },
+    {
+      "code": "RIGHTS_PENDING",
+      "severity": "WARN",
+      "detail": "location diner_night: pending"
+    },
+    {
+      "code": "RIGHTS_PENDING",
+      "severity": "WARN",
+      "detail": "source script.fountain: pending"
+    },
+    {
+      "code": "RIGHTS_PENDING",
+      "severity": "WARN",
+      "detail": "likeness none (no real person's likeness): pending"
+    }
+  ],
+  "owner_creative_acceptance": "NOT_INFERRED",
+  "original_delivery_preserved": "D:\\AI FILM MAKER\\AFP-stable\\films\\film06_six_am\\delivery.superseded-20261110T041616534561Z",
+  "full_suite": "Recorded separately for exact committed source; see docs/drama/STATUS.md",
+  "master_qc_warnings_preserved": [
+    {
+      "group": "color",
+      "code": "COLOR_MATCH",
+      "severity": "WARN",
+      "detail": "film.py grade left a shot 8.058 levels from its reference",
+      "at_s": null
+    },
+    {
+      "group": "sync",
+      "code": "CUE_NO_SPEECH",
+      "severity": "WARN",
+      "detail": "no clear speech under the cue at 51.93 s",
+      "at_s": 51.933
+    },
+    {
+      "group": "sync",
+      "code": "CUE_NO_SPEECH",
+      "severity": "WARN",
+      "detail": "no clear speech under the cue at 83.35 s",
+      "at_s": 83.35
+    },
+    {
+      "group": "sync",
+      "code": "CUE_NO_SPEECH",
+      "severity": "WARN",
+      "detail": "no clear speech under the cue at 106.97 s",
+      "at_s": 106.967
+    }
+  ]
+}

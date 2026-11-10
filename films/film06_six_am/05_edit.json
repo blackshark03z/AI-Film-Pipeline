@@ -1,1 +1,99 @@
-{}
+{
+  "events": [
+    {
+      "event_id": "SC01_g1",
+      "kind": "TAKE",
+      "take_id": "SC01_g1_t1"
+    },
+    {
+      "event_id": "SC01_g2",
+      "kind": "TAKE",
+      "take_id": "SC01_g2_t1"
+    },
+    {
+      "event_id": "SC02_g1",
+      "kind": "TAKE",
+      "take_id": "SC02_g1_t1"
+    },
+    {
+      "event_id": "SC02_g2",
+      "kind": "TAKE",
+      "take_id": "SC02_g2_t1"
+    },
+    {
+      "event_id": "SC02_g3",
+      "kind": "TAKE",
+      "take_id": "SC02_g3_t1"
+    },
+    {
+      "event_id": "SC02_g4",
+      "kind": "TAKE",
+      "take_id": "SC02_g4_t1"
+    },
+    {
+      "event_id": "SC03_g1",
+      "kind": "TAKE",
+      "take_id": "SC03_g1_t1"
+    },
+    {
+      "event_id": "SC03_g2",
+      "kind": "TAKE",
+      "take_id": "SC03_g2_t1"
+    },
+    {
+      "event_id": "SC04_g1",
+      "kind": "TAKE",
+      "take_id": "SC04_g1_t1"
+    },
+    {
+      "event_id": "SC04_g2",
+      "kind": "TAKE",
+      "take_id": "SC04_g2_t1"
+    },
+    {
+      "event_id": "SC04_g3",
+      "kind": "TAKE",
+      "take_id": "SC04_g3_t1"
+    },
+    {
+      "event_id": "SC05_g1",
+      "kind": "TAKE",
+      "take_id": "SC05_g1_t1"
+    },
+    {
+      "event_id": "SC05_g2",
+      "kind": "TAKE",
+      "take_id": "SC05_g2_t1"
+    },
+    {
+      "event_id": "SC06_g1",
+      "kind": "TAKE",
+      "take_id": "SC06_g1_t1"
+    },
+    {
+      "event_id": "SC06_g2",
+      "kind": "TAKE",
+      "take_id": "SC06_g2_t1"
+    },
+    {
+      "event_id": "SC07_g1",
+      "kind": "TAKE",
+      "take_id": "SC07_g1_t1"
+    },
+    {
+      "event_id": "SC07_g2",
+      "kind": "TAKE",
+      "take_id": "SC07_g2_t1"
+    }
+  ],
+  "title": [
+    {
+      "text": "SIX A.M.",
+      "size": 96
+    },
+    {
+      "text": "Generated with AI",
+      "size": 28
+    }
+  ]
+}

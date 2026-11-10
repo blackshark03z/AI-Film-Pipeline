@@ -6,7 +6,8 @@ platform compliance). Nothing here publishes anything: it writes files under ``v
   tags, else its ``titles/portrait_focus.json`` x (``{"events": {event_id: x 0..1}}``, set by a reviewer looking at the
   frame; it moves only the 9:16 window, never the 16:9 picture), else the centre of its ``titles/reframe.json`` box, else the middle of the frame (``PORTRAIT_FOCUS_UNKNOWN``: nobody
   has said where the subject is, a human checks it). Two tagged faces further apart than the window warn
-  (``PORTRAIT_SPREAD``). Title, end card and CARD events cannot be cropped without losing words: they are fitted to the width
+  (``PORTRAIT_SPREAD``). Declared multi-person MASTER events are fitted to retain their shared composition.
+  Title, end card and CARD events cannot be cropped without losing words: they are fitted to the width
   on black. The sound is copied untouched. Burned-in cues sit across the whole 16:9 frame, so a crop loses part of them
   (``PORTRAIT_BURNED_TEXT``). The fix: ``film.py titles --render --clean-copy`` also renders the cut with no cues and records
   it in ``titles/titles.json`` (``clean_render``, sha-bound); ``versions`` then crops that clean picture and burns the cues
@@ -101,17 +102,20 @@ def focus_for(event_id: str, section: Any, reframes: dict[str, Any], crop_frac: 
 
 
 def portrait_segments(plan: dict[str, Any], section: Any, reframes: dict[str, Any], width: int, height: int, fps: float,
-                      focus: dict[str, float] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+                      focus: dict[str, float] | None = None,
+                      fit_events: set[str] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Partition the master's clock into segments, each cropped around its focus or fitted. Frames, so the video keeps its length."""
     crop_w = int(height * 9 / 16) // 2 * 2
     crop_frac = crop_w / width
+    fit_events = fit_events or set()
     problems: list[dict[str, Any]] = []
     cuts: list[tuple[float, float, str, str]] = [(0.0, plan["title_s"], "fit", "title")]
     events = plan["events"]
     for i, placed in enumerate(events):
         start = placed["start_s"] if i else plan["title_s"]
         end = events[i + 1]["start_s"] if i + 1 < len(events) else plan["body_end_s"]
-        cuts.append((start, end, "fit" if placed["kind"] == "CARD" else "crop", placed["event_id"]))
+        mode = "fit" if placed["kind"] == "CARD" or placed["event_id"] in fit_events else "crop"
+        cuts.append((start, end, mode, placed["event_id"]))
     cuts.append((plan["body_end_s"], plan["total_s"], "fit", "end"))
     segments: list[dict[str, Any]] = []
     for start, end, mode, event_id in cuts:
@@ -401,7 +405,12 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
             problems.append(_problem("PORTRAIT_CLEAN_STALE", "WARN", f"titles.json names a clean render {recorded.get('output')} "
                                      "that is missing or changed since; cropping the master instead"))
     source = clean or master
-    segments, found = portrait_segments(plan, section, reframes, width, height, fps, load_portrait_focus(pkg.root))
+    from film_pipeline.production.takes import load_log
+    shots = pkg.typed.get("shots")
+    masters = {g.generation_id for g in shots.generations if g.coverage == "MASTER" and len(g.visible) > 1} if shots else set()
+    generations = {t.take_id: t.generation_id for t in load_log(pkg.root, pkg.header.film_id).takes}
+    fit_events = {event["event_id"] for event in plan["events"] if generations.get(event.get("take_id")) in masters}
+    segments, found = portrait_segments(plan, section, reframes, width, height, fps, load_portrait_focus(pkg.root), fit_events)
     problems += found
     if titles_report and titles_report.get("cues") and clean is None:
         problems.append(_problem("PORTRAIT_BURNED_TEXT", "WARN",

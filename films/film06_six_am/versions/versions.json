@@ -1,0 +1,284 @@
+{
+  "film_id": "film06_six_am",
+  "ok": true,
+  "versions": [
+    {
+      "name": "master_16x9",
+      "file": "films\\film06_six_am\\media\\cut\\mixed.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": 24.0,
+      "sha256": "a4cd4e0e636e5f8928220d039d557edae0709f377e3fc2831d92e318d737f4a2"
+    },
+    {
+      "name": "portrait_9x16",
+      "file": "versions/film06_six_am_9x16.mp4",
+      "width": 720,
+      "height": 1280,
+      "fps": 24.0,
+      "sha256": "cdd98e518458f27fd68dcdd9638012421c962137e1f2a7896c25891ab753ff1c",
+      "upscale": 1.78,
+      "ai_label": {
+        "text": "AI-generated",
+        "start_s": 3.0,
+        "end_s": 120.624997,
+        "x": 24,
+        "y": 1020
+      },
+      "source": "clean",
+      "cues_relaid": 14,
+      "segments": [
+        {
+          "event_id": "title",
+          "mode": "fit",
+          "start_frame": 0,
+          "end_frame": 72,
+          "start_s": 0.0,
+          "end_s": 3.0
+        },
+        {
+          "event_id": "SC01_g1",
+          "mode": "fit",
+          "start_frame": 72,
+          "end_frame": 240,
+          "start_s": 3.0,
+          "end_s": 10.0
+        },
+        {
+          "event_id": "SC01_g2",
+          "mode": "crop",
+          "start_frame": 240,
+          "end_frame": 431,
+          "start_s": 10.0,
+          "end_s": 17.958,
+          "focus": 0.64,
+          "focus_source": "portrait_focus",
+          "crop_x": 616,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC02_g1",
+          "mode": "crop",
+          "start_frame": 431,
+          "end_frame": 623,
+          "start_s": 17.958,
+          "end_s": 25.958,
+          "focus": 0.73,
+          "focus_source": "portrait_focus",
+          "crop_x": 732,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC02_g2",
+          "mode": "crop",
+          "start_frame": 623,
+          "end_frame": 815,
+          "start_s": 25.958,
+          "end_s": 33.958,
+          "focus": 0.31,
+          "focus_source": "portrait_focus",
+          "crop_x": 194,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC02_g3",
+          "mode": "crop",
+          "start_frame": 815,
+          "end_frame": 1006,
+          "start_s": 33.958,
+          "end_s": 41.917,
+          "focus": 0.67,
+          "focus_source": "portrait_focus",
+          "crop_x": 656,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC02_g4",
+          "mode": "crop",
+          "start_frame": 1006,
+          "end_frame": 1101,
+          "start_s": 41.917,
+          "end_s": 45.875,
+          "focus": 0.5,
+          "focus_source": "portrait_focus",
+          "crop_x": 438,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC03_g1",
+          "mode": "crop",
+          "start_frame": 1101,
+          "end_frame": 1220,
+          "start_s": 45.875,
+          "end_s": 50.833,
+          "focus": 0.33,
+          "focus_source": "portrait_focus",
+          "crop_x": 220,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC03_g2",
+          "mode": "crop",
+          "start_frame": 1220,
+          "end_frame": 1411,
+          "start_s": 50.833,
+          "end_s": 58.792,
+          "focus": 0.64,
+          "focus_source": "portrait_focus",
+          "crop_x": 616,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC04_g1",
+          "mode": "crop",
+          "start_frame": 1411,
+          "end_frame": 1579,
+          "start_s": 58.792,
+          "end_s": 65.792,
+          "focus": 0.33,
+          "focus_source": "portrait_focus",
+          "crop_x": 220,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC04_g2",
+          "mode": "crop",
+          "start_frame": 1579,
+          "end_frame": 1698,
+          "start_s": 65.792,
+          "end_s": 70.75,
+          "focus": 0.67,
+          "focus_source": "portrait_focus",
+          "crop_x": 656,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC04_g3",
+          "mode": "crop",
+          "start_frame": 1698,
+          "end_frame": 1938,
+          "start_s": 70.75,
+          "end_s": 80.75,
+          "focus": 0.28,
+          "focus_source": "portrait_focus",
+          "crop_x": 156,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC05_g1",
+          "mode": "crop",
+          "start_frame": 1938,
+          "end_frame": 2082,
+          "start_s": 80.75,
+          "end_s": 86.75,
+          "focus": 0.63,
+          "focus_source": "portrait_focus",
+          "crop_x": 604,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC05_g2",
+          "mode": "crop",
+          "start_frame": 2082,
+          "end_frame": 2274,
+          "start_s": 86.75,
+          "end_s": 94.75,
+          "focus": 0.31,
+          "focus_source": "portrait_focus",
+          "crop_x": 194,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC06_g1",
+          "mode": "crop",
+          "start_frame": 2274,
+          "end_frame": 2393,
+          "start_s": 94.75,
+          "end_s": 99.708,
+          "focus": 0.66,
+          "focus_source": "portrait_focus",
+          "crop_x": 642,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC06_g2",
+          "mode": "crop",
+          "start_frame": 2393,
+          "end_frame": 2536,
+          "start_s": 99.708,
+          "end_s": 105.667,
+          "focus": 0.31,
+          "focus_source": "portrait_focus",
+          "crop_x": 194,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC07_g1",
+          "mode": "crop",
+          "start_frame": 2536,
+          "end_frame": 2728,
+          "start_s": 105.667,
+          "end_s": 113.667,
+          "focus": 0.28,
+          "focus_source": "portrait_focus",
+          "crop_x": 156,
+          "crop_w": 404
+        },
+        {
+          "event_id": "SC07_g2",
+          "mode": "fit",
+          "start_frame": 2728,
+          "end_frame": 2895,
+          "start_s": 113.667,
+          "end_s": 120.625
+        },
+        {
+          "event_id": "end",
+          "mode": "fit",
+          "start_frame": 2895,
+          "end_frame": 2991,
+          "start_s": 120.625,
+          "end_s": 124.625
+        }
+      ]
+    }
+  ],
+  "thumbnails": [
+    {
+      "file": "versions/thumbs/thumb_01.jpg",
+      "at_s": 68.271,
+      "event_id": "SC04_g2",
+      "scene": "SC04",
+      "moment": "Sam stares at Ruth, frozen, after she says she knew it was him",
+      "device": "reaction",
+      "fact_id": "ruth_knew",
+      "luma": 33.4,
+      "contrast": 45.6,
+      "burned_text": false,
+      "lifted": false,
+      "sha256": "073db45582a56cfa5441f3b13a26740536110012a7e46fc1da4bbe9e62dd7635"
+    },
+    {
+      "file": "versions/thumbs/thumb_02.jpg",
+      "at_s": 43.896,
+      "event_id": "SC02_g4",
+      "scene": "SC02",
+      "moment": "the thick white envelope lies alone on the table, nobody touching it",
+      "device": "insert",
+      "fact_id": "money_in_envelope",
+      "luma": 36.0,
+      "contrast": 43.7,
+      "burned_text": false,
+      "lifted": false,
+      "sha256": "c6d9f3999a64e849d59e37c90acc586c6e279a0fa7d7868c85e6c4eddca99bab"
+    }
+  ],
+  "metadata": "versions/metadata.json",
+  "problems": [],
+  "summary": {
+    "portrait_segments": 19,
+    "thumbnails": 2,
+    "blocks": 0,
+    "warnings": 0
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "film_id": "film06_six_am",
+  "locked_at": "2026-11-09T19:33:18+00:00",
+  "locked_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+  "reason": "picture lock under OWNER_POLICY.md delegation (Owner: 'Bạn tự duyệt...', 'Làm film06'); 17 accepted takes (all first send), 120.6 s, both seated in the booth all film, screen sides hold",
+  "edl_sha256": "8e71e40d6db99fcf8b40c8e8cc2ba99afe63c3d70ccfb1c184133975947cae23",
+  "frame_sha256": "b83ecc39f928ff22fbf760fa41c2542cc7ccdc9aac948dcee95fd0d5d0d4b45a",
+  "events": [
+    {
+      "event_id": "SC01_g1",
+      "reach_back": false,
+      "sha256": "fa638eb68d5929122b6c6acccc0bc36befe276f5a2477b8f8e77a3cb98118c41"
+    },
+    {
+      "event_id": "SC01_g2",
+      "reach_back": false,
+      "sha256": "3b20556b4906ba768e237aa3c50b3e0c0a70b571f3fe7a03dfb450640f9b9d3e"
+    },
+    {
+      "event_id": "SC02_g1",
+      "reach_back": false,
+      "sha256": "67eb46dc0b048ddd6ff5cc16b1d329acb79a43213aebbc004e4304f89afc5d3d"
+    },
+    {
+      "event_id": "SC02_g2",
+      "reach_back": false,
+      "sha256": "ff16a1c0d4f8f796cc1fe57d20905896e16565e2b5399c72894ccbc1faff47a0"
+    },
+    {
+      "event_id": "SC02_g3",
+      "reach_back": false,
+      "sha256": "7d66295d3618ea502856728497bccf15c23ea344ba7c17c62210236a71a67092"
+    },
+    {
+      "event_id": "SC02_g4",
+      "reach_back": false,
+      "sha256": "d79789b4c1626ce80840237b09dc5c8eb4fada6873393bd8a43c042f0ff85d00"
+    },
+    {
+      "event_id": "SC03_g1",
+      "reach_back": false,
+      "sha256": "01c9c1716303e74ea32bbac0796194d41b7eeaf1268e50a16ddca8f13c9a1212"
+    },
+    {
+      "event_id": "SC03_g2",
+      "reach_back": false,
+      "sha256": "894c081ac060da4e665b34ad41e0b29550d26ae67c47110f4b9c086982a11646"
+    },
+    {
+      "event_id": "SC04_g1",
+      "reach_back": false,
+      "sha256": "dc72e18e6cc941e849d1aa817cb012f701287082031ec037d94cdfb8286f1179"
+    },
+    {
+      "event_id": "SC04_g2",
+      "reach_back": false,
+      "sha256": "a8251a360b99da457f0eebdbc3a96383068f7c930c01c70786fd6000c513d608"
+    },
+    {
+      "event_id": "SC04_g3",
+      "reach_back": false,
+      "sha256": "16f71b23b5dae503787151b9d2bfa625a25c9fb9ad733345c8969f48af49da7a"
+    },
+    {
+      "event_id": "SC05_g1",
+      "reach_back": false,
+      "sha256": "c7aac6c5a4dc3a28f98ee15a1df4456eaeb7af267de143b8a5c365fecf869d67"
+    },
+    {
+      "event_id": "SC05_g2",
+      "reach_back": false,
+      "sha256": "d38f0390b929013ddc95234d919081590f564d1b91c6625dcf75c5a6706f6466"
+    },
+    {
+      "event_id": "SC06_g1",
+      "reach_back": false,
+      "sha256": "98efb149385bd63f50cef353e83de195a268459abee139980e979d3516be020d"
+    },
+    {
+      "event_id": "SC06_g2",
+      "reach_back": false,
+      "sha256": "8a7177991169908ee21669f5111495ea687fa090b4240afa7026df44e96434f7"
+    },
+    {
+      "event_id": "SC07_g1",
+      "reach_back": false,
+      "sha256": "28ef60c17079de29062a41ab0e36519ccc2796b96b8b34e929bef9d3cb59523d"
+    },
+    {
+      "event_id": "SC07_g2",
+      "reach_back": false,
+      "sha256": "aa353a8ce9749d114b324de6c47b246f128fb4832f2bbc6df65b3f6bb980b810"
+    }
+  ],
+  "sources": {
+    "SC01_g1_t1": "6696d45c787270245dea6438722d1cbd21cec5678687e97444c044ef14d31745",
+    "SC01_g2_t1": "4ba882654b7ed7758f640da8acf1d43ff8ad82b0b86ece9dc6ad39fd52a7a445",
+    "SC02_g1_t1": "fa5824d5c21f4f5299e28a8155badc34f5efc51b10c2a5470ff66499a4c538a7",
+    "SC02_g2_t1": "26a2b5a8367284ea44fbe0a113d50054f9e6a3f4d350e19386018fa6195f70a2",
+    "SC02_g3_t1": "b0a88b17b9db429d47eba4af164952d0481902dd1d09a4603a829d8203c98eae",
+    "SC02_g4_t1": "340a7a30cc75616cd05b89f472d45a3159e7f3a15cd474ef51da879dfdff004c",
+    "SC03_g1_t1": "55d0e5fca5accdf8dc8239d12d2ac5fa4c7189584e61879540fb9bbf771bb9fd",
+    "SC03_g2_t1": "e25cde8c045b06920075b7f17b7847bc7c9c37c0380169b0a5fec9c8a9305193",
+    "SC04_g1_t1": "4f86b793cc4a6c751e4276d92c17f32a75261f77340015650c3b14ec3f1504ef",
+    "SC04_g2_t1": "a012944a2b5976293057224b7cfa85c439eb1c5a02ceebfe3cdedead7e574600",
+    "SC04_g3_t1": "50ce839383ea05ad03854d05be528ed4ea1f5891df52f0fd88e815cb0abeb3bc",
+    "SC05_g1_t1": "a8f31c4b0ceb9785eb22695b1132e3bca370a88f047f00484fb25293d2967412",
+    "SC05_g2_t1": "e2d9e38d9c58ae082b39090bc96a220793f76b875a7f5c22924178482e1c38a5",
+    "SC06_g1_t1": "26dde8a0ba3f364f5abe639b33e86a43ad10572b2e9b0a7d8fcb0baa2d50c7b4",
+    "SC06_g2_t1": "4599d445e0da4e185aca43d7c3ed555a881214d1b90c32660076289a2857ab55",
+    "SC07_g1_t1": "af8730bb7d594ada180a461aa6644211142d352de131f6155dc66b257ef1e96b",
+    "SC07_g2_t1": "dcad5a839e7febcd71006810d3f3cc4bff5d37d31f8baa0329722f7940e31d06"
+  },
+  "supersedes": "",
+  "changed_events": []
+}

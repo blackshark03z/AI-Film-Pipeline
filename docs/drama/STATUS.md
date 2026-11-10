@@ -1,3 +1,43 @@
+# Drama handoff — P19 film06 local finishing verified (2026-11-10; final qualification pending)
+
+## Goal and source
+Finish Claude's existing film06 "Six A.M." local delivery and P19 scorecard. Source
+`feature/drama-preprod-p0@65d7467`; original dirty stage05/06/07 and finishing artifacts preserved at
+`C:/Users/ADMIN/AppData/Local/Temp/AFP-P19-20261110/claude-before-finishing/` before replacement.
+Owner explicitly corrected this chat from the separate Codex Irene line, then said "Vậy tiếp tục".
+
+## Independently established
+- All17 native send/take/intent receipts agree on prompt/output hashes, model and quoted cost; all17 declared ACCEPTED
+  on first send, all17 bind inside the send,118credits,0provider failures/auto-resends. Own tile identity12/17 agrees with
+  the five P19-02 incidents. This is retained receipt proof, not a fresh account-balance or full-speed acting review.
+- Original33-file archive verifies and both masters fully decode. `release_ready=false` has five RIGHTS_PENDING items.
+- Budget criterion has a real miss:118 versus frozen expected140.3 = -15.895%, outside literal +/-15%; cap210.45 PASS.
+  Preserve that baseline and FAIL_UNDERRUN result. Never generate extra takes to spend into the band.
+- Finishing gaps: audio/mix.json used rough_cut.mp4 rather than the rendered graded/titled cut; portrait crop removed
+  one actor from the declared MASTER opening/closing. Logged P19-03 before repair. Existing clean-render/relaid-cue path
+  repairs captions; a small versions fix fits declared multi-person MASTER events, leaving singles/OTS cropped.
+- Regression reproduced crop != fit before repair;30 versions/titles tests PASS after repair (134.74s).
+
+## Finishing verification
+Existing CLI chain all exit0: titles --render --color --clean-copy -> mix(titled_cut) -> mastercheck -> versions ->
+dialoguecheck -> deliver -> package status. Fourteen EN cues now burn correctly in each aspect; VI remains a sidecar.
+Portrait uses the hash-bound clean source, relays14cues, fits opening/closing MASTER shots with both seated actors,
+and reports0BLOCK/0WARN. Reviewer independently inspected the two bookends and four caption samples.
+Both delivery masters fully decode,124.625s;33-file archive hash/restore check passes after copying to C.
+Fresh STT14/14 PASS, mean recall0.972. Master -14.7LUFS/-1.1dBFS peak; mastercheck retains COLOR_MATCH and three
+CUE_NO_SPEECH warnings (not waived; advisory STT finds the lines). Picture lock stays fresh.62protected plan/receipt
+files stay unchanged. `qc/p19_scorecard.json` and `qc/p19_completion.json` record exact scope/limits.
+
+## Next / remaining limits
+Scope-commit this verified film06 finishing and P19-03 repair, then run full qualification on the exact clean candidate.
+Logs/large derived audio remain on C at `C:/Users/ADMIN/AppData/Local/Temp/AFP-P19-20261110/`; raw takes remain on D.
+Original archive retained as `delivery.superseded-20261110T041616534561Z`; no footage was regenerated.
+Local delivery is complete, but P19 scorecard is not an all-PASS because budget deviation is -15.895%.
+`release_ready=false` has five RIGHTS_PENDING items; Owner film-level creative/release acceptance is not inferred.
+No new film, generation, purchase, publication or push. P19-02 fix and automatic resend remain without new live proof.
+
+---
+
 # Drama handoff — P18 Flow route hardening (2026-11-09, P18-01..09)
 
 ## Goal

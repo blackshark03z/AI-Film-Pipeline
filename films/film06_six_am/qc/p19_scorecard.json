@@ -1,0 +1,223 @@
+{
+  "film_id": "film06_six_am",
+  "takes": [
+    {
+      "generation_id": "SC01_g1",
+      "take_id": "SC01_g1_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "6696d45c787270245dea6438722d1cbd21cec5678687e97444c044ef14d31745",
+      "prompt_sha256": "d738e8ae53c427576618ab0aa83dff0a9ecd6ca32901f82ef0a5ce2128d3a85d",
+      "credits": 7.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC01_g2",
+      "take_id": "SC01_g2_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "4ba882654b7ed7758f640da8acf1d43ff8ad82b0b86ece9dc6ad39fd52a7a445",
+      "prompt_sha256": "6cac35c76f86c6f423dcfca5a680c0c67cd557d9fcffd02fa074e7f1970b6a64",
+      "credits": 8.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC02_g1",
+      "take_id": "SC02_g1_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "fa5824d5c21f4f5299e28a8155badc34f5efc51b10c2a5470ff66499a4c538a7",
+      "prompt_sha256": "6ef5d9cfd23eb87f7e45da3a2ac0336474e02d7b299dafca781494cea8a2aef9",
+      "credits": 8.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC02_g2",
+      "take_id": "SC02_g2_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "26a2b5a8367284ea44fbe0a113d50054f9e6a3f4d350e19386018fa6195f70a2",
+      "prompt_sha256": "7d3b7337cbc6dc8f0b9fecddada1cbdc0009539e3e8b13fb27cd0bc11d73f029",
+      "credits": 8.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC02_g3",
+      "take_id": "SC02_g3_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "b0a88b17b9db429d47eba4af164952d0481902dd1d09a4603a829d8203c98eae",
+      "prompt_sha256": "f9145501f4c2144e5a7a1f3248b4ed3103f7f6620e9533c0ac53e7c1eaf33cb8",
+      "credits": 8.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC02_g4",
+      "take_id": "SC02_g4_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "340a7a30cc75616cd05b89f472d45a3159e7f3a15cd474ef51da879dfdff004c",
+      "prompt_sha256": "be3788b0a36132d1f97b6a3ddee4317eae78361fd8ebbe06889a808af4db6a1a",
+      "credits": 4.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC03_g1",
+      "take_id": "SC03_g1_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "55d0e5fca5accdf8dc8239d12d2ac5fa4c7189584e61879540fb9bbf771bb9fd",
+      "prompt_sha256": "2788ac1133fc0d0f121b57bf8cb9e0e5ce067cbf20cc6348d14ef081186547d7",
+      "credits": 5.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC03_g2",
+      "take_id": "SC03_g2_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "e25cde8c045b06920075b7f17b7847bc7c9c37c0380169b0a5fec9c8a9305193",
+      "prompt_sha256": "c7b1a1f0e454dd28aea4b9bd40fe4f6d27ab96e5f8b02e48c9b2c7130f3de04d",
+      "credits": 8.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": false
+    },
+    {
+      "generation_id": "SC04_g1",
+      "take_id": "SC04_g1_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "4f86b793cc4a6c751e4276d92c17f32a75261f77340015650c3b14ec3f1504ef",
+      "prompt_sha256": "529ae1c049ce6c8082e5705220e3fb6a5328f83174917098fe9540d06648f748",
+      "credits": 7.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": false
+    },
+    {
+      "generation_id": "SC04_g2",
+      "take_id": "SC04_g2_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "a012944a2b5976293057224b7cfa85c439eb1c5a02ceebfe3cdedead7e574600",
+      "prompt_sha256": "7cf4049b8e1387cae265d26a649c300f1dd37e01217a512c4ffccf7c27f33a50",
+      "credits": 5.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": false
+    },
+    {
+      "generation_id": "SC04_g3",
+      "take_id": "SC04_g3_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "50ce839383ea05ad03854d05be528ed4ea1f5891df52f0fd88e815cb0abeb3bc",
+      "prompt_sha256": "511f8249f06f047f479290466586d4895d65f51cadb60204e6047315512947de",
+      "credits": 10.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC05_g1",
+      "take_id": "SC05_g1_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "a8f31c4b0ceb9785eb22695b1132e3bca370a88f047f00484fb25293d2967412",
+      "prompt_sha256": "54d759aa191b4de79c383eeb69b6f44cfe9f5e281ed0661f365d3d3f701ae11b",
+      "credits": 6.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC05_g2",
+      "take_id": "SC05_g2_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "e2d9e38d9c58ae082b39090bc96a220793f76b875a7f5c22924178482e1c38a5",
+      "prompt_sha256": "31a865de19ff610ebf781581ded4b6ab49069362378d5389de7996ea8f5b7630",
+      "credits": 8.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": false
+    },
+    {
+      "generation_id": "SC06_g1",
+      "take_id": "SC06_g1_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "26dde8a0ba3f364f5abe639b33e86a43ad10572b2e9b0a7d8fcb0baa2d50c7b4",
+      "prompt_sha256": "c806ff52fca44822a0eafbd778b4bd1ab90436fb0f2e8bd5e6291be6c63e3bb7",
+      "credits": 5.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC06_g2",
+      "take_id": "SC06_g2_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "4599d445e0da4e185aca43d7c3ed555a881214d1b90c32660076289a2857ab55",
+      "prompt_sha256": "744c44de115d6a0a97e655009d3afbb684759241f78359a8a59d918c67d2f839",
+      "credits": 6.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC07_g1",
+      "take_id": "SC07_g1_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "af8730bb7d594ada180a461aa6644211142d352de131f6155dc66b257ef1e96b",
+      "prompt_sha256": "866bb3a6496e39f8f428886d0b6aaefa026294fa95e298059de5bb2870fdf748",
+      "credits": 8.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": true
+    },
+    {
+      "generation_id": "SC07_g2",
+      "take_id": "SC07_g2_t1",
+      "status": "ACCEPTED",
+      "output_sha256": "dcad5a839e7febcd71006810d3f3cc4bff5d37d31f8baa0329722f7940e31d06",
+      "prompt_sha256": "f5610e25fc0c42dcb5252d452077da4c924bc3fb65b9aec3d65fabd29b015a74",
+      "credits": 7.0,
+      "binding": "RECONCILE_PROMPT_MATCH",
+      "own_tile_matches_bound": false
+    }
+  ],
+  "submitted": 17,
+  "criteria": {
+    "logged_changes_only": {
+      "verdict": "PASS",
+      "fixes": [
+        "P19-02",
+        "P19-03"
+      ]
+    },
+    "first_send_and_attempt_caps": {
+      "verdict": "PASS",
+      "accepted_first_send": 17,
+      "total": 17,
+      "over_cap": []
+    },
+    "no_manual_send_rescue": {
+      "verdict": "PASS_WITH_EVIDENCE_LIMIT",
+      "bound_in_send": 17,
+      "submitted": 17,
+      "basis": "All native/send manifests bind in-send; separate reconcile not required. No audit of every desktop input."
+    },
+    "budget_plus_minus_15_percent": {
+      "verdict": "FAIL_UNDERRUN",
+      "baseline_expected_credits": 140.3,
+      "actual_receipted_credits": 118.0,
+      "deviation_percent": -15.895,
+      "allowed_percent": 15,
+      "base_generation_credits": 118.0,
+      "owner_cap": 210.45,
+      "cap_pass": true,
+      "note": "Preserve frozen baseline; never spend more just to enter the band."
+    },
+    "bind_at_least_90_percent": {
+      "verdict": "PASS",
+      "actual_percent": 100,
+      "required_percent": 90
+    },
+    "auto_resend_incidents_explained": {
+      "verdict": "NOT_EXERCISED",
+      "incidents": 0
+    }
+  },
+  "own_tile_identity_matches": 12,
+  "auto_resends": 0,
+  "provider_failures": 0,
+  "cost_basis": "retained native quotes/receipts; not fresh account balance",
+  "new_generation_requests_in_takeover": 0,
+  "owner_creative_acceptance": "NOT_INFERRED"
+}

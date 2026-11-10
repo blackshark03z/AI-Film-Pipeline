@@ -1110,7 +1110,7 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
 
 Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bind ở quy mô lớn không?": "Làm film06".
 
-### P19-01 film06 "Six A.M.": end to end on the Flow route — IN PROGRESS
+### P19-01 film06 "Six A.M.": end to end on the Flow route — LOCAL DELIVERY COMPLETE; scorecard deviation
 - **Scope:** an original quiet drama, 2 characters, 1 location (a diner booth), 17 generations / 118 s planned,
   360p Omni 1.2 Flash, cap 256.8 credits (plan: expected 140.3, cap 210.4). Both characters stay seated the whole
   film and every single keeps the booth back in frame (film05 seated/standing ambiguity).
@@ -1120,6 +1120,29 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   auto-resend incident with how it was handled.
 - **Offline done (6c4b221):** package and plan; gates 1-2 PASS, gate 3 waits only for the storyboard review; all 17
   shots GREEN.
+- **Takeover closeout (2026-11-10):** independently reconciled17native send/take/intent hashes, model and quoted costs;
+  17first-send ACCEPTED /17in-send bound,118credits,0provider failures/resends. Scorecard `films/film06_six_am/qc/p19_scorecard.json`.
+  Original delivery existed but used rough-cut picture in the mix and single-person crops for two MASTER shots; P19-03
+  completes the real title/grade/mix/portrait chain. Final archive33files verifies after relocation,124.625s, STT14/14.
+  Receipt-based send criteria and >=90% bind criterion PASS; the literal budget +/-15% criterion is **FAIL_UNDERRUN**:
+  118vs frozen expected140.3 = -15.895%, although cap210.45 PASS. Do not change the baseline or spend to hide this miss.
+  Local execution complete; not an all-PASS stability acceptance or Owner creative/publication approval. Five rights
+  checkpoints remain open; source/full qualification and handoff recorded in `docs/drama/STATUS.md`.
+
+### P19-03 Finish the real post chain and preserve portrait MASTER coverage — VERIFIED locally; final qualification pending
+- **Seen on independent takeover (2026-11-10):** film06 audio/mix.json points to rough_cut.mp4, so the delivered master
+  does not use the rendered grade/titles. EN/VI SRTs exist as sidecars, but no dialogue captions are visible in either master.
+  The portrait also crops SC01_g1 and SC07_g2 to one person although both are declared MASTER, visible=[RUTH,SAM],
+  listener VISIBLE; the closing direction explicitly holds both in the booth.
+- **Bounded fix:** use existing titles --render --color --clean-copy, mix the titled cut, then mastercheck/versions/deliver.
+  Make versions fit declared multi-person MASTER events to full width; retain face crops for singles/OTS. No per-film renderer
+  or new option, no new generation. Regression: actual CLI output must fit film03's declared three-person MASTER while
+  retaining crops for its OTS/single events. Preserve Claude's original delivery and finishing files before replacement.
+- **Acceptance:** real film06 both bookends show both seated actors; 14 dialogue cues rendered and re-laid for portrait;
+  master hash/clock/label/audio/QC and relocated delivery verify; original P19 send scorecard stays separately evidenced.
+- **Proof:** all7CLI steps exit0;30versions/titles regressions PASS after the new assertion reproduced crop != fit;
+ 17Flow-wait tests PASS. Independent source review clear; rebuilt portrait bookends/caption samples verified.
+ 33-file relocated archive/hash check and full decode PASS; no new video or acceptance waiver. Exact candidate full suite next.
 
 ### P19-02 own-tile identity: a just-queued own tile was called a stray — DONE
 - **Seen (film06, live):** 5 of 17 sends (SC03_g2, SC04_g1, SC04_g2, SC05_g2, SC07_g2) took no own identity:

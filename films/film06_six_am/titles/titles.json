@@ -1,0 +1,181 @@
+{
+  "film_id": "film06_six_am",
+  "ok": true,
+  "sidecars": {
+    "en": "films\\film06_six_am\\titles\\film06_six_am.en.srt",
+    "vi": "films\\film06_six_am\\titles\\film06_six_am.vi.srt"
+  },
+  "credits": "titles/credits.json",
+  "cues": [
+    {
+      "event_id": "SC01_g1",
+      "line_no": 13,
+      "character": "RUTH",
+      "text": "We closed an hour ago.",
+      "start_s": 2.6,
+      "end_s": 4.1,
+      "source": "override",
+      "abs_start_s": 5.6,
+      "abs_end_s": 7.1
+    },
+    {
+      "event_id": "SC01_g2",
+      "line_no": 16,
+      "character": "SAM",
+      "text": "I know. I waited till the last customer left.",
+      "start_s": 1.4,
+      "end_s": 5.4,
+      "source": "override",
+      "abs_start_s": 11.4,
+      "abs_end_s": 15.4
+    },
+    {
+      "event_id": "SC02_g1",
+      "line_no": 21,
+      "character": "SAM",
+      "text": "Ten years ago, somebody took money from your till.",
+      "start_s": 2.5,
+      "end_s": 6.1,
+      "source": "override",
+      "abs_start_s": 20.458,
+      "abs_end_s": 24.058
+    },
+    {
+      "event_id": "SC02_g2",
+      "line_no": 24,
+      "character": "RUTH",
+      "text": "Three hundred and forty dollars. On a Tuesday.",
+      "start_s": 1.2,
+      "end_s": 4.9,
+      "source": "override",
+      "abs_start_s": 27.158,
+      "abs_end_s": 30.858
+    },
+    {
+      "event_id": "SC02_g3",
+      "line_no": 27,
+      "character": "SAM",
+      "text": "It's in the envelope. All of it, and some more.",
+      "start_s": 2.1,
+      "end_s": 5.9,
+      "source": "override",
+      "abs_start_s": 36.058,
+      "abs_end_s": 39.858
+    },
+    {
+      "event_id": "SC03_g1",
+      "line_no": 34,
+      "character": "RUTH",
+      "text": "Why now?",
+      "start_s": 1.7,
+      "end_s": 2.6,
+      "source": "override",
+      "abs_start_s": 47.575,
+      "abs_end_s": 48.475
+    },
+    {
+      "event_id": "SC03_g2",
+      "line_no": 37,
+      "character": "SAM",
+      "text": "I'm twenty-one. I want to start my life owing no one.",
+      "start_s": 1.1,
+      "end_s": 6.5,
+      "source": "override",
+      "abs_start_s": 51.933,
+      "abs_end_s": 57.333
+    },
+    {
+      "event_id": "SC04_g1",
+      "line_no": 42,
+      "character": "RUTH",
+      "text": "I knew it was you. Your red bike was out front.",
+      "start_s": 1.3,
+      "end_s": 5.1,
+      "source": "override",
+      "abs_start_s": 60.092,
+      "abs_end_s": 63.892
+    },
+    {
+      "event_id": "SC04_g3",
+      "line_no": 47,
+      "character": "RUTH",
+      "text": "You were eleven. You came back for pie every Sunday after.",
+      "start_s": 1.3,
+      "end_s": 6.5,
+      "source": "override",
+      "abs_start_s": 72.05,
+      "abs_end_s": 77.25
+    },
+    {
+      "event_id": "SC05_g1",
+      "line_no": 54,
+      "character": "SAM",
+      "text": "Please. Take it.",
+      "start_s": 2.6,
+      "end_s": 5.0,
+      "source": "override",
+      "abs_start_s": 83.35,
+      "abs_end_s": 85.75
+    },
+    {
+      "event_id": "SC05_g2",
+      "line_no": 59,
+      "character": "RUTH",
+      "text": "My cook quits on Friday.",
+      "start_s": 3.6,
+      "end_s": 5.3,
+      "source": "override",
+      "abs_start_s": 90.35,
+      "abs_end_s": 92.05
+    },
+    {
+      "event_id": "SC06_g1",
+      "line_no": 64,
+      "character": "SAM",
+      "text": "You'd hire me?",
+      "start_s": 1.3,
+      "end_s": 2.3,
+      "source": "override",
+      "abs_start_s": 96.05,
+      "abs_end_s": 97.05
+    },
+    {
+      "event_id": "SC06_g2",
+      "line_no": 67,
+      "character": "RUTH",
+      "text": "I'd hire somebody who comes back.",
+      "start_s": 1.3,
+      "end_s": 3.4,
+      "source": "override",
+      "abs_start_s": 101.008,
+      "abs_end_s": 103.108
+    },
+    {
+      "event_id": "SC07_g1",
+      "line_no": 72,
+      "character": "RUTH",
+      "text": "Keep the money. Buy shoes that don't slip. Six a.m.",
+      "start_s": 1.3,
+      "end_s": 6.6,
+      "source": "override",
+      "abs_start_s": 106.967,
+      "abs_end_s": 112.267
+    }
+  ],
+  "reframed": [],
+  "problems": [],
+  "summary": {
+    "cues": 14,
+    "languages": [
+      "en",
+      "vi"
+    ],
+    "reframed": 0,
+    "blocks": 0,
+    "warnings": 0
+  },
+  "clean_render": {
+    "output": "media/cut/titled_cut.clean.mp4",
+    "sha256": "3ab8cb644afa68b13a4e6c11c8ab9d38f20ece9b507f664c711907864d179e00"
+  }
+}

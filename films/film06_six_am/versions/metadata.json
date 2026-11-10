@@ -1,0 +1,79 @@
+{
+  "film_id": "film06_six_am",
+  "status": "DRAFT_NOT_PUBLISHED",
+  "source_language": "en",
+  "title": {
+    "source": "Six A.M.",
+    "vi": "SÁU GIỜ SÁNG"
+  },
+  "description": "Ten years after he robbed her till, Sam Doyle waits in Ruth Keller's closed diner to pay back the money, but Ruth will not take it.",
+  "description_note": "drafted from the logline; the Owner writes the final copy",
+  "tags": [
+    "AI film",
+    "AI generated",
+    "short film",
+    "Quiet drama (short, contained, one diner booth, a few minutes)",
+    "Owing someone is not settled by money; coming back is what counts."
+  ],
+  "ai_disclosure": {
+    "ai_generated": true,
+    "digital_source_type": "trainedAlgorithmicMedia",
+    "synthetic_persons": true,
+    "generators": "Google Flow Omni 1.2 Flash",
+    "generator_records": [
+      {
+        "provider": "Google",
+        "model": "Flow Omni 1.2 Flash",
+        "role": "",
+        "settings": ""
+      }
+    ],
+    "ai_label": "always",
+    "text": {
+      "en": "Generated with AI: Google Flow Omni 1.2 Flash Synthetic characters: faces and voices are AI-generated.",
+      "vi": "Tạo bằng AI: Google Flow Omni 1.2 Flash Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra."
+    }
+  },
+  "credits": {
+    "characters": [
+      "RUTH",
+      "SAM"
+    ],
+    "sound_attributions": [],
+    "fiction_line": "A work of fiction. All characters are fictional."
+  },
+  "runtime_s": 124.624997,
+  "versions": [
+    {
+      "name": "master_16x9",
+      "file": "films\\film06_six_am\\media\\cut\\mixed.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": 24.0,
+      "sha256": "a4cd4e0e636e5f8928220d039d557edae0709f377e3fc2831d92e318d737f4a2"
+    },
+    {
+      "name": "portrait_9x16",
+      "file": "versions/film06_six_am_9x16.mp4",
+      "width": 720,
+      "height": 1280,
+      "fps": 24.0,
+      "sha256": "cdd98e518458f27fd68dcdd9638012421c962137e1f2a7896c25891ab753ff1c",
+      "upscale": 1.78,
+      "ai_label": {
+        "text": "AI-generated",
+        "start_s": 3.0,
+        "end_s": 120.624997,
+        "x": 24,
+        "y": 1020
+      },
+      "source": "clean",
+      "cues_relaid": 14
+    }
+  ],
+  "platform_note": "set the platform's own AI / synthetic-content label at upload; nothing was published",
+  "thumbnails": [
+    "versions/thumbs/thumb_01.jpg",
+    "versions/thumbs/thumb_02.jpg"
+  ]
+}

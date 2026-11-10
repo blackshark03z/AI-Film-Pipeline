@@ -1,0 +1,135 @@
+{
+  "film_id": "film06_six_am",
+  "cut": "films\\film06_six_am\\media\\cut\\titled_cut.mp4",
+  "cut_sha256": "4e3d48f24f1517ac5ff49a915056c5733558c0041f1287c03d1a8d0ced90d1ff",
+  "output": "films\\film06_six_am\\media\\cut\\mixed.mp4",
+  "output_sha256": "a4cd4e0e636e5f8928220d039d557edae0709f377e3fc2831d92e318d737f4a2",
+  "total_s": 124.624997,
+  "plan": {
+    "ambience_lufs": -40.0,
+    "sfx_gain_db": -6.0,
+    "duck_threshold_db": -50.0,
+    "duck_ratio": 8.0,
+    "duck_attack_ms": 20.0,
+    "duck_release_ms": 400.0,
+    "min_duck_depth_db": 6.0,
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "lufs_tolerance": 1.0,
+    "music": []
+  },
+  "stems": {
+    "dialogue": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\AFP-P19-20261110\\new-stems\\dialogue.wav",
+    "ambience": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\AFP-P19-20261110\\new-stems\\ambience.wav",
+    "sfx": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\AFP-P19-20261110\\new-stems\\sfx.wav",
+    "music": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\AFP-P19-20261110\\new-stems\\music.wav"
+  },
+  "ambience": [
+    {
+      "scene_id": "SC01",
+      "location": "diner_night",
+      "room_tone": "quiet diner hum, a refrigerator, rain on the window",
+      "start_s": 3.0,
+      "end_s": 17.958333,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC02",
+      "location": "diner_night",
+      "room_tone": "quiet diner hum, a refrigerator, rain on the window",
+      "start_s": 17.958333,
+      "end_s": 45.874999,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC03",
+      "location": "diner_night",
+      "room_tone": "quiet diner hum, a refrigerator, rain on the window",
+      "start_s": 45.874999,
+      "end_s": 58.791665,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC04",
+      "location": "diner_night",
+      "room_tone": "quiet diner hum, a refrigerator, rain on the window",
+      "start_s": 58.791665,
+      "end_s": 80.749998,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC05",
+      "location": "diner_night",
+      "room_tone": "quiet diner hum, a refrigerator, rain on the window",
+      "start_s": 80.749998,
+      "end_s": 94.749998,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC06",
+      "location": "diner_night",
+      "room_tone": "quiet diner hum, a refrigerator, rain on the window",
+      "start_s": 94.749998,
+      "end_s": 105.666664,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC07",
+      "location": "diner_night",
+      "room_tone": "quiet diner hum, a refrigerator, rain on the window",
+      "start_s": 105.666664,
+      "end_s": 120.624997,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    }
+  ],
+  "sfx": [],
+  "music": [],
+  "duck": {
+    "frames": 374,
+    "depth_db": 20.56,
+    "wanted_db": 6.0
+  },
+  "loudness": {
+    "before": {
+      "integrated_lufs": -25.3,
+      "peak_dbfs": -8.4
+    },
+    "after": {
+      "integrated_lufs": -14.7,
+      "peak_dbfs": -1.1
+    },
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "ok": true
+  },
+  "problems": [],
+  "ok": true
+}

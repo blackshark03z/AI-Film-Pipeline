@@ -1,0 +1,22 @@
+{
+  "note": "9:16 window centre per event (x, fraction of the 16:9 width) on the speaker's or reacting face, read from each accepted take's contact sheet by agent:tech-lead.delegated-by.owner-khoikk03, 2026-11-10. The window is 0.32 of the width.",
+  "events": {
+    "SC01_g1": 0.18,
+    "SC01_g2": 0.64,
+    "SC02_g1": 0.73,
+    "SC02_g2": 0.31,
+    "SC02_g3": 0.67,
+    "SC02_g4": 0.5,
+    "SC03_g1": 0.33,
+    "SC03_g2": 0.64,
+    "SC04_g1": 0.33,
+    "SC04_g2": 0.67,
+    "SC04_g3": 0.28,
+    "SC05_g1": 0.63,
+    "SC05_g2": 0.31,
+    "SC06_g1": 0.66,
+    "SC06_g2": 0.31,
+    "SC07_g1": 0.28,
+    "SC07_g2": 0.8
+  }
+}

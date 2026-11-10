@@ -1,0 +1,175 @@
+{
+  "film_id": "film06_six_am",
+  "ok": true,
+  "engine": "vosk-small-en-us-0.15",
+  "rows": [
+    {
+      "event_id": "SC01_g1",
+      "line_no": 13,
+      "character": "RUTH",
+      "expected": "We closed an hour ago.",
+      "heard": "we closed an hour ago",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g2",
+      "line_no": 16,
+      "character": "SAM",
+      "expected": "I know. I waited till the last customer left.",
+      "heard": "i know i waited till the last customer left",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g1",
+      "line_no": 21,
+      "character": "SAM",
+      "expected": "Ten years ago, somebody took money from your till.",
+      "heard": "ten years ago somebody took money from your to",
+      "source": "stem",
+      "recall": 0.889,
+      "missing": [
+        "till"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g2",
+      "line_no": 24,
+      "character": "RUTH",
+      "expected": "Three hundred and forty dollars. On a Tuesday.",
+      "heard": "three hundred and forty dollars on a tuesday",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g3",
+      "line_no": 27,
+      "character": "SAM",
+      "expected": "It's in the envelope. All of it, and some more.",
+      "heard": "it's in the on veilleux all of it and some more",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "envelope"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g1",
+      "line_no": 34,
+      "character": "RUTH",
+      "expected": "Why now?",
+      "heard": "why now",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g2",
+      "line_no": 37,
+      "character": "SAM",
+      "expected": "I'm twenty-one. I want to start my life owing no one.",
+      "heard": "i'm twenty one i want to start my life owing no one",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g1",
+      "line_no": 42,
+      "character": "RUTH",
+      "expected": "I knew it was you. Your red bike was out front.",
+      "heard": "i knew it was you your read bike was out front",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g3",
+      "line_no": 47,
+      "character": "RUTH",
+      "expected": "You were eleven. You came back for pie every Sunday after.",
+      "heard": "you were eleven you came back for pie every sunday after",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g1",
+      "line_no": 54,
+      "character": "SAM",
+      "expected": "Please. Take it.",
+      "heard": "please take it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g2",
+      "line_no": 59,
+      "character": "RUTH",
+      "expected": "My cook quits on Friday.",
+      "heard": "my cook quits on friday",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g1",
+      "line_no": 64,
+      "character": "SAM",
+      "expected": "You'd hire me?",
+      "heard": "you'd hire me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g2",
+      "line_no": 67,
+      "character": "RUTH",
+      "expected": "I'd hire somebody who comes back.",
+      "heard": "i'd hire somebody who comes back",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g1",
+      "line_no": 72,
+      "character": "RUTH",
+      "expected": "Keep the money. Buy shoes that don't slip. Six a.m.",
+      "heard": "keep the money by shoes that don't slip six am",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "a",
+        "m"
+      ],
+      "verdict": "PASS"
+    }
+  ],
+  "problems": [],
+  "summary": {
+    "lines": 14,
+    "pass": 14,
+    "warn": 0,
+    "mean_recall": 0.972
+  }
+}

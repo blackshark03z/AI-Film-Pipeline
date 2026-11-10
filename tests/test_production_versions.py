@@ -151,6 +151,9 @@ def test_cli_builds_the_portrait_version_the_thumbnails_and_the_draft(tmp_path):
     assert done.returncode == 0 and body["ok"], body
     portrait = next(v for v in body["versions"] if v["name"] == "portrait_9x16")
     assert (portrait["width"], portrait["height"]) == (720, 1280) and portrait["fps"] == 24.0
+    modes = {s["event_id"]: s["mode"] for s in portrait["segments"]}
+    assert modes["d"] == "fit"  # SC04_g2 declares a MASTER with all three characters visible.
+    assert modes["a"] == modes["b"] == "crop"
     master = root / "media" / "cut" / "mixed.mp4"
     probe = lambda p, e: float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", f"format={e}", "-of", "csv=p=0", str(p)],
                                               capture_output=True, text=True).stdout)

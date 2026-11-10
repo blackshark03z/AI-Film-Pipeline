@@ -1,1 +1,63 @@
-{}
+{
+  "color": {
+    "report": "color/color.json",
+    "ok": true,
+    "summary": {
+      "shots": 17,
+      "corrected": 16,
+      "worst_before": 16.954,
+      "worst_after": 8.058
+    },
+    "locked_against": "8e71e40d6db99fcf8b40c8e8cc2ba99afe63c3d70ccfb1c184133975947cae23"
+  },
+  "titles": {
+    "report": "titles/titles.json",
+    "ok": true,
+    "summary": {
+      "cues": 14,
+      "languages": [
+        "en",
+        "vi"
+      ],
+      "reframed": 0,
+      "blocks": 0,
+      "warnings": 0
+    },
+    "locked_against": "8e71e40d6db99fcf8b40c8e8cc2ba99afe63c3d70ccfb1c184133975947cae23"
+  },
+  "mix": {
+    "output_sha256": "a4cd4e0e636e5f8928220d039d557edae0709f377e3fc2831d92e318d737f4a2",
+    "cut_sha256": "4e3d48f24f1517ac5ff49a915056c5733558c0041f1287c03d1a8d0ced90d1ff",
+    "report": "audio/mix.json",
+    "ok": true,
+    "locked_against": "8e71e40d6db99fcf8b40c8e8cc2ba99afe63c3d70ccfb1c184133975947cae23"
+  },
+  "master_qc": {
+    "report": "qc/master_qc.json",
+    "sha256": "a4cd4e0e636e5f8928220d039d557edae0709f377e3fc2831d92e318d737f4a2",
+    "ok": true,
+    "locked_against": "8e71e40d6db99fcf8b40c8e8cc2ba99afe63c3d70ccfb1c184133975947cae23"
+  },
+  "versions": {
+    "report": "versions/versions.json",
+    "ok": true,
+    "summary": {
+      "portrait_segments": 19,
+      "thumbnails": 2,
+      "blocks": 0,
+      "warnings": 0
+    },
+    "locked_against": "8e71e40d6db99fcf8b40c8e8cc2ba99afe63c3d70ccfb1c184133975947cae23"
+  },
+  "dialogue_stt": {
+    "report": "qc/dialogue_stt.json",
+    "ok": true,
+    "summary": {
+      "lines": 14,
+      "pass": 14,
+      "warn": 0,
+      "mean_recall": 0.972
+    },
+    "locked_against": "8e71e40d6db99fcf8b40c8e8cc2ba99afe63c3d70ccfb1c184133975947cae23"
+  }
+}
