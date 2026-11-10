@@ -1,4 +1,4 @@
-# Drama handoff — P19 film06 local finishing verified (2026-11-10; final qualification pending)
+# Drama handoff — P19 film06 local delivery qualified (2026-11-10; Owner release pending)
 
 ## Goal and source
 Finish Claude's existing film06 "Six A.M." local delivery and P19 scorecard. Source
@@ -32,13 +32,23 @@ files stay unchanged. `qc/p19_scorecard.json` and `qc/p19_completion.json` recor
 Finishing candidate committed6ef1bce. First full run:2205PASS/205SKIP/1FAIL in1139.84s. The sole failure was a test
 that cleared VILAO_API_KEY but inherited the supported VILAO_API_KEY_FILE fallback. P19-04 clears both only inside
 that test; its refusal assertions and all production code stay unchanged.28provider-routing tests PASS after repair.
-Owner says "tiếp tục" during qualification; continuation bound30minutes, no new generation/spend. Commit the test-only
-isolation fix and rerun full qualification on that exact clean candidate; preserve the first failure receipt.
+Owner says "tiếp tục" during qualification; continuation bound30minutes, no new generation/spend. The test-only
+isolation fix is c4a6bd5. Final full suite on that exact clean candidate: **2206 passed / 205 skipped / 0 failed**,
+114 warnings in1104.28s (18m24s), no new exclusions. First failure receipt retained as full-first.xml.
 Logs/large derived audio remain on C at `C:/Users/ADMIN/AppData/Local/Temp/AFP-P19-20261110/`; raw takes remain on D.
 Original archive retained as `delivery.superseded-20261110T041616534561Z`; no footage was regenerated.
 Local delivery is complete, but P19 scorecard is not an all-PASS because budget deviation is -15.895%.
 `release_ready=false` has five RIGHTS_PENDING items; Owner film-level creative/release acceptance is not inferred.
 No new film, generation, purchase, publication or push. P19-02 fix and automatic resend remain without new live proof.
+
+## Local handoff artifacts
+- Qualified production/test code: `c4a6bd534ddcd57eadb424971ef971a18cab46d1`; the later handoff commit changes only docs/evidence.
+- Local ZIP: `C:/AFP-Releases/film06_six_am_P19_c4a6bd5.zip` (38,000,773bytes), SHA256
+  `0facdc67d5a1d97a30fa1332393b0afd0ea10f4a3606545995528d61ae267315`.
+- Durable sibling `.VERIFICATION.json` and `.pytest.xml` bind full results, source trees, artifact hashes and retained limits.
+- ZIP CRC and all33manifest item sizes/hashes PASS;34entries including MANIFEST.json. Manifest SHA256
+  `6767ebe44d06ed308d97474c08c27f673964d50f6d4d0799eb0ca0ea6ceaca85`.
+- Next: Owner can review the existing masters and resolve rights/release decisions. No new film or live proof is started.
 
 ---
 

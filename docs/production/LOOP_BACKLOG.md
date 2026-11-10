@@ -1129,7 +1129,7 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   Local execution complete; not an all-PASS stability acceptance or Owner creative/publication approval. Five rights
   checkpoints remain open; source/full qualification and handoff recorded in `docs/drama/STATUS.md`.
 
-### P19-03 Finish the real post chain and preserve portrait MASTER coverage — VERIFIED locally; final qualification pending
+### P19-03 Finish the real post chain and preserve portrait MASTER coverage — DONE locally (6ef1bce; qualified c4a6bd5)
 - **Seen on independent takeover (2026-11-10):** film06 audio/mix.json points to rough_cut.mp4, so the delivered master
   does not use the rendered grade/titles. EN/VI SRTs exist as sidecars, but no dialogue captions are visible in either master.
   The portrait also crops SC01_g1 and SC07_g2 to one person although both are declared MASTER, visible=[RUTH,SAM],
@@ -1142,13 +1142,15 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   master hash/clock/label/audio/QC and relocated delivery verify; original P19 send scorecard stays separately evidenced.
 - **Proof:** all7CLI steps exit0;30versions/titles regressions PASS after the new assertion reproduced crop != fit;
  17Flow-wait tests PASS. Independent source review clear; rebuilt portrait bookends/caption samples verified.
- 33-file relocated archive/hash check and full decode PASS; no new video or acceptance waiver. Exact candidate full suite next.
+ 33-file relocated archive/hash check and full decode PASS; no new video or acceptance waiver. Exact clean candidate c4a6bd5:2206PASS/205SKIP/0FAIL,114warnings,1104.28s.
+ Local ZIP + durable verification/JUnit at C:/AFP-Releases/film06_six_am_P19_c4a6bd5.*; not publication/Owner acceptance.
 
-### P19-04 Missing-key test must isolate both credential inputs — DONE (offline)
+### P19-04 Missing-key test must isolate both credential inputs — DONE (c4a6bd5, offline)
 - Final full run at6ef1bce:2205PASS/205SKIP/1FAIL. The missing-key refusal test removed VILAO_API_KEY but inherited
   VILAO_API_KEY_FILE from the machine, so supported file-key authentication correctly reported ready. The missing VND
   budget still prevented any send. Fix only the test's monkeypatch to remove both inputs; preserve its exact refusal
   assertion and production authentication/budget gates. No key contents printed, no global env/auth/config change.
+- **Proof:**28provider-routing tests PASS; final unfiltered full suite2206PASS/205SKIP/0FAIL on clean c4a6bd5.
 
 ### P19-02 own-tile identity: a just-queued own tile was called a stray — DONE
 - **Seen (film06, live):** 5 of 17 sends (SC03_g2, SC04_g1, SC04_g2, SC05_g2, SC07_g2) took no own identity:

@@ -53,7 +53,18 @@
   ],
   "owner_creative_acceptance": "NOT_INFERRED",
   "original_delivery_preserved": "D:\\AI FILM MAKER\\AFP-stable\\films\\film06_six_am\\delivery.superseded-20261110T041616534561Z",
-  "full_suite": "Recorded separately for exact committed source; see docs/drama/STATUS.md",
+  "full_suite": {
+    "verdict": "PASS",
+    "source_commit": "c4a6bd534ddcd57eadb424971ef971a18cab46d1",
+    "passed": 2206,
+    "skipped": 205,
+    "failed": 0,
+    "warnings": 114,
+    "duration_s": 1104.28,
+    "junit": "C:\\AFP-Releases\\film06_six_am_P19_c4a6bd5.pytest.xml",
+    "junit_sha256": "cc1381f88cf8af1473f53d3ddea2c7f58361fe7abd2b7e9ec7e68e5c2a438bb1",
+    "new_exclusions": 0
+  },
   "master_qc_warnings_preserved": [
     {
       "group": "color",
@@ -83,5 +94,7 @@
       "detail": "no clear speech under the cue at 106.97 s",
       "at_s": 106.967
     }
-  ]
+  ],
+  "local_archive": "C:\\AFP-Releases\\film06_six_am_P19_c4a6bd5.zip",
+  "local_archive_sha256": "0facdc67d5a1d97a30fa1332393b0afd0ea10f4a3606545995528d61ae267315"
 }
