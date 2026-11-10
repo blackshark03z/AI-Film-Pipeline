@@ -1,3 +1,33 @@
+# Drama handoff — film06 Owner-approved; all6gates PASS (2026-11-10)
+
+Owner: **"Đoạn hội thoại cơ bản tốt, mọi thứ tự nhiên. Duyệt. Tiếp tục"**; then explicitly **"Xác nhận cả 5 mục"**
+for RUTH/SAM, the diner, original script and generated likeness. Exact statements and review hashes live in
+`qc/p19_completion.json`/`qc/p19_scorecard.json`; five rights entries now `original` with explicit Owner evidence.
+No creative approval is inferred for the separate rejected Irene film.
+
+## Current product result
+- Replanned after the rights-only preprod change:17/17PASS, all59prompt/board files byte-unchanged; no storyboard re-approval.
+- Both final masters byte-identical to the reviewed delivery. Rights and manifest updated,35files verify.
+- `film.py deliver --accept "Owner khoikk03 (explicit chat approval, 2026-11-10)"` succeeds; all6gates PASS,
+  legal clear, release_ready=true, no delivery findings. This is local final acceptance, not public publication.
+- Final manifest `2b1c14056e1c5982e2da9167a7b7933fa67b55437bd605b4ae3d3d0e3e73a650`.
+- ZIP `C:/AFP-Releases/film06_six_am_P19_OWNER_APPROVED_20261110.zip` (38,006,397bytes), SHA256
+  `e3748a14a7ac4a31c470337b97622367a6a08e3dd3d02f9b3e7c0cfe8771ec41`; sibling verification binds actual CLI acceptance.
+  ZIP CRC/35file hashes and relocated package status PASS. Owner review page is the sibling `_APPROVED_REVIEW.html`.
+- Windows denied renaming the old delivery directory. Verified full backup `delivery.superseded-owner-rights-20261110T100944Z`;
+  completed only metadata in place, skipping both identical masters, using existing archive validation and post stamping.
+  The standard CLI then wrote Owner acceptance; no gate/acceptance bypass or source gate change.
+- P19-05 fixes report.next_action's unconditional "waiting for Owner" fallback: announce accepted only with Gate6PASS
+  and every evaluated gatePASS. Regression RED before fix;19report/runbook testsPASS in22.55s; actual film06 CLI/reviewpack
+  now reports accepted. Full qualification of the exact clean candidate follows; no full-PASS claim on this new source yet.
+- Prior c4a6bd5 full2206PASS/205SKIP remains historical. Subsequent source scope:2line report branch + one regression.
+- Budget forecast miss remains FAIL_UNDERRUN -15.895%,118credits within cap. No new generation/uploads/spend/push/publication.
+  Master color/speech-window WARNs retained; Owner creative acceptance resolves naturalness, not those technical records.
+- Continuation bound30minutes for P19-05. Next after qualification: close this accepted local journey; new film/publication
+  still need their explicit product scope. Own-tile and auto-resend fresh live evidence remains unexercised.
+
+---
+
 # Drama handoff — P19 film06 local delivery qualified (2026-11-10; Owner release pending)
 
 ## Goal and source

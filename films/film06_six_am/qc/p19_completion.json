@@ -1,12 +1,11 @@
 {
   "film_id": "film06_six_am",
   "source_base": "65d7467494362c5606f75a6ca7104ff0e312e4bc",
-  "status": "LOCAL_FINISHING_VERIFIED_OWNER_PENDING",
+  "status": "OWNER_CREATIVE_APPROVED_RIGHTS_CONFIRMED_LOCAL_DELIVERY_READY",
   "new_generation_requests": 0,
   "new_uploads": 0,
   "purchases": 0,
-  "protected_receipt_plan_files_unchanged": 62,
-  "delivery_manifest_sha256": "6767ebe44d06ed308d97474c08c27f673964d50f6d4d0799eb0ca0ea6ceaca85",
+  "protected_receipt_plan_files_unchanged": 61,
   "duration_s": 124.625,
   "masters_full_decode": "PASS",
   "package_files_verified": 33,
@@ -23,35 +22,26 @@
     "warn": 0,
     "mean_recall": 0.972
   },
-  "release_ready": false,
-  "remaining_release_findings": [
-    {
-      "code": "RIGHTS_PENDING",
-      "severity": "WARN",
-      "detail": "character RUTH: pending"
-    },
-    {
-      "code": "RIGHTS_PENDING",
-      "severity": "WARN",
-      "detail": "character SAM: pending"
-    },
-    {
-      "code": "RIGHTS_PENDING",
-      "severity": "WARN",
-      "detail": "location diner_night: pending"
-    },
-    {
-      "code": "RIGHTS_PENDING",
-      "severity": "WARN",
-      "detail": "source script.fountain: pending"
-    },
-    {
-      "code": "RIGHTS_PENDING",
-      "severity": "WARN",
-      "detail": "likeness none (no real person's likeness): pending"
+  "release_ready": true,
+  "remaining_release_findings": [],
+  "owner_creative_acceptance": {
+    "verdict": "APPROVED",
+    "source": "Owner message in this Codex chat",
+    "quote": "Đoạn hội thoại cơ bản tốt, mọi thứ tự nhiên. Duyệt. Tiếp tục",
+    "recorded_at": "2026-11-10T10:05:41+00:00",
+    "manifest_sha256": "6767ebe44d06ed308d97474c08c27f673964d50f6d4d0799eb0ca0ea6ceaca85",
+    "scope": "Film06 dialogue, naturalness and creative acceptance. Legal rights clearance and publication are not inferred.",
+    "delivery_masters": {
+      "master_16x9": {
+        "path": "masters/film06_six_am_16x9.mp4",
+        "sha256": "907e50b0768df050cc7ea29b65bb08e84fb05285b05d97cfb29763cbbf322135"
+      },
+      "portrait_9x16": {
+        "path": "masters/film06_six_am_9x16.mp4",
+        "sha256": "b07213acd0fd0493d86b935231cdb89bd8fa7aeaf5f5fad94bb42eb35af11f43"
+      }
     }
-  ],
-  "owner_creative_acceptance": "NOT_INFERRED",
+  },
   "original_delivery_preserved": "D:\\AI FILM MAKER\\AFP-stable\\films\\film06_six_am\\delivery.superseded-20261110T041616534561Z",
   "full_suite": {
     "verdict": "PASS",
@@ -95,6 +85,26 @@
       "at_s": 106.967
     }
   ],
-  "local_archive": "C:\\AFP-Releases\\film06_six_am_P19_c4a6bd5.zip",
-  "local_archive_sha256": "0facdc67d5a1d97a30fa1332393b0afd0ea10f4a3606545995528d61ae267315"
+  "rights_owner_confirmation": {
+    "recorded_at": "2026-11-10T10:07:14+00:00",
+    "source": "Owner reply in current Codex chat",
+    "quote": "Xác nhận cả 5 mục",
+    "subjects": [
+      "RUTH",
+      "SAM",
+      "diner_night",
+      "script.fountain",
+      "none (no real person's likeness)"
+    ],
+    "status": "original",
+    "evidence": "Owner confirmation in current Codex chat, 2026-11-10T10:07:14+00:00: \"Xác nhận cả 5 mục\" in response to the question confirming RUTH/SAM, diner and script are original, and generated faces do not model real people."
+  },
+  "reviewed_manifest_sha256": "6767ebe44d06ed308d97474c08c27f673964d50f6d4d0799eb0ca0ea6ceaca85",
+  "manifest_binding_note": "The reviewed manifest is retained as historical creative-review evidence. Both final master files are byte-identical; the current release manifest and formal Owner acceptance are bound in 07_delivery.json and the sibling release VERIFICATION.json, avoiding a self-referential manifest.",
+  "owner_authorized_changes_to_protected_inputs": [
+    "03_preprod.json rights declarations only; all59 plan prompt/board files unchanged"
+  ],
+  "prior_review_archive": "C:\\AFP-Releases\\film06_six_am_P19_c4a6bd5.zip",
+  "prior_review_archive_sha256": "0facdc67d5a1d97a30fa1332393b0afd0ea10f4a3606545995528d61ae267315",
+  "final_master_bytes_equal_creatively_approved_delivery": true
 }

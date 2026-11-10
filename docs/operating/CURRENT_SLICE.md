@@ -1,27 +1,20 @@
-# CURRENT SLICE — P19 film06 local handoff — 2026-11-10
+# CURRENT SLICE — film06 accepted / P19-05 qualification — 2026-11-10
 
-## Active result
-- Continue Claude's `AFP-stable`, branch `feature/drama-preprod-p0`; film06 **Six A.M.** local delivery is complete.
-  The separate Codex Irene line is outside this continuation; its rejected film is not this result.
-- Repairs: render the existing grade/titles before mixing; burn 14 EN cues in both aspects; preserve both seated
-  actors in the portrait MASTER bookends. No new footage, story change, spend or per-film renderer.
-- Qualified code `c4a6bd534ddcd57eadb424971ef971a18cab46d1`: **2206 passed / 205 skipped / 0 failed**,
-  114 warnings,1104.28s. Subsequent handoff changes are docs/evidence only; source/test trees stay identical.
-- Both masters124.625s, full decode PASS; STT14/14; relocated33-file package, ZIP CRC and hashes PASS.
-- Local ZIP: `C:/AFP-Releases/film06_six_am_P19_c4a6bd5.zip`; durable proof/JUnit are adjacent.
-  Full evidence and links: [drama handoff](../drama/STATUS.md).
-
-## Limits and next action
-- P19 receipts:17/17first-send ACCEPTED and in-send bound,118credits,0failures/resends;62protected inputs unchanged.
-- Frozen expected140.3 vs118actual: **FAIL_UNDERRUN -15.895%** under literal +/-15%; cap210.45 PASS.
-  Preserve the miss. No generation solely to adjust spend; no all-PASS stability claim.
-- `release_ready=false`:five RIGHTS_PENDING items. One color and three speech-window warnings retained.
-  Frame sampling and STT do not establish full-speed natural acting or Owner creative/release approval.
-- Next is review of these existing masters and Owner rights/release decisions. P19-02 own-tile fix and auto-resend
-  still lack fresh live proof; this task does not start a new film or paid probe to obtain it.
-- Apply [OWNER_POLICY](../production/OWNER_POLICY.md); no push/publication/purchase in this tranche.
-  Preserve unrelated WIP and `uv.lock`; never read cookies or list GPM profiles.
-- XIANXIA60/X04 remain PAUSED_BY_OWNER, NOT_SHIPPED. Other film verdicts are unchanged by this handoff.
+- Active: Claude's film06 **Six A.M.**, `AFP-stable` / `feature/drama-preprod-p0`; separate Irene remains rejected.
+- Owner explicitly approves dialogue/natural acting and confirms all5rights. Actual `deliver --accept` succeeds;
+  all6gatesPASS, release_ready=true,35archive files verify; both masters byte-identical to Owner-reviewed files.
+- Final ZIP `C:/AFP-Releases/film06_six_am_P19_OWNER_APPROVED_20261110.zip`; hashes, acceptance and cold restore
+  are in the sibling verification JSON. Full source/receipts: [drama handoff](../drama/STATUS.md).
+- P19-05 observed after acceptance: status/reviewpack incorrectly kept asking for approval. Minimal report branch fixes
+  the accepted message only after all evaluated gatesPASS, including6. RED reproduced;19report/runbook checksPASS;
+  actual film06 now reports accepted. Full qualification of clean committed candidate is the active step.
+- Bound30minutes, zero new generation/uploads/spend. Keep tracked tree clean during full suite (invariant test).
+- Historical qualified source c4a6bd5:2206PASS/205SKIP/0FAIL; new report branch requires its own final qualification.
+- Receipt KPIs17/17first-send accepted and bound,118credits; budget prediction FAIL_UNDERRUN -15.895%,capPASS.
+  Rights confirmation changes03_preprod only among62original protected inputs; remaining61 unchanged. All59plan
+  prompt/board files unchanged after replan. Master color/speech-window warnings retained, not waived.
+- After qualification, close this accepted local journey. No public publication/push/new film; apply
+  [OWNER_POLICY](../production/OWNER_POLICY.md). Own-tile/auto-resend new live proof remains unexercised.
+- Preserve unrelated WIP/uv.lock. XIANXIA60/X04 remain PAUSED_BY_OWNER,NOT_SHIPPED; other film verdicts unchanged.
 
 Prior snapshot: [2026-11-07](archive/CURRENT_SLICE_SNAPSHOT_20261107.md).
-Earlier history: [through2026-11-06](archive/CURRENT_SLICE_HISTORY_THRU_20261106.md).

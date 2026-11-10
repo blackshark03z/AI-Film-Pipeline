@@ -151,6 +151,17 @@ def test_next_action_for_each_later_state():
     assert "Render 1 more shots" in R.next_action(shots)
 
 
+
+def test_an_accepted_delivery_does_not_ask_the_owner_to_accept_again():
+    accepted = {str(i): {"name": "n", "status": "PASS", "issues": 0, "first": []} for i in range(1, 7)}
+    action = R.next_action(merged(gates=accepted))
+    assert action == "Nothing open on the pipeline side: delivery accepted by the Owner"
+    assert R.runbook_step(action) == "R10"
+    for gate in ("4", "5", "6"):
+        blocked = {**accepted, gate: {**accepted[gate], "status": "BLOCK"}}
+        assert "delivery accepted" not in R.next_action(merged(gates=blocked))
+
+
 def test_the_ledger_promotes_only_with_a_second_film(tmp_path):
     root = film(tmp_path)
     first = R.add_learning(root, "film03_front_desk", "Name the prop in every shot that shows it", "docs/drama/film03/README.md", area="shots")

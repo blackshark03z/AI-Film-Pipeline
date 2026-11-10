@@ -1353,23 +1353,23 @@
     {
       "subject": "RUTH",
       "kind": "character",
-      "status": "pending",
-      "evidence": "",
-      "note": "fictional character, model-written for this film; Owner to confirm originality"
+      "status": "original",
+      "evidence": "Owner confirmation in current Codex chat, 2026-11-10T10:07:14+00:00: \"Xác nhận cả 5 mục\" in response to the question confirming RUTH/SAM, diner and script are original, and generated faces do not model real people.",
+      "note": "fictional character, model-written for this film; originality confirmed by Owner"
     },
     {
       "subject": "SAM",
       "kind": "character",
-      "status": "pending",
-      "evidence": "",
-      "note": "fictional character, model-written for this film; Owner to confirm originality"
+      "status": "original",
+      "evidence": "Owner confirmation in current Codex chat, 2026-11-10T10:07:14+00:00: \"Xác nhận cả 5 mục\" in response to the question confirming RUTH/SAM, diner and script are original, and generated faces do not model real people.",
+      "note": "fictional character, model-written for this film; originality confirmed by Owner"
     },
     {
       "subject": "diner_night",
       "kind": "location",
-      "status": "pending",
-      "evidence": "",
-      "note": "fictional set, model-written for this film; Owner to confirm originality"
+      "status": "original",
+      "evidence": "Owner confirmation in current Codex chat, 2026-11-10T10:07:14+00:00: \"Xác nhận cả 5 mục\" in response to the question confirming RUTH/SAM, diner and script are original, and generated faces do not model real people.",
+      "note": "fictional set, model-written for this film; originality confirmed by Owner"
     },
     {
       "subject": "none (room tone and SFX are generated or CC0)",
@@ -1381,16 +1381,16 @@
     {
       "subject": "script.fountain",
       "kind": "source",
-      "status": "pending",
-      "evidence": "",
-      "note": "original script, model-written for this film; Owner to confirm originality"
+      "status": "original",
+      "evidence": "Owner confirmation in current Codex chat, 2026-11-10T10:07:14+00:00: \"Xác nhận cả 5 mục\" in response to the question confirming RUTH/SAM, diner and script are original, and generated faces do not model real people.",
+      "note": "original script, model-written for this film; originality confirmed by Owner"
     },
     {
       "subject": "none (no real person's likeness)",
       "kind": "likeness",
-      "status": "pending",
-      "evidence": "",
-      "note": "faces are generated, not modelled on a real person; Owner to confirm"
+      "status": "original",
+      "evidence": "Owner confirmation in current Codex chat, 2026-11-10T10:07:14+00:00: \"Xác nhận cả 5 mục\" in response to the question confirming RUTH/SAM, diner and script are original, and generated faces do not model real people.",
+      "note": "faces are generated, not modelled on a real person; confirmed by Owner"
     }
   ],
   "risk_fallbacks": {},

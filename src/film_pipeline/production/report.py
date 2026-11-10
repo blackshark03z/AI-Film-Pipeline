@@ -257,6 +257,8 @@ def next_action(report: dict[str, Any]) -> str:
     if not report["delivery"]["release_ready"]:
         why = [*report["rights"]["pending"][:2], *report["rights"]["sound"][:2]] or report["delivery"].get("open_findings", [])
         return f"Clear what keeps the delivery from release_ready: {'; '.join(why) or 'see delivery/MANIFEST.json'}"
+    if gates.get("6", {}).get("status") == "PASS" and all(g["status"] == "PASS" for g in gates.values()):
+        return "Nothing open on the pipeline side: delivery accepted by the Owner"
     return "Nothing open on the pipeline side: waiting for the Owner's acceptance"
 
 

@@ -219,5 +219,22 @@
   "provider_failures": 0,
   "cost_basis": "retained native quotes/receipts; not fresh account balance",
   "new_generation_requests_in_takeover": 0,
-  "owner_creative_acceptance": "NOT_INFERRED"
+  "owner_creative_acceptance": {
+    "verdict": "APPROVED",
+    "source": "Owner message in this Codex chat",
+    "quote": "Đoạn hội thoại cơ bản tốt, mọi thứ tự nhiên. Duyệt. Tiếp tục",
+    "recorded_at": "2026-11-10T10:05:41+00:00",
+    "manifest_sha256": "6767ebe44d06ed308d97474c08c27f673964d50f6d4d0799eb0ca0ea6ceaca85",
+    "scope": "Film06 dialogue, naturalness and creative acceptance. Legal rights clearance and publication are not inferred.",
+    "delivery_masters": {
+      "master_16x9": {
+        "path": "masters/film06_six_am_16x9.mp4",
+        "sha256": "907e50b0768df050cc7ea29b65bb08e84fb05285b05d97cfb29763cbbf322135"
+      },
+      "portrait_9x16": {
+        "path": "masters/film06_six_am_9x16.mp4",
+        "sha256": "b07213acd0fd0493d86b935231cdb89bd8fa7aeaf5f5fad94bb42eb35af11f43"
+      }
+    }
+  }
 }

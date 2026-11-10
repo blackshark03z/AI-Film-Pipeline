@@ -1110,7 +1110,7 @@ MiniMax/Vilao is parked. Each fix goes to the stage that missed the defect, with
 
 Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bind ở quy mô lớn không?": "Làm film06".
 
-### P19-01 film06 "Six A.M.": end to end on the Flow route — LOCAL DELIVERY COMPLETE; scorecard deviation
+### P19-01 film06 "Six A.M.": end to end on the Flow route — OWNER-ACCEPTED LOCAL DELIVERY; scorecard deviation
 - **Scope:** an original quiet drama, 2 characters, 1 location (a diner booth), 17 generations / 118 s planned,
   360p Omni 1.2 Flash, cap 256.8 credits (plan: expected 140.3, cap 210.4). Both characters stay seated the whole
   film and every single keeps the booth back in frame (film05 seated/standing ambiguity).
@@ -1126,8 +1126,9 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   completes the real title/grade/mix/portrait chain. Final archive33files verifies after relocation,124.625s, STT14/14.
   Receipt-based send criteria and >=90% bind criterion PASS; the literal budget +/-15% criterion is **FAIL_UNDERRUN**:
   118vs frozen expected140.3 = -15.895%, although cap210.45 PASS. Do not change the baseline or spend to hide this miss.
-  Local execution complete; not an all-PASS stability acceptance or Owner creative/publication approval. Five rights
-  checkpoints remain open; source/full qualification and handoff recorded in `docs/drama/STATUS.md`.
+  Owner now explicitly approves natural dialogue/acting and confirms all5rights. Formal CLI acceptance binds final manifest
+  2b1c14056e1c5982e2da9167a7b7933fa67b55437bd605b4ae3d3d0e3e73a650; all6gatesPASS,release_ready=true.
+  Still not an all-PASS stability scorecard or public publication; exact source/full qualification in `docs/drama/STATUS.md`.
 
 ### P19-03 Finish the real post chain and preserve portrait MASTER coverage — DONE locally (6ef1bce; qualified c4a6bd5)
 - **Seen on independent takeover (2026-11-10):** film06 audio/mix.json points to rough_cut.mp4, so the delivered master
@@ -1163,3 +1164,15 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   stays STRAY_IN_FRONT. Test: `tests/test_flow_send_wait_p18.py::test_submit_tile_waits_for_a_just_queued_own_tile_to_show_its_percentage`.
 - **Not yet proven live:** film06 ended before the fix; the next film's sends should show no STRAY_IN_FRONT whose
   stray_tail equals the bound media id.
+
+
+### P19-05 Accepted delivery still asks the Owner to accept again — IN_PROGRESS (2026-11-10)
+- Real film06 after explicit creative approval and confirmation of all5rights: all6gates PASS and CLI deliver --accept succeeds,
+  but status/reviewpack next_action still says waiting for Owner acceptance. The fallback in report.next_action has no accepted state.
+- Scope: one accepted-state branch using the already evaluated gates; no new approval path, gate weakening or publishing.
+  Regression must retain the waiting state without Gate6PASS and never announce accepted while any gate is blocked.
+- Bound:30minutes, zero new generation/uploads/spend. Focused report/reviewpack checks, actual film06 CLI, then full qualification
+  on the exact clean candidate before local software completion. Existing package and source/test/receipt history preserved.
+- **P19-05 focused proof:** regression reproduced the false waiting message;19report/runbook checksPASS (22.55s).
+  Actual accepted film06 CLI/reviewpack now reports accepted; unknown/missing Gate6 or any blocked gate never announce accepted.
+  Final full suite starts on the clean committed candidate; previous c4a6bd5 full result is not promoted to this changed source.
