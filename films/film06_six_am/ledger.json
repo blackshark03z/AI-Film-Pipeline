@@ -1,1 +1,17 @@
-{}
+{
+  "film_id": "film06_six_am",
+  "learnings": [
+    {
+      "learning_id": "L001",
+      "text": "Film06: two people seated across a diner booth, clear mutual eyelines and restrained dialogue actions yielded 17/17 delegated first-send take acceptances and Owner-approved natural dialogue/acting in the final film. One-film observation only; complex movement and general reliability are unproven.",
+      "area": "performance / Flow Omni 1.2 Flash 360p",
+      "evidence": [
+        {
+          "film_id": "film06_six_am",
+          "ref": "qc/p19_completion.json (explicit Owner creative approval); qc/p19_scorecard.json (native send receipts)",
+          "at": "2026-11-10T10:38:13+00:00"
+        }
+      ]
+    }
+  ]
+}

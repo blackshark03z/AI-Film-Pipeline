@@ -19,12 +19,19 @@ No creative approval is inferred for the separate rejected Irene film.
   The standard CLI then wrote Owner acceptance; no gate/acceptance bypass or source gate change.
 - P19-05 fixes report.next_action's unconditional "waiting for Owner" fallback: announce accepted only with Gate6PASS
   and every evaluated gatePASS. Regression RED before fix;19report/runbook testsPASS in22.55s; actual film06 CLI/reviewpack
-  now reports accepted. Full qualification of the exact clean candidate follows; no full-PASS claim on this new source yet.
-- Prior c4a6bd5 full2206PASS/205SKIP remains historical. Subsequent source scope:2line report branch + one regression.
+  now reports accepted. Exact clean06373f6 full qualification: **2207PASS/205SKIP/0FAIL**,114warnings,1319.07s (21m59s).
+- Qualified source `06373f6045155a5f335016afcf3e64d530e42744`; later handoff/learning changes are docs/data only.
+  Durable sibling `.pytest.xml` and verification JSON bind this full result; no new exclusions.
+- Post-delivery L001 is one-film observation in the existing ledger, not a replicated performance guarantee. Of62original
+  protected files60remain unchanged; explicit rights declaration and this ledger observation are the two intentional deltas.
+  All53original takes-area files and59plan prompt/board files remain unchanged.
+- The accepted archive is frozen; its packaged QC files are the dated delivery snapshot. Current source qualification and
+  later learning live in the source handoff/current QC report and sibling release verification. No manifest/acceptance churn.
 - Budget forecast miss remains FAIL_UNDERRUN -15.895%,118credits within cap. No new generation/uploads/spend/push/publication.
   Master color/speech-window WARNs retained; Owner creative acceptance resolves naturalness, not those technical records.
-- Continuation bound30minutes for P19-05. Next after qualification: close this accepted local journey; new film/publication
-  still need their explicit product scope. Own-tile and auto-resend fresh live evidence remains unexercised.
+- P19-05 completed within30minute bound. Accepted local journey closed; next production scope needs an explicit film brief,
+  not another approval of this film. Own-tile/auto-resend new live evidence and complex motion remain unexercised.
+  Automatic recovery from a Windows-locked old delivery is not implemented; the verified metadata-only recovery is documented above.
 
 ---
 

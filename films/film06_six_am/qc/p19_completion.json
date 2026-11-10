@@ -1,11 +1,11 @@
 {
   "film_id": "film06_six_am",
   "source_base": "65d7467494362c5606f75a6ca7104ff0e312e4bc",
-  "status": "OWNER_CREATIVE_APPROVED_RIGHTS_CONFIRMED_LOCAL_DELIVERY_READY",
+  "status": "OWNER_ACCEPTED_LOCAL_DELIVERY_COMPLETE",
   "new_generation_requests": 0,
   "new_uploads": 0,
   "purchases": 0,
-  "protected_receipt_plan_files_unchanged": 61,
+  "protected_receipt_plan_files_unchanged": 60,
   "duration_s": 124.625,
   "masters_full_decode": "PASS",
   "package_files_verified": 33,
@@ -45,14 +45,14 @@
   "original_delivery_preserved": "D:\\AI FILM MAKER\\AFP-stable\\films\\film06_six_am\\delivery.superseded-20261110T041616534561Z",
   "full_suite": {
     "verdict": "PASS",
-    "source_commit": "c4a6bd534ddcd57eadb424971ef971a18cab46d1",
-    "passed": 2206,
+    "source_commit": "06373f6045155a5f335016afcf3e64d530e42744",
+    "passed": 2207,
     "skipped": 205,
     "failed": 0,
     "warnings": 114,
-    "duration_s": 1104.28,
-    "junit": "C:\\AFP-Releases\\film06_six_am_P19_c4a6bd5.pytest.xml",
-    "junit_sha256": "cc1381f88cf8af1473f53d3ddea2c7f58361fe7abd2b7e9ec7e68e5c2a438bb1",
+    "duration_s": 1319.07,
+    "junit": "C:\\AFP-Releases\\film06_six_am_P19_OWNER_APPROVED_20261110.pytest.xml",
+    "junit_sha256": "7e42d326aeeb9a581f3603285367233c0c18ffdf687dfbb0f4be7cdd73da1435",
     "new_exclusions": 0
   },
   "master_qc_warnings_preserved": [
@@ -102,9 +102,17 @@
   "reviewed_manifest_sha256": "6767ebe44d06ed308d97474c08c27f673964d50f6d4d0799eb0ca0ea6ceaca85",
   "manifest_binding_note": "The reviewed manifest is retained as historical creative-review evidence. Both final master files are byte-identical; the current release manifest and formal Owner acceptance are bound in 07_delivery.json and the sibling release VERIFICATION.json, avoiding a self-referential manifest.",
   "owner_authorized_changes_to_protected_inputs": [
-    "03_preprod.json rights declarations only; all59 plan prompt/board files unchanged"
+    "03_preprod.json: explicit Owner confirmation of five original-rights declarations",
+    "ledger.json: post-delivery one-film observation L001, not a replicated rule"
   ],
   "prior_review_archive": "C:\\AFP-Releases\\film06_six_am_P19_c4a6bd5.zip",
   "prior_review_archive_sha256": "0facdc67d5a1d97a30fa1332393b0afd0ea10f4a3606545995528d61ae267315",
-  "final_master_bytes_equal_creatively_approved_delivery": true
+  "final_master_bytes_equal_creatively_approved_delivery": true,
+  "formal_owner_acceptance": {
+    "by": "Owner khoikk03 (explicit chat approval, 2026-11-10)",
+    "at": "2026-11-10T10:10:55+00:00",
+    "manifest_sha256": "2b1c14056e1c5982e2da9167a7b7933fa67b55437bd605b4ae3d3d0e3e73a650"
+  },
+  "current_accepted_manifest_sha256": "2b1c14056e1c5982e2da9167a7b7933fa67b55437bd605b4ae3d3d0e3e73a650",
+  "archive_snapshot_note": "The accepted delivery archive remains frozen. This current post-delivery QC report adds later source qualification and learning; archived QC reports are the earlier dated delivery snapshot."
 }

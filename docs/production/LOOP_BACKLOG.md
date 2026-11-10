@@ -1166,7 +1166,7 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   stray_tail equals the bound media id.
 
 
-### P19-05 Accepted delivery still asks the Owner to accept again — IN_PROGRESS (2026-11-10)
+### P19-05 Accepted delivery still asks the Owner to accept again — DONE (06373f6, 2026-11-10)
 - Real film06 after explicit creative approval and confirmation of all5rights: all6gates PASS and CLI deliver --accept succeeds,
   but status/reviewpack next_action still says waiting for Owner acceptance. The fallback in report.next_action has no accepted state.
 - Scope: one accepted-state branch using the already evaluated gates; no new approval path, gate weakening or publishing.
@@ -1175,4 +1175,5 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   on the exact clean candidate before local software completion. Existing package and source/test/receipt history preserved.
 - **P19-05 focused proof:** regression reproduced the false waiting message;19report/runbook checksPASS (22.55s).
   Actual accepted film06 CLI/reviewpack now reports accepted; unknown/missing Gate6 or any blocked gate never announce accepted.
-  Final full suite starts on the clean committed candidate; previous c4a6bd5 full result is not promoted to this changed source.
+  Final clean06373f6 full suite2207PASS/205SKIP/0FAIL,114warnings,1319.07s. Actual Owner-accepted film06 reports
+  accepted; final35-file ZIP CRC/hash/cold restorePASS. One-film observationL001 recorded without promotion to replicated.
