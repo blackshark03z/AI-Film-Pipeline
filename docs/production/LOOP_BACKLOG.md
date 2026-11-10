@@ -1144,6 +1144,12 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
  17Flow-wait tests PASS. Independent source review clear; rebuilt portrait bookends/caption samples verified.
  33-file relocated archive/hash check and full decode PASS; no new video or acceptance waiver. Exact candidate full suite next.
 
+### P19-04 Missing-key test must isolate both credential inputs — DONE (offline)
+- Final full run at6ef1bce:2205PASS/205SKIP/1FAIL. The missing-key refusal test removed VILAO_API_KEY but inherited
+  VILAO_API_KEY_FILE from the machine, so supported file-key authentication correctly reported ready. The missing VND
+  budget still prevented any send. Fix only the test's monkeypatch to remove both inputs; preserve its exact refusal
+  assertion and production authentication/budget gates. No key contents printed, no global env/auth/config change.
+
 ### P19-02 own-tile identity: a just-queued own tile was called a stray — DONE
 - **Seen (film06, live):** 5 of 17 sends (SC03_g2, SC04_g1, SC04_g2, SC05_g2, SC07_g2) took no own identity:
   8 s after the submit the front tile read "play_circle The given image is the first frame..." with no percentage

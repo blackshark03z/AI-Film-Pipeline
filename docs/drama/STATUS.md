@@ -29,7 +29,11 @@ CUE_NO_SPEECH warnings (not waived; advisory STT finds the lines). Picture lock 
 files stay unchanged. `qc/p19_scorecard.json` and `qc/p19_completion.json` record exact scope/limits.
 
 ## Next / remaining limits
-Scope-commit this verified film06 finishing and P19-03 repair, then run full qualification on the exact clean candidate.
+Finishing candidate committed6ef1bce. First full run:2205PASS/205SKIP/1FAIL in1139.84s. The sole failure was a test
+that cleared VILAO_API_KEY but inherited the supported VILAO_API_KEY_FILE fallback. P19-04 clears both only inside
+that test; its refusal assertions and all production code stay unchanged.28provider-routing tests PASS after repair.
+Owner says "tiếp tục" during qualification; continuation bound30minutes, no new generation/spend. Commit the test-only
+isolation fix and rerun full qualification on that exact clean candidate; preserve the first failure receipt.
 Logs/large derived audio remain on C at `C:/Users/ADMIN/AppData/Local/Temp/AFP-P19-20261110/`; raw takes remain on D.
 Original archive retained as `delivery.superseded-20261110T041616534561Z`; no footage was regenerated.
 Local delivery is complete, but P19 scorecard is not an all-PASS because budget deviation is -15.895%.

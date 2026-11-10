@@ -264,6 +264,7 @@ def test_an_api_route_sends_through_its_adapter_and_binds_the_take_by_job_id(tmp
 
 def test_an_api_route_without_a_cap_or_key_is_refused(tmp_path, monkeypatch):
     monkeypatch.delenv("VILAO_API_KEY", raising=False)
+    monkeypatch.delenv("VILAO_API_KEY_FILE", raising=False)
     pkg = _route(film(tmp_path, 100), {"provider": "vilao", "model": "h3-480p"})
     done = G.generate(pkg, "SC01_g1", dry_run=False, stills_dir=still(tmp_path), backlog=backlog(tmp_path, GO))
     assert not done["sent"] and {r["code"] for r in done["refused"]} == {"BUDGET_NOT_SET", "PROVIDER_NOT_READY"}
