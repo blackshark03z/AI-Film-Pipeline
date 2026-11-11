@@ -54,8 +54,8 @@ class _Loc:
 class FakeComposer:
     """Flow composer: a chip, and a settings menu with mode / resolution radios, a model dropdown, a duration slider."""
 
-    def __init__(self, mode="image", res="720p", chip_after=0, stuck_mode=False, sub="Thành phần"):
-        self.mode, self.res, self.dur, self.sub = mode, res, 3, sub
+    def __init__(self, mode="image", res="720p", chip_after=0, stuck_mode=False, sub="Thành phần", lang="vi"):
+        self.mode, self.res, self.dur, self.sub, self.lang = mode, res, 3, sub, lang
         self.menu = False
         self.chip_after, self.polls, self.stuck_mode = chip_after, 0, stuck_mode
         self.clicks, self.keys = [], []
@@ -85,7 +85,8 @@ class FakeComposer:
             self.polls += 1
             if self.polls <= self.chip_after:
                 return []
-            chip = (f"Video · {self.res} · {self.dur} giây crop_16_9 x1" if self.mode == "video"
+            unit = f"{self.dur}s" if self.lang == "en" else f"{self.dur} giây"
+            chip = (f"Video · {self.res} · {unit} crop_16_9 x1" if self.mode == "video"
                     else "Nano Banana 2.1 crop_16_9 x1")
             els = [_El("home"), _El(chip, click=lambda: setattr(self, "menu", True))]
             if self.menu:
@@ -102,10 +103,11 @@ class FakeComposer:
     def _radios(self):
         def flag(b):
             return "true" if b else "false"
-        return [_El("imageHình ảnh", lambda: self._set_mode("image"), {"aria-checked": flag(self.mode == "image")}),
+        en = self.lang == "en"
+        return [_El("imageImage" if en else "imageHình ảnh", lambda: self._set_mode("image"), {"aria-checked": flag(self.mode == "image")}),
                 _El("videocamVideo", lambda: self._set_mode("video"), {"aria-checked": flag(self.mode == "video")}),
-                _El("crop_freeKhung hình", lambda: self._set_sub("Khung hình"), {"aria-checked": flag(self.sub == "Khung hình")}),
-                _El("chrome_extensionThành phần", lambda: self._set_sub("Thành phần"), {"aria-checked": flag(self.sub == "Thành phần")}),
+                _El("crop_freeFrames" if en else "crop_freeKhung hình", lambda: self._set_sub("Khung hình"), {"aria-checked": flag(self.sub == "Khung hình")}),
+                _El("chrome_extensionIngredients" if en else "chrome_extensionThành phần", lambda: self._set_sub("Thành phần"), {"aria-checked": flag(self.sub == "Thành phần")}),
                 _El("360pinfo", lambda: self._set_res("360p"), {"aria-checked": flag(self.res == "360p")}),
                 _El("720p", lambda: self._set_res("720p"), {"aria-checked": flag(self.res == "720p")})]
 
@@ -116,6 +118,8 @@ class FakeComposer:
         pass
 
     async def evaluate(self, script, *_args):
+        if self.lang == "en":
+            return f"Length\n{self.dur} Sec\nGenerating will use {self.dur} credits"
         return f"Độ dài {self.dur} giây\nSẽ tốn {self.dur} tín dụng"
 
 
@@ -140,6 +144,24 @@ def test_start_frame_send_forces_the_khung_hinh_sub_mode():
     assert result is None and page.sub == "Khung hình" and rec["submode_set"] == "Khung hình"
     ok, _ = _run(FakeComposer(mode="video", res="360p", sub="Khung hình"), submode="Khung hình")
     assert ok is None
+
+
+def test_english_ui_account_is_driven_the_same_way():
+    """The second Flow account (khoia1k57) shows English labels: Frames, a '6s' chip, 'Length 6 Sec', 'will use 6 credits'."""
+    page = FakeComposer(mode="image", res="720p", lang="en")
+    result, rec = _run(page, submode="Khung hình", expected_credits=6)
+    assert result is None and page.mode == "video" and page.res == "360p" and page.dur == 6
+    assert page.sub == "Khung hình" and rec["flow_credits"] == 6 and rec["duration_set"] == 6
+    mismatch, _ = _run(FakeComposer(mode="video", res="360p", sub="Khung hình", lang="en"), expected_credits=7)
+    assert mismatch.startswith("PRE_SUBMIT_ERROR CREDIT_QUOTE_MISMATCH")
+
+
+def test_ui_text_parsers_read_both_languages():
+    assert fs.parse_duration_s("Độ dài 8 giây") == 8 and fs.parse_duration_s("Length\n8 Sec") == 8
+    assert fs.parse_cost("Sẽ tốn 8 tín dụng") == 8 and fs.parse_cost("Generating will use 48 credits") == 48
+    assert fs.SETTINGS_CHIP_RE.search("Video · 360p · 6s crop_16_9 x1") and fs.SETTINGS_CHIP_RE.search("Video · 360p · 6 giây")
+    assert fs.has_failed_text("Không thành công") and fs.has_failed_text("Unsuccessful") and not fs.has_failed_text("Done")
+    assert fs.SLOT_LABEL["start"] == ["Bắt đầu", "Start"] and fs.SLOT_LABEL["end"] == ["Kết thúc", "End"]
 
 
 def test_video_mode_composer_needs_no_mode_click():

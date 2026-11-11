@@ -46,7 +46,8 @@ TOKEN_RE = re.compile(r"/asb/([A-Za-z0-9_\-]{24,})")
 PLUS_XY = (358, 662)          # composer "+" (CSS px, 1280x720 viewport)
 START_XY = (379, 563)         # "Khung hình" start-frame slot (fallback; the slot is found by its button text)
 END_DX = 98                   # the end slot sits this many CSS px right of the start slot (measured, 56 px buttons)
-SLOT_LABEL = {"start": "Bắt đầu", "end": "Kết thúc"}
+# Flow shows its UI in the account language: the Vietnamese account says "Bắt đầu"/"Kết thúc", the English one "Start"/"End"
+SLOT_LABEL = {"start": ["Bắt đầu", "Start"], "end": ["Kết thúc", "End"]}
 MAX_BODIES = 400
 
 # videos show an /asb/ thumbnail; generated images a flow-content /image/ URL
@@ -90,10 +91,10 @@ JS_SLOT_BYTES = r"""async ([x, y]) => { let i = null, best = 60;
     return Array.from(new Uint8Array(await r.arrayBuffer())) }"""
 
 # centre of the visible frame-slot button by its text ("Bắt đầu" start, "Kết thúc" end); the GPM window size changes
-JS_FRAME_SLOT = r"""(label) => { const b = [...document.querySelectorAll('button')].find(b => {
-    const r = b.getBoundingClientRect();
+JS_FRAME_SLOT = r"""(arg) => { const labels = Array.isArray(arg) ? arg : [arg]; const b = [...document.querySelectorAll('button')].find(b => {
+    const r = b.getBoundingClientRect(), t = (b.innerText || '').trim();
     return r.width > 0 && r.height > 0 && r.bottom > 0 && r.y < innerHeight
-        && (b.innerText || '').includes(label) });
+        && labels.some(l => t === l || (!/^[ -~]*$/.test(l) && t.includes(l))) });
     if (!b) return null; const r = b.getBoundingClientRect();
     return [r.x + r.width / 2, r.y + r.height / 2] }"""
 
@@ -204,7 +205,7 @@ async def _fill_frame_slot(page, which: str, tok: str, still: Path | None, rec: 
         return f"{name}_NOT_FOUND upload" if newest_k is not None else f"{name}_NOT_FOUND {tok}"
     await page.mouse.click(*xy)
     await page.wait_for_timeout(800)
-    add = page.get_by_text("Thêm vào câu lệnh", exact=True)
+    add = page.get_by_text(ADD_TO_PROMPT_RE)
     if await add.count():   # some picker states fill the slot directly
         await add.click()
     await page.wait_for_timeout(2000)
@@ -405,10 +406,23 @@ JS_MARKED_TOKEN = r"""() => { const c = document.querySelector('[data-vp-n]');
     return m ? m[1] : null }"""
 
 
+# the picker's confirm button ("Add to prompt" is the English wording, unverified: a miss is harmless, the slot is checked)
+ADD_TO_PROMPT_RE = re.compile(r"^(Thêm vào câu lệnh|Add to prompt)$")
+# a rejected job tile: "Không thành công" (vi); English wordings are best guesses, a miss only delays failure detection
+FAILED_WORDS = ("Không thành công", "Unsuccessful", "Something went wrong")
+FAILED_TEXT = FAILED_WORDS[0]   # the Vietnamese wording; kept for callers that need one marker
+FAILED_JS_RE = "/" + "|".join(FAILED_WORDS) + "/g"
+
+
+def has_failed_text(text: str) -> bool:
+    return any(w in (text or "") for w in FAILED_WORDS)
+
+
 # Flow job state on the gallery page: a running job shows "NN%" (0-99), a rejected one "Không thành công"
 JS_JOB_STATE = r"""() => { const t = document.body.innerText;
   return {running: /^\s*\d{1,2}%\s*$/m.test(t),
-          failed: (t.match(/Không thành công/g) || []).length}; }"""
+          failed: 0}; }"""
+JS_JOB_STATE = JS_JOB_STATE.replace("failed: 0", "failed: (t.match(" + FAILED_JS_RE + ") || []).length")
 
 
 # The gallery is a virtual list that mixes images and videos: a young project shows only its first rows at scroll 0.
@@ -587,7 +601,6 @@ async def front_snapshot(page, home: str, scan: int = 6) -> dict:
     return {"front_id": front, "before_ids": ids, "signatures": await gallery_signatures(page)}
 
 
-FAILED_TEXT = "Không thành công"
 # the newest video tile's text: a job still rendering shows its progress (live SC05_g1 v4, 8 s after the submit:
 # "play_circle 0% The given image is the first frame..."; a finished clip shows no percentage)
 JS_FRONT_TILE_TEXT = r"""() => { const cs = [...document.querySelectorAll('flow-grid-tile-container')]
@@ -641,7 +654,7 @@ async def submit_tile(page, home: str, before_ids: list[str], known: set[str]) -
         # a new tile still showing no percentage after the re-reads is a finished clip: not this send's job
         own.update(why="STRAY_IN_FRONT", stray_tail=mid[-8:])
     else:
-        own.update(media_id=mid, failed_at_submit=FAILED_TEXT in (d.get("text") or ""))
+        own.update(media_id=mid, failed_at_submit=has_failed_text(d.get("text")))
     return own
 
 
@@ -651,7 +664,7 @@ def own_tile_only(res: dict, details: list[dict], own_id: str, prompt: str) -> d
     ids = [fb.media_id_from_url((d or {}).get("url", "")) for d in details]
     strays = [m for m in (res.get("media_ids") or [res.get("media_id")]) if m and m != own_id]
     own_text = (details[ids.index(own_id)] or {}).get("text", "") if own_id in ids else ""
-    if FAILED_TEXT in own_text:
+    if has_failed_text(own_text):
         return {"result": "NOT_IN_GALLERY", "why": "own tile failed", "strays": strays}
     if own_id in ids and fb.prompt_on_page(prompt, own_text):
         return {"result": "BOUND", "media_id": own_id, "index": ids.index(own_id), "strays": strays}
@@ -662,7 +675,7 @@ def own_tile_state(details: list[dict], own_id: str) -> str:
     """FAILED (own tile shows the failure), OK (own tile present, not failed) or MISSING."""
     for d in details:
         if fb.media_id_from_url((d or {}).get("url", "")) == own_id:
-            return "FAILED" if FAILED_TEXT in ((d or {}).get("text") or "") else "OK"
+            return "FAILED" if has_failed_text((d or {}).get("text")) else "OK"
     return "MISSING"
 
 
@@ -812,13 +825,13 @@ def probe_duration(path: Path) -> float | None:
 
 
 # composer settings (model + clip length): the chip is the button whose text has "Video" and "giây"
-SETTINGS_CHIP_RE = re.compile(r"Video[\s\S]*giây")
+SETTINGS_CHIP_RE = re.compile(r"Video[\s\S]*(?:giây|\d+s\b)")   # vi "… 6 giây", en "Video · 360p · 6s"
 # image mode shows another chip ("Nano Banana ... crop_16_9 x1"): any composer chip carries the aspect icon and the count
-SETTINGS_CHIP_ANY_RE = re.compile(r"(?:Video|Hình ảnh|Nano Banana)[\s\S]*crop_\d+_\d+[\s\S]*x\d")
+SETTINGS_CHIP_ANY_RE = re.compile(r"(?:Video|Hình ảnh|Image|Nano Banana)[\s\S]*crop_\d+_\d+[\s\S]*x\d")
 SETTINGS_CHIP_ATTEMPTS = 3   # bounded retries for "settings chip not found" before the send is refused (0 credits)
 MODEL_BUTTON_RE = re.compile(r"Omni|Veo")
-DURATION_RE = re.compile(r"Độ dài\s*(\d+)\s*giây")
-COST_RE = re.compile(r"tốn\s*(\d+)\s*tín dụng")
+DURATION_RE = re.compile(r"(?:Độ dài|Length)\s*(\d+)\s*(?:giây|Sec)")
+COST_RE = re.compile(r"(?:tốn|will use)\s*(\d+)\s*(?:tín dụng|credits?)")
 MIN_DURATION_S, MAX_DURATION_S = 3, 15   # the slider runs 3..15 s in 1 s steps; Home = 3 s
 
 JS_OPTION_XY = r"""(name) => { const vis = e => { const r = e.getBoundingClientRect();
@@ -877,9 +890,13 @@ async def _find_settings_chip(page, attempts: int = SETTINGS_CHIP_ATTEMPTS):
     return None
 
 
+RADIO_ALIASES = {"Khung hình": ("Khung hình", "Frames"), "Thành phần": ("Thành phần", "Ingredients"),
+                 "Hình ảnh": ("Hình ảnh", "Image")}   # Vietnamese label -> its wording in every UI language we drive
+
+
 def _radio_re(label: str):
     # has_text matches textContent, where the icon ligature runs into the label ("videocamVideo"): case-sensitive substring
-    return re.compile(re.escape(label))
+    return re.compile("|".join(re.escape(x) for x in RADIO_ALIASES.get(label, (label,))))
 
 
 async def _ensure_radio(page, label: str, what: str) -> str | None:
@@ -971,7 +988,7 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
     if duration is not None:
         if shown_s != duration:
             return f"SETTINGS_NOT_SET duration shows {shown_s}, wanted {duration}"
-        if f"{duration} giây" not in chip_text:
+        if f"{duration} giây" not in chip_text and not re.search(rf"\b{duration}s\b", chip_text):
             return f"SETTINGS_NOT_SET chip does not show {duration} giây"
     if expected_credits is not None and cost != expected_credits:
         return f"PRE_SUBMIT_ERROR CREDIT_QUOTE_MISMATCH shown={cost} reserved={expected_credits:g}"
@@ -980,7 +997,7 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
 
 async def _upload_in_picker(page, f: Path) -> bool:
     """Upload one local file through the open frame picker's "Tải nội dung" button; False when no picker is open."""
-    btn = page.locator("text=Tải nội dung >> visible=true")
+    btn = page.locator("text=/Tải nội dung|Upload media/ >> visible=true")
     if not await btn.count():
         return False
     async with page.expect_file_chooser(timeout=15000) as fc:
@@ -995,7 +1012,7 @@ async def _upload(page, f) -> None:
     async with page.expect_file_chooser(timeout=15000) as fc:
         await page.mouse.click(*await _plus_xy(page))
         await page.wait_for_timeout(1200)
-        await page.get_by_text("Tải nội dung", exact=False).last.click()
+        await page.get_by_text(re.compile(r"Tải nội dung|Upload media")).last.click()
     await (await fc.value).set_files([f])
     await page.wait_for_timeout(15000)
     await page.keyboard.press("Escape")
@@ -1096,7 +1113,7 @@ async def run(args, before_submit=None) -> dict:
                 else:
                     await page.locator(f"text={title} >> visible=true").first.click()
                 await page.wait_for_timeout(800)
-                add = page.get_by_text("Thêm vào câu lệnh", exact=True)
+                add = page.get_by_text(ADD_TO_PROMPT_RE)
                 if await add.count():   # image mode attaches on the click itself
                     await add.click()
                 await page.wait_for_timeout(1500)

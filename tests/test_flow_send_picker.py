@@ -138,10 +138,11 @@ class _SlotPage:
 
     async def evaluate(self, js, *args):
         if js is fs.JS_FRAME_SLOT:
-            self.slot_asked.append(args[0])
+            label = args[0][0] if isinstance(args[0], list) else args[0]   # vi label first, then the English one
+            self.slot_asked.append(label)
             if not self.texts:
                 return None
-            return {"Bắt đầu": [330, 520], "Kết thúc": [428, 520]}[args[0]]
+            return {"Bắt đầu": [330, 520], "Kết thúc": [428, 520]}[label]
         if js is fs.JS_PICKER_CENTRES:
             return [list(t) for t in self.thumbs]
         if js is fs.JS_SLOT_BYTES:
