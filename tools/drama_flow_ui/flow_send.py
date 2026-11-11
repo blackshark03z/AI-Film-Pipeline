@@ -411,6 +411,52 @@ JS_JOB_STATE = r"""() => { const t = document.body.innerText;
           failed: (t.match(/Không thành công/g) || []).length}; }"""
 
 
+# The gallery is a virtual list that mixes images and videos: a young project shows only its first rows at scroll 0.
+# Keys are "row:col" of the tile's container in absolute (scroll-independent) 40 px cells.
+JS_VIDEO_KEYS = r"""() => { let top = 0;
+    document.querySelectorAll('*').forEach(e => { if (e.clientHeight > 300 && e.scrollHeight > e.clientHeight + 50
+        && getComputedStyle(e).overflowY !== 'visible' && e.scrollTop > top) top = e.scrollTop });
+    const keys = [...document.querySelectorAll('flow-grid-tile-container')].filter(c => c.querySelector('flow-video-tile'))
+        .map(c => { const r = c.getBoundingClientRect(); return Math.round((r.top + top) / 40) + ':' + Math.round(r.left / 40) });
+    return {top, keys} }"""
+
+JS_MARK_KEY = r"""(key) => { document.querySelectorAll('[data-vp-n]').forEach(e => e.removeAttribute('data-vp-n'));
+    let top = 0;
+    document.querySelectorAll('*').forEach(e => { if (e.clientHeight > 300 && e.scrollHeight > e.clientHeight + 50
+        && getComputedStyle(e).overflowY !== 'visible' && e.scrollTop > top) top = e.scrollTop });
+    for (const c of document.querySelectorAll('flow-grid-tile-container')) {
+        if (!c.querySelector('flow-video-tile')) continue;
+        const r = c.getBoundingClientRect();
+        if (Math.round((r.top + top) / 40) + ':' + Math.round(r.left / 40) === key) { c.setAttribute('data-vp-n', '1'); return true } }
+    return false }"""
+
+SCROLL_STEP_PX = 500   # below the 720 px viewport, so no row is skipped between two steps
+
+
+async def mark_nth_video(page, n: int) -> bool:
+    """Mark the n-th video tile (top-to-bottom, left-to-right), scrolling the virtual grid when the first rows hold fewer.
+    False only once the grid is scrolled to its end and no n-th video exists: the gallery is exhausted."""
+    if await page.evaluate(JS_MARK_NTH, n):
+        return True
+    seen: dict[str, float] = {}
+    y = 0
+    while True:
+        state = await page.evaluate(JS_VIDEO_KEYS)
+        for key in state["keys"]:
+            seen.setdefault(key, state["top"])
+        if len(seen) > n:
+            break
+        y += SCROLL_STEP_PX
+        if not await page.evaluate(JS_SCROLL_STEP, y):
+            return False
+        await page.wait_for_timeout(700)
+    key = sorted(seen, key=lambda k: tuple(int(p) for p in k.split(":")))[n]
+    if seen[key] != state["top"]:
+        await page.evaluate(JS_SCROLL_STEP, seen[key])
+        await page.wait_for_timeout(700)
+    return bool(await page.evaluate(JS_MARK_KEY, key))
+
+
 # P18-01: the first K video tiles of the gallery at scroll 0 (top-to-bottom, left-to-right), CSS px rects in the viewport
 JS_VIDEO_RECTS = r"""(k) => [...document.querySelectorAll('flow-grid-tile-container')]
     .filter(c => c.querySelector('flow-video-tile')).map(c => c.getBoundingClientRect())
@@ -512,7 +558,7 @@ async def read_nth_detail(page, n: int, home: str) -> dict | None:
     (URL has the media id, body has the prompt), come back to the gallery."""
     await page.evaluate(JS_TOP)
     await page.wait_for_timeout(500)
-    if not await page.evaluate(JS_MARK_NTH, n):
+    if not await mark_nth_video(page, n):
         return None
     await page.locator("[data-vp-n] flow-video-tile").first.click(timeout=8000)
     await page.wait_for_timeout(3500)

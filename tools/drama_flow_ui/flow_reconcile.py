@@ -110,10 +110,11 @@ async def scan_gallery(page, n: int) -> list[dict]:
     return details
 
 
-def complete_negative_scan(details: list[dict], home: str) -> bool:
+def complete_negative_scan(details: list[dict], home: str, exhausted: bool = False) -> bool:
+    """Full scan: MIN_SCAN newest pages read, or the gallery ran out of videos first (a young project holds fewer)."""
     prefix = home.split('/edit/')[0].split('?')[0].rstrip('/') + '/edit/'
     ids = [fb.media_id_from_url(d.get("url", "")) for d in details]
-    return (len(ids) >= MIN_SCAN and all(ids) and len({m.lower() for m in ids}) == len(ids)
+    return ((len(ids) >= MIN_SCAN or (exhausted and ids)) and all(ids) and len({m.lower() for m in ids}) == len(ids)
             and all(d.get("url", "").startswith(prefix) and d.get("text", "").strip() for d in details))
 
 
@@ -206,7 +207,7 @@ async def run(args) -> dict[str, dict]:
                 res = bind_receipt(prompt, details, known, context)
                 res["scanned"] = len(details)
                 res.update(prompt_sha256=_sha(prompt), project=context.get("project"),
-                           scan_verified=complete_negative_scan(details, page.url))
+                           scan_verified=complete_negative_scan(details, page.url, exhausted=len(details) < args.scan))
                 if native.is_file():
                     res["native_sha256"] = hashlib.sha256(native.read_bytes()).hexdigest()
                 if res["result"] == "BOUND":
