@@ -229,7 +229,10 @@ def build_stems(pkg: Any, section: Any, cut: Path, stems_dir: Path, plan: MixPla
     problems: list[dict[str, str]] = []
 
     dialogue = stems_dir / "dialogue.wav"
-    _ff("-i", str(cut), "-vn", "-ac", "2", "-ar", str(SR), "-t", f"{total:.3f}", "-c:a", "pcm_s16le", str(dialogue))
+    # The picture is the clock: the cut's own audio may end a few frames before its picture, so pad it to the planned
+    # length (a short dialogue stem would shorten the whole mix through amix duration=first).
+    _ff("-i", str(cut), "-vn", "-ac", "2", "-ar", str(SR), "-af", f"apad=whole_dur={total:.6f}", "-t", f"{total:.6f}",
+        "-c:a", "pcm_s16le", str(dialogue))
 
     spans = scene_spans(pkg, section, planned)
     layers, used_ambience = [], []
@@ -328,8 +331,12 @@ def mix_cut(pkg: Any, section: Any, cut: Path, out: Path, *, stems_dir: Path | N
                          "detail": f"bed ducked by {depth} dB under dialogue, wanted >= {plan.min_duck_depth_db}"})
     out.parent.mkdir(parents=True, exist_ok=True)
     before = measure_ebur128(Path(mixed["mix"]))
-    _ff("-i", str(cut), "-i", mixed["mix"], "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
-        "-shortest", "-movflags", "+faststart", str(out))
+    # No -shortest: with stream copy it cuts the picture at the audio end (and a few packets earlier). The audio is
+    # padded/trimmed to the picture length instead, so the master keeps every frame of the locked cut.
+    picture_s = f"{built['total_s']:.6f}"
+    _ff("-i", str(cut), "-i", mixed["mix"], "-map", "0:v", "-map", "1:a", "-c:v", "copy",
+        "-af", f"apad=whole_dur={picture_s},atrim=0:{picture_s}", "-c:a", "aac", "-b:a", "256k",
+        "-movflags", "+faststart", str(out))
     after = normalize_loudness(out, target_i=plan.target_lufs, true_peak=min(plan.true_peak_db, -1.5))
     ok_loud = abs(after["integrated_lufs"] - plan.target_lufs) <= plan.lufs_tolerance and \
         after["peak_dbfs"] <= plan.true_peak_db

@@ -335,7 +335,11 @@ def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, hei
                     chunk = _save_render(cache_dir, key, generated, ".mkv")
                 chunks.append(chunk)
             concat_list = work / "concat.txt"
-            concat_list.write_text("".join(f"file '{p.as_posix()}'\n" for p in chunks), encoding="utf-8")
+            # Explicit exact durations: mkv timestamps are whole milliseconds, so without them every join took the
+            # chunk's rounded-up length and a 30 min portrait ended a whole frame late.
+            concat_list.write_text(
+                "".join(f"file '{p.as_posix()}'\nduration {(w[-1]['end_frame'] - w[0]['start_frame']) / fps:.9f}\n"
+                        for p, w in zip(chunks, windows)), encoding="utf-8")
             joined = work / "joined.mkv"
             subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
                             "-c", "copy", str(joined)], check=True)

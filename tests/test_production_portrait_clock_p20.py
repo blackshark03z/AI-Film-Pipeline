@@ -48,3 +48,28 @@ def test_long_portrait_keeps_absolute_picture_audio_clock_and_png_label(tmp_path
         if marked:
             r, g, b = pixel(out, 3, "crop=32:32:0:0")
             assert g > r + 70 and g > b + 70, "label overlay did not use its PNG input"
+
+
+def picture_pts(path):
+    out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "packet=pts_time",
+                          "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True).stdout
+    return sorted(float(x) for x in out.split())
+
+
+def test_joined_portrait_parts_do_not_accumulate_clock_drift(tmp_path):
+    """P20 benchmark WARN: chunk durations came from millisecond mkv timestamps, every join added ~0.3 ms, and a 30 min
+    portrait ran a whole frame long (ffmpeg then reported non monotonically increasing dts when decoding it).
+    Parts of 25 frames are not a whole number of milliseconds (1041.667 ms), so each join used to round up."""
+    source = tmp_path / "source.mp4"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc=s=320x180:r=24:d=42",
+                    "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p", str(source)], check=True)
+    frames = 1000
+    segments = [{"event_id": f"e{i}", "mode": "fit", "start_frame": i * 50, "end_frame": (i + 1) * 50,
+                 "start_s": i * 50 / 24, "end_s": (i + 1) * 50 / 24} for i in range(frames // 50)]
+    parts = [{"key": f"{i:064x}", "start_frame": i * 25, "end_frame": (i + 1) * 25} for i in range(frames // 25)]
+    out = tmp_path / "portrait.mp4"
+    render_portrait(source, segments, out, 180, 24, cache_dir=tmp_path / "cache", picture_parts=parts)
+    pts = picture_pts(out)
+    assert len(pts) == frames
+    worst = max(abs(p - n / 24) for n, p in enumerate(pts))
+    assert worst < 0.0015, f"portrait clock drifted {worst * 1000:.2f} ms from n/24 over {frames} frames"

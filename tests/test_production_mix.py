@@ -189,3 +189,34 @@ def test_cli_mix(cut):
     missing = subprocess.run([sys.executable, str(TOOL), "mix", "--film", str(pkg.root), "--cut", str(tmp / "no.mp4")],
                              capture_output=True, text=True, encoding="utf-8", cwd=ROOT)
     assert missing.returncode == 1 and "render the cut first" in json.loads(missing.stdout)["error"]
+
+
+def packet_count(path: Path, stream: str = "v:0") -> int:
+    out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", stream, "-count_packets", "-show_entries",
+                          "stream=nb_read_packets", "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True)
+    return int(out.stdout.strip())
+
+
+def stream_seconds(path: Path, stream: str) -> float:
+    out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", stream, "-show_entries", "stream=duration",
+                          "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True)
+    return float(out.stdout.strip())
+
+
+@needs_ffmpeg
+def test_master_keeps_every_picture_frame_when_the_cut_audio_is_shorter_than_the_picture(cut):
+    """P20 benchmark WARN: the cut's own audio ended ~0.08 s before its picture; the dialogue stem (amix duration=first)
+    and ``-shortest`` then dropped the last picture frames. The picture is the clock: audio is padded to it."""
+    pkg, section, out, tmp = cut
+    frames = packet_count(out)
+    short = tmp / "cut" / "short_audio.mp4"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(out), "-map", "0:v", "-map", "0:a", "-c:v", "copy",
+                    "-af", "atrim=0:15.84,asetpts=N/SR/TB", "-c:a", "aac", str(short)], check=True)
+    short.with_suffix(".cut.json").write_text(out.with_suffix(".cut.json").read_text(encoding="utf-8"), encoding="utf-8")
+    assert packet_count(short) == frames and stream_seconds(short, "a:0") < stream_seconds(short, "v:0") - 0.1
+    report = M.mix_cut(pkg, section, short, tmp / "mixed.mp4")
+    assert report["ok"]
+    assert packet_count(tmp / "mixed.mp4") == frames
+    picture = stream_seconds(tmp / "mixed.mp4", "v:0")
+    assert abs(picture - stream_seconds(short, "v:0")) < 1e-3
+    assert abs(stream_seconds(tmp / "mixed.mp4", "a:0") - picture) < 0.03   # audio is exactly the picture's length
