@@ -1,0 +1,1220 @@
+{
+  "vision": {
+    "tone": "Plain, patient and close: two people talking at a diner counter and booth in early light, the turns carried by faces and small pauses, never by speeches or camera tricks.",
+    "references": [
+      "an empty diner at dawn seen at standing and seated eye level, cool window light warming through the morning",
+      "a low-key negotiation drama played in pauses and glances"
+    ]
+  },
+  "visual_rules": [
+    {
+      "rule": "Static eye-level camera, no dutch angles, no handheld shake.",
+      "why": "The turn comes from Ruth's face and Sam's answer, not from the camera."
+    },
+    {
+      "rule": "Keep Ruth screen-left and Sam screen-right in every shot of the counter and the booth.",
+      "why": "The distance between them stays readable and the cut never flips who is where."
+    },
+    {
+      "rule": "One person moves or handles one prop at a time, never together; no hand-over and no contact.",
+      "why": "Hands on small props and two bodies in contact are the least reliable things the video model does (film01, film04)."
+    },
+    {
+      "rule": "Singles keep the counter edge or the high red booth back in frame.",
+      "why": "film05: a close single at table height reads as standing or seated by chance; the furniture makes posture readable."
+    },
+    {
+      "rule": "The closure notice and the OPEN card are static graphics composited and checked in post.",
+      "why": "Generated text on a prop cannot be trusted to read correctly."
+    }
+  ],
+  "reveals": [
+    {
+      "fact_id": "notice_before_offer",
+      "scene_id": "SC01"
+    },
+    {
+      "fact_id": "last_morning_planned",
+      "scene_id": "SC02"
+    },
+    {
+      "fact_id": "trial_terms",
+      "scene_id": "SC11"
+    },
+    {
+      "fact_id": "open_card",
+      "scene_id": "SC12"
+    }
+  ],
+  "coverage_plan": {
+    "B1": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B2": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B3": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B4": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B5": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B6": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B7": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B8": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B9": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B10": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B11": [
+      "SINGLE"
+    ],
+    "B12": [
+      "MASTER",
+      "SINGLE"
+    ]
+  },
+  "scenes": {
+    "SC01": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closing",
+          "notice_before_offer"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "notice_before_offer"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "notice_before_offer"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Ruth admits the notice was printed before her offer",
+          "device": "hold",
+          "generation_id": "SC01_g22",
+          "fact_id": "notice_before_offer"
+        }
+      ],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 3
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC01_g22",
+            "seconds": 1.0,
+            "why": "hold on Ruth after she admits the notice came first"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "title card, then a hard cut into the diner at dawn"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC02": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Ruth names the last morning she planned",
+          "device": "hold",
+          "generation_id": "SC02_g11",
+          "fact_id": "last_morning_planned"
+        }
+      ],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 4
+        },
+        "RUTH": {
+          "start": 3,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC02_g11",
+            "seconds": 1.0,
+            "why": "hold on Ruth after she names the last morning"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC03": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 2
+        },
+        "RUTH": {
+          "start": 3,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC03_g13",
+            "seconds": 3.0,
+            "why": "Sam's quiet look at the two mugs"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC04": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 2,
+          "end": 3
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC04_g14",
+            "seconds": 3.0,
+            "why": "Ruth's quiet moment of admission"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC05": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 3
+        },
+        "RUTH": {
+          "start": 3,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC05_g06",
+            "seconds": 3.0,
+            "why": "Sam's easing jaw"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC06": {
+      "pov": {
+        "whose": "RUTH",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer",
+          "ruth_cannot_run_alone"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 2
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC06_g13",
+            "seconds": 3.0,
+            "why": "Ruth sits quietly with the choice"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC07": {
+      "pov": {
+        "whose": "RUTH",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer",
+          "ruth_cannot_run_alone",
+          "two_seat_counter"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "two_seat_counter"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "two_seat_counter"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 2,
+          "end": 2
+        },
+        "RUTH": {
+          "start": 3,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC07_g18",
+            "seconds": 1.0,
+            "why": "hold on Ruth agreeing to two seats"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC08": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer",
+          "ruth_cannot_run_alone",
+          "two_seat_counter",
+          "wage_reserve"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "two_seat_counter",
+            "wage_reserve"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "two_seat_counter",
+            "wage_reserve"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 2,
+          "end": 3
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC08_g18",
+            "seconds": 3.0,
+            "why": "Sam takes his time before the next question"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC09": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer",
+          "ruth_cannot_run_alone",
+          "two_seat_counter",
+          "wage_reserve"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "two_seat_counter",
+            "wage_reserve"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "two_seat_counter",
+            "wage_reserve"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 2
+        },
+        "RUTH": {
+          "start": 3,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC09_g25",
+            "seconds": 1.0,
+            "why": "hold on Ruth admitting she is still learning"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC10": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer",
+          "ruth_cannot_run_alone",
+          "two_seat_counter",
+          "wage_reserve"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "two_seat_counter",
+            "wage_reserve"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "two_seat_counter",
+            "wage_reserve"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "SAM": {
+          "start": 2,
+          "end": 3
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC10_g25",
+            "seconds": 1.0,
+            "why": "hold on Ruth answering as an employer"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC11": {
+      "pov": {
+        "whose": "RUTH",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer",
+          "ruth_cannot_run_alone",
+          "trial_terms",
+          "two_seat_counter",
+          "wage_reserve"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "trial_terms",
+            "two_seat_counter",
+            "wage_reserve"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "ruth_cannot_run_alone",
+            "trial_terms",
+            "two_seat_counter",
+            "wage_reserve"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Sam holds a quiet look before the terms are sealed",
+          "device": "reaction",
+          "generation_id": "SC11_g13",
+          "fact_id": "trial_terms"
+        }
+      ],
+      "curve": {
+        "SAM": {
+          "start": 3,
+          "end": 2
+        },
+        "RUTH": {
+          "start": 3,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC11_g13",
+            "seconds": 3.0,
+            "why": "Sam's deliberate look"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    },
+    "SC12": {
+      "pov": {
+        "whose": "SAM",
+        "audience_knows": [
+          "diner_closing",
+          "last_morning_planned",
+          "notice_before_offer",
+          "open_card",
+          "ruth_cannot_run_alone",
+          "trial_terms",
+          "two_seat_counter",
+          "wage_reserve"
+        ],
+        "characters_know": {
+          "SAM": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "open_card",
+            "ruth_cannot_run_alone",
+            "trial_terms",
+            "two_seat_counter",
+            "wage_reserve"
+          ],
+          "RUTH": [
+            "diner_closing",
+            "last_morning_planned",
+            "notice_before_offer",
+            "open_card",
+            "ruth_cannot_run_alone",
+            "trial_terms",
+            "two_seat_counter",
+            "wage_reserve"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Sam sets the OPEN card on the counter",
+          "device": "hold",
+          "generation_id": "SC12_g25",
+          "fact_id": "open_card"
+        }
+      ],
+      "curve": {
+        "SAM": {
+          "start": 2,
+          "end": 1
+        },
+        "RUTH": {
+          "start": 2,
+          "end": 2
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC12_g25",
+            "seconds": 1.5,
+            "why": "the OPEN card stays still on the counter"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same two people"
+      }
+    }
+  },
+  "comprehension": {
+    "intros": [
+      {
+        "character": "RUTH",
+        "label": "RUTH KELLER",
+        "relation": "owns the diner",
+        "needed_by": "SC01_g02",
+        "carriers": []
+      },
+      {
+        "character": "SAM",
+        "label": "SAM DOYLE",
+        "relation": "starting his first shift",
+        "needed_by": "SC01_g01",
+        "carriers": []
+      }
+    ],
+    "facts": [
+      {
+        "fact_id": "diner_closing",
+        "text": "A printed notice says the diner is closing permanently",
+        "needed_by": "SC01_g10",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC01_g10",
+            "detail": "It says permanently. That's quite a word to leave out."
+          }
+        ]
+      },
+      {
+        "fact_id": "notice_before_offer",
+        "text": "The closure notice was printed before Ruth offered Sam the job",
+        "needed_by": "SC01_g23",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC01_g22",
+            "detail": "Yes. It was already here when we talked that night."
+          }
+        ]
+      },
+      {
+        "fact_id": "last_morning_planned",
+        "text": "Ruth planned this as one last proper morning before closing",
+        "needed_by": "SC02_g12",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC02_g11",
+            "detail": "One proper morning. Before I put that thing on display."
+          }
+        ]
+      },
+      {
+        "fact_id": "ruth_cannot_run_alone",
+        "text": "Ruth cannot open and close everything alone any more",
+        "needed_by": "SC06_g09",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC06_g08",
+            "detail": "I can still do the work. I can't do all of it."
+          }
+        ]
+      },
+      {
+        "fact_id": "two_seat_counter",
+        "text": "The diner will open as a two-seat counter with coffee and toast",
+        "needed_by": "SC07_g19",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC07_g18",
+            "detail": "Then two seats hold. I can live with two seats."
+          }
+        ]
+      },
+      {
+        "fact_id": "wage_reserve",
+        "text": "There is a fixed wage reserve for the trial week, 225 dollars",
+        "needed_by": "SC08_g18",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC08_g17",
+            "detail": "Two hundred twenty five. Paid each morning, not after Friday."
+          }
+        ]
+      },
+      {
+        "fact_id": "trial_terms",
+        "text": "Sam and Ruth agree five paid mornings and a decision after the trial",
+        "needed_by": "SC11_g21",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC11_g01",
+            "detail": "Five mornings, counting today. Six until nine, fifteen an hour."
+          },
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC11_g12",
+            "detail": "At the end, we decide whether another week makes sense."
+          }
+        ]
+      },
+      {
+        "fact_id": "open_card",
+        "text": "The diner puts up an OPEN card; the trial begins",
+        "needed_by": "SC12_g25",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC12_g23",
+            "detail": "There's a small open card beside the till. Use that one."
+          },
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC12_g25",
+            "detail": "SAM sets the small OPEN card on the counter"
+          }
+        ]
+      }
+    ],
+    "tags": [
+      {
+        "character": "SAM",
+        "generation_id": "SC01_g01",
+        "start_s": 0.3,
+        "end_s": 3.3,
+        "anchor_x": null,
+        "anchor_y": null
+      },
+      {
+        "character": "RUTH",
+        "generation_id": "SC01_g02",
+        "start_s": 0.3,
+        "end_s": 3.3,
+        "anchor_x": null,
+        "anchor_y": null
+      }
+    ],
+    "cards": []
+  },
+  "translations": {
+    "THE FIRST SHIFT": "CA LÀM ĐẦU TIÊN",
+    "owns the diner": "chủ quán ăn",
+    "starting his first shift": "bắt đầu ca làm đầu tiên",
+    "You're early. I haven't even switched the front lights on.": "Cậu đến sớm. Tôi còn chưa bật đèn phía trước nữa.",
+    "Six meant six. I didn't want you waiting for me.": "Sáu giờ là sáu giờ. Cháu không muốn cô phải đợi.",
+    "I wasn't expecting new shoes. Those look properly dry, anyway.": "Tôi không ngờ cậu mua giày mới. Ít ra trông chúng khô ráo.",
+    "The shop had one pair left that actually fit me.": "Cửa hàng còn đúng một đôi vừa chân cháu thật sự.",
+    "Good. You can leave your coat on for a minute.": "Tốt. Cậu cứ mặc áo khoác thêm một lát cũng được.",
+    "Is that notice on the counter meant for the window?": "Tờ thông báo trên quầy kia là để dán lên cửa kính ạ?",
+    "I hadn't decided where it ought to go just yet.": "Tôi vẫn chưa quyết định nên đặt nó ở đâu thôi.",
+    "It says permanently. That's quite a word to leave out.": "Nó ghi vĩnh viễn. Đó đâu phải từ có thể bỏ qua.",
+    "I know what it says. I had it printed myself.": "Tôi biết nó ghi gì. Chính tôi đã nhờ in mà.",
+    "Then should I have called before coming down this morning?": "Vậy lẽ ra sáng nay cháu nên gọi trước khi đến ạ?",
+    "No. You came when I asked you. You did right.": "Không. Cậu đến đúng giờ tôi hẹn. Cậu làm đúng rồi.",
+    "I thought the first thing would be learning the till.": "Cháu tưởng việc đầu tiên sẽ là học dùng máy tính tiền.",
+    "We can leave the till alone until we've had coffee.": "Cứ để máy tính tiền đó đến khi chúng ta uống cà phê.",
+    "This one's empty. Were you going to make some now?": "Cốc này rỗng. Cô định pha cà phê bây giờ sao?",
+    "I was going to ask if you still take milk.": "Tôi định hỏi cậu còn uống kèm sữa hay không.",
+    "I do, but coffee isn't why I came here today.": "Có ạ, nhưng hôm nay cháu không đến đây vì cà phê.",
+    "I didn't say it was. Please give me a minute.": "Tôi đâu có nói thế. Cho tôi một phút đã nhé.",
+    "Was that notice printed before you offered me the job?": "Cô in thông báo đó trước khi đề nghị nhận cháu sao?",
+    "Yes. It was already here when we talked that night.": "Phải. Nó đã ở đây từ đêm chúng ta nói chuyện.",
+    "Then I need you to explain what I'm here for.": "Vậy cháu cần cô giải thích cháu đến đây để làm gì.",
+    "All right. Let's sit where we can actually hear ourselves.": "Được rồi. Hãy ngồi chỗ nào chúng ta nghe rõ nhau hơn.",
+    "I thought we'd sit a while before doing anything else.": "Tôi nghĩ mình sẽ ngồi một lát trước khi làm việc gì khác.",
+    "You could have asked me for breakfast instead of work.": "Cô có thể mời cháu ăn sáng thay vì hứa cho việc.",
+    "You might not have come if I'd called it breakfast.": "Nếu tôi chỉ gọi là ăn sáng, có lẽ cậu đã không đến.",
+    "You don't know that. You never gave me that choice.": "Cô đâu biết được. Cô chưa từng cho cháu lựa chọn đó.",
+    "No. I didn't. I thought I was making it easier.": "Phải. Tôi không cho. Tôi tưởng như vậy sẽ dễ hơn.",
+    "Easier for which of us? I'm honestly asking you that.": "Dễ hơn cho ai ạ? Cháu thực lòng muốn hỏi cô điều đó.",
+    "For me, probably. I didn't want another morning here alone.": "Chắc là cho tôi. Tôi không muốn lại ở đây một mình.",
+    "So this was supposed to be your last morning here?": "Vậy cô định coi đây là buổi sáng cuối cùng ở đây sao?",
+    "One proper morning. Before I put that thing on display.": "Một buổi sáng cho tử tế. Trước khi tôi treo thông báo đó.",
+    "And I was supposed to sit here while you closed?": "Còn cháu chỉ việc ngồi đây nhìn cô đóng cửa sao?",
+    "I hadn't worked out what I'd say when you arrived.": "Tôi chưa nghĩ ra sẽ nói gì khi cậu đến.",
+    "You told me six. I spent the night planning around it.": "Cô hẹn sáu giờ. Cả đêm cháu đã tính toán theo lời hẹn.",
+    "I meant that part. I wanted you to be here.": "Phần đó là thật. Tôi muốn cậu có mặt ở đây.",
+    "Being here isn't the same as having somewhere to work.": "Có mặt ở đây đâu có nghĩa là có nơi làm việc.",
+    "No. It isn't. I should have said what was happening.": "Không giống. Tôi lẽ ra phải nói rõ chuyện đang xảy ra.",
+    "I can hear bad news. I can't plan around guesses.": "Cháu nghe được tin xấu. Cháu không thể tính theo phỏng đoán.",
+    "Then ask me what you need to know. I'll answer.": "Vậy cậu cứ hỏi điều cần biết. Tôi sẽ trả lời.",
+    "Is there any work here that you actually need done?": "Ở đây có việc gì cô thực sự cần người làm không?",
+    "There is plenty. I just can't promise where it leads.": "Có rất nhiều. Tôi chỉ không hứa được nó sẽ dẫn đến đâu.",
+    "I'm asking about this morning. Start with what's actually here.": "Cháu đang hỏi sáng nay. Hãy bắt đầu bằng việc có thật.",
+    "The counter needs setting. We can start with that much.": "Quầy cần được chuẩn bị. Ta có thể bắt đầu từ việc đó.",
+    "Only this end first. The other stools can stay empty.": "Trước mắt chỉ đầu quầy này. Các ghế còn lại cứ để trống.",
+    "How many places do you normally set before opening up?": "Thường cô chuẩn bị bao nhiêu chỗ trước khi mở cửa ạ?",
+    "All eight, usually. Then the booths, if I have time.": "Thường là cả tám. Rồi đến các bàn, nếu còn thời gian.",
+    "You said this end. Does that mean two places today?": "Cô nói đầu này. Vậy hôm nay chuẩn bị hai chỗ thôi ạ?",
+    "Two is enough for now. I keep forgetting that part.": "Hai chỗ trước mắt là đủ. Tôi cứ quên mất điều đó.",
+    "Do the handles face the person or face the till?": "Quai cốc quay về phía khách hay về phía máy tính tiền ạ?",
+    "The person, unless they're left handed and move it themselves.": "Về phía khách, trừ khi họ thuận tay trái và tự xoay lại.",
+    "Good. That's something I can check without guessing your mind.": "Tốt. Việc đó cháu kiểm tra được mà không phải đoán ý cô.",
+    "You'll have to ask things. I haven't trained anyone lately.": "Cậu sẽ phải hỏi nhiều đấy. Lâu rồi tôi chưa hướng dẫn ai.",
+    "I can ask. Will you tell me when something matters?": "Cháu hỏi được. Cô sẽ nói rõ khi việc gì quan trọng chứ?",
+    "Yes. And when it doesn't, I'll try to say that.": "Có. Và khi không quan trọng, tôi cũng sẽ cố nói rõ.",
+    "Are these two clean, or are they waiting for washing?": "Hai cốc này sạch rồi hay vẫn đang chờ rửa ạ?",
+    "Clean. The dirty ones stay in the tray behind me.": "Sạch rồi. Cốc bẩn ở trong khay phía sau tôi.",
+    "Separate trays would help me keep the two things straight.": "Có khay riêng sẽ giúp cháu phân biệt hai loại rõ hơn.",
+    "There used to be one. It cracked a while back.": "Trước đây có một cái. Nó nứt từ một dạo trước rồi.",
+    "Could an empty shelf do until you replace the tray?": "Dùng tạm một ngăn kệ trống trước khi thay khay được không?",
+    "The lower shelf is free. Don't put anything hot there.": "Ngăn dưới đang trống. Đừng đặt đồ nóng ở đó nhé.",
+    "I'll leave this here, away from the clean cup spaces.": "Cháu để khăn ở đây, cách xa chỗ dành cho cốc sạch.",
+    "That's sensible. I usually end up looking for the thing.": "Hợp lý đấy. Tôi thường cứ phải tìm mãi chiếc khăn này.",
+    "Then that can be my first job. Keeping this end ready.": "Vậy việc đầu tiên của cháu là giữ đầu quầy này sẵn sàng.",
+    "It won't take three hours to put two mugs out.": "Bày hai chiếc cốc đâu có mất đến ba tiếng đồng hồ.",
+    "Then tell me the next job when this one's done.": "Vậy cô giao việc tiếp theo khi cháu xong việc này nhé.",
+    "Before we do another job, we need to discuss pay.": "Trước khi làm việc tiếp, chúng ta cần nói về tiền công.",
+    "I was going to get to that. Fifteen an hour.": "Tôi đang định nói chuyện đó. Mười lăm đô một giờ.",
+    "For how many hours today, including the time we're talking?": "Hôm nay bao nhiêu giờ, kể cả thời gian đang nói chuyện ạ?",
+    "Six until nine. Forty five dollars for the whole morning.": "Từ sáu đến chín. Bốn mươi lăm đô cho cả buổi sáng.",
+    "And that's work, even if nobody comes through the door?": "Và đó vẫn là làm việc, dù không có khách vào sao?",
+    "Of course it is. You came here because I asked.": "Tất nhiên rồi. Cậu đến đây vì tôi đã hẹn cậu.",
+    "Can you pay that today, without using tomorrow's takings first?": "Hôm nay cô trả được chứ, không cần lấy doanh thu ngày mai?",
+    "Yes. Today's money is already separate from the bill money.": "Được. Tiền công hôm nay đã để riêng khỏi tiền hóa đơn.",
+    "I need to ask. I've worked places that answered differently.": "Cháu phải hỏi. Cháu từng làm ở những nơi trả lời khác.",
+    "You don't need to explain why you want paying, Sam.": "Cậu không cần giải thích vì sao muốn nhận lương đâu, Sam.",
+    "Then don't make that face when I ask about it.": "Vậy khi cháu hỏi, cô đừng nhìn cháu như thế nữa.",
+    "What face? I'm trying to remember where I put things.": "Nhìn thế nào? Tôi đang cố nhớ mình để đồ ở đâu thôi.",
+    "All right. I don't like admitting how little is certain.": "Được rồi. Tôi không thích thừa nhận có quá ít điều chắc chắn.",
+    "I don't need everything certain. I need today's part clear.": "Cháu không cần mọi thứ chắc chắn. Cháu cần phần hôm nay rõ ràng.",
+    "Today is paid. Tomorrow is something we haven't agreed yet.": "Hôm nay có lương. Ngày mai là chuyện ta chưa thỏa thuận.",
+    "If today goes well, would there actually be another shift?": "Nếu hôm nay ổn, liệu sẽ thực sự có ca tiếp theo không?",
+    "I don't know yet. I'm sorry, but that's the answer.": "Tôi chưa biết. Rất tiếc, nhưng câu trả lời là vậy.",
+    "I'll write today down. I won't write tomorrow in yet.": "Cháu sẽ ghi hôm nay. Cháu chưa ghi thêm ngày mai đâu.",
+    "That sounds fair. You can stop at nine without asking.": "Như vậy công bằng. Đến chín giờ cậu nghỉ, không cần hỏi.",
+    "If you're behind, I still stop unless we agree otherwise?": "Nếu cô còn dở việc, cháu vẫn nghỉ trừ khi thỏa thuận thêm?",
+    "Yes. I won't keep you here by looking worn out.": "Phải. Tôi sẽ không dùng vẻ mệt mỏi để giữ cậu lại.",
+    "Good. Then we can talk about the work without guessing.": "Tốt. Vậy ta có thể nói về công việc mà không phải đoán.",
+    "You haven't asked whether this changes what we discussed before.": "Cậu chưa hỏi liệu chuyện này có thay đổi điều ta từng nói.",
+    "I've been trying to keep those things apart this morning.": "Sáng nay cháu vẫn cố tách riêng hai chuyện đó ra.",
+    "I told you to buy shoes. I meant that, Sam.": "Tôi bảo cậu mua giày. Tôi thực lòng nói vậy, Sam.",
+    "I did. But the rest of that money is mine?": "Cháu mua rồi. Nhưng số tiền còn lại vẫn là của cháu chứ?",
+    "Yes. It isn't a deposit on keeping this place open.": "Phải. Đó không phải tiền đặt cọc để giữ quán mở cửa.",
+    "I needed you to say that without me offering first.": "Cháu cần cô nói điều đó trước khi cháu lại đề nghị.",
+    "Were you going to offer? Please don't tell me yes.": "Cậu định đề nghị sao? Đừng nói với tôi là có nhé.",
+    "I thought about it when I saw the closed notice.": "Cháu đã nghĩ đến lúc nhìn thấy thông báo đóng cửa.",
+    "Then I gave you the wrong idea by hiding things.": "Vậy việc giấu giếm của tôi đã khiến cậu hiểu sai.",
+    "You made it hard to know what you actually wanted.": "Cô khiến cháu khó biết cô thực sự muốn điều gì.",
+    "I wanted someone here. I should have asked you plainly.": "Tôi muốn có người ở đây. Tôi lẽ ra phải nói thẳng.",
+    "I can come for breakfast without buying part of your problems.": "Cháu có thể đến ăn sáng mà không phải mua thêm rắc rối.",
+    "You can. And you can take another job without asking.": "Cậu có thể. Cũng có thể nhận việc khác mà không cần hỏi tôi.",
+    "Even if you teach me things and this goes badly?": "Kể cả khi cô đã dạy cháu rồi mà việc này thất bại sao?",
+    "Yes. Teaching you doesn't make your next decision belong here.": "Phải. Dạy cậu không khiến quyết định tiếp theo thuộc về quán.",
+    "I don't want every mistake measured against what happened then.": "Cháu không muốn lỗi nào cũng bị so với chuyện ngày trước.",
+    "Neither do I. But money mistakes will still need explaining.": "Tôi cũng vậy. Nhưng sai sót tiền bạc vẫn phải giải thích rõ.",
+    "That's fair, if you ask before deciding what I meant.": "Công bằng, nếu cô hỏi trước khi quyết định cháu có ý gì.",
+    "I'll ask. You tell me straight, even when you're embarrassed.": "Tôi sẽ hỏi. Cậu cứ nói thật, kể cả khi thấy xấu hổ.",
+    "I can do that better if the answer isn't already chosen.": "Cháu làm được hơn nếu câu trả lời chưa bị định sẵn.",
+    "Then we'll both have something to practise while we're here.": "Vậy cả hai đều có điều phải tập trong lúc ở đây.",
+    "All right. My savings stay separate. So does this job.": "Được ạ. Tiền dành dụm để riêng. Công việc này cũng vậy.",
+    "What made you print the notice instead of asking for help?": "Điều gì khiến cô in thông báo thay vì nhờ người giúp?",
+    "I asked in little ways. Nobody knew what I meant.": "Tôi nhờ bằng những câu vòng vo. Không ai hiểu ý tôi.",
+    "You could have said the cook leaving changes the hours.": "Cô có thể nói đầu bếp nghỉ thì giờ mở cửa phải đổi.",
+    "I kept thinking I'd manage until I found somebody else.": "Tôi cứ nghĩ mình sẽ xoay xở đến khi tìm được người khác.",
+    "Was there somebody else coming, or were you just hoping?": "Đã có ai định đến chưa, hay cô chỉ đang hy vọng?",
+    "Just hoping. Then I started leaving jobs for the next morning.": "Chỉ hy vọng thôi. Rồi tôi bắt đầu dồn việc sang sáng sau.",
+    "I can still do the work. I can't do all of it.": "Tôi vẫn làm việc được. Tôi không thể làm hết mọi việc.",
+    "Which part makes you want to turn round at the door?": "Việc nào khiến cô muốn quay đi ngay khi đến cửa?",
+    "Opening everything when I know I'll be closing everything alone.": "Mở hết mọi thứ, dù biết mình sẽ phải đóng hết một mình.",
+    "Then maybe everything is too much to open this week.": "Vậy có lẽ tuần này mình không nên mở hết mọi thứ.",
+    "People expect the booths, the hot food, all of it.": "Mọi người mong có bàn, đồ ăn nóng, tất cả như trước.",
+    "You don't have to promise every usual thing before breakfast.": "Cô không phải hứa đủ mọi thứ thường ngày trước bữa sáng.",
+    "I don't want them walking in and thinking we've given up.": "Tôi không muốn họ bước vào rồi nghĩ chúng ta đã bỏ cuộc.",
+    "They might think you changed the hours because you needed to.": "Họ có thể nghĩ cô đổi giờ vì thực sự cần đổi.",
+    "You make it sound simple. I know it won't be.": "Cậu nói nghe đơn giản. Tôi biết sẽ không đơn giản đâu.",
+    "I'm saying smaller. You can still tell me it's hard.": "Cháu nói thu gọn thôi. Cô vẫn có thể nói là khó.",
+    "I wanted that notice to make the decision for me.": "Tôi đã muốn tờ thông báo quyết định thay mình.",
+    "Do you want to close, if you can choose again?": "Nếu được chọn lại, cô có muốn đóng cửa không?",
+    "I want to stop doing mornings that leave me flattened.": "Tôi muốn chấm dứt những buổi sáng làm mình kiệt sức.",
+    "That's different. What would a morning you could manage look like?": "Vậy là khác. Một buổi sáng vừa sức với cô sẽ thế nào?",
+    "One counter. Short hours. And somebody telling me to stop.": "Một quầy. Giờ ngắn. Và có người nhắc tôi dừng lại.",
+    "Let's work out that morning before we decide about forever.": "Hãy tính buổi sáng ấy trước khi quyết định chuyện vĩnh viễn.",
+    "Coffee and toast first. That's what I could manage myself.": "Trước tiên là cà phê và bánh mì nướng. Tôi tự lo được.",
+    "Can you manage both while showing me what to do?": "Cô vừa lo cả hai vừa chỉ việc cho cháu được không?",
+    "If you handle the clean cups and keep this counter clear.": "Được, nếu cậu lo cốc sạch và giữ mặt quầy này thoáng.",
+    "I haven't worked the machine. I shouldn't guess with that.": "Cháu chưa dùng máy pha. Cháu không nên tự đoán cách dùng.",
+    "You won't. I do the hot things until you've learned.": "Cậu không cần. Tôi lo đồ nóng đến khi cậu học xong.",
+    "And if somebody asks me for something we aren't serving?": "Nếu có người gọi món mà chúng ta không phục vụ thì sao?",
+    "Tell them the choices. If they're unhappy, you call me.": "Nói họ các lựa chọn. Nếu họ không hài lòng thì gọi tôi.",
+    "You won't change your mind and start the whole kitchen?": "Cô sẽ không đổi ý rồi mở lại cả bếp chứ?",
+    "I might want to. You'll probably see it on my face.": "Có thể tôi sẽ muốn. Chắc cậu sẽ thấy ngay trên mặt tôi.",
+    "Then give me something definite I can remind you of.": "Vậy cô cho cháu một giới hạn rõ để cháu nhắc lại.",
+    "No breakfast plates this week. Just the things we agreed.": "Tuần này không làm suất ăn sáng. Chỉ những món đã thống nhất.",
+    "Do we leave the booths closed, even if they're empty?": "Ta vẫn không phục vụ bàn, kể cả khi các bàn trống ạ?",
+    "Yes. Four counter seats, so I can see what's happening.": "Phải. Bốn ghế ở quầy, để tôi theo dõi được mọi việc.",
+    "You said two places earlier. Are we changing that already?": "Lúc trước cô nói hai chỗ. Ta đã đổi ngay rồi sao?",
+    "You're right. Two first. We can discuss four another day.": "Cậu nói đúng. Trước tiên hai chỗ. Chuyện bốn chỗ để ngày khác.",
+    "I'm not trying to catch you. I need instructions that hold.": "Cháu không bắt bẻ cô. Cháu cần chỉ dẫn nhất quán thôi.",
+    "Then two seats hold. I can live with two seats.": "Vậy chốt hai ghế. Tôi chấp nhận hai ghế được.",
+    "We should put the short menu somewhere people can read.": "Nên đặt thực đơn ngắn ở chỗ mọi người đọc được.",
+    "I'll explain it before they sit. That's my job today.": "Tôi sẽ giải thích trước khi họ ngồi. Hôm nay đó là việc tôi.",
+    "And I keep this bit ready without promising anything extra.": "Còn cháu giữ khu này sẵn sàng, không tự hứa thêm gì.",
+    "Exactly. If we're slow, we say we're slow, without excuses.": "Đúng. Nếu làm chậm, ta nói là chậm, không viện cớ.",
+    "I can say that. I don't want to invent answers.": "Cháu nói được. Cháu không muốn bịa câu trả lời đâu.",
+    "Neither do I. We can leave the bigger menu put away.": "Tôi cũng vậy. Cứ cất thực đơn đầy đủ đi đã.",
+    "If we're discussing a week, I need numbers for that.": "Nếu đang bàn một tuần, cháu cần biết con số cụ thể.",
+    "Five mornings, three hours each. Nothing on the weekend yet.": "Năm buổi sáng, mỗi buổi ba tiếng. Cuối tuần chưa tính gì.",
+    "That's fifteen hours. At fifteen, you'd need two hundred twenty five.": "Là mười lăm giờ. Giá mười lăm thì cần hai trăm hai mươi lăm.",
+    "I have that much set aside. It includes today's forty five.": "Tôi có để riêng đủ số đó, kể cả bốn mươi lăm hôm nay.",
+    "Is that money needed for a bill that's due tomorrow?": "Số tiền đó có cần cho hóa đơn đến hạn ngày mai không?",
+    "Not tomorrow. The rent is the bill I'm worried about.": "Không phải ngày mai. Tiền thuê mới là hóa đơn khiến tôi lo.",
+    "Would paying me mean you can't pay the rent afterward?": "Trả lương cháu có làm cô không trả nổi tiền thuê sau đó không?",
+    "The rent was a problem before you walked in here.": "Tiền thuê đã là vấn đề từ trước khi cậu bước vào.",
+    "That doesn't answer whether a week makes the problem worse.": "Như vậy chưa trả lời một tuần có làm vấn đề tệ hơn không.",
+    "It costs money. Staying shut also costs money every day.": "Nó tốn tiền. Đóng cửa cũng vẫn tốn tiền mỗi ngày.",
+    "I don't want you calling my wages another favour later.": "Cháu không muốn sau này cô gọi tiền lương là một ân huệ nữa.",
+    "They aren't a favour. They're the cost of asking you here.": "Đó không phải ân huệ. Đó là chi phí để thuê cậu đến.",
+    "Then keep the full week separate before we call it agreed.": "Vậy hãy để riêng đủ tiền cả tuần trước khi chốt thỏa thuận.",
+    "That's reasonable. But I can't reserve another week behind it.": "Hợp lý. Nhưng tôi không thể để dành tiếp cho tuần sau nữa.",
+    "I'm not asking for another week. I'm asking about this one.": "Cháu không đòi tuần sau. Cháu đang hỏi đúng tuần này.",
+    "Two hundred twenty five. Paid each morning, not after Friday.": "Hai trăm hai mươi lăm. Trả từng sáng, không đợi qua thứ Sáu.",
+    "If we stop early, we settle the hours already worked?": "Nếu nghỉ sớm, ta thanh toán số giờ đã làm rồi chứ?",
+    "Yes. And if I cancel, I tell you before you travel.": "Phải. Nếu hủy ca, tôi báo trước khi cậu đi đến đây.",
+    "Before I leave home. That matters more than it sounds.": "Trước lúc cháu ra khỏi nhà. Điều đó quan trọng hơn cô nghĩ.",
+    "All right. Before you leave home. We choose a time.": "Được rồi. Trước khi cậu ra khỏi nhà. Ta thống nhất giờ báo.",
+    "Don't promise now if you need to check your figures.": "Nếu cần kiểm tra số liệu thì cô đừng hứa ngay bây giờ.",
+    "I checked them last night. The wage money is there.": "Tối qua tôi đã kiểm tra. Tiền lương có đủ ở đó.",
+    "Then that's the limit. We don't cover gaps with my savings.": "Vậy đó là giới hạn. Không dùng tiền cháu bù phần thiếu.",
+    "You'll make mistakes. I need to say that before we start.": "Cậu sẽ mắc lỗi. Tôi cần nói trước khi chúng ta bắt đầu.",
+    "I know. I don't know which ones you expect first.": "Cháu biết. Cháu chỉ chưa biết cô nghĩ cháu sẽ sai việc nào.",
+    "Probably putting things where I can't find them at first.": "Chắc lúc đầu là cất đồ vào chỗ tôi không tìm được.",
+    "If you haven't shown me, tell me where they belong.": "Nếu chưa chỉ trước, cô hãy nói chúng thuộc chỗ nào.",
+    "Fair. And if I've shown you, ask me again anyway.": "Công bằng. Kể cả tôi chỉ rồi, cậu cứ hỏi lại.",
+    "Suppose I put that cup in the wrong place twice?": "Giả sử cháu đặt chiếc cốc ấy sai chỗ hai lần thì sao?",
+    "Then we mark the shelf, instead of having an argument.": "Vậy ta đánh dấu ngăn kệ, thay vì cãi nhau.",
+    "And if you change the place halfway through the morning?": "Còn nếu cô đổi chỗ để đồ giữa buổi sáng thì sao?",
+    "I tell you first. You don't have to notice everything.": "Tôi báo cậu trước. Cậu không phải tự nhận ra mọi thay đổi.",
+    "If the till is short, we check the numbers together?": "Nếu máy tính tiền thiếu tiền, ta cùng kiểm tra số liệu nhé?",
+    "Yes. Neither of us starts by deciding who to blame.": "Phải. Không ai được bắt đầu bằng việc chọn người để đổ lỗi.",
+    "I don't want access to it until I've been shown.": "Cháu không muốn dùng nó cho đến khi được hướng dẫn.",
+    "You won't have to use it today. I handle payments.": "Hôm nay cậu không phải dùng. Tôi sẽ lo việc thanh toán.",
+    "If something breaks, I tell you before trying a repair.": "Nếu đồ gì hỏng, cháu báo cô trước khi thử sửa.",
+    "Please do. I'm attached to several very unreliable old things.": "Nhớ nhé. Tôi vẫn quý vài món đồ cũ chẳng đáng tin lắm.",
+    "And if a job feels unsafe, I can say no?": "Nếu thấy việc nào không an toàn, cháu được nói không chứ?",
+    "Yes. Then we find another way or leave it undone.": "Được. Ta tìm cách khác hoặc tạm để việc đó chưa làm.",
+    "That includes carrying anything heavy because you're too tired, right?": "Kể cả việc mang đồ nặng vì cô quá mệt, đúng không ạ?",
+    "It does. Asking for help doesn't mean ordering you about.": "Đúng. Nhờ giúp không có nghĩa là sai cậu làm mọi thứ.",
+    "I can work hard. I just need to know the difference.": "Cháu làm chăm được. Cháu chỉ cần biết rõ sự khác biệt.",
+    "If I forget, remind me without waiting until you're furious.": "Nếu tôi quên, hãy nhắc ngay, đừng đợi đến lúc nổi giận.",
+    "I'll try. You might have to hear it twice sometimes.": "Cháu sẽ cố. Có lúc cô có thể phải nghe nhắc hai lần.",
+    "That's all right. I haven't learned this part properly either.": "Không sao. Phần này chính tôi cũng chưa học cho tử tế.",
+    "I need a minute before I say yes to anything.": "Cháu cần một phút trước khi đồng ý bất kỳ chuyện gì.",
+    "Take it. You don't have to answer while I'm watching.": "Cứ suy nghĩ. Cậu không phải trả lời khi tôi đang nhìn.",
+    "I'm not trying to make you ask me twice, Ruth.": "Cháu không cố khiến cô phải nài cháu lần nữa đâu, Ruth.",
+    "I know. I gave you rather more than you expected.": "Tôi biết. Tôi đã đưa ra nhiều chuyện hơn cậu hình dung.",
+    "I thought I'd be nervous about remembering orders this morning.": "Cháu tưởng sáng nay mình sẽ lo chuyện nhớ món khách gọi.",
+    "I thought I'd have found a better way to explain.": "Tôi tưởng mình sẽ tìm được cách giải thích tốt hơn.",
+    "Please don't follow me. I'll only be by the doorway.": "Cô đừng đi theo nhé. Cháu chỉ ra đứng cạnh cửa thôi.",
+    "I can still hear you from here if you need something.": "Cháu vẫn nghe cô từ đây, nếu cô cần gì.",
+    "I don't need anything right now. Take your minute properly.": "Giờ tôi không cần gì. Cậu cứ dành trọn một phút đi.",
+    "I used to leave places before anyone could turn me down.": "Trước đây cháu thường bỏ đi trước khi ai đó từ chối mình.",
+    "You can leave here because you want to. That's allowed.": "Cậu có thể rời đây vì cậu muốn. Điều đó hoàn toàn được.",
+    "I'm trying to work out whether I actually want to.": "Cháu đang cố hiểu mình có thực sự muốn đi hay không.",
+    "Then I should stop talking and let you do that.": "Vậy tôi nên ngừng nói để cậu tự suy nghĩ.",
+    "There's something I could learn here, if we keep it small.": "Ở đây có điều cháu học được, nếu ta giữ việc vừa sức.",
+    "There is. But you can learn things in other places.": "Có. Nhưng cậu cũng có thể học ở những nơi khác.",
+    "I know. I don't want you to be my only option.": "Cháu biết. Cháu không muốn cô là lựa chọn duy nhất.",
+    "You shouldn't. Keep looking if you need more paid hours.": "Không nên như vậy. Nếu cần thêm giờ làm có lương, cứ tìm.",
+    "Would that bother you, knowing I'm still looking somewhere else?": "Biết cháu vẫn tìm nơi khác có làm cô khó chịu không?",
+    "A little, probably. But that doesn't make it your problem.": "Chắc cũng hơi buồn. Nhưng đó không phải vấn đề của cậu.",
+    "Then I can offer one week, with the limits we discussed.": "Vậy cháu nhận một tuần, theo những giới hạn mình vừa bàn.",
+    "Are you sure that's an offer you want to make?": "Cậu chắc đó là đề nghị cậu thực sự muốn đưa ra chứ?",
+    "Yes. Not because you need saving. Because I want the work.": "Vâng. Không phải để cứu cô. Vì cháu muốn công việc này.",
+    "All right. Then I'll answer you as someone hiring you.": "Được rồi. Vậy tôi sẽ trả lời với tư cách người thuê cậu.",
+    "Five mornings, counting today. Six until nine, fifteen an hour.": "Năm buổi sáng, tính cả hôm nay. Sáu đến chín, mười lăm một giờ.",
+    "Paid each morning. Any extra time gets agreed before it happens.": "Trả từng sáng. Thời gian làm thêm phải thống nhất từ trước.",
+    "Two counter seats. Coffee and toast. I handle the hot things.": "Hai ghế quầy. Cà phê và bánh mì nướng. Tôi lo đồ nóng.",
+    "I handle cups and clearing. You teach me the rest gradually.": "Cháu lo cốc và dọn quầy. Cô dạy dần những việc còn lại.",
+    "If I cancel, I call before you leave home for work.": "Nếu hủy ca, tôi gọi trước lúc cậu ra khỏi nhà đi làm.",
+    "By five fifteen, please. After that, I've already left home.": "Trước năm giờ mười lăm nhé. Sau đó cháu đã ra khỏi nhà.",
+    "Five fifteen. I'll keep the number by the phone here.": "Năm giờ mười lăm. Tôi sẽ để số điện thoại cạnh máy ở đây.",
+    "If I can't come, I call then too, not just disappear.": "Nếu không đến được, cháu cũng gọi giờ đó, không tự nhiên biến mất.",
+    "After each morning, ten minutes to say what didn't work.": "Sau mỗi buổi sáng, dành mười phút nói điều gì chưa ổn.",
+    "Inside the paid time. I don't want that sliding afterward.": "Trong thời gian có lương. Cháu không muốn nó trượt ra sau ca.",
+    "Inside it. We stop serving early enough to finish by nine.": "Trong ca. Ta ngừng phục vụ đủ sớm để xong trước chín giờ.",
+    "At the end, we decide whether another week makes sense.": "Cuối tuần thử việc, ta quyết định có nên làm thêm tuần nữa.",
+    "Either of us can say no. We settle what's been worked.": "Ai cũng được nói không. Ta thanh toán phần đã làm.",
+    "And I don't lose today's pay if tomorrow doesn't happen.": "Và cháu không mất lương hôm nay nếu ngày mai không tiếp tục.",
+    "You don't. I'm paying for work, not for keeping promises forever.": "Không mất. Tôi trả tiền công, không mua lời hứa mãi mãi.",
+    "You don't have to guarantee the place will still be here.": "Cô không phải bảo đảm quán vẫn sẽ còn ở đây.",
+    "I can't guarantee that. I can tell you what I know.": "Tôi không bảo đảm được. Tôi có thể nói điều mình biết.",
+    "Tell me when it changes, before I'm standing outside again.": "Khi có thay đổi, báo cháu trước khi cháu lại đứng ngoài cửa.",
+    "I will. I won't leave you reading another notice first.": "Tôi sẽ báo. Tôi không để cậu phải đọc thông báo trước nữa.",
+    "Then I want the week. I don't need a bigger promise.": "Vậy cháu nhận tuần này. Cháu không cần lời hứa lớn hơn.",
+    "I'd like the week too. Even knowing it might not work.": "Tôi cũng muốn thử một tuần. Dù biết có thể không thành.",
+    "We can find that out without pretending we've already solved it.": "Ta có thể tìm hiểu mà không giả vờ đã giải quyết xong.",
+    "Agreed. We'll check the work, the hours, and the money.": "Thống nhất. Ta kiểm tra công việc, giờ làm và tiền bạc.",
+    "All right. Tell me where you'd like me to start.": "Được rồi. Cô nói cháu biết cô muốn cháu bắt đầu từ đâu.",
+    "First, put that cup back. I can never find one.": "Trước hết đặt cốc lại nhé. Tôi cứ chẳng tìm thấy cốc nào.",
+    "The cup's already there. You're looking past it at me.": "Cốc ở đó rồi. Cô đang nhìn qua nó để nhìn cháu.",
+    "So it is. I'm going to have to get used to this.": "Đúng thế thật. Tôi sẽ phải tập quen với chuyện này.",
+    "Having the cups ready, or somebody telling you where they are?": "Quen với cốc sẵn sàng, hay có người chỉ cho cô chỗ để?",
+    "Both, probably. Don't expect me to be graceful about it.": "Chắc là cả hai. Đừng mong lúc nào tôi cũng nhẹ nhàng nhé.",
+    "I wasn't. I'd like instructions more than graceful, to start.": "Cháu không mong vậy. Trước tiên cháu cần chỉ dẫn hơn sự nhẹ nhàng.",
+    "The clean cloth stays here. The other one stays behind me.": "Khăn sạch để đây. Chiếc còn lại ở phía sau tôi.",
+    "And nothing hot on the lower shelf. I remember that.": "Không đặt đồ nóng ở ngăn dưới. Cháu vẫn nhớ điều đó.",
+    "Good. We'll check the two places before we open anything.": "Tốt. Ta kiểm tra hai chỗ trước khi mở cửa phục vụ.",
+    "What time do you want to start serving this morning?": "Sáng nay cô muốn bắt đầu phục vụ lúc mấy giờ ạ?",
+    "Seven. That gives us time to get the counter ready.": "Bảy giờ. Như vậy có thời gian chuẩn bị quầy cho xong.",
+    "Then we should say seven, rather than let people guess.": "Vậy nên ghi bảy giờ, đừng để mọi người phải đoán.",
+    "I'll put the hours by the door before we serve.": "Tôi sẽ để giờ mở cửa cạnh cửa trước lúc phục vụ.",
+    "Do you want the old notice put away for now?": "Cô có muốn tạm cất tờ thông báo cũ đi không?",
+    "Leave it folded on the back counter. Don't throw it out.": "Cứ để nó gấp lại ở quầy sau. Đừng vứt đi.",
+    "All right. We don't have to decide what happens afterward.": "Được. Ta chưa cần quyết định chuyện gì xảy ra sau đó.",
+    "And if this feels wrong tomorrow, you'll tell me then?": "Nếu ngày mai thấy không ổn, cậu sẽ nói với tôi chứ?",
+    "Yes. Will you tell me, instead of printing another notice?": "Vâng. Cô cũng nói với cháu, thay vì in thông báo nữa chứ?",
+    "I'll tell you. Probably over coffee that actually has coffee in it.": "Tôi sẽ nói. Chắc khi uống cà phê có cà phê thật trong cốc.",
+    "I'd settle for knowing which mug you're putting mine in.": "Cháu chỉ cần biết cô định rót phần cháu vào chiếc cốc nào.",
+    "The one on your side. I can keep that much straight.": "Chiếc phía cậu. Chừng đó thì tôi vẫn phân biệt được.",
+    "Good. I'll leave it there until you need the space.": "Tốt. Cháu cứ để đó đến khi cô cần chỗ trống.",
+    "There's a small open card beside the till. Use that one.": "Có thẻ mở cửa nhỏ cạnh máy tính tiền. Dùng tấm đó nhé.",
+    "Put it here on the counter, where we can see it.": "Đặt nó ở đây trên quầy, chỗ chúng ta nhìn thấy được."
+  }
+}

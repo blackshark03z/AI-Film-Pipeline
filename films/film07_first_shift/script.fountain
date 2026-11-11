@@ -1,0 +1,1580 @@
+Title: The First Shift
+Credit: original drama; names, events and dialogue are new (not film06 text)
+Author: Codex (screenplay draft); production package by Claude
+Format: 12 scenes, 300 Flow generations of 6 s (Omni 1.2 Flash 360p), each used at about 5.5 s; English dialogue, Vietnamese subtitles; no music
+Tests: P20 second long film; pilot SC01-SC02 first (50 generations), the rest only after the pilot QC passes and the Owner is told
+Approval: Owner 2026-11-11 "Duyệt, chạy pilot" (budget.json owner_approval); source draft SHA-256 c45ac9dcdfc09cefb4f11c8efc868ed132aa0c288d379c991eb856c4ec3bf92c
+
+[[Opening card: 3 seconds. THE FIRST SHIFT. AI-generated drama. Body: 300 beats at an intended 5.5 seconds each; actual performance and trims are measured on the takes.]]
+
+RUTH KELLER is the same fictional woman in her sixties as in Six A.M.; SAM DOYLE is the same fictional twenty-one-year-old man. Her pale blue uniform and white apron, his grey hoodie and the red vinyl booth are the reused visual references. His shoes are now dry. This is their first working morning, not a revision of their earlier conversation.
+
+The diner is empty. Morning light reaches the familiar red booth. The counter and doorway are new extensions of the set. No other person is seen or heard. A CLOSED PERMANENTLY notice lies on the counter. There is no music.
+
+INT. KELLER'S DINER - DAWN
+
+[[area: counter]]
+
+[[SC01 — The notice]]
+
+RUTH is standing; SAM is standing. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC01_g01 ACTION — native 6s / intended used 5.5s]]
+
+Sam enters the counter frame through the open doorway at an ordinary walking pace.
+
+[[SC01_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You're early. I haven't even switched the front lights on.
+
+[[SC01_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Six meant six. I didn't want you waiting for me.
+
+[[SC01_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I wasn't expecting new shoes. Those look properly dry, anyway.
+
+[[SC01_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+The shop had one pair left that actually fit me.
+
+[[SC01_g06 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Good. You can leave your coat on for a minute.
+
+[[SC01_g07 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Is that notice on the counter meant for the window?
+
+[[SC01_g08 ACTION — native 6s / intended used 5.5s]]
+
+Ruth places one empty white mug on the counter; Sam's hands remain away from it.
+
+[[SC01_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I hadn't decided where it ought to go just yet.
+
+[[SC01_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+It says permanently. That's quite a word to leave out.
+
+[[SC01_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I know what it says. I had it printed myself.
+
+[[SC01_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then should I have called before coming down this morning?
+
+[[SC01_g13 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+No. You came when I asked you. You did right.
+
+[[SC01_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I thought the first thing would be learning the till.
+
+[[SC01_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+We can leave the till alone until we've had coffee.
+
+[[SC01_g16 ACTION — native 6s / intended used 5.5s]]
+
+Sam picks up the white mug from the counter; Ruth's hands stay on her own side.
+
+[[SC01_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+This one's empty. Were you going to make some now?
+
+[[SC01_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I was going to ask if you still take milk.
+
+[[SC01_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I do, but coffee isn't why I came here today.
+
+[[SC01_g20 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I didn't say it was. Please give me a minute.
+
+[[SC01_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Was that notice printed before you offered me the job?
+
+[[SC01_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. It was already here when we talked that night.
+
+[[SC01_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then I need you to explain what I'm here for.
+
+[[SC01_g24 ACTION — native 6s / intended used 5.5s]]
+
+Sam sets the mug down on the counter in its original place; Ruth does not reach toward it.
+
+[[SC01_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+All right. Let's sit where we can actually hear ourselves.
+
+INT. KELLER'S DINER - DAWN
+
+[[area: counter / booth]]
+
+[[SC02 — The morning she planned]]
+
+RUTH is standing beside the booth; SAM is standing at the counter. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC02_g01 ACTION — native 6s / intended used 5.5s]]
+
+Sam walks out of the counter frame toward the booth; Ruth remains outside this frame.
+
+[[SC02_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I thought we'd sit a while before doing anything else.
+
+[[SC02_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You could have asked me for breakfast instead of work.
+
+[[SC02_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You might not have come if I'd called it breakfast.
+
+[[SC02_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You don't know that. You never gave me that choice.
+
+[[SC02_g06 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+No. I didn't. I thought I was making it easier.
+
+[[SC02_g07 ACTION — native 6s / intended used 5.5s]]
+
+Sam sits down on the near booth seat; Ruth stays standing across the table.
+
+[[SC02_g08 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Easier for which of us? I'm honestly asking you that.
+
+[[SC02_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+For me, probably. I didn't want another morning here alone.
+
+[[SC02_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+So this was supposed to be your last morning here?
+
+[[SC02_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+One proper morning. Before I put that thing on display.
+
+[[SC02_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+And I was supposed to sit here while you closed?
+
+[[SC02_g13 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I hadn't worked out what I'd say when you arrived.
+
+[[SC02_g14 ACTION — native 6s / intended used 5.5s]]
+
+Ruth sits down on the opposite booth seat; the table remains between both actors.
+
+[[SC02_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You told me six. I spent the night planning around it.
+
+[[SC02_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I meant that part. I wanted you to be here.
+
+[[SC02_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Being here isn't the same as having somewhere to work.
+
+[[SC02_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+No. It isn't. I should have said what was happening.
+
+[[SC02_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I can hear bad news. I can't plan around guesses.
+
+[[SC02_g20 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Then ask me what you need to know. I'll answer.
+
+[[SC02_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Is there any work here that you actually need done?
+
+[[SC02_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+There is plenty. I just can't promise where it leads.
+
+[[SC02_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'm asking about this morning. Start with what's actually here.
+
+[[SC02_g24 ACTION — native 6s / intended used 5.5s]]
+
+Sam stands up beside his booth seat without approaching Ruth or touching the table.
+
+[[SC02_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+The counter needs setting. We can start with that much.
+
+INT. KELLER'S DINER - EARLY MORNING
+
+[[area: counter]]
+
+[[SC03 — One place to start]]
+
+RUTH is standing behind the counter; SAM is standing on the customer side. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC03_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Only this end first. The other stools can stay empty.
+
+[[SC03_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+How many places do you normally set before opening up?
+
+[[SC03_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+All eight, usually. Then the booths, if I have time.
+
+[[SC03_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You said this end. Does that mean two places today?
+
+[[SC03_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Two is enough for now. I keep forgetting that part.
+
+[[SC03_g06 ACTION — native 6s / intended used 5.5s]]
+
+Ruth places a second empty mug on the counter, well away from Sam's hands.
+
+[[SC03_g07 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Do the handles face the person or face the till?
+
+[[SC03_g08 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+The person, unless they're left handed and move it themselves.
+
+[[SC03_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Good. That's something I can check without guessing your mind.
+
+[[SC03_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You'll have to ask things. I haven't trained anyone lately.
+
+[[SC03_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I can ask. Will you tell me when something matters?
+
+[[SC03_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. And when it doesn't, I'll try to say that.
+
+[[SC03_g13 REACTION — native 6s / intended used 5.5s]]
+
+Sam watches the two separate mugs in a still close-up, then holds a thoughtful expression.
+
+[[SC03_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Are these two clean, or are they waiting for washing?
+
+[[SC03_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Clean. The dirty ones stay in the tray behind me.
+
+[[SC03_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Separate trays would help me keep the two things straight.
+
+[[SC03_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+There used to be one. It cracked a while back.
+
+[[SC03_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Could an empty shelf do until you replace the tray?
+
+[[SC03_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+The lower shelf is free. Don't put anything hot there.
+
+[[SC03_g20 ACTION — native 6s / intended used 5.5s]]
+
+Sam places a clean folded cloth on the clear end of the counter; Ruth remains still.
+
+[[SC03_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'll leave this here, away from the clean cup spaces.
+
+[[SC03_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+That's sensible. I usually end up looking for the thing.
+
+[[SC03_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then that can be my first job. Keeping this end ready.
+
+[[SC03_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+It won't take three hours to put two mugs out.
+
+[[SC03_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then tell me the next job when this one's done.
+
+INT. KELLER'S DINER - MORNING
+
+[[area: booth]]
+
+[[SC04 — What today costs]]
+
+RUTH is seated on the far booth seat; SAM is seated on the near booth seat. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC04_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Before we do another job, we need to discuss pay.
+
+[[SC04_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I was going to get to that. Fifteen an hour.
+
+[[SC04_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+For how many hours today, including the time we're talking?
+
+[[SC04_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Six until nine. Forty five dollars for the whole morning.
+
+[[SC04_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+And that's work, even if nobody comes through the door?
+
+[[SC04_g06 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Of course it is. You came here because I asked.
+
+[[SC04_g07 ACTION — native 6s / intended used 5.5s]]
+
+Ruth places one plain sheet of paper on her own side of the booth table.
+
+[[SC04_g08 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Can you pay that today, without using tomorrow's takings first?
+
+[[SC04_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. Today's money is already separate from the bill money.
+
+[[SC04_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I need to ask. I've worked places that answered differently.
+
+[[SC04_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You don't need to explain why you want paying, Sam.
+
+[[SC04_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then don't make that face when I ask about it.
+
+[[SC04_g13 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+What face? I'm trying to remember where I put things.
+
+[[SC04_g14 REACTION — native 6s / intended used 5.5s]]
+
+Ruth holds Sam's eyeline in a still close-up; the admission takes a quiet moment.
+
+[[SC04_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+All right. I don't like admitting how little is certain.
+
+[[SC04_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I don't need everything certain. I need today's part clear.
+
+[[SC04_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Today is paid. Tomorrow is something we haven't agreed yet.
+
+[[SC04_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+If today goes well, would there actually be another shift?
+
+[[SC04_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I don't know yet. I'm sorry, but that's the answer.
+
+[[SC04_g20 ACTION — native 6s / intended used 5.5s]]
+
+Sam places his own small notebook beside his elbow, clear of Ruth's paper.
+
+[[SC04_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'll write today down. I won't write tomorrow in yet.
+
+[[SC04_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+That sounds fair. You can stop at nine without asking.
+
+[[SC04_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+If you're behind, I still stop unless we agree otherwise?
+
+[[SC04_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. I won't keep you here by looking worn out.
+
+[[SC04_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Good. Then we can talk about the work without guessing.
+
+INT. KELLER'S DINER - MORNING
+
+[[area: counter]]
+
+[[SC05 — The old money]]
+
+RUTH is standing behind the counter; SAM is standing on the customer side. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC05_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You haven't asked whether this changes what we discussed before.
+
+[[SC05_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I've been trying to keep those things apart this morning.
+
+[[SC05_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I told you to buy shoes. I meant that, Sam.
+
+[[SC05_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I did. But the rest of that money is mine?
+
+[[SC05_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. It isn't a deposit on keeping this place open.
+
+[[SC05_g06 REACTION — native 6s / intended used 5.5s]]
+
+Sam remains still with both hands visible and empty; his jaw eases slightly.
+
+[[SC05_g07 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I needed you to say that without me offering first.
+
+[[SC05_g08 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Were you going to offer? Please don't tell me yes.
+
+[[SC05_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I thought about it when I saw the closed notice.
+
+[[SC05_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Then I gave you the wrong idea by hiding things.
+
+[[SC05_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You made it hard to know what you actually wanted.
+
+[[SC05_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I wanted someone here. I should have asked you plainly.
+
+[[SC05_g13 ACTION — native 6s / intended used 5.5s]]
+
+Ruth picks up her own empty mug from the counter; Sam does not reach toward her.
+
+[[SC05_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I can come for breakfast without buying part of your problems.
+
+[[SC05_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You can. And you can take another job without asking.
+
+[[SC05_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Even if you teach me things and this goes badly?
+
+[[SC05_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. Teaching you doesn't make your next decision belong here.
+
+[[SC05_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I don't want every mistake measured against what happened then.
+
+[[SC05_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Neither do I. But money mistakes will still need explaining.
+
+[[SC05_g20 ACTION — native 6s / intended used 5.5s]]
+
+Ruth sets her own mug back onto her own side of the counter.
+
+[[SC05_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+That's fair, if you ask before deciding what I meant.
+
+[[SC05_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I'll ask. You tell me straight, even when you're embarrassed.
+
+[[SC05_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I can do that better if the answer isn't already chosen.
+
+[[SC05_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Then we'll both have something to practise while we're here.
+
+[[SC05_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+All right. My savings stay separate. So does this job.
+
+INT. KELLER'S DINER - MORNING
+
+[[area: booth]]
+
+[[SC06 — Why she was closing]]
+
+RUTH is seated on the far booth seat; SAM is seated on the near booth seat. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC06_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+What made you print the notice instead of asking for help?
+
+[[SC06_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I asked in little ways. Nobody knew what I meant.
+
+[[SC06_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You could have said the cook leaving changes the hours.
+
+[[SC06_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I kept thinking I'd manage until I found somebody else.
+
+[[SC06_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Was there somebody else coming, or were you just hoping?
+
+[[SC06_g06 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Just hoping. Then I started leaving jobs for the next morning.
+
+[[SC06_g07 ACTION — native 6s / intended used 5.5s]]
+
+Ruth places the folded closure notice on her own side of the booth table.
+
+[[SC06_g08 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I can still do the work. I can't do all of it.
+
+[[SC06_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Which part makes you want to turn round at the door?
+
+[[SC06_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Opening everything when I know I'll be closing everything alone.
+
+[[SC06_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then maybe everything is too much to open this week.
+
+[[SC06_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+People expect the booths, the hot food, all of it.
+
+[[SC06_g13 REACTION — native 6s / intended used 5.5s]]
+
+Ruth stays seated, considering the empty booth opposite; no other people appear or speak.
+
+[[SC06_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You don't have to promise every usual thing before breakfast.
+
+[[SC06_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I don't want them walking in and thinking we've given up.
+
+[[SC06_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+They might think you changed the hours because you needed to.
+
+[[SC06_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You make it sound simple. I know it won't be.
+
+[[SC06_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'm saying smaller. You can still tell me it's hard.
+
+[[SC06_g19 ACTION — native 6s / intended used 5.5s]]
+
+Sam places his closed notebook on his own side of the table, without crossing Ruth's reach.
+
+[[SC06_g20 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I wanted that notice to make the decision for me.
+
+[[SC06_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Do you want to close, if you can choose again?
+
+[[SC06_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I want to stop doing mornings that leave me flattened.
+
+[[SC06_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+That's different. What would a morning you could manage look like?
+
+[[SC06_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+One counter. Short hours. And somebody telling me to stop.
+
+[[SC06_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Let's work out that morning before we decide about forever.
+
+INT. KELLER'S DINER - MORNING
+
+[[area: counter]]
+
+[[SC07 — A smaller opening]]
+
+RUTH is standing behind the counter; SAM is standing on the customer side. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC07_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Coffee and toast first. That's what I could manage myself.
+
+[[SC07_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Can you manage both while showing me what to do?
+
+[[SC07_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+If you handle the clean cups and keep this counter clear.
+
+[[SC07_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I haven't worked the machine. I shouldn't guess with that.
+
+[[SC07_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You won't. I do the hot things until you've learned.
+
+[[SC07_g06 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+And if somebody asks me for something we aren't serving?
+
+[[SC07_g07 ACTION — native 6s / intended used 5.5s]]
+
+Ruth places a plain menu card flat on the counter, beyond Sam's hand space.
+
+[[SC07_g08 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Tell them the choices. If they're unhappy, you call me.
+
+[[SC07_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You won't change your mind and start the whole kitchen?
+
+[[SC07_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I might want to. You'll probably see it on my face.
+
+[[SC07_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then give me something definite I can remind you of.
+
+[[SC07_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+No breakfast plates this week. Just the things we agreed.
+
+[[SC07_g13 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Do we leave the booths closed, even if they're empty?
+
+[[SC07_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. Four counter seats, so I can see what's happening.
+
+[[SC07_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You said two places earlier. Are we changing that already?
+
+[[SC07_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You're right. Two first. We can discuss four another day.
+
+[[SC07_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'm not trying to catch you. I need instructions that hold.
+
+[[SC07_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Then two seats hold. I can live with two seats.
+
+[[SC07_g19 ACTION — native 6s / intended used 5.5s]]
+
+Sam places the folded cloth beside the two empty cup spaces, leaving both spaces clear.
+
+[[SC07_g20 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+We should put the short menu somewhere people can read.
+
+[[SC07_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I'll explain it before they sit. That's my job today.
+
+[[SC07_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+And I keep this bit ready without promising anything extra.
+
+[[SC07_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Exactly. If we're slow, we say we're slow, without excuses.
+
+[[SC07_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I can say that. I don't want to invent answers.
+
+[[SC07_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Neither do I. We can leave the bigger menu put away.
+
+INT. KELLER'S DINER - MORNING
+
+[[area: booth]]
+
+[[SC08 — One week's money]]
+
+RUTH is seated on the far booth seat; SAM is seated on the near booth seat. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC08_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+If we're discussing a week, I need numbers for that.
+
+[[SC08_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Five mornings, three hours each. Nothing on the weekend yet.
+
+[[SC08_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+That's fifteen hours. At fifteen, you'd need two hundred twenty five.
+
+[[SC08_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I have that much set aside. It includes today's forty five.
+
+[[SC08_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Is that money needed for a bill that's due tomorrow?
+
+[[SC08_g06 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Not tomorrow. The rent is the bill I'm worried about.
+
+[[SC08_g07 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Would paying me mean you can't pay the rent afterward?
+
+[[SC08_g08 ACTION — native 6s / intended used 5.5s]]
+
+Ruth places one wage calculation sheet on her own side of the booth table.
+
+[[SC08_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+The rent was a problem before you walked in here.
+
+[[SC08_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+That doesn't answer whether a week makes the problem worse.
+
+[[SC08_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+It costs money. Staying shut also costs money every day.
+
+[[SC08_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I don't want you calling my wages another favour later.
+
+[[SC08_g13 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+They aren't a favour. They're the cost of asking you here.
+
+[[SC08_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then keep the full week separate before we call it agreed.
+
+[[SC08_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+That's reasonable. But I can't reserve another week behind it.
+
+[[SC08_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'm not asking for another week. I'm asking about this one.
+
+[[SC08_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Two hundred twenty five. Paid each morning, not after Friday.
+
+[[SC08_g18 REACTION — native 6s / intended used 5.5s]]
+
+Sam studies Ruth's face in a still close-up, taking time before his next question.
+
+[[SC08_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+If we stop early, we settle the hours already worked?
+
+[[SC08_g20 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. And if I cancel, I tell you before you travel.
+
+[[SC08_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Before I leave home. That matters more than it sounds.
+
+[[SC08_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+All right. Before you leave home. We choose a time.
+
+[[SC08_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Don't promise now if you need to check your figures.
+
+[[SC08_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I checked them last night. The wage money is there.
+
+[[SC08_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then that's the limit. We don't cover gaps with my savings.
+
+INT. KELLER'S DINER - MORNING
+
+[[area: counter]]
+
+[[SC09 — How to get things wrong]]
+
+RUTH is standing behind the counter; SAM is standing on the customer side. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC09_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You'll make mistakes. I need to say that before we start.
+
+[[SC09_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I know. I don't know which ones you expect first.
+
+[[SC09_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Probably putting things where I can't find them at first.
+
+[[SC09_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+If you haven't shown me, tell me where they belong.
+
+[[SC09_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Fair. And if I've shown you, ask me again anyway.
+
+[[SC09_g06 ACTION — native 6s / intended used 5.5s]]
+
+Sam sets one empty mug into the clear cup space on his side of the counter.
+
+[[SC09_g07 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Suppose I put that cup in the wrong place twice?
+
+[[SC09_g08 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Then we mark the shelf, instead of having an argument.
+
+[[SC09_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+And if you change the place halfway through the morning?
+
+[[SC09_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I tell you first. You don't have to notice everything.
+
+[[SC09_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+If the till is short, we check the numbers together?
+
+[[SC09_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. Neither of us starts by deciding who to blame.
+
+[[SC09_g13 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I don't want access to it until I've been shown.
+
+[[SC09_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You won't have to use it today. I handle payments.
+
+[[SC09_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+If something breaks, I tell you before trying a repair.
+
+[[SC09_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Please do. I'm attached to several very unreliable old things.
+
+[[SC09_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+And if a job feels unsafe, I can say no?
+
+[[SC09_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Yes. Then we find another way or leave it undone.
+
+[[SC09_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+That includes carrying anything heavy because you're too tired, right?
+
+[[SC09_g20 ACTION — native 6s / intended used 5.5s]]
+
+Sam places a second clean empty mug into the other cup space; Ruth stays clear of his reach.
+
+[[SC09_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+It does. Asking for help doesn't mean ordering you about.
+
+[[SC09_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I can work hard. I just need to know the difference.
+
+[[SC09_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+If I forget, remind me without waiting until you're furious.
+
+[[SC09_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'll try. You might have to hear it twice sometimes.
+
+[[SC09_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+That's all right. I haven't learned this part properly either.
+
+INT. KELLER'S DINER - MORNING
+
+[[area: booth / doorway / counter]]
+
+[[SC10 — The doorway]]
+
+RUTH is standing behind the counter; SAM is standing beside the booth. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC10_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I need a minute before I say yes to anything.
+
+[[SC10_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Take it. You don't have to answer while I'm watching.
+
+[[SC10_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'm not trying to make you ask me twice, Ruth.
+
+[[SC10_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I know. I gave you rather more than you expected.
+
+[[SC10_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I thought I'd be nervous about remembering orders this morning.
+
+[[SC10_g06 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I thought I'd have found a better way to explain.
+
+[[SC10_g07 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Please don't follow me. I'll only be by the doorway.
+
+[[SC10_g08 ACTION — native 6s / intended used 5.5s]]
+
+Sam walks out of the booth frame toward the doorway; Ruth does not follow him.
+
+[[SC10_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I can still hear you from here if you need something.
+
+[[SC10_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I don't need anything right now. Take your minute properly.
+
+[[SC10_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I used to leave places before anyone could turn me down.
+
+[[SC10_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You can leave here because you want to. That's allowed.
+
+[[SC10_g13 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'm trying to work out whether I actually want to.
+
+[[SC10_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Then I should stop talking and let you do that.
+
+[[SC10_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+There's something I could learn here, if we keep it small.
+
+[[SC10_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+There is. But you can learn things in other places.
+
+[[SC10_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I know. I don't want you to be my only option.
+
+[[SC10_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You shouldn't. Keep looking if you need more paid hours.
+
+[[SC10_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Would that bother you, knowing I'm still looking somewhere else?
+
+[[SC10_g20 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+A little, probably. But that doesn't make it your problem.
+
+[[SC10_g21 ACTION — native 6s / intended used 5.5s]]
+
+Sam enters the counter frame at an ordinary walking pace, stopping on the customer side.
+
+[[SC10_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then I can offer one week, with the limits we discussed.
+
+[[SC10_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Are you sure that's an offer you want to make?
+
+[[SC10_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Yes. Not because you need saving. Because I want the work.
+
+[[SC10_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+All right. Then I'll answer you as someone hiring you.
+
+INT. KELLER'S DINER - MORNING
+
+[[area: booth]]
+
+[[SC11 — The trial]]
+
+RUTH is seated on the far booth seat; SAM is seated on the near booth seat. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC11_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Five mornings, counting today. Six until nine, fifteen an hour.
+
+[[SC11_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Paid each morning. Any extra time gets agreed before it happens.
+
+[[SC11_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Two counter seats. Coffee and toast. I handle the hot things.
+
+[[SC11_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I handle cups and clearing. You teach me the rest gradually.
+
+[[SC11_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+If I cancel, I call before you leave home for work.
+
+[[SC11_g06 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+By five fifteen, please. After that, I've already left home.
+
+[[SC11_g07 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Five fifteen. I'll keep the number by the phone here.
+
+[[SC11_g08 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+If I can't come, I call then too, not just disappear.
+
+[[SC11_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+After each morning, ten minutes to say what didn't work.
+
+[[SC11_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Inside the paid time. I don't want that sliding afterward.
+
+[[SC11_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Inside it. We stop serving early enough to finish by nine.
+
+[[SC11_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+At the end, we decide whether another week makes sense.
+
+[[SC11_g13 REACTION — native 6s / intended used 5.5s]]
+
+Sam holds a quiet, deliberate expression in a static close-up before continuing the agreement.
+
+[[SC11_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Either of us can say no. We settle what's been worked.
+
+[[SC11_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+And I don't lose today's pay if tomorrow doesn't happen.
+
+[[SC11_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+You don't. I'm paying for work, not for keeping promises forever.
+
+[[SC11_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+You don't have to guarantee the place will still be here.
+
+[[SC11_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I can't guarantee that. I can tell you what I know.
+
+[[SC11_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Tell me when it changes, before I'm standing outside again.
+
+[[SC11_g20 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I will. I won't leave you reading another notice first.
+
+[[SC11_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then I want the week. I don't need a bigger promise.
+
+[[SC11_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I'd like the week too. Even knowing it might not work.
+
+[[SC11_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+We can find that out without pretending we've already solved it.
+
+[[SC11_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Agreed. We'll check the work, the hours, and the money.
+
+[[SC11_g25 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+All right. Tell me where you'd like me to start.
+
+INT. KELLER'S DINER - MORNING
+
+[[area: counter]]
+
+[[SC12 — The first task]]
+
+RUTH is standing behind the counter; SAM is standing on the customer side. Props are preset between scenes; there are no other visible or audible people.
+
+[[SC12_g01 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+First, put that cup back. I can never find one.
+
+[[SC12_g02 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+The cup's already there. You're looking past it at me.
+
+[[SC12_g03 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+So it is. I'm going to have to get used to this.
+
+[[SC12_g04 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Having the cups ready, or somebody telling you where they are?
+
+[[SC12_g05 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Both, probably. Don't expect me to be graceful about it.
+
+[[SC12_g06 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I wasn't. I'd like instructions more than graceful, to start.
+
+[[SC12_g07 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+The clean cloth stays here. The other one stays behind me.
+
+[[SC12_g08 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+And nothing hot on the lower shelf. I remember that.
+
+[[SC12_g09 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Good. We'll check the two places before we open anything.
+
+[[SC12_g10 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+What time do you want to start serving this morning?
+
+[[SC12_g11 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Seven. That gives us time to get the counter ready.
+
+[[SC12_g12 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Then we should say seven, rather than let people guess.
+
+[[SC12_g13 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I'll put the hours by the door before we serve.
+
+[[SC12_g14 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Do you want the old notice put away for now?
+
+[[SC12_g15 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Leave it folded on the back counter. Don't throw it out.
+
+[[SC12_g16 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+All right. We don't have to decide what happens afterward.
+
+[[SC12_g17 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+And if this feels wrong tomorrow, you'll tell me then?
+
+[[SC12_g18 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Yes. Will you tell me, instead of printing another notice?
+
+[[SC12_g19 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+I'll tell you. Probably over coffee that actually has coffee in it.
+
+[[SC12_g20 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+I'd settle for knowing which mug you're putting mine in.
+
+[[SC12_g21 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+The one on your side. I can keep that much straight.
+
+[[SC12_g22 DIALOGUE — native 6s / intended used 5.5s]]
+
+SAM
+Good. I'll leave it there until you need the space.
+
+[[SC12_g23 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+There's a small open card beside the till. Use that one.
+
+[[SC12_g24 DIALOGUE — native 6s / intended used 5.5s]]
+
+RUTH
+Put it here on the counter, where we can see it.
+
+[[SC12_g25 ACTION — native 6s / intended used 5.5s]]
+
+Sam sets a small freestanding OPEN card on the clear counter; only his own hand touches it. Ruth stays still, well clear of his reach.
+
+[[Closing card: 4 seconds. AI-generated drama. Credits/disclosure wording is a proposed finishing element, subject to the actual generator record and Owner approval. No promise of the diner surviving follows the OPEN card.]]

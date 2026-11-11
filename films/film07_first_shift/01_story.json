@@ -1,0 +1,258 @@
+{
+  "concept": "On his first morning at Ruth Keller's diner Sam Doyle finds a closure notice and has to learn whether the job is real before he works a single shift.",
+  "theme": "A kindness is only fair when it can be refused: the truth and clear terms come before any promise.",
+  "genre": "Quiet two-hander drama (a long conversation at a diner counter and booth, about 27 minutes)",
+  "audience": {
+    "who": "General online audience watching English-language dramas with Vietnamese subtitles; anyone who has been offered help that felt like pity.",
+    "expectation": "A patient, realistic negotiation between two decent people that ends on a small, honest start, not a rescue."
+  },
+  "premise": "Ruth Keller offered Sam Doyle a job at her diner; on the morning of his first shift he finds a printed CLOSED PERMANENTLY notice on the counter and asks whether the offer was ever real.",
+  "central_conflict": "Sam wants a real job on fair, clear terms and refuses to be anyone's rescuer; Ruth wants one last good morning and cannot admit she cannot run the place alone.",
+  "logline": {
+    "text": "On his first morning, Sam Doyle finds a closure notice in Ruth Keller's diner and asks her for the truth, so a real, paid trial of the job can begin on fair terms.",
+    "protagonist": "SAM",
+    "goal": "a real, paid job on fair terms",
+    "obstacle": "Ruth hid that she planned to close"
+  },
+  "structure": [
+    {
+      "id": "ACT1",
+      "name": "The notice",
+      "beats": [
+        {
+          "id": "B1",
+          "function": "SETUP",
+          "scene_ids": [
+            "SC01"
+          ],
+          "summary": "Sam arrives on time and sees the notice; Ruth admits it was printed before her offer."
+        },
+        {
+          "id": "B2",
+          "function": "INCITING",
+          "scene_ids": [
+            "SC02"
+          ],
+          "summary": "Ruth admits she planned a last morning; Sam demands to talk about real work."
+        }
+      ]
+    },
+    {
+      "id": "ACT2",
+      "name": "Terms",
+      "beats": [
+        {
+          "id": "B3",
+          "function": "ESCALATION",
+          "scene_ids": [
+            "SC03"
+          ],
+          "summary": "They start with one counter station and clear instructions."
+        },
+        {
+          "id": "B4",
+          "function": "ESCALATION",
+          "scene_ids": [
+            "SC04"
+          ],
+          "summary": "Pay for the morning is settled; no later shift is promised."
+        },
+        {
+          "id": "B5",
+          "function": "MIDPOINT",
+          "scene_ids": [
+            "SC05"
+          ],
+          "summary": "Sam's savings and the old money are separated from the job."
+        },
+        {
+          "id": "B6",
+          "function": "CRISIS",
+          "scene_ids": [
+            "SC06"
+          ],
+          "summary": "Ruth says what she cannot manage and chooses to test a smaller opening."
+        },
+        {
+          "id": "B7",
+          "function": "CRISIS",
+          "scene_ids": [
+            "SC07"
+          ],
+          "summary": "They define a counter-only service with two seats."
+        },
+        {
+          "id": "B8",
+          "function": "CRISIS",
+          "scene_ids": [
+            "SC08"
+          ],
+          "summary": "A finite wage reserve is named; Sam's savings may not fill gaps."
+        },
+        {
+          "id": "B9",
+          "function": "CRISIS",
+          "scene_ids": [
+            "SC09"
+          ],
+          "summary": "They agree how mistakes, corrections and refusals work."
+        }
+      ]
+    },
+    {
+      "id": "ACT3",
+      "name": "The trial",
+      "beats": [
+        {
+          "id": "B10",
+          "function": "CLIMAX",
+          "scene_ids": [
+            "SC10"
+          ],
+          "summary": "Sam steps to the doorway to choose freely and returns with a conditional offer of one week."
+        },
+        {
+          "id": "B11",
+          "function": "CLIMAX",
+          "scene_ids": [
+            "SC11"
+          ],
+          "summary": "Five paid mornings, daily checks and a decision after the trial, with no promise of survival."
+        },
+        {
+          "id": "B12",
+          "function": "RESOLUTION",
+          "scene_ids": [
+            "SC12"
+          ],
+          "summary": "The first task is given; Sam sets an OPEN card on the counter."
+        }
+      ]
+    }
+  ],
+  "plot": "Sam arrives on time for his first shift and finds the closure notice (SC01); Ruth admits she planned a last morning (SC02). They begin with one small station (SC03), settle pay (SC04), separate Sam's savings and the old money from the job (SC05), Ruth says why she was closing (SC06), and they define a smaller opening (SC07), a finite wage reserve (SC08) and rules for mistakes (SC09). Sam goes to the doorway to choose freely and returns with a conditional offer (SC10); they fix five paid mornings (SC11) and begin the first task, Sam setting an OPEN card on the counter (SC12).",
+  "subplots": [],
+  "characters": {
+    "SAM": {
+      "id": "SAM",
+      "name": "Sam Doyle",
+      "role": "protagonist",
+      "want": "A real job on clear terms, and a true answer about why he was asked.",
+      "need": "To choose to stay for his own reasons, not to repay or rescue.",
+      "flaw": "He leaves places before anyone can turn him down.",
+      "arc_change": "From waiting to be refused to choosing the trial week himself, on his own terms.",
+      "change_scene_id": "SC10"
+    },
+    "RUTH": {
+      "id": "RUTH",
+      "name": "Ruth Keller",
+      "role": "supporting",
+      "want": "One proper morning, and someone to share the work.",
+      "need": "To say plainly what she can and cannot do and ask for help.",
+      "flaw": "She hides what she plans behind dry, practical remarks.",
+      "arc_change": "From letting a printed notice decide for her to choosing a smaller opening in her own words.",
+      "change_scene_id": "SC06"
+    }
+  },
+  "scenes": {
+    "SC01": {
+      "purpose": "Establish the first morning, the counter and the CLOSED PERMANENTLY notice.",
+      "conflict": "Sam came to start work; Ruth let the notice stand unexplained.",
+      "outcome": "Ruth admits the closure notice predates her offer; Sam asks what he is there for.",
+      "value": "trust",
+      "shift": "-"
+    },
+    "SC02": {
+      "purpose": "Name the pity Sam suspects and the last morning Ruth planned.",
+      "conflict": "Sam wants the truth about the invitation; Ruth wants one proper morning before she closes.",
+      "outcome": "Ruth admits she planned a last morning together; Sam insists they talk about real work.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC03": {
+      "purpose": "Find one small, definite place to begin.",
+      "conflict": "Sam needs a clear task; Ruth has forgotten how to explain the work.",
+      "outcome": "They define one counter station and Ruth admits she needs help explaining.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC04": {
+      "purpose": "Settle pay for the morning and what is not promised.",
+      "conflict": "Sam asks for pay and a defined shift; Ruth cannot promise a next one.",
+      "outcome": "A paid three-hour morning; no further shift promised.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC05": {
+      "purpose": "Separate Sam's savings and the old money from the job.",
+      "conflict": "Sam fears the job is a repayment; Ruth fears she has hidden too much.",
+      "outcome": "Sam keeps his savings; the job must stand on its own terms.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC06": {
+      "purpose": "Ruth says why she was closing and what she cannot manage.",
+      "conflict": "Ruth would rather hide behind the notice; Sam asks her to say what she wants.",
+      "outcome": "Ruth chooses to test a smaller opening instead of closing or pretending.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC07": {
+      "purpose": "Define what the diner can honestly offer with two inexperienced hands.",
+      "conflict": "Ruth wants to open everything again; Sam needs instructions that hold.",
+      "outcome": "Counter-only service; Ruth owns telling people the limits.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC08": {
+      "purpose": "Test whether a trial week is funded or only hoped for.",
+      "conflict": "Sam will not work on hope; Ruth will not take his savings.",
+      "outcome": "A finite wage reserve is identified and may not become Sam's investment.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC09": {
+      "purpose": "Agree how training, corrections and refusals will work.",
+      "conflict": "Mistakes are certain; blame is not.",
+      "outcome": "Both accept the rules: ask, explain, pay for time, stop rather than hide mistakes.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC10": {
+      "purpose": "Give Sam room to choose without guilt, then hear what he decides.",
+      "conflict": "Sam's habit of leaving before he is refused against Ruth's wish not to pressure him.",
+      "outcome": "Sam returns with a conditional offer of one week, not a rescue promise.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC11": {
+      "purpose": "Turn the offer into mutual terms.",
+      "conflict": "Hours, pay, cancellation and no promise of survival.",
+      "outcome": "Five paid mornings, daily check-ins and a decision after the trial.",
+      "value": "trust",
+      "shift": "+"
+    },
+    "SC12": {
+      "purpose": "Begin a modest real shift instead of celebrating a rescue.",
+      "conflict": "A tired owner and a careful employee find the first task.",
+      "outcome": "Sam sets the OPEN card on the counter; the trial begins and the future stays uncertain.",
+      "value": "trust",
+      "shift": "+"
+    }
+  },
+  "source_note": "Original script written for this film; the two characters, the diner and their earlier conversation come from film06 (Owner-accepted) as visual references only: no film06 line, ending or outcome is changed. Names, events and dialogue of film07 are new; no outside text.",
+  "rewrite_log": [
+    {
+      "version": 1,
+      "date": "2026-11-10",
+      "reason": "First draft by Codex for Owner review (docs/production/pilots/film07_first_shift).",
+      "changed": "docs/production/pilots/film07_first_shift/script.fountain, beats.json"
+    },
+    {
+      "version": 2,
+      "date": "2026-11-11",
+      "reason": "Owner approved the film ('Duyệt, chạy pilot'); package built from the approved draft without a change of meaning, dialogue or order. Only the scene headings (area moved to an [[area:]] note so the parser reads the time of day) and the front matter changed; draft script SHA-256 c45ac9dcdfc09cefb4f11c8efc868ed132aa0c288d379c991eb856c4ec3bf92c.",
+      "changed": "films/film07_first_shift/script.fountain"
+    }
+  ]
+}
