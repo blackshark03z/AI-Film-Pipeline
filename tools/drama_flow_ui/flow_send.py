@@ -407,7 +407,7 @@ JS_MARKED_TOKEN = r"""() => { const c = document.querySelector('[data-vp-n]');
 
 
 # the picker's confirm button ("Add to prompt" is the English wording, unverified: a miss is harmless, the slot is checked)
-ADD_TO_PROMPT_RE = re.compile(r"^(Thêm vào câu lệnh|Add to prompt)$")
+ADD_TO_PROMPT_RE = re.compile(r"^\s*(Thêm vào câu lệnh|Add to prompt)\s*$")   # the English button text is " Add to prompt "
 # a rejected job tile: "Không thành công" (vi); English wordings are best guesses, a miss only delays failure detection
 FAILED_WORDS = ("Không thành công", "Unsuccessful", "Something went wrong")
 FAILED_TEXT = FAILED_WORDS[0]   # the Vietnamese wording; kept for callers that need one marker

@@ -161,6 +161,7 @@ def test_ui_text_parsers_read_both_languages():
     assert fs.parse_cost("Sẽ tốn 8 tín dụng") == 8 and fs.parse_cost("Generating will use 48 credits") == 48
     assert fs.SETTINGS_CHIP_RE.search("Video · 360p · 6s crop_16_9 x1") and fs.SETTINGS_CHIP_RE.search("Video · 360p · 6 giây")
     assert fs.has_failed_text("Không thành công") and fs.has_failed_text("Unsuccessful") and not fs.has_failed_text("Done")
+    assert fs.ADD_TO_PROMPT_RE.search(" Add to prompt ") and fs.ADD_TO_PROMPT_RE.search("Thêm vào câu lệnh")
     assert fs.SLOT_LABEL["start"] == ["Bắt đầu", "Start"] and fs.SLOT_LABEL["end"] == ["Kết thúc", "End"]
 
 
