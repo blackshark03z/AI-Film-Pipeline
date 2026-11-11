@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g12_t1",
+  "generation_id": "SC02_g12",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:206": "yes: SAM's head and eyes turn screen-left toward RUTH's off-frame place as he speaks"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes: RUTH wholly out of frame, her place not shown empty; SAM's eyes go screen-left",
+        "REL_GAZE": "yes: SAM looks screen-left, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'and i was supposed to sit here while you closed' span 1.8-4.3 s = line 206 exact; SAM close-medium seated at the booth as g10 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH's off-frame place, never into lens, lips match speech; left frame edge shows only booth seat, RUTH wholly out of frame; background stable, no morphing; mean -33.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:206",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "81a96b5023f8c616e19974d5397e2a9c5d34b70004cfeddd038f906d89f70cc0"
+}
