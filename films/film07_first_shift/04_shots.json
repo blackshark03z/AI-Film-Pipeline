@@ -1334,7 +1334,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "MASTER",
       "subject": "SAM",
       "foreground": "",
@@ -1356,7 +1356,7 @@
             "kind": "ACTION",
             "start_s": 1.0,
             "end_s": 2.8,
-            "description": "SAM lifts the white mug from the counter in his right hand",
+            "description": "SAM lifts the white mug from the counter in his left hand",
             "motion": "pick_up_small_object"
           },
           {
@@ -1406,7 +1406,9 @@
         "lens_intent": "WIDE_ESTABLISH",
         "composition": "wide shot from the doorway end of the counter: RUTH behind the counter on the left, SAM on the customer side on the right, the back shelf of white mugs and the pale front window behind them"
       },
-      "camera_position": "cA_ctr"
+      "camera_position": "cA_ctr",
+      "repair_of": "SC01_g16@v1",
+      "repair_reason": "SC01_g16_t1 showed SAM's left hand while the prompt said right; canon is the left hand, prompt and later states corrected"
     },
     {
       "generation_id": "SC01_g17",
@@ -26607,6 +26609,89 @@
         }
       },
       "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC01_g16",
+      "scene_id": "SC01",
+      "start_state": "SC01_g16",
+      "end_state": "SC01_g17",
+      "previous_generation_id": "SC01_g15",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "MASTER",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "RUTH",
+        "SAM"
+      ],
+      "dialogue": [],
+      "choreography": {
+        "generation_id": "SC01_g16",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "RUTH stands behind the counter with her hands at her sides, the white mug stands on the counter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 2.8,
+            "description": "SAM lifts the white mug from the counter in his right hand",
+            "motion": "pick_up_small_object"
+          },
+          {
+            "kind": "CONSEQUENCE",
+            "start_s": 2.8,
+            "end_s": 4.0,
+            "description": "SAM holds the white mug at chest height"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "both stay still, RUTH's hands stay on her own side"
+          }
+        ],
+        "once_actions": [
+          "SAM lifts the white mug"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "careful, polite",
+            "visible_cues": [
+              "eyes steady",
+              "small swallow"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_morning@1",
+        "prop_notice@1",
+        "prop_mug1@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "wide shot from the doorway end of the counter: RUTH behind the counter on the left, SAM on the customer side on the right, the back shelf of white mugs and the pale front window behind them"
+      },
+      "camera_position": "cA_ctr"
     }
   ]
 }

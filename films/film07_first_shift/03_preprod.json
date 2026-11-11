@@ -1354,7 +1354,7 @@
       },
       "props": {
         "the closure notice:": "lying flat on the counter, face up",
-        "the white mug:": "held in SAM's right hand at chest height"
+        "the white mug:": "held in SAM's left hand at chest height"
       },
       "looks": {
         "RUTH": "ruth_apron",
@@ -1383,7 +1383,7 @@
       },
       "props": {
         "the closure notice:": "lying flat on the counter, face up",
-        "the white mug:": "held in SAM's right hand at chest height"
+        "the white mug:": "held in SAM's left hand at chest height"
       },
       "looks": {
         "RUTH": "ruth_apron",
@@ -1412,7 +1412,7 @@
       },
       "props": {
         "the closure notice:": "lying flat on the counter, face up",
-        "the white mug:": "held in SAM's right hand at chest height"
+        "the white mug:": "held in SAM's left hand at chest height"
       },
       "looks": {
         "RUTH": "ruth_apron",
@@ -1441,7 +1441,7 @@
       },
       "props": {
         "the closure notice:": "lying flat on the counter, face up",
-        "the white mug:": "held in SAM's right hand at chest height"
+        "the white mug:": "held in SAM's left hand at chest height"
       },
       "looks": {
         "RUTH": "ruth_apron",
@@ -1470,7 +1470,7 @@
       },
       "props": {
         "the closure notice:": "lying flat on the counter, face up",
-        "the white mug:": "held in SAM's right hand at chest height"
+        "the white mug:": "held in SAM's left hand at chest height"
       },
       "looks": {
         "RUTH": "ruth_apron",
@@ -1499,7 +1499,7 @@
       },
       "props": {
         "the closure notice:": "lying flat on the counter, face up",
-        "the white mug:": "held in SAM's right hand at chest height"
+        "the white mug:": "held in SAM's left hand at chest height"
       },
       "looks": {
         "RUTH": "ruth_apron",
@@ -1528,7 +1528,7 @@
       },
       "props": {
         "the closure notice:": "lying flat on the counter, face up",
-        "the white mug:": "held in SAM's right hand at chest height"
+        "the white mug:": "held in SAM's left hand at chest height"
       },
       "looks": {
         "RUTH": "ruth_apron",
@@ -1557,7 +1557,7 @@
       },
       "props": {
         "the closure notice:": "lying flat on the counter, face up",
-        "the white mug:": "held in SAM's right hand at chest height"
+        "the white mug:": "held in SAM's left hand at chest height"
       },
       "looks": {
         "RUTH": "ruth_apron",
@@ -9890,52 +9890,52 @@
     "SC01_g17": {
       "file": "media/stills/start_SC01_g17.jpg",
       "sha256": "0da3eeb06540768e139ef5666b60079b066976e074a81980fa51b71593ae6c18",
-      "prompt_sha256": "49fa070e6c7762b0fb8827953b2270a10a12a20ec7466c36d27597dd3330f1ff",
-      "source": "Flow Nano Banana 2.1 project 87dac583 (refs: char refs + Empty diner set plate); image drawn for SC01_g17",
+      "prompt_sha256": "8436dab130e7eff365a6948b1d07f6d24cb63c3b60ef6defaa754a4111c7a7fa",
+      "source": "Flow Nano Banana (same image, prompt corrected to left hand)",
       "credits": 0.0,
-      "registered_at": "2026-11-11T09:17:18+00:00",
+      "registered_at": "2026-11-11T11:35:22+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T09:17:18+00:00"
+      "approved_at": "2026-11-11T11:35:23+00:00"
     },
     "SC01_g19": {
       "file": "media/stills/start_SC01_g19.jpg",
       "sha256": "0da3eeb06540768e139ef5666b60079b066976e074a81980fa51b71593ae6c18",
-      "prompt_sha256": "49fa070e6c7762b0fb8827953b2270a10a12a20ec7466c36d27597dd3330f1ff",
-      "source": "Flow Nano Banana 2.1 project 87dac583 (refs: char refs + Empty diner set plate); image drawn for SC01_g17, reused: same still prompt as SC01_g17",
+      "prompt_sha256": "8436dab130e7eff365a6948b1d07f6d24cb63c3b60ef6defaa754a4111c7a7fa",
+      "source": "Flow Nano Banana (same image, prompt corrected to left hand)",
       "credits": 0.0,
-      "registered_at": "2026-11-11T09:17:19+00:00",
+      "registered_at": "2026-11-11T11:35:25+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T09:17:20+00:00"
+      "approved_at": "2026-11-11T11:35:26+00:00"
     },
     "SC01_g21": {
       "file": "media/stills/start_SC01_g21.jpg",
       "sha256": "0da3eeb06540768e139ef5666b60079b066976e074a81980fa51b71593ae6c18",
-      "prompt_sha256": "49fa070e6c7762b0fb8827953b2270a10a12a20ec7466c36d27597dd3330f1ff",
-      "source": "Flow Nano Banana 2.1 project 87dac583 (refs: char refs + Empty diner set plate); image drawn for SC01_g17, reused: same still prompt as SC01_g17",
+      "prompt_sha256": "8436dab130e7eff365a6948b1d07f6d24cb63c3b60ef6defaa754a4111c7a7fa",
+      "source": "Flow Nano Banana (same image, prompt corrected to left hand)",
       "credits": 0.0,
-      "registered_at": "2026-11-11T09:17:21+00:00",
+      "registered_at": "2026-11-11T11:35:27+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T09:17:22+00:00"
+      "approved_at": "2026-11-11T11:35:28+00:00"
     },
     "SC01_g23": {
       "file": "media/stills/start_SC01_g23.jpg",
       "sha256": "0da3eeb06540768e139ef5666b60079b066976e074a81980fa51b71593ae6c18",
-      "prompt_sha256": "49fa070e6c7762b0fb8827953b2270a10a12a20ec7466c36d27597dd3330f1ff",
-      "source": "Flow Nano Banana 2.1 project 87dac583 (refs: char refs + Empty diner set plate); image drawn for SC01_g17, reused: same still prompt as SC01_g17",
+      "prompt_sha256": "8436dab130e7eff365a6948b1d07f6d24cb63c3b60ef6defaa754a4111c7a7fa",
+      "source": "Flow Nano Banana (same image, prompt corrected to left hand)",
       "credits": 0.0,
-      "registered_at": "2026-11-11T09:17:23+00:00",
+      "registered_at": "2026-11-11T11:35:29+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T09:17:24+00:00"
+      "approved_at": "2026-11-11T11:35:30+00:00"
     },
     "SC01_g24": {
       "file": "media/stills/start_SC01_g24.jpg",
       "sha256": "3ec3f7dd8ab8d4cccfd4bd60549fd78ae3df533dad6581e9f84ace355aa5935d",
-      "prompt_sha256": "1c6c9606759933ba34fb29db6f320a1ca6b9ae6e6ea6e2b700132fc3736e8d46",
-      "source": "Flow Nano Banana 2.1 project 87dac583 (refs: char refs + Empty diner set plate); image drawn for SC01_g24",
+      "prompt_sha256": "8cf81c0322a4971810ed679886a8251c4416f478bf8fef8ddddd0c30c96ec87d",
+      "source": "Flow Nano Banana (same image, prompt corrected to left hand)",
       "credits": 0.0,
-      "registered_at": "2026-11-11T09:17:25+00:00",
+      "registered_at": "2026-11-11T11:35:31+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T09:17:26+00:00"
+      "approved_at": "2026-11-11T11:35:32+00:00"
     },
     "SC02_g02": {
       "file": "media/stills/start_SC02_g02.jpg",

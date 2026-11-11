@@ -1,0 +1,131 @@
+{
+  "take_id": "SC01_g16_t2",
+  "generation_id": "SC01_g16",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 zoomed crops: SAM (curly dark hair, thin face, damp grey hoodie) stands on customer side frame-right, faces RUTH off to screen-left; ACTION 1.0-2.8 s he reaches the arm on the camera-far/screen-left side, lifts the white mug off the counter, CONSEQUENCE/HOLD 2.8-6.0 s mug held at chest height to the last frame, no touching of notice, no one else; same arm and same chest-height pose as SC01_g16_t1 and as start stills g17-g24 (continuity); RUTH behind counter frame-left as her still, hands at her sides, unmoved; notice flat on counter unmoved; shelves stable, no morphing; no speech; mean -47.8 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [],
+  "output_sha256": "cabc1ebfb1660a1f4efca983738123c531c4a0787518510e7c00282adbb7656a"
+}
