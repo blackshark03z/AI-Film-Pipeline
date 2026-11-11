@@ -102,5 +102,13 @@
     ],
     "scope_now": "pilot SC01-SC02 only; continuing beyond the pilot requires pilot QC PASS and a report to the Owner first",
     "unchanged": "360p Omni 1.2 Flash only; no publication/push; final film acceptance stays with the Owner"
+  },
+  "flow_rights_consent": {
+    "date": "2026-11-12",
+    "granted_by": "Owner (khoikk03), confirmed by the Owner directly in this executor session chat",
+    "scope": "Click \"I agree\" on Flow's \"Rights to use this image\" dialog, upload film07 reference images only",
+    "account": "khoia1k57",
+    "project": "542e948a-a222-4a6f-a0c6-7cb0733ea719",
+    "not_covered": "any other terms or consent dialogs"
   }
 }
