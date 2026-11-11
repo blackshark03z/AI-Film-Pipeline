@@ -1,0 +1,140 @@
+{
+  "take_id": "SC01_g12_t1",
+  "generation_id": "SC01_g12",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:77": "yes, SAM's head and eyes turned screen-left toward off-frame RUTH while speaking"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes, RUTH's place stays out of frame and SAM's eyes go just past the lens to frame-left",
+        "REL_GAZE": "yes, SAM looks screen-left, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'then should i have called before coming down this morning' span 1.9-4.3 s = line 77 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g10); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -32 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:77",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "45786540c8e98eb7c3fe1d867275f847e0913e7254134ffb3b1c367f53d77462"
+}
