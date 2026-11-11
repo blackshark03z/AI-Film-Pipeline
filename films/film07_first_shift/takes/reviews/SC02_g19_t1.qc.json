@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g19_t1",
+  "generation_id": "SC02_g19",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:240": "yes: Sam speaks line 240 to Ruth off-frame-left, mouth moves with audio, body angled toward her"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes: Ruth wholly out of frame, place never shown empty; Sam's eyes go to screen-left where she stands",
+        "REL_GAZE": "yes: eyes held just left of lens at Ruth, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match (dark curly hair, grey hoodie); seated at counter-side booth, same diner background as g18; left edge shows only background red booth/stools, no Ruth (blue uniform/hair) in any of 4 sampled frames; STT 'i can hear bad news i can't plan around guesses' 1.2-4.4 s matches line 240",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:240",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "ca100b6df9797084bffecf60e2c9af31587e110d3d33d8da0d18f003f4d25fd0"
+}
