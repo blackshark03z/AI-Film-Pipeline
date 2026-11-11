@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g05_t1",
+  "generation_id": "SC02_g05",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:172": "yes: SAM's head and eyes turn screen-left toward RUTH's place as he speaks"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "RUTH's grey hair and forehead enter the left edge of frame for the whole clip; she must be wholly out of shot",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "no: RUTH's hair and forehead intrude at the left frame edge from the first second, she is not kept out of frame",
+        "REL_GAZE": "yes: SAM looks screen-left, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed faces + left-edge crops at 1.2/2.4/3.6 s: SAM seated in the red booth as his still, STT 'you don't know that you never gave me that choice' = line 172; but RUTH's grey hair and forehead (blurred) enter the left frame edge for the whole clip",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "the video model let the off-frame listener's head enter the left edge; the placement text did not forbid any part of her entering the frame (same class as SC01_g13_t1 and SC01_g25_t1)",
+  "required_answers": [
+    "REL_ADDRESS:172",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "3ebb883887243fa376f1b2545076e87b3f03a8ce22bd6b7327cc8e65b6a9dcf7"
+}
