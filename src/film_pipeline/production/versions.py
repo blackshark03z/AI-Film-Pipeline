@@ -29,6 +29,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from film_pipeline.production.ffjoin import join_video_chunks
 from film_pipeline.production.render_cache import cached as _cached_render, key_for as _render_key, save as _save_render
 
 PORTRAIT_H = 1280
@@ -341,8 +342,7 @@ def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, hei
                 "".join(f"file '{p.as_posix()}'\nduration {(w[-1]['end_frame'] - w[0]['start_frame']) / fps:.9f}\n"
                         for p, w in zip(chunks, windows)), encoding="utf-8")
             joined = work / "joined.mkv"
-            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
-                            "-c", "copy", str(joined)], check=True)
+            join_video_chunks(concat_list, joined)
             subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(joined), "-i", str(audio_source),
                             "-map", "0:v:0", "-map", "1:a:0?", "-c", "copy", "-movflags", "+faststart", str(out)], check=True)
         return out

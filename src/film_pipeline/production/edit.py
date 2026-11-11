@@ -33,6 +33,7 @@ from typing import Any, Callable, Literal
 from pydantic import Field, model_validator
 
 from film_pipeline.core import ContractModel
+from film_pipeline.production.ffjoin import join_video_chunks, media_timeout, run_ffmpeg
 from film_pipeline.production.render_cache import cached as _cached_render, key_for as _render_key, save as _save_render
 
 FPS = 24
@@ -374,7 +375,7 @@ def _trim(src: Path, dst: Path, start: float, end: float | None,
     if vf:
         cmd += ["-vf", vf]
     cmd += ["-r", str(FPS), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", "-ar", "48000", str(dst)]
-    subprocess.run(cmd, check=True)
+    run_ffmpeg(cmd, timeout_s=1800.0)
     return dst
 
 
@@ -592,7 +593,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
                             "-/filter_complex", str(graph_file), "-map", "[vchunk]", "-map", "[achunk]",
                             "-t", f"{trim_duration:.6f}", "-r", str(FPS), "-c:v", "libx264", "-crf", "14",
                             "-preset", "fast", "-pix_fmt", "yuv420p", "-c:a", "pcm_s16le", str(generated)]
-                    subprocess.run(cmd, check=True)
+                    run_ffmpeg(cmd, timeout_s=media_timeout(trim_duration))
                     chunk = _save_render(cache_dir, key, generated, ".mkv")
                 chunk_id = chunk.stem
                 at = {e.event_id: starts[i] for i, e in enumerate(section.events)}
@@ -633,8 +634,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
             concat_list = work / "fine_concat.txt"
             concat_list.write_text("".join(f"file '{p.as_posix()}'\n" for p in chunk_paths), encoding="utf-8")
             body = work / "body.mkv"
-            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
-                            "-c", "copy", str(body)], check=True)
+            join_video_chunks(concat_list, body)
             assemble([body], out, cues=[], title_lines=title, end_lines=end, title_s=section.title_s,
                      end_s=section.end_s, grade="null", label_text="")
         else:
@@ -751,8 +751,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
                 concat_list = work / "body_concat.txt"
                 concat_list.write_text("".join(f"file '{p.as_posix()}'\n" for p in chunk_paths), encoding="utf-8")
                 body = work / "body.mkv"
-                subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
-                                "-c", "copy", str(body)], check=True)
+                join_video_chunks(concat_list, body)
                 assemble([body], out, cues=[], title_lines=title, end_lines=end, title_s=section.title_s,
                          end_s=section.end_s, grade="null", label_text="")
             lengths = {e.event_id: probe_video_duration(c) for e, c in zip(section.events, clips)}

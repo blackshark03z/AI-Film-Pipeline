@@ -24,6 +24,7 @@ from pathlib import Path
 from pydantic import Field
 
 from ..core import ContractModel
+from ..production.ffjoin import media_timeout, run_ffmpeg
 
 W, H, FPS = 1280, 720, 24
 FONT = "C:/Windows/Fonts/arial.ttf"
@@ -337,13 +338,14 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
             last = f"p{j}"
         graph_file = cards / "assemble.filter"
         graph_file.write_text(";".join(fl), encoding="utf-8")
-        subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs,
-                        "-/filter_complex", str(graph_file),
-                        "-map", f"[{last}]", "-map", "[aout]",
-                        "-c:v", "libx264", "-crf", "18",
-                        "-preset", "medium", "-pix_fmt", "yuv420p",
-                        *( ["-c:a", "pcm_s16le"] if _body_only else ["-c:a", "aac", "-b:a", "192k"] ),
-                        "-movflags", "+faststart", str(out)], check=True)
+        run_ffmpeg(["ffmpeg", "-v", "error", "-y", *inputs,
+                    "-/filter_complex", str(graph_file),
+                    "-map", f"[{last}]", "-map", "[aout]",
+                    "-c:v", "libx264", "-crf", "18",
+                    "-preset", "medium", "-pix_fmt", "yuv420p",
+                    *( ["-c:a", "pcm_s16le"] if _body_only else ["-c:a", "aac", "-b:a", "192k"] ),
+                    "-movflags", "+faststart", str(out)],
+                   timeout_s=media_timeout(body_end + (0.0 if _body_only else end_s)))
     return out
 
 
