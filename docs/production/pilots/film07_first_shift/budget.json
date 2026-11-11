@@ -1,7 +1,27 @@
 {
   "film_id": "film07_first_shift",
   "status": "DRAFT_NOT_AUTHORIZED",
-  "current_quote_status": "PENDING_SESSION_RECOVERY",
+  "current_quote_status": "READ_2026-11-11_DISPLAY_ONLY_NO_ATTACHED_INPUT",
+  "current_quote": {
+    "read_at_utc": "2026-11-11T02:29:44+00:00",
+    "evidence": "C:/film-work/production-stability-p20/proof/flow-quote-20261111.json",
+    "model": "Omni 1.2 Flash",
+    "resolution": "360p",
+    "aspect": "16:9",
+    "multiplier": "x1",
+    "video_credits_by_duration_s": {"6": 6, "8": 8, "10": 10, "12": 14, "15": 20},
+    "per_6s_video_credits": 6.0,
+    "image_credits_displayed": 0,
+    "image_model": "Nano Banana 2.1",
+    "price_changed_vs_2026_11_08": false,
+    "model_list_or_retirement_notice_changed": false,
+    "retirement_notices": "Omni 1.1 Flash, Veo 3.1 Fast and Veo 3.1 Quality retire 2026-12-05; Omni 1.2 Flash and Veo 3.1 Lite have no notice",
+    "caveats": [
+      "price read before Submit with no ingredient/frame attached; recheck after inputs are attached",
+      "above 10 s the rate doubles (12 s = 14, 15 s = 20); the draft uses native 6 s generations only",
+      "image 0 credits is the displayed price today, still not a guarantee for later sends"
+    ]
+  },
   "pricing_basis": {
     "measured_date": "2026-11-08",
     "source": "production.planning.flow_credits; historical UI measurement",
@@ -33,6 +53,23 @@
     "historical_high_credits": 2520.0,
     "proposed_cap_credits": 3210.0
   },
+  "recomputed_at_current_quote_2026_11_11": {
+    "price_basis_per_6s_video_credits": 6.0,
+    "cap_rule": "1.5 x mean-retake estimate, rounded",
+    "pilot_first_two_scenes": {
+      "first_pass_credits": 300.0,
+      "expected_credits": 356.67,
+      "high_credits": 420.0,
+      "proposed_cap_credits": 535.0
+    },
+    "whole_film_including_pilot": {
+      "first_pass_credits": 1800.0,
+      "expected_credits": 2140.0,
+      "high_credits": 2520.0,
+      "proposed_cap_credits": 3210.0
+    },
+    "delta_vs_2026_11_08": "none: all figures identical"
+  },
   "approved_new_film_cap_credits": null,
   "new_film_spent_credits": 0,
   "unchanged_standing_cap_credits": 256.8,
@@ -40,7 +77,7 @@
     "Owner approves new film meaning, rights and overall cap before any generation",
     "pilot tranche is included in whole-film cap, not added to it",
     "recheck live quote after frames/ingredients; missing or changed price stops before Submit",
-    "verify still price separately; do not assume historical zero-credit pricing",
+    "verify still price separately; 2026-11-11 display showed 0 credits but do not assume it persists",
     "pilot motion/acting/identity QC before continuing the same film",
     "no cadence or deadline promise before live pilot data"
   ],

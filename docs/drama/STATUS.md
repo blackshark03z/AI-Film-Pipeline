@@ -1,3 +1,16 @@
+# P20 coordinator takeover — Claude main session (2026-11-11T02:25Z)
+
+Codex stopped after commit 863e7ed plus uncommitted send-recovery/download-identity WIP (10 files + 2 new tests).
+Review: WIP is coherent (in-process controller dispatch journal PREPARING/SUBMITTING, SUBMIT_UNCONFIRMED stays ambiguous,
+download binds to the opened tile's media id + prompt, provider-no-clip only on verified 30-tile project scan + settled
+manifest). Focused Flow/recovery/custody group 90PASS on current WIP. Earlier proof XMLs with failures were pre-fix RED.
+Final 1800s benchmark process is dead: landscape/clean/mix done (metrics.json), portrait + decode/restore checks NOT run.
+Main session coordinates only; execution in child sessions: (1) finish benchmark portrait/checks, scratch-only;
+(2) independent review + commit of the recovery WIP; (3) read-only current Flow quote -> film07 BUDGET refresh.
+Then: exact RC full suite -> Owner decision on film07 (new film + cap above 256.8 are Owner-reserved).
+
+---
+
 # P20 continuation — final native30minute benchmark (2026-11-11T01:19Z)
 
 Owner explicitly says tiếp tục; renewed180minute tranche from01:19Z (08:19Asia/Saigon). No provider sends/spend/push.
