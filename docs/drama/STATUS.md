@@ -430,3 +430,12 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   rejected; film04 SC05_g3 thumb luma 25 -> 52, THUMB_REJECTED gone (3 thumbs). Black/flat frames still rejected.
   Still open: RIGHTS_PENDING (Owner); the SFX are not
   yet judged by ear.
+
+- film07 SC03 (2026-11-12, executor session): 25/25 gens ACCEPTED, 27 sends (g04_t1 NOT_SUBMITTED, g16_t1 + g20_t1 rejected
+  for listener/continuity then restaged v2, g22_t1 FLOW_FAILED_NO_CLIP then g22_t2 rejected START_FRAME: SAM shoulder in the
+  shared RUTH-single still; still redrawn with an empty right edge, pickup v2, g22_t3 accepted). 100% bound in send. Credits:
+  ledger 546 incl. the no-clip g22_t1 (not charged by Flow); real spend = ledger - 6 + 12 stray (INC-001,
+  takes/incidents/INC-001-stray-video-jobs.md). Flow balance read 25 after g25 (cap 3,210 via credits_estimate 2140).
+  No SC03 events exist in 05_edit.json, so `cut --render` has nothing to cut: excerpt = concat of the 25 accepted takes
+  (tmp/SC03_excerpt.mp4, 149.7 s). Next: SC04+ needs credits (Owner: second Flow account khoia1k57 or the 30/11 reset);
+  author the SC03 edit before picture lock. Do not commit uv.lock.
