@@ -1,0 +1,140 @@
+{
+  "take_id": "SC01_g04_t1",
+  "generation_id": "SC01_g04",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:38": "yes, RUTH's eyes and head turned screen-right toward off-frame SAM while speaking"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes, SAM's place stays out of frame and RUTH's eyes go just past the lens to frame-right",
+        "REL_GAZE": "yes, RUTH looks screen-right, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'i wasn't expecting new shoes those look properly dry anyway' span 0.6-4.8 s = line 38 exact; close-up RUTH as her still (grey bun, glasses cord, blue dress, apron), eyes screen-right to off-frame SAM, lips move 0.6-4.8 s, guarded dry, holds still at end; notice on counter; set/light stable, no morphing; mean -31 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:38",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "ea8308c008bdea5ea8b390cf403258f7b818b9e201650c562c4a3af25e129658"
+}
