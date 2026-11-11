@@ -1,0 +1,239 @@
+{
+  "take": {
+    "take_id": "SC01_g24_t1",
+    "generation_id": "SC01_g24",
+    "prompt_sha256": "eb33adf50a943dae44a697add02fa3028b93450142684549876a8a476d234d18",
+    "start_frame_sha256": "3ec3f7dd8ab8d4cccfd4bd60549fd78ae3df533dad6581e9f84ace355aa5935d",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC01_g24_t1.mp4",
+    "output_sha256": "1629952d2c38e34af84b7fe60ce90b19e9097fba9c8ae7d39887894794c895ea",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-11T12:18:01Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "RUTH",
+      "SAM"
+    ],
+    "start_state": "SC01_g24",
+    "end_state": "SC01_g25",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "SAM holds the white mug at chest height, RUTH stands behind the counter"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.8,
+        "description": "SAM sets the white mug down on the counter in its original place"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.8,
+        "end_s": 4.0,
+        "description": "the white mug stands still on the counter between them"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "both stay still, RUTH does not reach toward the mug"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - SAM holds the white mug at chest height, RUTH stands behind the counter?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.8s ACTION: does this happen on screen - SAM sets the white mug down on the counter in its original place?"
+    },
+    {
+      "group": "action",
+      "question": "2.8-4s CONSEQUENCE: does this happen on screen - the white mug stands still on the counter between them?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - both stay still, RUTH does not reach toward the mug?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): SAM sets the white mug down"
+    },
+    {
+      "group": "character",
+      "question": "SAM: does the face/body read as careful, polite (restrained)? Must NOT read as: anger."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC01_g24: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right; the closure notice: lying flat on the counter, face up; the white mug: held in SAM's left hand at chest height."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC01_g25: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right; the closure notice: lying flat on the counter, face up; the white mug: standing on the counter."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC01_g24_t1",
+    "generation_id": "SC01_g24",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [],
+    "output_sha256": "1629952d2c38e34af84b7fe60ce90b19e9097fba9c8ae7d39887894794c895ea"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}

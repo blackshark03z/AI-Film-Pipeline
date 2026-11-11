@@ -1,0 +1,131 @@
+{
+  "take_id": "SC01_g24_t1",
+  "generation_id": "SC01_g24",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed crops: wide two-shot, RUTH frame-left behind counter (grey bun, blue dress, white apron) hands at her sides, still and not reaching toward the mug; SAM frame-right on customer side (curly dark hair, damp grey hoodie) 0-1.0 s holds the white mug at chest height (arm on the camera-far side, same arm as g16_t2..g23), ACTION 1.0-2.8 s lowers it and sets it on the counter beside the closure notice, 2.8-6.0 s mug stands still beside the notice, SAM's hands at his sides, no one touches the notice; mug returns to the pre-pickup position (same spot as SC01_g16 start); no morphing of shelves/stools; no speech; mean -43.5 dB room tone",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [],
+  "output_sha256": "1629952d2c38e34af84b7fe60ce90b19e9097fba9c8ae7d39887894794c895ea"
+}
