@@ -1184,3 +1184,5 @@ Owner explicitly approved implementation of [the plan](PRODUCTION_STABILITY_P20_
 agent-run/Owner-final approval, quoted budget per film,2consecutive accepted films before stable operation.
 P20-M0 owned scratch reclaimed23.906GiB with preserved JUnit; M1recovery/delivery and M2long rendering active.
 No new provider effects until reviewable pilot/script/budget confirmation. Current checkpoint:docs/drama/STATUS.md.
+
+- P20 money ledger adjustments (backlog, test-first): `money_ledger` has no entry for uncharged sends (film07 SC03_g22_t1 FLOW_FAILED_NO_CLIP, -6) or stray jobs (INC-001, +12), so ledger spent differs from the real balance change. Add an adjustment record, then log the avatar-menu balance next to the ledger total at each scene start/end.

@@ -2923,7 +2923,7 @@
       "version": 3,
       "coverage": "SINGLE",
       "subject": "RUTH",
-      "foreground": "the tall red booth back fills the right edge of the frame",
+      "foreground": "",
       "visible": [
         "RUTH"
       ],
