@@ -10438,6 +10438,256 @@
       "registered_at": "2026-11-11T20:46:32+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
       "approved_at": "2026-11-11T20:46:33+00:00"
+    },
+    "SC04_g01": {
+      "file": "media/stills/start_SC04_g01.jpg",
+      "sha256": "b4211b1a93f04d71b3d1d79374ba9ce4c8c779b848863300275aa931cb28518a",
+      "prompt_sha256": "5748da0507c3bca3d4464fc3912a908bfe7f76d9fa9cd8a6f8bedef737f3055c",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:18+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:19+00:00"
+    },
+    "SC04_g03": {
+      "file": "media/stills/start_SC04_g03.jpg",
+      "sha256": "b4211b1a93f04d71b3d1d79374ba9ce4c8c779b848863300275aa931cb28518a",
+      "prompt_sha256": "5748da0507c3bca3d4464fc3912a908bfe7f76d9fa9cd8a6f8bedef737f3055c",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g01, reused: same still prompt as SC04_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:20+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:20+00:00"
+    },
+    "SC04_g05": {
+      "file": "media/stills/start_SC04_g05.jpg",
+      "sha256": "b4211b1a93f04d71b3d1d79374ba9ce4c8c779b848863300275aa931cb28518a",
+      "prompt_sha256": "5748da0507c3bca3d4464fc3912a908bfe7f76d9fa9cd8a6f8bedef737f3055c",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g01, reused: same still prompt as SC04_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:21+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:22+00:00"
+    },
+    "SC04_g08": {
+      "file": "media/stills/start_SC04_g08.jpg",
+      "sha256": "b4211b1a93f04d71b3d1d79374ba9ce4c8c779b848863300275aa931cb28518a",
+      "prompt_sha256": "5748da0507c3bca3d4464fc3912a908bfe7f76d9fa9cd8a6f8bedef737f3055c",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g01, reused: same still prompt as SC04_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:23+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:24+00:00"
+    },
+    "SC04_g10": {
+      "file": "media/stills/start_SC04_g10.jpg",
+      "sha256": "b4211b1a93f04d71b3d1d79374ba9ce4c8c779b848863300275aa931cb28518a",
+      "prompt_sha256": "5748da0507c3bca3d4464fc3912a908bfe7f76d9fa9cd8a6f8bedef737f3055c",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g01, reused: same still prompt as SC04_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:25+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:26+00:00"
+    },
+    "SC04_g12": {
+      "file": "media/stills/start_SC04_g12.jpg",
+      "sha256": "b4211b1a93f04d71b3d1d79374ba9ce4c8c779b848863300275aa931cb28518a",
+      "prompt_sha256": "5748da0507c3bca3d4464fc3912a908bfe7f76d9fa9cd8a6f8bedef737f3055c",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g01, reused: same still prompt as SC04_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:27+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:28+00:00"
+    },
+    "SC04_g16": {
+      "file": "media/stills/start_SC04_g16.jpg",
+      "sha256": "b4211b1a93f04d71b3d1d79374ba9ce4c8c779b848863300275aa931cb28518a",
+      "prompt_sha256": "5748da0507c3bca3d4464fc3912a908bfe7f76d9fa9cd8a6f8bedef737f3055c",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g01, reused: same still prompt as SC04_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:29+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:30+00:00"
+    },
+    "SC04_g18": {
+      "file": "media/stills/start_SC04_g18.jpg",
+      "sha256": "b4211b1a93f04d71b3d1d79374ba9ce4c8c779b848863300275aa931cb28518a",
+      "prompt_sha256": "5748da0507c3bca3d4464fc3912a908bfe7f76d9fa9cd8a6f8bedef737f3055c",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g01, reused: same still prompt as SC04_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:31+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:32+00:00"
+    },
+    "SC04_g02": {
+      "file": "media/stills/start_SC04_g02.jpg",
+      "sha256": "b22a21efc516f913a9679a5f8630ae96fd8ccbe23624a14839253ac64b52a50e",
+      "prompt_sha256": "3539dd41c0eee054e6723880bca0fb496780bd939776f124336ad3bd3926d3b5",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g02",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:33+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:33+00:00"
+    },
+    "SC04_g04": {
+      "file": "media/stills/start_SC04_g04.jpg",
+      "sha256": "b22a21efc516f913a9679a5f8630ae96fd8ccbe23624a14839253ac64b52a50e",
+      "prompt_sha256": "3539dd41c0eee054e6723880bca0fb496780bd939776f124336ad3bd3926d3b5",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g02, reused: same still prompt as SC04_g02",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:34+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:35+00:00"
+    },
+    "SC04_g06": {
+      "file": "media/stills/start_SC04_g06.jpg",
+      "sha256": "b22a21efc516f913a9679a5f8630ae96fd8ccbe23624a14839253ac64b52a50e",
+      "prompt_sha256": "3539dd41c0eee054e6723880bca0fb496780bd939776f124336ad3bd3926d3b5",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g02, reused: same still prompt as SC04_g02",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:36+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:37+00:00"
+    },
+    "SC04_g07": {
+      "file": "media/stills/start_SC04_g07.jpg",
+      "sha256": "bc551603da8d5dc38da8eb60ca797811582b350dfe669af9db4bef9456626710",
+      "prompt_sha256": "a99ab47ac2693fc6c4772ac4f37bf940a30d2665dd9257213830aeb1c323b9c0",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g07",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:38+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:39+00:00"
+    },
+    "SC04_g09": {
+      "file": "media/stills/start_SC04_g09.jpg",
+      "sha256": "c67fb407284e1347ecddc31a1c7de64b7f013d0255a5a91b2be93cbd2048e6ee",
+      "prompt_sha256": "00bc6faf2fe5f0e48a8558e2b7af00926a6b890eb57360a3f0cb4694c666916f",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g09",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:40+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:41+00:00"
+    },
+    "SC04_g11": {
+      "file": "media/stills/start_SC04_g11.jpg",
+      "sha256": "c67fb407284e1347ecddc31a1c7de64b7f013d0255a5a91b2be93cbd2048e6ee",
+      "prompt_sha256": "00bc6faf2fe5f0e48a8558e2b7af00926a6b890eb57360a3f0cb4694c666916f",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g09, reused: same still prompt as SC04_g09",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:42+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:42+00:00"
+    },
+    "SC04_g13": {
+      "file": "media/stills/start_SC04_g13.jpg",
+      "sha256": "c67fb407284e1347ecddc31a1c7de64b7f013d0255a5a91b2be93cbd2048e6ee",
+      "prompt_sha256": "00bc6faf2fe5f0e48a8558e2b7af00926a6b890eb57360a3f0cb4694c666916f",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g09, reused: same still prompt as SC04_g09",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:43+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:44+00:00"
+    },
+    "SC04_g15": {
+      "file": "media/stills/start_SC04_g15.jpg",
+      "sha256": "c67fb407284e1347ecddc31a1c7de64b7f013d0255a5a91b2be93cbd2048e6ee",
+      "prompt_sha256": "00bc6faf2fe5f0e48a8558e2b7af00926a6b890eb57360a3f0cb4694c666916f",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g09, reused: same still prompt as SC04_g09",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:45+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:46+00:00"
+    },
+    "SC04_g17": {
+      "file": "media/stills/start_SC04_g17.jpg",
+      "sha256": "c67fb407284e1347ecddc31a1c7de64b7f013d0255a5a91b2be93cbd2048e6ee",
+      "prompt_sha256": "00bc6faf2fe5f0e48a8558e2b7af00926a6b890eb57360a3f0cb4694c666916f",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g09, reused: same still prompt as SC04_g09",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:47+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:48+00:00"
+    },
+    "SC04_g19": {
+      "file": "media/stills/start_SC04_g19.jpg",
+      "sha256": "c67fb407284e1347ecddc31a1c7de64b7f013d0255a5a91b2be93cbd2048e6ee",
+      "prompt_sha256": "00bc6faf2fe5f0e48a8558e2b7af00926a6b890eb57360a3f0cb4694c666916f",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g09, reused: same still prompt as SC04_g09",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:49+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:50+00:00"
+    },
+    "SC04_g22": {
+      "file": "media/stills/start_SC04_g22.jpg",
+      "sha256": "c67fb407284e1347ecddc31a1c7de64b7f013d0255a5a91b2be93cbd2048e6ee",
+      "prompt_sha256": "00bc6faf2fe5f0e48a8558e2b7af00926a6b890eb57360a3f0cb4694c666916f",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g09, reused: same still prompt as SC04_g09",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:51+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:51+00:00"
+    },
+    "SC04_g24": {
+      "file": "media/stills/start_SC04_g24.jpg",
+      "sha256": "c67fb407284e1347ecddc31a1c7de64b7f013d0255a5a91b2be93cbd2048e6ee",
+      "prompt_sha256": "00bc6faf2fe5f0e48a8558e2b7af00926a6b890eb57360a3f0cb4694c666916f",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g09, reused: same still prompt as SC04_g09",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:52+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:53+00:00"
+    },
+    "SC04_g14": {
+      "file": "media/stills/start_SC04_g14.jpg",
+      "sha256": "8292d0de807be4eb2a0d7ddc7f4e424ab20f28ca326626fbccad2651562f1ed6",
+      "prompt_sha256": "d9cd4fd4e5ba8abeec9459677ef961662b23c5660c99a9b815b0301a0f3ab69b",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g14",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:54+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:55+00:00"
+    },
+    "SC04_g20": {
+      "file": "media/stills/start_SC04_g20.jpg",
+      "sha256": "09648238169a44823c6fdfc66003d758c33d7e446651a70077b8b532128f84c5",
+      "prompt_sha256": "a12ae1f33d8e5960ce3d9d6d19f90e53aea4a9199cc592ec6d7b443d9f315f08",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g20",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:56+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:57+00:00"
+    },
+    "SC04_g21": {
+      "file": "media/stills/start_SC04_g21.jpg",
+      "sha256": "ba601dafade6c13c808ae25e74ba5ece14962e76af59ded42861cab9ec83b304",
+      "prompt_sha256": "ccdb7c08932f045cfb25e83c332a616259805c91614c980df0f720c41d1986df",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g21",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:32:58+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:32:59+00:00"
+    },
+    "SC04_g23": {
+      "file": "media/stills/start_SC04_g23.jpg",
+      "sha256": "ba601dafade6c13c808ae25e74ba5ece14962e76af59ded42861cab9ec83b304",
+      "prompt_sha256": "ccdb7c08932f045cfb25e83c332a616259805c91614c980df0f720c41d1986df",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g21, reused: same still prompt as SC04_g21",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:33:00+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:33:01+00:00"
+    },
+    "SC04_g25": {
+      "file": "media/stills/start_SC04_g25.jpg",
+      "sha256": "ba601dafade6c13c808ae25e74ba5ece14962e76af59ded42861cab9ec83b304",
+      "prompt_sha256": "ccdb7c08932f045cfb25e83c332a616259805c91614c980df0f720c41d1986df",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g21, reused: same still prompt as SC04_g21",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T22:33:01+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T22:33:02+00:00"
     }
   }
 }
