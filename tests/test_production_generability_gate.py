@@ -78,17 +78,22 @@ def dry(pkg, tmp_path):
     return done, [b["code"] for b in done["payload"]["blockers"]]
 
 
-def sent(pkg, n, version=1, result="PASSED", credits=8.0, gid=GID):
-    """A receipt of a real send (what generate() writes before and after the runner)."""
+def sent(pkg, n, version=1, result="PASSED", credits=8.0, gid=GID, registered=True):
+    """A receipt of a real send (what generate() writes before and after the runner). P20: a PASSED send whose clip is
+    not registered as a take is unresolved (SEND_PENDING), so a PASSED receipt is paired with its registered take by
+    default; pass registered=False to model the unreconciled state."""
     path = T.takes_dir(pkg.root) / "intents" / f"{gid}_t{n}.intent.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"film_id": pkg.header.film_id, "generation_id": gid, "take_id": f"{gid}_t{n}",
                                 "shot_version": version, "sent": True, "result": result, "expected_credits": credits}),
                     encoding="utf-8")
+    if registered and result == "PASSED" and gid == GID:
+        take(pkg, n, "GENERATED", version=version)
 
 
 def take(pkg, n, status, version=1):
     log = T.load_log(pkg.root, pkg.header.film_id)
+    log.takes = [t for t in log.takes if t.take_id != f"{GID}_t{n}"]   # sent() may already have registered it
     log.takes.append(T.TakeEntry(take_id=f"{GID}_t{n}", generation_id=GID, prompt_sha256="a" * 64, route="r", model="m",
                                  credits=8.0, output_file=f"{GID}_t{n}.mp4", output_sha256="b" * 64, status=status,
                                  shot_version=version))
@@ -227,7 +232,8 @@ def test_flow_failed_send_does_not_use_the_cap(tmp_path):
     assert not set(found) & GATE and done["payload"]["attempts"]["this_version"] == 0
     assert done["payload"]["credits_spent"] == 8.0
     sent(pkg, 2, result="UNBOUND")
-    assert dry(pkg, tmp_path)[1] == ["SEND_CAP"]
+    # P20: an UNBOUND send is an unknown outcome: it still uses the cap and must be reconciled before another send
+    assert dry(pkg, tmp_path)[1] == ["SEND_PENDING", "SEND_CAP"]
 
 
 def test_a_vanished_flow_job_proven_by_reconcile_does_not_use_the_cap(tmp_path):
@@ -235,7 +241,8 @@ def test_a_vanished_flow_job_proven_by_reconcile_does_not_use_the_cap(tmp_path):
     # flow_reconcile found nothing 10+ min later (provider_no_clip) -> a provider failure: credits count, cap unused.
     pkg = film(tmp_path, GREEN_TEXT)
     sent(pkg, 1, result="AMBIGUOUS")
-    assert dry(pkg, tmp_path)[1] == ["SEND_CAP"]   # unproven: may still be a clip in the gallery
+    # unproven: may still be a clip in the gallery (P20: it also blocks another send until reconciled)
+    assert dry(pkg, tmp_path)[1] == ["SEND_PENDING", "SEND_CAP"]
     takes = pkg.root / "media" / "takes"
     takes.mkdir(parents=True, exist_ok=True)
     (takes / f"{GID}_t1.reconcile.json").write_text(json.dumps(
