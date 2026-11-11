@@ -1,0 +1,140 @@
+{
+  "take_id": "SC01_g03_t1",
+  "generation_id": "SC01_g03",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:33": "yes, SAM's eyes and head turned screen-left toward off-frame RUTH while speaking"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes, RUTH's place stays out of frame and SAM's eyes go just past the lens to frame-left",
+        "REL_GAZE": "yes, SAM looks screen-left, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + STT 'six months six i didn't want you waiting for me' span 1.7-4.9 s (line 33; STT small model hears 'meant' as 'months'); close-up SAM (curly dark hair, thin face, grey hoodie) as his still, eyes screen-left to off-frame RUTH, lips move 1.7-4.9 s, restrained/careful not angry, holds still at end; notice on counter; set/light stable; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:33",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "83e158e615eb6888fe256bb8d272d998797c1dd76b4834dd2b696bd90dc77bb4"
+}
