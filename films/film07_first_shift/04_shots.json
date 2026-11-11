@@ -1062,7 +1062,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "RUTH",
       "foreground": "",
@@ -1137,11 +1137,13 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot, not even his head",
           "established_by": "SC01_g08"
         }
       },
-      "gaze_target": "SAM"
+      "gaze_target": "SAM",
+      "repair_of": "SC01_g13@v1",
+      "repair_reason": "SC01_g13_t1 rejected: SAM's head entered the top-right frame edge from 1.2 s (REL_LISTENER); prompt now forbids any part of him entering the frame"
     },
     {
       "generation_id": "SC01_g14",
@@ -26515,5 +26517,96 @@
       "camera_position": "cA_ctr"
     }
   ],
-  "history": []
+  "history": [
+    {
+      "generation_id": "SC01_g13",
+      "scene_id": "SC01",
+      "start_state": "SC01_g13",
+      "end_state": "SC01_g14",
+      "previous_generation_id": "SC01_g12",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "dialogue": [
+        82
+      ],
+      "choreography": {
+        "generation_id": "SC01_g13",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.3,
+            "description": "RUTH speaks to SAM guardedly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.3,
+            "end_s": 6.0,
+            "description": "RUTH holds SAM's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "dry, guarded",
+            "visible_cues": [
+              "level look",
+              "flat mouth"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "loc_diner_morning@1",
+        "prop_notice@1",
+        "prop_mug1@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cC_ctr",
+      "addressees": {
+        "82": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "established_by": "SC01_g08"
+        }
+      },
+      "gaze_target": "SAM"
+    }
+  ]
 }
