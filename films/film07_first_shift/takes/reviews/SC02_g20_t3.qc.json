@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g20_t3",
+  "generation_id": "SC02_g20",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:245": "yes: Ruth speaks line 245 to Sam off-frame-right, mouth moves with audio, body toward him"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes: Sam wholly out of frame, place not shown empty; Ruth's eyes go just past lens to screen-right",
+        "REL_GAZE": "yes: gaze held to screen-right at Sam, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g18 (grey bun, light-blue uniform, white apron, glasses on chest), same red booth back/window background; right edge empty in all 4 sampled frames (Sam wholly off-frame); STT 'then ask me what you need to know i'll answer' 1.0-3.9 s matches line 245; t1/t2 were FLOW_FAILED_NO_CLIP (no attempt counted), t3 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:245",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "6b303ff658be6f651f8b26a71a0c03ab798942fb03648e68ab6a1cbc64792063"
+}
