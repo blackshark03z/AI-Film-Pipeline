@@ -6115,7 +6115,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "MASTER",
       "subject": "SAM",
       "foreground": "",
@@ -6131,30 +6131,30 @@
             "kind": "SETUP",
             "start_s": 0.0,
             "end_s": 1.0,
-            "description": "SAM stands on the customer side with a folded cloth in his hand, RUTH stands behind the counter"
+            "description": "SAM stands on the customer side with a folded cloth in his hand, RUTH stands still behind the counter at the far end, the only woman in the shot"
           },
           {
             "kind": "ACTION",
             "start_s": 1.0,
             "end_s": 2.8,
-            "description": "SAM lays the folded cloth on the clear end of the counter",
+            "description": "SAM lays the folded cloth on the near end of the counter beside him",
             "motion": "put_down_small_object"
           },
           {
             "kind": "CONSEQUENCE",
             "start_s": 2.8,
             "end_s": 4.0,
-            "description": "the folded cloth lies still on the counter"
+            "description": "the folded cloth lies still on the counter beside SAM"
           },
           {
             "kind": "HOLD",
             "start_s": 4.0,
             "end_s": 6.0,
-            "description": "both stay still, RUTH does not move"
+            "description": "both stay still where they are, RUTH stays at the far end and does not move"
           }
         ],
         "once_actions": [
-          "SAM lays the folded cloth on the clear end of the counter"
+          "SAM lays the folded cloth on the near end of the counter beside him"
         ],
         "gesture_budget": 1,
         "performance": [
@@ -6186,9 +6186,11 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "WIDE_ESTABLISH",
-        "composition": "wide shot from the doorway end of the counter: RUTH behind the counter on the left, SAM on the customer side on the right, the back shelf of white mugs and the pale front window behind them"
+        "composition": "locked-off wide shot from the doorway end of the counter, the camera does not move: RUTH small and far at the back of the counter on the left, SAM large on the customer side on the right, the back shelf of white mugs and the pale front window behind them"
       },
-      "camera_position": "cA_ctr"
+      "camera_position": "cA_ctr",
+      "repair_of": "SC03_g20@v1",
+      "repair_reason": "SC03_g20_t1 rejected: a second RUTH appeared in the foreground and SAM left the frame (character P1); prompt now pins RUTH at the far end as the only woman, a locked-off camera and the cloth's resting place beside SAM"
     },
     {
       "generation_id": "SC03_g21",
@@ -27231,6 +27233,90 @@
         }
       },
       "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC03_g20",
+      "scene_id": "SC03",
+      "start_state": "SC03_g20",
+      "end_state": "SC03_g21",
+      "previous_generation_id": "SC03_g19",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "MASTER",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "RUTH",
+        "SAM"
+      ],
+      "dialogue": [],
+      "choreography": {
+        "generation_id": "SC03_g20",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "SAM stands on the customer side with a folded cloth in his hand, RUTH stands behind the counter"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 2.8,
+            "description": "SAM lays the folded cloth on the clear end of the counter",
+            "motion": "put_down_small_object"
+          },
+          {
+            "kind": "CONSEQUENCE",
+            "start_s": 2.8,
+            "end_s": 4.0,
+            "description": "the folded cloth lies still on the counter"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "both stay still, RUTH does not move"
+          }
+        ],
+        "once_actions": [
+          "SAM lays the folded cloth on the clear end of the counter"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "focused, curious",
+            "visible_cues": [
+              "attentive eyes",
+              "slight nod"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "boredom"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_morning@1",
+        "prop_mug1@1",
+        "prop_mug2@1",
+        "prop_cloth@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "wide shot from the doorway end of the counter: RUTH behind the counter on the left, SAM on the customer side on the right, the back shelf of white mugs and the pale front window behind them"
+      },
+      "camera_position": "cA_ctr"
     }
   ]
 }
