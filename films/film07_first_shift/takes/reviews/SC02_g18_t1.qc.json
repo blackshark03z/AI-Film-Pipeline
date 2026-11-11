@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g18_t1",
+  "generation_id": "SC02_g18",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:235": "yes: speaks line 235 to Sam off-frame-right, mouth moves with audio"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes: Sam off-frame-right, no part of him enters frame (right edge clean)",
+        "REL_GAZE": "yes: eyes held just past lens toward screen-right, steady in all frames"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match (grey bun, light-blue uniform, white apron, glasses on chest); seated behind red booth back, right edge empty in all 4 sampled frames (Sam wholly off-frame); speech matches STT 'no it isn't i should have said what was happening' 0.6-4.9 s; continuity with g17 (same booth/window background)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:235",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "30e137534052f52f34af63ae4000eeeaad9d44f757e7d059d393ac95c68a28d1"
+}
