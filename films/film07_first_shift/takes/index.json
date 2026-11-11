@@ -1,0 +1,25 @@
+{
+  "film_id": "film07_first_shift",
+  "takes": [
+    {
+      "take_id": "SC01_g01_t2",
+      "generation_id": "SC01_g01",
+      "prompt_sha256": "ff21931b1f0506f2ab4d0d28e4ee72e309cd8d40e027db80299f86d61b6f8d3f",
+      "start_frame_sha256": "56397e680b1587376dd8196217aa8511f81315bbb52e4e19d432d2abe9b5f881",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 6.0,
+      "output_file": "SC01_g01_t2.mp4",
+      "output_sha256": "8fd1bbf5dbf6c7fe0f053f55d4fd94204951a6375a2bd619ff095fabbc1c5912",
+      "status": "ACCEPTED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-11T08:49:38Z",
+      "review_file": "reviews/SC01_g01_t2.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
+    }
+  ]
+}

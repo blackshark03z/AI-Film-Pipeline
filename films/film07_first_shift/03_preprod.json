@@ -9676,5 +9676,26 @@
     }
   ],
   "risk_fallbacks": {},
-  "stills": {}
+  "stills": {
+    "SC01_g01": {
+      "file": "media/stills/start_SC01_g01.jpg",
+      "sha256": "56397e680b1587376dd8196217aa8511f81315bbb52e4e19d432d2abe9b5f881",
+      "prompt_sha256": "a3ae9ca0e73abf9d2e0ba1cfbee9fcb27153e721443023f711be8f6cf26d1b0d",
+      "source": "Flow Nano Banana 2.1 (project 87dac583; refs: plate Flow image, char_RUTH/char_SAM from film06 same look)",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T08:40:13+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T08:40:14+00:00"
+    },
+    "SC02_g01": {
+      "file": "media/stills/start_SC02_g01.jpg",
+      "sha256": "a51f0afdd5adffd3f2d6f24b98483b0f70845a2b9ede4f6d94974039ba044887",
+      "prompt_sha256": "83a90daac878e4f44bfbe83743ff3b966cc67447db2d6d6616d6b2417db41fa9",
+      "source": "Flow Nano Banana 2.1 (project 87dac583; refs: plate Flow image, char_SAM from film06 same look)",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T08:41:45+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T08:41:46+00:00"
+    }
+  }
 }
