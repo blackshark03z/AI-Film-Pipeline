@@ -1,3 +1,20 @@
+# film07 pilot SC01–SC02 QC PASS — reported to Owner, full film next (2026-11-12)
+
+Pilot B (Sonnet) finished: 50/50 gens accepted (last take 630a950, draft EDL d6d1331), excerpt
+C:/film-work/film07-pilot/pilot_SC01-SC02.mp4 (306.04 s, 1280x720 h264/aac, -26.1 LUFS, TP -4.6 dBFS, AI line on title).
+Metrics: 69 sends (58 PASSED, 7 FLOW_FAILED_NO_CLIP auto-reconciled, 3 SETTINGS_NOT_SET 0 cr, 1 UNBOUND g05 proven no-clip),
+390 cr vs est 357 / cap 535, in-send bind 58/58, STRAY_IN_FRONT 0, duplicate/unresolved 0, first-pass 43/50, 8 rejects
+(6 PROMPT: off-screen listener intruding x4, g16 hand relabel, g14 invented line; 2 START_FRAME), ~7h37m wall.
+Coordinator QC (25-frame sheet): identity/wardrobe/set consistent, no defects visible. QC PASS (agent:tech-lead, delegated).
+Known label defect: SC01_g17–g24 text says Sam "left hand"; picture shows anatomical right (far arm, screen-left).
+Kept, not re-shot. Learning: state handedness in both frames at plan time.
+Gaps to fix before SC03+: flow_send does not restore video mode after image stills (SETTINGS_NOT_SET); prompt template
+lacks "off-screen listener fully out of frame" and "no one speaks" for silent shots (patched per shot in pilot).
+Projection: ~7.8 cr/gen -> ~2,340 for 300 gens, inside the 3,210 full cap. No push. Uncommitted, not ours: _author.py,
+LOOP_BACKLOG.md line endings.
+
+---
+
 # P20 RC d5baa38 QUALIFIED — waiting for Owner decision on film07 (2026-11-11)
 
 Exact clean RC d5baa38680cb8d5961ce22969beefe1ec694f3fc full suite: 2285PASS/202SKIP/0FAIL, 114 warnings, 1372s, no new
