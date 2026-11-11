@@ -1,0 +1,131 @@
+{
+  "take_id": "SC01_g08_t1",
+  "generation_id": "SC01_g08",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 counter crops (0.5/1.5/2.2/2.8/4.0/5.8 s); wide two-shot as the approved still (RUTH left in blue dress and white apron, SAM right by the open door in grey hoodie, notice on counter); 0.5 s no mug, 1.5-2.2 s RUTH sets ONE white mug down on the counter beside the notice and releases it, 2.8-5.8 s the mug stands still on the counter to the last frame, nothing is moved again; SAM stays standing with hands at sides, no touching, never reaches the mug; no speech (STT empty, mean -41 dB ambience); no one looks into the lens; set and light stable, no morphing; continuity with g07 (same room, same props)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [],
+  "output_sha256": "b08c20ed975b8fc9a5f38c2d149089e98d842b15293b5e802be9de8cd6c4f0fd"
+}
