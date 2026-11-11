@@ -1,0 +1,140 @@
+{
+  "take_id": "SC01_g13_t2",
+  "generation_id": "SC01_g13",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:82": "yes, RUTH's head and eyes turned screen-right toward off-frame SAM while speaking"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes, SAM's place stays wholly out of frame (right edge empty at six sampled instants) and RUTH's eyes go just past the lens to frame-right",
+        "REL_GAZE": "yes, RUTH looks just right of the lens, never into it"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples (0.3/1.2/2.4/3.6/4.8/5.8 s) + STT 'no you came when i asked you you did right' span 0.7-5.0 s = line 82 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes turned slightly screen-right just past the lens to off-frame SAM, dry and guarded, holds still; right frame edge stays empty window/wall in all six samples (the v1 defect, SAM's head at the edge, is gone); mug and notice unmoved on the counter; shelves/coffee machines stable, no morphing; continuity with g11; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:82",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "eaa1243da13af92f1962ad9fd724c1b0aca07f92923c133cad1329e467ab6625"
+}
