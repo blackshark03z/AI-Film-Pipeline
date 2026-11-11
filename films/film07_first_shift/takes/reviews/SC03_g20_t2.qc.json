@@ -1,0 +1,131 @@
+{
+  "take_id": "SC03_g20_t2",
+  "generation_id": "SC03_g20",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Silent two-shot, 4 frames checked at 0.3/1.6/2.6/5.5 s: single RUTH static at far end of counter (left), SAM stays on the customer side in frame, folded cloth laid on the counter beside him, no invented line, no extra person.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [],
+  "output_sha256": "625e2f96f6fd9cd3decd16f588567e78ee2539e5048ae9fc790c6a323d781f13"
+}
