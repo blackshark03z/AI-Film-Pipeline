@@ -167,7 +167,7 @@ SC = {
                      20: ({}, {"the notebook:": "lying closed beside SAM's elbow on the booth table"})}),
     "SC05": dict(area="counter", tod="MORNING", light="morning", r="R_CTR", s="S_CUST",
                  props={"the white mug:": "standing on the counter on RUTH's side"},
-                 ev={13: ({}, {"the white mug:": "held in RUTH's right hand"}),
+                 ev={13: ({}, {"the white mug:": "held in RUTH's right hand (the arm nearer the camera, on screen-left)"}),
                      20: ({}, {"the white mug:": "standing on the counter on RUTH's side"})}),
     "SC06": dict(area="booth", tod="MORNING", light="morning", r="R_BSEAT", s="S_BSEAT", props={},
                  ev={7: ({}, {"the closure notice:": "lying folded on RUTH's side of the booth table"}),

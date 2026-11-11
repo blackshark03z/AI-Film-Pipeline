@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from film_pipeline.drama.handedness import bare_hand_mentions
 from film_pipeline.drama import (CharacterBrief, ContinuityState, GenerationHandoff, StoryboardGate,
                                  compile_scene_prompt, preflight_scene, render_schematic_frame,
                                  shot_fingerprint)
@@ -272,6 +273,24 @@ class _Plan:
         return ("Edit the given image, the first frame of this shot. "
                 f"{change}.{pose} Keep everything else the same: framing, people, faces, clothes, light.")
 
+    def handedness_issues(self, decl: ShotDecl) -> list[PreflightIssue]:
+        """HANDEDNESS_BARE (WARN): a hand named without both frames in text of a scene under the hardened prompt rules."""
+        if decl.scene_id not in self.pre.preflight.safeguard_scenes:
+            return []
+        texts = [p.description for p in decl.choreography.phases] + list(decl.choreography.once_actions)
+        texts += [cue for perf in decl.choreography.performance for cue in perf.visible_cues]
+        texts += [decl.camera.composition] if decl.camera is not None else []
+        texts += [a.placement for a in decl.listener_anchors.values()]
+        for sid in (decl.start_state, decl.end_state):
+            state = self.state(sid)
+            texts += list(state.props.values()) + list(state.positions.values())
+        found = sorted({m for t in texts for m in bare_hand_mentions(t)})
+        if not found:
+            return []
+        return [PreflightIssue(check="HANDEDNESS_BARE", severity="WARN",
+                               detail=f"{decl.generation_id}: {', '.join(found)} named without both frames; write e.g. "
+                                      "\"his right hand (the arm farther from camera, on screen-left)\"")]
+
     def motion_target_issues(self, decl: ShotDecl) -> list[PreflightIssue]:
         """Mid-travel stops must name a real set object (STOP_TARGET) and no text may describe the stop vaguely
         (TARGET_CONFLICT); the model otherwise picks its own stopping point (film04 SC01_g1 t9/t10)."""
@@ -458,7 +477,7 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         issues = list(report.issues)
         if p.pre.preflight.interaction_contract:
             issues += hidden_person_issues(p.pre, decl, p.gen_index[gid], [text, still])
-        issues += p.motion_target_issues(decl) + p.look_pin_issues(decl)
+        issues += p.motion_target_issues(decl) + p.look_pin_issues(decl) + p.handedness_issues(decl)
         rating = None
         if p.pre.preflight.generability:
             rating, extra = generability_issues(decl)
