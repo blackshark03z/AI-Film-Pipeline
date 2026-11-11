@@ -1,1 +1,264 @@
-{}
+{
+  "events": [
+    {
+      "event_id": "SC01_g01",
+      "kind": "TAKE",
+      "take_id": "SC01_g01_t2"
+    },
+    {
+      "event_id": "SC01_g02",
+      "kind": "TAKE",
+      "take_id": "SC01_g02_t1"
+    },
+    {
+      "event_id": "SC01_g03",
+      "kind": "TAKE",
+      "take_id": "SC01_g03_t1"
+    },
+    {
+      "event_id": "SC01_g04",
+      "kind": "TAKE",
+      "take_id": "SC01_g04_t1"
+    },
+    {
+      "event_id": "SC01_g05",
+      "kind": "TAKE",
+      "take_id": "SC01_g05_t2"
+    },
+    {
+      "event_id": "SC01_g06",
+      "kind": "TAKE",
+      "take_id": "SC01_g06_t2"
+    },
+    {
+      "event_id": "SC01_g07",
+      "kind": "TAKE",
+      "take_id": "SC01_g07_t1"
+    },
+    {
+      "event_id": "SC01_g08",
+      "kind": "TAKE",
+      "take_id": "SC01_g08_t1"
+    },
+    {
+      "event_id": "SC01_g09",
+      "kind": "TAKE",
+      "take_id": "SC01_g09_t1"
+    },
+    {
+      "event_id": "SC01_g10",
+      "kind": "TAKE",
+      "take_id": "SC01_g10_t2"
+    },
+    {
+      "event_id": "SC01_g11",
+      "kind": "TAKE",
+      "take_id": "SC01_g11_t1"
+    },
+    {
+      "event_id": "SC01_g12",
+      "kind": "TAKE",
+      "take_id": "SC01_g12_t1"
+    },
+    {
+      "event_id": "SC01_g13",
+      "kind": "TAKE",
+      "take_id": "SC01_g13_t2"
+    },
+    {
+      "event_id": "SC01_g14",
+      "kind": "TAKE",
+      "take_id": "SC01_g14_t1"
+    },
+    {
+      "event_id": "SC01_g15",
+      "kind": "TAKE",
+      "take_id": "SC01_g15_t1"
+    },
+    {
+      "event_id": "SC01_g16",
+      "kind": "TAKE",
+      "take_id": "SC01_g16_t2"
+    },
+    {
+      "event_id": "SC01_g17",
+      "kind": "TAKE",
+      "take_id": "SC01_g17_t1"
+    },
+    {
+      "event_id": "SC01_g18",
+      "kind": "TAKE",
+      "take_id": "SC01_g18_t1"
+    },
+    {
+      "event_id": "SC01_g19",
+      "kind": "TAKE",
+      "take_id": "SC01_g19_t1"
+    },
+    {
+      "event_id": "SC01_g20",
+      "kind": "TAKE",
+      "take_id": "SC01_g20_t1"
+    },
+    {
+      "event_id": "SC01_g21",
+      "kind": "TAKE",
+      "take_id": "SC01_g21_t1"
+    },
+    {
+      "event_id": "SC01_g22",
+      "kind": "TAKE",
+      "take_id": "SC01_g22_t1"
+    },
+    {
+      "event_id": "SC01_g23",
+      "kind": "TAKE",
+      "take_id": "SC01_g23_t1"
+    },
+    {
+      "event_id": "SC01_g24",
+      "kind": "TAKE",
+      "take_id": "SC01_g24_t1"
+    },
+    {
+      "event_id": "SC01_g25",
+      "kind": "TAKE",
+      "take_id": "SC01_g25_t2"
+    },
+    {
+      "event_id": "SC02_g01",
+      "kind": "TAKE",
+      "take_id": "SC02_g01_t2"
+    },
+    {
+      "event_id": "SC02_g02",
+      "kind": "TAKE",
+      "take_id": "SC02_g02_t1"
+    },
+    {
+      "event_id": "SC02_g03",
+      "kind": "TAKE",
+      "take_id": "SC02_g03_t1"
+    },
+    {
+      "event_id": "SC02_g04",
+      "kind": "TAKE",
+      "take_id": "SC02_g04_t2"
+    },
+    {
+      "event_id": "SC02_g05",
+      "kind": "TAKE",
+      "take_id": "SC02_g05_t2"
+    },
+    {
+      "event_id": "SC02_g06",
+      "kind": "TAKE",
+      "take_id": "SC02_g06_t1"
+    },
+    {
+      "event_id": "SC02_g07",
+      "kind": "TAKE",
+      "take_id": "SC02_g07_t4"
+    },
+    {
+      "event_id": "SC02_g08",
+      "kind": "TAKE",
+      "take_id": "SC02_g08_t1"
+    },
+    {
+      "event_id": "SC02_g09",
+      "kind": "TAKE",
+      "take_id": "SC02_g09_t3"
+    },
+    {
+      "event_id": "SC02_g10",
+      "kind": "TAKE",
+      "take_id": "SC02_g10_t1"
+    },
+    {
+      "event_id": "SC02_g11",
+      "kind": "TAKE",
+      "take_id": "SC02_g11_t1"
+    },
+    {
+      "event_id": "SC02_g12",
+      "kind": "TAKE",
+      "take_id": "SC02_g12_t1"
+    },
+    {
+      "event_id": "SC02_g13",
+      "kind": "TAKE",
+      "take_id": "SC02_g13_t2"
+    },
+    {
+      "event_id": "SC02_g14",
+      "kind": "TAKE",
+      "take_id": "SC02_g14_t2"
+    },
+    {
+      "event_id": "SC02_g15",
+      "kind": "TAKE",
+      "take_id": "SC02_g15_t1"
+    },
+    {
+      "event_id": "SC02_g16",
+      "kind": "TAKE",
+      "take_id": "SC02_g16_t1"
+    },
+    {
+      "event_id": "SC02_g17",
+      "kind": "TAKE",
+      "take_id": "SC02_g17_t1"
+    },
+    {
+      "event_id": "SC02_g18",
+      "kind": "TAKE",
+      "take_id": "SC02_g18_t1"
+    },
+    {
+      "event_id": "SC02_g19",
+      "kind": "TAKE",
+      "take_id": "SC02_g19_t1"
+    },
+    {
+      "event_id": "SC02_g20",
+      "kind": "TAKE",
+      "take_id": "SC02_g20_t3"
+    },
+    {
+      "event_id": "SC02_g21",
+      "kind": "TAKE",
+      "take_id": "SC02_g21_t1"
+    },
+    {
+      "event_id": "SC02_g22",
+      "kind": "TAKE",
+      "take_id": "SC02_g22_t1"
+    },
+    {
+      "event_id": "SC02_g23",
+      "kind": "TAKE",
+      "take_id": "SC02_g23_t1"
+    },
+    {
+      "event_id": "SC02_g24",
+      "kind": "TAKE",
+      "take_id": "SC02_g24_t1"
+    },
+    {
+      "event_id": "SC02_g25",
+      "kind": "TAKE",
+      "take_id": "SC02_g25_t1"
+    }
+  ],
+  "title": [
+    {
+      "text": "THE FIRST SHIFT",
+      "size": 96
+    },
+    {
+      "text": "Generated with AI",
+      "size": 28
+    }
+  ]
+}
