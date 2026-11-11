@@ -1,0 +1,229 @@
+{
+  "take": {
+    "take_id": "SC02_g07_t4",
+    "generation_id": "SC02_g07",
+    "prompt_sha256": "e9b7ee91ca2922f1a9bd72090e1f406916868001064ed78b428ece4a60a5c005",
+    "start_frame_sha256": "f341645f44d5c5149fad10bf7e508c2d964fb5802b97d31d875f27332d0d2a4a",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC02_g07_t4.mp4",
+    "output_sha256": "42bc25d3279d9f7ff889553c7523f31f1ee986e5404b5d2a3cf25f264ba1a374",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-11T13:50:03Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "RUTH",
+      "SAM"
+    ],
+    "start_state": "SC02_g07",
+    "end_state": "SC02_g08",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "RUTH stands beside the far booth seat, SAM stands beside the near booth seat"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 3.0,
+        "description": "SAM sits down on the near booth seat"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 3.0,
+        "end_s": 6.0,
+        "description": "SAM sits against the high red booth back, RUTH stays standing across the table"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - RUTH stands beside the far booth seat, SAM stands beside the near booth seat?"
+    },
+    {
+      "group": "action",
+      "question": "1-3s ACTION: does this happen on screen - SAM sits down on the near booth seat?"
+    },
+    {
+      "group": "action",
+      "question": "3-6s HOLD: does this happen on screen - SAM sits against the high red booth back, RUTH stays standing across the table?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): SAM sits down on the near booth seat"
+    },
+    {
+      "group": "character",
+      "question": "SAM: does the face/body read as direct, hurt (restrained)? Must NOT read as: anger."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC02_g07: Continues from the previous shot: RUTH standing beside the far booth seat, frame-left; SAM standing beside the near booth seat, frame-right; the closure notice: lying flat on the counter, face up."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC02_g08: Continues from the previous shot: RUTH standing beside the far booth seat, frame-left; SAM seated on the near booth seat across the table, frame-right; the closure notice: lying flat on the counter, face up."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC02_g07_t4",
+    "generation_id": "SC02_g07",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [],
+    "output_sha256": "42bc25d3279d9f7ff889553c7523f31f1ee986e5404b5d2a3cf25f264ba1a374"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}

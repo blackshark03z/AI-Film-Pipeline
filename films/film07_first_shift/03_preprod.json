@@ -9989,13 +9989,13 @@
     },
     "SC02_g07": {
       "file": "media/stills/start_SC02_g07.jpg",
-      "sha256": "2267a77140eee6402c5b23d83529d140bcf74b2f500a965cd76b067944aa86bd",
+      "sha256": "f341645f44d5c5149fad10bf7e508c2d964fb5802b97d31d875f27332d0d2a4a",
       "prompt_sha256": "d204ed44693207b12d797e97d8e1534c1afbeba17f1be8756625e6ea9f37dcd8",
-      "source": "Flow Nano Banana 2.1 project 87dac583 (refs: char refs + Empty diner set plate); image drawn for SC02_g07",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (refs: char refs + Empty diner set plate); redrawn after SC02_g07_t2 rejected (START_FRAME: near booth seat hidden, SAM sat on a counter stool); composition prompt adds the near booth seat beside SAM",
       "credits": 0.0,
-      "registered_at": "2026-11-11T09:17:36+00:00",
+      "registered_at": "2026-11-11T13:43:24+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T09:17:36+00:00"
+      "approved_at": "2026-11-11T13:43:25+00:00"
     },
     "SC02_g08": {
       "file": "media/stills/start_SC02_g08.jpg",

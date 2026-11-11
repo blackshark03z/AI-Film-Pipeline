@@ -1,0 +1,131 @@
+{
+  "take_id": "SC02_g07_t2",
+  "generation_id": "SC02_g07",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "SAM sits on a counter stool instead of the near booth seat; the end pose is not 'against the high red booth back across the table'; the near booth seat is not visible beside him in the start still",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 larger frames: wide two-shot, RUTH frame-left standing by the booths, SAM walks the aisle and ACTION 1.0-3.0 s sits down; but he sits on a red COUNTER STOOL at the counter, not on the near booth seat; he ends 3.0-6.0 s on the stool with the counter beside him and the booth table behind, instead of against the high red booth back across the table from RUTH. The start still shows SAM beside counter stools with the near booth seat hidden behind the foreground stool",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "START_FRAME",
+  "cause_note": "the start still shows SAM next to the counter stools with the near booth seat hidden behind a foreground stool, so the model sat him on a stool",
+  "required_answers": [],
+  "output_sha256": "76faaa53c5e407406d5919eba400905dd80f20310d0fc1f4f45061575716cc47"
+}

@@ -1,0 +1,131 @@
+{
+  "take_id": "SC02_g07_t4",
+  "generation_id": "SC02_g07",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples + 4 full frames: wide two-shot from the open end of the booths, RUTH frame-left standing by the far booth seat (grey bun, glasses on cord, pale blue dress, white apron) and SAM frame-right standing beside the near booth seat (curly dark hair, thin face, damp grey hoodie); ACTION 1.0-3.0 s SAM sits down on the near booth seat (not the counter stool, v t2 defect fixed by the redrawn start still); 3.0-6.0 s he sits against the high red booth back looking at RUTH, she stays standing and quiet across the table, no touching; notice on the counter unmoved in the background; no morphing; no speech (STT 'huh' is room noise); mean -47.6 dB room tone. History: t1 FLOW_FAILED_NO_CLIP (not charged), t2 rejected START_FRAME (sat on stool), t3 SETTINGS_NOT_SET (not submitted, composer left in image mode after redrawing the still), t4 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [],
+  "output_sha256": "42bc25d3279d9f7ff889553c7523f31f1ee986e5404b5d2a3cf25f264ba1a374"
+}
