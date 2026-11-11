@@ -1,0 +1,140 @@
+{
+  "take_id": "SC03_g16_t1",
+  "generation_id": "SC03_g16",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:355": "yes: SAM's head and eyes turn screen-left toward RUTH's off-frame place as he speaks"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "RUTH's forehead, nose and hair profile enter the top-left edge of frame for the whole shot, she must be wholly out of shot",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "NO: RUTH's head and nose profile intrude at the top-left frame edge from 0.2 s to the end, her place is not wholly out of frame",
+        "REL_GAZE": "yes: SAM looks screen-left, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 6 left-edge crops (0.2/1.2/2.2/3.2/4.2/5.2 s) + STT",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "the video model let the off-frame listener's head enter the left edge; the prompt did not forbid even her head entering the frame",
+  "required_answers": [
+    "REL_ADDRESS:355",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "9318bfc7b9a190560ffd026f5026777d9e04dc391263987889218d8904ebe658"
+}
