@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g02_t1",
+  "generation_id": "SC02_g02",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:157": "yes: RUTH's eyes and head turn toward SAM's off-frame place as she speaks"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes: SAM not in frame, his place not shown empty; RUTH's eyes go to where he stands",
+        "REL_GAZE": "yes: RUTH looks off-frame at SAM, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + STT 'i thought we'd sit a while before doing anything else' span 1.9-4.5 s = line 157 exact; RUTH single as her still (grey bun, glasses on cord, pale blue dress, white apron) seated at the red booth with the closure notice on the table in front of her (SC02 staging), eyes toward SAM's off-frame place (screen-left), speaks plainly then holds still; right frame edge shows only the door/room, SAM wholly out of frame at all six samples; diner behind her (counter, stools, window) stable, no morphing; mean -31.3 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:157",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "7f79563fe3eab1c57c60e0f303496d19bb921fc88da2c380771c0d6285ee90a5"
+}
