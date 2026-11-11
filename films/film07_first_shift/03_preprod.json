@@ -10188,6 +10188,256 @@
       "registered_at": "2026-11-11T14:01:22+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
       "approved_at": "2026-11-11T14:01:23+00:00"
+    },
+    "SC03_g01": {
+      "file": "media/stills/start_SC03_g01.jpg",
+      "sha256": "77e46f63f0ca810691c39f7e63cc0aa8deb460776afcd36a37fc05d5ca48e3af",
+      "prompt_sha256": "5e7a6e70531026e17339adee1fb32df270320ecb9c0dd6897d76214d60d9d42e",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:01+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:02+00:00"
+    },
+    "SC03_g03": {
+      "file": "media/stills/start_SC03_g03.jpg",
+      "sha256": "77e46f63f0ca810691c39f7e63cc0aa8deb460776afcd36a37fc05d5ca48e3af",
+      "prompt_sha256": "5e7a6e70531026e17339adee1fb32df270320ecb9c0dd6897d76214d60d9d42e",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g01, reused: same still prompt as SC03_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:05+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:06+00:00"
+    },
+    "SC03_g05": {
+      "file": "media/stills/start_SC03_g05.jpg",
+      "sha256": "77e46f63f0ca810691c39f7e63cc0aa8deb460776afcd36a37fc05d5ca48e3af",
+      "prompt_sha256": "5e7a6e70531026e17339adee1fb32df270320ecb9c0dd6897d76214d60d9d42e",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g01, reused: same still prompt as SC03_g01",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:07+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:08+00:00"
+    },
+    "SC03_g02": {
+      "file": "media/stills/start_SC03_g02.jpg",
+      "sha256": "292f7491d3e4417faf654a74d51625159ba65b6a5d48e9ad4cec5b456b6e19d6",
+      "prompt_sha256": "94e36fbaa3c428f10ee44ba99d10ec39400ef513c0907128a55748360d7485c7",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g02",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:09+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:11+00:00"
+    },
+    "SC03_g04": {
+      "file": "media/stills/start_SC03_g04.jpg",
+      "sha256": "292f7491d3e4417faf654a74d51625159ba65b6a5d48e9ad4cec5b456b6e19d6",
+      "prompt_sha256": "94e36fbaa3c428f10ee44ba99d10ec39400ef513c0907128a55748360d7485c7",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g02, reused: same still prompt as SC03_g02",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:13+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:14+00:00"
+    },
+    "SC03_g06": {
+      "file": "media/stills/start_SC03_g06.jpg",
+      "sha256": "ec0e586f83207e3e978c18148a20f29ef455d2efe9f4939fa87b897669c1c7a1",
+      "prompt_sha256": "507de588e40231b128b4afefbbc3499ee91d91d18899945eabb0e791ee37b13a",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g06",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:15+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:16+00:00"
+    },
+    "SC03_g07": {
+      "file": "media/stills/start_SC03_g07.jpg",
+      "sha256": "9a908a0ae2e3a189417e09e3aa987498ba2dec28d8668ff8608b153d968e634b",
+      "prompt_sha256": "c5756b52752c5b75428bec5725f7e20b7f99eb0d84a412a5c9d050a1e5833969",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g07",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:18+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:20+00:00"
+    },
+    "SC03_g09": {
+      "file": "media/stills/start_SC03_g09.jpg",
+      "sha256": "9a908a0ae2e3a189417e09e3aa987498ba2dec28d8668ff8608b153d968e634b",
+      "prompt_sha256": "c5756b52752c5b75428bec5725f7e20b7f99eb0d84a412a5c9d050a1e5833969",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g07, reused: same still prompt as SC03_g07",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:22+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:23+00:00"
+    },
+    "SC03_g11": {
+      "file": "media/stills/start_SC03_g11.jpg",
+      "sha256": "9a908a0ae2e3a189417e09e3aa987498ba2dec28d8668ff8608b153d968e634b",
+      "prompt_sha256": "c5756b52752c5b75428bec5725f7e20b7f99eb0d84a412a5c9d050a1e5833969",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g07, reused: same still prompt as SC03_g07",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:24+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:25+00:00"
+    },
+    "SC03_g14": {
+      "file": "media/stills/start_SC03_g14.jpg",
+      "sha256": "9a908a0ae2e3a189417e09e3aa987498ba2dec28d8668ff8608b153d968e634b",
+      "prompt_sha256": "c5756b52752c5b75428bec5725f7e20b7f99eb0d84a412a5c9d050a1e5833969",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g07, reused: same still prompt as SC03_g07",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:27+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:29+00:00"
+    },
+    "SC03_g16": {
+      "file": "media/stills/start_SC03_g16.jpg",
+      "sha256": "9a908a0ae2e3a189417e09e3aa987498ba2dec28d8668ff8608b153d968e634b",
+      "prompt_sha256": "c5756b52752c5b75428bec5725f7e20b7f99eb0d84a412a5c9d050a1e5833969",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g07, reused: same still prompt as SC03_g07",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:30+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:31+00:00"
+    },
+    "SC03_g18": {
+      "file": "media/stills/start_SC03_g18.jpg",
+      "sha256": "9a908a0ae2e3a189417e09e3aa987498ba2dec28d8668ff8608b153d968e634b",
+      "prompt_sha256": "c5756b52752c5b75428bec5725f7e20b7f99eb0d84a412a5c9d050a1e5833969",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g07, reused: same still prompt as SC03_g07",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:32+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:33+00:00"
+    },
+    "SC03_g08": {
+      "file": "media/stills/start_SC03_g08.jpg",
+      "sha256": "970acabd8e509e5e9aad21c70df3cae130539c3d001abbac5c6cd0dfd61a10a6",
+      "prompt_sha256": "d0147193c6007e420f935fac210c88b6224fef19c51df4d47017d2216763a186",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g08",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:34+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:36+00:00"
+    },
+    "SC03_g10": {
+      "file": "media/stills/start_SC03_g10.jpg",
+      "sha256": "970acabd8e509e5e9aad21c70df3cae130539c3d001abbac5c6cd0dfd61a10a6",
+      "prompt_sha256": "d0147193c6007e420f935fac210c88b6224fef19c51df4d47017d2216763a186",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g08, reused: same still prompt as SC03_g08",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:38+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:39+00:00"
+    },
+    "SC03_g12": {
+      "file": "media/stills/start_SC03_g12.jpg",
+      "sha256": "970acabd8e509e5e9aad21c70df3cae130539c3d001abbac5c6cd0dfd61a10a6",
+      "prompt_sha256": "d0147193c6007e420f935fac210c88b6224fef19c51df4d47017d2216763a186",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g08, reused: same still prompt as SC03_g08",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:40+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:41+00:00"
+    },
+    "SC03_g15": {
+      "file": "media/stills/start_SC03_g15.jpg",
+      "sha256": "970acabd8e509e5e9aad21c70df3cae130539c3d001abbac5c6cd0dfd61a10a6",
+      "prompt_sha256": "d0147193c6007e420f935fac210c88b6224fef19c51df4d47017d2216763a186",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g08, reused: same still prompt as SC03_g08",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:42+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:43+00:00"
+    },
+    "SC03_g17": {
+      "file": "media/stills/start_SC03_g17.jpg",
+      "sha256": "970acabd8e509e5e9aad21c70df3cae130539c3d001abbac5c6cd0dfd61a10a6",
+      "prompt_sha256": "d0147193c6007e420f935fac210c88b6224fef19c51df4d47017d2216763a186",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g08, reused: same still prompt as SC03_g08",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:44+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:45+00:00"
+    },
+    "SC03_g19": {
+      "file": "media/stills/start_SC03_g19.jpg",
+      "sha256": "970acabd8e509e5e9aad21c70df3cae130539c3d001abbac5c6cd0dfd61a10a6",
+      "prompt_sha256": "d0147193c6007e420f935fac210c88b6224fef19c51df4d47017d2216763a186",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g08, reused: same still prompt as SC03_g08",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:46+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:47+00:00"
+    },
+    "SC03_g13": {
+      "file": "media/stills/start_SC03_g13.jpg",
+      "sha256": "271e74783c71cb313d32c878ff07d7944adea2834dc03796fef5f5cda9d4d7cc",
+      "prompt_sha256": "8fcd4665d76f909811e8db40122334a4e72a4bc4a49df5d26916a09217209948",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g13",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:48+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:49+00:00"
+    },
+    "SC03_g20": {
+      "file": "media/stills/start_SC03_g20.jpg",
+      "sha256": "c15c8a4401900066552df2feff3e9ec234a6ae681e700b6b0445d1fb9641f6a3",
+      "prompt_sha256": "2869937e9e3d6c1516fac98cfceeb9e33de0079b74ab4263a81280d415725a69",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g20",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:50+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:51+00:00"
+    },
+    "SC03_g21": {
+      "file": "media/stills/start_SC03_g21.jpg",
+      "sha256": "3f2a0630833aa33bd31992b21af99fdb1e40bdf91626e69b7af02a78b6348338",
+      "prompt_sha256": "7b9e3f9f9075aec3f74bd19be5d660364e265c2e087de655523e6602e2649be8",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g21",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:52+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:53+00:00"
+    },
+    "SC03_g23": {
+      "file": "media/stills/start_SC03_g23.jpg",
+      "sha256": "3f2a0630833aa33bd31992b21af99fdb1e40bdf91626e69b7af02a78b6348338",
+      "prompt_sha256": "7b9e3f9f9075aec3f74bd19be5d660364e265c2e087de655523e6602e2649be8",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g21, reused: same still prompt as SC03_g21",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:54+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:55+00:00"
+    },
+    "SC03_g25": {
+      "file": "media/stills/start_SC03_g25.jpg",
+      "sha256": "3f2a0630833aa33bd31992b21af99fdb1e40bdf91626e69b7af02a78b6348338",
+      "prompt_sha256": "7b9e3f9f9075aec3f74bd19be5d660364e265c2e087de655523e6602e2649be8",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g21, reused: same still prompt as SC03_g21",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:56+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:21:57+00:00"
+    },
+    "SC03_g22": {
+      "file": "media/stills/start_SC03_g22.jpg",
+      "sha256": "b3ad149c00829ab053b6b61e93ee266af819fe70b53acf54b0393477a9852677",
+      "prompt_sha256": "585b19418c421762d124bed4a3b5f6a69fe0f6f494b0a2aa7b9bf1d589bebefa",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g22",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:21:58+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:22:00+00:00"
+    },
+    "SC03_g24": {
+      "file": "media/stills/start_SC03_g24.jpg",
+      "sha256": "b3ad149c00829ab053b6b61e93ee266af819fe70b53acf54b0393477a9852677",
+      "prompt_sha256": "585b19418c421762d124bed4a3b5f6a69fe0f6f494b0a2aa7b9bf1d589bebefa",
+      "source": "Flow Nano Banana 2.1 project 87dac583 (image mode, 0 credits) (refs: char refs + Empty diner set plate); image drawn for SC03_g22, reused: same still prompt as SC03_g22",
+      "credits": 0.0,
+      "registered_at": "2026-11-11T18:22:01+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-11T18:22:02+00:00"
     }
   }
 }

@@ -1,0 +1,140 @@
+{
+  "take_id": "SC03_g01_t2",
+  "generation_id": "SC03_g01",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:282": "yes: RUTH's eyes and head turn toward SAM's off-frame place at screen-right as she speaks"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes: SAM out of the shot apart from a static dark shoulder edge in the bottom-right corner (from the still, never moves in), his place not shown empty; RUTH's eyes go just past the lens to screen-right",
+        "REL_GAZE": "yes: RUTH looks screen-right, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + corner crop + STT: RUTH speaks the line to SAM off-frame right, mouth moves with audio, gaze held just past the lens at screen-right, hands/mug unchanged; SAM not in shot except a static dark foreground shoulder edge at the bottom-right corner inherited from the approved still (no movement into frame)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:282",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "525fbf8a906b7fe35f722002aaf50df5b1af84f26cdeab61af428e358c182af4"
+}
