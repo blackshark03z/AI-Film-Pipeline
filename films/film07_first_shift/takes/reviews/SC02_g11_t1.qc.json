@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g11_t1",
+  "generation_id": "SC02_g11",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:201": "yes: RUTH's eyes and head turn toward SAM's off-frame place at screen-right as she speaks"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes: SAM is out of the shot apart from a sub-visible hair clump at the top-right corner, his place is not shown empty; RUTH's eyes go just past the lens to screen-right",
+        "REL_GAZE": "yes: RUTH looks screen-right, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'one proper morning before i put that thing on display' span 0.7-4.9 s = line 201 exact; RUTH single standing beside the far booth seat as the redrawn still and g09_t3 (grey bun, glasses on cord, pale blue dress, white apron), tall red booth back fills the right side, notice on table, eyes just past the lens to screen-right toward SAM, speaks then holds; SAM not in frame EXCEPT a tiny dark hair clump (about 7 px wide) at the very top-right corner from about 2.4 s (judged below visibility, recorded as a residual P2 not a reject); background stable, no morphing; mean -32.6 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:201",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "b712fb95467aee5d580450f9a047451429921ca529c2162c42e730c0691dd162"
+}
