@@ -1,0 +1,140 @@
+{
+  "take_id": "SC03_g23_t1",
+  "generation_id": "SC03_g23",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:389": "SAM speaks to RUTH, eyes and body turned toward them"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "left edge strips show only wall/counter, RUTH never enters, eyes go to her off-screen side",
+        "REL_GAZE": "eyes off-lens to the right throughout"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, left edge empty (no RUTH, no empty-place shown), gaze held off-lens to the right, line spoken as written (STT matches), cloth + mug stay on counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:389",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "4d0f233568ec4ded01c20a3ea004531a039ec09b30d081f6f5c2bf125afb0e71"
+}
