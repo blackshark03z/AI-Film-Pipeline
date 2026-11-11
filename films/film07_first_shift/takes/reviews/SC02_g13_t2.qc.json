@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g13_t2",
+  "generation_id": "SC02_g13",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:211": "yes: RUTH's eyes and head turn toward SAM's off-frame place at screen-right as she speaks"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes: SAM wholly out of frame, booth back fills the right edge; RUTH's eyes go just past the lens to screen-right",
+        "REL_GAZE": "yes: RUTH looks screen-right, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 full frames + 6 samples + STT 'i hadn't worked out what i'd say when you arrived' span 2.1-4.5 s = line 211 exact; RUTH single standing beside the far booth seat as g11 (grey bun, glasses on cord, pale blue dress, white apron), booth back fills the right side, notice on table, eyes toward SAM at screen-right (a blink at 2.4 s), speaks then holds; SAM wholly out of frame at all samples; background stable, no morphing; mean -31.2 dB. History: t1 FLOW_FAILED_NO_CLIP after 627 s (not charged), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:211",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "d7b335f3b90d7eafd1c7984ab1013f44bdb797c3bad48894190eee89dc418843"
+}
