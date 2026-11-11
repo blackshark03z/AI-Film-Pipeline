@@ -632,10 +632,12 @@ rights = [
 
 preprod = {
     "feasibility": feas,
-    "preflight": {"max_prompt_words": 215,
+    "preflight": {"max_prompt_words": 230,   # 215 + the two SC03+ safeguard sentences (<= 229 words, film02 ran 165-220)
                   "timing": {"duration_s": 6.0, "max_shots": 1, "min_shot_s": 2.0, "syllables_per_second": 2.5,
                              "establish_s": 1.5, "reaction_s": 3.0},
-                  "feasibility": feas, "interaction_contract": True},
+                  "feasibility": feas, "interaction_contract": True,
+                  # video prompt: off-screen listener fully out of frame + "No one speaks."; SC01-SC02 have accepted takes
+                  "safeguard_scenes": [f"SC{n:02d}" for n in range(3, 13)]},
     "characters": {
         "RUTH": {"look": {"look_id": "ruth_apron", "character": "RUTH", "text": RUTH_LOOK,
                           "invariants": ["grey hair in a loose bun", "reading glasses on a cord", "pale blue uniform dress",

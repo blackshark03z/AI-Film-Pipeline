@@ -45,6 +45,9 @@ class PreflightLimits(ContractModel):
     generability: bool = True
     # interaction.py: addressees, listener anchors, actor marks/blocking and gaze targets; opt-in (films before P16-02)
     interaction_contract: bool = False
+    # scenes whose VIDEO prompt says an off-screen listener stays fully out of frame and, for a shot without dialogue,
+    # "No one speaks." (film07 pilot rejects). Listed per scene so scenes with accepted takes keep their prompt hash.
+    safeguard_scenes: list[str] = Field(default_factory=list)
     timing: SceneTiming = Field(default_factory=SceneTiming)
     feasibility: FeasibilityLimits = Field(default_factory=FeasibilityLimits)
 

@@ -8,7 +8,7 @@
     "syllables_per_second": 2.5
   },
   "preflight": {
-    "max_prompt_words": 215,
+    "max_prompt_words": 230,
     "timing": {
       "duration_s": 6.0,
       "max_shots": 1,
@@ -25,7 +25,19 @@
       "min_silence_s": 3.0,
       "syllables_per_second": 2.5
     },
-    "interaction_contract": true
+    "interaction_contract": true,
+    "safeguard_scenes": [
+      "SC03",
+      "SC04",
+      "SC05",
+      "SC06",
+      "SC07",
+      "SC08",
+      "SC09",
+      "SC10",
+      "SC11",
+      "SC12"
+    ]
   },
   "characters": {
     "RUTH": {

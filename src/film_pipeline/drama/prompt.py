@@ -41,6 +41,15 @@ DEFAULT_PROHIBITIONS = (
 )
 
 
+# film07 pilot rejects: an off-screen listener walked into frame (x4) and a silent shot got an invented line. Added to the
+# video prompt only for scenes that opt in (`preflight.safeguard_scenes`), so accepted takes keep their prompt hash.
+NO_ONE_SPEAKS = "No one speaks."
+
+
+def out_of_frame_sentence(name: str) -> str:
+    return f"{name} stays fully out of frame: no part of {name} enters the frame."
+
+
 class CharacterBrief(ContractModel):
     name: str
     appearance: str = ""       # identity + scene look, one clause
@@ -110,11 +119,15 @@ def compile_scene_prompt(unit: SceneUnit, *,
                          choreography: GenerationChoreography | None = None,
                          style: Literal["full", "start_frame"] = "full",
                          handles: dict[str, str] | None = None,
-                         placement: str = ""
+                         placement: str = "",
+                         out_of_frame: list[str] | None = None,
+                         silent_line: bool = False
                          ) -> ScenePromptPlan:
     """style="start_frame": the image carries looks and set, the prompt describes motion only (P13-04).
     `handles` adds names of characters who are not in `characters` (out of frame) to the name->handle map.
-    `placement` (P16-03) = who speaks to whom and where the listeners are; it follows the shot description."""
+    `placement` (P16-03) = who speaks to whom and where the listeners are; it follows the shot description.
+    `out_of_frame` names the off-screen listeners that must stay fully out of frame; `silent_line` adds "No one speaks."
+    when the shot has no spoken line (both opt-in, see NO_ONE_SPEAKS)."""
     start_frame = style == "start_frame"
     attachments = attachment_plan(reference_sets or [],
                                   max_images=max_reference_images)
@@ -169,6 +182,8 @@ def compile_scene_prompt(unit: SceneUnit, *,
                       f"{unit.shots[0].describe(book)}.")
     if placement:
         shots_text += " " + placement
+    if out_of_frame:
+        shots_text += " " + " ".join(out_of_frame_sentence(n) for n in out_of_frame)
     performance = ""
     if choreography is not None:
         if start_frame:
@@ -197,6 +212,8 @@ def compile_scene_prompt(unit: SceneUnit, *,
         dialogue_text = (f"{dialogue_language} dialogue, lip-synced: "
                          + " ".join(dialogue)) if dialogue else ""
         sound_text = ("Sound: " + "; ".join(sound) + ".") if sound else ""
+    if silent_line and not dialogue_text:
+        dialogue_text = NO_ONE_SPEAKS
     sections = {
         "characters": "" if start_frame else " ".join(cast),
         "setting": setting_text,

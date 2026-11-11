@@ -190,7 +190,8 @@ class _Plan:
             dialogue_language=self.language, start_state=start,
             end_state=end if self.pre.preflight.end_state_in_prompt else None, location=location.look,
             choreography=decl.choreography, style=self.pre.preflight.prompt_style,
-            handles={n: c.handle for n, c in self.pre.characters.items() if c.handle}, placement=placement)
+            handles={n: c.handle for n, c in self.pre.characters.items() if c.handle}, placement=placement,
+            **self.safeguards(decl))
         report = preflight_scene(
             scene=self.scenes[decl.scene_id], unit=unit, prompt=plan, reference_sets=[],
             reference_root=self.reference_root, storyboard=gate, known_characters=self.script.characters,
@@ -199,6 +200,13 @@ class _Plan:
             start_state=start, location=location.look, occupancy=scene.occupancy,
             choreography=decl.choreography)
         return unit, plan, report
+
+    def safeguards(self, decl: ShotDecl) -> dict:
+        """Video-prompt safeguards, only for scenes listed in `preflight.safeguard_scenes` (none by default)."""
+        if decl.scene_id not in self.pre.preflight.safeguard_scenes:
+            return {}
+        off = sorted(n for n, a in decl.listener_anchors.items() if a.mode == "OFF_FRAME")
+        return {"out_of_frame": off, "silent_line": not decl.dialogue}
 
     def placement(self, decl: ShotDecl) -> list[str]:
         return placement_sentences(self.pre, decl, {l.line_no: l.character for l in self.lines_for(decl)})
