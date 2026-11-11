@@ -1,0 +1,140 @@
+{
+  "take_id": "SC01_g10_t2",
+  "generation_id": "SC01_g10",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:67": "yes, SAM's head and eyes turned screen-left toward off-frame RUTH while speaking"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes, RUTH's place stays out of frame and SAM's eyes go just past the lens to frame-left",
+        "REL_GAZE": "yes, SAM looks screen-left, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + STT 'it says permanently that's quite a word to leave out' span 0.7-3.9 s = line 67 exact; close-up SAM as his still (short dark curls, thin face, damp grey hoodie), head and eyes screen-left just past the lens to off-frame RUTH, careful and steady, holds still; notice and white mug stay on the counter (continuity with g08/g09 end state); counter/stools/shelf stable, no morphing; faint star mark bottom-right = Flow watermark; mean -33 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:67",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "1ab0e420322199e733395b1d624170f3ef2f534722a14bba45876756665e4ae3"
+}
