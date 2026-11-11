@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g21_t1",
+  "generation_id": "SC02_g21",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:250": "yes: Sam speaks line 250 to Ruth off-frame-left, mouth moves with audio"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes: Ruth wholly out of frame, place not shown empty; Sam's eyes go to screen-left",
+        "REL_GAZE": "yes: eyes held just left of lens at Ruth, never into lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam identity/look match g19 (dark curly hair, grey hoodie), same diner background; left edge shows only background red booth/stools, no Ruth in any of 4 sampled frames; STT 'is there any work here that you actually need done' 1.6-4.0 s matches line 250",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:250",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "ad8faff0be6408eca1c947a868b4db31e7ab517344ecd6da7b7a15fdcb4a9187"
+}
