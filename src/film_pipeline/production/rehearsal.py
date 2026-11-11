@@ -112,12 +112,24 @@ def _write_json(path: Path, body: Any) -> None:
 
 
 def _review_sheet(root: Path, film_id: str, take_id: str, gid: str) -> dict[str, Any]:
-    from film_pipeline.production.qc_model import TAKE_GROUPS
-    from film_pipeline.production.takes import load_log
+    from film_pipeline.production.package import load_package
+    from film_pipeline.production.qc_model import TAKE_GROUPS, answer_group
+    from film_pipeline.production.takes import _relation_questions, load_log, script_dialogue
     entry = load_log(root, film_id).get(take_id)
     checks = [{"group": g, "result": "PASS", "level": "FULL_MOTION", "reviewer": f"human:{BOT}",
                "evidence": f"{STAMP}: the clip is a still plus a tone; nothing was judged"} for g in TAKE_GROUPS]
-    return {"take_id": take_id, "generation_id": gid, "checks": checks, "output_sha256": entry.output_sha256}
+    sheet: dict[str, Any] = {"take_id": take_id, "generation_id": gid, "checks": checks, "output_sha256": entry.output_sha256}
+    # an interaction-contract film asks relation questions (REL_*); a review that omits them is refused, so the
+    # placeholder answers each one as unjudged, in the group the question belongs to
+    pkg = load_package(root)
+    decl = next((g for g in pkg.typed["shots"].generations if g.generation_id == gid), None)
+    questions = _relation_questions(pkg.typed["preprod"], decl, script_dialogue(pkg)) if decl else []
+    if questions:
+        sheet["required_answers"] = [q["id"] for q in questions]
+        for q in questions:
+            check = next(c for c in checks if c["group"] == answer_group(q["id"]))
+            check.setdefault("answers", {})[q["id"]] = f"{STAMP}: not judged (still plus tone)"
+    return sheet
 
 
 def rehearse(src: Path, dest: Path, *, stop_on_fail: bool = True) -> dict[str, Any]:

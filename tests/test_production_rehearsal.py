@@ -178,3 +178,23 @@ def test_restore_check_verifies_a_copy_of_the_archive_and_catches_a_damaged_one(
     log = R._Log(root)
     assert R.restore_check(log, root) is False
     assert log.restore["ok"] is False and log.restore["detail"] and not log.steps[0]["ok"]
+
+
+def test_bot_review_answers_the_relation_questions_of_an_interaction_contract_film(tmp_path):
+    # film06 declares addressees, off-frame listeners and a gaze: the take review must answer its REL_* questions,
+    # otherwise ingest refuses with "review drops required relation questions" and the rehearsal dies at its first review
+    film06 = ROOT / "films" / "film06_six_am"
+    root = tmp_path / "rh06"
+    root.mkdir()
+    for name in FILES:
+        (root / name).write_text((film06 / name).read_text(encoding="utf-8"), encoding="utf-8")
+    header = json.loads((root / "film.json").read_text(encoding="utf-8"))
+    header["rehearsal"] = True
+    (root / "film.json").write_text(json.dumps(header), encoding="utf-8")
+    pkg = load_package(root)
+    clip = root / "media" / "takes" / "SC01_g1_t1.mp4"
+    clip.parent.mkdir(parents=True)
+    clip.write_bytes(b"clip")
+    entry, _ = T.register_take(root, pkg.header.film_id, "SC01_g1", clip, prompt_text="p", route="r", model="m", credits=0.0)
+    sheet = R._review_sheet(root, pkg.header.film_id, entry.take_id, "SC01_g1")
+    assert T.ingest_review(root, pkg.header.film_id, sheet, pkg)["status"] == "ACCEPTED"

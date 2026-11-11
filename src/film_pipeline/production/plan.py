@@ -61,6 +61,13 @@ def top_sections(sections: dict[str, int], n: int = 3) -> str:
     return ", ".join(f"{BUDGET_LABELS[k]} {v}" for k, v in ranked)
 
 
+def _scaled_feasibility(base, seconds: float):
+    factor = seconds / base.scene_duration_s
+    return base.model_copy(update={"scene_duration_s": seconds,
+                                   "max_dialogue_syllables": int(base.max_dialogue_syllables * factor),
+                                   "min_silence_s": base.min_silence_s * factor})
+
+
 class _Plan:
     def __init__(self, pkg: FilmPackage, takes_dir: Path | None, reference_root: Path | None,
                  attestations: Path | None = None, verified_handoffs: frozenset[str] = frozenset()) -> None:
@@ -117,6 +124,22 @@ class _Plan:
         return [SpokenLine(character=by_no[n].character, text=by_no[n].text, syllables=by_no[n].syllables,
                            line_no=n) for n in decl.dialogue if n in by_no]
 
+    def allocated_seconds(self) -> dict[str, float]:
+        """Generated seconds per script scene (a scene may span many generations)."""
+        allocated: dict[str, float] = {}
+        for shot in self.shots.generations:
+            allocated[shot.scene_id] = allocated.get(shot.scene_id, 0.0) + shot_seconds(shot, self.pkg.header)
+        return allocated
+
+    def preflight_limits(self, scene_id: str):
+        """Preflight limits for one generation: the per-generation check sees the whole script scene, so a scene
+        that spans many generations gets the same scaled speech/silence budget as the scene-level check."""
+        limits = self.pre.preflight
+        seconds = self.allocated_seconds().get(scene_id, 0.0)
+        if seconds <= limits.feasibility.scene_duration_s:
+            return limits
+        return limits.model_copy(update={"feasibility": _scaled_feasibility(limits.feasibility, seconds)})
+
     def unit_for(self, decl: ShotDecl) -> SceneUnit:
         sid, k = decl.scene_id, self.gen_index[decl.generation_id]
         book = self.pre.scenes[sid].axis
@@ -171,7 +194,7 @@ class _Plan:
         report = preflight_scene(
             scene=self.scenes[decl.scene_id], unit=unit, prompt=plan, reference_sets=[],
             reference_root=self.reference_root, storyboard=gate, known_characters=self.script.characters,
-            limits=self.pre.preflight, reference_mode="TEXT_ONLY", looks=list(self.video_looks.values()),
+            limits=self.preflight_limits(decl.scene_id), reference_mode="TEXT_ONLY", looks=list(self.video_looks.values()),
             generation_index=self.gen_index[decl.generation_id], handoff=self.handoff_for(decl),
             start_state=start, location=location.look, occupancy=scene.occupancy,
             choreography=decl.choreography)
@@ -363,16 +386,8 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     out.mkdir(parents=True, exist_ok=True)
     # A script scene may span many generations; individual shot speech/reaction checks still run below.
     base_limits = p.pre.feasibility
-    allocated: dict[str, float] = {}
-    for shot in p.shots.generations:
-        allocated[shot.scene_id] = allocated.get(shot.scene_id, 0.0) + shot_seconds(shot, pkg.header)
-    scene_limits = {}
-    for sid, seconds in allocated.items():
-        if seconds > base_limits.scene_duration_s:
-            factor = seconds / base_limits.scene_duration_s
-            scene_limits[sid] = base_limits.model_copy(update={"scene_duration_s": seconds,
-                "max_dialogue_syllables": int(base_limits.max_dialogue_syllables * factor),
-                "min_silence_s": base_limits.min_silence_s * factor})
+    scene_limits = {sid: _scaled_feasibility(base_limits, seconds) for sid, seconds in p.allocated_seconds().items()
+                    if seconds > base_limits.scene_duration_s}
     feas = check_script(p.script, limits=base_limits, scene_limits=scene_limits)
     temporal = p.temporal()
 
@@ -469,7 +484,7 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
     record["locations"] = [v.look.model_dump() for v in p.pre.locations.values()]
     record["states"] = {k: v.model_dump() for k, v in p.pre.states.items()}
     _write(out / "gate3.json", json.dumps(record, ensure_ascii=False, indent=2), out)
-    problems = [f"{k.upper()} {i['check']}: {i['detail']}" for k in ("feasibility", "temporal", "continuity", "camera", "layout", "comprehension")
+    problems = [f"{k.upper()} {i.get('check') or i.get('rule')}: {i['detail']}" for k in ("feasibility", "temporal", "continuity", "camera", "layout", "comprehension")
                 for i in record.get(k, []) if i["severity"] == "BLOCK"]
     problems += [f"{g} preflight {v['verdict']}" for g, v in record["generations"].items() if v["verdict"] != "PASS"]
     problems += p.dialogue_problems() + p.overlong_problems(record)

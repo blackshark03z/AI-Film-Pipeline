@@ -158,3 +158,24 @@ def test_exceptions_are_exactly_the_overlong_prompts():
     over = {g for g, v in record["generations"].items() if v["words"] > pre.preflight.max_prompt_words}
     assert over == set(pre.accepted_overlong)
     assert all("Owner review pending" in why for why in pre.accepted_overlong.values())
+
+
+def test_feasibility_block_is_reported_not_a_crash(pkg_dir, tmp_path):
+    # a scene whose dialogue exceeds the feasibility limit must come back as a problem, not a KeyError on 'check'
+    edit(pkg_dir / "03_preprod.json", lambda d: d["feasibility"].update(max_dialogue_syllables=1))
+    problems = run_plan(pkg_dir, tmp_path).problems
+    assert any(p.startswith("FEASIBILITY DIALOGUE_TOO_LONG") for p in problems)
+
+
+def test_long_scene_scaling_applies_to_each_generation_preflight(pkg_dir, tmp_path):
+    # SC01 has 11 dialogue syllables; the limit 8 would fail a 16 s scene, but two 15 s generations (30 s) scale it to 15.
+    def shrink(d):
+        d["feasibility"].update(max_dialogue_syllables=8)
+        d["preflight"]["feasibility"].update(max_dialogue_syllables=8)
+    edit(pkg_dir / "03_preprod.json", shrink)
+    edit(pkg_dir / "04_shots.json", lambda d: [g.update(duration_s=15) for g in d["generations"] if g["scene_id"] == "SC01"])
+    result = run_plan(pkg_dir, tmp_path)
+    for gid in ("SC01_g1", "SC01_g2"):
+        checks = {i["check"] for i in result.record["generations"][gid]["issues"]}
+        assert "FEASIBILITY:DIALOGUE_TOO_LONG" not in checks, checks
+    assert not any("SC01" in p and "DIALOGUE_TOO_LONG" in p for p in result.problems)
