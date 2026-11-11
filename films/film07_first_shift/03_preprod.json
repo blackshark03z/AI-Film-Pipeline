@@ -9840,12 +9840,12 @@
     "SC01_g25": {
       "file": "media/stills/start_SC01_g25.jpg",
       "sha256": "5727135a21d5bb58809e3790a9d3e4cd18313f64b14772983624401461f2ee06",
-      "prompt_sha256": "1415ae01b462258eadf35739ba7a0240a1bab626edab52ce12519e66d26ab0e0",
-      "source": "Flow Nano Banana 2.1 project 87dac583 (refs: char refs + Empty diner set plate); image drawn for SC01_g09, reused: same still prompt as SC01_g09",
+      "prompt_sha256": "664f96a4686e5903665f0380ab4656dbdd26f07c8f5dd50e27ba5302a0c0a25f",
+      "source": "Flow Nano Banana (same image, prompt corrected: off-frame listener wholly out of shot)",
       "credits": 0.0,
-      "registered_at": "2026-11-11T09:17:08+00:00",
+      "registered_at": "2026-11-11T12:23:55+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T09:17:09+00:00"
+      "approved_at": "2026-11-11T12:23:56+00:00"
     },
     "SC01_g10": {
       "file": "media/stills/start_SC01_g10.jpg",

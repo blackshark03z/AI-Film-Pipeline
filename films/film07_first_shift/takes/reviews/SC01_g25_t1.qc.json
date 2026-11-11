@@ -1,0 +1,140 @@
+{
+  "take_id": "SC01_g25_t1",
+  "generation_id": "SC01_g25",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:140": "yes: RUTH's eyes and head turn toward SAM's off-frame place as she speaks"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "SAM's head and nose profile enter the right edge of frame from 1.2 s to the end; he must be wholly out of shot",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "no: SAM's head and face intrude at the right frame edge from 1.2 s, he is not kept out of frame",
+        "REL_GAZE": "yes: RUTH looks off-frame, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + right-edge crops: RUTH close single as her still, STT 'alright let's sit where we can actually hear ourselves' = line 140; but SAM's head, hair and nose profile enter the right frame edge from 1.2 s to the end (crops at 1.2/2.4/3.6 s)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "the video model let the off-frame listener's head enter the right edge; the g25 placement text did not forbid any part of him entering the frame (same defect as SC01_g13_t1)",
+  "required_answers": [
+    "REL_ADDRESS:140",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "839316c6fe22ee913ba5c8ffb870452de2dd30bcc450aa7289e6207a14bb81a2"
+}
