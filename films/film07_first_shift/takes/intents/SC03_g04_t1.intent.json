@@ -4,7 +4,7 @@
   "take_id": "SC03_g04_t1",
   "shot_version": 1,
   "prompt_sha256": "43b862299714481b37fea178e1e43f52fdc26e481f905e3c67c98aa4f4b782c2",
-  "prompt_file": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\media\\plan\\prompts\\SC03_g04.txt",
+  "prompt_file": "films\\film07_first_shift\\takes\\intents\\SC03_g04_t1.prompt.txt",
   "route": "start_frame+Khung hinh",
   "model": "Omni 1.2 Flash 360p",
   "duration_s": 6,
@@ -16,12 +16,14 @@
   "tier": "TEST",
   "cost_unit": "credits",
   "expected_cost": 6.0,
+  "submit_protocol": "inprocess-checkpoint-v1",
+  "dispatch_phase": "PREPARING",
   "start_frame_sha256": "292f7491d3e4417faf654a74d51625159ba65b6a5d48e9ad4cec5b456b6e19d6",
-  "start_frame_source": "end frame of SC03_g03",
-  "blockers": [
-    "HANDOFF_PREVIOUS_NOT_ACCEPTED"
-  ],
-  "dry_run": true,
-  "sent": false,
-  "owner_go_live": false
+  "start_frame_source": "end frame of SC03_g03_t1",
+  "blockers": [],
+  "dry_run": false,
+  "sent": true,
+  "owner_go_live": true,
+  "result": "SETTINGS_NOT_SET settings chip not found",
+  "take_registered": false
 }
