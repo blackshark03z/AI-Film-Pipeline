@@ -439,3 +439,8 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   No SC03 events exist in 05_edit.json, so `cut --render` has nothing to cut: excerpt = concat of the 25 accepted takes
   (tmp/SC03_excerpt.mp4, 149.7 s). Next: SC04+ needs credits (Owner: second Flow account khoia1k57 or the 30/11 reset);
   author the SC03 edit before picture lock. Do not commit uv.lock.
+- Coordinator (2026-11-12 ~04:50): SC03 QC PASS (25-frame sheet + full-res RUTH/SAM vs pilot: identity, wardrobe, set match).
+  Balance reconciles 205-168-12=25. Open: ledger has no adjustment entries (uncharged no-clip, stray jobs) -> backlog;
+  C: 18 GiB free (< 20 GiB render rule) after pytest tmp blowup -> no full suite tonight, renders blocked until space is freed
+  (candidates, coordinator-owned: C:/film-work/film07-rehearsal 5.8G); gate 4 SC02_g09 'unknown character' data defect before lock.
+  SC04+ continues on Owner-authorized GPM profile khoia1k57 (~1000 cr).
