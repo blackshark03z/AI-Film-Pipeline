@@ -1,0 +1,139 @@
+{
+  "take_id": "SC02_g01_t2",
+  "generation_id": "SC02_g01",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes: RUTH's place is out of frame and never shown empty; SAM's eyes go just past the lens to screen-left",
+        "REL_GAZE": "yes: SAM looks screen-left toward the booth table, never into the lens",
+        "REL_BARRIER": "yes: only SAM is ever in frame, on the customer side of the counter, RUTH off-frame on her own side by the booth"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed frames: close-up SAM as his still (short dark curly hair, thin face, damp grey hoodie), 0-1.0 s stands on the customer side with eyes just past the lens to screen-left toward the booth, never into the lens; ACTION 1.0-4.0 s turns and walks out of frame to screen-left toward the booth (face and hoodie consistent while he passes close to camera); 4.0-6.0 s counter empty of people, pale window light steady, closure notice flat on the counter, no one else, RUTH not shown anywhere; slight re-framing (frame widens a little once he leaves) but no scene cut, no morphing; no speech; mean -44.9 dB room tone. Send history: SC02_g01_t1 FLOW_FAILED_NO_CLIP after 620 s (no output, not charged, software auto-resend), t2 bound in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_LISTENER:RUTH",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "80ec88cd7eb69da49acfdf7fd3ecf7ef20060b6ac0f9c6f1a9d97a8b2a9e3cce"
+}
