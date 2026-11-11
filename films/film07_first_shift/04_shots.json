@@ -7012,7 +7012,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 2,
+      "version": 3,
       "coverage": "SINGLE",
       "subject": "SAM",
       "foreground": "",
@@ -7072,7 +7072,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, RUTH out of frame to the left",
+        "composition": "close single on SAM seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_bth",
@@ -7090,8 +7090,8 @@
         }
       },
       "gaze_target": "RUTH",
-      "repair_of": "SC04_g05@v1",
-      "repair_reason": "stronger off-frame placement: no head, hair or shoulder at the edge (SC04_g02/g05 listener intrusions)"
+      "repair_of": "SC04_g05@v2",
+      "repair_reason": "SC04_g05_t2 rejected: RUTH head at the left edge again; composition now states the left edge is bare wall and window"
     },
     {
       "generation_id": "SC04_g06",
@@ -27590,6 +27590,96 @@
         }
       },
       "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC04_g05",
+      "scene_id": "SC04",
+      "start_state": "SC04_g05",
+      "end_state": "SC04_g06",
+      "previous_generation_id": "SC04_g04",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 2,
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "dialogue": [
+        432
+      ],
+      "choreography": {
+        "generation_id": "SC04_g05",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "SAM looks at RUTH"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.3,
+            "description": "SAM speaks to RUTH evenly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.3,
+            "end_s": 6.0,
+            "description": "SAM holds RUTH's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "SAM speaks to RUTH"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "measured, firm",
+            "visible_cues": [
+              "level look",
+              "small nod"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "design_refs": [
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_morning@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on SAM seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, RUTH out of frame to the left",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cB_bth",
+      "addressees": {
+        "432": [
+          "RUTH"
+        ]
+      },
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH sits off frame-left across the table, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "established_by": "SC03_g20"
+        }
+      },
+      "gaze_target": "RUTH",
+      "repair_of": "SC04_g05@v1",
+      "repair_reason": "stronger off-frame placement: no head, hair or shoulder at the edge (SC04_g02/g05 listener intrusions)"
     }
   ]
 }
