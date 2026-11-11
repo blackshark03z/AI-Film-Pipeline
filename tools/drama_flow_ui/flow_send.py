@@ -813,6 +813,9 @@ def probe_duration(path: Path) -> float | None:
 
 # composer settings (model + clip length): the chip is the button whose text has "Video" and "giây"
 SETTINGS_CHIP_RE = re.compile(r"Video[\s\S]*giây")
+# image mode shows another chip ("Nano Banana ... crop_16_9 x1"): any composer chip carries the aspect icon and the count
+SETTINGS_CHIP_ANY_RE = re.compile(r"(?:Video|Hình ảnh|Nano Banana)[\s\S]*crop_\d+_\d+[\s\S]*x\d")
+SETTINGS_CHIP_ATTEMPTS = 3   # bounded retries for "settings chip not found" before the send is refused (0 credits)
 MODEL_BUTTON_RE = re.compile(r"Omni|Veo")
 DURATION_RE = re.compile(r"Độ dài\s*(\d+)\s*giây")
 COST_RE = re.compile(r"tốn\s*(\d+)\s*tín dụng")
@@ -858,14 +861,58 @@ def slider_presses(seconds: int) -> int:
     return seconds - MIN_DURATION_S
 
 
+async def _find_settings_chip(page, attempts: int = SETTINGS_CHIP_ATTEMPTS):
+    """The composer settings chip (video chip, or the image-mode chip), retried a bounded number of times; None if absent.
+
+    film07 pilot: right after an image-mode still the chip was briefly missing / not the video chip and the send died
+    SETTINGS_NOT_SET. Each retry presses Escape (closes a stray popup) and waits for the composer to settle."""
+    for attempt in range(max(1, attempts)):
+        for pattern in (SETTINGS_CHIP_RE, SETTINGS_CHIP_ANY_RE):
+            chip = page.locator("button").filter(has_text=pattern).first
+            if await chip.count():
+                return chip
+        if attempt + 1 < attempts:
+            await page.keyboard.press("Escape")
+            await page.wait_for_timeout(1500)
+    return None
+
+
+def _radio_re(label: str):
+    # has_text matches textContent, where the icon ligature runs into the label ("videocamVideo"): case-sensitive substring
+    return re.compile(re.escape(label))
+
+
+async def _ensure_radio(page, label: str, what: str) -> str | None:
+    """Select the settings-menu radio whose text ends in `label` and verify it is checked. None = fine."""
+    radio = page.locator("button[role=radio]").filter(has_text=_radio_re(label)).first
+    if not await radio.count():
+        return f"SETTINGS_NOT_SET {what} option {label!r} not found"
+    if await radio.get_attribute("aria-checked") != "true":
+        await radio.click()
+        await page.wait_for_timeout(800)
+        radio = page.locator("button[role=radio]").filter(has_text=_radio_re(label)).first
+        if not await radio.count() or await radio.get_attribute("aria-checked") != "true":
+            return f"SETTINGS_NOT_SET {what} did not switch to {label!r}"
+    return None
+
+
 async def _set_composer_settings(page, model: str, duration: int | None, rec: dict,
-                                 expected_credits: float | None = None) -> str | None:
-    """Set model / clip length in the composer settings menu and verify both. None = fine, else a result string."""
-    chip = page.locator("button").filter(has_text=SETTINGS_CHIP_RE).first
-    if not await chip.count():
+                                 expected_credits: float | None = None, mode: str | None = None,
+                                 resolution: str | None = None) -> str | None:
+    """Set mode / model / resolution / clip length in the composer settings menu and verify each. None = fine, else a result string.
+
+    mode="Video" and resolution="360p" are forced before every video send: an image-mode still leaves the composer in
+    image mode (film07 pilot SETTINGS_NOT_SET)."""
+    chip = await _find_settings_chip(page)
+    if chip is None:
         return "SETTINGS_NOT_SET settings chip not found"
     await chip.click()
     await page.wait_for_timeout(800)
+    if mode:
+        failed = await _ensure_radio(page, mode, "mode")
+        if failed:
+            return failed
+        rec["mode_set"] = mode
     if model:
         dropdown = page.locator("button").filter(has_text="arrow_drop_down").filter(has_text=MODEL_BUTTON_RE).first
         if not await dropdown.count():
@@ -882,6 +929,11 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
         rec["model_set"] = shown
         if not shown.startswith(model):
             return f"SETTINGS_NOT_SET model shows {shown!r}, wanted {model!r}"
+    if resolution:   # after the model: the resolution options depend on it
+        failed = await _ensure_radio(page, resolution, "resolution")
+        if failed:
+            return failed
+        rec["resolution_set"] = resolution
     if duration is not None:
         try:
             presses = slider_presses(duration)
@@ -903,10 +955,17 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
         rec["flow_credits"] = cost
     await page.keyboard.press("Escape")
     await page.wait_for_timeout(500)
+    if mode or resolution or duration is not None:
+        chip = await _find_settings_chip(page) or chip
+        chip_text = await chip.inner_text()
+        if mode and mode not in chip_text:
+            return f"SETTINGS_NOT_SET chip does not show {mode}"
+        if resolution and resolution not in chip_text:
+            return f"SETTINGS_NOT_SET chip does not show {resolution}"
     if duration is not None:
         if shown_s != duration:
             return f"SETTINGS_NOT_SET duration shows {shown_s}, wanted {duration}"
-        if f"{duration} giây" not in await chip.inner_text():
+        if f"{duration} giây" not in chip_text:
             return f"SETTINGS_NOT_SET chip does not show {duration} giây"
     if expected_credits is not None and cost != expected_credits:
         return f"PRE_SUBMIT_ERROR CREDIT_QUOTE_MISMATCH shown={cost} reserved={expected_credits:g}"
@@ -999,7 +1058,11 @@ async def run(args, before_submit=None) -> dict:
             uploaded = [f for f in (args.start_file, args.end_file) if f] if args.upload_frames else []
             rec["frames_uploaded"] = [Path(f).name for f in uploaded]
             if args.model or args.duration is not None:   # a mode change can clear frame slots
-                failed = await _set_composer_settings(page, args.model, args.duration, rec)
+                # every video send forces video mode + resolution: an image-mode still leaves the composer in image mode
+                video = not args.image and bool(args.model)
+                failed = await _set_composer_settings(page, args.model, args.duration, rec,
+                                                      mode="Video" if video else None,
+                                                      resolution=args.resolution if video else None)
                 if failed:
                     rec["result"] = failed
                     return rec
@@ -1186,6 +1249,8 @@ def build_parser() -> argparse.ArgumentParser:
                          "picker items by pixels; --start / --end tokens are not needed")
     ap.add_argument("--model", default="",
                     help="composer model name (dropdown text must start with it), e.g. 'Omni 1.2 Flash'")
+    ap.add_argument("--resolution", default="360p",
+                    help="video resolution forced before a video send (film takes: 360p only)")
     ap.add_argument("--duration", type=int, default=None,
                     help="clip length in seconds (3-15), set on the settings slider")
     ap.add_argument("--expected-credits", type=float,

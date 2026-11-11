@@ -263,7 +263,7 @@ def test_send_rechecks_quote_after_frames_and_never_submits_on_price_change(tmp_
     events = []
     async def frame(*args, **kwargs):
         events.append("frame")
-    async def settings(page, model, duration, record, expected_credits=None):
+    async def settings(page, model, duration, record, expected_credits=None, **forced):
         events.append("quote" if expected_credits is not None else "settings")
         if expected_credits is not None:
             assert events[-2] == "frame"
