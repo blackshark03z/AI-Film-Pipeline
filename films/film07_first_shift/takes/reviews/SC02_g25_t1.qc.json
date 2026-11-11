@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g25_t1",
+  "generation_id": "SC02_g25",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:269": "yes: Ruth speaks line 269 to standing Sam off-frame-right, eyes up and right, mouth moves with audio"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes: Sam wholly out of frame (right edge empty of any body part), place not shown empty",
+        "REL_GAZE": "yes: gaze held up toward screen-right at standing Sam, never into lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g22 (grey bun, light-blue uniform, white apron, glasses on chest), seated in booth; wider framing than g18-g22 (booth back, counter, stool and door frame visible) because Sam now stands - she looks up/right toward him; right edge shows only door frame/stool, no Sam in 4 sampled frames; STT 'the counter need setting we can start with that much' 0.7-4.1 s matches line 269; continuity with g24 (Sam standing, Ruth seated) ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:269",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "dc2abf3ed916ea87e60d7188c8b26ad73a71eb59273fb1e6389f049c175aef34"
+}
