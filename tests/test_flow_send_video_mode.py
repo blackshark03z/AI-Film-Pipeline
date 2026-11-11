@@ -54,8 +54,8 @@ class _Loc:
 class FakeComposer:
     """Flow composer: a chip, and a settings menu with mode / resolution radios, a model dropdown, a duration slider."""
 
-    def __init__(self, mode="image", res="720p", chip_after=0, stuck_mode=False):
-        self.mode, self.res, self.dur = mode, res, 3
+    def __init__(self, mode="image", res="720p", chip_after=0, stuck_mode=False, sub="Thành phần"):
+        self.mode, self.res, self.dur, self.sub = mode, res, 3, sub
         self.menu = False
         self.chip_after, self.polls, self.stuck_mode = chip_after, 0, stuck_mode
         self.clicks, self.keys = [], []
@@ -73,6 +73,9 @@ class FakeComposer:
     def _set_mode(self, m):
         if not self.stuck_mode:
             self.mode = m
+
+    def _set_sub(self, s):
+        self.sub = s
 
     def _set_res(self, r):
         self.res = r
@@ -101,6 +104,8 @@ class FakeComposer:
             return "true" if b else "false"
         return [_El("imageHình ảnh", lambda: self._set_mode("image"), {"aria-checked": flag(self.mode == "image")}),
                 _El("videocamVideo", lambda: self._set_mode("video"), {"aria-checked": flag(self.mode == "video")}),
+                _El("crop_freeKhung hình", lambda: self._set_sub("Khung hình"), {"aria-checked": flag(self.sub == "Khung hình")}),
+                _El("chrome_extensionThành phần", lambda: self._set_sub("Thành phần"), {"aria-checked": flag(self.sub == "Thành phần")}),
                 _El("360pinfo", lambda: self._set_res("360p"), {"aria-checked": flag(self.res == "360p")}),
                 _El("720p", lambda: self._set_res("720p"), {"aria-checked": flag(self.res == "720p")})]
 
@@ -127,6 +132,14 @@ def test_image_mode_composer_is_switched_back_to_video_360p_and_verified():
     assert result is None
     assert page.mode == "video" and page.res == "360p" and page.dur == 6
     assert rec["mode_set"] == "Video" and rec["resolution_set"] == "360p"
+
+
+def test_start_frame_send_forces_the_khung_hinh_sub_mode():
+    page = FakeComposer(mode="image", res="720p")           # after an image detour the sub-mode is the ingredients one
+    result, rec = _run(page, submode="Khung hình")
+    assert result is None and page.sub == "Khung hình" and rec["submode_set"] == "Khung hình"
+    ok, _ = _run(FakeComposer(mode="video", res="360p", sub="Khung hình"), submode="Khung hình")
+    assert ok is None
 
 
 def test_video_mode_composer_needs_no_mode_click():
@@ -163,8 +176,8 @@ def _patched_run(tmp_path, monkeypatch, *extra):
     monkeypatch.setattr(fs, "_fill_frame_slot", AsyncMock(return_value=None))
     seen = []
 
-    async def settings(page, model, duration, record, expected_credits=None, mode=None, resolution=None):
-        seen.append({"model": model, "mode": mode, "resolution": resolution})
+    async def settings(page, model, duration, record, expected_credits=None, mode=None, resolution=None, submode=None):
+        seen.append({"model": model, "mode": mode, "resolution": resolution, "submode": submode})
         return "SETTINGS_NOT_SET stop here"
     monkeypatch.setattr(fs, "_set_composer_settings", settings)
     prompt = tmp_path / "prompt.txt"
@@ -176,9 +189,16 @@ def _patched_run(tmp_path, monkeypatch, *extra):
 def test_every_video_send_forces_video_mode_and_360p(tmp_path, monkeypatch):
     result, seen = _patched_run(tmp_path, monkeypatch, "--model", "Omni 1.2 Flash", "--duration", "6")
     assert result["result"].startswith("SETTINGS_NOT_SET")
-    assert seen == [{"model": "Omni 1.2 Flash", "mode": "Video", "resolution": "360p"}]
+    assert seen == [{"model": "Omni 1.2 Flash", "mode": "Video", "resolution": "360p", "submode": "Khung hình"}]
 
 
 def test_image_sends_do_not_force_video_mode(tmp_path, monkeypatch):
     _, seen = _patched_run(tmp_path, monkeypatch, "--image", "--model", "Nano Banana 2.1")
-    assert seen == [{"model": "Nano Banana 2.1", "mode": None, "resolution": None}]
+    assert seen == [{"model": "Nano Banana 2.1", "mode": None, "resolution": None, "submode": None}]
+
+
+def test_start_frame_send_asks_for_the_khung_hinh_sub_mode(tmp_path, monkeypatch):
+    still = tmp_path / "s.jpg"
+    still.write_bytes(b"x")
+    _, seen = _patched_run(tmp_path, monkeypatch, "--model", "Omni 1.2 Flash", "--duration", "6", "--start-file", str(still))
+    assert seen[0]["submode"] == "Khung hình"

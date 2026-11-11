@@ -898,11 +898,12 @@ async def _ensure_radio(page, label: str, what: str) -> str | None:
 
 async def _set_composer_settings(page, model: str, duration: int | None, rec: dict,
                                  expected_credits: float | None = None, mode: str | None = None,
-                                 resolution: str | None = None) -> str | None:
+                                 resolution: str | None = None, submode: str | None = None) -> str | None:
     """Set mode / model / resolution / clip length in the composer settings menu and verify each. None = fine, else a result string.
 
     mode="Video" and resolution="360p" are forced before every video send: an image-mode still leaves the composer in
-    image mode (film07 pilot SETTINGS_NOT_SET)."""
+    image mode (film07 pilot SETTINGS_NOT_SET). submode="Khung hình" is forced for start-frame sends: after an image-mode
+    detour the video composer comes back without the frame slots (film07 SC03_g01_t1 START_NOT_FOUND upload)."""
     chip = await _find_settings_chip(page)
     if chip is None:
         return "SETTINGS_NOT_SET settings chip not found"
@@ -913,6 +914,11 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
         if failed:
             return failed
         rec["mode_set"] = mode
+    if submode:
+        failed = await _ensure_radio(page, submode, "video sub-mode")
+        if failed:
+            return failed
+        rec["submode_set"] = submode
     if model:
         dropdown = page.locator("button").filter(has_text="arrow_drop_down").filter(has_text=MODEL_BUTTON_RE).first
         if not await dropdown.count():
@@ -1062,7 +1068,8 @@ async def run(args, before_submit=None) -> dict:
                 video = not args.image and bool(args.model)
                 failed = await _set_composer_settings(page, args.model, args.duration, rec,
                                                       mode="Video" if video else None,
-                                                      resolution=args.resolution if video else None)
+                                                      resolution=args.resolution if video else None,
+                                                      submode="Khung hình" if video and (args.start or args.start_file) else None)
                 if failed:
                     rec["result"] = failed
                     return rec
