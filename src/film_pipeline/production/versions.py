@@ -29,6 +29,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from film_pipeline.production.render_cache import cached as _cached_render, key_for as _render_key, save as _save_render
+
 PORTRAIT_H = 1280
 PORTRAIT_W = 720
 DEVICE_RANK = {"hold": 0, "push": 1, "reaction": 2, "insert": 3}
@@ -214,12 +216,132 @@ def portrait_cue_png(path: Path, text: str) -> Path:
     return Path(path)
 
 
+def picture_identity(parts: list[dict], start: int, end: int) -> list[dict]:
+    identity, covered = [], start
+    for p in parts:
+        a, b = max(start, p["start_frame"]), min(end, p["end_frame"])
+        if b <= a:
+            continue
+        if a != covered:
+            raise ValueError("picture part coverage has a gap or overlap")
+        identity.append({"key": p["key"], "in_frame": a - p["start_frame"], "out_frame": b - p["start_frame"]})
+        covered = b
+    if covered != end:
+        raise ValueError("picture parts do not cover this portrait window")
+    return identity
+
+
+def verified_picture_parts(source: Path, plan: dict, fps: float) -> list[dict] | None:
+    """Legacy or stale provenance falls back to hashing the entire source."""
+    from film_pipeline.drama.post import probe_video_duration
+    try:
+        report = json.loads(source.with_suffix(".cut.json").read_text(encoding="utf-8"))
+        parts = report.get("picture_parts")
+        if not parts or report["output_sha256"] != sha256_file(source) or report["planned"] != plan:
+            return None
+        cursor = 0
+        for part in parts:
+            if (part["start_frame"] != cursor or not isinstance(part["end_frame"], int)
+                    or part["end_frame"] <= cursor or len(part["key"]) != 64
+                    or any(c not in "0123456789abcdef" for c in part["key"])):
+                return None
+            cursor = part["end_frame"]
+        if cursor != round(plan["total_s"] * fps) or abs(cursor - round(probe_video_duration(source) * fps)) > 1:
+            return None
+        return parts
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return None
+
+
+def portrait_windows(segments: list[dict], fps: float, picture_parts: list[dict] | None = None) -> list[list[dict]]:
+    max_frames = max(1, round(60 * fps))
+    boundaries = [p["end_frame"] for p in picture_parts or []]
+    pieces = []
+    for segment in segments:
+        start, end = segment["start_frame"], segment["end_frame"]
+        while start < end:
+            boundary = next((f for f in boundaries if f > start), end)
+            stop = min(end, start + max_frames, boundary)
+            pieces.append({**segment, "start_frame": start, "end_frame": stop,
+                           "start_s": round(start / fps, 3), "end_s": round(stop / fps, 3)})
+            start = stop
+    windows = []
+    for piece in pieces:
+        previous = windows[-1] if windows else []
+        boundary = previous and previous[-1]["end_frame"] in boundaries
+        if (not previous or boundary or len(previous) == 12
+                or piece["end_frame"] - previous[0]["start_frame"] > max_frames):
+            windows.append([])
+        windows[-1].append(piece)
+    return windows
+
+
 def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, height: int, fps: float,
                     label: tuple[Path, float, float] | None = None, cues: list[tuple[Path, float, float]] | None = None,
-                    audio_from: Path | None = None) -> Path:
+                    audio_from: Path | None = None, cache_dir: Path | None = None,
+                    picture_parts: list[dict] | None = None) -> Path:
     """`label` = (PNG, start_s, end_s): the AI label burned over the body of the 9:16 picture; `cues` = more (PNG, start_s,
     end_s) layers; `audio_from` = the file whose sound is copied (default: the source)."""
     out.parent.mkdir(parents=True, exist_ok=True)
+    cues = cues or []
+    windows = portrait_windows(segments, fps, picture_parts)
+    if len(windows) > 1:
+        import tempfile
+
+        cache_dir = Path(cache_dir) if cache_dir is not None else out.parent / ".render_cache"
+        audio_source = Path(audio_from) if audio_from is not None else Path(source)
+        with tempfile.TemporaryDirectory(dir=str(out.parent)) as tmp:
+            work = Path(tmp)
+            chunks: list[Path] = []
+            for chunk_no, part in enumerate(windows):
+                first_frame, last_frame = part[0]["start_frame"], part[-1]["end_frame"]
+                start_s, end_s = first_frame / fps, last_frame / fps
+                local = [{**s, "start_frame": s["start_frame"] - first_frame,
+                          "end_frame": s["end_frame"] - first_frame,
+                          "start_s": round((s["start_frame"] - first_frame) / fps, 3),
+                          "end_s": round((s["end_frame"] - first_frame) / fps, 3)} for s in part]
+                active_label = label if label and label[1] < end_s and label[2] > start_s else None
+                active_cues = [(p, a, b) for p, a, b in cues if a < end_s and b > start_s]
+                files = [] if picture_parts else [Path(source)]
+                if active_label:
+                    files.append(Path(active_label[0]))
+                files.extend(Path(p) for p, _, _ in active_cues)
+                label_window = ((round(max(0., active_label[1] - start_s), 3), round(min(end_s - start_s, active_label[2] - start_s), 3))
+                                if active_label else None)
+                cue_windows = [(round(max(0., a - start_s), 3), round(min(end_s - start_s, b - start_s), 3)) for _, a, b in active_cues]
+                settings = {"segments": local, "height": height, "fps": fps, "video_only_profile": 1,
+                            "source_start_frame": None if picture_parts else first_frame,
+                            "picture": picture_identity(picture_parts, first_frame, last_frame) if picture_parts else None,
+                            "label": label_window, "cues": cue_windows,
+                            "duration_frames": last_frame - first_frame}
+                key = _render_key(sources=files, settings=settings)
+                chunk = _cached_render(cache_dir, key, ".mkv")
+                if chunk is None:
+                    inputs = ["-ss", f"{start_s:.6f}", "-i", str(source)]
+                    if active_label:
+                        inputs += ["-loop", "1", "-i", str(active_label[0])]
+                    first_cue = 1 + int(bool(active_label))
+                    for png, _, _ in active_cues:
+                        inputs += ["-loop", "1", "-i", str(png)]
+                    layer_list = [(first_cue + i, a, b) for i, (a, b) in enumerate(cue_windows)]
+                    graph = portrait_graph(local, height, label_window, layer_list)
+                    graph_file = work / f"portrait_{chunk_no:06d}.filter"
+                    graph_file.write_text(graph, encoding="utf-8")
+                    generated = work / f"portrait_{chunk_no:06d}.mkv"
+                    subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs,
+                                    "-/filter_complex", str(graph_file), "-map", "[v]", "-an",
+                                    "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+                                    "-pix_fmt", "yuv420p", "-r", f"{fps:g}", str(generated)], check=True)
+                    chunk = _save_render(cache_dir, key, generated, ".mkv")
+                chunks.append(chunk)
+            concat_list = work / "concat.txt"
+            concat_list.write_text("".join(f"file '{p.as_posix()}'\n" for p in chunks), encoding="utf-8")
+            joined = work / "joined.mkv"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
+                            "-c", "copy", str(joined)], check=True)
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(joined), "-i", str(audio_source),
+                            "-map", "0:v:0", "-map", "1:a:0?", "-c", "copy", "-movflags", "+faststart", str(out)], check=True)
+        return out
     inputs = ["-i", str(source)] + (["-loop", "1", "-i", str(label[0])] if label else [])
     first = 2 if label else 1
     for png, _, _ in cues or []:
@@ -229,10 +351,12 @@ def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, hei
     if audio_from is not None and Path(audio_from) != Path(source):
         inputs += ["-i", str(audio_from)]
         audio = f"{first + len(overlays)}:a?"
-    graph = portrait_graph(segments, height, (label[1], label[2]) if label else None, overlays)
-    subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", graph,
+    graph_file = out.with_suffix(".filter")
+    graph_file.write_text(portrait_graph(segments, height, (label[1], label[2]) if label else None, overlays), encoding="utf-8")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-/filter_complex", str(graph_file),
                     "-map", "[v]", "-map", audio, "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
                     "-r", f"{fps:g}", "-c:a", "copy", "-movflags", "+faststart", str(out)], check=True)
+    graph_file.unlink(missing_ok=True)
     return out
 
 
@@ -429,7 +553,9 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
             cue_layers.append((portrait_cue_png(out / "cues" / f"cue_{k:02d}.png", row["text"]),
                                row["abs_start_s"], row["abs_end_s"]))
     portrait = render_portrait(source, segments, out / f"{pkg.header.film_id}_9x16.mp4", height, fps, label,
-                               cue_layers, audio_from=master)
+                               cue_layers, audio_from=master,
+                               picture_parts=verified_picture_parts(source, plan, fps)
+                               if clean is not None and portrait_source is None else None)
     thumbs, found = thumbnails(pkg, master, plan, section, out / "thumbs", titles_report)
     problems += found
     p_w, p_h, p_fps = probe_size(portrait)

@@ -26,12 +26,14 @@ import json
 import shutil
 import subprocess
 import tempfile
+from bisect import bisect_right
 from pathlib import Path
 from typing import Any, Callable, Literal
 
 from pydantic import Field, model_validator
 
 from film_pipeline.core import ContractModel
+from film_pipeline.production.render_cache import cached as _cached_render, key_for as _render_key, save as _save_render
 
 FPS = 24
 FRAME_S = 1.0 / FPS
@@ -376,6 +378,15 @@ def _trim(src: Path, dst: Path, start: float, end: float | None,
     return dst
 
 
+def _split_render_clip(src: Path, dst: Path, start: float, duration: float) -> Path:
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-vf",
+                    f"fps={FPS},trim=start={start:.6f}:duration={duration:.6f},setpts=PTS-STARTPTS",
+                    "-af", f"atrim=start={start:.6f}:duration={duration:.6f},asetpts=PTS-STARTPTS",
+                    "-c:v", "libx264", "-preset", "fast", "-crf", "14", "-pix_fmt", "yuv420p",
+                    "-c:a", "pcm_s16le", str(dst)], check=True)
+    return dst
+
+
 def _is_fine(section: EditSection) -> bool:
     return any(e.transition.type not in _HARD or e.audio.j_cut_s or e.audio.l_cut_s for e in section.events)
 
@@ -432,16 +443,58 @@ def fine_graph(section: EditSection, starts: list[float], lengths: list[float], 
     return fl
 
 
+def fine_windows(events, starts: list[float], lengths: list[float], body_s: float,
+                 *, scene_ids: list[str] | None = None) -> list[tuple[int, int, float, float]]:
+    """Disjoint output windows with all picture/audio contributors and boundary metadata."""
+    import math
+    ends = [s + d for s, d in zip(starts, lengths)]
+    sound_starts = [s - e.audio.j_cut_s for s, e in zip(starts, events)]
+    sound_ends = [end + (events[i + 1].audio.l_cut_s if i + 1 < len(events) else 0)
+                  for i, end in enumerate(ends)]
+    def support(a, b):
+        active = [i for i in range(len(events))
+                  if min(starts[i], sound_starts[i]) < b - 1e-8 and max(ends[i], sound_ends[i]) > a + 1e-8]
+        if not active:
+            raise ValueError("fine render window has no source")
+        # The adjoining events also supply transition/fade metadata to fine_graph.
+        return max(0, min(active) - 1), min(len(events) - 1, max(active) + 1)
+    total_frames, cursor = math.ceil(body_s * FPS - 1e-7), 0
+    event_boundaries = sorted({round(s * FPS) for s in starts})
+    scene_boundaries = [round(starts[i] * FPS) for i in range(1, len(events))
+                        if scene_ids and scene_ids[i] != scene_ids[i - 1]]
+    result = []
+    while cursor < total_frames:
+        scene_end = next((f for f in scene_boundaries if f > cursor), total_frames)
+        low, high, best = cursor + 1, min(scene_end, cursor + 60 * FPS), None
+        while low <= high:
+            frame = (low + high) // 2
+            lo, hi = support(cursor / FPS, min(body_s, frame / FPS))
+            if hi - lo + 1 <= 12:
+                best = (frame, lo, hi)
+                low = frame + 1
+            else:
+                high = frame - 1
+        if best is None:
+            raise ValueError("more than12 simultaneous picture/audio sources exceed the render bound")
+        frame, lo, hi = best
+        if frame not in (scene_end, total_frames):
+            frame = max((f for f in event_boundaries if cursor < f <= frame), default=frame)
+            lo, hi = support(cursor / FPS, min(body_s, frame / FPS))
+        result.append((lo, hi, cursor / FPS, min(body_s, frame / FPS)))
+        cursor = frame
+    return result
+
+
 def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | None = None,
                require_accepted: bool = False, cues: list | None = None,
                corrections: dict[str, tuple[float, float, float]] | None = None, look: str | None = None,
                reframes: dict[str, Reframe] | None = None, title_lines: list[tuple[str, int]] | None = None,
-               end_lines: list[tuple[str, int]] | None = None) -> dict[str, Any]:
+               end_lines: list[tuple[str, int]] | None = None, cache_dir: Path | None = None) -> dict[str, Any]:
     """Render the EDL to ``out`` and return the report. Raises ValueError listing BLOCK problems. Cues, if given, are
     SubtitleCue keyed by event_id with times in seconds of the used part of that event. ``corrections`` maps a take id
     to the per-channel gains of its colour match (production/color.py); ``look`` replaces the global grade; ``reframes``
     maps an event id to its crop box (production/titles.py); ``title_lines`` / ``end_lines`` replace the cards."""
-    from film_pipeline.drama.post import (GRADE as DEFAULT_GRADE, H, W, Overlay, assemble, context_card_clip,
+    from film_pipeline.drama.post import (GRADE as DEFAULT_GRADE, DEFAULT_FONTS, H, W, Overlay, assemble, context_card_clip,
                                           identity_tag_png, probe_video_duration)
     from film_pipeline.production.takes import load_log
     GRADE = look or DEFAULT_GRADE
@@ -454,6 +507,10 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
         raise ValueError("; ".join(f"{p['code']} {p['event_id']}: {p['detail']}" for p in blocks))
     root = Path(pkg.root)
     entries = {t.take_id: t for t in load_log(root, pkg.header.film_id).takes}
+    shots = pkg.typed.get("shots")
+    scene_of = {g.generation_id: g.scene_id for g in shots.generations} if shots else {}
+    def scene_id(event):
+        return scene_of.get(event.generation_id, "") if event.kind == "TAKE" else f"card:{event.event_id}"
     title, end = resolved_cards(pkg, section)
     title, end = title_lines or title, end_lines or end
     # film.json disclosure.ai_label: "always" burns the small label over the body; "title_card" leaves the body clean
@@ -462,14 +519,27 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
     fine = _is_fine(section)
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
+    cache_dir = Path(cache_dir) if cache_dir is not None else out.parent / ".render_cache"
+    picture_parts = []
+    font_files = [Path(p) for p in DEFAULT_FONTS]
+    font_hashes = [_sha256(p) for p in font_files]
     with tempfile.TemporaryDirectory() as tmp:
         work = Path(tmp)
         sources: list[Path] = []
         lengths: dict[str, float] = {}
         for event in section.events:
             if event.kind == "CARD":
-                src = context_card_clip(work / f"{event.event_id}.mp4", list(event.card_lines),
-                                        float(event.card_duration_s))
+                card_settings = {"lines": event.card_lines, "duration_s": event.card_duration_s, "fonts": font_hashes}
+                key = _render_key(sources=[], settings={"card": card_settings})
+                src = _cached_render(cache_dir, key, ".mp4")
+                if src is None:
+                    generated = context_card_clip(work / f"{event.event_id}.mp4", list(event.card_lines),
+                                                  float(event.card_duration_s))
+                    src = _save_render(cache_dir, key, generated, ".mp4")
+                local = work / f"{event.event_id}.mp4"
+                if src != local:
+                    shutil.copyfile(src, local)
+                src = local
                 lengths[event.event_id] = probe_video_duration(src)
             else:
                 src = resolve_clip(root, entries[event.take_id].output_file, clips_dir)
@@ -484,25 +554,89 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
         if fine:
             starts = [e["start_s"] - section.title_s for e in plan["events"]]
             body_s = plan["body_end_s"] - section.title_s
-            body = work / "body.mp4"
-            graph = fine_graph(section, starts, [lengths[e.event_id] for e in section.events],
-                               [e.src_in_s for e in section.events], body_s, GRADE, W, H, gains, boxes)
-            cmd = ["ffmpeg", "-v", "error", "-y"]
-            for src in sources:
-                cmd += ["-i", str(src)]
-            cmd += ["-f", "lavfi", "-t", f"{body_s:.6f}", "-i", "anullsrc=r=48000:cl=stereo",
-                    "-filter_complex", ";".join(graph), "-map", "[vout]", "-map", "[aout]", "-t", f"{body_s:.6f}",
-                    "-r", str(FPS), "-c:v", "libx264", "-crf", "14", "-preset", "fast", "-pix_fmt", "yuv420p",
-                    "-c:a", "aac", "-b:a", "256k", str(body)]
-            subprocess.run(cmd, check=True)
-            at = {e.event_id: starts[i] for i, e in enumerate(section.events)}
-            overlays = [Overlay(generation_id="body", start_s=at[t.event_id] + t.start_s,
-                                end_s=at[t.event_id] + t.end_s, png=tag_png(i, t))
-                        for i, t in enumerate(section.tags, 1)]
-            sub_cues = [c.model_copy(update={"generation_id": "body", "start_s": at[c.generation_id] + c.start_s,
-                                             "end_s": at[c.generation_id] + c.end_s}) for c in sub_cues]
-            assemble([body], out, cues=sub_cues, title_lines=title, end_lines=end, title_s=section.title_s,
-                     end_s=section.end_s, overlays=overlays, grade="null", label_text=label_text)
+            event_lengths = [lengths[e.event_id] for e in section.events]
+            event_starts = [round(s * FPS) / FPS for s in starts]
+            event_ends = [s + d for s, d in zip(event_starts, event_lengths)]
+            windows = fine_windows(section.events, event_starts, event_lengths, body_s,
+                                   scene_ids=[scene_id(e) for e in section.events])
+            chunk_paths: list[Path] = []
+            for chunk_no, (lo, hi, cut_start, cut_end) in enumerate(windows):
+                origin = event_starts[lo]
+                part_events = list(section.events[lo:hi + 1])
+                part_events[0] = part_events[0].model_copy(update={"transition": Transition(type="CUT")})
+                relative_starts = [round(event_starts[i] - origin, 6) for i in range(lo, hi + 1)]
+                part_lengths = [round(v, 6) for v in event_lengths[lo:hi + 1]]
+                part_in = [round(section.events[i].src_in_s, 6) for i in range(lo, hi + 1)]
+                part_gains, part_boxes = gains[lo:hi + 1], boxes[lo:hi + 1]
+                part_body_s = round(max(cut_end, max(event_ends[lo:hi + 1])) - origin, 6)
+                part_section = type("FineWindow", (), {"events": part_events})()
+                part_graph = fine_graph(part_section, relative_starts, part_lengths, part_in,
+                                        part_body_s, GRADE, W, H, part_gains, part_boxes)
+                trim_start, trim_duration = round(cut_start - origin, 6), round(cut_end - cut_start, 6)
+                part_graph += [f"[vout]trim=start={trim_start:.6f}:duration={trim_duration:.6f},setpts=PTS-STARTPTS[vchunk]",
+                               f"[aout]atrim=start={trim_start:.6f}:duration={trim_duration:.6f},asetpts=PTS-STARTPTS[achunk]"]
+                part_sources = sources[lo:hi + 1]
+                key = _render_key(sources=part_sources, settings={"events": [e.model_dump(mode="json") for e in part_events],
+                                     "starts": relative_starts, "lengths": part_lengths, "in_points": part_in,
+                                     "body_s": part_body_s, "cut_window": [trim_start, trim_duration], "grade": GRADE,
+                                     "gains": part_gains, "reframes": [reframe_filter(b) for b in part_boxes]})
+                chunk = _cached_render(cache_dir, key, ".mkv")
+                if chunk is None:
+                    graph_file = work / f"fine_{chunk_no:04d}.filter"
+                    graph_file.write_text(";".join(part_graph), encoding="utf-8")
+                    generated = work / f"fine_{chunk_no:04d}.mkv"
+                    cmd = ["ffmpeg", "-v", "error", "-y"]
+                    for src in part_sources:
+                        cmd += ["-i", str(src)]
+                    cmd += ["-f", "lavfi", "-t", f"{part_body_s:.6f}", "-i", "anullsrc=r=48000:cl=stereo",
+                            "-/filter_complex", str(graph_file), "-map", "[vchunk]", "-map", "[achunk]",
+                            "-t", f"{trim_duration:.6f}", "-r", str(FPS), "-c:v", "libx264", "-crf", "14",
+                            "-preset", "fast", "-pix_fmt", "yuv420p", "-c:a", "pcm_s16le", str(generated)]
+                    subprocess.run(cmd, check=True)
+                    chunk = _save_render(cache_dir, key, generated, ".mkv")
+                chunk_id = chunk.stem
+                at = {e.event_id: starts[i] for i, e in enumerate(section.events)}
+                local_cues = []
+                for cue in sub_cues:
+                    cue_start, cue_end = at[cue.generation_id] + cue.start_s, at[cue.generation_id] + cue.end_s
+                    if cue_end <= cut_start or cue_start >= cut_end:
+                        continue
+                    local_cues.append(cue.model_copy(update={"generation_id": chunk_id,
+                                                              "start_s": round(max(0.0, cue_start - cut_start), 3),
+                                                              "end_s": round(min(trim_duration, cue_end - cut_start), 3),
+                                                              "speaker_window": None}))
+                local_overlays = []
+                for i, tag in enumerate(section.tags, 1):
+                    tag_start, tag_end = at[tag.event_id] + tag.start_s, at[tag.event_id] + tag.end_s
+                    if tag_end <= cut_start or tag_start >= cut_end:
+                        continue
+                    local_overlays.append(Overlay(generation_id=chunk_id,
+                                                  start_s=round(max(0.0, tag_start - cut_start), 3),
+                                                  end_s=round(min(trim_duration, tag_end - cut_start), 3),
+                                                  png=tag_png(i, tag),
+                                                  fade_in_s=0.0 if tag_start < cut_start else None,
+                                                  fade_out_s=0.0 if tag_end > cut_end else None))
+                overlay_key = _render_key(sources=[chunk, *(Path(o.png) for o in local_overlays)],
+                                          settings={"cut": [trim_duration],
+                                                    "cues": [c.model_dump(mode="json") for c in local_cues],
+                                                    "overlays": [o.model_dump(mode="json", exclude={"png"}) for o in local_overlays],
+                                                    "label": label_text, "grade": "null", "fonts": font_hashes})
+                annotated = _cached_render(cache_dir, overlay_key, ".mkv")
+                if annotated is None:
+                    generated = work / f"fine_annotated_{chunk_no:04d}.mkv"
+                    assemble([chunk], generated, cues=local_cues, title_lines=[], end_lines=[], grade="null",
+                             label_text=label_text, overlays=local_overlays, _body_only=True, _edge_fades=False)
+                    annotated = _save_render(cache_dir, overlay_key, generated, ".mkv")
+                chunk_paths.append(annotated)
+                picture_parts.append({"key": overlay_key, "start_frame": frames(section.title_s + cut_start),
+                                      "end_frame": frames(section.title_s + cut_end)})
+            concat_list = work / "fine_concat.txt"
+            concat_list.write_text("".join(f"file '{p.as_posix()}'\n" for p in chunk_paths), encoding="utf-8")
+            body = work / "body.mkv"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
+                            "-c", "copy", str(body)], check=True)
+            assemble([body], out, cues=[], title_lines=title, end_lines=end, title_s=section.title_s,
+                     end_s=section.end_s, grade="null", label_text="")
         else:
             clips: list[Path] = []
             for event, src, gain, box in zip(section.events, sources, gains, boxes):
@@ -510,15 +644,117 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
                     clips.append(src)
                     continue
                 dst = work / f"{event.event_id}.mp4"
-                if event.src_in_s == 0 and event.src_out_s is None and gain is None and not reframe_filter(box):
-                    shutil.copyfile(src, dst)
-                else:
-                    _trim(src, dst, event.src_in_s, event.src_out_s, gain, box)
+                key = _render_key(sources=[src], settings={"trim": [event.src_in_s, event.src_out_s],
+                                     "grade": GRADE, "gain": gain, "reframe": reframe_filter(box), "fps": FPS})
+                cached = _cached_render(cache_dir, key, ".mp4")
+                if cached is None:
+                    if event.src_in_s == 0 and event.src_out_s is None and gain is None and not reframe_filter(box):
+                        shutil.copyfile(src, dst)
+                    else:
+                        _trim(src, dst, event.src_in_s, event.src_out_s, gain, box)
+                    cached = _save_render(cache_dir, key, dst, ".mp4")
+                shutil.copyfile(cached, dst)
                 clips.append(dst)
-            overlays = [Overlay(generation_id=t.event_id, start_s=t.start_s, end_s=t.end_s, png=tag_png(i, t))
-                        for i, t in enumerate(section.tags, 1)]
-            assemble(clips, out, cues=sub_cues, title_lines=title, end_lines=end, title_s=section.title_s,
-                     end_s=section.end_s, overlays=overlays, grade=GRADE, label_text=label_text)
+            pieces: list[Path] = []
+            piece_ids: list[str] = []
+            piece_events: list[EditEvent] = []
+            piece_offsets: list[float] = []
+            piece_durations: list[float] = []
+            for i, (event, clip_path) in enumerate(zip(section.events, clips)):
+                duration = probe_video_duration(clip_path)
+                offset, part_no = 0.0, 0
+                while offset < duration - 1e-6:
+                    part_duration = min(60.0, duration - offset)
+                    if duration <= 60.0 + 1e-6:
+                        piece = clip_path
+                    else:
+                        piece = work / f"{event.event_id}_part{part_no:02d}.mkv"
+                        piece_key = _render_key(sources=[clip_path], settings={"internal_part": [offset, part_duration],
+                                                       "fps": FPS, "audio": "pcm_s16le"})
+                        saved_piece = _cached_render(cache_dir, piece_key, ".mkv")
+                        if saved_piece is None:
+                            _split_render_clip(clip_path, piece, offset, part_duration)
+                            saved_piece = _save_render(cache_dir, piece_key, piece, ".mkv")
+                        if saved_piece != piece:
+                            shutil.copyfile(saved_piece, piece)
+                    piece_id = event.event_id if duration <= 60.0 + 1e-6 else f"{event.event_id}_part{part_no:02d}"
+                    pieces.append(piece)
+                    piece_ids.append(piece_id)
+                    piece_events.append(event)
+                    piece_offsets.append(offset)
+                    piece_durations.append(part_duration)
+                    offset += part_duration
+                    part_no += 1
+            piece_cues = []
+            for cue in sub_cues:
+                for piece_id, offset, duration, event in zip(piece_ids, piece_offsets, piece_durations, piece_events):
+                    if cue.generation_id != event.event_id or cue.end_s <= offset or cue.start_s >= offset + duration:
+                        continue
+                    window = cue.speaker_window
+                    if window is not None:
+                        window = (max(0.0, window[0] - offset), min(duration, window[1] - offset))
+                    piece_cues.append(cue.model_copy(update={"generation_id": piece_id,
+                                                             "start_s": max(0.0, cue.start_s - offset),
+                                                             "end_s": min(duration, cue.end_s - offset),
+                                                             "speaker_window": window}))
+            piece_overlays: list[Overlay] = []
+            tag_pngs = [tag_png(i, t) for i, t in enumerate(section.tags, 1)]
+            for piece_id, offset, duration, event in zip(piece_ids, piece_offsets, piece_durations, piece_events):
+                for i, tag in enumerate(section.tags):
+                    if tag.event_id != event.event_id:
+                        continue
+                    if tag.end_s > offset and tag.start_s < offset + duration:
+                        piece_overlays.append(Overlay(generation_id=piece_id,
+                                                      start_s=max(0.0, tag.start_s - offset),
+                                                      end_s=min(duration, tag.end_s - offset),
+                                                      png=tag_pngs[i],
+                                                      fade_in_s=0.0 if tag.start_s < offset else None,
+                                                      fade_out_s=0.0 if tag.end_s > offset + duration else None))
+            piece_sections = len(pieces)
+            if piece_sections <= 12 and sum(piece_durations) <= 60.0 + 1e-6:
+                assemble(pieces, out, cues=piece_cues, title_lines=title, end_lines=end, title_s=section.title_s,
+                         end_s=section.end_s, overlays=piece_overlays, grade=GRADE, label_text=label_text)
+            else:
+                chunk_paths: list[Path] = []
+                start = 0
+                while start < len(pieces):
+                    stop, elapsed = start, 0.0
+                    while stop < len(pieces) and stop - start < 12 and elapsed + piece_durations[stop] <= 60.0 + 1e-6:
+                        if stop > start and scene_id(piece_events[stop]) != scene_id(piece_events[start]):
+                            break
+                        elapsed += piece_durations[stop]
+                        stop += 1
+                    if stop == start:
+                        raise ValueError(f"{piece_ids[start]}: render chunk exceeds the 60-second bound")
+                    part = pieces[start:stop]
+                    part_ids = set(piece_ids[start:stop])
+                    part_cues = [c for c in piece_cues if c.generation_id in part_ids]
+                    part_overlays = [o for o in piece_overlays if o.generation_id in part_ids]
+                    part_sources = [*part, *(Path(o.png) for o in part_overlays)]
+                    key = _render_key(sources=part_sources, settings={"events": [event.model_dump(mode="json")
+                                                                                 for event in piece_events[start:stop]],
+                                         "piece_ids": piece_ids[start:stop], "piece_offsets": piece_offsets[start:stop],
+                                         "cues": [c.model_dump(mode="json") for c in part_cues],
+                                         "overlays": [o.model_dump(mode="json", exclude={"png"}) for o in part_overlays],
+                                         "grade": GRADE, "label": label_text, "fonts": font_hashes})
+                    chunk = _cached_render(cache_dir, key, ".mkv")
+                    if chunk is None:
+                        generated = work / f"body_{start:04d}.mkv"
+                        assemble(part, generated, cues=part_cues, title_lines=[], end_lines=[], grade=GRADE,
+                                 label_text=label_text, overlays=part_overlays, _body_only=True)
+                        chunk = _save_render(cache_dir, key, generated, ".mkv")
+                    chunk_paths.append(chunk)
+                    start_s = section.title_s + sum(piece_durations[:start])
+                    picture_parts.append({"key": key, "start_frame": frames(start_s),
+                                          "end_frame": frames(start_s + elapsed)})
+                    start = stop
+                concat_list = work / "body_concat.txt"
+                concat_list.write_text("".join(f"file '{p.as_posix()}'\n" for p in chunk_paths), encoding="utf-8")
+                body = work / "body.mkv"
+                subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
+                                "-c", "copy", str(body)], check=True)
+                assemble([body], out, cues=[], title_lines=title, end_lines=end, title_s=section.title_s,
+                         end_s=section.end_s, grade="null", label_text="")
             lengths = {e.event_id: probe_video_duration(c) for e, c in zip(section.events, clips)}
             plan = timeline(section, durations, lengths)
     total = probe_video_duration(out)
@@ -527,6 +763,15 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
               "rendered_events": [{"event_id": e["event_id"], "start_s": e["start_s"], "duration_s": e["duration_s"]}
                                   for e in plan["events"]],
               "problems": problems}
+    if picture_parts:
+        def card_key(lines, seconds):
+            return _render_key(sources=font_files, settings={"card": lines, "duration_s": seconds,
+                "profile": "post-card-v1", "width": W, "height": H, "fps": FPS})
+        report["picture_parts"] = [{"key": card_key(title, section.title_s), "start_frame": 0,
+                                     "end_frame": frames(section.title_s)}, *picture_parts,
+                                   {"key": card_key(end, section.end_s),
+                                    "start_frame": picture_parts[-1]["end_frame"],
+                                    "end_frame": picture_parts[-1]["end_frame"] + frames(section.end_s)}]
     report_path = out.with_suffix(".cut.json")
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     report["report"] = str(report_path)

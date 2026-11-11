@@ -46,6 +46,13 @@ def _is_registered(tid: str, receipt: dict[str, Any], files: set[str], jobs: set
     return tid in files or bool(job and (str(receipt.get("provider") or "flow"), job) in jobs)
 
 
+def unresolved_sends(log: Any, sent: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Unknown outcomes and unregistered successes must be reconciled before another send."""
+    files, jobs = _registered(log)
+    return {tid: r for tid, r in sent.items()
+            if receipt_result(r) in {"AMBIGUOUS", "PASSED"} and not _is_registered(tid, r, files, jobs)}
+
+
 def money_ledger(log: Any, sent: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
     """unit -> {logged, unresolved {receipt id: amount}, not_submitted [ids], not_charged [ids], spent}.
     ``credits`` is always present (every film has a Flow credit line, possibly 0)."""

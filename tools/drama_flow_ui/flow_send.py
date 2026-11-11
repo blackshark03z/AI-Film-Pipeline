@@ -812,7 +812,8 @@ def slider_presses(seconds: int) -> int:
     return seconds - MIN_DURATION_S
 
 
-async def _set_composer_settings(page, model: str, duration: int | None, rec: dict) -> str | None:
+async def _set_composer_settings(page, model: str, duration: int | None, rec: dict,
+                                 expected_credits: float | None = None) -> str | None:
     """Set model / clip length in the composer settings menu and verify both. None = fine, else a result string."""
     chip = page.locator("button").filter(has_text=SETTINGS_CHIP_RE).first
     if not await chip.count():
@@ -861,6 +862,8 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
             return f"SETTINGS_NOT_SET duration shows {shown_s}, wanted {duration}"
         if f"{duration} giây" not in await chip.inner_text():
             return f"SETTINGS_NOT_SET chip does not show {duration} giây"
+    if expected_credits is not None and cost != expected_credits:
+        return f"PRE_SUBMIT_ERROR CREDIT_QUOTE_MISMATCH shown={cost} reserved={expected_credits:g}"
     return None
 
 
@@ -947,7 +950,7 @@ async def run(args) -> dict:
             # frame stills are uploaded inside their slot picker (_fill_frame_slot), each then the newest picker item
             uploaded = [f for f in (args.start_file, args.end_file) if f] if args.upload_frames else []
             rec["frames_uploaded"] = [Path(f).name for f in uploaded]
-            if args.model or args.duration is not None:   # before the frame slots: a mode change can clear them
+            if args.model or args.duration is not None:   # a mode change can clear frame slots
                 failed = await _set_composer_settings(page, args.model, args.duration, rec)
                 if failed:
                     rec["result"] = failed
@@ -979,6 +982,11 @@ async def run(args) -> dict:
                 if await add.count():   # image mode attaches on the click itself
                     await add.click()
                 await page.wait_for_timeout(1500)
+            if args.expected_credits is not None:  # frames/ingredients may change the final quote
+                failed = await _set_composer_settings(page, "", None, rec, args.expected_credits)
+                if failed:
+                    rec["result"] = failed
+                    return rec
         except Exception as e:  # noqa: BLE001 - recorded as a pre-submit result, not a lost send
             rec["result"] = f"PRE_SUBMIT_ERROR {type(e).__name__}"
             rec["error"] = str(e).splitlines()[0][:200] if str(e) else ""
@@ -991,6 +999,8 @@ async def run(args) -> dict:
         await box.click()
         await box.fill(prompt)
         await page.wait_for_timeout(500)
+        checkpoint(out, {**rec, "before_ids": pre.get("before_ids", []), "result": "PENDING",
+                         "submission_phase": "SUBMITTING"})
         await page.keyboard.press("Enter")
         t0 = time.time()
         await page.wait_for_timeout(8000)
@@ -1008,6 +1018,8 @@ async def run(args) -> dict:
                 pre["own"] = {"media_id": None, "why": f"ERROR {type(e).__name__}"}
             own = pre["own"]
             rec["own_tile_at_submit"] = {k: (v[-8:] if k == "media_id" and v else v) for k, v in own.items()}
+            rec["before_ids"] = pre.get("before_ids", [])
+            checkpoint(out, {**rec, "result": "PENDING", "submission_phase": "SUBMITTED"})
             return await _video_wait_and_bind(page, ctx, args, prompt, out, rec, pre, t0, failed_before)
 
         probe = prompt[:30]
@@ -1123,6 +1135,8 @@ def build_parser() -> argparse.ArgumentParser:
                     help="composer model name (dropdown text must start with it), e.g. 'Omni 1.2 Flash'")
     ap.add_argument("--duration", type=int, default=None,
                     help="clip length in seconds (3-15), set on the settings slider")
+    ap.add_argument("--expected-credits", type=float,
+                    help="refuse before submit if the displayed credit quote differs from the reserved amount")
     ap.add_argument("--image", action="store_true",
                     help="composer is in image mode; save the output image")
     return ap
@@ -1138,15 +1152,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return args
 
 
+def checkpoint(out: Path, record: dict) -> None:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+    from film_pipeline.production.runtime import atomic_json
+    atomic_json(Path(out).with_suffix(".take.json"), record)
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     args = parse_args()
     rec = asyncio.run(run(args))
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    manifest = out.with_suffix(".take.json")
-    manifest.write_text(json.dumps(rec, ensure_ascii=False, indent=2),
-                        encoding="utf-8")
+    checkpoint(out, rec)
     print(rec.get("result"), rec.get("binding", ""), rec.get("sha256", ""),
           f"{rec.get('elapsed_s', '?')}s")
 

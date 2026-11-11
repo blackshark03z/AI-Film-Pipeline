@@ -50,6 +50,8 @@ class Overlay(ContractModel):
     end_s: float
     png: str
     fade_s: float = 0.25
+    fade_in_s: float | None = None
+    fade_out_s: float | None = None
 
 
 def clamp_cues(cues: list[SubtitleCue], notes: list[str] | None = None
@@ -117,6 +119,11 @@ def probe_video_duration(path: Path) -> float:
         ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
          "stream=duration", "-of", "csv=p=0", str(path)],
         capture_output=True, text=True, check=True)
+    value = out.stdout.strip()
+    if value and value != "N/A":
+        return float(value)
+    out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                          "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True)
     return float(out.stdout.strip())
 
 
@@ -254,58 +261,62 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
              end_s: float = 4.0, grade: str = GRADE,
              label_text: str = "AI-generated",
              fonts: Fonts = DEFAULT_FONTS,
-             overlays: list[Overlay] = ()) -> Path:
+             overlays: list[Overlay] = (), _body_only: bool = False,
+             _edge_fades: bool = True) -> Path:
     """title card + graded clips + end card, AI label over the body,
     subtitle overlays for ``cues`` and faded ``overlays`` (both
     clip-relative, matched to clips by stem). Audio is edge-faded per clip
     but not loudness-normalised."""
-    offs = cue_offsets(clips, title_s)
+    lead_s = 0.0 if _body_only else title_s
+    offs = cue_offsets(clips, lead_s)
     durs = [probe_video_duration(c) for c in clips]
-    body_end = title_s + sum(durs)
+    body_end = lead_s + sum(durs)
     abs_cues = absolute_cues(cues, offs)
     abs_ovs = [(offs[o.generation_id] + o.start_s,
                 offs[o.generation_id] + o.end_s, o) for o in overlays]
     out.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         cards = Path(tmp)
-        title = title_card(cards / "title.png", title_lines, fonts)
-        end = title_card(cards / "end.png", end_lines, fonts)
+        title = None if _body_only else title_card(cards / "title.png", title_lines, fonts)
+        end = None if _body_only else title_card(cards / "end.png", end_lines, fonts)
         label = ai_label_png(cards / "ai_label.png", label_text, fonts=fonts)
         subs = [subtitle_png(cards / f"sub_{i:02}.png", txt, fonts=fonts)
                 for i, (_, _, txt) in enumerate(abs_cues, 1)]
 
         n = len(clips)
         end_idx = n + 1
-        inputs = ["-loop", "1", "-t", str(title_s), "-r", str(FPS),
-                  "-i", str(title)]
-        for c in clips:
-            inputs += ["-i", str(c)]
-        inputs += ["-loop", "1", "-t", str(end_s), "-r", str(FPS),
-                   "-i", str(end)]
-        for d in (title_s, end_s):
-            inputs += ["-f", "lavfi", "-t", str(d), "-i",
-                       "anullsrc=r=48000:cl=stereo"]
-        a_title, a_end, ov0 = end_idx + 1, end_idx + 2, end_idx + 3
+        if _body_only:
+            inputs = [arg for c in clips for arg in ("-i", str(c))]
+            ov0 = n
+        else:
+            inputs = ["-loop", "1", "-t", str(title_s), "-r", str(FPS), "-i", str(title)]
+            for c in clips:
+                inputs += ["-i", str(c)]
+            inputs += ["-loop", "1", "-t", str(end_s), "-r", str(FPS), "-i", str(end)]
+            for d in (title_s, end_s):
+                inputs += ["-f", "lavfi", "-t", str(d), "-i", "anullsrc=r=48000:cl=stereo"]
+            a_title, a_end, ov0 = end_idx + 1, end_idx + 2, end_idx + 3
         for png in [label, *subs, *(o.png for _, _, o in abs_ovs)]:
             inputs += ["-loop", "1", "-i", str(png)]
 
-        fl = [f"[0:v]fps={FPS},format=yuv420p,"
+        fl = [] if _body_only else [f"[0:v]fps={FPS},format=yuv420p,"
               f"fade=t=out:st={title_s - 0.6}:d=0.6[v0]"]
         for i, d in enumerate(durs, 1):
-            fl.append(f"[{i}:v]fps={FPS},scale={W}:{H},setsar=1,"
+            idx = i - 1 if _body_only else i
+            fl.append(f"[{idx}:v]fps={FPS},scale={W}:{H},setsar=1,"
                       f"{grade},format=yuv420p[v{i}]")
-            fl.append(f"[{i}:a]aresample=48000,"
-                      "aformat=channel_layouts=stereo,"
-                      f"atrim=0:{d},afade=t=in:d=0.05,"
-                      f"afade=t=out:st={d - 0.08:.3f}:d=0.08[a{i}]")
-        fl.append(f"[{end_idx}:v]fps={FPS},format=yuv420p,"
-                  f"fade=t=in:d=0.6[v{end_idx}]")
-        fl.append(f"[{a_title}:a]anull[a0]")
-        fl.append(f"[{a_end}:a]anull[a{end_idx}]")
-        fl.append("".join(f"[v{k}][a{k}]" for k in range(end_idx + 1)) +
-                  f"concat=n={end_idx + 1}:v=1:a=1[cv][aout]")
+            fade = f",afade=t=in:d=0.05,afade=t=out:st={d - 0.08:.3f}:d=0.08" if _edge_fades else ""
+            fl.append(f"[{idx}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{d}{fade}[a{i}]")
+        if _body_only:
+            fl.append("".join(f"[v{k}][a{k}]" for k in range(1, n + 1)) + f"concat=n={n}:v=1:a=1[cv][aout]")
+        else:
+            fl.append(f"[{end_idx}:v]fps={FPS},format=yuv420p,fade=t=in:d=0.6[v{end_idx}]")
+            fl.append(f"[{a_title}:a]anull[a0]")
+            fl.append(f"[{a_end}:a]anull[a{end_idx}]")
+            fl.append("".join(f"[v{k}][a{k}]" for k in range(end_idx + 1)) +
+                      f"concat=n={end_idx + 1}:v=1:a=1[cv][aout]")
         fl.append(f"[cv][{ov0}:v]overlay=0:0:shortest=1:"
-                  f"enable='between(t,{title_s},{body_end:.3f})'[o0]")
+                  f"enable='between(t,{lead_s},{body_end:.3f})'[o0]")
         last = "o0"
         for k, (a, b, _) in enumerate(abs_cues, 1):
             fl.append(f"[{last}][{ov0 + k}:v]overlay=0:0:shortest=1:"
@@ -313,19 +324,25 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
             last = f"o{k}"
         base = ov0 + len(abs_cues) + 1
         for j, (a, b, o) in enumerate(abs_ovs):
-            f = o.fade_s
-            fl.append(f"[{base + j}:v]format=rgba,"
-                      f"fade=t=in:st={a:.3f}:d={f}:alpha=1,"
-                      f"fade=t=out:st={b - f:.3f}:d={f}:alpha=1[t{j}]")
+            fade_in = o.fade_s if o.fade_in_s is None else o.fade_in_s
+            fade_out = o.fade_s if o.fade_out_s is None else o.fade_out_s
+            filters = ["format=rgba"]
+            if fade_in > 0:
+                filters.append(f"fade=t=in:st={a:.3f}:d={fade_in}:alpha=1")
+            if fade_out > 0:
+                filters.append(f"fade=t=out:st={b - fade_out:.3f}:d={fade_out}:alpha=1")
+            fl.append(f"[{base + j}:v]{','.join(filters)}[t{j}]")
             fl.append(f"[{last}][t{j}]overlay=0:0:shortest=1:"
                       f"enable='between(t,{a:.3f},{b:.3f})'[p{j}]")
             last = f"p{j}"
+        graph_file = cards / "assemble.filter"
+        graph_file.write_text(";".join(fl), encoding="utf-8")
         subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs,
-                        "-filter_complex", ";".join(fl),
+                        "-/filter_complex", str(graph_file),
                         "-map", f"[{last}]", "-map", "[aout]",
                         "-c:v", "libx264", "-crf", "18",
                         "-preset", "medium", "-pix_fmt", "yuv420p",
-                        "-c:a", "aac", "-b:a", "192k",
+                        *( ["-c:a", "pcm_s16le"] if _body_only else ["-c:a", "aac", "-b:a", "192k"] ),
                         "-movflags", "+faststart", str(out)], check=True)
     return out
 

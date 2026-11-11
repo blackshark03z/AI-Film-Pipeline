@@ -1177,3 +1177,10 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   Actual accepted film06 CLI/reviewpack now reports accepted; unknown/missing Gate6 or any blocked gate never announce accepted.
   Final clean06373f6 full suite2207PASS/205SKIP/0FAIL,114warnings,1319.07s. Actual Owner-accepted film06 reports
   accepted; final35-file ZIP CRC/hash/cold restorePASS. One-film observationL001 recorded without promotion to replicated.
+
+
+## P20 Approved long-form production stability — IN_PROGRESS (2026-11-10)
+Owner explicitly approved implementation of [the plan](PRODUCTION_STABILITY_P20_PLAN.md):25–30minute drama,
+agent-run/Owner-final approval, quoted budget per film,2consecutive accepted films before stable operation.
+P20-M0 owned scratch reclaimed23.906GiB with preserved JUnit; M1recovery/delivery and M2long rendering active.
+No new provider effects until reviewable pilot/script/budget confirmation. Current checkpoint:docs/drama/STATUS.md.

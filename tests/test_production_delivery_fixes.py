@@ -100,7 +100,7 @@ def test_default_render_burns_the_label_and_deliver_sees_it(tmp_path):
     assert done.returncode == 0 and body["ok"], body
     check = body["ai_label"]
     assert check["mode"] == "always" and check["evidence"]["ok"] and check["evidence"]["positive"] >= 3
-    disc = json.loads((root / "delivery" / "disclosure_16x9.json").read_text(encoding="utf-8"))
+    disc = json.loads((DL.current_archive(root) / "disclosure_16x9.json").read_text(encoding="utf-8"))
     assert disc["visible_label"]["watermark_always_on"] is True
 
 
@@ -123,7 +123,7 @@ def test_always_setting_with_a_master_that_has_no_label_blocks_the_delivery(tmp_
     header_path.write_text(json.dumps(data), encoding="utf-8")
     done, body = deliver(root, report)
     assert done.returncode == 1 and not body["ok"] and "AI_LABEL_NOT_BURNED" in codes(body, "BLOCK")
-    assert not (root / "delivery").exists()
+    assert not (DL.current_archive(root)).exists()
 
 
 def test_a_frame_counts_only_when_the_label_has_contrast_of_its_own():
@@ -163,7 +163,7 @@ def test_delivery_records_the_disclosure_policy_and_a_policy_change_refuses_acce
     root, report = pipeline(tmp_path)
     done, body = deliver(root, report)
     assert done.returncode == 0 and body["ok"], body
-    manifest = json.loads((root / "delivery" / "MANIFEST.json").read_text(encoding="utf-8"))
+    manifest = json.loads((DL.current_archive(root) / "MANIFEST.json").read_text(encoding="utf-8"))
     item = json.loads((root / "07_delivery.json").read_text(encoding="utf-8"))["delivery"]
     assert manifest["ai_label"] == "always" and item["ai_label"] == "always"
     assert not [i for i in GC.master_issues(load_package(root)) if "ai_label" in i]
@@ -214,7 +214,7 @@ def test_a_9x16_version_without_the_label_blocks_the_delivery(tmp_path):
     done, body = deliver(root, report)
     assert done.returncode == 1 and "AI_LABEL_NOT_BURNED_9X16" in codes(body, "BLOCK")
     assert "AI_LABEL_NOT_BURNED" not in codes(body, "BLOCK")  # the 16:9 master is fine
-    assert not (root / "delivery").exists()
+    assert not (DL.current_archive(root)).exists()
 
 
 @needs_ffmpeg
@@ -223,7 +223,7 @@ def test_deliver_takes_a_generators_file_and_refuses_both_forms(tmp_path):
     path = gen_file(tmp_path, [FLOW, IMAGE])
     done = run("deliver", "--film", str(root), "--cut-report", report, "--generators-file", str(path))
     assert done.returncode == 0, done.stdout
-    disc = json.loads((root / "delivery" / "disclosure_16x9.json").read_text(encoding="utf-8"))
+    disc = json.loads((DL.current_archive(root) / "disclosure_16x9.json").read_text(encoding="utf-8"))
     assert [(g["role"], g["settings"]) for g in disc["generators"]] == [("video+audio", "360p, Khung hinh"), ("image", "")]
     both = run("deliver", "--film", str(root), "--cut-report", report, "--generators", "X Y", "--generators-file", str(path))
     assert both.returncode == 1 and "not both" in json.loads(both.stdout)["error"]

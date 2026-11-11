@@ -65,7 +65,8 @@ class FlowUiAdapter:
                              "the start still is uploaded to the Flow gallery (its tail is --start-token)"]
             if end is not None:
                 preconditions.append("the end still is uploaded to the Flow gallery (its tail is --end-token)")
-        argv += ["--model", self.cap.api_model or FLOW_MODEL, "--duration", str(int(request.duration_s))]
+        argv += ["--expected-credits", str(self.cap.price_of(request.duration_s, request.tier)),
+                 "--model", self.cap.api_model or FLOW_MODEL, "--duration", str(int(request.duration_s))]
         if not upload and end is not None:
             argv += ["--end", end_token or PLACEHOLDER_END_TOKEN, "--end-file", str(end)]
         if upload and end is not None:

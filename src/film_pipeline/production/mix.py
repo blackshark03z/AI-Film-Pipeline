@@ -91,7 +91,14 @@ def slug(text: str) -> str:
 
 
 def _ff(*args: str) -> None:
-    subprocess.run(["ffmpeg", "-v", "error", "-nostats", "-y", *args], check=True, capture_output=True)
+    with tempfile.TemporaryDirectory() as tmp:
+        argv = list(args)
+        if "-filter_complex" in argv:
+            index = argv.index("-filter_complex")
+            graph = Path(tmp) / "mix.filter"
+            graph.write_text(argv[index + 1], encoding="utf-8")
+            argv[index:index + 2] = ["-/filter_complex", str(graph)]
+        subprocess.run(["ffmpeg", "-v", "error", "-nostats", "-y", *argv], check=True, capture_output=True)
 
 
 def tone_for(text: str) -> tuple[str, int, int]:
@@ -354,5 +361,6 @@ def stamp_post_item(pkg: Any, name: str, item: dict[str, Any], *, filename: str 
     path = root / filename
     data = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
     data[name] = {**item, "locked_against": stamp}
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    from film_pipeline.production.runtime import atomic_json
+    atomic_json(path, data)
     return stamp

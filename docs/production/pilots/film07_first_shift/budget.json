@@ -1,0 +1,49 @@
+{
+  "film_id": "film07_first_shift",
+  "status": "DRAFT_NOT_AUTHORIZED",
+  "current_quote_status": "PENDING_SESSION_RECOVERY",
+  "pricing_basis": {
+    "measured_date": "2026-11-08",
+    "source": "production.planning.flow_credits; historical UI measurement",
+    "model": "Omni 1.2 Flash",
+    "resolution": "360p",
+    "per_6s_video_credits": 6.0,
+    "image_quote_credits": null,
+    "image_historical_credits": 0
+  },
+  "retake_factor_basis": {
+    "film01_first_day": 1.4,
+    "film02_spare_key": 1.1666666666666667,
+    "film03_front_desk": 1.0
+  },
+  "retake_factor_mean": 1.1888888888888889,
+  "pilot_first_two_scenes": {
+    "generations": 50,
+    "native_requested_s": 300,
+    "first_pass_credits": 300.0,
+    "historical_expected_credits": 356.67,
+    "historical_high_credits": 420.0,
+    "proposed_cap_credits": 535.0
+  },
+  "whole_film_including_pilot": {
+    "generations": 300,
+    "native_requested_s": 1800,
+    "first_pass_credits": 1800.0,
+    "historical_expected_credits": 2140.0,
+    "historical_high_credits": 2520.0,
+    "proposed_cap_credits": 3210.0
+  },
+  "approved_new_film_cap_credits": null,
+  "new_film_spent_credits": 0,
+  "unchanged_standing_cap_credits": 256.8,
+  "conditions": [
+    "Owner approves new film meaning, rights and overall cap before any generation",
+    "pilot tranche is included in whole-film cap, not added to it",
+    "recheck live quote after frames/ingredients; missing or changed price stops before Submit",
+    "verify still price separately; do not assume historical zero-credit pricing",
+    "pilot motion/acting/identity QC before continuing the same film",
+    "no cadence or deadline promise before live pilot data"
+  ],
+  "screenplay_sha256": "c45ac9dcdfc09cefb4f11c8efc868ed132aa0c288d379c991eb856c4ec3bf92c",
+  "beats_sha256": "ddf469880a86fe2044f9b9aba14e5103fa350286bfc6b393f26a33b0c1bb6c08"
+}

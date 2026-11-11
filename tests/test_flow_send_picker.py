@@ -225,6 +225,61 @@ def test_settings_text_parsers():
     assert fs.parse_cost("") is None
 
 
+def test_composer_quote_must_match_reserved_credits_before_submission():
+    class Control:
+        @property
+        def first(self): return self
+        def filter(self, **kwargs): return self
+        async def count(self): return 1
+        async def click(self): pass
+        async def focus(self): pass
+        async def press(self, key): pass
+        async def inner_text(self): return "Omni 1.2 Flash / 6 giây"
+    class Page:
+        keyboard = Control()
+        def __init__(self, cost): self.cost = cost
+        def locator(self, selector): return Control()
+        async def wait_for_timeout(self, ms): pass
+        async def evaluate(self, script): return f"Độ dài 6 giây\n{self.cost}"
+    for shown, allowed in [("Sẽ tốn 6 tín dụng", True), ("Sẽ tốn 7 tín dụng", False), ("", False)]:
+        record = {}
+        result = asyncio.run(fs._set_composer_settings(Page(shown), "", 6, record, expected_credits=6))
+        assert (result is None) == allowed
+        if not allowed:
+            assert result.startswith("PRE_SUBMIT_ERROR CREDIT_QUOTE_MISMATCH")
+
+
+def test_send_rechecks_quote_after_frames_and_never_submits_on_price_change(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock, Mock
+    import patchright.async_api as pa
+    page = SimpleNamespace(url="https://flow.google.com/project/owned", set_viewport_size=AsyncMock(),
+                           keyboard=SimpleNamespace(press=AsyncMock()), wait_for_timeout=AsyncMock(), on=Mock())
+    page.evaluate = AsyncMock(side_effect=lambda js: {"failed": 0} if js == fs.JS_JOB_STATE else [])
+    browser = SimpleNamespace(contexts=[SimpleNamespace(pages=[page])])
+    pw = SimpleNamespace(chromium=SimpleNamespace(connect_over_cdp=AsyncMock(return_value=browser)), stop=AsyncMock())
+    monkeypatch.setattr(pa, "async_playwright", lambda: SimpleNamespace(start=AsyncMock(return_value=pw)))
+    monkeypatch.setattr(fs, "front_snapshot", AsyncMock(return_value={"before_ids": []}))
+    events = []
+    async def frame(*args, **kwargs):
+        events.append("frame")
+    async def settings(page, model, duration, record, expected_credits=None):
+        events.append("quote" if expected_credits is not None else "settings")
+        if expected_credits is not None:
+            assert events[-2] == "frame"
+            return "PRE_SUBMIT_ERROR CREDIT_QUOTE_MISMATCH shown=7 reserved=6"
+    monkeypatch.setattr(fs, "_fill_frame_slot", frame)
+    monkeypatch.setattr(fs, "_set_composer_settings", settings)
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("original fictional dialogue", encoding="utf-8")
+    args = fs.parse_args([str(prompt), str(tmp_path / "out.mp4"), "--start", "tok:owned",
+                          "--model", "Omni 1.2 Flash", "--duration", "6", "--expected-credits", "6"])
+    result = asyncio.run(fs.run(args))
+    assert result["result"].startswith("PRE_SUBMIT_ERROR CREDIT_QUOTE_MISMATCH")
+    assert events == ["settings", "frame", "quote"]
+    assert all(call.args != ("Enter",) for call in page.keyboard.press.call_args_list)
+
+
 def test_model_label_and_match():
     assert fs.model_label("Omni 1.2 Flash\narrow_drop_down") == "Omni 1.2 Flash"
     assert fs.model_matches("Omni 1.2 Flash\narrow_drop_down", "Omni 1.2 Flash")

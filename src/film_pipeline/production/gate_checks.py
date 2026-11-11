@@ -229,7 +229,7 @@ def _delivery_item(pkg: Any) -> dict[str, Any]:
 
 def master_issues(pkg: Any) -> list[str]:
     from film_pipeline.production import master_qc as mq
-    from film_pipeline.production.deliver import MANIFEST, sha256_file, verify_archive
+    from film_pipeline.production.deliver import MANIFEST, sha256_file, verify_archive, current_archive
     from film_pipeline.production.lock import picture_lock_issues
     root = Path(pkg.root)
     out: list[str] = []
@@ -242,7 +242,10 @@ def master_issues(pkg: Any) -> list[str]:
             out.append("the master QC record has a failing group")
     out += [f"picture lock: {i}" for i in picture_lock_issues(pkg)]
     item = _delivery_item(pkg)
-    archive = root / "delivery"
+    try:
+        archive = current_archive(root)
+    except (ValueError, OSError) as exc:
+        return out + [f"delivery manifest: {exc}"]
     if not item or not (archive / MANIFEST).is_file():
         out.append("no delivery archive (delivery/MANIFEST.json): run film.py deliver")
         return out
@@ -256,6 +259,8 @@ def master_issues(pkg: Any) -> list[str]:
         out.append(f"the archive was built with ai_label '{built_under}' but film.json now says '{policy}': "
                    "deliver again under the current policy")
     verified = verify_archive(archive)
+    if item.get("release_ready") != verified.get("release_ready"):
+        out.append("recorded release_ready differs from the verified delivery manifest")
     if not verified.get("ok"):
         why = [f"missing {m}" for m in verified.get("missing_files", [])] + [f"hash {m}" for m in verified.get("hash_mismatch", [])]
         why += [p["detail"] for p in verified.get("problems", []) if p.get("severity") == "BLOCK"]

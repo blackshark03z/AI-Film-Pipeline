@@ -1,3 +1,87 @@
+# P20 continuation — final native30minute benchmark (2026-11-11T01:19Z)
+
+Owner explicitly says tiếp tục; renewed180minute tranche from01:19Z (08:19Asia/Saigon). No provider sends/spend/push.
+Current source remains uncommitted on feature/drama-preprod-p0; preserve all unrelated media/uv.lock.
+Native finish has now completed ALL7standard stages on the copied rehearsal (ok=true, release_ready=false,
+owner_acceptance_written=false), including real Vosk bridge, immutable delivery and actual clean-picture part provenance.
+An unchanged replay reuses every stage. Proof: C:/film-work/production-stability-p20/proof/finish-code-bound.json,
+finish-replay.json. The original accepted film06 still reuses its unchanged accepted archive; final P19ZIP hash unchanged.
+Additional integrated work since the earlier checkpoint:
+- Scene/event anchors plus verified picture-part lineage and video-only portrait cache. Final audio is muxed once from
+  the mixed master. Fractional-frame trim / changed take / audio-only change native regressions7PASS, final-render-short.xml.
+- Finish fingerprints include the loaded finishing source identity; software changes cannot silently reuse an old checkpoint.
+  code-bound-finish.xml17PASS; native stdout-capture integration bug reproduced and fixed in shared CLI _emit.
+- Atomic native reconciliation output and recovery from truncated legacy resolution: native-atomic-reconcile.xml10PASS.
+- Before Submit, displayed Flow credits must equal the reserved quote; missing/changed price refuses at0spend.
+  credit-quote-final.xml88PASS. This does not create a current quote or authorize a cap increase.
+- Initial old-code benchmark completed1800s landscape and mix, then was deliberately interrupted during portrait when
+  the selective-cache gap required repair; NOT a full PASS. Preserved masters/metrics/logs. The obsolete owned cache/PCM
+  were retired only by an audited literal allowlist after checking rehearsal identity and both retained master hashes;
+  proof/initial-cache-retirement.json. Initial inline cleanup was automatically rejected; safer audited script succeeded.
+- film07 The First Shift draft is ready:12scenes/300beats, proposed27:37; first2scenes4:38, English+Vietnamese dialogue.
+  Draft only, no new-film/rights/budget approval inferred. Main structural check PASS, media/performance UNVERIFIED.
+Next: final benchmark including clean picture and verified selective portrait path -> native ZIP/decode/restore checks ->
+freeze exact RC/full suite -> current quote and concrete pilot budget approval. No stable-production claim before2real long films.
+
+---
+
+# P20 checkpoint — M1 verified, M2 native benchmark running (2026-11-10T15:57Z)
+
+Main owns all implementation. Independent read-only review found8defects (portrait clock/label input, finish CLI/config/
+optional cues/relative paths, J/L boundary support, disposable cache paths); localized repairs are in the current dirty RC.
+Evidence under C:/film-work/production-stability-p20/proof/:
+- review-fixed.xml7PASS; render-short.xml3PASS; tagged fine-cache native rerender1PASS without cache metadata churn.
+- focused-integration.xml41PASS; delivery-fault.xml2PASS including an actual Windows no-delete-share master handle and
+  recovery of a complete orphan after a failed atomic pointer promotion.
+- process-death.xml10PASS; ambiguity-final.xml20PASS includes real child process death, cross-film Flow lock exclusion,
+  pending cost retention and reconciliation of confirmed failures. Broader unresolved-sends group72PASS/2old-assumption
+  failures: migrated the budget test to explicit provider failure and isolated two independent sender-failure cases.
+  New normalized ambiguous/success-without-registration guard fixes UNBOUND/TIMEOUT bypass of the old PENDING-only gate.
+- finish-all-faults.xml21PASS: before/after interruption at every finishing stage, complete-hash reuse and stale config/output.
+- runbook parser/delegation-focused3PASS. Updated existing RUNBOOK to the Owner's standing delegation and approved P20 scope.
+- Native40s/18event technical fixture rendered/mixed/decoded both aspects; metrics ok=true, one FFmpeg, ~1.5GiB RAM upper bound.
+  Native1800s/300event fixture now running sequentially, copied17film06sources with explicit rehearsal/no creative approval.
+  Full scratch sampler includes the task-owned TMP intermediates. No long benchmark PASS or M2 completion claimed yet.
+- A separate copied film06rehearsal has gates1–5PASS and finish --dry-run environmentPASS (Python3.13.15, FFmpeg9.0.1,
+  existingPython3.11/Vosk bridge); actual finish is queued after the long benchmark to retain one render at a time.
+Draft-authorp20_review now owns ONLY docs/production/pilots/film07_first_shift/ for a new Owner-reviewable screenplay/beat draft,
+not code or acceptance. Main computes budget and integrates it after M2 proof. No new film/provider spend is authorized.
+Remaining critical path: native30minute result/resource/restore checks -> actual finish -> exact committed RC/full suite ->
+pilot script/rights/current quote for Owner approval. Renewed180minute bound from15:09Z remains; all film06originals protected.
+
+---
+
+# P20 resumed checkpoint — Owner says tiếp tục (2026-11-10T15:09Z)
+
+Continue the approved implementation, renewed tranche180minutes. No source reset or new film/provider effects.
+M1 new recovery/locking/immutable-version tests:20PASS integration; later recovery/native wait/report group44PASS
+(proof/m1-recovery.xml). Per-scene feasibility now2PASS with unchanged standalone short-scene guard.
+Render writer's file changes are present; no worker currently active. Main now owns integration/verification of all files.
+Remaining: preflight/finish, bounded30minute benchmark, independent review, exact RC/full suite, pilot draft/quote.
+No claim of M2complete or stable production. Film06 source/media/approval remain protected.
+
+---
+
+# P20 implementation ACTIVE — approved25–30minute production plan (2026-11-10)
+
+Base804727952f87d793b19b0eaf9cda15fdf629c04d, branchfeature/drama-preprod-p0. Contract:
+[PRODUCTION_STABILITY_P20_PLAN](../production/PRODUCTION_STABILITY_P20_PLAN.md). POLICY_REF45f71d6226c5ffc58b4e70f3bcea1bb0151b7003.
+M0 source/policy/MAR worktree inventory verified; no policy drift. Reclaimed only3owned prior pytest fixture directories,
+23.906GiB, after preserving JUnit/log evidence; C now27.03GiBfree. Film06 approved ZIP hash unchanged. Proof:
+C:/film-work/production-stability-p20/proof/m0-scratch-reclamation.json. RuntimePython3.13.15/FFmpeg9.0.1;
+STT bridgePython3.11 retained. BMad runtime absent; use native equivalent, no installation/scope expansion.
+
+- M0: resource preparationDONE; environment/preflight integration pending.
+- M1: main implements immutable intent snapshot/locks/reconcile + versioned delivery pointer + CLI/status.
+- M2: isolated writerp20_long_render owns post.py/edit.py/versions.py and render cache/new render tests only;
+  main owns scene feasibility, finish integration, benchmark/resources. No overlapping writes; all full qualification in main.
+- M3/M4: NOT_STARTED; no new Generate/uploads/purchases. Prepare a concrete pilot brief/script/quote for Owner approval
+  only after software/30minute fixture proof. Existing256.8cap stays; no stable-production claim before2accepted long films.
+Initial tranche180minutes from2026-11-10T11:38Z; two ineffective attempts change approach; persist checkpoints here.
+All unrelated WIP/uv.lock and all accepted film06 artifacts protected. No push/publication.
+
+---
+
 # Drama handoff — film06 Owner-approved; all6gates PASS (2026-11-10)
 
 Owner: **"Đoạn hội thoại cơ bản tốt, mọi thứ tự nhiên. Duyệt. Tiếp tục"**; then explicitly **"Xác nhận cả 5 mục"**

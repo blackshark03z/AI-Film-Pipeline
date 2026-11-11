@@ -206,7 +206,8 @@ def rehearse(src: Path, dest: Path, *, stop_on_fail: bool = True) -> dict[str, A
 def restore_check(log: _Log, dest: Path) -> bool:
     """Copy the delivery archive to a new directory and run the restore check (`film.py status --package`) on the copy:
     every hash, the package inside it, the disclosure of each master. Nothing under the rehearsal directory is read."""
-    archive = dest / "delivery"
+    from film_pipeline.production.deliver import current_archive
+    archive = current_archive(dest)
     if not (archive / "MANIFEST.json").is_file():
         log.restore = {"ok": None, "detail": "not run: no delivery archive"}
         return False
@@ -226,7 +227,8 @@ def restore_check(log: _Log, dest: Path) -> bool:
 
 
 def _finish(log: _Log, src: Path, dest: Path, started: float) -> dict[str, Any]:
-    delivered = (dest / "delivery" / "MANIFEST.json").is_file()
+    from film_pipeline.production.deliver import current_archive
+    delivered = (current_archive(dest) / "MANIFEST.json").is_file()
     report = {"stamp": STAMP, "source": str(src), "rehearsal": str(dest), "release_ready": False,
               "reached_delivery": delivered, "restore": log.restore, "all_steps_ok": all(s["ok"] for s in log.steps),
               "wall_s": round(time.time() - started, 1), "steps": log.steps, "manual_steps": log.manual}

@@ -172,7 +172,7 @@ def test_restore_check_verifies_a_copy_of_the_archive_and_catches_a_damaged_one(
     assert log.restore["ok"] is True and log.restore["files"] > 5 and log.restore["film_id"]
     assert [s["step"] for s in log.steps] == ["restore"] and log.steps[0]["ok"]
     assert str(root) not in json.dumps(log.restore)               # the copy lived somewhere else
-    master = next((root / "delivery" / "masters").glob("*_16x9.mp4"))
+    master = next((D.current_archive(root) / "masters").glob("*_16x9.mp4"))
     with master.open("ab") as handle:
         handle.write(b"\0")                                        # the archive no longer matches its manifest
     log = R._Log(root)

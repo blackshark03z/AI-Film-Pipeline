@@ -28,6 +28,7 @@ from pydantic import Field, model_validator
 
 from film_pipeline.core import ContractModel
 from film_pipeline.production.qc_model import GroupCheck, TakeQc, auto_check, blank_take
+from film_pipeline.production.runtime import atomic_json, film_writer
 
 TakeStatus = Literal["GENERATED", "INCOMPLETE", "ACCEPTED", "REJECTED"]
 _STATUS_OF = {"ACCEPTED": "ACCEPTED", "REJECTED": "REJECTED", "INCOMPLETE": "INCOMPLETE"}
@@ -109,10 +110,11 @@ def load_log(film_root: Path, film_id: str) -> TakeLog:
 def save_log(film_root: Path, log: TakeLog) -> Path:
     path = takes_dir(film_root) / "index.json"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(log.model_dump(mode="json"), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_json(path, log.model_dump(mode="json"))
     return path
 
 
+@film_writer()
 def register_take(film_root: Path, film_id: str, generation_id: str, clip: Path, *, prompt_text: str, route: str,
                   model: str, credits: float, start_frame: Path | None = None, known_generations: set[str] | None = None,
                   shot_version: int = 1, provider: str = "flow", provider_job_id: str = "",
@@ -356,6 +358,7 @@ def write_dailies(pkg: Any, film_root: Path, script_lines: dict[int, str] | None
     return out
 
 
+@film_writer()
 def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: Any = None) -> dict[str, Any]:
     """Validate a filled sheet (or a bare TakeQc), bind it to the logged bytes, store it and set the take's status."""
     supplemental = filled.get("supplemental") == "relations"

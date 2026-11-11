@@ -21,7 +21,8 @@ GENERATORS_FILE_HELP = ("JSON list of {role: video+audio|image|voice|music, name
 
 
 def _emit(payload: dict) -> None:
-    sys.stdout.reconfigure(encoding="utf-8")
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     print(json.dumps(payload, ensure_ascii=False, indent=2))
 
 
@@ -187,6 +188,12 @@ def main(argv: list[str] | None = None) -> int:
     gn.add_argument("--backlog", type=Path, help="file holding the OWNER_GO_LIVE line (default: the loop backlog)")
     gn.add_argument("--no-auto-resend", action="store_true",
                     help="do not resend once after a provider failure (P18-03; default: resend once)")
+    rc = actions.add_parser("reconcile", help="resolve one existing Flow send without submitting another job")
+    rc.add_argument("--film", required=True, type=Path)
+    rc.add_argument("--take-id", required=True)
+    fi = actions.add_parser("finish", help="run/resume local finishing from a locked EDL; never accepts for the Owner")
+    fi.add_argument("--film", required=True, type=Path)
+    fi.add_argument("--dry-run", action="store_true")
     st = actions.add_parser("stills", help="start stills: list their state, --register an image made elsewhere, --approve it")
     st.add_argument("--film", required=True, type=Path)
     st.add_argument("--register", metavar="GENERATION_ID|end:GENERATION_ID")
@@ -305,6 +312,19 @@ def main(argv: list[str] | None = None) -> int:
     if args.action != "narration" and rest:
         parser.error(f"unrecognized arguments: {' '.join(rest)}")
 
+    from film_pipeline.production.runtime import writer, WriterBusy
+    readonly = {"status", "validate", "qc", "impact", "camera", "continuity"}
+    try:
+        if getattr(args, "film", None) and args.action not in readonly:
+            with writer(args.film, flow=args.action in {"generate", "reconcile"}):
+                return _run(args, rest, parser)
+        return _run(args, rest, parser)
+    except WriterBusy as exc:
+        _emit({"ok": False, "code": "FILM_BUSY", "error": str(exc)})
+        return 1
+
+
+def _run(args, rest, parser) -> int:
     try:
         if args.action == "narration":
             return _narration(args, rest, parser)
@@ -361,6 +381,20 @@ def main(argv: list[str] | None = None) -> int:
             _emit({"created": str(target), "profile": args.profile})
             return 0
         pkg = load_package(args.film)
+        if args.action == "finish":
+            from film_pipeline.production.finish import finish
+            report = finish(pkg, command=main, dry_run=args.dry_run)
+            _emit(report)
+            return 0 if report["ok"] else 1
+        if args.action == "reconcile":
+            from film_pipeline.production.recovery import reconcile
+            try:
+                report = reconcile(pkg, args.take_id)
+            except (ValueError, OSError) as exc:
+                _emit({"resolved": False, "error": str(exc)})
+                return 1
+            _emit(report)
+            return 0 if report["resolved"] else 1
         if args.action == "impact":
             from film_pipeline.production.impact import affected_by
             try:
@@ -620,7 +654,6 @@ def main(argv: list[str] | None = None) -> int:
                 _emit({"error": str(exc)})
                 return 1
             report = ti_mod.write_outputs(pkg, prepared)
-            stamp_post_item(pkg, "titles", {"report": "titles/titles.json", "ok": report["ok"], "summary": report["summary"]})
             if args.render and report["ok"]:
                 extra = {}
                 if args.color:
@@ -657,6 +690,7 @@ def main(argv: list[str] | None = None) -> int:
                     stored = json.loads(titles_json.read_text(encoding="utf-8"))
                     stored["clean_render"] = report["clean_render"]
                     titles_json.write_text(json.dumps(stored, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            stamp_post_item(pkg, "titles", {"report": "titles/titles.json", "ok": report["ok"], "summary": report["summary"]})
             _emit(report)
             return 0 if report["ok"] else 1
         if args.action == "sounds":

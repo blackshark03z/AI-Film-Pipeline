@@ -361,7 +361,19 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
               Path(attestations) if attestations else None, verified_handoffs)
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
-    feas = check_script(p.script, limits=p.pre.feasibility)
+    # A script scene may span many generations; individual shot speech/reaction checks still run below.
+    base_limits = p.pre.feasibility
+    allocated: dict[str, float] = {}
+    for shot in p.shots.generations:
+        allocated[shot.scene_id] = allocated.get(shot.scene_id, 0.0) + shot_seconds(shot, pkg.header)
+    scene_limits = {}
+    for sid, seconds in allocated.items():
+        if seconds > base_limits.scene_duration_s:
+            factor = seconds / base_limits.scene_duration_s
+            scene_limits[sid] = base_limits.model_copy(update={"scene_duration_s": seconds,
+                "max_dialogue_syllables": int(base_limits.max_dialogue_syllables * factor),
+                "min_silence_s": base_limits.min_silence_s * factor})
+    feas = check_script(p.script, limits=base_limits, scene_limits=scene_limits)
     temporal = p.temporal()
 
     gate = StoryboardGate(out / "storyboard")

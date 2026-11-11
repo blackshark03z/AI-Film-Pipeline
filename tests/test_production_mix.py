@@ -21,6 +21,19 @@ needs_ffmpeg = pytest.mark.skipif(not (shutil.which("ffmpeg") and shutil.which("
 GIDS = ("SC01_g1", "SC01_g2", "SC02_g1")   # SC02_g1 declares the sfx 'paper unfolding'
 
 
+def test_mix_filtergraph_uses_file_instead_of_windows_command_line(monkeypatch):
+    graph = "[0:a]anull[o]" * 3000
+    seen = []
+    def run(argv, **kwargs):
+        assert "-filter_complex" not in argv
+        path = Path(argv[argv.index("-/filter_complex") + 1])
+        assert path.read_text(encoding="utf-8") == graph
+        seen.append(path)
+    monkeypatch.setattr(M.subprocess, "run", run)
+    M._ff("-i", "source.wav", "-filter_complex", graph, "out.wav")
+    assert len(seen) == 1 and not seen[0].exists()
+
+
 def speech_clip(path: Path, seconds: float, freq: int) -> Path:
     """Solid picture; sound is a tone that is on for 1 s and off for 1 s (something to duck under)."""
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", f"color=c=gray:size=320x180:rate=24:duration={seconds}",

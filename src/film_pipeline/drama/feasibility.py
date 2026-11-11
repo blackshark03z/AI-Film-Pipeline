@@ -149,7 +149,8 @@ def check_scene(scene: ScriptScene, *, known_characters: list[str],
 
 def check_script(script: Script, *,
                  limits: FeasibilityLimits | None = None,
-                 extra_characters: list[str] | None = None
+                 extra_characters: list[str] | None = None,
+                 scene_limits: dict[str, FeasibilityLimits] | None = None
                  ) -> FeasibilityReport:
     """``extra_characters``: non-speaking cast who may appear in action."""
     known = list(dict.fromkeys(script.characters + (extra_characters or [])))
@@ -160,7 +161,7 @@ def check_script(script: Script, *,
             detail="no scene headings found (INT./EXT./NỘI./NGOẠI.)"))
     for scene in script.scenes:
         issues, metrics = check_scene(scene, known_characters=known,
-                                      limits=limits)
+                                      limits=(scene_limits or {}).get(scene.scene_id, limits))
         report.issues.extend(issues)
         report.scene_metrics[scene.scene_id] = metrics
     return report

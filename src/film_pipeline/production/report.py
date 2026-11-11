@@ -208,7 +208,8 @@ def _rights(pkg: Any) -> dict[str, Any]:
 
 
 def _delivery(pkg: Any) -> dict[str, Any]:
-    path = Path(pkg.root) / "delivery" / "MANIFEST.json"
+    from film_pipeline.production.deliver import current_archive
+    path = current_archive(Path(pkg.root)) / "MANIFEST.json"
     if not path.is_file():
         return {"delivered": False}
     data = json.loads(path.read_text(encoding="utf-8"))
@@ -228,6 +229,8 @@ def _cut(pkg: Any) -> dict[str, Any] | None:
 
 def next_action(report: dict[str, Any]) -> str:
     gates, production = report["gates"], report.get("production", {})
+    if report.get("pending_sends"):
+        return f"Reconcile existing send {report['pending_sends'][0]['take_id']} before another Generate"
     for gid, g in gates.items():
         if g["status"] == "BLOCK" and int(gid) <= 3:
             return f"Resolve Gate {gid} ({g['name']}): {g['first'][0] if g['first'] else 'see validate'}"
@@ -264,7 +267,7 @@ def next_action(report: dict[str, Any]) -> str:
 
 RUNBOOK = "docs/production/RUNBOOK.md"
 # next_action text prefix -> the RUNBOOK.md step that explains what to do (kept next to next_action; a test pins both)
-RUNBOOK_STEPS = (("Resolve Gate 3", "R3"), ("Resolve Gate", "R2"), ("Owner decision needed", "R4"), ("Generate is paused", "R4"),
+RUNBOOK_STEPS = (("Reconcile existing send", "R6"), ("Resolve Gate 3", "R3"), ("Resolve Gate", "R2"), ("Owner decision needed", "R4"), ("Generate is paused", "R4"),
                  ("Retake decision", "R7"), ("Review takes", "R7"), ("Render", "R6"), ("Write 05_edit.json", "R8"),
                  ("Lock the picture", "R8"), ("Rebuild what", "R9"), ("Produce the missing post", "R9"),
                  ("Run film.py deliver", "R10"), ("Clear what keeps", "R10"), ("Nothing open", "R10"))
@@ -313,8 +316,18 @@ def status_report(pkg: Any) -> dict[str, Any]:
     report["cut"] = section("cut", lambda: _cut(pkg), None)
     report["learnings"] = ledger_view(Path(pkg.root), pkg.header.film_id)["counts"]
     report["errors"] = errors
+    from film_pipeline.production.recovery import pending_receipts
+    report["pending_sends"] = section("pending_sends", lambda: pending_receipts(pkg), [])
     report["next_action"] = next_action(report)
     report["runbook"] = f"{RUNBOOK} {runbook_step(report['next_action'])}".strip()
+    if report["pending_sends"]:
+        report["next_step"] = {"action": "reconcile", "take_id": report["pending_sends"][0]["take_id"]}
+    elif report["gates"].get("6", {}).get("status") == "PASS" and all(g["status"] == "PASS" for g in report["gates"].values()):
+        report["next_step"] = {"action": "complete"}
+    elif report["delivery"].get("release_ready") and all(report["gates"].get(str(i), {}).get("status") == "PASS" for i in range(1, 6)):
+        report["next_step"] = {"action": "owner_acceptance"}
+    else:
+        report["next_step"] = {"action": "inspect", "reason": report["next_action"]}
     return report
 
 

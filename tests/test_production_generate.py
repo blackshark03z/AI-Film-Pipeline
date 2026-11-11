@@ -89,6 +89,7 @@ def test_dry_run_builds_the_exact_payload_and_sends_nothing(tmp_path):
     assert p["take_id"] == "SC01_g1_t1" and p["output"].endswith("SC01_g1_t1.mp4")
     assert p["route"] == "start_frame+Khung hinh" and p["model"] == "Omni 1.2 Flash 360p" and p["expected_credits"] == 8
     assert p["duration_s"] == 8 and p["argv"][-4:] == ["--model", "Omni 1.2 Flash", "--duration", "8"]
+    assert float(p["argv"][p["argv"].index("--expected-credits") + 1]) == p["expected_credits"]
     assert p["argv"][2:6] == [p["prompt_file"], p["output"], "--upload-frames", "--start-file"]
     assert "--start" not in p["argv"] and "--end" not in p["argv"] and "--end-file" not in p["argv"]
     assert p["start_frame"]["exists"] and p["start_frame"]["sha256"] == T.sha256_text("png-bytes")
@@ -284,9 +285,9 @@ def live(pkg, tmp_path, runner, **kw):
 
 def test_a_failed_send_keeps_its_take_number_and_its_credits(tmp_path):
     pkg = film(tmp_path, 14)   # cap 21: two 8-credit sends fit, three do not
-    first = live(pkg, tmp_path, FakeRunner("TIMEOUT"))
+    first = live(pkg, tmp_path, FakeRunner("FLOW_FAILED"), auto_resend=0)
     assert first["sent"] and first["payload"]["take_id"] == "SC01_g1_t1"
-    second = live(pkg, tmp_path, FakeRunner("TIMEOUT"))
+    second = live(pkg, tmp_path, FakeRunner("FLOW_FAILED"), auto_resend=0)
     assert second["payload"]["take_id"] == "SC01_g1_t2" and second["payload"]["credits_spent"] == 8
     assert (Path(first["receipt"]).parent / "SC01_g1_t1.intent.json").is_file()   # evidence of t1 is not overwritten
     third = live(pkg, tmp_path, FakeRunner())
@@ -342,7 +343,9 @@ def test_a_failing_sender_does_not_register_an_old_clip(tmp_path):
             out.write_bytes(b"new-bytes")
             return {"result": "PASSED", "returncode": 0, "sha256": "0" * 64}
 
-    other = live(pkg, tmp_path, WrongHash())
+    # The sender-exit result above is unresolved; test hash rejection in a separate film.
+    independent = tmp_path / "hash-case"
+    other = live(film(independent, 100), independent, WrongHash())
     assert other["manifest_result"] == "MANIFEST_HASH_MISMATCH" and "take" not in other
 
 

@@ -26,6 +26,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import flow_bind as fb  # noqa: E402
 import flow_send as fs  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+from film_pipeline.production.runtime import atomic_json  # noqa: E402
 
 
 def _sha(text: str) -> str:
@@ -40,6 +42,8 @@ def known_ids(manifests: Path | None, out_dir: Path, skip: frozenset[str] = froz
     known: set[str] = set()
     if manifests and Path(manifests).is_dir():
         for m in sorted(Path(manifests).glob("*.take.json")):
+            if m.name.removesuffix(".take.json") in skip:
+                continue
             tail = json.loads(m.read_text(encoding="utf-8")).get("media_id_tail")
             if tail:
                 known.add(tail)
@@ -72,13 +76,24 @@ def settled(manifest: Path, now: datetime | None = None) -> bool:
 def load_receipt(receipts: Path, rid: str, prompts: Path) -> tuple[dict, str | None, str | None]:
     """(receipt, prompt, problem): the prompt only when its hash is the one the receipt recorded."""
     receipt = json.loads((receipts / f"{rid}.intent.json").read_text(encoding="utf-8"))
-    path = prompts / f"{receipt['generation_id']}.txt"
+    snapshot = receipts / f"{rid}.prompt.txt"
+    path = snapshot if snapshot.is_file() else prompts / f"{receipt['generation_id']}.txt"
     if not path.is_file():
         return receipt, None, f"prompt file {path.name} not found"
     prompt = path.read_text(encoding="utf-8").strip()
     if _sha(prompt) != receipt.get("prompt_sha256"):
         return receipt, None, "PROMPT_CHANGED: the plan prompt is not the one that was sent"
     return receipt, prompt, None
+
+
+def bind_receipt(prompt: str, details: list[dict], known: set[str], context: dict) -> dict:
+    if context.get("prompt_sha256") and context["prompt_sha256"] != _sha(prompt):
+        return {"result": "NATIVE_PROMPT_MISMATCH"}
+    excluded = known | set(context.get("before_ids", []))
+    own = context.get("own_tile_at_submit", {}).get("media_id")
+    if own:
+        excluded |= {mid for d in details if (mid := fb.media_id_from_url(d.get("url", ""))) and not fb.is_known(mid, {own})}
+    return fb.reconcile(prompt, details, excluded)
 
 
 async def scan_gallery(page, n: int) -> list[dict]:
@@ -117,7 +132,11 @@ async def download_nth(page, ctx, n: int, out: Path) -> str | None:
     if resp.status != 200 or not ctype.startswith("video/"):
         return f"DOWNLOAD_FAILED {resp.status} {ctype}"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_bytes(data)
+    if out.exists():
+        return None if hashlib.sha256(out.read_bytes()).digest() == hashlib.sha256(data).digest() else "OUTPUT_CONFLICT"
+    temporary = out.with_suffix(".download.tmp")
+    temporary.write_bytes(data)
+    temporary.replace(out)
     return None
 
 
@@ -147,13 +166,21 @@ async def run(args) -> dict[str, dict]:
             await page.keyboard.press("Escape")
             details = await scan_gallery(page, args.scan)   # once, shared by every receipt
             for rid, prompt in todo.items():
-                res = fb.reconcile(prompt, details, known)
+                native = manifests / f"{rid}.take.json"
+                context = json.loads(native.read_text(encoding="utf-8")) if native.is_file() else {}
+                if context.get("project") and f"/project/{context['project']}" not in page.url:
+                    results[rid] = {"result": "WRONG_PROJECT"}
+                    continue
+                res = bind_receipt(prompt, details, known, context)
                 res["scanned"] = len(details)
                 if res["result"] == "BOUND":
                     known.add(res["media_id"])   # a clip binds to one receipt only
                     if args.download:
                         failed = await download_nth(page, ctx, res["index"], out_dir / f"{rid}.mp4")
                         res["download"] = failed or "SAVED"
+                        if not failed:
+                            res["sha256"] = hashlib.sha256((out_dir / f"{rid}.mp4").read_bytes()).hexdigest()
+                            res["prompt_sha256"] = _sha(prompt)
                 results[rid] = res
         finally:
             await pw.stop()   # disconnect only; browser and tab stay open
@@ -162,8 +189,7 @@ async def run(args) -> dict[str, dict]:
         if (res["result"] == "NOT_IN_GALLERY" and res.get("scanned", 0) >= MIN_SCAN
                 and settled(manifests / f"{rid}.take.json")):
             res["provider_no_clip"] = True
-        (out_dir / f"{rid}.reconcile.json").write_text(json.dumps({"receipt_id": rid, **res}, indent=2),
-                                                       encoding="utf-8")
+        atomic_json(out_dir / f"{rid}.reconcile.json", {"receipt_id": rid, **res})
     return results
 
 

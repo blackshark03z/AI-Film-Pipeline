@@ -62,7 +62,7 @@ def test_deliver_archives_restores_and_catches_tampering(tmp_path):
     done, body = deliver(root, report)
     assert done.returncode == 0 and body["ok"], body
     assert not body["release_ready"] and {"PICTURE_NOT_LOCKED", "RIGHTS_PENDING"} <= codes(body, "WARN")
-    arch = root / "delivery"
+    arch = DL.current_archive(root)
     manifest = DL.ArchiveManifest.model_validate_json((arch / "MANIFEST.json").read_text(encoding="utf-8"))
     paths = {f.path for f in manifest.files}
     assert {"masters/film03_front_desk_16x9.mp4", "masters/film03_front_desk_9x16.mp4", "disclosure_16x9.json", "disclosure_9x16.json",
@@ -109,10 +109,10 @@ def test_deliver_archives_restores_and_catches_tampering(tmp_path):
 def test_a_tampered_master_fails_the_restore_check(tmp_path):
     root, report = pipeline(tmp_path)
     assert deliver(root, report)[0].returncode == 0
-    master = root / "delivery" / "masters" / "film03_front_desk_16x9.mp4"
+    master = DL.current_archive(root) / "masters" / "film03_front_desk_16x9.mp4"
     with master.open("ab") as f:
         f.write(b"\0")
-    got = json.loads(run("status", "--package", str(root / "delivery")).stdout)
+    got = json.loads(run("status", "--package", str(DL.current_archive(root))).stdout)
     assert not got["ok"] and got["hash_mismatch"] == ["masters/film03_front_desk_16x9.mp4"]
     assert any(p["code"] == "COMPLIANCE" for p in got["problems"])
 
@@ -130,7 +130,7 @@ def test_without_the_ai_label_or_generators_nothing_is_delivered(tmp_path):
     root, report = pipeline(tmp_path, label=False)
     done, body = deliver(root, report)
     assert done.returncode == 1 and not body["ok"] and "AI_LABEL_MISSING" in codes(body, "BLOCK")
-    assert not (root / "delivery").exists() and not (root / "delivery.staging").exists()
+    assert not (DL.current_archive(root)).exists() and not (root / "delivery.staging").exists()
     bare = run("deliver", "--film", str(root), "--cut-report", report)
     assert "GENERATORS_MISSING" in {f["code"] for f in json.loads(bare.stdout)["findings"]}
 
@@ -152,16 +152,17 @@ def test_missing_stale_or_failing_inputs_block(tmp_path):
     record["findings"] = [{"group": "technical", "code": "X", "severity": "P0", "detail": "forced"}]
     record["checks"] = [{**c, "result": "FAIL", "severity": "P0"} if c["group"] == "technical" else c for c in record["checks"]]
     qc.write_text(json.dumps(record), encoding="utf-8")
-    assert not (root / "delivery").exists()
+    assert not (DL.current_archive(root)).exists()
 
 
 @needs_ffmpeg
-def test_a_second_delivery_keeps_the_first(tmp_path):
+def test_an_unchanged_delivery_reuses_the_first_without_pointer_churn(tmp_path):
     root, report = pipeline(tmp_path)
     first = deliver(root, report)[1]
     again = deliver(root, report)[1]
-    assert first["superseded"] is None and again["superseded"].startswith("delivery.superseded-")
-    assert (root / again["superseded"] / "MANIFEST.json").is_file() and (root / "delivery" / "MANIFEST.json").is_file()
+    assert first["superseded"] is None and again["reused"]
+    assert again["archive"] == first["archive"] and again["manifest_sha256"] == first["manifest_sha256"]
+    assert (DL.current_archive(root) / "MANIFEST.json").is_file()
 
 
 @needs_ffmpeg
@@ -170,6 +171,6 @@ def test_c2pa_asked_for_but_failing_blocks(tmp_path):
     junk = tmp_path / "junk.pem"
     junk.write_text("not a certificate", encoding="utf-8")
     done, body = deliver(root, report, "--c2pa-cert", str(junk), "--c2pa-key", str(junk))
-    assert done.returncode == 1 and "C2PA_FAILED" in codes(body, "BLOCK") and not (root / "delivery").exists()
+    assert done.returncode == 1 and "C2PA_FAILED" in codes(body, "BLOCK") and not (DL.current_archive(root)).exists()
     half = run("deliver", "--film", str(root), "--c2pa-cert", str(junk))
     assert half.returncode == 2

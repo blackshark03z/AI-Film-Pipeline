@@ -26,6 +26,7 @@ import hashlib
 import json
 import re
 import shutil
+import uuid
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -33,6 +34,7 @@ from typing import Any
 from pydantic import Field
 
 from film_pipeline.core import ContractModel
+from film_pipeline.production.runtime import atomic_json, film_writer
 
 LABEL_WORD = re.compile(r"\bAI\b")
 BODY_LABEL = "AI-generated"  # the small bottom-left label drama.post.assemble burns over the body (film.json disclosure.ai_label)
@@ -68,6 +70,62 @@ class ArchiveManifest(ContractModel):
     files: list[FileEntry] = Field(default_factory=list)
     external_dependencies: list[Dependency] = Field(default_factory=list)
     findings: list[dict[str, Any]] = Field(default_factory=list)
+    input_fingerprint: str = ""  # absent in legacy archives
+
+
+def current_archive(root: Path) -> Path:
+    """Resolve the recorded immutable archive, retaining legacy delivery/ compatibility."""
+    root = Path(root)
+    path = root / "07_delivery.json"
+    data = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+    rel = data.get("delivery", {}).get("manifest")
+    if not rel:
+        return root / "delivery"
+    manifest = root / rel
+    if (Path(rel).is_absolute() or not manifest.resolve().is_relative_to(root.resolve())
+            or manifest.name != MANIFEST):
+        raise ValueError("delivery manifest must stay inside this film package")
+    return manifest.parent
+
+
+def _inputs_fingerprint(pkg, master, cut_report, disclosure) -> str:
+    root = Path(pkg.root)
+    paths = {p for pattern in (*PACKAGE_GLOBS, "titles/*.srt", "versions/thumbs/*.jpg")
+             for p in root.glob(pattern) if p.is_file()}
+    version = root / "versions" / "versions.json"
+    if version.is_file():
+        paths.update(root / v["file"] for v in json.loads(version.read_text(encoding="utf-8"))["versions"]
+                     if (root / v["file"]).is_file())
+    files = {str(p.relative_to(root)): sha256_file(p) for p in paths}
+    files.update(master=sha256_file(Path(master)), cut_report=sha256_file(Path(cut_report)))
+    meta = disclosure.model_dump(mode="json")
+    meta.pop("created", None)  # elapsed calendar days alone do not revoke a delivered film
+    return hashlib.sha256(json.dumps({"files": files, "disclosure": meta}, sort_keys=True).encode()).hexdigest()
+
+
+def _publication(pkg, archive: Path, manifest: ArchiveManifest, *, reused=False, label_check=None) -> dict:
+    from film_pipeline.production.mix import stamp_post_item
+    root = Path(pkg.root)
+    previous = current_archive(root)
+    if archive.name.startswith(".staging-"):
+        archive = archive.rename(archive.with_name(archive.name.removeprefix(".staging-")))
+    digest = sha256_file(archive / MANIFEST)
+    old = json.loads((root / "07_delivery.json").read_text(encoding="utf-8")) if (root / "07_delivery.json").is_file() else {}
+    item = old.get("delivery", {})
+    if item.get("manifest_sha256") != digest or current_archive(root) != archive:
+        stamp_post_item(pkg, "delivery", {"manifest": str((archive / MANIFEST).relative_to(root)).replace("\\", "/"),
+                        "manifest_sha256": digest, "release_ready": manifest.release_ready,
+                        "files": len(manifest.files), "ai_label": manifest.ai_label}, filename="07_delivery.json")
+    return {"film_id": manifest.film_id, "ok": True, "release_ready": manifest.release_ready,
+            "archive": archive.relative_to(root).as_posix(), "manifest_sha256": digest, "reused": reused,
+            "superseded": previous.relative_to(root).as_posix() if previous != archive and previous.is_dir() else None,
+            "package_files": [f.path.removeprefix("package/") for f in manifest.files if f.path.startswith("package/")],
+            "findings": manifest.findings, "ai_label": label_check or {"mode": manifest.ai_label},
+            "external_dependencies": {"count": len(manifest.external_dependencies),
+                                      "present": sum(d.present_at_delivery for d in manifest.external_dependencies)},
+            "summary": {"files": len(manifest.files), "blocks": 0,
+                        "warnings": sum(f["severity"] == "WARN" for f in manifest.findings)},
+            **({"stamp": "REHEARSAL — synthetic"} if pkg.header.rehearsal else {})}
 
 
 def sha256_file(path: Path) -> str:
@@ -245,6 +303,7 @@ def inventory(out: Path) -> list[FileEntry]:
 
 # ------------------------------------------------------------------ deliver
 
+@film_writer()
 def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c2pa: tuple[Path, Path] | None = None) -> dict[str, Any]:
     """Build ``delivery/``; returns the report (``ok`` false and nothing replaced when a BLOCK finding stands)."""
     from film_pipeline.drama import disclosure as D
@@ -314,9 +373,20 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
                                          f"the body ({label_check['portrait_evidence']['detail']}): run film.py versions again"))
 
     # ---- stage the archive
-    stage = root / "delivery.staging"
-    if stage.exists():
-        shutil.rmtree(stage)
+    fingerprint = _inputs_fingerprint(pkg, master, cut_report, disclosure) if not c2pa and not any(f["severity"] == "BLOCK" for f in findings) else ""
+    if fingerprint:
+        current = current_archive(root)
+        candidates = [current, *sorted((root / "media/deliveries").glob("*"))]
+        for candidate in candidates:
+            try:
+                saved = ArchiveManifest.model_validate_json((candidate / MANIFEST).read_text(encoding="utf-8"))
+                reusable = saved.input_fingerprint == fingerprint and verify_archive(candidate)["ok"]
+            except (OSError, ValueError):
+                continue
+            if reusable:
+                return _publication(pkg, candidate, saved, reused=True, label_check=label_check)
+    version_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S") + "-" + uuid.uuid4().hex[:10]
+    stage = root / "media" / "deliveries" / (".staging-" + version_id)
     masters: dict[str, str] = {}
     if not any(f["severity"] == "BLOCK" for f in findings):
         marks = {"master_16x9": (master, f"masters/{film_id}_16x9.mp4", "disclosure_16x9.json")}
@@ -365,31 +435,18 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
     manifest = ArchiveManifest(film_id=film_id, title=pkg.header.title, created=datetime.now(timezone.utc).isoformat(timespec="seconds"),
                                release_ready=release_ready, ai_label=pkg.header.disclosure.ai_label,
                                picture_lock={k: status.get(k) for k in ("locked", "fresh", "lock_edl_sha256", "locked_by") if k in status},
-                               masters=masters, files=inventory(stage), external_dependencies=dependencies(pkg), findings=findings)
+                               masters=masters, files=inventory(stage), external_dependencies=dependencies(pkg), findings=findings,
+                               input_fingerprint=fingerprint)
     (stage / MANIFEST).write_text(json.dumps(manifest.model_dump(mode="json"), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    # ---- swap in; an earlier delivery is kept
-    final = root / "delivery"
-    superseded = None
-    if final.exists():
-        superseded = root / f"delivery.superseded-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')}"
-        final.rename(superseded)
-    stage.rename(final)
-    manifest_sha = sha256_file(final / MANIFEST)
-    stamp_post_item(pkg, "delivery", {"manifest": "delivery/MANIFEST.json", "manifest_sha256": manifest_sha,
-                                      "release_ready": release_ready, "files": len(manifest.files),
-                                      "ai_label": pkg.header.disclosure.ai_label}, filename="07_delivery.json")
-    return {"film_id": film_id, "ok": True, "release_ready": release_ready, "archive": "delivery", "manifest_sha256": manifest_sha,
-            **({"stamp": "REHEARSAL — synthetic"} if pkg.header.rehearsal else {}),
-            "superseded": superseded.name if superseded else None, "package_files": copied, "findings": findings,
-            "ai_label": label_check,
-            "external_dependencies": {"count": len(manifest.external_dependencies),
-                                      "present": sum(d.present_at_delivery for d in manifest.external_dependencies)},
-            "summary": {"files": len(manifest.files), "blocks": 0, "warnings": sum(f["severity"] == "WARN" for f in findings)}}
+    if not verify_archive(stage)["ok"]:
+        raise ValueError("staged delivery failed verification; prior archive and pointer retained")
+    return _publication(pkg, stage, manifest, label_check=label_check)
 
 
 # ------------------------------------------------------------------ Owner acceptance
 
+@film_writer()
 def accept_delivery(pkg: Any, by: str) -> dict[str, Any]:
     """Record the Owner's acceptance of the *current* archive (bound to its manifest hash; a new ``deliver`` drops it).
 
@@ -418,7 +475,7 @@ def accept_delivery(pkg: Any, by: str) -> dict[str, Any]:
     data = json.loads(path.read_text(encoding="utf-8"))
     data["delivery"]["owner_acceptance"] = {"by": by.strip(), "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                                             "manifest_sha256": item["manifest_sha256"]}
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_json(path, data)
     return {"accepted_by": by.strip(), "manifest_sha256": item["manifest_sha256"]}
 
 

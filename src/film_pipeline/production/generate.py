@@ -42,11 +42,12 @@ from typing import Any, Callable
 
 from film_pipeline.drama.generability import DRAFTS, rate_shot
 from film_pipeline.production.plan import plan_package
-from film_pipeline.production.money import (credit_ledger, money_ledger, receipt_amount, receipt_charged,
+from film_pipeline.production.money import (credit_ledger, money_ledger, receipt_amount, receipt_charged, unresolved_sends,
                                             receipt_result, receipt_unit)
 from film_pipeline.production.planning import flow_credits
 from film_pipeline.production.sections import shot_seconds
 from film_pipeline.production.takes import (load_log, register_take, sha256_file, sha256_text, takes_dir)
+from film_pipeline.production.runtime import atomic_json, atomic_text, film_writer
 from film_pipeline.providers.capability import DEFAULT_MODEL, DEFAULT_PROVIDER, ModelCapability, get_capability
 from film_pipeline.providers.http_adapters import make_adapter
 from film_pipeline.providers.flow_ui_adapter import FlowUiAdapter, default_runner  # noqa: F401 - re-exported
@@ -180,10 +181,10 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     out = root / "media" / "takes" / f"{take_id}.mp4"
     ledger = money_ledger(log, sent)
     spent = ledger.get(unit, {}).get("spent", 0.0)
-    pending = [tid for tid, r in sent.items() if r.get("result") == "PENDING" and tid.startswith(f"{generation_id}_t")]
+    pending = unresolved_sends(log, sent)
     if pending:
-        blockers.append(_blocker("SEND_PENDING", f"{', '.join(pending)} was sent and never reported back; check Flow for the "
-                                 f"clip and register or discard it by hand before another send", live_only=True))
+        blockers.append(_blocker("SEND_PENDING", f"{', '.join(pending)} still needs reconciliation; run film.py reconcile "
+                                 f"for the existing send before another submission", live_only=True))
     if out.exists() or out.with_suffix(".take.json").exists():
         blockers.append(_blocker("OUTPUT_EXISTS", f"{out} (or its manifest) already exists; it is evidence and is not "
                                  f"overwritten", live_only=True))
@@ -392,6 +393,11 @@ def _sent_receipts(root: Path, film_id: str, prices: dict[str, Any]) -> dict[str
         price = price if isinstance(price, dict) else {"expected_credits": float(price)}
         try:
             body = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(body, dict):
+                raise ValueError("unreadable intent object")
+            if receipt_result(body) == "AMBIGUOUS":
+                from film_pipeline.production.recovery import resolved_receipt
+                body = resolved_receipt(Path(root), take_id, body)
         except (OSError, ValueError):
             # its unit is unknown: reserve the Flow credits it would have cost and, when the shot now routes to
             # another unit, that route's price as well (never silently move money from one unit to another)
@@ -432,7 +438,7 @@ def _provider_no_clip(root: Path, take_id: str) -> bool:
 def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
     path = takes_dir(root) / "intents" / f"{payload['take_id']}.intent.json"
     path.parent.mkdir(parents=True, exist_ok=True)
-    keep = ("film_id", "generation_id", "take_id", "shot_version", "prompt_sha256", "route", "model",
+    keep = ("film_id", "generation_id", "take_id", "shot_version", "prompt_sha256", "prompt_file", "route", "model",
             "duration_s", "expected_credits", "credits_spent", "credit_cap", "provider", "provider_model", "tier",
             "cost_unit", "expected_cost")
     receipt = {k: payload[k] for k in keep}
@@ -449,7 +455,7 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
         except (OSError, ValueError):
             first = None
         receipt["sent_on"] = first or date.today().isoformat()
-    path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_json(path, receipt)
     return path
 
 
@@ -457,6 +463,7 @@ AUTO_RESEND = 1                         # P18-03: automatic resends after a prov
 PROVIDER_FAILURES_BEFORE_RESTAGE = 3    # OWNER_POLICY.md: after 3 provider failures on one shot, restage
 
 
+@film_writer(flow=True)
 def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Path | None = None,
              stills_dir: Path | None = None, start_token: str | None = None, backlog: Path | None = None,
              runner: Runner | None = None, end_token: str | None = None,
@@ -494,6 +501,23 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
         receipt = _write_receipt(root, payload, dry_run=False, sent=False, owner_go_live=go,
                                  refused=[r["code"] for r in refusals])
         return {"sent": False, "dry_run": False, "refused": refusals, "payload": payload, "receipt": str(receipt)}
+    if flow and runner is None and not mock:
+        from film_pipeline.production.preflight import check
+        environment = check(root, probe_flow=True)
+        if not environment["ok"]:
+            return {"sent": False, "dry_run": False, "refused": [_blocker("ENVIRONMENT_NOT_READY", issue)
+                    for issue in environment["issues"]], "payload": payload, "environment": environment}
+    snapshot = takes_dir(root) / "intents" / f"{payload['take_id']}.prompt.txt"
+    prompt = Path(payload["prompt_file"]).read_text(encoding="utf-8").strip()
+    if sha256_text(prompt) != payload["prompt_sha256"]:
+        raise ValueError("prompt changed during preflight; no send was made")
+    if snapshot.exists() and snapshot.read_text(encoding="utf-8").strip() != prompt:
+        raise ValueError("immutable sent prompt snapshot conflicts; no send was made")
+    if not snapshot.exists():
+        atomic_text(snapshot, prompt + "\n")
+    old_prompt = payload["prompt_file"]
+    payload["prompt_file"] = str(snapshot)
+    payload["argv"] = [str(snapshot) if arg == old_prompt else arg for arg in payload["argv"]]
     receipt = _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
     if not flow:
         return _generate_api(pkg, payload, adapter, mock, receipt)
