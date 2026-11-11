@@ -1,0 +1,140 @@
+{
+  "take_id": "SC01_g15_t1",
+  "generation_id": "SC01_g15",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:92": "yes, RUTH's head and eyes turned screen-right toward off-frame SAM while speaking"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes, SAM's place stays wholly out of frame (right edge empty at six sampled instants) and RUTH's eyes go just past the lens to frame-right",
+        "REL_GAZE": "yes, RUTH looks just right of the lens, never into it"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 8-frame sheet + 4 zoomed frames + 6 full-frame samples + STT 'we can leave the till alone until we've had coffee' span 1.4-4.0 s = line 92 exact; close-up RUTH as her still (grey bun, glasses on cord, blue dress, white apron), head and eyes slightly screen-right to off-frame SAM, dry and guarded, holds still; right frame edge empty at all six samples (SAM wholly out of frame); mug and notice unmoved (continuity with g13); shelves/coffee machines stable, no morphing; mean -30 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:92",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "de435f64d24d679fa698f7f680baff0906323581aa9229c92612dff35c389c2b"
+}
