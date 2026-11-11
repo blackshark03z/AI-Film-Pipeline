@@ -1,3 +1,5 @@
+**OWNER_APPROVED 2026-11-11 — "Duyệt, chạy pilot":** film07, quyền như tóm tắt, trần pilot 535 và toàn phim 3.210 credits. Hiện chỉ chạy pilot SC01–SC02; phần còn lại cần pilot QC PASS và báo Owner trước.
+
 # The First Shift — dự toán chờ xác minh quote và Owner duyệt
 
 **DRAFT_NOT_AUTHORIZED.** Chưa khởi tạo phim sản xuất, Generate, upload hay chi credits. Trần cũ256,8credits giữ nguyên.

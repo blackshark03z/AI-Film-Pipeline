@@ -1,6 +1,6 @@
 {
   "film_id": "film07_first_shift",
-  "status": "DRAFT_NOT_AUTHORIZED",
+  "status": "OWNER_APPROVED_PILOT_ONLY_2026-11-11",
   "current_quote_status": "READ_2026-11-11_DISPLAY_ONLY_NO_ATTACHED_INPUT",
   "current_quote": {
     "read_at_utc": "2026-11-11T02:29:44+00:00",
@@ -9,7 +9,13 @@
     "resolution": "360p",
     "aspect": "16:9",
     "multiplier": "x1",
-    "video_credits_by_duration_s": {"6": 6, "8": 8, "10": 10, "12": 14, "15": 20},
+    "video_credits_by_duration_s": {
+      "6": 6,
+      "8": 8,
+      "10": 10,
+      "12": 14,
+      "15": 20
+    },
     "per_6s_video_credits": 6.0,
     "image_credits_displayed": 0,
     "image_model": "Nano Banana 2.1",
@@ -82,5 +88,19 @@
     "no cadence or deadline promise before live pilot data"
   ],
   "screenplay_sha256": "c45ac9dcdfc09cefb4f11c8efc868ed132aa0c288d379c991eb856c4ec3bf92c",
-  "beats_sha256": "ddf469880a86fe2044f9b9aba14e5103fa350286bfc6b393f26a33b0c1bb6c08"
+  "beats_sha256": "ddf469880a86fe2044f9b9aba14e5103fa350286bfc6b393f26a33b0c1bb6c08",
+  "owner_approval": {
+    "by": "Owner khoikk03 (explicit chat approval)",
+    "at_local": "2026-11-11 (UTC+7)",
+    "statement": "Duyệt, chạy pilot",
+    "answering": "Duyệt film07 \"The First Shift\" với trần pilot 535 / toàn phim 3.210 credits? (brief, rights summary: RUTH/SAM fictional, film06 generated likeness reused, new diner counter/door/morning extension, no music, original script)",
+    "covers": [
+      "new film film07 meaning/brief",
+      "rights as summarized",
+      "pilot cap 535 credits",
+      "full-film cap 3210 credits incl. pilot"
+    ],
+    "scope_now": "pilot SC01-SC02 only; continuing beyond the pilot requires pilot QC PASS and a report to the Owner first",
+    "unchanged": "360p Omni 1.2 Flash only; no publication/push; final film acceptance stays with the Owner"
+  }
 }
