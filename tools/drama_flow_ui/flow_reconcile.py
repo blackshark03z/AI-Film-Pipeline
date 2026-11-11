@@ -110,6 +110,23 @@ async def scan_gallery(page, n: int) -> list[dict]:
     return details
 
 
+def exhaustion_confirmed(first: list[dict], second: list[dict]) -> bool:
+    """A short scan counts as the whole gallery only if a fresh rescan returns the same ordered media ids."""
+    a = [fb.media_id_from_url(d.get("url", "")).lower() for d in first]
+    b = [fb.media_id_from_url(d.get("url", "")).lower() for d in second]
+    return bool(a) and all(a) and a == b
+
+
+async def confirm_exhausted(page, first: list[dict], requested: int, home: str) -> bool:
+    """Short first scan (it ran out of videos before `requested`): reload the project, let the grid render, rescan.
+    A transient short read (grid still lazy-loading) must never authorise a provider-failure verdict and a resend."""
+    if len(first) >= requested:
+        return False
+    await page.goto(home, timeout=45000)
+    await page.wait_for_timeout(6000)
+    return exhaustion_confirmed(first, await scan_gallery(page, requested))
+
+
 def complete_negative_scan(details: list[dict], home: str, exhausted: bool = False) -> bool:
     """Full scan: MIN_SCAN newest pages read, or the gallery ran out of videos first (a young project holds fewer)."""
     prefix = home.split('/edit/')[0].split('?')[0].rstrip('/') + '/edit/'
@@ -198,6 +215,7 @@ async def run(args) -> dict[str, dict]:
             await page.set_viewport_size({"width": 1280, "height": 720})
             await page.keyboard.press("Escape")
             details = await scan_gallery(page, args.scan)   # once, shared by every receipt
+            exhausted = await confirm_exhausted(page, details, args.scan, page.url)
             for rid, prompt in todo.items():
                 native = manifests / f"{rid}.take.json"
                 context = json.loads(native.read_text(encoding="utf-8")) if native.is_file() else {}
@@ -207,7 +225,7 @@ async def run(args) -> dict[str, dict]:
                 res = bind_receipt(prompt, details, known, context)
                 res["scanned"] = len(details)
                 res.update(prompt_sha256=_sha(prompt), project=context.get("project"),
-                           scan_verified=complete_negative_scan(details, page.url, exhausted=len(details) < args.scan))
+                           scan_verified=complete_negative_scan(details, page.url, exhausted=exhausted))
                 if native.is_file():
                     res["native_sha256"] = hashlib.sha256(native.read_bytes()).hexdigest()
                 if res["result"] == "BOUND":
