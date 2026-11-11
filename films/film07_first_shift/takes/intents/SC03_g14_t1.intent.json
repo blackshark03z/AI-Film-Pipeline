@@ -1,0 +1,27 @@
+{
+  "film_id": "film07_first_shift",
+  "generation_id": "SC03_g14",
+  "take_id": "SC03_g14_t1",
+  "shot_version": 1,
+  "prompt_sha256": "27bd2f7ee871da7e84a1254efb7cde2405c0308dc50ad002ae3df2b7afe4ee09",
+  "prompt_file": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\media\\plan\\prompts\\SC03_g14.txt",
+  "route": "start_frame+Khung hinh",
+  "model": "Omni 1.2 Flash 360p",
+  "duration_s": 6,
+  "expected_credits": 6.0,
+  "credits_spent": 474.0,
+  "credit_cap": 535.0,
+  "provider": "flow",
+  "provider_model": "omni-1.2-flash",
+  "tier": "TEST",
+  "cost_unit": "credits",
+  "expected_cost": 6.0,
+  "start_frame_sha256": "9a908a0ae2e3a189417e09e3aa987498ba2dec28d8668ff8608b153d968e634b",
+  "start_frame_source": "end frame of SC03_g13",
+  "blockers": [
+    "HANDOFF_PREVIOUS_NOT_ACCEPTED"
+  ],
+  "dry_run": true,
+  "sent": false,
+  "owner_go_live": false
+}
