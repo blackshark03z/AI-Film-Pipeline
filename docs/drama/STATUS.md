@@ -1,3 +1,17 @@
+# P20 coordinator checkpoint — RC 5901981 blocked by FFmpeg hang (2026-11-11T04:10Z)
+
+Done since takeover: 47a5e88 recovery WIP (hand review; Codex quota out), 3ddce7e film07 quote (11/11 price unchanged:
+6 cr/6 s Omni 1.2 Flash 360p, image 0), c941e11 stale test expectations, M2 1800s benchmark PASS
+(proof/benchmark-final-verdict.json), 5901981 master keeps all picture frames + exact portrait concat durations.
+RC 5901981 full suite hung at 43%: test_film03_rendered_cut_has_the_legacy_final_duration. Bisected: concat filter with
+title + body.mkv joined by concat demuxer (-c copy, edit.py fine_concat) hangs at 0 CPU; single chunks fine. Fixed in cacb557
+(root cause: chunks with different libx264 VUI colour tags -> CLI filter-graph reinit -> concat deadlock; join now
+retags to BT.709 with h264_metadata bsf, -c copy, pixel-neutral; all render FFmpeg runs bounded by timeout).
+RC 5901981 full run: 2281 PASS/202 SKIP/1 FAIL (the hang only). RC re-frozen at cacb557 for a new full run. Then re-freeze RC, rerun full suite, then Owner decision on film07 (new film + cap).
+Child sessions run Sonnet high; coordinator Opus.
+
+---
+
 # P20 coordinator takeover — Claude main session (2026-11-11T02:25Z)
 
 Codex stopped after commit 863e7ed plus uncommitted send-recovery/download-identity WIP (10 files + 2 new tests).
