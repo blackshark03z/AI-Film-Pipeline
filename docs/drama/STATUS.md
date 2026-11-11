@@ -1,3 +1,14 @@
+# P20 RC d5baa38 QUALIFIED — waiting for Owner decision on film07 (2026-11-11)
+
+Exact clean RC d5baa38680cb8d5961ce22969beefe1ec694f3fc full suite: 2285PASS/202SKIP/0FAIL, 114 warnings, 1372s, no new
+exclusions. JUnit C:/AFP-Releases/P20_RC_d5baa38.pytest.xml sha256 20e89c25b630375db8a50c6892c8b22431603678f3917260bd41b3a4b9a134b0,
+C:/AFP-Releases/P20_RC_d5baa38.VERIFICATION.json. M0–M2 software criteria met (M2 benchmark PASS, rehearsal only).
+Not claimed: stable production (needs 2 Owner-accepted 25–30 min films). Next: Owner decides film07 meaning/rights/cap
+(new film + cap above 256.8 are reserved). On approval: pilot SC01–SC02 only (cap 535), QC, then full film under 3,210.
+Coordinator Opus; child sessions Sonnet high. No push.
+
+---
+
 # P20 coordinator checkpoint — RC 5901981 blocked by FFmpeg hang (2026-11-11T04:10Z)
 
 Done since takeover: 47a5e88 recovery WIP (hand review; Codex quota out), 3ddce7e film07 quote (11/11 price unchanged:
