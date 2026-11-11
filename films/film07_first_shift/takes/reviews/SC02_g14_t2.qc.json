@@ -1,0 +1,131 @@
+{
+  "take_id": "SC02_g14_t2",
+  "generation_id": "SC02_g14",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near booth seat throughout looking at RUTH (curly dark hair, damp grey hoodie), RUTH (grey bun, blue dress, white apron) stands beside the far seat 0-1.0 s, sits down on the far booth seat 1.0-3.0 s, 3.0-6.0 s both sit facing each other across the booth table, her hands resting on her side of the table, no touching; notice/room stable, no morphing; audio is room tone only (STT empty, mean -45.1 dB), the invented-speech defect of t1 is gone after the no-speech sound line",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [],
+  "output_sha256": "13e24dfafc03a702d50902617fba61bdd53f3af5b26e21aaaf9b4405ccaa9503"
+}

@@ -3364,10 +3364,12 @@
       "start_state": "SC02_g14",
       "end_state": "SC02_g15",
       "previous_generation_id": "SC02_g13",
-      "sfx": [],
+      "sfx": [
+        "no one speaks, no voices, no spoken words"
+      ],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "MASTER",
       "subject": "RUTH",
       "foreground": "",
@@ -3432,7 +3434,9 @@
         "lens_intent": "WIDE_ESTABLISH",
         "composition": "master from the open end of the booth: RUTH on the left and SAM on the right across the booth table, the high red booth backs and the table between them"
       },
-      "camera_position": "cA_bth"
+      "camera_position": "cA_bth",
+      "repair_of": "SC02_g14@v1",
+      "repair_reason": "SC02_g14_t1 rejected: the model invented a spoken line in a no-dialogue shot; prompt sound design now says no one speaks"
     },
     {
       "generation_id": "SC02_g15",
@@ -27057,6 +27061,82 @@
       "gaze_target": "SAM",
       "repair_of": "SC02_g09@v1",
       "repair_reason": "SC02_g09_t1 rejected: SAM's hair/head entered the right frame edge (REL_LISTENER); prompt now forbids any part of him entering the frame"
+    },
+    {
+      "generation_id": "SC02_g14",
+      "scene_id": "SC02",
+      "start_state": "SC02_g14",
+      "end_state": "SC02_g15",
+      "previous_generation_id": "SC02_g13",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "MASTER",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH",
+        "SAM"
+      ],
+      "dialogue": [],
+      "choreography": {
+        "generation_id": "SC02_g14",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "SAM sits on the near booth seat, RUTH stands beside the far booth seat"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 3.0,
+            "description": "RUTH sits down on the far booth seat",
+            "motion": "sit_down"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 3.0,
+            "end_s": 6.0,
+            "description": "both sit facing each other across the booth table"
+          }
+        ],
+        "once_actions": [
+          "RUTH sits down on the far booth seat"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "honest, tired",
+            "visible_cues": [
+              "lowered eyes",
+              "steady voice"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "pity"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_morning@1",
+        "prop_notice@1"
+      ],
+      "camera": {
+        "size": "WIDE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "master from the open end of the booth: RUTH on the left and SAM on the right across the booth table, the high red booth backs and the table between them"
+      },
+      "camera_position": "cA_bth"
     }
   ]
 }

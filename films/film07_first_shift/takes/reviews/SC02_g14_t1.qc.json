@@ -1,0 +1,131 @@
+{
+  "take_id": "SC02_g14_t1",
+  "generation_id": "SC02_g14",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "an unscripted spoken line (it's time to face it son we did everything we could) is heard at 1.9-5.5 s in a silent shot; story meaning is changed",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 samples: wide two-shot from the open end of the booth, SAM seated on the near seat throughout, RUTH stands beside the far seat 0-1.0 s, sits down 1.0-3.0 s, both seated facing each other 3.0-6.0 s; picture is correct and notice/room stable; BUT the audio carries an invented spoken line, STT \"it's time to face it son we did everything we could\" span 1.9-5.5 s, in a shot whose script has no dialogue (max -13.5 dB, mean -32.8 dB); the prompt's performance note says 'steady voice' and nothing forbids speech",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "the prompt for a no-dialogue shot says 'steady voice' in the performance note and never says nobody speaks, so the model invented a spoken line",
+  "required_answers": [],
+  "output_sha256": "c31d6685c8e3a0c2f796a7cd72b5a682b4e227a636de8dc0d203cc0ec551a6ec"
+}
