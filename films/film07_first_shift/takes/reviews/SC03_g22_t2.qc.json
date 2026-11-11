@@ -1,0 +1,140 @@
+{
+  "take_id": "SC03_g22_t2",
+  "generation_id": "SC03_g22",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:384": "yes, RUTH speaks to SAM off-frame right, eyes and body turned that way"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "SAM's shoulder enters the bottom-right edge for the whole shot (present in the start still), must be fully out of frame",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "no: a dark shoulder of SAM is visible in the bottom-right corner; RUTH's eyes go to frame-right",
+        "REL_GAZE": "yes, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-instant sheet + full-res frame at 3.2 s + corner crops (start still, 0.2/3.2/5.8 s): a dark shoulder/hood fragment of SAM sits in the bottom-right corner from the first frame (already in the start still) for the whole shot; RUTH, gaze, line and mug/cloth are fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "START_FRAME",
+  "cause_note": "the shared RUTH-single still (g22/g24) carries a dark shoulder fragment of SAM at the bottom-right edge; redraw the still with the right edge empty",
+  "required_answers": [
+    "REL_ADDRESS:384",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "e158dde00c69f3cced1007750fbe5f6ef8badd9551db2066d0c97b0dcc0a11f3"
+}
