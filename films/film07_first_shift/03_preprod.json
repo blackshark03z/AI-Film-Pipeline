@@ -10522,12 +10522,12 @@
     "SC04_g02": {
       "file": "media/stills/start_SC04_g02.jpg",
       "sha256": "b22a21efc516f913a9679a5f8630ae96fd8ccbe23624a14839253ac64b52a50e",
-      "prompt_sha256": "3539dd41c0eee054e6723880bca0fb496780bd939776f124336ad3bd3926d3b5",
-      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57) (image mode, 0 credits) (refs: char refs + plate_diner_morning); image drawn for SC04_g02",
+      "prompt_sha256": "dc9fccb6273b22d759dde7b6ce097053ee88e9a49e511f6c1428f0e8942cfce6",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-11T22:32:33+00:00",
+      "registered_at": "2026-11-11T22:45:28+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T22:32:33+00:00"
+      "approved_at": "2026-11-11T22:45:29+00:00"
     },
     "SC04_g04": {
       "file": "media/stills/start_SC04_g04.jpg",
