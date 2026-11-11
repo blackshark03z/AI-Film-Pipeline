@@ -50,7 +50,7 @@ from film_pipeline.production.takes import (load_log, register_take, sha256_file
 from film_pipeline.production.runtime import atomic_json, atomic_text, film_writer
 from film_pipeline.providers.capability import DEFAULT_MODEL, DEFAULT_PROVIDER, ModelCapability, get_capability
 from film_pipeline.providers.http_adapters import make_adapter
-from film_pipeline.providers.flow_ui_adapter import FlowUiAdapter, default_runner  # noqa: F401 - re-exported
+from film_pipeline.providers.flow_ui_adapter import FlowUiAdapter, default_runner, controller_runner  # noqa: F401 - re-exported
 from film_pipeline.providers.request import FrameRef, GenerationRequest
 from film_pipeline.providers.route import RouteSpec, resolve_route, route_defaults, route_issues
 
@@ -442,6 +442,7 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
             "duration_s", "expected_credits", "credits_spent", "credit_cap", "provider", "provider_model", "tier",
             "cost_unit", "expected_cost")
     receipt = {k: payload[k] for k in keep}
+    receipt.update({k: payload[k] for k in ("submit_protocol", "dispatch_phase", "project") if k in payload})
     receipt["start_frame_sha256"] = payload["start_frame"]["sha256"]
     receipt["start_frame_source"] = payload["start_frame"]["source"]
     if "end_frame" in payload:
@@ -518,16 +519,18 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     old_prompt = payload["prompt_file"]
     payload["prompt_file"] = str(snapshot)
     payload["argv"] = [str(snapshot) if arg == old_prompt else arg for arg in payload["argv"]]
+    if flow and runner is None:
+        payload.update(submit_protocol="inprocess-checkpoint-v1", dispatch_phase="PREPARING")
     receipt = _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
     if not flow:
         return _generate_api(pkg, payload, adapter, mock, receipt)
     out = Path(payload["output"])
-    try:
-        manifest = FlowUiAdapter(cap, runner=runner).send(payload["argv"], out)
-    except BaseException:
-        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING",
-                       note="the sender raised before reporting; check Flow before resending")
-        raise
+    def before_submit(context):
+        payload.update(dispatch_phase="SUBMITTING", project=context.get("project", ""))
+        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
+    native_runner = runner if runner is not None else lambda argv, output: controller_runner(argv, output, before_submit)
+    # On exception keep the last durable phase; a dead controller cannot issue a later Enter.
+    manifest = FlowUiAdapter(cap, runner=native_runner).send(payload["argv"], out)
     result: dict[str, Any] = {"sent": True, "dry_run": False, "payload": payload, "manifest_result": manifest.get("result"),
                               "receipt": str(receipt)}
     outcome = str(manifest.get("result"))

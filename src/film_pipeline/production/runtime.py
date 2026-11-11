@@ -2,15 +2,29 @@
 from __future__ import annotations
 
 import hashlib
+import asyncio
 import json
 import os
 import tempfile
 import threading
 from contextlib import contextmanager, ExitStack
+from concurrent.futures import ThreadPoolExecutor
 from functools import wraps
 from pathlib import Path
 
 _local = threading.local()
+
+
+def run_async(factory, *, timeout=None):
+    """Keep native UI control in the lock-owning process, including async API callers."""
+    async def invoke():
+        return await factory() if timeout is None else await asyncio.wait_for(factory(), timeout)
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(invoke())
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        return pool.submit(lambda: asyncio.run(invoke())).result()
 
 
 class WriterBusy(ValueError):

@@ -3,12 +3,10 @@ from __future__ import annotations
 
 import json
 import re
-import subprocess
-import sys
 from pathlib import Path
 from typing import Any
 
-from film_pipeline.production.runtime import atomic_json, film_writer
+from film_pipeline.production.runtime import atomic_json, film_writer, run_async
 from film_pipeline.production import takes as T
 from film_pipeline.production.money import receipt_result, unresolved_sends
 
@@ -50,6 +48,13 @@ def resolved_receipt(root: Path, take_id: str, receipt: dict) -> dict:
         intent = root / "takes" / "intents" / f"{take_id}.intent.json"
         clip = root / "media" / "takes" / f"{take_id}.mp4"
         native = clip.with_suffix(".take.json")
+        if (result.get("resolution") == "QUALIFIED_PREPARING" and result.get("intent_sha256") == T.sha256_file(intent)
+                and receipt.get("submit_protocol") == "inprocess-checkpoint-v1" and receipt.get("dispatch_phase") == "PREPARING"):
+            return {**receipt, "result": "PRE_SUBMIT_ERROR CONTROLLER_NOT_DISPATCHED", "reconciled": True}
+        if (result.get("resolution") == "PROVIDER_NO_CLIP" and result.get("intent_sha256") == T.sha256_file(intent)
+                and result.get("native_sha256") == T.sha256_file(native) and result.get("prompt_sha256") == receipt.get("prompt_sha256")
+                and result.get("provider_no_clip") is True and result.get("scan_verified") is True):
+            return {**receipt, "result": "FLOW_FAILED_NO_CLIP", "reconciled": True}
         if (result.get("intent_sha256") == T.sha256_file(intent) and result.get("native_sha256")
                 and result["native_sha256"] == T.sha256_file(native)):
             evidence = json.loads(native.read_text(encoding="utf-8"))
@@ -70,17 +75,15 @@ def resolved_receipt(root: Path, take_id: str, receipt: dict) -> dict:
 
 
 def _native_runner(pkg, take_id: str, prompt: str, out: Path) -> dict:
+    from film_pipeline.providers.flow_ui_adapter import flow_tool
     root = Path(pkg.root)
-    command = [sys.executable, str(ROOT / "tools/drama_flow_ui/flow_reconcile.py"),
-               "--receipts", str(root / "takes/intents"), "--takes-index", str(root / "takes/index.json"),
-               "--ids", take_id, "--out-dir", str(out.parent), "--download"]
-    done = subprocess.run(command, capture_output=True, text=True, timeout=480)
-    if done.returncode:
-        raise ValueError("Flow reconciliation failed; original send remains pending: " + done.stderr[-300:])
-    path = _resolution_path(root, take_id)
-    if not path.is_file():
+    tool = flow_tool("flow_reconcile")
+    args = tool.build_parser().parse_args(["--receipts", str(root / "takes/intents"), "--takes-index", str(root / "takes/index.json"),
+                                         "--ids", take_id, "--out-dir", str(out.parent), "--download"])
+    results = run_async(lambda: tool.run(args), timeout=480)
+    if take_id not in results:
         raise ValueError("Flow reconciliation returned no evidence; original send remains pending")
-    return json.loads(path.read_text(encoding="utf-8"))
+    return results[take_id]
 
 
 @film_writer(flow=True)
@@ -103,10 +106,27 @@ def reconcile(pkg: Any, take_id: str, *, runner=None) -> dict:
     out = root / "media/takes" / f"{take_id}.mp4"
     result_path = _resolution_path(root, take_id)
     native = out.with_suffix(".take.json")
+    if receipt.get("submit_protocol") == "inprocess-checkpoint-v1" and receipt.get("dispatch_phase") == "PREPARING":
+        if native.is_file() and json.loads(native.read_text(encoding="utf-8")).get("submission_phase") in {"SUBMITTING", "SUBMITTED"}:
+            raise ValueError("dispatch journal contradicts the native submission checkpoint")
+        atomic_json(result_path, {"resolution": "QUALIFIED_PREPARING", "intent_sha256": T.sha256_file(path)})
+        return {"resolved": True, "result": "PRE_SUBMIT_ERROR CONTROLLER_NOT_DISPATCHED", "submitted_again": False}
+    native_bound = None
     if native.is_file():
         evidence = json.loads(native.read_text(encoding="utf-8"))
+        if (evidence.get("result") == "PASSED" and evidence.get("media_id")
+                and evidence.get("binding") == "RECONCILE_PROMPT_MATCH"):
+            if (evidence.get("prompt_sha256") != receipt["prompt_sha256"] or evidence.get("file") != out.name
+                    or not out.is_file() or evidence.get("sha256") != T.sha256_file(out)
+                    or (receipt.get("project") and evidence.get("project") != receipt["project"])):
+                raise ValueError("native download provenance/hash does not identify this send")
+            native_bound = {"result": "BOUND", "download": "SAVED", "media_id": evidence["media_id"],
+                            "sha256": evidence["sha256"], "prompt_sha256": receipt["prompt_sha256"],
+                            "native_sha256": T.sha256_file(native), "resolution_source": "NATIVE_PASSED"}
         outcome = {**receipt, "result": evidence.get("result")}
-        if evidence.get("prompt_sha256") == receipt["prompt_sha256"] and receipt_result(outcome) in {"NOT_SUBMITTED", "PROVIDER_FAILED"}:
+        if (evidence.get("prompt_sha256") == receipt["prompt_sha256"]
+                and receipt_result(outcome) in {"NOT_SUBMITTED", "PROVIDER_FAILED"}
+                and not (receipt.get("dispatch_phase") == "SUBMITTING" and evidence.get("submission_phase") == "PREPARING")):
             atomic_json(result_path, {"receipt_id": take_id, "result": evidence["result"],
                                      "intent_sha256": T.sha256_file(path), "native_sha256": T.sha256_file(native)})
             return {"resolved": True, "result": evidence["result"], "submitted_again": False}
@@ -119,7 +139,16 @@ def reconcile(pkg: Any, take_id: str, *, runner=None) -> dict:
     reusable = (prior.get("result") == "BOUND" and prior.get("download") == "SAVED" and out.is_file()
                 and prior.get("intent_sha256") == T.sha256_file(path)
                 and prior.get("sha256") == T.sha256_file(out) and prior.get("prompt_sha256") == receipt["prompt_sha256"])
-    result = prior if reusable else (runner or _native_runner)(pkg, take_id, prompt, out)
+    result = prior if reusable else native_bound or (runner or _native_runner)(pkg, take_id, prompt, out)
+    if result.get("provider_no_clip") and result.get("result") == "NOT_IN_GALLERY":
+        from film_pipeline.providers.flow_ui_adapter import flow_tool
+        context = json.loads(native.read_text(encoding="utf-8")) if native.is_file() else {}
+        if (result.get("scan_verified") is True and result.get("native_sha256") == T.sha256_file(native)
+                and result.get("prompt_sha256") == receipt["prompt_sha256"] and result.get("project") == context.get("project")
+                and context.get("project") and (not receipt.get("project") or receipt["project"] == context["project"])
+                and flow_tool("flow_reconcile").settled(native)):
+            atomic_json(result_path, {**result, "resolution": "PROVIDER_NO_CLIP", "intent_sha256": T.sha256_file(path)})
+            return {"resolved": True, "result": "FLOW_FAILED_NO_CLIP", "submitted_again": False}
     if result.get("result") != "BOUND" or result.get("download") != "SAVED":
         return {"resolved": False, "take_id": take_id, "result": result.get("result", "UNKNOWN"),
                 "next_action": "Reconcile this existing send again; do not resubmit an uncertain job"}

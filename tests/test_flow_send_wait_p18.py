@@ -121,7 +121,8 @@ def _patch(monkeypatch, scans, downloads=None, clock=None):
     async def scan(_page, _n):
         return next(it)
 
-    async def download(_page, _ctx, _n, out):
+    async def download(_page, _ctx, _n, out, *, media_id, prompt):
+        assert media_id == MID_NEW and prompt == PROMPT
         failed = next(dl)
         if failed is None:
             out.write_bytes(b"video")
@@ -324,7 +325,8 @@ def _patch_scans(monkeypatch, scans, clock):
     async def nth(_page, n, _home):
         return state["now"][n] if n < len(state["now"]) else None
 
-    async def download(_page, _ctx, n, out):
+    async def download(_page, _ctx, n, out, *, media_id, prompt):
+        assert fr.fb.media_id_from_url(state["now"][n]["url"]) == media_id and prompt == PROMPT
         if fs.FAILED_TEXT in state["now"][n]["text"] or state["now"][n]["text"].startswith("rendering"):
             return "NO_VIDEO_UNDER_TILE"
         out.write_bytes(state["now"][n]["url"][-8:].encode())

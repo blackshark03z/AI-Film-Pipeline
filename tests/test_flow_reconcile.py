@@ -82,3 +82,32 @@ def test_settled_needs_ten_minutes_after_the_send_ended(tmp_path):
     from datetime import timezone
     assert fr.settled(m, now=datetime(2026, 11, 9, 12, 10, 0, tzinfo=timezone.utc))
     assert not fr.settled(m, now=datetime(2026, 11, 9, 12, 20, 0))   # aware vs naive: no crash, not settled
+
+
+def test_negative_scan_rejects_duplicates_invalid_details_and_wrong_project():
+    import flow_reconcile as fr
+    home = "https://labs.google/fx/tools/flow/project/p"
+    details = [page(f"11111111-2222-3333-4444-{i:012d}", "other full prompt") for i in range(6)]
+    assert fr.complete_negative_scan(details, home)
+    assert not fr.complete_negative_scan(details[:5], home)
+    assert not fr.complete_negative_scan([*details[:5], details[0]], home)
+    assert not fr.complete_negative_scan([*details, {"url": home, "text": "gallery"}], home)
+    assert not fr.complete_negative_scan(details, home + "2")
+
+
+def test_controller_death_after_enter_can_still_settle_from_the_pre_enter_stamp(tmp_path):
+    """A hard death between Enter and the SUBMITTED checkpoint leaves only the SUBMITTING checkpoint (no finished /
+    submitted_at); its pre-Enter stamp must still let a verified negative scan settle, or the send stays pending forever."""
+    import json
+    from datetime import datetime
+
+    import flow_reconcile as fr
+    m = tmp_path / "X_t1.take.json"
+    m.write_text(json.dumps({"submission_phase": "SUBMITTING", "submitting_at": "2026-11-09T12:00:00",
+                             "started": "2026-11-09T11:00:00"}), encoding="utf-8")
+    assert not fr.settled(m, now=datetime(2026, 11, 9, 12, 9, 0))
+    assert fr.settled(m, now=datetime(2026, 11, 9, 12, 10, 0))
+    # PREPARING never pressed Enter: `started` is not a send time
+    m.write_text(json.dumps({"submission_phase": "PREPARING", "submitting_at": "2026-11-09T12:00:00",
+                             "started": "2026-11-09T11:00:00"}), encoding="utf-8")
+    assert not fr.settled(m, now=datetime(2026, 11, 9, 13, 0, 0))

@@ -64,7 +64,10 @@ MIN_SCAN = 6     # ... and only when at least this many newest detail pages were
 def settled(manifest: Path, now: datetime | None = None) -> bool:
     """True when the send's take manifest says it finished SETTLE_S or more ago (film05: Flow jobs that vanished)."""
     try:
-        finished = datetime.fromisoformat(json.loads(manifest.read_text(encoding="utf-8"))["finished"])
+        record = json.loads(manifest.read_text(encoding="utf-8"))
+        sent = record.get("submission_phase") in {"SUBMITTING", "SUBMITTED"}   # PREPARING never pressed Enter
+        stamp = record.get("finished") or (record.get("submitted_at") or record.get("submitting_at") if sent else None)
+        finished = datetime.fromisoformat(stamp)
     except (OSError, ValueError, KeyError, TypeError):
         return False
     now = now or datetime.now(finished.tzinfo)   # the manifest writes local naive time; an offset is honoured too
@@ -107,13 +110,31 @@ async def scan_gallery(page, n: int) -> list[dict]:
     return details
 
 
+def complete_negative_scan(details: list[dict], home: str) -> bool:
+    prefix = home.split('/edit/')[0].split('?')[0].rstrip('/') + '/edit/'
+    ids = [fb.media_id_from_url(d.get("url", "")) for d in details]
+    return (len(ids) >= MIN_SCAN and all(ids) and len({m.lower() for m in ids}) == len(ids)
+            and all(d.get("url", "").startswith(prefix) and d.get("text", "").strip() for d in details))
+
+
 JS_MARKED_CENTRE = r"""() => { const c = document.querySelector('[data-vp-n]');
     if (!c) return null; c.scrollIntoView({block: 'center'});
     const r = c.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2] }"""
 
+JS_CAPTURE_AND_OPEN = r"""() => {
+    const c = document.querySelector('[data-vp-n]');
+    const tile = c && c.querySelector('flow-video-tile');
+    const video = c && c.querySelector('video');
+    const src = video && (video.currentSrc || video.src);
+    if (!tile || !src) return null;
+    tile.click();
+    return src;
+}"""
 
-async def download_nth(page, ctx, n: int, out: Path) -> str | None:
-    """Download the n-th video tile (gallery at scroll 0) like flow_send does; None = saved, else the failure."""
+
+async def download_nth(page, ctx, n: int, out: Path, *, media_id: str, prompt: str) -> str | None:
+    """Bind the captured player URL to the identity opened by that same tile activation."""
+    home = page.url
     await page.evaluate(fs.JS_TOP)
     await page.wait_for_timeout(500)
     if not await page.evaluate(fs.JS_MARK_NTH, n):
@@ -123,13 +144,24 @@ async def download_nth(page, ctx, n: int, out: Path) -> str | None:
         return "TILE_NOT_FOUND"
     await page.mouse.move(*xy)
     await page.wait_for_timeout(2500)
-    src = await page.evaluate(fs.JS_VIDEO_AT, xy)
+    src = await page.evaluate(JS_CAPTURE_AND_OPEN)
     if not src:
         return "NO_VIDEO_UNDER_TILE"
-    resp = await ctx.request.get(src, timeout=300000)
-    ctype = resp.headers.get("content-type", "")
-    data = await resp.body()
-    if resp.status != 200 or not ctype.startswith("video/"):
+    try:
+        await page.wait_for_timeout(3500)
+        prefix = home.split('/edit/')[0].split('?')[0].rstrip('/') + '/edit/'
+        if (fb.media_id_from_url(page.url) != media_id or not page.url.startswith(prefix)
+                or not fb.prompt_on_page(prompt, await page.evaluate("document.body.innerText"))):
+            return "DOWNLOAD_IDENTITY_MISMATCH"
+        resp = await ctx.request.get(src, timeout=300000)
+        ctype = resp.headers.get("content-type", "")
+        data = await resp.body()
+    except Exception as exc:
+        return f"DOWNLOAD_FAILED {type(exc).__name__}"  # signed URLs never enter the receipt/error text
+    finally:
+        await page.goto(home, timeout=45000)
+        await page.wait_for_timeout(1000)
+    if resp.status != 200 or not ctype.startswith("video/") or not data:
         return f"DOWNLOAD_FAILED {resp.status} {ctype}"
     out.parent.mkdir(parents=True, exist_ok=True)
     if out.exists():
@@ -173,10 +205,15 @@ async def run(args) -> dict[str, dict]:
                     continue
                 res = bind_receipt(prompt, details, known, context)
                 res["scanned"] = len(details)
+                res.update(prompt_sha256=_sha(prompt), project=context.get("project"),
+                           scan_verified=complete_negative_scan(details, page.url))
+                if native.is_file():
+                    res["native_sha256"] = hashlib.sha256(native.read_bytes()).hexdigest()
                 if res["result"] == "BOUND":
                     known.add(res["media_id"])   # a clip binds to one receipt only
                     if args.download:
-                        failed = await download_nth(page, ctx, res["index"], out_dir / f"{rid}.mp4")
+                        failed = await download_nth(page, ctx, res["index"], out_dir / f"{rid}.mp4",
+                                                    media_id=res["media_id"], prompt=prompt)
                         res["download"] = failed or "SAVED"
                         if not failed:
                             res["sha256"] = hashlib.sha256((out_dir / f"{rid}.mp4").read_bytes()).hexdigest()
@@ -186,7 +223,7 @@ async def run(args) -> dict[str, dict]:
             await pw.stop()   # disconnect only; browser and tab stay open
     for rid, res in results.items():
         # Codex review: only a full scan proves the clip is gone (a short or failed scan could hide it)
-        if (res["result"] == "NOT_IN_GALLERY" and res.get("scanned", 0) >= MIN_SCAN
+        if (res["result"] == "NOT_IN_GALLERY" and res.get("scan_verified") and res.get("project")
                 and settled(manifests / f"{rid}.take.json")):
             res["provider_no_clip"] = True
         atomic_json(out_dir / f"{rid}.reconcile.json", {"receipt_id": rid, **res})

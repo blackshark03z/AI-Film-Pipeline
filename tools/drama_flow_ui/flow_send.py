@@ -648,7 +648,7 @@ async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline:
             if res["result"] == "BOUND":
                 again = await read_nth_detail(page, res["index"], page.url)
                 if again and fb.media_id_from_url(again["url"]) == res["media_id"]:
-                    failed = await fr.download_nth(page, ctx, res["index"], out)
+                    failed = await fr.download_nth(page, ctx, res["index"], out, media_id=res["media_id"], prompt=prompt)
                     rec["reconcile_bind"] = {"tries": tries, "media_id_tail": res["media_id"][-8:],
                                              "download": failed or "SAVED", "download_retries": retries}
                     if failed and time.time() < deadline:
@@ -661,7 +661,7 @@ async def reconcile_bind(page, ctx, prompt: str, out: Path, rec: dict, deadline:
                         rec["result"] = failed
                         return True
                     data = out.read_bytes()
-                    rec.update(result="PASSED", binding="RECONCILE_PROMPT_MATCH", media_id_tail=res["media_id"][-8:],
+                    rec.update(result="PASSED", binding="RECONCILE_PROMPT_MATCH", media_id=res["media_id"], media_id_tail=res["media_id"][-8:],
                                file=out.name, sha256=_sha(data), bytes=len(data), duration_s=probe_duration(out))
                     return True
                 res = {"result": "MOVED", "why": "the gallery moved before the download"}
@@ -890,7 +890,7 @@ async def _upload(page, f) -> None:
     await page.keyboard.press("Escape")
 
 
-async def run(args) -> dict:
+async def run(args, before_submit=None) -> dict:
     from patchright.async_api import async_playwright
     prompt = Path(args.prompt_file).read_text(encoding="utf-8").strip()
     out = Path(args.out)
@@ -900,6 +900,8 @@ async def run(args) -> dict:
            **({"end": args.end} if args.end else {}),
            "upload": [Path(u).name for u in args.upload],
            "started": time.strftime("%Y-%m-%dT%H:%M:%S")}
+    rec.update(submission_phase="PREPARING", result="PREPARING")
+    checkpoint(out, rec)
     pw = await async_playwright().start()
     try:
         browser = await pw.chromium.connect_over_cdp(CDP, timeout=30000)
@@ -999,14 +1001,18 @@ async def run(args) -> dict:
         await box.click()
         await box.fill(prompt)
         await page.wait_for_timeout(500)
-        checkpoint(out, {**rec, "before_ids": pre.get("before_ids", []), "result": "PENDING",
-                         "submission_phase": "SUBMITTING"})
+        if before_submit is not None:
+            before_submit(rec)
+        # submitting_at: a death between Enter and the SUBMITTED checkpoint still leaves a send time to settle from
+        rec.update(before_ids=(pre or {}).get("before_ids", []), result="PENDING", submission_phase="SUBMITTING",
+                   submitting_at=time.strftime("%Y-%m-%dT%H:%M:%S"))
+        checkpoint(out, rec)
         await page.keyboard.press("Enter")
         t0 = time.time()
         await page.wait_for_timeout(8000)
         left = await box.evaluate("e => (e.value ?? e.innerText) || ''")
         if prompt[:40] in left:
-            rec["result"] = "SEND_FAILED"
+            rec["result"] = "SUBMIT_UNCONFIRMED"
             return rec
 
         if not args.image:
@@ -1019,7 +1025,8 @@ async def run(args) -> dict:
             own = pre["own"]
             rec["own_tile_at_submit"] = {k: (v[-8:] if k == "media_id" and v else v) for k, v in own.items()}
             rec["before_ids"] = pre.get("before_ids", [])
-            checkpoint(out, {**rec, "result": "PENDING", "submission_phase": "SUBMITTED"})
+            rec.update(result="PENDING", submission_phase="SUBMITTED", submitted_at=time.strftime("%Y-%m-%dT%H:%M:%S"))
+            checkpoint(out, rec)
             return await _video_wait_and_bind(page, ctx, args, prompt, out, rec, pre, t0, failed_before)
 
         probe = prompt[:30]

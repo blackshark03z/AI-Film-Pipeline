@@ -7,6 +7,7 @@ manifest/result strings, the same ledger effect. Flow has no stable job id: a ta
 from __future__ import annotations
 
 import json
+import importlib
 import subprocess
 import sys
 from pathlib import Path
@@ -22,6 +23,25 @@ FLOW_MODEL = "Omni 1.2 Flash"  # the model name Flow's composer dropdown starts 
 PLACEHOLDER_END_TOKEN = "tok:<TAIL_OF_UPLOADED_END_FRAME>"
 
 Runner = Callable[[list[str], Path], dict[str, Any]]
+
+
+def flow_tool(name: str):
+    sys.path.insert(0, str(FLOW_SEND.parent))
+    module = importlib.import_module(name)
+    if Path(module.__file__).resolve() != (FLOW_SEND.parent / f"{name}.py").resolve():
+        raise ValueError("Flow tool belongs to a different checkout")
+    return module
+
+
+def controller_runner(argv: list[str], out: Path, before_submit=None) -> dict[str, Any]:
+    from film_pipeline.production.runtime import run_async
+    if Path(argv[1]).resolve() != FLOW_SEND.resolve():
+        raise ValueError("production controller requires the qualified native Flow tool")
+    tool = flow_tool("flow_send")
+    args = tool.parse_args(argv[2:])
+    body = run_async(lambda: tool.run(args, before_submit=before_submit))
+    tool.checkpoint(out, body)
+    return {**body, "returncode": 0}
 
 
 def default_runner(argv: list[str], out: Path) -> dict[str, Any]:  # pragma: no cover - spends credits; P3-05 only

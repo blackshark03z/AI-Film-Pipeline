@@ -280,6 +280,39 @@ def test_send_rechecks_quote_after_frames_and_never_submits_on_price_change(tmp_
     assert all(call.args != ("Enter",) for call in page.keyboard.press.call_args_list)
 
 
+def test_composer_text_remaining_after_enter_keeps_the_send_ambiguous(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock, Mock
+    import patchright.async_api as pa
+    from film_pipeline.providers.capability import get_capability
+    prompt = "Original fictional dialogue remains visible after Enter."
+    box = SimpleNamespace(click=AsyncMock(), fill=AsyncMock(), evaluate=AsyncMock(return_value=prompt))
+    events = []
+    async def press(key):
+        if key == "Enter":
+            assert events == ["SUBMITTING"]
+            # the durable pre-Enter checkpoint carries its own send time (a death after Enter can still settle)
+            on_disk = json.loads((tmp_path / "out.take.json").read_text(encoding="utf-8"))
+            assert on_disk["submission_phase"] == "SUBMITTING" and on_disk["submitting_at"]
+            events.append("ENTER")
+    page = SimpleNamespace(url="https://flow.google.com/project/owned", set_viewport_size=AsyncMock(),
+                           keyboard=SimpleNamespace(press=press), wait_for_timeout=AsyncMock(), on=Mock(),
+                           locator=lambda selector: SimpleNamespace(first=box))
+    page.evaluate = AsyncMock(side_effect=lambda js: {"failed": 0} if js == fs.JS_JOB_STATE else [])
+    browser = SimpleNamespace(contexts=[SimpleNamespace(pages=[page])])
+    pw = SimpleNamespace(chromium=SimpleNamespace(connect_over_cdp=AsyncMock(return_value=browser)), stop=AsyncMock())
+    monkeypatch.setattr(pa, "async_playwright", lambda: SimpleNamespace(start=AsyncMock(return_value=pw)))
+    monkeypatch.setattr(fs, "front_snapshot", AsyncMock(return_value={"before_ids": []}))
+    monkeypatch.setattr(fs, "_fill_frame_slot", AsyncMock(return_value=None))
+    source = tmp_path / "prompt.txt"
+    source.write_text(prompt, encoding="utf-8")
+    args = fs.parse_args([str(source), str(tmp_path / "out.mp4"), "--start", "tok:owned"])
+    result = asyncio.run(fs.run(args, before_submit=lambda context: events.append("SUBMITTING")))
+    assert events == ["SUBMITTING", "ENTER"]
+    assert result["result"] == "SUBMIT_UNCONFIRMED" and result["submission_phase"] == "SUBMITTING"
+    assert get_capability("flow").normalize(result["result"]) == "AMBIGUOUS"
+
+
 def test_model_label_and_match():
     assert fs.model_label("Omni 1.2 Flash\narrow_drop_down") == "Omni 1.2 Flash"
     assert fs.model_matches("Omni 1.2 Flash\narrow_drop_down", "Omni 1.2 Flash")
@@ -480,7 +513,8 @@ def _patch(monkeypatch, rounds, at_index=None, saved=None):
     async def scan(_page, _n):
         return next(it)
 
-    async def download(_page, _ctx, n, out):
+    async def download(_page, _ctx, n, out, *, media_id, prompt):
+        assert media_id and prompt
         out.write_bytes(b"video")
         if saved is not None:
             saved.append(n)

@@ -60,7 +60,7 @@ def test_ambiguous_reconcile_keeps_reservation_and_original_receipt(tmp_path):
     assert credit_ledger(T.load_log(pkg.root, pkg.header.film_id), sent)["spent"] == 8
 
 
-@pytest.mark.parametrize("outcome", ["UNBOUND", "AMBIGUOUS", "TIMEOUT", "MANIFEST_HASH_MISMATCH", "PASSED"])
+@pytest.mark.parametrize("outcome", ["UNBOUND", "AMBIGUOUS", "TIMEOUT", "MANIFEST_HASH_MISMATCH", "PASSED", "SUBMIT_UNCONFIRMED"])
 def test_reported_but_unresolved_send_also_blocks_the_next_generation(tmp_path, outcome):
     pkg, path, original = interrupted(tmp_path)
     receipt = json.loads(original)
@@ -159,6 +159,67 @@ def test_truncated_legacy_resolution_can_be_reconciled_without_a_new_send(tmp_pa
     result = R.reconcile(pkg, "SC01_g1_t1", runner=bound)
     assert result["resolved"]
     assert (pkg.root / "takes/intents/SC01_g1_t1.intent.json").read_bytes() == original
+
+
+@pytest.mark.parametrize("submitted", [False, True])
+def test_controller_dispatch_journal_distinguishes_death_before_and_after_submit(tmp_path, monkeypatch, submitted):
+    from film_pipeline.production import preflight as P
+    pkg = film(tmp_path, 100)
+    monkeypatch.setattr(P, "check", lambda *a, **k: {"ok": True})
+    def controller(argv, out, before_submit=None):
+        if submitted:
+            before_submit({"project": "owned-project"})
+        raise RuntimeError("controller died")
+    monkeypatch.setattr(G, "controller_runner", controller)
+    with pytest.raises(RuntimeError, match="controller died"):
+        G.generate(pkg, "SC01_g1", dry_run=False, stills_dir=still(tmp_path),
+                   backlog=backlog(tmp_path, "OWNER_GO_LIVE: YES"))
+    intent = pkg.root / "takes/intents/SC01_g1_t1.intent.json"
+    original = intent.read_bytes()
+    receipt = json.loads(original)
+    assert receipt["dispatch_phase"] == ("SUBMITTING" if submitted else "PREPARING")
+    result = R.reconcile(pkg, "SC01_g1_t1", runner=lambda *a: {"result": "AMBIGUOUS"})
+    assert result["resolved"] is (not submitted)
+    assert intent.read_bytes() == original
+    sent = G._sent_receipts(pkg.root, pkg.header.film_id, {"SC01_g1": 8})
+    assert credit_ledger(T.load_log(pkg.root, pkg.header.film_id), sent)["spent"] == (8 if submitted else 0)
+
+
+def test_verified_native_download_recovers_without_another_gallery_read(tmp_path):
+    pkg, path, original = interrupted(tmp_path)
+    receipt = json.loads(original)
+    out = pkg.root / "media/takes/SC01_g1_t1.mp4"
+    out.parent.mkdir(parents=True)
+    out.write_bytes(b"exact downloaded result")
+    native = {"result": "PASSED", "prompt_sha256": receipt["prompt_sha256"], "sha256": T.sha256_file(out),
+              "file": out.name, "media_id": "aaaaaaaa-2222-3333-4444-555555555555", "project": "owned-project",
+              "binding": "RECONCILE_PROMPT_MATCH"}
+    out.with_suffix(".take.json").write_text(json.dumps(native), encoding="utf-8")
+    result = R.reconcile(pkg, "SC01_g1_t1", runner=lambda *a: pytest.fail("native download already verified"))
+    assert result["resolved"] and result["take"]["status"] == "GENERATED"
+    assert path.read_bytes() == original
+    assert R.reconcile(pkg, "SC01_g1_t1", runner=lambda *a: pytest.fail("no repeat lookup"))["resolved"]
+    assert len(T.load_log(pkg.root, pkg.header.film_id).takes) == 1
+
+
+@pytest.mark.parametrize("verified", [False, True])
+def test_only_hash_bound_settled_negative_scan_resolves_a_pending_receipt(tmp_path, verified):
+    from datetime import datetime, timedelta
+    pkg, intent, original = interrupted(tmp_path)
+    receipt = json.loads(original)
+    native = pkg.root / "media/takes/SC01_g1_t1.take.json"
+    native.parent.mkdir(parents=True)
+    native.write_text(json.dumps({"result": "UNBOUND", "prompt_sha256": receipt["prompt_sha256"],
+        "project": "owned", "finished": (datetime.now() - timedelta(seconds=700)).isoformat()}), encoding="utf-8")
+    proof = {"result": "NOT_IN_GALLERY", "provider_no_clip": True, "scan_verified": verified, "scanned": 6,
+             "project": "owned", "prompt_sha256": receipt["prompt_sha256"], "native_sha256": T.sha256_file(native)}
+    result = R.reconcile(pkg, "SC01_g1_t1", runner=lambda *a: proof)
+    assert result["resolved"] is verified and intent.read_bytes() == original
+    assert bool(R.pending_receipts(pkg)) is (not verified)
+    sent = G._sent_receipts(pkg.root, pkg.header.film_id, {"SC01_g1": 8})
+    assert credit_ledger(T.load_log(pkg.root, pkg.header.film_id), sent)["spent"] == 8
+    if verified:
+        assert R.reconcile(pkg, "SC01_g1_t1", runner=lambda *a: pytest.fail("resolved proof is reusable"))["resolved"]
 
 
 @pytest.mark.parametrize("initial", ["PENDING", "UNBOUND"])
