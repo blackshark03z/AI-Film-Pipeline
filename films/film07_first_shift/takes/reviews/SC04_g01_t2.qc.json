@@ -1,0 +1,140 @@
+{
+  "take_id": "SC04_g01_t2",
+  "generation_id": "SC04_g01",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:412": "SAM speaks to RUTH, eyes and body turned toward frame-left where she sits off-frame."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "RUTH's place is kept out of frame and never shown empty; SAM's eyes go to frame-left, just past the lens.",
+        "REL_GAZE": "SAM looks toward RUTH off-frame and never into the lens."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: SAM alone, no other person or empty place shown at the edges, gaze held off-lens to frame-left, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:412",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "ae38b7b779c8a8bb8a02a7ed7a6d8ba23a87fe404ed855b88fc8738820673288"
+}
