@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g22_t1",
+  "generation_id": "SC02_g22",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:255": "yes: Ruth speaks line 255 to Sam off-frame-right, mouth moves with audio"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes: Sam wholly out of frame, place not shown empty; Ruth's eyes go just past lens to screen-right",
+        "REL_GAZE": "yes: gaze held screen-right at Sam, never into lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Ruth identity/look match g20, same booth/window background; right edge empty in all 4 sampled frames (Sam off-frame); STT 'there is plenty i just can't promise where it leads' 0.6-4.6 s matches line 255",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:255",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "5a836428e22b097fdea3d54fff4a9fd9e407f9f511080a391ff54bd5d5a6eebd"
+}
