@@ -4245,7 +4245,9 @@
       "start_state": "SC02_g24",
       "end_state": "SC02_g25",
       "previous_generation_id": "SC02_g23",
-      "sfx": [],
+      "sfx": [
+        "no one speaks, no voices, no spoken words"
+      ],
       "readout": [],
       "duration_s": 6,
       "version": 1,
