@@ -1,0 +1,140 @@
+{
+  "take_id": "SC01_g18_t1",
+  "generation_id": "SC01_g18",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:106": "yes: RUTH's eyes and head turn toward SAM's off-frame place as she speaks the line"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes: SAM is not in frame and his place is not shown empty; RUTH's eyes go to where he stands",
+        "REL_GAZE": "yes: RUTH looks off-frame at SAM, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6 full-frame samples + 4 zoomed faces + STT 'i was going to ask if you still take milk' span 1.7-4.0 s = line 106 exact; RUTH close single as her still (grey bun, glasses on cord, pale blue dress, white apron), head and eyes slightly screen-left toward SAM's off-frame place, guarded, speaks then holds still; right frame edge shows only door frame/room, SAM wholly out of frame at all six samples and no mug on the counter (he holds it), notice flat on counter; shelves/stools stable, no morphing; mean -31.9 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:106",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "ecbb58e94c05af48546553b68da2ce3481c125bdc69fa223367f7df21fe00d46"
+}
