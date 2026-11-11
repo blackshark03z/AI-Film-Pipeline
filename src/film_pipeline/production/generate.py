@@ -504,7 +504,7 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
         return {"sent": False, "dry_run": False, "refused": refusals, "payload": payload, "receipt": str(receipt)}
     if flow and runner is None and not mock:
         from film_pipeline.production.preflight import check
-        environment = check(root, probe_flow=True)
+        environment = check(root, probe_flow=True, operation="send")
         if not environment["ok"]:
             return {"sent": False, "dry_run": False, "refused": [_blocker("ENVIRONMENT_NOT_READY", issue)
                     for issue in environment["issues"]], "payload": payload, "environment": environment}
