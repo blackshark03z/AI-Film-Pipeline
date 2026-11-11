@@ -1,0 +1,140 @@
+{
+  "take_id": "SC03_g24_t1",
+  "generation_id": "SC03_g24",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:394": "yes, RUTH speaks to SAM off-frame right, eyes and body turned that way"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes, SAM's place stays out of frame and is not shown empty; RUTH's eyes go just past the lens to frame-right",
+        "REL_GAZE": "yes, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + edge strips at 6 instants: RUTH alone, right edge shows only counter/stool and window, no SAM shoulder or sleeve (redrawn still), line spoken as written (STT matches), mug and cloth on the counter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:394",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "65a68e1a38c5ceacb7a06e623c34a29680980472b714628c462165036ab81473"
+}
