@@ -4,7 +4,7 @@
   "take_id": "SC03_g12_t1",
   "shot_version": 1,
   "prompt_sha256": "cbe6369d6ec99caa3eb7dbffbf6d99adc4e33c21b0861ab71b376835e5490fb0",
-  "prompt_file": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\media\\plan\\prompts\\SC03_g12.txt",
+  "prompt_file": "films\\film07_first_shift\\takes\\intents\\SC03_g12_t1.prompt.txt",
   "route": "start_frame+Khung hinh",
   "model": "Omni 1.2 Flash 360p",
   "duration_s": 6,
@@ -16,12 +16,15 @@
   "tier": "TEST",
   "cost_unit": "credits",
   "expected_cost": 6.0,
+  "submit_protocol": "inprocess-checkpoint-v1",
+  "dispatch_phase": "SUBMITTING",
+  "project": "87dac583-fc31-4b2f-858e-07d794c62278",
   "start_frame_sha256": "970acabd8e509e5e9aad21c70df3cae130539c3d001abbac5c6cd0dfd61a10a6",
-  "start_frame_source": "end frame of SC03_g11",
-  "blockers": [
-    "HANDOFF_PREVIOUS_NOT_ACCEPTED"
-  ],
-  "dry_run": true,
-  "sent": false,
-  "owner_go_live": false
+  "start_frame_source": "end frame of SC03_g11_t1",
+  "blockers": [],
+  "dry_run": false,
+  "sent": true,
+  "owner_go_live": true,
+  "result": "PASSED",
+  "take_registered": true
 }
