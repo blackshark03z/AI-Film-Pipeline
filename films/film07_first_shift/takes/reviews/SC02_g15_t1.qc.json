@@ -1,0 +1,140 @@
+{
+  "take_id": "SC02_g15_t1",
+  "generation_id": "SC02_g15",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:220": "yes: SAM's head and eyes turn screen-left toward RUTH's off-frame place as he speaks"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes: RUTH wholly out of frame, her place not shown empty; SAM's eyes go screen-left",
+        "REL_GAZE": "yes: SAM looks screen-left, never into the lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 4 zoomed frames + STT 'he told me six i spent the night planning around it' span 0.7-4.8 s = line 220 ('he' for 'you', one-word drift, lips and delivery address RUTH); SAM close-medium seated at the booth after g14 (curly dark hair, thin face, damp grey hoodie), head/eyes screen-left toward RUTH seated off-frame, never into lens; left frame edge shows only red booth vinyl, RUTH wholly out of frame; background stable, no morphing; mean -33.4 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:220",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "7bba0fc149a8d6ac81ea80aceb23f7ccd1f3e5b1ec6863aad59544bd332e949c"
+}
