@@ -1,0 +1,140 @@
+{
+  "take_id": "SC12_g01_t4",
+  "generation_id": "SC12_g01",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1458": "yes RUTH speaks toward frame-right to SAM"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes SAM out of frame; only a tiny hair sliver at the extreme edge late in clip (noted, croppable)",
+        "REL_GAZE": "yes never lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: right edge is blank wall; only a ~1% dark hair sliver at the far top-right corner from ~4.8s (croppable with a 2% punch-in in edit); STT matches line 1458 (v4 after 3 leak rejects)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1458",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "142e618cfb948d11d101bcdfb97cf9ace9560d7cc7c5dbf95276d452ff8d9d1b"
+}
