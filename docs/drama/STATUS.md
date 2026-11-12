@@ -472,3 +472,10 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - Batch 6: the first image draw (SC09_g23 v2 still, 0 cr) failed with "Chúng tôi nhận thấy có hoạt động bất thường nào đó ... Bạn chưa bị tính phí cho lượt tạo này". STOPPED per rule; g23 v2 restage committed (33585d2, shard-4), nothing sent.
 - All four Flow accounts are now flagged (khoia1k57, gmail-3 via GPM and pane, gmail-4). The pane is also an automated browser, so the route does not avoid the flag.
 - Remaining: SC09 g23-g25 (3), SC11 (25), SC07 (25), SC12_g23 (policy gap). Next step is an Owner decision: wait and retry, manual sends by the Owner, the paid official Veo API, or finish the cut with gaps covered.
+
+### 2026-11-13 SC09 QC (g01-g22, sheet D:/film-work-shards/shard-4/SC09_sheet_g01-g22.jpg)
+- Identity, wardrobe and eyelines hold: RUTH is screen-left looking right, SAM is screen-right looking left (wide g06/g20).
+- DEFECT (background continuity): the singles change background through the scene. g01-g04 have the diner counter, g05-g13 a cream wall with a mug shelf, g14-g19 (pane redraws) a plain grey or taupe wall, and g21-g22 the diner again. Cause: the pane cannot upload, so the redraws had no background reference, and the "plain wall" singles rule overrode the scene look.
+  - Edit fix: grade-match the walls.
+  - Pipeline fix: draw singles with an accepted still of the same scene as the background ingredient. For SC09 g23-g25 use the g21/g22 stills, which are in the gmail-3 project.
+- Owner decision 2026-11-13: wait, then retry Flow on gmail-3 with one test still. Stop for good if it is flagged again.
