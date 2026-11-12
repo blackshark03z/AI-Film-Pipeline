@@ -1,0 +1,140 @@
+{
+  "take_id": "SC04_g09_t1",
+  "generation_id": "SC04_g09",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:451": "see the failed spatial check: the off-frame listener's head and hair enter the right edge from about 2.5 s; the still leaves wide empty room on the right of RUTH and the model filled it with SAM"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "the off-frame listener's head and hair enter the right edge from about 2.5 s; the still leaves wide empty room on the right of RUTH and the model filled it with SAM",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "see the failed spatial check: the off-frame listener's head and hair enter the right edge from about 2.5 s; the still leaves wide empty room on the right of RUTH and the model filled it with SAM",
+        "REL_GAZE": "see the failed spatial check: the off-frame listener's head and hair enter the right edge from about 2.5 s; the still leaves wide empty room on the right of RUTH and the model filled it with SAM"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Right-edge strips of the sheet: SAM's dark hair and head enter the top-right edge from about 2.5 s and grow to the end.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "the off-frame listener's head and hair enter the right edge from about 2.5 s; the still leaves wide empty room on the right of RUTH and the model filled it with SAM",
+  "required_answers": [
+    "REL_ADDRESS:451",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "e742dc2de60e3772d25b14ff47d064b384d0068aa3a885c72194ae69b9ac9089"
+}

@@ -9,14 +9,14 @@
   "model": "Omni 1.2 Flash 360p",
   "duration_s": 6,
   "expected_credits": 6.0,
-  "credits_spent": 618.0,
+  "credits_spent": 654.0,
   "credit_cap": 3210.0,
   "provider": "flow",
   "provider_model": "omni-1.2-flash",
   "tier": "TEST",
   "cost_unit": "credits",
   "expected_cost": 6.0,
-  "start_frame_sha256": "c67fb407284e1347ecddc31a1c7de64b7f013d0255a5a91b2be93cbd2048e6ee",
+  "start_frame_sha256": "b7f78759bdc2f669b547962e56e2632b494318a622954b4a36b4e8b3c478e7fa",
   "start_frame_source": "end frame of SC04_g12",
   "blockers": [
     "HANDOFF_PREVIOUS_NOT_ACCEPTED"
