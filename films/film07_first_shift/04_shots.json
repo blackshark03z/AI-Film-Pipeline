@@ -25433,7 +25433,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 2,
+      "version": 3,
       "coverage": "SINGLE",
       "subject": "RUTH",
       "foreground": "",
@@ -25493,7 +25493,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "tight close single on RUTH behind the counter against the back shelf of white mugs: her head and shoulders fill the middle of the frame; the right 40 percent of the frame is one blank plain cream wall from the floor to beyond the top of the frame with nothing on it; the other edge is the background; the camera is level with her face",
+        "composition": "tight close single on RUTH behind the counter against the back shelf of white mugs: her head and shoulders sit in the left third of the frame; the right 55 percent of the frame is one wide blank plain cream wall from the floor to beyond the top of the frame with nothing on it; the camera is level with her face",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -25506,13 +25506,13 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands well back, three metres behind the camera, outside the picture; nothing of SAM is ever in the frame, only plain wall at the right edge",
+          "placement": "SAM stands far back behind the camera, outside the picture; nothing of SAM is ever in the frame, only wide blank plain wall at the right side",
           "established_by": "SC10_g21"
         }
       },
       "gaze_target": "SAM",
-      "repair_of": "SC12_g13@v1",
-      "repair_reason": "listener SAM head entered right edge; placement reworded (well back behind camera)"
+      "repair_of": "SC12_g13@v2",
+      "repair_reason": "SAM head entered right edge again; wider wall (55 percent) and listener far back"
     },
     {
       "generation_id": "SC12_g14",
@@ -29036,6 +29036,96 @@
         }
       },
       "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC12_g13",
+      "scene_id": "SC12",
+      "start_state": "SC12_g13",
+      "end_state": "SC12_g14",
+      "previous_generation_id": "SC12_g12",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 2,
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "dialogue": [
+        1518
+      ],
+      "choreography": {
+        "generation_id": "SC12_g13",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.3,
+            "description": "RUTH speaks to SAM warmly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.3,
+            "end_s": 6.0,
+            "description": "RUTH holds SAM's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "dry, warm",
+            "visible_cues": [
+              "slight smile",
+              "steady eyes"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "mockery"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "loc_diner_morning@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "tight close single on RUTH behind the counter against the back shelf of white mugs: her head and shoulders fill the middle of the frame; the right 40 percent of the frame is one blank plain cream wall from the floor to beyond the top of the frame with nothing on it; the other edge is the background; the camera is level with her face",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cC_ctr",
+      "addressees": {
+        "1518": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM stands well back, three metres behind the camera, outside the picture; nothing of SAM is ever in the frame, only plain wall at the right edge",
+          "established_by": "SC10_g21"
+        }
+      },
+      "gaze_target": "SAM",
+      "repair_of": "SC12_g13@v1",
+      "repair_reason": "listener SAM head entered right edge; placement reworded (well back behind camera)"
     }
   ]
 }
