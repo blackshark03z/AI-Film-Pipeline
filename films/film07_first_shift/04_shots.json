@@ -20611,7 +20611,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "SAM",
       "foreground": "",
@@ -20632,7 +20632,7 @@
             "kind": "ACTION",
             "start_s": 1.0,
             "end_s": 4.0,
-            "description": "SAM walks away from the booth toward the doorway and out of the frame",
+            "description": "SAM turns right and walks away from the booth toward the open doorway on the right, leaving the frame at the right edge",
             "motion": "walk_across_room"
           },
           {
@@ -20643,7 +20643,7 @@
           }
         ],
         "once_actions": [
-          "SAM walks away from the booth toward the doorway"
+          "SAM turns right and walks away from the booth toward the open doorway on the right, leaving the frame at the right edge"
         ],
         "gesture_budget": 1,
         "performance": [
@@ -20670,7 +20670,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close on SAM beside the booth, the high red booth back behind him; he turns and walks out of the frame toward the doorway, leaving the booth behind; the left edge of the frame is plain wall with nobody there",
+        "composition": "close on SAM beside the booth, the high red booth back behind him; the camera stays locked off; he turns to screen-right and walks out of the frame at the right edge toward the open doorway, leaving the booth behind; the left edge of the frame is plain wall with nobody there",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_bth",
@@ -20682,7 +20682,9 @@
           "placement": "RUTH stands behind the counter off frame-left, wholly out of shot, not even her head, hair or shoulder at the left edge",
           "established_by": "SC09_g20"
         }
-      }
+      },
+      "repair_of": "SC10_g08@v1",
+      "repair_reason": "exit side wrong in v1 (left instead of the doorway on the right); exit direction and locked camera stated"
     },
     {
       "generation_id": "SC10_g09",
@@ -28953,6 +28955,88 @@
         }
       },
       "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC10_g08",
+      "scene_id": "SC10",
+      "start_state": "SC10_g08",
+      "end_state": "SC10_g09",
+      "previous_generation_id": "SC10_g07",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "dialogue": [],
+      "choreography": {
+        "generation_id": "SC10_g08",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.0,
+            "description": "SAM stands beside the near booth seat, looking toward the doorway"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.0,
+            "end_s": 4.0,
+            "description": "SAM walks away from the booth toward the doorway and out of the frame",
+            "motion": "walk_across_room"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "the booth stands empty of people, daylight holds on the red seats"
+          }
+        ],
+        "once_actions": [
+          "SAM walks away from the booth toward the doorway"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "thoughtful, wary",
+            "visible_cues": [
+              "eyes down then up",
+              "slow breath"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "fear"
+          }
+        ]
+      },
+      "design_refs": [
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_morning@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close on SAM beside the booth, the high red booth back behind him; he turns and walks out of the frame toward the doorway, leaving the booth behind; the left edge of the frame is plain wall with nobody there",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cB_bth",
+      "gaze_target": "doorway",
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "established_by": "SC09_g20"
+        }
+      }
     }
   ]
 }

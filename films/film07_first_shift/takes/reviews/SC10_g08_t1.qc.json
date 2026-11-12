@@ -1,0 +1,139 @@
+{
+  "take_id": "SC10_g08_t1",
+  "generation_id": "SC10_g08",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "exit direction wrong: he leaves screen-left instead of toward the doorway on screen-right; camera drifts",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "see the failed spatial check: exit direction wrong: he leaves screen-left instead of toward the doorway on screen-right; camera drifts",
+        "REL_GAZE": "see the failed spatial check: exit direction wrong: he leaves screen-left instead of toward the doorway on screen-right; camera drifts",
+        "REL_BARRIER": "see the failed spatial check: exit direction wrong: he leaves screen-left instead of toward the doorway on screen-right; camera drifts"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sam turns and exits frame-left (towards Ruth's side), the opposite of the open doorway on the right; the camera view also drifts after he leaves",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "exit direction wrong: he leaves screen-left instead of toward the doorway on screen-right; camera drifts",
+  "required_answers": [
+    "REL_LISTENER:RUTH",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "7dba3971a6c4bc755f7328b30382663f479d95c873a0d0a6743ffbb8116b89bd"
+}
