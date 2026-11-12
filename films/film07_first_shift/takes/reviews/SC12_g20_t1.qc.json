@@ -1,0 +1,140 @@
+{
+  "take_id": "SC12_g20_t1",
+  "generation_id": "SC12_g20",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1553": "yes SAM speaks toward frame-left to RUTH"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes off-screen, no intrusion",
+        "REL_GAZE": "yes never lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: wide blank wall on left, RUTH not visible; SAM sits hard against right edge in profile (off-centre framing, dead wall space on left; note for edit); STT matches line 1553 except last word",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1553",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "74f6f2367ca2addcb00aeb6f69c38d4e11bf6011f7a17f17b8e3b9aaf4e34273"
+}
