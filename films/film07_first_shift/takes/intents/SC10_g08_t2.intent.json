@@ -4,7 +4,7 @@
   "take_id": "SC10_g08_t2",
   "shot_version": 2,
   "prompt_sha256": "14c86a148b0ac4949b9af8aa3340562e94e67bdf367b7222a472c25399be4b02",
-  "prompt_file": "films\\film07_first_shift\\media\\plan\\prompts\\SC10_g08.txt",
+  "prompt_file": "films\\film07_first_shift\\takes\\intents\\SC10_g08_t2.prompt.txt",
   "route": "start_frame+Khung hinh",
   "model": "Omni 1.2 Flash 360p",
   "duration_s": 6,
@@ -16,10 +16,16 @@
   "tier": "TEST",
   "cost_unit": "credits",
   "expected_cost": 6.0,
+  "submit_protocol": "inprocess-checkpoint-v1",
+  "dispatch_phase": "SUBMITTING",
+  "project": "542e948a-a222-4a6f-a0c6-7cb0733ea719",
+  "cdp": "http://127.0.0.1:9333",
   "start_frame_sha256": "d349d0b54a35c2ad703fa8dec8bc92a583569030e28eb22fbca19719579685c0",
   "start_frame_source": "end frame of SC10_g07_t2",
   "blockers": [],
-  "dry_run": true,
-  "sent": false,
-  "owner_go_live": false
+  "dry_run": false,
+  "sent": true,
+  "owner_go_live": true,
+  "result": "PASSED",
+  "take_registered": true
 }
