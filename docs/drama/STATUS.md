@@ -466,3 +466,9 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - SC09_g14_t1 accepted (0c5828a, ca9c2d4, shard-4). SC09_g15_t1 rejected for RUTH's hair/face at the left edge and stray mugs (1eec1cd); v2 restage approved (agent:tech-lead, delegated).
 - Pane spend so far: 5 sends = 30 cr (g23 policy block refunded). gmail-3 is about 648 (not read back). No account warnings on the pane route.
 - Cost: about 120 Sonnet tool calls per shot. The brief is tightened.
+
+### 2026-11-13 pane route flagged; all Flow sends stopped
+- Batches 3-5 (gmail-3, pane): SC09 g15_t2, g16, g17 (re-review, reframe note), g18 (re-review, reframe 1.08x left), g19, g20, g21, g22 accepted; g23_t1 rejected (SAM at right edge 5.5-8%). gmail-3 balance 594 (read 2026-11-13).
+- Batch 6: the first image draw (SC09_g23 v2 still, 0 cr) failed with "Chúng tôi nhận thấy có hoạt động bất thường nào đó ... Bạn chưa bị tính phí cho lượt tạo này". STOPPED per rule; g23 v2 restage committed (33585d2, shard-4), nothing sent.
+- All four Flow accounts are now flagged (khoia1k57, gmail-3 via GPM and pane, gmail-4). The pane is also an automated browser, so the route does not avoid the flag.
+- Remaining: SC09 g23-g25 (3), SC11 (25), SC07 (25), SC12_g23 (policy gap). Next step is an Owner decision: wait and retry, manual sends by the Owner, the paid official Veo API, or finish the cut with gaps covered.
