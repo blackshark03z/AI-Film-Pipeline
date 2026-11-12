@@ -479,3 +479,8 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   - Edit fix: grade-match the walls.
   - Pipeline fix: draw singles with an accepted still of the same scene as the background ingredient. For SC09 g23-g25 use the g21/g22 stills, which are in the gmail-3 project.
 - Owner decision 2026-11-13: wait, then retry Flow on gmail-3 with one test still. Stop for good if it is flagged again.
+
+### 2026-11-13 route change: Owner manual sends
+- The Owner reports that manual creation in Flow works. Agent-driven sends are stopped for good; the wait-and-retry wakeup is cancelled.
+- New flow: the coordinator builds a pack per batch (D:/film-work/film07-manual/<batch>/HUONG_DAN.md, start frames, prompt files, inbox/). The Owner sends and downloads 720p into inbox/, then a Sonnet agent registers, reviews and commits in the right worktree.
+- Pack SC09_b1 is ready: g23/g25 reuse the g21 RUTH frame and g24 reuses the g22 SAM frame, which also fixes the background continuity; mug lines are removed.
