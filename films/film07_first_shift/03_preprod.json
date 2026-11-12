@@ -10751,23 +10751,23 @@
     },
     "SC08_g14": {
       "file": "media/stills/start_SC08_g14.jpg",
-      "sha256": "ee6a15172b2adac58c796ca24700a64298b05e317f04840a85c215ce4c8c6ebc",
+      "sha256": "7e82145ccfb58c5069770dc728757015ba3bb49395860588dcf50a77f6c57e3b",
       "prompt_sha256": "76e0bcca134a4925005930815e52c03c094467a5949c44d233c279af10c50ad3",
       "source": "Flow image mode gmail-3 Nano Banana 2.1 x1 (v2 redraw)",
       "credits": 0.0,
-      "registered_at": "2026-11-12T06:15:15+00:00",
+      "registered_at": "2026-11-12T06:34:29+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T06:15:16+00:00"
+      "approved_at": "2026-11-12T06:34:31+00:00"
     },
     "SC08_g16": {
       "file": "media/stills/start_SC08_g16.jpg",
-      "sha256": "fe49cf31a6be7ffabed9db81a7762f0483cd1e8be041b7ee46cb9ac6b229b703",
-      "prompt_sha256": "494c35c366fa576735d5094266181ac529008ce7e3947f076603144b198d4927",
-      "source": "Flow Nano Banana 2.1 project 10b9a87d (account gmail-3, image mode, 0 credits); SC08-S01",
+      "sha256": "ddefb0a60e24da833345a50e5278b0eb1088ce898fd1f743dbb0de5774571e9d",
+      "prompt_sha256": "76e0bcca134a4925005930815e52c03c094467a5949c44d233c279af10c50ad3",
+      "source": "Flow image mode gmail-3 Nano Banana 2.1 x1 (v2 redraw)",
       "credits": 0.0,
-      "registered_at": "2026-11-12T02:03:17+00:00",
+      "registered_at": "2026-11-12T06:34:35+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T02:03:19+00:00"
+      "approved_at": "2026-11-12T06:34:36+00:00"
     },
     "SC08_g18": {
       "file": "media/stills/start_SC08_g18.jpg",
@@ -10891,13 +10891,13 @@
     },
     "SC08_g15": {
       "file": "media/stills/start_SC08_g15.jpg",
-      "sha256": "14146a905b659263fa7edfe9c13fb5b59029d921310e5bfa7fa55be32404551d",
-      "prompt_sha256": "fbb4dca3b2cf0d4c5ca4a4baaefb54dd78773654af7e245ee0a3edc95300d526",
-      "source": "Flow Nano Banana 2.1 project 10b9a87d (account gmail-3, image mode, 0 credits); SC08-S04",
+      "sha256": "839d3206c1cc08f990582781553db20cb1f46d14453c138baf8a58e9bf0d70f3",
+      "prompt_sha256": "e26e389b2a61c0ae9c8577415ae1738a690b850c6d956c63f2b4531d34c6ec4c",
+      "source": "Flow image mode gmail-3 Nano Banana 2.1 x1 (v2 redraw)",
       "credits": 0.0,
-      "registered_at": "2026-11-12T02:10:21+00:00",
+      "registered_at": "2026-11-12T06:34:32+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T02:10:23+00:00"
+      "approved_at": "2026-11-12T06:34:34+00:00"
     },
     "SC08_g17": {
       "file": "media/stills/start_SC08_g17.jpg",
