@@ -110,5 +110,13 @@
     "account": "khoia1k57",
     "project": "542e948a-a222-4a6f-a0c6-7cb0733ea719",
     "not_covered": "any other terms or consent dialogs"
+  },
+  "flow_rights_consent_gmail-4": {
+    "date": "2026-11-12",
+    "granted_by": "Owner (khoikk03), in chat on 2026-11-12, verbatim \"Đồng ý cả 4\" (the 4 Gmail chính profiles), relayed to this executor by the coordinator brief",
+    "scope": "Click \"I agree\" on Flow's \"Rights to use this image\" dialog, upload film07 reference images only",
+    "account": "gmail-4",
+    "project": "2acd7acd-46d6-4bab-9910-cd43802cb604",
+    "not_covered": "any other terms or consent dialogs"
   }
 }
