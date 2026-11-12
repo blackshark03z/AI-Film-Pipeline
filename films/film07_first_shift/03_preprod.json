@@ -10661,33 +10661,33 @@
     },
     "SC04_g21": {
       "file": "media/stills/start_SC04_g21.jpg",
-      "sha256": "ba601dafade6c13c808ae25e74ba5ece14962e76af59ded42861cab9ec83b304",
+      "sha256": "3e17005cedc4a5aecfd34ab321f18be448a339601b49ae9fbbaab696141b1b67",
       "prompt_sha256": "2d0438cbfe3ac1e45c581b02195c8a67e45392b2717e3af7befe6aae3bb4a5cf",
       "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-11T23:23:57+00:00",
+      "registered_at": "2026-11-12T00:52:40+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T23:23:58+00:00"
+      "approved_at": "2026-11-12T00:52:41+00:00"
     },
     "SC04_g23": {
       "file": "media/stills/start_SC04_g23.jpg",
-      "sha256": "ba601dafade6c13c808ae25e74ba5ece14962e76af59ded42861cab9ec83b304",
+      "sha256": "3e17005cedc4a5aecfd34ab321f18be448a339601b49ae9fbbaab696141b1b67",
       "prompt_sha256": "2d0438cbfe3ac1e45c581b02195c8a67e45392b2717e3af7befe6aae3bb4a5cf",
       "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-11T23:24:01+00:00",
+      "registered_at": "2026-11-12T00:52:42+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T23:24:02+00:00"
+      "approved_at": "2026-11-12T00:52:43+00:00"
     },
     "SC04_g25": {
       "file": "media/stills/start_SC04_g25.jpg",
-      "sha256": "ba601dafade6c13c808ae25e74ba5ece14962e76af59ded42861cab9ec83b304",
+      "sha256": "3e17005cedc4a5aecfd34ab321f18be448a339601b49ae9fbbaab696141b1b67",
       "prompt_sha256": "2d0438cbfe3ac1e45c581b02195c8a67e45392b2717e3af7befe6aae3bb4a5cf",
       "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-11T23:24:04+00:00",
+      "registered_at": "2026-11-12T00:52:44+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T23:24:05+00:00"
+      "approved_at": "2026-11-12T00:52:45+00:00"
     }
   }
 }
