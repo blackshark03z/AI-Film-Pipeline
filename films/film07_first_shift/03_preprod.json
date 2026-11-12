@@ -10833,11 +10833,11 @@
       "file": "media/stills/start_SC05_g14.jpg",
       "sha256": "4940e2b724f289f5a9d48ef4173b2222dce36a92793a509183ebc4e377dad639",
       "prompt_sha256": "4200afab619995773e8cf5025b2581034cba04b4ea228dbd0cb3936e00bd076c",
-      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits; refs: char refs + plate_diner_morning); image drawn for SC05_S02, reused: same still prompt as SC05_g02",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-12T05:02:28+00:00",
+      "registered_at": "2026-11-12T05:58:22+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T05:02:29+00:00"
+      "approved_at": "2026-11-12T05:58:23+00:00"
     },
     "SC05_g16": {
       "file": "media/stills/start_SC05_g16.jpg",
