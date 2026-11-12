@@ -1,0 +1,140 @@
+{
+  "take_id": "SC09_g15_t1",
+  "generation_id": "SC09_g15",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1133": "yes SAM looks toward frame-left"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "listener hair at right frame edge",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "no, RUTH hair and face at left edge",
+        "REL_GAZE": "yes never lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send; RUTH's grey hair and face enter the left frame edge at 1, 3 and 5 s although the prompt and still had only SAM; two white mugs appear low in frame; SAM identity and eyeline screen-left otherwise fine",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1133",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "24399531578e9fc79974a0f694ccc138e901b86767c0f49a236c49f2ac7b8d5e"
+}
