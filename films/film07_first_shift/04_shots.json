@@ -7808,7 +7808,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "RUTH",
       "foreground": "",
@@ -7874,7 +7874,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, SAM out of frame to the right; the right edge of the frame is empty room with nobody there",
+        "composition": "close single on RUTH seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, SAM out of frame to the right; the right edge of the frame is empty room with nobody there; RUTH is centred and tight, the high red booth back and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_bth",
@@ -7886,7 +7886,9 @@
           "placement": "SAM sits off frame-right across the table, wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC04_g07"
         }
-      }
+      },
+      "repair_of": "SC04_g14@v1",
+      "repair_reason": "SC04_g14_t1 rejected: SAM face at the right edge; still redrawn tight and centred"
     },
     {
       "generation_id": "SC04_g15",
@@ -27771,6 +27773,95 @@
         }
       },
       "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC04_g14",
+      "scene_id": "SC04",
+      "start_state": "SC04_g14",
+      "end_state": "SC04_g15",
+      "previous_generation_id": "SC04_g13",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "dialogue": [],
+      "choreography": {
+        "generation_id": "SC04_g14",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "RUTH looks toward SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 2.4,
+            "description": "RUTH meets SAM's look and takes a quiet moment before she goes on",
+            "motion": "glance"
+          },
+          {
+            "kind": "CONSEQUENCE",
+            "start_s": 2.4,
+            "end_s": 4.0,
+            "description": "RUTH stays with what they see"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "RUTH holds the quiet look, nobody speaks"
+          }
+        ],
+        "once_actions": [
+          "RUTH meets SAM's look and takes a quiet moment before she goes on"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "matter-of-fact, uneasy",
+            "visible_cues": [
+              "steady eyes",
+              "a small frown"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "loc_diner_morning@1",
+        "prop_paper@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, SAM out of frame to the right; the right edge of the frame is empty room with nobody there",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cC_bth",
+      "gaze_target": "SAM",
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM sits off frame-right across the table, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "established_by": "SC04_g07"
+        }
+      }
     }
   ]
 }

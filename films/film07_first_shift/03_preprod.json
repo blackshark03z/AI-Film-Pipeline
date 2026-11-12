@@ -10641,13 +10641,13 @@
     },
     "SC04_g14": {
       "file": "media/stills/start_SC04_g14.jpg",
-      "sha256": "8292d0de807be4eb2a0d7ddc7f4e424ab20f28ca326626fbccad2651562f1ed6",
+      "sha256": "fb88c747502fdc7f0dee685a1fafa4a4c9097c302a0c9f6e7a58b16bccf4a8d0",
       "prompt_sha256": "9adf3b60e2130eb29bbe1847c1d67a77cd6a08864e855637d8cd197d3c5d3da6",
       "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-11T23:23:46+00:00",
+      "registered_at": "2026-11-12T00:46:41+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-11T23:23:47+00:00"
+      "approved_at": "2026-11-12T00:46:42+00:00"
     },
     "SC04_g20": {
       "file": "media/stills/start_SC04_g20.jpg",
