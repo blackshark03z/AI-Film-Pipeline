@@ -8966,7 +8966,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 2,
+      "version": 3,
       "coverage": "SINGLE",
       "subject": "SAM",
       "foreground": "",
@@ -9027,7 +9027,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him; the left edge of the frame stays bare wall, window and counter for the whole shot, nobody and nothing enters it",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, a plain beige wall and the pale window frame behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him; the left edge of the frame stays bare wall, window and counter for the whole shot, nobody and nothing enters it",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -9045,8 +9045,8 @@
         }
       },
       "gaze_target": "RUTH",
-      "repair_of": "SC05_g02@v1",
-      "repair_reason": "off-screen listener's hair enters the left edge: bare-edge composition stated for the whole shot"
+      "repair_of": "SC05_g02@v2",
+      "repair_reason": "listener hair at the left edge twice: still redrawn tight and centred on a plain wall, no room beside SAM"
     },
     {
       "generation_id": "SC05_g03",
@@ -27953,6 +27953,97 @@
         }
       },
       "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC05_g02",
+      "scene_id": "SC05",
+      "start_state": "SC05_g02",
+      "end_state": "SC05_g03",
+      "previous_generation_id": "SC05_g01",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 2,
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "dialogue": [
+        547
+      ],
+      "choreography": {
+        "generation_id": "SC05_g02",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "SAM looks at RUTH"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.3,
+            "description": "SAM speaks to RUTH carefully"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.3,
+            "end_s": 6.0,
+            "description": "SAM holds RUTH's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "SAM speaks to RUTH"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "guarded, honest",
+            "visible_cues": [
+              "level look",
+              "mouth easing"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "anger"
+          }
+        ]
+      },
+      "design_refs": [
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_morning@1",
+        "prop_mug1@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him; the left edge of the frame stays bare wall, window and counter for the whole shot, nobody and nothing enters it",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cB_ctr",
+      "addressees": {
+        "547": [
+          "RUTH"
+        ]
+      },
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH stands off frame-left, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "established_by": "SC04_g20"
+        }
+      },
+      "gaze_target": "RUTH",
+      "repair_of": "SC05_g02@v1",
+      "repair_reason": "off-screen listener's hair enters the left edge: bare-edge composition stated for the whole shot"
     }
   ]
 }
