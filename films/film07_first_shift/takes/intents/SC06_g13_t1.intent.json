@@ -1,0 +1,27 @@
+{
+  "film_id": "film07_first_shift",
+  "generation_id": "SC06_g13",
+  "take_id": "SC06_g13_t1",
+  "shot_version": 1,
+  "prompt_sha256": "ba30a47f65bb8f756a27ad6ba190e1b1a1dcc127cd08e7540f84360386787f9c",
+  "prompt_file": "films\\film07_first_shift\\media\\plan\\prompts\\SC06_g13.txt",
+  "route": "start_frame+Khung hinh",
+  "model": "Omni 1.2 Flash 360p",
+  "duration_s": 6,
+  "expected_credits": 6.0,
+  "credits_spent": 1008.0,
+  "credit_cap": 3210.0,
+  "provider": "flow",
+  "provider_model": "omni-1.2-flash",
+  "tier": "TEST",
+  "cost_unit": "credits",
+  "expected_cost": 6.0,
+  "start_frame_sha256": "4a9f955884403bc4dc670eeaba56a21b4226e84e1a0428488c6979001a6f9b84",
+  "start_frame_source": "end frame of SC06_g12",
+  "blockers": [
+    "HANDOFF_PREVIOUS_NOT_ACCEPTED"
+  ],
+  "dry_run": true,
+  "sent": false,
+  "owner_go_live": false
+}
