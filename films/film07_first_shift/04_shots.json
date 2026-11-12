@@ -18101,7 +18101,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 2,
+      "version": 3,
       "coverage": "SINGLE",
       "subject": "RUTH",
       "foreground": "",
@@ -18163,7 +18163,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her; nobody enters from the right: SAM stays far beyond the right edge and the right side of the frame stays bare shelf and window for the whole shot",
+        "composition": "tight close single on RUTH, head and shoulders, standing behind the counter and placed in the left half of the frame; behind her is only a plain pale wall and the back shelf of white mugs, no window and no doorway anywhere in frame; the right third of the frame is empty plain wall and shelf, nobody there, and nobody ever enters it: SAM is far outside the frame to the right for the whole shot",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -18176,13 +18176,13 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands far off frame-right, wholly out of shot at every moment, no head, hair, face or shoulder at the right edge",
+          "placement": "SAM stands far off frame-right, wholly out of shot at every moment; the right third of the frame is plain empty wall, no head, hair, face, shoulder or shadow of him",
           "established_by": "SC08_g08"
         }
       },
       "gaze_target": "SAM",
-      "repair_of": "SC09_g05@v1",
-      "repair_reason": "SC09_g05_t1 rejected: SAM head and face enter at the right edge from 1.2 s; stronger off-frame placement and bare-right-edge composition"
+      "repair_of": "SC09_g05@v2",
+      "repair_reason": "SC09_g05 v1 and v2 (t1, t2) both rejected: SAM's head and profile leak into the right edge. Restage per OWNER_POLICY section 3: tight RUTH close-up in the left half against a plain wall, no window or doorway on the right, empty right third. agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)"
     },
     {
       "generation_id": "SC09_g06",
@@ -27954,6 +27954,98 @@
         }
       },
       "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC09_g05",
+      "scene_id": "SC09",
+      "start_state": "SC09_g05",
+      "end_state": "SC09_g06",
+      "previous_generation_id": "SC09_g04",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 2,
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "dialogue": [
+        1084
+      ],
+      "choreography": {
+        "generation_id": "SC09_g05",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.3,
+            "description": "RUTH speaks to SAM humbly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.3,
+            "end_s": 6.0,
+            "description": "RUTH holds SAM's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "candid, humble",
+            "visible_cues": [
+              "soft eyes",
+              "small nod"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "authority"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "loc_diner_morning@1",
+        "prop_mug1@1",
+        "prop_mug2@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her; nobody enters from the right: SAM stays far beyond the right edge and the right side of the frame stays bare shelf and window for the whole shot",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cC_ctr",
+      "addressees": {
+        "1084": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM stands far off frame-right, wholly out of shot at every moment, no head, hair, face or shoulder at the right edge",
+          "established_by": "SC08_g08"
+        }
+      },
+      "gaze_target": "SAM",
+      "repair_of": "SC09_g05@v1",
+      "repair_reason": "SC09_g05_t1 rejected: SAM head and face enter at the right edge from 1.2 s; stronger off-frame placement and bare-right-edge composition"
     }
   ]
 }
