@@ -1,0 +1,140 @@
+{
+  "take_id": "SC08_g21_t2",
+  "generation_id": "SC08_g21",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1031": "yes SAM speaks toward frame-left to RUTH"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes off-screen, no intrusion",
+        "REL_GAZE": "yes never lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM tight single, solid red booth back on left, RUTH not visible at either edge (only SAM's own shoulder at lower-right); STT matches line 1031. t1 was a Flow stall (FLOW_FAILED_NO_CLIP, no clip) then t2 passed in-send",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1031",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "d79dc0e8bf44b5a83896b3e100d5bf6949eedfab91f9eda2a9331150b527d69a"
+}
