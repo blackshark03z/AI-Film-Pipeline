@@ -13,7 +13,7 @@ from pathlib import Path
 
 from .runtime import flow_cdp, flow_project
 
-MIN_SCRATCH_GIB = 20.0      # long renders (cut/titles/mix/versions/finish/benchmark): scratch for the whole pass
+MIN_SCRATCH_GIB = 10.0      # Owner 2026-11-12: lowered from 20; long renders (cut/titles/mix/versions/finish/benchmark): scratch for the whole pass
 SEND_RESERVE_GIB = 4.0      # a single Flow send/download keeps only the standing reserve ...
 SEND_TAKE_BOUND_GIB = 0.5   # ... plus a conservative bound for one take and its still (a 6-15 s 360p clip is a few MB)
 OPERATIONS = ("render", "send")
@@ -28,7 +28,7 @@ def required_free_gib(operation: str = "render", expected_bytes: int = 0) -> flo
 
 
 def check(root: Path, *, probe_flow: bool = False, operation: str = "render", expected_bytes: int = 0) -> dict:
-    """``operation`` picks the disk rule: ``render`` keeps the 20 GiB long-render rule (default), ``send`` needs the
+    """``operation`` picks the disk rule: ``render`` keeps the 10 GiB long-render rule (default), ``send`` needs the
     4 GiB reserve plus the expected download (stills, sends and reconcile)."""
     need = required_free_gib(operation, expected_bytes)
     issues, warnings = [], []

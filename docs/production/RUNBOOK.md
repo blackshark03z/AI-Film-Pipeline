@@ -18,7 +18,7 @@ python tools/film.py new film05_name --profile drama --title "Title"
 
 Write `script.fountain`, then `01_story.json` … `04_shots.json` (see `docs/director/DIRECTOR_PLAYBOOK.md`). Allocate enough
 generations for each scene's speech, movement and reactions; each generation still passes its own duration/speech limits.
-Drama only; media (`media/`) is git-ignored and never committed. Long films need a dedicated scratch volume: at least20GiB
+Drama only; media (`media/`) is git-ignored and never committed. Long films need a dedicated scratch volume: at least10GiB (Owner 2026-11-12, was 20)
 free before starting, or1.5times the measured peak scratch if larger; retain4GiB reserve during the run.
 
 ## R2 Gates 1–2: story and direction

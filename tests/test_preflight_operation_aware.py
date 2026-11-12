@@ -1,4 +1,4 @@
-"""The disk rule depends on the operation: long renders keep 20 GiB, a single send needs the 4 GiB reserve + a download."""
+"""The disk rule depends on the operation: long renders keep 10 GiB (Owner, 2026-11-12), a single send needs the 4 GiB reserve + a download."""
 from types import SimpleNamespace
 
 import pytest
@@ -22,13 +22,18 @@ def test_send_is_allowed_at_13_gib(tmp_path, monkeypatch):
     assert result["required_free_gib"] == pytest.approx(P.SEND_RESERVE_GIB + P.SEND_TAKE_BOUND_GIB)
 
 
-def test_render_is_still_refused_at_13_gib(tmp_path, monkeypatch):
-    _free(monkeypatch, 13.0)
+def test_render_is_refused_below_10_gib(tmp_path, monkeypatch):
+    _free(monkeypatch, 8.0)
     for kwargs in ({}, {"operation": "render"}):
         result = P.check(tmp_path, **kwargs)
         issues = _space_issues(result)
-        assert len(issues) == 2 and all("render" in i and "20GiB" in i for i in issues)
-        assert result["required_free_gib"] == 20.0
+        assert len(issues) == 2 and all("render" in i and "10GiB" in i for i in issues)
+        assert result["required_free_gib"] == 10.0
+
+
+def test_render_is_allowed_at_13_gib(tmp_path, monkeypatch):
+    _free(monkeypatch, 13.0)
+    assert _space_issues(P.check(tmp_path, operation="render")) == []
 
 
 def test_send_is_refused_below_the_reserve_and_names_operation_and_gib(tmp_path, monkeypatch):
