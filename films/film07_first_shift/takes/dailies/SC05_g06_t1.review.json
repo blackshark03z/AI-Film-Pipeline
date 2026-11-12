@@ -1,0 +1,251 @@
+{
+  "take": {
+    "take_id": "SC05_g06_t1",
+    "generation_id": "SC05_g06",
+    "prompt_sha256": "a946268e442b34f850af25feeb145dd9854334bd05b8dcf12cb6644db505e622",
+    "start_frame_sha256": "4940e2b724f289f5a9d48ef4173b2222dce36a92793a509183ebc4e377dad639",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC05_g06_t1.mp4",
+    "output_sha256": "51d7ba78b10c5b26ae667eb569f81d67281777c518f6598477166bd5283319f9",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-12T05:21:13Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "SAM"
+    ],
+    "start_state": "SC05_g06",
+    "end_state": "SC05_g07",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.5,
+        "description": "SAM looks toward RUTH"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.5,
+        "end_s": 2.4,
+        "description": "SAM stands still with both hands visible and empty, his jaw easing slightly"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.4,
+        "end_s": 4.0,
+        "description": "SAM stays with what they see"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "SAM holds the quiet look, nobody speaks"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1.5s SETUP: does this happen on screen - SAM looks toward RUTH?"
+    },
+    {
+      "group": "action",
+      "question": "1.5-2.4s ACTION: does this happen on screen - SAM stands still with both hands visible and empty, his jaw easing slightly?"
+    },
+    {
+      "group": "action",
+      "question": "2.4-4s CONSEQUENCE: does this happen on screen - SAM stays with what they see?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - SAM holds the quiet look, nobody speaks?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): SAM stands still with both hands visible and empty, his jaw easing slightly"
+    },
+    {
+      "group": "character",
+      "question": "SAM: does the face/body read as guarded, honest (restrained)? Must NOT read as: anger."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC05_g06: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right; the white mug: standing on the counter on RUTH's side."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC05_g07: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right; the white mug: standing on the counter on RUTH's side."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_LISTENER:RUTH",
+      "group": "spatial",
+      "question": "Is the place where RUTH stands kept out of frame (never shown empty), and do SAM's eyes go just past the lens to frame-left?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does SAM look at RUTH and never into the lens?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC05_g06_t1",
+    "generation_id": "SC05_g06",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_LISTENER:RUTH",
+      "REL_GAZE"
+    ],
+    "output_sha256": "51d7ba78b10c5b26ae667eb569f81d67281777c518f6598477166bd5283319f9"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}
