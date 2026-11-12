@@ -1,0 +1,142 @@
+{
+  "take_id": "SC10_g18_t1",
+  "generation_id": "SC10_g18",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1279": "see the failed spatial check: SAM (off-frame listener) enters the right edge; the still has a window on the right"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "SAM (off-frame listener) enters the right edge; the still has a window on the right",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "see the failed spatial check: SAM (off-frame listener) enters the right edge; the still has a window on the right",
+        "REL_GAZE": "see the failed spatial check: SAM (off-frame listener) enters the right edge; the still has a window on the right",
+        "REL_BARRIER": "see the failed spatial check: SAM (off-frame listener) enters the right edge; the still has a window on the right"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 4-8: SAM's head and face enter the right edge of the frame (grows to a profile in the last frames)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "START_FRAME",
+  "cause_note": "SAM (off-frame listener) enters the right edge; the still has a window on the right",
+  "required_answers": [
+    "REL_ADDRESS:1279",
+    "REL_LISTENER:SAM",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "a882a5763af3679e5d235cb82dda983113e91c66d6e1cf4cecfecc00d45b75c3"
+}
