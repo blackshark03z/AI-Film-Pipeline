@@ -7,6 +7,7 @@ import json
 import os
 import tempfile
 import threading
+from urllib.parse import urlsplit
 from contextlib import contextmanager, ExitStack
 from concurrent.futures import ThreadPoolExecutor
 from functools import wraps
@@ -29,6 +30,38 @@ def run_async(factory, *, timeout=None):
 
 class WriterBusy(ValueError):
     pass
+
+
+# One Flow profile = one CDP endpoint. A shard process sets AFP_FLOW_CDP (and AFP_FLOW_PROJECT) for the profile it drives.
+DEFAULT_FLOW_CDP = "http://127.0.0.1:9333"
+FLOW_CDP_ENV = "AFP_FLOW_CDP"
+FLOW_PROJECT_ENV = "AFP_FLOW_PROJECT"
+
+
+def normalize_cdp(endpoint: str | None) -> str:
+    """Canonical ``http://127.0.0.1:<port>`` form: localhost, trailing slash and a missing scheme are the same endpoint."""
+    text = (endpoint or "").strip() or DEFAULT_FLOW_CDP
+    parts = urlsplit(text if "://" in text else "http://" + text)
+    host = (parts.hostname or "127.0.0.1").lower()
+    host = "127.0.0.1" if host == "localhost" else host
+    port = parts.port or (443 if parts.scheme == "https" else 80)
+    return f"{parts.scheme or 'http'}://{host}:{port}"
+
+
+def flow_cdp(override: str | None = None) -> str:
+    """The CDP endpoint this process drives (override > AFP_FLOW_CDP > the legacy 127.0.0.1:9333)."""
+    return normalize_cdp(override or os.environ.get(FLOW_CDP_ENV))
+
+
+def flow_project() -> str:
+    """The Flow project id this process is pinned to ('' = whatever Flow tab the endpoint shows, as before)."""
+    return os.environ.get(FLOW_PROJECT_ENV, "").strip()
+
+
+def flow_lock_key(cdp: str | None = None) -> str:
+    endpoint = flow_cdp(cdp)
+    # the default endpoint keeps the pre-shard key, so old and new processes still exclude each other on it
+    return "flow-ui-composer" if endpoint == normalize_cdp(DEFAULT_FLOW_CDP) else "flow-ui-composer:" + endpoint
 
 
 def atomic_text(path: Path, value: str) -> None:
@@ -88,11 +121,11 @@ def _exclusive(key: str):
 
 
 @contextmanager
-def writer(root: Path, *, flow: bool = False):
+def writer(root: Path, *, flow: bool = False, cdp: str | None = None):
     with ExitStack() as stack:
         if flow:
-            # flow_send currently has one CDP composer endpoint; protect that shared surface too.
-            stack.enter_context(_exclusive("flow-ui-composer"))
+            # One in-flight send per composer: the lock is keyed by the CDP endpoint (= the Flow profile) in use.
+            stack.enter_context(_exclusive(flow_lock_key(cdp)))
         stack.enter_context(_exclusive("film:" + os.path.normcase(str(Path(root).resolve()))))
         yield
 
