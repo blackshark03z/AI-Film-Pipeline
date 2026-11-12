@@ -11890,7 +11890,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "RUTH",
       "foreground": "",
@@ -11964,11 +11964,13 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM sits \u0001, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM sits wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC06_g07"
         }
       },
-      "gaze_target": "SAM"
+      "gaze_target": "SAM",
+      "repair_of": "SC06_g10@v1",
+      "repair_reason": "leading words 'Opening everything' not spoken; also fixes a corrupted placement text (control character) so the listener sits off frame across the table"
     },
     {
       "generation_id": "SC06_g11",
@@ -12053,7 +12055,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH sits \u0001, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "placement": "RUTH sits wholly out of shot, not even her head, hair or shoulder at the left edge",
           "established_by": "SC06_g07"
         }
       },
@@ -12142,7 +12144,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM sits \u0001, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM sits wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC06_g07"
         }
       },
@@ -12232,7 +12234,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM sits \u0001, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM sits wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC06_g07"
         }
       }
@@ -12320,7 +12322,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH sits \u0001, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "placement": "RUTH sits wholly out of shot, not even her head, hair or shoulder at the left edge",
           "established_by": "SC06_g07"
         }
       },
@@ -12409,7 +12411,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM sits \u0001, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM sits wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC06_g07"
         }
       },
@@ -12498,7 +12500,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH sits \u0001, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "placement": "RUTH sits wholly out of shot, not even her head, hair or shoulder at the left edge",
           "established_by": "SC06_g07"
         }
       },
@@ -12587,7 +12589,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM sits \u0001, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM sits wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC06_g07"
         }
       },
@@ -12676,7 +12678,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH sits \u0001, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "placement": "RUTH sits wholly out of shot, not even her head, hair or shoulder at the left edge",
           "established_by": "SC06_g07"
         }
       },
@@ -12849,7 +12851,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM sits \u0001, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM sits wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC06_g19"
         }
       },
@@ -12939,7 +12941,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH sits \u0001, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "placement": "RUTH sits wholly out of shot, not even her head, hair or shoulder at the left edge",
           "established_by": "SC06_g19"
         }
       },
@@ -13029,7 +13031,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM sits \u0001, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM sits wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC06_g19"
         }
       },
@@ -13119,7 +13121,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH sits \u0001, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "placement": "RUTH sits wholly out of shot, not even her head, hair or shoulder at the left edge",
           "established_by": "SC06_g19"
         }
       },
@@ -13209,7 +13211,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM sits \u0001, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM sits wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC06_g19"
         }
       },
@@ -13299,7 +13301,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH sits \u0001, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "placement": "RUTH sits wholly out of shot, not even her head, hair or shoulder at the left edge",
           "established_by": "SC06_g19"
         }
       },
@@ -28769,6 +28771,95 @@
           "side": "RIGHT",
           "placement": "SAM stands off frame-right, wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC05_g20"
+        }
+      },
+      "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC06_g10",
+      "scene_id": "SC06",
+      "start_state": "SC06_g10",
+      "end_state": "SC06_g11",
+      "previous_generation_id": "SC06_g09",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "dialogue": [
+        716
+      ],
+      "choreography": {
+        "generation_id": "SC06_g10",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.3,
+            "description": "RUTH speaks to SAM tiredly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.3,
+            "end_s": 6.0,
+            "description": "RUTH holds SAM's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "tired, truthful",
+            "visible_cues": [
+              "lowered eyes",
+              "a long breath"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "self-pity"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "loc_diner_morning@1",
+        "prop_notice@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH seated in the booth: head and shoulders against the high red booth back, the table edge at the bottom of frame, SAM out of frame to the right; the right edge of the frame stays plain wall for the whole shot, nobody and nothing enters it; RUTH is centred and tight, the high red booth back and a plain wall fill the frame on both sides of her",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cC_bth",
+      "addressees": {
+        "716": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM sits \u0001, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "established_by": "SC06_g07"
         }
       },
       "gaze_target": "SAM"
