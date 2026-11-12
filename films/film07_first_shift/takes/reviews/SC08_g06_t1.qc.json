@@ -1,0 +1,140 @@
+{
+  "take_id": "SC08_g06_t1",
+  "generation_id": "SC08_g06",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:958": "yes RUTH speaks to SAM"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "listener SAM head in profile at the right frame edge from about 1.5s; prompt requires SAM fully off-screen",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "FAIL: SAM head visible at the right edge from about 1.5s",
+        "REL_GAZE": "yes never lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet + edge strips: from the 3rd instant SAM's head/face in profile enters the right frame edge and stays; RUTH identity ok, STT matches line 958",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:958",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "80e133b1ee9da962e0b80b51b8f67397b99a3fed0803d2f407091b7a47133805"
+}
