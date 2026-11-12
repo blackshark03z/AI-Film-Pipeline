@@ -1,0 +1,131 @@
+{
+  "take_id": "SC09_g20_t1",
+  "generation_id": "SC09_g20",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; strip at 0, 2, 3.5, 5.75 s: RUTH left behind counter, SAM right, identities and wardrobe hold, SAM reaches with his left hand and two mugs stand on the counter at the end, nobody enters the edges, no lens look",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [],
+  "output_sha256": "08db0e5f803112771bb3558ee04a85b16092730f90d9028fb681c1becb27b1dd"
+}
