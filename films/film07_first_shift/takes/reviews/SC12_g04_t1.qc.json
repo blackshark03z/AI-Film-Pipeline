@@ -1,0 +1,140 @@
+{
+  "take_id": "SC12_g04_t1",
+  "generation_id": "SC12_g04",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1473": "yes SAM speaks toward frame-left to RUTH"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes off-screen, no intrusion",
+        "REL_GAZE": "yes never lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips clean: SAM single, blank wall on left, RUTH not visible; STT matches line 1473 (cubs=cups noise)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1473",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "f473cf6180b37eb409e6e4f2d146badb9435db9e36ee3953eca25332d2fb2187"
+}
