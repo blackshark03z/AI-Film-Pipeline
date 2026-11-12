@@ -24373,7 +24373,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "RUTH",
       "foreground": "",
@@ -24433,7 +24433,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
+        "composition": "tight close single on RUTH behind the counter: her head and shoulders fill the middle of the frame against the back shelf of white mugs; the right third of the frame is a solid plain cream wall pillar reaching from the floor to beyond the top of the frame, SAM out of frame to the right behind it; the other edge is the back shelf",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -24446,11 +24446,13 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM sits directly behind the camera, out of shot; nothing of him at either edge of the frame",
           "established_by": "SC10_g21"
         }
       },
-      "gaze_target": "SAM"
+      "gaze_target": "SAM",
+      "repair_of": "SC12_g01@v1",
+      "repair_reason": "listener SAM face leaked into right edge; wall pillar barrier on listener side"
     },
     {
       "generation_id": "SC12_g02",
@@ -28586,6 +28588,94 @@
         }
       },
       "gaze_target": "RUTH"
+    },
+    {
+      "generation_id": "SC12_g01",
+      "scene_id": "SC12",
+      "start_state": "SC12_g01",
+      "end_state": "SC12_g02",
+      "previous_generation_id": null,
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "dialogue": [
+        1458
+      ],
+      "choreography": {
+        "generation_id": "SC12_g01",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.3,
+            "description": "RUTH speaks to SAM warmly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.3,
+            "end_s": 6.0,
+            "description": "RUTH holds SAM's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "dry, warm",
+            "visible_cues": [
+              "slight smile",
+              "steady eyes"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "mockery"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "loc_diner_morning@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cC_ctr",
+      "addressees": {
+        "1458": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "established_by": "SC10_g21"
+        }
+      },
+      "gaze_target": "SAM"
     }
   ]
 }
