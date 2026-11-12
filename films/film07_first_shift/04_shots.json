@@ -17803,7 +17803,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -17816,7 +17816,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC08_g08"
         }
       },
@@ -17893,7 +17893,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -17906,7 +17906,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC08_g08"
         }
       },
@@ -17983,7 +17983,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -17996,7 +17996,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC08_g08"
         }
       },
@@ -18073,7 +18073,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -18086,7 +18086,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC08_g08"
         }
       },
@@ -18163,7 +18163,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -18176,7 +18176,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC08_g08"
         }
       },
@@ -18213,7 +18213,7 @@
             "kind": "ACTION",
             "start_s": 1.0,
             "end_s": 2.8,
-            "description": "SAM sets one empty mug into the clear cup space on his side of the counter",
+            "description": "SAM sets one empty mug into the clear cup space on his side of the counter with his left hand (the arm nearer the camera, on screen-right)",
             "motion": "put_down_small_object"
           },
           {
@@ -18336,7 +18336,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -18349,7 +18349,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC09_g06"
         }
       },
@@ -18426,7 +18426,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -18439,7 +18439,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC09_g06"
         }
       },
@@ -18516,7 +18516,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -18529,7 +18529,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC09_g06"
         }
       },
@@ -18606,7 +18606,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -18619,7 +18619,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC09_g06"
         }
       },
@@ -18696,7 +18696,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -18709,7 +18709,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC09_g06"
         }
       },
@@ -18786,7 +18786,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -18799,7 +18799,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC09_g06"
         }
       },
@@ -18876,7 +18876,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -18889,7 +18889,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC09_g06"
         }
       },
@@ -18966,7 +18966,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -18979,7 +18979,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC09_g06"
         }
       },
@@ -19056,7 +19056,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -19069,7 +19069,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC09_g06"
         }
       },
@@ -19146,7 +19146,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -19159,7 +19159,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC09_g06"
         }
       },
@@ -19236,7 +19236,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -19249,7 +19249,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC09_g06"
         }
       },
@@ -19326,7 +19326,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -19339,7 +19339,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC09_g06"
         }
       },
@@ -19416,7 +19416,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -19429,7 +19429,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC09_g06"
         }
       },
@@ -19466,7 +19466,7 @@
             "kind": "ACTION",
             "start_s": 1.0,
             "end_s": 2.8,
-            "description": "SAM sets a second clean empty mug into the other cup space",
+            "description": "SAM sets a second clean empty mug into the other cup space with his left hand (the arm nearer the camera, on screen-right)",
             "motion": "put_down_small_object"
           },
           {
@@ -19589,7 +19589,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -19602,7 +19602,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC09_g20"
         }
       },
@@ -19679,7 +19679,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -19692,7 +19692,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC09_g20"
         }
       },
@@ -19769,7 +19769,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -19782,7 +19782,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC09_g20"
         }
       },
@@ -19859,7 +19859,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left",
+        "composition": "close single on SAM standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the pale front window behind him, RUTH out of frame to the left; the left edge of the frame is plain wall and window with nobody there; SAM is centred and tight, the pale front window and a plain wall fill the frame on both sides of him",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cB_ctr",
@@ -19872,7 +19872,7 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot",
+          "placement": "RUTH stands off frame-left, wholly out of shot, no head, hair or shoulder at the left edge",
           "established_by": "SC09_g20"
         }
       },
@@ -19949,7 +19949,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the counter edge low in the frame, the back shelf of white mugs behind her, SAM out of frame to the right; the right edge of the frame is plain wall and back shelf with nobody there; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
         "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
       },
       "camera_position": "cC_ctr",
@@ -19962,7 +19962,7 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands on the customer side of the counter off frame-right, wholly out of shot",
+          "placement": "SAM stands off frame-right, wholly out of shot, no head, hair or shoulder at the right edge",
           "established_by": "SC09_g20"
         }
       },
