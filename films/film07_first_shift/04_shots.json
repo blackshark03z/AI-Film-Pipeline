@@ -21490,7 +21490,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 2,
+      "version": 3,
       "coverage": "SINGLE",
       "subject": "RUTH",
       "foreground": "",
@@ -21563,13 +21563,13 @@
         "SAM": {
           "mode": "OFF_FRAME",
           "side": "RIGHT",
-          "placement": "SAM stands well off frame-right in the open doorway, several metres away, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "placement": "SAM stands far away across the room in the open doorway, the whole width of the diner away from this counter, wholly out of shot, not even his head, hair or shoulder at the right edge",
           "established_by": "SC09_g20"
         }
       },
       "gaze_target": "SAM",
-      "repair_of": "SC10_g18@v1",
-      "repair_reason": "SAM head enters the right edge in v1; start still re-cropped tight to plain wall, distant placement"
+      "repair_of": "SC10_g18@v2",
+      "repair_reason": "SAM hair enters the right edge again; placement far across the room"
     },
     {
       "generation_id": "SC10_g19",
@@ -29307,6 +29307,96 @@
         }
       },
       "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC10_g18",
+      "scene_id": "SC10",
+      "start_state": "SC10_g18",
+      "end_state": "SC10_g19",
+      "previous_generation_id": "SC10_g17",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 2,
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "dialogue": [
+        1279
+      ],
+      "choreography": {
+        "generation_id": "SC10_g18",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.3,
+            "description": "RUTH speaks to SAM quietly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.3,
+            "end_s": 6.0,
+            "description": "RUTH holds SAM's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "restrained, giving space",
+            "visible_cues": [
+              "still posture",
+              "soft eyes"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "pressure"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "loc_diner_morning@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on RUTH standing behind the counter: head and shoulders, the back shelf of white mugs behind her, SAM out of frame to the right; the whole right edge of the frame stays plain wall and back shelf for the whole shot, nobody and nothing enters it; RUTH is centred and tight, the back shelf of white mugs and a plain wall fill the frame on both sides of her",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cC_ctr",
+      "addressees": {
+        "1279": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM stands well off frame-right in the open doorway, several metres away, wholly out of shot, not even his head, hair or shoulder at the right edge",
+          "established_by": "SC09_g20"
+        }
+      },
+      "gaze_target": "SAM",
+      "repair_of": "SC10_g18@v1",
+      "repair_reason": "SAM head enters the right edge in v1; start still re-cropped tight to plain wall, distant placement"
     }
   ]
 }
