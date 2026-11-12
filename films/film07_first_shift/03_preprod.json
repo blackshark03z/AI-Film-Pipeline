@@ -10841,13 +10841,13 @@
     },
     "SC08_g06": {
       "file": "media/stills/start_SC08_g06.jpg",
-      "sha256": "28c0c09308963a7b6c127cab9272013bd9ed165267745dd15595b6a19069997b",
-      "prompt_sha256": "c3ffcb523509cfaf1e5f56622c7d417769a7024976fb6679052666bd320b814f",
+      "sha256": "b50819f644a48dae7323a4bf7ec3c0c5c26bc7adec3b82b855f398543e82167b",
+      "prompt_sha256": "f443c60c3ff8a1e2cd10b7f6754335a15b7f1acde67b333d333a11f5b5fa1f44",
       "source": "Flow image mode gmail-3 Nano Banana 2.1 x1 (v2 redraw)",
       "credits": 0.0,
-      "registered_at": "2026-11-12T04:55:28+00:00",
+      "registered_at": "2026-11-12T05:01:18+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T04:55:30+00:00"
+      "approved_at": "2026-11-12T05:01:20+00:00"
     },
     "SC08_g08": {
       "file": "media/stills/start_SC08_g08.jpg",
