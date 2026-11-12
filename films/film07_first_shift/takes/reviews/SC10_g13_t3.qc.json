@@ -1,0 +1,142 @@
+{
+  "take_id": "SC10_g13_t3",
+  "generation_id": "SC10_g13",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1254": "see the failed spatial check: RUTH (off-frame listener) enters the left edge again in v2; the wide still shows open room at left"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "RUTH (off-frame listener) enters the left edge again in v2; the wide still shows open room at left",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "see the failed spatial check: RUTH (off-frame listener) enters the left edge again in v2; the wide still shows open room at left",
+        "REL_GAZE": "see the failed spatial check: RUTH (off-frame listener) enters the left edge again in v2; the wide still shows open room at left",
+        "REL_BARRIER": "see the failed spatial check: RUTH (off-frame listener) enters the left edge again in v2; the wide still shows open room at left"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): frames 2-5: RUTH's head and hair in profile enter the left edge (second intrusion on this shot)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "START_FRAME",
+  "cause_note": "RUTH (off-frame listener) enters the left edge again in v2; the wide still shows open room at left",
+  "required_answers": [
+    "REL_ADDRESS:1254",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "a067d50dd95b9c9b18a9f74e18ac6ef8a3ed01e10b7ebdf2442230ae553fdbd6"
+}
