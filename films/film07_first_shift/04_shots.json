@@ -20521,7 +20521,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "SAM",
       "foreground": "",
@@ -20594,11 +20594,13 @@
         "RUTH": {
           "mode": "OFF_FRAME",
           "side": "LEFT",
-          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "placement": "RUTH stands well off frame-left behind the counter, several metres away, wholly out of shot, not even her head, hair or shoulder at the left edge",
           "established_by": "SC09_g20"
         }
       },
-      "gaze_target": "RUTH"
+      "gaze_target": "RUTH",
+      "repair_of": "SC10_g07@v1",
+      "repair_reason": "RUTH head enters the left edge in v1 (frames 3-7); placement moved several metres off frame"
     },
     {
       "generation_id": "SC10_g08",
@@ -28863,6 +28865,94 @@
         }
       },
       "gaze_target": "SAM"
+    },
+    {
+      "generation_id": "SC10_g07",
+      "scene_id": "SC10",
+      "start_state": "SC10_g07",
+      "end_state": "SC10_g08",
+      "previous_generation_id": "SC10_g06",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "SINGLE",
+      "subject": "SAM",
+      "foreground": "",
+      "visible": [
+        "SAM"
+      ],
+      "dialogue": [
+        1225
+      ],
+      "choreography": {
+        "generation_id": "SC10_g07",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "SAM looks at RUTH"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.3,
+            "description": "SAM speaks to RUTH quietly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.3,
+            "end_s": 6.0,
+            "description": "SAM holds RUTH's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "SAM speaks to RUTH"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "SAM",
+            "emotion_intent": "thoughtful, wary",
+            "visible_cues": [
+              "eyes down then up",
+              "slow breath"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "fear"
+          }
+        ]
+      },
+      "design_refs": [
+        "SAM_look@1",
+        "SAM_costume@1",
+        "loc_diner_morning@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on SAM standing beside the booth: head and shoulders against the high red booth back, the table edge low in the frame, RUTH out of frame to the left; the left edge of the frame is empty room with nobody there; SAM is centred and tight, the high red booth back and a plain wall fill the frame on both sides of him",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cB_bth",
+      "addressees": {
+        "1225": [
+          "RUTH"
+        ]
+      },
+      "listener_anchors": {
+        "RUTH": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "RUTH stands behind the counter off frame-left, wholly out of shot, not even her head, hair or shoulder at the left edge",
+          "established_by": "SC09_g20"
+        }
+      },
+      "gaze_target": "RUTH"
     }
   ]
 }
