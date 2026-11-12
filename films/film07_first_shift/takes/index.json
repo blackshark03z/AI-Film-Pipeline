@@ -2651,7 +2651,7 @@
       "credits": 6.0,
       "output_file": "SC09_g17_t1.mp4",
       "output_sha256": "68b8c0f1d49194f70e1b1aef68a0c98e0e30dbb378eb66636f58326c084abd94",
-      "status": "REJECTED",
+      "status": "ACCEPTED",
       "shot_version": 1,
       "cause": "",
       "registered_at": "2026-11-12T15:44:46Z",
