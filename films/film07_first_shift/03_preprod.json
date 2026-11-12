@@ -11292,42 +11292,42 @@
     "SC10_g13": {
       "file": "media/stills/start_SC10_g13.jpg",
       "sha256": "e9907816e2f2c96078aca8dcc1549cb9954bc47fee956725addaae0b8ff6912b",
-      "prompt_sha256": "37a3ef5dfa1fd612bd397a9dc646a27dbcc16f9321e037dd3915ab83df2ce020",
-      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits; refs: char refs + plate_diner_morning); image drawn for SC10_S04, reused: same still prompt as SC10_g09",
+      "prompt_sha256": "4b780b14c8cee247adc0841c8fef2cd316c7a4c927bbddfe1ede19832288fc03",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-12T10:22:35+00:00",
+      "registered_at": "2026-11-12T11:54:13+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T10:22:36+00:00"
+      "approved_at": "2026-11-12T11:54:14+00:00"
     },
     "SC10_g15": {
       "file": "media/stills/start_SC10_g15.jpg",
       "sha256": "e9907816e2f2c96078aca8dcc1549cb9954bc47fee956725addaae0b8ff6912b",
-      "prompt_sha256": "37a3ef5dfa1fd612bd397a9dc646a27dbcc16f9321e037dd3915ab83df2ce020",
-      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits; refs: char refs + plate_diner_morning); image drawn for SC10_S04, reused: same still prompt as SC10_g09",
+      "prompt_sha256": "4b780b14c8cee247adc0841c8fef2cd316c7a4c927bbddfe1ede19832288fc03",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-12T10:22:37+00:00",
+      "registered_at": "2026-11-12T11:54:15+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T10:22:38+00:00"
+      "approved_at": "2026-11-12T11:54:16+00:00"
     },
     "SC10_g17": {
       "file": "media/stills/start_SC10_g17.jpg",
       "sha256": "e9907816e2f2c96078aca8dcc1549cb9954bc47fee956725addaae0b8ff6912b",
-      "prompt_sha256": "37a3ef5dfa1fd612bd397a9dc646a27dbcc16f9321e037dd3915ab83df2ce020",
-      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits; refs: char refs + plate_diner_morning); image drawn for SC10_S04, reused: same still prompt as SC10_g09",
+      "prompt_sha256": "4b780b14c8cee247adc0841c8fef2cd316c7a4c927bbddfe1ede19832288fc03",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-12T10:22:39+00:00",
+      "registered_at": "2026-11-12T11:54:17+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T10:22:40+00:00"
+      "approved_at": "2026-11-12T11:54:18+00:00"
     },
     "SC10_g19": {
       "file": "media/stills/start_SC10_g19.jpg",
       "sha256": "e9907816e2f2c96078aca8dcc1549cb9954bc47fee956725addaae0b8ff6912b",
-      "prompt_sha256": "37a3ef5dfa1fd612bd397a9dc646a27dbcc16f9321e037dd3915ab83df2ce020",
-      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits; refs: char refs + plate_diner_morning); image drawn for SC10_S04, reused: same still prompt as SC10_g09",
+      "prompt_sha256": "4b780b14c8cee247adc0841c8fef2cd316c7a4c927bbddfe1ede19832288fc03",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-12T10:22:41+00:00",
+      "registered_at": "2026-11-12T11:54:19+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T10:22:42+00:00"
+      "approved_at": "2026-11-12T11:54:20+00:00"
     },
     "SC10_g10": {
       "file": "media/stills/start_SC10_g10.jpg",
@@ -11402,22 +11402,22 @@
     "SC10_g22": {
       "file": "media/stills/start_SC10_g22.jpg",
       "sha256": "511347c979707beb721b625f60f70b058c6ee7bacf1a034c7f0ac57b8d06c7fe",
-      "prompt_sha256": "5423911bcf3ee6c28e080cf5211c6aa470f3f26af0f0fac1f9fe1390961726c6",
-      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits; refs: char refs + plate_diner_morning); image drawn for SC10_S07",
+      "prompt_sha256": "04aed76b92f627d09bddad7cacd351b5571a08637c6eb63fe290d7d43d19c404",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-12T10:22:56+00:00",
+      "registered_at": "2026-11-12T11:54:21+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T10:22:57+00:00"
+      "approved_at": "2026-11-12T11:54:22+00:00"
     },
     "SC10_g24": {
       "file": "media/stills/start_SC10_g24.jpg",
       "sha256": "511347c979707beb721b625f60f70b058c6ee7bacf1a034c7f0ac57b8d06c7fe",
-      "prompt_sha256": "5423911bcf3ee6c28e080cf5211c6aa470f3f26af0f0fac1f9fe1390961726c6",
-      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits; refs: char refs + plate_diner_morning); image drawn for SC10_S07, reused: same still prompt as SC10_g22",
+      "prompt_sha256": "04aed76b92f627d09bddad7cacd351b5571a08637c6eb63fe290d7d43d19c404",
+      "source": "Flow Nano Banana 2.1 project 542e948a (account khoia1k57, image mode, 0 credits); same image, still prompt re-registered after the v2 placement edit",
       "credits": 0.0,
-      "registered_at": "2026-11-12T10:22:58+00:00",
+      "registered_at": "2026-11-12T11:54:23+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T10:22:59+00:00"
+      "approved_at": "2026-11-12T11:54:24+00:00"
     },
     "SC10_g23": {
       "file": "media/stills/start_SC10_g23.jpg",
