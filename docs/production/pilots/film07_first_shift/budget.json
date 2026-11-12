@@ -110,5 +110,20 @@
     "account": "khoia1k57",
     "project": "542e948a-a222-4a6f-a0c6-7cb0733ea719",
     "not_covered": "any other terms or consent dialogs"
+  },
+  "flow_rights_consent_gmail_3": {
+    "date": "2026-11-12",
+    "granted_by": "Owner (khoikk03), in chat to the coordinator session, relayed to shard-3",
+    "statement": "Đồng ý cả 4",
+    "scope": "Click \"I agree\" on Flow's \"Rights to use this image\" dialog, upload film07 reference images only",
+    "account": "gmail-3",
+    "project": "10b9a87d-4287-4f27-bec9-824378fad8f2",
+    "first_run_onboarding": {
+      "date": "2026-11-12",
+      "statement": "Đồng ý (to: click 'Tiếp theo' and accept Flow's first-run terms on gmail-3 and gmail-4); also confirmed by the Owner/user in the shard-3 session",
+      "done": "Left both optional checkboxes (marketing email, user research) unchecked; clicked 'Tiếp theo' and 'Tiếp tục' on Flow's privacy notice; no opt-ins",
+      "not_covered": "payment, upgrade, personal data, any other terms or consent dialogs"
+    },
+    "not_covered": "any other terms or consent dialogs"
   }
 }
