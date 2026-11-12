@@ -166,6 +166,8 @@ def main(argv: list[str] | None = None) -> int:
     tk.add_argument("--route", default="start_frame+Khung hinh")
     tk.add_argument("--model", default="")
     tk.add_argument("--credits", type=float)
+    tk.add_argument("--merge-from", metavar="GIT_REF", help="union a shard branch's takes/index.json and takes/send_log.jsonl "
+                    "into this checkout (same take_id with different content = error); reports a 04_shots.json conflict")
     mo = actions.add_parser("motion", help="trajectory QC: measure a tracked prop's travel in a take (a measurement for the reviewer, not an acceptance)")
     mo.add_argument("--film", required=True, type=Path)
     mo.add_argument("--gid", required=True, metavar="GENERATION_ID")
@@ -443,6 +445,15 @@ def _run(args, rest, parser) -> int:
             return _motion(args, pkg)
         if args.action == "takes":
             from film_pipeline.production import takes as tk_mod
+            if args.merge_from:
+                from film_pipeline.production.shard_merge import ShardMergeError, merge_shard_takes
+                try:
+                    report = merge_shard_takes(pkg.root, args.merge_from)
+                except ShardMergeError as exc:
+                    _emit({"error": str(exc)})
+                    return 2
+                _emit(report)
+                return 1 if report["conflicts"] else 0
             if args.register:
                 missing = [f for f, v in (("--clip", args.clip), ("--prompt", args.prompt), ("--model", args.model),
                                           ("--credits", args.credits)) if v in (None, "")]
