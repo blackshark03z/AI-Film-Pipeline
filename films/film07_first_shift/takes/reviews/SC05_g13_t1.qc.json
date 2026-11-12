@@ -1,0 +1,131 @@
+{
+  "take_id": "SC05_g13_t1",
+  "generation_id": "SC05_g13",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants:  alone, the right-side edge shows no  (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [],
+  "output_sha256": "f0e4d431ffc0fb4b352f9ab2841f339f588038b54999b34e9a8160a5194485e0"
+}
