@@ -1920,6 +1920,26 @@
       "provider_job_id": "",
       "cost_unit": "credits",
       "cost_amount": null
+    },
+    {
+      "take_id": "SC04_g08_t3",
+      "generation_id": "SC04_g08",
+      "prompt_sha256": "86ddc8619df280eac4c5f6a271ee578373eab0d604e32ad627980c8f1c72ccb3",
+      "start_frame_sha256": "b4211b1a93f04d71b3d1d79374ba9ce4c8c779b848863300275aa931cb28518a",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 6.0,
+      "output_file": "SC04_g08_t3.mp4",
+      "output_sha256": "2b98d2b58a946114ba075f5d2333fc391bceb0518d6a01b81ba0a8e49479648e",
+      "status": "ACCEPTED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-12T00:01:45Z",
+      "review_file": "reviews/SC04_g08_t3.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     }
   ]
 }
