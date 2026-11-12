@@ -1,0 +1,140 @@
+{
+  "take_id": "SC04_g09_t2",
+  "generation_id": "SC04_g09",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:451": "RUTH speaks to SAM, eyes and body turned toward frame-right where SAM is off-frame."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "SAM's place is kept out of frame and never shown empty; RUTH's eyes go to frame-right, just past the lens.",
+        "REL_GAZE": "RUTH looks toward SAM off-frame and never into the lens."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Sheet + left/right edge strips at 6 instants: RUTH alone, the right-side edge shows no SAM (no head, hair or shoulder), gaze held off-lens to frame-right, line spoken as written (STT matches). Framing is a little wider than the still (RUTH centred against the booth back) but both edges are bare.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:451",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "2a169e4a6188415af308aadc2990678527bc5341b2e2fc1ca96134befd843a80"
+}
