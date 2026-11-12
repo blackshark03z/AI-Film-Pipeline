@@ -1,0 +1,239 @@
+{
+  "take": {
+    "take_id": "SC06_g19_t1",
+    "generation_id": "SC06_g19",
+    "prompt_sha256": "dd7ddfda9532179c775d03a19b00e6d3c5433c2699e5d3a325ff7f92bd06b9bd",
+    "start_frame_sha256": "cadf7cc10a1f038a9d0a5c647c2827df1bb7a60117477118761410ef0f337aa1",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC06_g19_t1.mp4",
+    "output_sha256": "d24f17c14685d60d3b3c4f3659f75c8e0f0af9f7a123ac7fea64106ad2f7845d",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-12T09:24:02Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "RUTH",
+      "SAM"
+    ],
+    "start_state": "SC06_g19",
+    "end_state": "SC06_g20",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "RUTH and SAM sit facing each other, SAM holds a closed notebook in his left hand (the arm nearer the camera, on screen-right)"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.6,
+        "description": "SAM lays his closed notebook down on his own side of the table with his left hand (the arm nearer the camera, on screen-right)"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.6,
+        "end_s": 4.0,
+        "description": "the notebook lies closed on SAM's side, away from RUTH's reach"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "both sit still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - RUTH and SAM sit facing each other, SAM holds a closed notebook in his left hand (the arm nearer the camera, on screen-right)?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.6s ACTION: does this happen on screen - SAM lays his closed notebook down on his own side of the table with his left hand (the arm nearer the camera, on screen-right)?"
+    },
+    {
+      "group": "action",
+      "question": "2.6-4s CONSEQUENCE: does this happen on screen - the notebook lies closed on SAM's side, away from RUTH's reach?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - both sit still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): SAM lays his closed notebook down"
+    },
+    {
+      "group": "character",
+      "question": "SAM: does the face/body read as patient, steady (restrained)? Must NOT read as: pity."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC06_g19: Continues from the previous shot: RUTH seated on the far booth seat across the table, frame-left; SAM seated on the near booth seat across the table, frame-right; the closure notice: lying folded on RUTH's side of the booth table."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC06_g20: Continues from the previous shot: RUTH seated on the far booth seat across the table, frame-left; SAM seated on the near booth seat across the table, frame-right; the closure notice: lying folded on RUTH's side of the booth table; the notebook: lying closed on SAM's side of the booth table."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC06_g19_t1",
+    "generation_id": "SC06_g19",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [],
+    "output_sha256": "d24f17c14685d60d3b3c4f3659f75c8e0f0af9f7a123ac7fea64106ad2f7845d"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}
