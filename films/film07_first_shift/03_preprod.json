@@ -10811,13 +10811,13 @@
     },
     "SC09_g19": {
       "file": "media/stills/start_SC09_g19.jpg",
-      "sha256": "c91e2f9ec4480cf78e37d7c988fa6adefe7177cdd8c47624fcdf182ef64e88c1",
+      "sha256": "fb7b4328b886a20d2d0bab9b51ccf310d6776534856712468ca24e76bae596dd",
       "prompt_sha256": "80413b799503854351fd12e8d65fc4accd59198fca35f33a65dc07d48ba1b459",
-      "source": "Flow Nano Banana 2.1 project 2acd7acd (account gmail-4, image mode, 0 credits); char_SAM ref; pre-restaged single: tight SAM close-up, empty left third",
+      "source": "Flow image mode gmail-3 Nano Banana 2.1 x1 (v1 restage redraw, built-in pane, char_SAM ingredient, no mug/prop lines)",
       "credits": 0.0,
-      "registered_at": "2026-11-12T05:47:40+00:00",
+      "registered_at": "2026-11-12T15:58:45+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-12T05:47:41+00:00"
+      "approved_at": "2026-11-12T15:58:47+00:00"
     },
     "SC09_g08": {
       "file": "media/stills/start_SC09_g08.jpg",
