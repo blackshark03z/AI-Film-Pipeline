@@ -105,6 +105,7 @@ JS_PICKER_CENTRES = r"""() => [...document.images].map(i => i.getBoundingClientR
     .map(r => [r.x + r.width / 2, r.y + r.height / 2])"""
 SLOT_DIFF_MAX = 4.0      # mean abs grey diff at 64x36; the same still scores 0-1,
                          # a sibling still of the same room 7 (film04 plate), others >= 40
+OUTPUT_COUNT = "x1"   # outputs per send: one (the quote of an x2 send is double)
 PICKER_MARGIN = 3.0      # the best picker match must beat the runner-up by this much
 SAME_STILL_MAX = 1.0     # ...unless the two are one still uploaded twice (their own diff at most this)
 
@@ -958,6 +959,11 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
         if failed:
             return failed
         rec["resolution_set"] = resolution
+    if mode == "Video":   # a send is exactly ONE output: this account's composer defaults to x2 (double cost)
+        failed = await _ensure_radio(page, OUTPUT_COUNT, "outputs")
+        if failed:
+            return failed
+        rec["outputs_set"] = OUTPUT_COUNT
     if duration is not None:
         try:
             presses = slider_presses(duration)
@@ -993,6 +999,33 @@ async def _set_composer_settings(page, model: str, duration: int | None, rec: di
             return f"SETTINGS_NOT_SET chip does not show {duration} giây"
     if expected_credits is not None and cost != expected_credits:
         return f"PRE_SUBMIT_ERROR CREDIT_QUOTE_MISMATCH shown={cost} reserved={expected_credits:g}"
+    return None
+
+
+async def _verify_video_composer(page, resolution: str, duration: int | None) -> str | None:
+    """Last look before the prompt is typed and submitted: the composer chip must show Video, the resolution, the
+    intended length and ONE output (x1), and the "Agent" chip must be off. None = fine, else a pre-submit result.
+
+    film07 shard-4: this account defaults to x2 / 720p / 8 s; attaching frames can reset the composer, so the settings
+    forced earlier are read again right before the submit (nothing has been sent yet: 0 credits)."""
+    chip = await _find_settings_chip(page)
+    if chip is None:
+        return "PRE_SUBMIT_ERROR COMPOSER_MISMATCH settings chip not found"
+    text = await chip.inner_text()
+    problems = []
+    if "Video" not in text:
+        problems.append("not video mode")
+    if resolution and resolution not in text:
+        problems.append(f"not {resolution}")
+    if duration is not None and f"{duration} giây" not in text and not re.search(rf"\b{duration}s\b", text):
+        problems.append(f"not {duration} s")
+    if not re.search(rf"\b{OUTPUT_COUNT}\b", text):
+        problems.append(f"not {OUTPUT_COUNT}")
+    agent = page.locator("button").filter(has_text="Agent").first
+    if await agent.count() and await agent.get_attribute("aria-pressed") == "true":
+        problems.append("Agent chip is on")
+    if problems:
+        return f"PRE_SUBMIT_ERROR COMPOSER_MISMATCH {', '.join(problems)} (chip {' '.join(text.split())!r})"
     return None
 
 
@@ -1129,6 +1162,11 @@ async def run(args, before_submit=None) -> dict:
             rec["error"] = str(e).splitlines()[0][:200] if str(e) else ""
             return rec
 
+        if not args.image and args.model:   # a video send: last look at the composer before anything is typed or sent
+            failed = await _verify_video_composer(page, args.resolution, args.duration)
+            if failed:
+                rec["result"] = failed
+                return rec
         box = page.locator("textarea, [contenteditable='true']").first
         # Codex 2026-11-09: re-read the failed-tile count right before the submit, so a job that failed during the
         # snapshot and composer setup is not taken for this send's failure

@@ -54,8 +54,11 @@ class _Loc:
 class FakeComposer:
     """Flow composer: a chip, and a settings menu with mode / resolution radios, a model dropdown, a duration slider."""
 
-    def __init__(self, mode="image", res="720p", chip_after=0, stuck_mode=False, sub="Thành phần", lang="vi"):
+    def __init__(self, mode="image", res="720p", chip_after=0, stuck_mode=False, sub="Thành phần", lang="vi", count="x1",
+                 stuck_count=False):
         self.mode, self.res, self.dur, self.sub, self.lang = mode, res, 3, sub, lang
+        self.count, self.stuck_count = count, stuck_count
+        self.agent_on = False
         self.menu = False
         self.chip_after, self.polls, self.stuck_mode = chip_after, 0, stuck_mode
         self.clicks, self.keys = [], []
@@ -80,15 +83,20 @@ class FakeComposer:
     def _set_res(self, r):
         self.res = r
 
+    def _set_count(self, c):
+        if not self.stuck_count:
+            self.count = c
+
     def elements(self, sel):
         if sel == "button":
             self.polls += 1
             if self.polls <= self.chip_after:
                 return []
             unit = f"{self.dur}s" if self.lang == "en" else f"{self.dur} giây"
-            chip = (f"Video · {self.res} · {unit} crop_16_9 x1" if self.mode == "video"
+            chip = (f"Video · {self.res} · {unit} crop_16_9 {self.count}" if self.mode == "video"
                     else "Nano Banana 2.1 crop_16_9 x1")
-            els = [_El("home"), _El(chip, click=lambda: setattr(self, "menu", True))]
+            els = [_El("home"), _El("Agent", attrs={"aria-pressed": "true" if self.agent_on else "false"}),
+                   _El(chip, click=lambda: setattr(self, "menu", True))]
             if self.menu:
                 els += self._radios()
                 if self.mode == "video":
@@ -109,7 +117,9 @@ class FakeComposer:
                 _El("crop_freeFrames" if en else "crop_freeKhung hình", lambda: self._set_sub("Khung hình"), {"aria-checked": flag(self.sub == "Khung hình")}),
                 _El("chrome_extensionIngredients" if en else "chrome_extensionThành phần", lambda: self._set_sub("Thành phần"), {"aria-checked": flag(self.sub == "Thành phần")}),
                 _El("360pinfo", lambda: self._set_res("360p"), {"aria-checked": flag(self.res == "360p")}),
-                _El("720p", lambda: self._set_res("720p"), {"aria-checked": flag(self.res == "720p")})]
+                _El("720p", lambda: self._set_res("720p"), {"aria-checked": flag(self.res == "720p")}),
+                _El("x1", lambda: self._set_count("x1"), {"aria-checked": flag(self.count == "x1")}),
+                _El("x2", lambda: self._set_count("x2"), {"aria-checked": flag(self.count == "x2")})]
 
     def locator(self, sel):
         return _Loc(self, sel)
@@ -225,3 +235,51 @@ def test_start_frame_send_asks_for_the_khung_hinh_sub_mode(tmp_path, monkeypatch
     still.write_bytes(b"x")
     _, seen = _patched_run(tmp_path, monkeypatch, "--model", "Omni 1.2 Flash", "--duration", "6", "--start-file", str(still))
     assert seen[0]["submode"] == "Khung hình"
+
+
+# --- x1 guard (film07 shard-4: this account defaults to x2 / 720p / 8 s; an x2 send would cost double) ---
+
+def test_video_send_switches_the_output_count_back_to_x1_and_verifies_it():
+    page = FakeComposer(mode="video", res="360p", count="x2")
+    result, rec = _run(page)
+    assert result is None and page.count == "x1" and rec["outputs_set"] == "x1"
+
+
+def test_output_count_that_does_not_stick_is_refused_before_submit():
+    result, _ = _run(FakeComposer(mode="video", res="360p", count="x2", stuck_count=True))
+    assert result and result.startswith("SETTINGS_NOT_SET") and "x1" in result
+
+
+def test_image_mode_settings_do_not_touch_the_output_count():
+    page = FakeComposer(mode="image", res="720p", count="x2")
+    result, rec = asyncio.run(fs._set_composer_settings(page, "", None, {})), None
+    assert result is None and page.count == "x2"
+
+
+def _verify(page, duration=6):
+    return asyncio.run(fs._verify_video_composer(page, "360p", duration))
+
+
+def test_last_look_before_submit_accepts_x1_360p_and_the_intended_duration():
+    page = FakeComposer(mode="video", res="360p", count="x1")
+    page.dur = 6
+    assert _verify(page) is None
+    en = FakeComposer(mode="video", res="360p", count="x1", lang="en")
+    en.dur = 6
+    assert _verify(en) is None
+
+
+def test_last_look_before_submit_refuses_x2_720p_wrong_duration_or_image_mode():
+    for kw, dur in ((dict(count="x2"), 6), (dict(res="720p"), 6), (dict(), 8), (dict(mode="image"), 6)):
+        page = FakeComposer(**{"mode": "video", "res": "360p", **kw})
+        page.dur = dur
+        result = _verify(page)
+        assert result and result.startswith("PRE_SUBMIT_ERROR COMPOSER_MISMATCH"), (kw, dur, result)
+
+
+def test_last_look_refuses_when_the_agent_chip_is_on():
+    page = FakeComposer(mode="video", res="360p", count="x1")
+    page.dur = 6
+    page.agent_on = True
+    result = _verify(page)
+    assert result and result.startswith("PRE_SUBMIT_ERROR COMPOSER_MISMATCH") and "Agent" in result
