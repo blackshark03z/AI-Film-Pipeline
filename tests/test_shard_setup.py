@@ -84,3 +84,32 @@ def test_shard_number_must_be_a_small_positive_integer(repo):
     for bad in (0, -1, 100, "a"):
         with pytest.raises(SS.ShardSetupError, match="shard number"):
             setup(repo, bad)
+
+
+def test_untracked_uv_lock_is_copied_so_that_sync_frozen_works(repo):
+    (repo / "uv.lock").write_text("lock", encoding="utf-8")        # uv.lock is deliberately not committed
+    report = setup(repo, 6)
+    assert (repo.parent / "AFP-shard-6/uv.lock").read_text(encoding="utf-8") == "lock" and report["uv_lock_copied"]
+
+
+def test_the_parent_virtualenv_is_not_leaked_into_the_shard_commands(repo, monkeypatch):
+    monkeypatch.setenv("VIRTUAL_ENV", "C:/somewhere/else/.venv")
+    show = [sys.executable, "-c", "import os, sys; sys.exit(7 if 'VIRTUAL_ENV' in os.environ else 0)"]
+    SS.setup_shard(repo, 7, parent=repo.parent, film="films/filmx", sync_cmd=show, check_cmd=show)
+
+
+def test_resume_finishes_a_worktree_whose_sync_failed_and_keeps_its_commits(repo):
+    with pytest.raises(SS.ShardSetupError, match="sync failed"):
+        SS.setup_shard(repo, 8, parent=repo.parent, film="films/filmx", sync_cmd=FAIL, check_cmd=PASS)
+    work = repo.parent / "AFP-shard-8"
+    with pytest.raises(SS.ShardSetupError, match="exists"):
+        setup(repo, 8)                                                # without --resume nothing is reused
+    report = setup(repo, 8, resume=True)
+    assert report["resumed"] and report["status_check"] == "ok" and (work / "sync.done").is_file()
+
+
+def test_resume_refuses_a_directory_that_is_not_that_shards_worktree(repo):
+    (repo.parent / "AFP-shard-9").mkdir()
+    with pytest.raises(SS.ShardSetupError, match="not a worktree"):
+        setup(repo, 9, resume=True)
+
