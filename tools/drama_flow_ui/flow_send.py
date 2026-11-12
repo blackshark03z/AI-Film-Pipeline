@@ -31,6 +31,7 @@ import argparse
 import asyncio
 import hashlib
 import json
+import os
 import re
 import statistics
 import subprocess
@@ -1032,9 +1033,10 @@ async def run(args, before_submit=None) -> dict:
     checkpoint(out, rec)
     pw = await async_playwright().start()
     try:
-        browser = await pw.chromium.connect_over_cdp(CDP, timeout=30000)
+        rec["cdp"] = cdp_endpoint()
+        browser = await pw.chromium.connect_over_cdp(rec["cdp"], timeout=30000)
         ctx = browser.contexts[0]
-        page = next((p for p in ctx.pages if "flow.google" in p.url), None)
+        page = select_flow_page(ctx.pages, flow_project())
         if page is None:   # 2026-11-09 SC03_g1 t1: no Flow tab crashed here and the receipt counted as a send
             rec["result"] = "PRE_SUBMIT_ERROR NO_FLOW_TAB"
             return rec
@@ -1292,6 +1294,30 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     if args.upload_frames and not args.start_file:
         ap.error("--upload-frames needs --start-file")
     return args
+
+
+def _runtime():
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+    from film_pipeline.production import runtime
+    return runtime
+
+
+def cdp_endpoint() -> str:
+    """The CDP endpoint of this process's Flow profile: AFP_FLOW_CDP, else the legacy CDP constant."""
+    return _runtime().flow_cdp(None if os.environ.get("AFP_FLOW_CDP") else CDP)
+
+
+def flow_project() -> str:
+    """The Flow project this process is pinned to (AFP_FLOW_PROJECT); '' = the endpoint's first Flow tab, as before."""
+    return _runtime().flow_project()
+
+
+def select_flow_page(pages, project: str = ""):
+    """The Flow tab to drive: with a pinned project only a tab of that project, else the first Flow tab."""
+    flow = [p for p in pages if "flow.google" in p.url]
+    if not project:
+        return flow[0] if flow else None
+    return next((p for p in flow if f"/project/{project}" in p.url), None)
 
 
 def checkpoint(out: Path, record: dict) -> None:

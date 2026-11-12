@@ -201,43 +201,50 @@ async def run(args) -> dict[str, dict]:
     results: dict[str, dict] = {}
     todo: dict[str, str] = {}
     for rid in args.ids:
-        _receipt, prompt, problem = load_receipt(receipts, rid, prompts)
-        if problem:
+        receipt, prompt, problem = load_receipt(receipts, rid, prompts)
+        wrong_target = fs._runtime().flow_target_problem(receipt)   # another profile / project: never scan it here
+        if wrong_target:
+            results[rid] = {"result": "WRONG_PROFILE", "why": wrong_target}
+        elif problem:
             results[rid] = {"result": "NO_PROMPT", "why": problem}
         else:
             todo[rid] = prompt
     if todo:
         pw = await async_playwright().start()
         try:
-            browser = await pw.chromium.connect_over_cdp(fs.CDP, timeout=30000)
+            browser = await pw.chromium.connect_over_cdp(fs.cdp_endpoint(), timeout=30000)
             ctx = browser.contexts[0]
-            page = next(p for p in ctx.pages if "flow.google" in p.url)
-            await page.set_viewport_size({"width": 1280, "height": 720})
-            await page.keyboard.press("Escape")
-            details = await scan_gallery(page, args.scan)   # once, shared by every receipt
-            exhausted = await confirm_exhausted(page, details, args.scan, page.url)
-            for rid, prompt in todo.items():
-                native = manifests / f"{rid}.take.json"
-                context = json.loads(native.read_text(encoding="utf-8")) if native.is_file() else {}
-                if context.get("project") and f"/project/{context['project']}" not in page.url:
-                    results[rid] = {"result": "WRONG_PROJECT"}
-                    continue
-                res = bind_receipt(prompt, details, known, context)
-                res["scanned"] = len(details)
-                res.update(prompt_sha256=_sha(prompt), project=context.get("project"),
-                           scan_verified=complete_negative_scan(details, page.url, exhausted=exhausted))
-                if native.is_file():
-                    res["native_sha256"] = hashlib.sha256(native.read_bytes()).hexdigest()
-                if res["result"] == "BOUND":
-                    known.add(res["media_id"])   # a clip binds to one receipt only
-                    if args.download:
-                        failed = await download_nth(page, ctx, res["index"], out_dir / f"{rid}.mp4",
-                                                    media_id=res["media_id"], prompt=prompt)
-                        res["download"] = failed or "SAVED"
-                        if not failed:
-                            res["sha256"] = hashlib.sha256((out_dir / f"{rid}.mp4").read_bytes()).hexdigest()
-                            res["prompt_sha256"] = _sha(prompt)
-                results[rid] = res
+            page = fs.select_flow_page(ctx.pages, fs.flow_project())
+            if page is None:   # no tab of the pinned project on this profile: nothing is scanned
+                for rid in todo:
+                    results[rid] = {"result": "NO_FLOW_TAB"}
+            else:
+                await page.set_viewport_size({"width": 1280, "height": 720})
+                await page.keyboard.press("Escape")
+                details = await scan_gallery(page, args.scan)   # once, shared by every receipt
+                exhausted = await confirm_exhausted(page, details, args.scan, page.url)
+                for rid, prompt in todo.items():
+                    native = manifests / f"{rid}.take.json"
+                    context = json.loads(native.read_text(encoding="utf-8")) if native.is_file() else {}
+                    if context.get("project") and f"/project/{context['project']}" not in page.url:
+                        results[rid] = {"result": "WRONG_PROJECT"}
+                        continue
+                    res = bind_receipt(prompt, details, known, context)
+                    res["scanned"] = len(details)
+                    res.update(prompt_sha256=_sha(prompt), project=context.get("project"),
+                               scan_verified=complete_negative_scan(details, page.url, exhausted=exhausted))
+                    if native.is_file():
+                        res["native_sha256"] = hashlib.sha256(native.read_bytes()).hexdigest()
+                    if res["result"] == "BOUND":
+                        known.add(res["media_id"])   # a clip binds to one receipt only
+                        if args.download:
+                            failed = await download_nth(page, ctx, res["index"], out_dir / f"{rid}.mp4",
+                                                        media_id=res["media_id"], prompt=prompt)
+                            res["download"] = failed or "SAVED"
+                            if not failed:
+                                res["sha256"] = hashlib.sha256((out_dir / f"{rid}.mp4").read_bytes()).hexdigest()
+                                res["prompt_sha256"] = _sha(prompt)
+                    results[rid] = res
         finally:
             await pw.stop()   # disconnect only; browser and tab stay open
     for rid, res in results.items():

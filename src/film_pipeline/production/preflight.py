@@ -11,6 +11,8 @@ import tempfile
 import urllib.request
 from pathlib import Path
 
+from .runtime import flow_cdp, flow_project
+
 MIN_SCRATCH_GIB = 20.0      # long renders (cut/titles/mix/versions/finish/benchmark): scratch for the whole pass
 SEND_RESERVE_GIB = 4.0      # a single Flow send/download keeps only the standing reserve ...
 SEND_TAKE_BOUND_GIB = 0.5   # ... plus a conservative bound for one take and its still (a 6-15 s 360p clip is a few MB)
@@ -63,9 +65,11 @@ def check(root: Path, *, probe_flow: bool = False, operation: str = "render", ex
     session = "NOT_PROBED"
     if probe_flow:
         try:
-            with urllib.request.urlopen("http://127.0.0.1:9333/json/list", timeout=5) as response:
+            with urllib.request.urlopen(flow_cdp() + "/json/list", timeout=5) as response:
                 pages = json.load(response)
-            present = any("flow.google" in p.get("url", "") or "/tools/flow" in p.get("url", "") for p in pages)
+            pinned = flow_project()
+            present = any(("flow.google" in p.get("url", "") or "/tools/flow" in p.get("url", ""))
+                          and (not pinned or f"/project/{pinned}" in p.get("url", "")) for p in pages)
             session = "FLOW_TAB_PRESENT" if present else "NO_FLOW_TAB"
         except (OSError, ValueError):
             session = "CDP_UNAVAILABLE"

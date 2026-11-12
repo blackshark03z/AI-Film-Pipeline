@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from film_pipeline.production.runtime import atomic_json, film_writer, run_async
+from film_pipeline.production.runtime import atomic_json, film_writer, flow_target_problem, run_async
 from film_pipeline.production import takes as T
 from film_pipeline.production.money import receipt_result, unresolved_sends
 
@@ -139,6 +139,10 @@ def reconcile(pkg: Any, take_id: str, *, runner=None) -> dict:
     reusable = (prior.get("result") == "BOUND" and prior.get("download") == "SAVED" and out.is_file()
                 and prior.get("intent_sha256") == T.sha256_file(path)
                 and prior.get("sha256") == T.sha256_file(out) and prior.get("prompt_sha256") == receipt["prompt_sha256"])
+    if not (reusable or native_bound):   # a scan is next: only on the profile (and project) that made the send
+        mismatch = flow_target_problem(receipt)
+        if mismatch:
+            raise ValueError(mismatch)
     result = prior if reusable else native_bound or (runner or _native_runner)(pkg, take_id, prompt, out)
     if result.get("provider_no_clip") and result.get("result") == "NOT_IN_GALLERY":
         from film_pipeline.providers.flow_ui_adapter import flow_tool

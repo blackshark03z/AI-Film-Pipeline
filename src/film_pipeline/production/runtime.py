@@ -58,6 +58,18 @@ def flow_project() -> str:
     return os.environ.get(FLOW_PROJECT_ENV, "").strip()
 
 
+def flow_target_problem(receipt: dict) -> str | None:
+    """Why this process may not scan for / reconcile the send `receipt` (None = it may). A receipt without ``cdp`` was
+    sent before shards existed, through the default endpoint. A pinned project must match the receipt's project."""
+    sent = normalize_cdp(receipt.get("cdp"))
+    if sent != flow_cdp():
+        return f"FLOW_TARGET_MISMATCH: the send used endpoint {sent}, this process drives {flow_cdp()}"
+    pinned, was = flow_project(), str(receipt.get("project") or "")
+    if pinned and was and pinned[:36] != was[:36]:
+        return f"FLOW_TARGET_MISMATCH: the send used project {was[:36]}, this process is pinned to {pinned[:36]}"
+    return None
+
+
 def flow_lock_key(cdp: str | None = None) -> str:
     endpoint = flow_cdp(cdp)
     # the default endpoint keeps the pre-shard key, so old and new processes still exclude each other on it

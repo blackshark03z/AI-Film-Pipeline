@@ -47,7 +47,7 @@ from film_pipeline.production.money import (credit_ledger, money_ledger, receipt
 from film_pipeline.production.planning import flow_credits
 from film_pipeline.production.sections import shot_seconds
 from film_pipeline.production.takes import (load_log, register_take, sha256_file, sha256_text, takes_dir)
-from film_pipeline.production.runtime import atomic_json, atomic_text, film_writer
+from film_pipeline.production.runtime import atomic_json, atomic_text, film_writer, flow_cdp, flow_project
 from film_pipeline.providers.capability import DEFAULT_MODEL, DEFAULT_PROVIDER, ModelCapability, get_capability
 from film_pipeline.providers.http_adapters import make_adapter
 from film_pipeline.providers.flow_ui_adapter import FlowUiAdapter, default_runner, controller_runner  # noqa: F401 - re-exported
@@ -442,7 +442,7 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
             "duration_s", "expected_credits", "credits_spent", "credit_cap", "provider", "provider_model", "tier",
             "cost_unit", "expected_cost")
     receipt = {k: payload[k] for k in keep}
-    receipt.update({k: payload[k] for k in ("submit_protocol", "dispatch_phase", "project") if k in payload})
+    receipt.update({k: payload[k] for k in ("submit_protocol", "dispatch_phase", "project", "cdp") if k in payload})
     receipt["start_frame_sha256"] = payload["start_frame"]["sha256"]
     receipt["start_frame_source"] = payload["start_frame"]["source"]
     if "end_frame" in payload:
@@ -519,6 +519,10 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     old_prompt = payload["prompt_file"]
     payload["prompt_file"] = str(snapshot)
     payload["argv"] = [str(snapshot) if arg == old_prompt else arg for arg in payload["argv"]]
+    if flow:   # the journal names the Flow profile (CDP endpoint) and, when pinned, the project this send targets
+        payload["cdp"] = flow_cdp()
+        if flow_project():
+            payload["project"] = flow_project()
     if flow and runner is None:
         payload.update(submit_protocol="inprocess-checkpoint-v1", dispatch_phase="PREPARING")
     receipt = _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
@@ -581,7 +585,8 @@ def log_send(root: Path, payload: dict[str, Any], manifest: dict[str, Any], outc
             "normalized": normalized, "incident": normalized == "PROVIDER_FAILED",
             "binding": manifest.get("binding", ""), "bound_in_send": outcome == "PASSED",
             "elapsed_s": manifest.get("elapsed_s"), "started": manifest.get("started", ""),
-            "finished": manifest.get("finished", ""), **extra}
+            "finished": manifest.get("finished", ""), "cdp": payload.get("cdp", ""),
+            "project": payload.get("project", ""), **extra}
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(line, ensure_ascii=False) + "\n")
     return path
