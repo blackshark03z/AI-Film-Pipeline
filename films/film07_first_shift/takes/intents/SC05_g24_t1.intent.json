@@ -3,13 +3,13 @@
   "generation_id": "SC05_g24",
   "take_id": "SC05_g24_t1",
   "shot_version": 1,
-  "prompt_sha256": "a1e152e68932f787cbb6853e90cf4b0c6b7665f504e612fbec748247808aa304",
+  "prompt_sha256": "b7a5150e1bab6db8b3dbf178b8853ab6684ac320db821a354fb41f31cf833e66",
   "prompt_file": "films\\film07_first_shift\\media\\plan\\prompts\\SC05_g24.txt",
   "route": "start_frame+Khung hinh",
   "model": "Omni 1.2 Flash 360p",
   "duration_s": 6,
   "expected_credits": 6.0,
-  "credits_spent": 906.0,
+  "credits_spent": 990.0,
   "credit_cap": 3210.0,
   "provider": "flow",
   "provider_model": "omni-1.2-flash",
@@ -17,10 +17,8 @@
   "cost_unit": "credits",
   "expected_cost": 6.0,
   "start_frame_sha256": "cab5375dbaefeab6e0c0e8bbe82e132988c797a9948f41dd69ccde0db4b2025a",
-  "start_frame_source": "end frame of SC05_g23",
-  "blockers": [
-    "HANDOFF_PREVIOUS_NOT_ACCEPTED"
-  ],
+  "start_frame_source": "end frame of SC05_g23_t2",
+  "blockers": [],
   "dry_run": true,
   "sent": false,
   "owner_go_live": false
