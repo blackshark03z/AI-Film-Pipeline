@@ -13168,6 +13168,16 @@
       "registered_at": "2026-11-13T23:35:49+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
       "approved_at": "2026-11-13T23:35:50+00:00"
+    },
+    "SC02_g25": {
+      "file": "media/stills/start_SC02_g25.jpg",
+      "sha256": "3ba2458e195324352ec769041bd3e7d26ba9e03fe3f30a674c854cd213892561",
+      "prompt_sha256": "9cafb6fb207882500efe0748f133cb810c922ba0f1d6f8b871bf873eba0172e9",
+      "source": "Flow Nano Banana 2.1, gmail-4 Chrome, project 6f8e24af, still S10",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T23:38:23+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T23:38:24+00:00"
     }
   }
 }
