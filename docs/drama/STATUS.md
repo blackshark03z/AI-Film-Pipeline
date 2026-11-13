@@ -499,3 +499,4 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - SC11 g01-g05 were accepted (7eea6ab, b644301, e7c450a, 921b9fe, af7180e). SC11_g06 was flagged with the same "hoạt động bất thường" text. Whether it was charged is unknown, because the tile did not show the "chưa bị tính phí" line. STOPPED; g07 was not sent.
 - NO-JS mode got 9 unflagged generations through after the cool-down, against 2 with page JS, then it was flagged again. Page JS was part of the trigger, but volume or automation is still detected.
 - Remaining: SC11 g06-g25 (20), SC07 (25), SC12_g23 (policy gap). Route decision goes to the Owner.
+- 2026-11-13 ~09:00: after a 10 min wait, the SC11_g06 reconcile send was flagged at once (0 of 1; INC-002, edb7c2e). Neither g06 failure charged; the balance is 540. A 10 min wait is not enough; the 2 h cool-down gave 9 generations.
