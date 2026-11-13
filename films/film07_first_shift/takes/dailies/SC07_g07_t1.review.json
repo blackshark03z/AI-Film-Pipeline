@@ -1,0 +1,239 @@
+{
+  "take": {
+    "take_id": "SC07_g07_t1",
+    "generation_id": "SC07_g07",
+    "prompt_sha256": "d1932765772dbd6d44dfaad860187015406bd96aab9fdfdbc781fc9df41156d0",
+    "start_frame_sha256": "bec4e6909f59dc498b49fb119ba5af850eb84b6f24ebbc090b6a952a53cf4d8c",
+    "route": "start_frame+Khung hinh",
+    "model": "omni-1.2-flash",
+    "credits": 6.0,
+    "output_file": "SC07_g07_t1.mp4",
+    "output_sha256": "0f04915950ff0376076ab3e5a7bec85f6779173eb16ab306dbfaa5d35bbfbe4b",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-13T07:16:02Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "RUTH",
+      "SAM"
+    ],
+    "start_state": "SC07_g07",
+    "end_state": "SC07_g08",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "RUTH stands behind the counter holding a plain menu card in her right hand (the arm nearer the camera, on screen-left), SAM stands on the customer side"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.6,
+        "description": "RUTH lays the plain menu card flat on the counter at her end with her right hand (the arm nearer the camera, on screen-left)"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.6,
+        "end_s": 4.0,
+        "description": "the menu card lies still, beyond SAM's reach"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "both stay still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - RUTH stands behind the counter holding a plain menu card in her right hand (the arm nearer the camera, on screen-left), SAM stands on the customer side?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.6s ACTION: does this happen on screen - RUTH lays the plain menu card flat on the counter at her end with her right hand (the arm nearer the camera, on screen-left)?"
+    },
+    {
+      "group": "action",
+      "question": "2.6-4s CONSEQUENCE: does this happen on screen - the menu card lies still, beyond SAM's reach?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - both stay still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): RUTH lays the plain menu card flat on the counter"
+    },
+    {
+      "group": "character",
+      "question": "RUTH: does the face/body read as practical, dry (restrained)? Must NOT read as: mockery."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC07_g07: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right; the cloth: lying folded on the counter in front of SAM."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC07_g08: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right; the cloth: lying folded on the counter in front of SAM; the menu card: lying flat on the counter at RUTH's end, beyond SAM's reach."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC07_g07_t1",
+    "generation_id": "SC07_g07",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; wide two-shot, both subjects in frame as intended, menu card laid flat at her end, cloth unchanged. Identity/wardrobe hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [],
+    "output_sha256": "0f04915950ff0376076ab3e5a7bec85f6779173eb16ab306dbfaa5d35bbfbe4b"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}

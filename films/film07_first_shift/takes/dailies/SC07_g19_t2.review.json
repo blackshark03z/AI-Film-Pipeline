@@ -1,0 +1,239 @@
+{
+  "take": {
+    "take_id": "SC07_g19_t2",
+    "generation_id": "SC07_g19",
+    "prompt_sha256": "1069d2d246aff9205cbc562b40b61987db3599d89d4703998d29472fee20a1bb",
+    "start_frame_sha256": "c24f5f208645e70da931a250584fc389053b1b0536f64d71439e7368640dcdac",
+    "route": "start_frame+Khung hinh",
+    "model": "omni-1.2-flash",
+    "credits": 6.0,
+    "output_file": "SC07_g19_t2.mp4",
+    "output_sha256": "e04e87790b8c5dd4993c902cd212ebe873b1403595569bfce59522ca4461449e",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-13T08:01:24Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "RUTH",
+      "SAM"
+    ],
+    "start_state": "SC07_g19",
+    "end_state": "SC07_g20",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "SAM stands at the counter, RUTH stands behind the counter, two empty cup spaces on the counter"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.8,
+        "description": "SAM lays the folded cloth on the counter beside the two cup spaces, lifting it first in his left hand (the arm nearer the camera, on screen-right)"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.8,
+        "end_s": 4.0,
+        "description": "the cloth lies still, both cup spaces clear"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "both stay still, RUTH stays clear of his reach"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - SAM stands at the counter, RUTH stands behind the counter, two empty cup spaces on the counter?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.8s ACTION: does this happen on screen - SAM lays the folded cloth on the counter beside the two cup spaces, lifting it first in his left hand (the arm nearer the camera, on screen-right)?"
+    },
+    {
+      "group": "action",
+      "question": "2.8-4s CONSEQUENCE: does this happen on screen - the cloth lies still, both cup spaces clear?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - both stay still, RUTH stays clear of his reach?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): SAM lays the folded cloth on the counter"
+    },
+    {
+      "group": "character",
+      "question": "SAM: does the face/body read as careful, practical (restrained)? Must NOT read as: doubt."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC07_g19: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right; the cloth: lying folded on the counter in front of SAM; the menu card: lying flat on the counter at RUTH's end, beyond SAM's reach."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC07_g20: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right; the cloth: lying folded on the counter beside the two empty cup spaces; the menu card: lying flat on the counter at RUTH's end, beyond SAM's reach."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC07_g19_t2",
+    "generation_id": "SC07_g19",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; end state correct (cloth folded on counter beside empty cup spaces, held); cloth is pre-placed in the still so the lift-and-lay is rendered as a hand touch/squaring at ~2s; mild camera drift; accepted as best of two, note for edit",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [],
+    "output_sha256": "e04e87790b8c5dd4993c902cd212ebe873b1403595569bfce59522ca4461449e"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}
