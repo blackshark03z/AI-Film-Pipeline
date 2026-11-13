@@ -494,3 +494,8 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - With no page JavaScript, 2 of 2 sends went through without a flag. SC09_g25_t1 (72e5bba) and SC09_g23_t3 (d598788) were accepted. SC09 is DONE at 25/25 (shard-4).
 - This is not conclusive yet: the previous try also passed 2 before flagging on the 3rd. SC11 continues in NO-JS mode, reusing accepted frames per speaker.
 - Open QC gap: pane reviews mark audio/sync PASS without listening. Check the dialogue audio at the edit stage.
+
+### 2026-11-13 NO-JS mode result
+- SC11 g01-g05 were accepted (7eea6ab, b644301, e7c450a, 921b9fe, af7180e). SC11_g06 was flagged with the same "hoạt động bất thường" text. Whether it was charged is unknown, because the tile did not show the "chưa bị tính phí" line. STOPPED; g07 was not sent.
+- NO-JS mode got 9 unflagged generations through after the cool-down, against 2 with page JS, then it was flagged again. Page JS was part of the trigger, but volume or automation is still detected.
+- Remaining: SC11 g06-g25 (20), SC07 (25), SC12_g23 (policy gap). Route decision goes to the Owner.
