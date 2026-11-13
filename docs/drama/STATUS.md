@@ -489,3 +489,8 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - About 2 h after the flag, three video sends reused the g21/g22 frames. SC09_g24_t1 was accepted (767c3a6). SC09_g23_t2 was rejected for SAM at the right edge, 4-9% (8d88f5b). The SC09_g25 send failed with the same "hoạt động bất thường" text (not charged). STOPPED.
 - Pattern: a 2 h cool-down buys only about 2 sends before the next flag. Agent-driven Flow is not a reliable route.
 - The manual pack SC09_b1 is updated to g23 + g25 only; the prompts gain "right side stays empty diner background".
+
+### 2026-11-13 NO-JS mode test
+- With no page JavaScript, 2 of 2 sends went through without a flag. SC09_g25_t1 (72e5bba) and SC09_g23_t3 (d598788) were accepted. SC09 is DONE at 25/25 (shard-4).
+- This is not conclusive yet: the previous try also passed 2 before flagging on the 3rd. SC11 continues in NO-JS mode, reusing accepted frames per speaker.
+- Open QC gap: pane reviews mark audio/sync PASS without listening. Check the dialogue audio at the edit stage.
