@@ -4280,6 +4280,26 @@
       "provider_job_id": "",
       "cost_unit": "credits",
       "cost_amount": null
+    },
+    {
+      "take_id": "SC11_g07_t1",
+      "generation_id": "SC11_g07",
+      "prompt_sha256": "bf591a0625879bdcd6d2ae43d57eeb317a2cd1480bcfbb9d7209f08766e1f68f",
+      "start_frame_sha256": "ea1e588f63dd64511b5b5ebda85612723b3d125c39b69f68e43b376e240d67ac",
+      "route": "start_frame+Khung hinh",
+      "model": "omni-1.2-flash",
+      "credits": 6.0,
+      "output_file": "SC11_g07_t1.mp4",
+      "output_sha256": "772c65a1d1970a6a6f05970700eb4390df0007a4fd0ee13c759b61322d3125c7",
+      "status": "ACCEPTED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-13T04:44:22Z",
+      "review_file": "reviews/SC11_g07_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     }
   ]
 }
