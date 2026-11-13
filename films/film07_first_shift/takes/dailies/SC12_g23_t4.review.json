@@ -1,0 +1,260 @@
+{
+  "take": {
+    "take_id": "SC12_g23_t4",
+    "generation_id": "SC12_g23",
+    "prompt_sha256": "bc68b213201660dda65ab0af290d83a5bb4e7ab700fd0012d6b5808085093cb7",
+    "start_frame_sha256": "8503a5060fcb2910111bc0e5e172b73b18e0a2d48c6f6b34460271eb4a2232ef",
+    "route": "start_frame+Khung hinh",
+    "model": "omni-1.2-flash",
+    "credits": 6.0,
+    "output_file": "SC12_g23_t4.mp4",
+    "output_sha256": "54e8f8635f9596e36ae40408aab30df7c46c9e43ffbcf7d0e574e27336be6431",
+    "status": "GENERATED",
+    "shot_version": 4,
+    "cause": "",
+    "registered_at": "2026-11-13T10:42:29Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "RUTH"
+    ],
+    "start_state": "SC12_g23",
+    "end_state": "SC12_g24",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 0.5,
+        "description": "RUTH looks at SAM"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 0.5,
+        "end_s": 4.7,
+        "description": "RUTH speaks to SAM warmly"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.7,
+        "end_s": 6.0,
+        "description": "RUTH holds SAM's look, quite still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-0.5s SETUP: does this happen on screen - RUTH looks at SAM?"
+    },
+    {
+      "group": "action",
+      "question": "0.5-4.7s ACTION: does this happen on screen - RUTH speaks to SAM warmly?"
+    },
+    {
+      "group": "action",
+      "question": "4.7-6s HOLD: does this happen on screen - RUTH holds SAM's look, quite still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): RUTH speaks to SAM"
+    },
+    {
+      "group": "character",
+      "question": "RUTH: does the face/body read as dry, warm (restrained)? Must NOT read as: mockery."
+    },
+    {
+      "group": "sync",
+      "question": "Line 1568 is audible, spoken by the right character, lips match: RUTH: There's a little note card by the register. Use that one."
+    },
+    {
+      "group": "audio",
+      "question": "RUTH sounds like the voice bible: dry, low female voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC12_g23: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC12_g24: Continues from the previous shot: RUTH standing behind the counter, frame-left; SAM standing on the customer side of the counter, frame-right."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_ADDRESS:1568",
+      "group": "narrative",
+      "question": "Line 1568: does RUTH clearly speak to SAM (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:SAM",
+      "group": "spatial",
+      "question": "Is the place where SAM stands kept out of frame (never shown empty), and do RUTH's eyes go just past the lens to frame-right?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does RUTH look at SAM and never into the lens?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC12_g23_t4",
+    "generation_id": "SC12_g23",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; listener head enters right edge, 3.9 percent at 1 s growing to 5.5 percent at 6 s, over the 5 percent edge rule at the end",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_ADDRESS:1568": "The speaker talks to the listener, eyes just past the lens."
+        }
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; listener head enters right edge, 3.9 percent at 1 s growing to 5.5 percent at 6 s, over the 5 percent edge rule at the end",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "FAIL",
+        "severity": "P1",
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; listener head enters right edge, 3.9 percent at 1 s growing to 5.5 percent at 6 s, over the 5 percent edge rule at the end FAIL: listener head enters right edge",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_LISTENER:SAM": "FAIL: the listener's head enters the right edge, up to 5.5 percent of width; the speaker's eyes go just past the lens.",
+          "REL_GAZE": "The speaker looks toward the off-frame listener and never into the lens."
+        }
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; listener head enters right edge, 3.9 percent at 1 s growing to 5.5 percent at 6 s, over the 5 percent edge rule at the end",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; listener head enters right edge, 3.9 percent at 1 s growing to 5.5 percent at 6 s, over the 5 percent edge rule at the end",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; listener head enters right edge, 3.9 percent at 1 s growing to 5.5 percent at 6 s, over the 5 percent edge rule at the end",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; listener head enters right edge, 3.9 percent at 1 s growing to 5.5 percent at 6 s, over the 5 percent edge rule at the end",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; listener head enters right edge, 3.9 percent at 1 s growing to 5.5 percent at 6 s, over the 5 percent edge rule at the end",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): strip at 1/3/5 s; listener head enters right edge, 3.9 percent at 1 s growing to 5.5 percent at 6 s, over the 5 percent edge rule at the end",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:1568",
+      "REL_LISTENER:SAM",
+      "REL_GAZE"
+    ],
+    "output_sha256": "54e8f8635f9596e36ae40408aab30df7c46c9e43ffbcf7d0e574e27336be6431"
+  },
+  "auto_evidence": {
+    "note": "autoqc not requested (no --clips directory)",
+    "warnings": []
+  }
+}
