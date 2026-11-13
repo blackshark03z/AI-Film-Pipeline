@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -181,9 +182,11 @@ def _prompt_rebind_issue(root: Path, entry: Any, current: str) -> str | None:
         return f"{path.name} is not readable JSON"
     if not isinstance(rec, dict):
         return f"{path.name} is not a JSON object"
-    missing = [k for k in REBIND_FIELDS if not str(rec.get(k) or "").strip()]
+    missing = [k for k in REBIND_FIELDS if not (isinstance(rec.get(k), str) and rec[k].strip())]
     if missing:
         return f"{path.name} lacks {', '.join(missing)}"
+    if not re.fullmatch(r"(?:human|agent):[A-Za-z0-9_.\-]+", rec["by"]):  # a judging reviewer, never an auto: tool
+        return f"{path.name}: 'by' must be human:<id> or a delegated agent:<id>, not {rec['by']!r}"
     if rec["take_id"] != entry.take_id or rec["output_sha256"] != entry.output_sha256:
         return f"{path.name} is not bound to this take's logged bytes"
     if rec["from_prompt_sha256"] != entry.prompt_sha256:
