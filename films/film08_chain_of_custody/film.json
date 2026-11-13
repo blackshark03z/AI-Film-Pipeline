@@ -17,7 +17,13 @@
   "disclosure": {
     "ai_label": "always"
   },
-  "delegated_reviewers": [],
+  "delegated_reviewers": [
+    {
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "owner_words": "Approve, write the script (Owner, 2026-11-14, after approving the film08 brief, 4-person cast and caps 535 pilot / 3,210 full); \"Continue\" (Owner, 2026-11-14); OWNER_POLICY.md: \"Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình\" / \"Thoải mái đi, đừng hỏi quyền. Tuy nhiên cấu hình tạo video thử nghiệm cứ dùng 360p, omni flash cho tiết kiệm nhé\"",
+      "granted": "2026-11-14"
+    }
+  ],
   "rehearsal": false,
   "gates": {
     "1": "NOT_RUN",
