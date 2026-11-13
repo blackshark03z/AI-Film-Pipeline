@@ -1,3 +1,29 @@
+# film08 "Chain of Custody" — Codex review done, pipeline fixes in; pilot running (2026-11-14 07:00)
+
+Goal: second accepted 25-30 min film for P20 M4. Pilot SC01-SC02 runs in session "film08 pilot SC01–SC02"
+(Chrome tab 214901168, gmail-4, brief C:/film-work/film08/PANE_BRIEF.md, run cap 300 cr).
+Done: Codex gpt-6.1-sol review of script + 17f5f35 (out: scratchpad codex08r_out.md), verdict FIX_FIRST both parts.
+- Part B (pipeline), all 3 confirmed and fixed in 200a34b (+3 tests, 11 pass; 391 related tests pass):
+  centre person kept in his own start still (decl.visible, not axis sides); object gaze -> eyeline "none", no
+  lateral header; pair member looking at a third listener -> ShotAxisRecord.off_partner, skipped by check_axis.
+  Effect: new field changes every shot fingerprint, so SC01-SC02 boards were re-approved (only SC01_S12 image
+  changed); the 9 S03 still registrations went STALE_PROMPT and were re-registered with the same image (0 cr,
+  landed in pilot commit 0c12e49). Gate 3 SC01-SC02 50/50 PASS. Prompts changed: SC01_g12, SC04_g10, SC11_g16-17.
+- Flow tile rename is unreliable (only char_ELI stuck); brief picks refs by unique caption + "Add to prompt".
+Open (Part A, script, SC03+; verify each, then fix in _author.py before SC03+ boards; none touch SC01-SC02):
+  P1 spoken clock (10:40 SC01_g22 .. SC08_g25 "eight minutes") contradicts cut time (~5.5 s/beat) -> retime lines;
+  P1 ID card Hollis takes (SC03_g01) never put down/returned, SC07_g22 needs both hands -> add placement + return;
+  P2 seal break SC09_g24/SC10_g01/g05-06 labelled `simple` in beats.json but AMBER -> mark AMBER + end-frame QC;
+  P2 Eli knows radio content (SC11_g18-19) with no listening beat after SC11_g17 -> add inaudible listening beat;
+  P2 SC07-SC08 repeat the dispute for ~7 min after "the seal comes off" (SC06_g24) -> give a leverage change
+     (story-meaning boundary: keep the plot, only sharpen beats);
+  P2 lines SC08_g17, SC09_g14, SC12_g17 read constructed; VI subtitles SC12_g17, SC07_g24 change meaning.
+Also open: pre-existing failure test_accepted_film07_takes_do_not_go_stale; LOOK_NOT_PINNED x5; 213 HANDEDNESS_BARE.
+Tests: `PYTHONPATH=src python -m pytest -q tests/test_drama_three_person_axis.py`; plan as below.
+Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ boards -> full run (cap 3,210).
+
+---
+
 # film08 "Chain of Custody" — package + refs + SC01–SC02 boards approved; pilot sends next (2026-11-14 04:20)
 
 Goal: second accepted 25-30 min film for P20 M4. Owner approved brief/cast/caps 535 pilot / 3,210 full on 2026-11-14.
