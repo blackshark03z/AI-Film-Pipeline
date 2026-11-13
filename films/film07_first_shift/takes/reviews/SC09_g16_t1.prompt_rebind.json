@@ -1,0 +1,10 @@
+{
+  "take_id": "SC09_g16_t1",
+  "output_sha256": "3cc8ebfa7ffabed0da4c5760f6d64916ed50b73ccb37a8e00a37cc91cb081b8e",
+  "from_prompt_sha256": "e86fc3050155f0a13b0cbea082bd49eb21185e82b2f1bf82c0cd62206cdecdcc",
+  "to_prompt_sha256": "0178a2a9f630e712f5bae7b1a74297be3a2242d3619aa7c5c285fd19e191e2fd",
+  "by": "agent:tech-lead.delegated-by.owner-khoikk03",
+  "at": "2026-11-13",
+  "reason": "prompt record lost: the take was sent through the pane with a hand-edited prompt that `plan` later overwrote; no copy survives in git, worktrees, receipts or transcripts. 04_shots declaration (shot version 1) is identical at accept time and HEAD.",
+  "evidence": "re-reviewed these bytes against the current prompt: contact sheet of the take at 1 s and 4 s and of all 25 SC09 shots (single close-up, eyeline just past lens, one spoken line, camera locked, soft steady light; plain-wall background as in the g07-g14 run, set by the start frame); qc/dialogue_stt.json recall 1.0 for 'Please do. I'm attached to several very unreliable old things.'; master QC sync PASS."
+}

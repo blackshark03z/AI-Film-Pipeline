@@ -163,6 +163,41 @@ def _review(root: Path, entry: Any) -> Any | None:
     return TakeQc.model_validate(raw), claimed
 
 
+REBIND_FIELDS = ("take_id", "output_sha256", "from_prompt_sha256", "to_prompt_sha256", "by", "reason", "evidence")
+
+
+def _prompt_rebind_issue(root: Path, entry: Any, current: str) -> str | None:
+    """A take made from a prompt that later changed may stand only if a named reviewer re-judged these exact bytes against
+    the current prompt and recorded it in ``takes/reviews/<take>.prompt_rebind.json``. Returns None when there is no record,
+    "" when the record holds, else why it does not (the gate never repairs it)."""
+    from film_pipeline.production.rehearsal import refuse_bot, refuse_undelegated
+    from film_pipeline.production.takes import takes_dir
+    path = takes_dir(root) / "reviews" / f"{entry.take_id}.prompt_rebind.json"
+    if not path.is_file():
+        return None
+    try:
+        rec = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return f"{path.name} is not readable JSON"
+    if not isinstance(rec, dict):
+        return f"{path.name} is not a JSON object"
+    missing = [k for k in REBIND_FIELDS if not str(rec.get(k) or "").strip()]
+    if missing:
+        return f"{path.name} lacks {', '.join(missing)}"
+    if rec["take_id"] != entry.take_id or rec["output_sha256"] != entry.output_sha256:
+        return f"{path.name} is not bound to this take's logged bytes"
+    if rec["from_prompt_sha256"] != entry.prompt_sha256:
+        return f"{path.name} rebinds from another prompt than the one logged for this take"
+    if rec["to_prompt_sha256"] != current:
+        return f"the prompt changed again after {path.name} was recorded: re-review the take"
+    try:
+        refuse_bot(root, rec["by"])
+        refuse_undelegated(root, rec["by"])
+    except ValueError as exc:
+        return f"{path.name}: {exc}"
+    return ""
+
+
 def take_issues(pkg: Any) -> list[str]:
     return _take_state(pkg)[0]
 
@@ -214,8 +249,13 @@ def _take_state(pkg: Any) -> tuple[list[str], list[str]]:
                 from film_pipeline.production.takes import sha256_text
                 current = sha256_text(prompt_file.read_text(encoding="utf-8").strip())
                 if current != entry.prompt_sha256:
-                    blocks.append(f"{entry.take_id}: the prompt changed after this take was generated (shot version {decl.version} "
-                                  f"is unchanged): retake it or bump the shot version")
+                    rebind = _prompt_rebind_issue(root, entry, current)
+                    if rebind is None:
+                        blocks.append(f"{entry.take_id}: the prompt changed after this take was generated (shot version {decl.version} "
+                                      f"is unchanged): retake it, bump the shot version, or re-review it against the current "
+                                      f"prompt (takes/reviews/{entry.take_id}.prompt_rebind.json)")
+                    elif rebind:
+                        blocks.append(f"{entry.take_id}: {rebind}")
     return blocks, pending
 
 

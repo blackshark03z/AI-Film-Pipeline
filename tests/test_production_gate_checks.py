@@ -259,6 +259,42 @@ def test_gate4_a_changed_prompt_makes_an_accepted_take_stale_without_a_version_b
     assert any("SC01_g1_t1: the prompt changed after this take was generated" in i for i in gate(root, "4").issues)
 
 
+def _rebind(root, entry, to_text, **over):
+    rec = {"take_id": entry.take_id, "output_sha256": entry.output_sha256, "from_prompt_sha256": entry.prompt_sha256,
+           "to_prompt_sha256": T.sha256_text(to_text), "by": "Owner", "reason": "prompt record lost",
+           "evidence": "contact sheet + STT"}
+    rec.update(over)
+    path = T.takes_dir(root) / "reviews" / f"{entry.take_id}.prompt_rebind.json"
+    path.write_text(json.dumps(rec), encoding="utf-8")
+    return path
+
+
+def test_gate4_a_prompt_rebind_bound_to_the_bytes_and_current_prompt_clears_the_stale_take(tmp_path):
+    root, pkg, entry, clip = accepted_one(tmp_path)
+    prompt = GC.plan_dir(root) / "prompts" / "SC01_g1.txt"
+    prompt.parent.mkdir(parents=True)
+    prompt.write_text("changed", encoding="utf-8")
+    _rebind(root, entry, "changed")
+    assert not any("SC01_g1_t1" in i for i in gate(root, "4").issues)
+    prompt.write_text("changed again", encoding="utf-8")  # a rebind holds only for the prompt it was judged against
+    assert any("SC01_g1_t1: the prompt changed again" in i for i in gate(root, "4").issues)
+
+
+@pytest.mark.parametrize("over, words", [
+    ({"output_sha256": "0" * 64}, "not bound to this take's logged bytes"),
+    ({"from_prompt_sha256": "0" * 64}, "rebinds from another prompt"),
+    ({"evidence": ""}, "lacks evidence"),
+    ({"by": "agent:not-delegated"}, "not a delegated reviewer"),
+])
+def test_gate4_a_prompt_rebind_that_does_not_hold_stays_a_block(tmp_path, over, words):
+    root, pkg, entry, clip = accepted_one(tmp_path)
+    prompt = GC.plan_dir(root) / "prompts" / "SC01_g1.txt"
+    prompt.parent.mkdir(parents=True)
+    prompt.write_text("changed", encoding="utf-8")
+    _rebind(root, entry, "changed", **over)
+    assert any(i.startswith("SC01_g1_t1: ") and words in i for i in gate(root, "4").issues)
+
+
 def test_gate4_review_after_dailies_and_ingest_points_at_the_stored_review(tmp_path):
     root = clone(tmp_path)
     pkg = load_package(root)
