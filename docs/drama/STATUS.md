@@ -507,3 +507,9 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - Coordinator contact sheet: identity and wardrobe hold, no listener in frame. g16 has a ~3% listener hair sliver at the right edge (reframe note: punch-in 1.10x, left anchor). RUTH framing drifts between takes (g11/g16 sit left, others centre-right), so match it in the edit.
 - Pane notes: the Flow picker is slow (>1 min sometimes). Twice a repeated click picked plate_diner_morning.jpg, and the agent fixed it before sending. Downloads also holds other panes' files, so take only files newer than the click.
 - Finding: NO-JS mode plus still reuse (no image draws) gave 20 clean sends in a row. Next: SC07 (prep pack C:/film-work/film07-full/prep/SC07, 6 stills to draw, 25 gens).
+
+### 2026-11-13 13:03 SC07 flagged on still S02
+- The SC07 patch is applied (50 entries), the g07/g19 storyboard frames are approved, and still S01 (RUTH) is drawn and registered for 9 gens (fd958fd..e932192).
+- Drawing still S02 (SAM, image mode, 0 cr) failed with the "hoạt động bất thường" tile, marked uncharged. STOPPED: no retry, no reload. No SC07 video sent; 0 cr. Balance last read 467.
+- Pattern: about 21 generations per window (20 video + 1 image) since the 11:00 restart, then a flag. Both pane flags today hit an image draw.
+- Next: 2 h cool-down until ~15:05, then S02-S06 and g01-g25 with the same NO-JS rules.
