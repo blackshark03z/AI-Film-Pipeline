@@ -71,3 +71,15 @@ def test_film08_prompts_have_one_consistent_eyeline(tmp_path):
         assert "eyes go just past the lens" not in prompts[gid] and " looks at the " in prompts[gid], gid
     assert "with the older man also in frame" in prompts["SC01_g01"]
     assert not [k for k, t in prompts.items() if t.count("eyes go just past the lens") > 1]
+
+
+def test_board_draws_the_unsided_centre_person(tmp_path):
+    """film08 SC01_g03: HOLLIS's singles rendered as empty boards (only sided people were drawn)."""
+    from PIL import Image
+    from film_pipeline.drama.coverage import SceneUnit
+    from film_pipeline.drama.storyboard import render_schematic_frame
+    shot = _shot("SINGLE", "HOLLIS", ["HOLLIS"], {"HOLLIS": "screen-left"})
+    unit = SceneUnit(scene_id="SC01", duration_s=6.0, shots=[shot], axis_book=BOOK)
+    out = render_schematic_frame(unit, shot, tmp_path / "f.png", width=640)
+    im = Image.open(out).convert("RGB")
+    assert im.getpixel((320, 230)) != (238, 236, 230)  # a figure at frame centre, not background

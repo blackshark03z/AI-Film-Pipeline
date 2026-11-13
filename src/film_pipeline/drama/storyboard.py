@@ -174,6 +174,10 @@ def render_schematic_frame(unit: SceneUnit, shot: CoverageShot,
     head = int(height * 0.11 * scale)
     floor = int(height * (0.80 + 0.25 * (scale - 0.42)))
     visible = list(shot.axis.visible.items())
+    # film08: a third person off the axis pair (HOLLIS) was not drawn at all,
+    # so his singles were blank boards; draw them at frame centre
+    visible += [(c, "CENTER") for c in shot.axis.eyelines
+                if c not in shot.axis.visible]
     for character, side in visible:
         is_subject = character == shot.subject or not shot.subject
         # OTS: the foreground shoulder sits large at the frame edge
@@ -182,7 +186,9 @@ def render_schematic_frame(unit: SceneUnit, shot: CoverageShot,
             body_head = int(head * 1.6)
             fill = (120, 120, 120)
         else:
-            if len(visible) == 1:
+            if side == "CENTER":
+                cx = width // 2
+            elif len(visible) == 1:
                 cx = int(width * (0.42 if side == "LEFT" else 0.58))
             else:
                 cx = int(width * (0.30 if side == "LEFT" else 0.70))
