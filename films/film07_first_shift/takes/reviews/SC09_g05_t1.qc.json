@@ -1,0 +1,140 @@
+{
+  "take_id": "SC09_g05_t1",
+  "generation_id": "SC09_g05",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1084": "RUTH speaks to SAM toward frame-right."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "FAIL: SAM head and face visible at the right edge from 1.2 s.",
+        "REL_GAZE": "RUTH looks off-lens toward frame-right."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): Edge strips: from about 1.2 s SAM's head and face enter at the right edge and stay to the end; the listener intrudes into frame. Line and gaze otherwise fine (STT recall 1.0).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1084",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "83a56a4d7f5ee185895daf607292a2b6edf7dee77f7bf112482104152c78785e"
+}

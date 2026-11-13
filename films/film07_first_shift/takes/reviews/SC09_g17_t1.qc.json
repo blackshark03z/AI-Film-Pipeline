@@ -1,0 +1,140 @@
+{
+  "take_id": "SC09_g17_t1",
+  "generation_id": "SC09_g17",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT on coordinator re-review, supersedes earlier reject. Faint left-edge sliver about 2% wide; SAM clean, eyeline screen-left correct. Edit note: reframe: crop/punch-in about 1.06x, biased right, to remove the left-edge sliver",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1143": "yes SAM looks toward frame-left"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT on coordinator re-review, supersedes earlier reject. Faint left-edge sliver about 2% wide; SAM clean, eyeline screen-left correct. Edit note: reframe: crop/punch-in about 1.06x, biased right, to remove the left-edge sliver",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT on coordinator re-review, supersedes earlier reject. Faint left-edge sliver about 2% wide; SAM clean, eyeline screen-left correct. Edit note: reframe: crop/punch-in about 1.06x, biased right, to remove the left-edge sliver",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "reframe: crop/punch-in about 1.06x, biased right, to remove the left-edge sliver",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes, off-frame; only a faint 2% left-edge sliver, fixed by reframe",
+        "REL_GAZE": "yes never lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT on coordinator re-review, supersedes earlier reject. Faint left-edge sliver about 2% wide; SAM clean, eyeline screen-left correct. Edit note: reframe: crop/punch-in about 1.06x, biased right, to remove the left-edge sliver",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT on coordinator re-review, supersedes earlier reject. Faint left-edge sliver about 2% wide; SAM clean, eyeline screen-left correct. Edit note: reframe: crop/punch-in about 1.06x, biased right, to remove the left-edge sliver",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send (v1 restage, no mug/prop); a pale rounded head/hair-like shape grows in at the LEFT frame edge from about 1 s (edge brightness deviation 27 at 1 s, 40 at 3 s and 5 s over about 57 rows), so the off-frame listener RUTH leaks into frame; SAM identity, eyeline screen-left and wardrobe hold",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send (v1 restage, no mug/prop); a pale rounded head/hair-like shape grows in at the LEFT frame edge from about 1 s (edge brightness deviation 27 at 1 s, 40 at 3 s and 5 s over about 57 rows), so the off-frame listener RUTH leaks into frame; SAM identity, eyeline screen-left and wardrobe hold",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send (v1 restage, no mug/prop); a pale rounded head/hair-like shape grows in at the LEFT frame edge from about 1 s (edge brightness deviation 27 at 1 s, 40 at 3 s and 5 s over about 57 rows), so the off-frame listener RUTH leaks into frame; SAM identity, eyeline screen-left and wardrobe hold",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send (v1 restage, no mug/prop); a pale rounded head/hair-like shape grows in at the LEFT frame edge from about 1 s (edge brightness deviation 27 at 1 s, 40 at 3 s and 5 s over about 57 rows), so the off-frame listener RUTH leaks into frame; SAM identity, eyeline screen-left and wardrobe hold",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send (v1 restage, no mug/prop); a pale rounded head/hair-like shape grows in at the LEFT frame edge from about 1 s (edge brightness deviation 27 at 1 s, 40 at 3 s and 5 s over about 57 rows), so the off-frame listener RUTH leaks into frame; SAM identity, eyeline screen-left and wardrobe hold",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): REJECT: 1280x720 pane send (v1 restage, no mug/prop); a pale rounded head/hair-like shape grows in at the LEFT frame edge from about 1 s (edge brightness deviation 27 at 1 s, 40 at 3 s and 5 s over about 57 rows), so the off-frame listener RUTH leaks into frame; SAM identity, eyeline screen-left and wardrobe hold",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1143",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "68b8c0f1d49194f70e1b1aef68a0c98e0e30dbb378eb66636f58326c084abd94"
+}

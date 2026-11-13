@@ -1,0 +1,140 @@
+{
+  "take_id": "SC09_g22_t1",
+  "generation_id": "SC09_g22",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1167": "yes SAM looks toward frame-left"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:RUTH": "yes, off-frame; nothing at either edge",
+        "REL_GAZE": "yes never lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send (v1 restage, no mug/prop); SAM identity and wardrobe hold, tight, eyeline screen-left, RUTH absent: both edges clean at 1, 3 and 5 s; lips move on the line (frames only)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1167",
+    "REL_LISTENER:RUTH",
+    "REL_GAZE"
+  ],
+  "output_sha256": "23bab4fa7e52a520e7035be0eb6182a49d2cd4e17991cf1d580a32d985570636"
+}
