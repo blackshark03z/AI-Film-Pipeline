@@ -11598,6 +11598,166 @@
       "registered_at": "2026-11-13T06:45:58+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
       "approved_at": "2026-11-13T06:45:59+00:00"
+    },
+    "SC07_g02": {
+      "file": "media/stills/start_SC07_g02.jpg",
+      "sha256": "085940cfcb9197f8807581b99a24b6f91a138542223e9e6f78f834fae08ebf68",
+      "prompt_sha256": "ef4c57b4c344131ea268cc5e876cb5a8645e127116c062d1ac462b3ec25d3ce5",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:48:32+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:48:33+00:00"
+    },
+    "SC07_g04": {
+      "file": "media/stills/start_SC07_g04.jpg",
+      "sha256": "085940cfcb9197f8807581b99a24b6f91a138542223e9e6f78f834fae08ebf68",
+      "prompt_sha256": "ef4c57b4c344131ea268cc5e876cb5a8645e127116c062d1ac462b3ec25d3ce5",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:48:34+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:48:35+00:00"
+    },
+    "SC07_g06": {
+      "file": "media/stills/start_SC07_g06.jpg",
+      "sha256": "085940cfcb9197f8807581b99a24b6f91a138542223e9e6f78f834fae08ebf68",
+      "prompt_sha256": "ef4c57b4c344131ea268cc5e876cb5a8645e127116c062d1ac462b3ec25d3ce5",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:48:37+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:48:38+00:00"
+    },
+    "SC07_g09": {
+      "file": "media/stills/start_SC07_g09.jpg",
+      "sha256": "085940cfcb9197f8807581b99a24b6f91a138542223e9e6f78f834fae08ebf68",
+      "prompt_sha256": "ef4c57b4c344131ea268cc5e876cb5a8645e127116c062d1ac462b3ec25d3ce5",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:48:39+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:48:40+00:00"
+    },
+    "SC07_g11": {
+      "file": "media/stills/start_SC07_g11.jpg",
+      "sha256": "085940cfcb9197f8807581b99a24b6f91a138542223e9e6f78f834fae08ebf68",
+      "prompt_sha256": "ef4c57b4c344131ea268cc5e876cb5a8645e127116c062d1ac462b3ec25d3ce5",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:48:41+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:48:42+00:00"
+    },
+    "SC07_g13": {
+      "file": "media/stills/start_SC07_g13.jpg",
+      "sha256": "085940cfcb9197f8807581b99a24b6f91a138542223e9e6f78f834fae08ebf68",
+      "prompt_sha256": "ef4c57b4c344131ea268cc5e876cb5a8645e127116c062d1ac462b3ec25d3ce5",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:48:43+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:48:44+00:00"
+    },
+    "SC07_g15": {
+      "file": "media/stills/start_SC07_g15.jpg",
+      "sha256": "085940cfcb9197f8807581b99a24b6f91a138542223e9e6f78f834fae08ebf68",
+      "prompt_sha256": "ef4c57b4c344131ea268cc5e876cb5a8645e127116c062d1ac462b3ec25d3ce5",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:48:45+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:48:46+00:00"
+    },
+    "SC07_g17": {
+      "file": "media/stills/start_SC07_g17.jpg",
+      "sha256": "085940cfcb9197f8807581b99a24b6f91a138542223e9e6f78f834fae08ebf68",
+      "prompt_sha256": "ef4c57b4c344131ea268cc5e876cb5a8645e127116c062d1ac462b3ec25d3ce5",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:48:47+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:48:48+00:00"
+    },
+    "SC07_g07": {
+      "file": "media/stills/start_SC07_g07.jpg",
+      "sha256": "bec4e6909f59dc498b49fb119ba5af850eb84b6f24ebbc090b6a952a53cf4d8c",
+      "prompt_sha256": "9bc182d5b9af74e8aabb458ee998e27d8437da9a9da21514aaf3996f8be372de",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:50:27+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:50:28+00:00"
+    },
+    "SC07_g19": {
+      "file": "media/stills/start_SC07_g19.jpg",
+      "sha256": "c24f5f208645e70da931a250584fc389053b1b0536f64d71439e7368640dcdac",
+      "prompt_sha256": "33848ae1bf42b468769f83ad1e21a640f048f3dc70326fab75666c9edee9af5d",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:51:56+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:51:57+00:00"
+    },
+    "SC07_g20": {
+      "file": "media/stills/start_SC07_g20.jpg",
+      "sha256": "79953ad36760baa1b170b4ff871ea15b65d81028557b4fcd5eea9971e0c0aa92",
+      "prompt_sha256": "bd6196b2a3a89c32bbabee56125f23588e0b6cbd8853aa6e6563cefee36d1aac",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:53:17+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:53:18+00:00"
+    },
+    "SC07_g22": {
+      "file": "media/stills/start_SC07_g22.jpg",
+      "sha256": "79953ad36760baa1b170b4ff871ea15b65d81028557b4fcd5eea9971e0c0aa92",
+      "prompt_sha256": "bd6196b2a3a89c32bbabee56125f23588e0b6cbd8853aa6e6563cefee36d1aac",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:53:19+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:53:20+00:00"
+    },
+    "SC07_g24": {
+      "file": "media/stills/start_SC07_g24.jpg",
+      "sha256": "79953ad36760baa1b170b4ff871ea15b65d81028557b4fcd5eea9971e0c0aa92",
+      "prompt_sha256": "bd6196b2a3a89c32bbabee56125f23588e0b6cbd8853aa6e6563cefee36d1aac",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:53:21+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:53:22+00:00"
+    },
+    "SC07_g21": {
+      "file": "media/stills/start_SC07_g21.jpg",
+      "sha256": "868855ab17698f14e12badb43bcd383bbc794fabff6aa10e08bff7ae0f48db9b",
+      "prompt_sha256": "033d3854d11143f3a694370dde974e0e1fe8b87be37fa1586d5380bd39c5fe6b",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:54:47+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:54:48+00:00"
+    },
+    "SC07_g23": {
+      "file": "media/stills/start_SC07_g23.jpg",
+      "sha256": "868855ab17698f14e12badb43bcd383bbc794fabff6aa10e08bff7ae0f48db9b",
+      "prompt_sha256": "033d3854d11143f3a694370dde974e0e1fe8b87be37fa1586d5380bd39c5fe6b",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:54:49+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:54:51+00:00"
+    },
+    "SC07_g25": {
+      "file": "media/stills/start_SC07_g25.jpg",
+      "sha256": "868855ab17698f14e12badb43bcd383bbc794fabff6aa10e08bff7ae0f48db9b",
+      "prompt_sha256": "033d3854d11143f3a694370dde974e0e1fe8b87be37fa1586d5380bd39c5fe6b",
+      "source": "Flow image gmail-4, Nano Banana 2.1, 0 credits",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T06:54:52+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T06:54:53+00:00"
     }
   }
 }
