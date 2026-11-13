@@ -1,3 +1,20 @@
+# film08 "Chain of Custody" — Owner approved brief; screenplay draft 1 done (2026-11-14)
+
+Goal: second accepted 25-30 min film for P20 M4 (STABLE_SUPERVISED needs film07 + film08 accepted).
+Owner chose source 2026-11-13 (wanglin08ma/NEXT/[4-11-26] ... [exfqsQTAYW4], another channel's narrated video);
+approved brief, 4-person cast and cap 535 pilot / 3,210 full on 2026-11-14 ("Approve, write the script").
+Decisions + why: premise only, all text new (0 six-word overlaps with source SRT); one records room and no contact so
+it fits the P20 scene class; film07 shape (12x25 beats, 6 s native, static one-speaker dialogue) because it worked;
+dialogue 9-11 words for speech fit; page text always turned away from camera.
+Files: docs/production/pilots/film08_chain_of_custody/{BRIEF,BUDGET}.md, script.fountain, beats.json, check_draft.py
+(commits 16d7b6e, 3e4653f). Test: `python -B docs/production/pilots/film08_chain_of_custody/check_draft.py` -> PASS.
+Open: Codex review not run (usage limit until 03:36 14/11); no character/set refs; Flow quote and balances unchecked;
+all 3 Flow accounts flagged 2026-11-12; police wording may trip moderation (pilot measures).
+Next: Codex review of script -> package films/film08_chain_of_custody -> refs (Flow image 0 cr / ChatGPT fallback)
+-> boards -> pilot SC01-SC02 under 535 cr. No push.
+
+---
+
 # film07 pilot SC01–SC02 QC PASS — reported to Owner, full film next (2026-11-12)
 
 Pilot B (Sonnet) finished: 50/50 gens accepted (last take 630a950, draft EDL d6d1331), excerpt
