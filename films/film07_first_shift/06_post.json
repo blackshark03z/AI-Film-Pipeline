@@ -1,1 +1,63 @@
-{}
+{
+  "color": {
+    "report": "color/color.json",
+    "ok": true,
+    "summary": {
+      "shots": 300,
+      "corrected": 299,
+      "worst_before": 63.576,
+      "worst_after": 45.848
+    },
+    "locked_against": ""
+  },
+  "titles": {
+    "report": "titles/titles.json",
+    "ok": true,
+    "summary": {
+      "cues": 270,
+      "languages": [
+        "en",
+        "vi"
+      ],
+      "reframed": 21,
+      "blocks": 0,
+      "warnings": 17
+    },
+    "locked_against": "a2b30da2d5d098c41e3fd5df79124170f63666a7bd18802698d42491ba5e96b6"
+  },
+  "mix": {
+    "output_sha256": "3ff0e6af123e1dfcf288fd1d2fbc2c092134bdedecdf22a15c5f02da7b6584f2",
+    "cut_sha256": "41b88e0bbddfb8f5b3d1ca5091555509e01237ce01b71d1b2365f38b2f37943b",
+    "report": "audio/mix.json",
+    "ok": true,
+    "locked_against": "a2b30da2d5d098c41e3fd5df79124170f63666a7bd18802698d42491ba5e96b6"
+  },
+  "dialogue_stt": {
+    "report": "qc/dialogue_stt.json",
+    "ok": true,
+    "summary": {
+      "lines": 270,
+      "pass": 269,
+      "warn": 1,
+      "mean_recall": 0.981
+    },
+    "locked_against": "a2b30da2d5d098c41e3fd5df79124170f63666a7bd18802698d42491ba5e96b6"
+  },
+  "master_qc": {
+    "report": "qc/master_qc.json",
+    "sha256": "3ff0e6af123e1dfcf288fd1d2fbc2c092134bdedecdf22a15c5f02da7b6584f2",
+    "ok": true,
+    "locked_against": "a2b30da2d5d098c41e3fd5df79124170f63666a7bd18802698d42491ba5e96b6"
+  },
+  "versions": {
+    "report": "versions/versions.json",
+    "ok": true,
+    "summary": {
+      "portrait_segments": 302,
+      "thumbnails": 4,
+      "blocks": 0,
+      "warnings": 2
+    },
+    "locked_against": "a2b30da2d5d098c41e3fd5df79124170f63666a7bd18802698d42491ba5e96b6"
+  }
+}

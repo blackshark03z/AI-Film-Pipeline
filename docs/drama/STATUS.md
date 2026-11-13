@@ -592,7 +592,7 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 
 **Open:** grade report/render, titles, mix, dialoguecheck (audio/sync still unverified), mastercheck, validate.
 
-## 2026-11-13 HANDOFF: film07 post — MIX + MASTER QC done -> open: gate 4 SC09 g15-g19, gate 6 Owner accept
+## 2026-11-13 HANDOFF: film07 post — MASTER done, delivered locally -> next: Owner accept (gate 6)
 **Run (all PASS):** grade (299/300 corrected, worst 63.6 -> 45.8) -> titles --render --color --clean-copy (270 cues en+vi, 21 reframes, 0 blocks, 17 WARN = CUE_TOO_FAST/REFRAME_TAG) -> mix (-14.3 LUFS, -1.7 dBTP) -> mastercheck (technical/audio/delivery PASS; sync WARN 18 CUE_NO_SPEECH; color WARN 1) -> dialoguecheck (Vosk: 269/270 PASS, mean recall 0.981). Master 29:59.5.
 
 **Decisions + why:**
@@ -605,8 +605,12 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - SC12_g23_t4 audio/sync PASS (recall 1.0, lip motion within ~0.2 s); picture lock signed agent:tech-lead.delegated-by.owner-khoikk03 (film05/06 precedent).
 - `generators.json`: Flow Omni 1.2 Flash 360p + Nano Banana 2.1 stills, no account labels.
 
-**Open defects:**
-- Gate 4 BLOCK: SC09_g15_t2, g16_t1, g17_t1, g18_t1, g19_t1 "prompt changed after this take was generated". The pane sends used hand-edited prompts that `plan` later overwrote; the original text is in no git object, worktree or transcript, and the shot declarations (04_shots) are identical at accept time and HEAD. Options: retake 5 x 6 cr = 30 cr (Chrome gmail-4), or an audited prompt-record-lost waiver in the gate (Codex review first). Hashes NOT altered, gate NOT weakened.
-- Gate 6: needs `deliver` (local archive) + Owner `deliver --accept` (reserved).
+**Gate 4 SC09 g15-g19 (resolved, e5303fe):** the pane sends used hand-edited prompts that `plan` later overwrote; the original text is lost (no git object, worktree, receipt or transcript), 04_shots unchanged. Retake (30 cr) rejected as waste: the takes sit in the plain-wall close-up run g07-g19 and match the current prompts. New audited escape in gate 4: `takes/reviews/<take>.prompt_rebind.json` bound to the logged bytes + logged prompt sha, judged against the current prompt sha, signed by a named/delegated reviewer; any mismatch stays BLOCK (5 tests). Five records written after re-review (contact sheets, STT recall 1.0). Codex review was unavailable (usage limit until 23:41): self-reviewed; run Codex on e5303fe when it is back.
 
-**Test commands:** `PYTHONPATH=src uv run --frozen --extra qc pytest tests/test_production_titles.py tests/test_production_versions.py -q` (47 passed); render tests (38 passed); mix/post tests (14 passed). Chain env: `TMP=D:/tmp_film TEMP=D:/tmp_film AFP_STT_PYTHON=C:/Users/ADMIN/AppData/Local/Programs/Python/Python311/python.exe`, absolute `--film` path.
+**9:16 version:** first build cropped centre (257 PORTRAIT_FOCUS_UNKNOWN; 4/16 samples cut faces or split two-shots). `titles/portrait_focus.json` (278 events) from OpenCV face detection on the clean cut (median of 4 frames, largest face); the 40 events with no/several/moving faces checked on an overlay sheet, 7 corrected; 40 random others all correct. Rebuilt: 0 focus WARN, 16/16 samples framed.
+
+**Delivery:** `deliver` ok, local archive media/deliveries/20261113T142538-339d5830f2 (36 files, 0 blocks, release_ready). validate: gates 1-5 PASS, gate 6 OWNER_PENDING.
+
+**Next step (Owner only):** watch media/cut/mixed.mp4 (and versions/film07_first_shift_9x16.mp4), then `film.py deliver --film films/film07_first_shift --accept <name>`. Publishing stays with the Owner.
+
+**Test commands:** `PYTHONPATH=src uv run --frozen --extra qc pytest tests/test_production_titles.py tests/test_production_versions.py -q` (47 passed); render tests (38 passed); mix/post tests (14 passed); `pytest tests/test_production_gate_checks.py -q` (24 passed). Chain env: `TMP=D:/tmp_film TEMP=D:/tmp_film AFP_STT_PYTHON=C:/Users/ADMIN/AppData/Local/Programs/Python/Python311/python.exe`, absolute `--film` path.

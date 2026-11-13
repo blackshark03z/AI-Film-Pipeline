@@ -1,1 +1,10 @@
-{}
+{
+  "delivery": {
+    "manifest": "media/deliveries/20261113T142538-339d5830f2/MANIFEST.json",
+    "manifest_sha256": "f3476aa2ecb70da6c28e8b1d55cbda42b53a300e821934fd55056b93e426a547",
+    "release_ready": true,
+    "files": 36,
+    "ai_label": "always",
+    "locked_against": "a2b30da2d5d098c41e3fd5df79124170f63666a7bd18802698d42491ba5e96b6"
+  }
+}

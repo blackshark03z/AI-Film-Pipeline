@@ -1,0 +1,87 @@
+{
+  "film_id": "film07_first_shift",
+  "status": "DRAFT_NOT_PUBLISHED",
+  "source_language": "en",
+  "title": {
+    "source": "The First Shift",
+    "vi": "CA LÀM ĐẦU TIÊN"
+  },
+  "description": "On his first morning, Sam Doyle finds a closure notice in Ruth Keller's diner and asks her for the truth, so a real, paid trial of the job can begin on fair terms.",
+  "description_note": "drafted from the logline; the Owner writes the final copy",
+  "tags": [
+    "AI film",
+    "AI generated",
+    "short film",
+    "Quiet two-hander drama (a long conversation at a diner counter and booth, about 27 minutes)",
+    "A kindness is only fair when it can be refused: the truth and clear terms come before any promise."
+  ],
+  "ai_disclosure": {
+    "ai_generated": true,
+    "digital_source_type": "trainedAlgorithmicMedia",
+    "synthetic_persons": true,
+    "generators": "Google Flow Omni 1.2 Flash (video+audio); Google Flow Nano Banana 2.1 (image)",
+    "generator_records": [
+      {
+        "provider": "Google Flow",
+        "model": "Omni 1.2 Flash",
+        "role": "video+audio",
+        "settings": "360p, 6 s clips from start-frame stills"
+      },
+      {
+        "provider": "Google Flow",
+        "model": "Nano Banana 2.1",
+        "role": "image",
+        "settings": "start-frame stills"
+      }
+    ],
+    "ai_label": "always",
+    "text": {
+      "en": "Generated with AI: Google Flow Omni 1.2 Flash (video+audio); Google Flow Nano Banana 2.1 (image) Synthetic characters: faces and voices are AI-generated.",
+      "vi": "Tạo bằng AI: Google Flow Omni 1.2 Flash (video+audio); Google Flow Nano Banana 2.1 (image) Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra."
+    }
+  },
+  "credits": {
+    "characters": [
+      "RUTH",
+      "SAM"
+    ],
+    "sound_attributions": [],
+    "fiction_line": "A work of fiction. All characters are fictional."
+  },
+  "runtime_s": 1799.458273,
+  "versions": [
+    {
+      "name": "master_16x9",
+      "file": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\media\\cut\\mixed.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": 24.0,
+      "sha256": "3ff0e6af123e1dfcf288fd1d2fbc2c092134bdedecdf22a15c5f02da7b6584f2"
+    },
+    {
+      "name": "portrait_9x16",
+      "file": "versions/film07_first_shift_9x16.mp4",
+      "width": 720,
+      "height": 1280,
+      "fps": 24.0,
+      "sha256": "53bf881a2e8c9f3c0d19d8913569cc2f1a449e6db43fe38ed354689a060ce5b5",
+      "upscale": 1.78,
+      "ai_label": {
+        "text": "AI-generated",
+        "start_s": 3.0,
+        "end_s": 1795.458273,
+        "x": 24,
+        "y": 1020
+      },
+      "source": "clean",
+      "cues_relaid": 270
+    }
+  ],
+  "platform_note": "set the platform's own AI / synthetic-content label at upload; nothing was published",
+  "thumbnails": [
+    "versions/thumbs/thumb_01.jpg",
+    "versions/thumbs/thumb_02.jpg",
+    "versions/thumbs/thumb_03.jpg",
+    "versions/thumbs/thumb_04.jpg"
+  ]
+}
