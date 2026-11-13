@@ -348,6 +348,7 @@ class Reframe(ContractModel):
     w: float = Field(default=1.0, gt=0.0, le=1.0)
     h: float = Field(default=1.0, gt=0.0, le=1.0)
     stabilize: bool = False
+    hflip: bool = False  # mirror the picture after the crop (screen-direction fix; only for frames without text)
 
     @model_validator(mode="after")
     def _inside(self) -> "Reframe":
@@ -363,6 +364,8 @@ def reframe_filter(r: Reframe | None) -> str:
     parts = ["deshake"] if r.stabilize else []
     if (r.x, r.y, r.w, r.h) != (0.0, 0.0, 1.0, 1.0):
         parts.append(f"crop=trunc(iw*{r.w:.6f}/2)*2:trunc(ih*{r.h:.6f}/2)*2:iw*{r.x:.6f}:ih*{r.y:.6f}")
+    if r.hflip:
+        parts.append("hflip")
     return ",".join(parts)
 
 

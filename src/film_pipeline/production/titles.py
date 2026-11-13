@@ -11,8 +11,8 @@
   Anything that is not a clean 1:1 match is a WARN ``DIALOGUE_UNALIGNED`` so a human checks the timing. The picture burns in
   the source language; sidecar SRTs (title, cards, identity tags, dialogue, credits) are written for the source language and,
   from ``direction.translations``, Vietnamese - a missing translation blocks that sidecar (``TRANSLATION_MISSING``).
-* **Reframe** - ``titles/reframe.json`` (``{"events": {event_id: {x, y, w, h, stabilize}}}``) crops a box of the frame and scales
-  it back up (a punch-in / recomposition); ``stabilize`` adds ffmpeg ``deshake``. The box must keep the frame's aspect
+* **Reframe** - ``titles/reframe.json`` (``{"events": {event_id: {x, y, w, h, stabilize, hflip}}}``) crops a box of the frame and scales
+  it back up (a punch-in / recomposition); ``stabilize`` adds ffmpeg ``deshake``; ``hflip`` mirrors it (screen direction). The box must keep the frame's aspect
   (``w == h``, fractions of the frame), a box narrower than half the frame warns (``REFRAME_SOFT``: upscaled over 2x), a
   reframed event with identity tags warns (``REFRAME_TAG``: the face moves under the tag). The render applies it
   (``edit.render_cut(reframes=...)``); the takes are untouched. 9:16 deliverables are out of scope here.
@@ -324,7 +324,7 @@ def reframe_problems(section: EditSection, reframes: ReframePlan) -> list[dict[s
             add("REFRAME_ASPECT", "BLOCK", event_id, f"w {box.w} != h {box.h}: the crop would distort the frame")
         if box.w < 0.5:
             add("REFRAME_SOFT", "WARN", event_id, f"a {box.w:.0%} crop is scaled up {1 / box.w:.1f}x; expect softness")
-        if event_id in tagged and (box.x, box.y, box.w, box.h) != (0.0, 0.0, 1.0, 1.0):
+        if event_id in tagged and ((box.x, box.y, box.w, box.h) != (0.0, 0.0, 1.0, 1.0) or box.hflip):
             add("REFRAME_TAG", "WARN", event_id, "the event has identity tags; the face moves under them")
     return out
 

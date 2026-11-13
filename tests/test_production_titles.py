@@ -224,6 +224,8 @@ def test_title_lines_under_the_name_are_translated_or_reported(tmp_path):
 def test_reframe_filter_and_rules():
     assert reframe_filter(None) == "" and reframe_filter(Reframe()) == "" and reframe_filter(Reframe(stabilize=True)) == "deshake"
     assert reframe_filter(Reframe(x=0.25, y=0.25, w=0.5, h=0.5)).startswith("crop=trunc(iw*0.500000/2)*2:trunc(ih*0.500000/2)*2:")
+    assert reframe_filter(Reframe(hflip=True)) == "hflip"
+    assert reframe_filter(Reframe(x=0.1, w=0.9, h=0.9, hflip=True)).endswith(",hflip")
     with pytest.raises(ValueError, match="leaves the frame"):
         Reframe(x=0.6, w=0.5, h=0.5)
     section = EditSection(events=[ev("a", "SC01_g1"), EditEvent(event_id="c", kind="CARD", card_lines=["x"], card_duration_s=1.0)],

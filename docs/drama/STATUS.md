@@ -570,3 +570,24 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 5. `film.py validate` must pass: currently it BLOCKs visual_spatial, production_asset, editorial_picture_lock and final_master.
 
 **Test commands:** `PYTHONPATH=src uv run --frozen --extra qc python tools/film.py validate --film films/film07_first_shift`; contact sheets ≤1280 px.
+
+## 2026-11-13 HANDOFF: film07 post — CUT done (300 events) -> next: grade/titles/mix/dialoguecheck
+**Goal:** film07 master 25-30 min. Cut runtime 29:59.5 (title 3 s + body 1795.5 s + end 4 s).
+
+**Done:**
+- `05_edit.json`: 300 TAKE events (SC01-SC12 x 25), latest ACCEPTED take of the current shot version per generation (same picks as the old 75-event SC01-SC03 EDL; no generation has 2 accepted takes). `film.py cut --accepted-only`: ok, 0 problems; continuity WARNs are OBJECT_HANDOFF at scene joins only.
+- `titles/reframe.json` (21 events), boxes from the dailies notes, checked on a reframed contact sheet at 4.8 s (no sliver left):
+  - SC07 g02 1.10x anchor right; g10 1.08x left; g15/g17 1.05x right; g23 1.10x left; g25 1.08x left (g08 "1.03x if needed": not needed).
+  - SC09 g17 1.06x right; g18 1.08x left. SC11 g16 1.10x left. SC12 g01/g11 1.03x bottom-left; g18 1.03x right; g23 1.10x left.
+  - SC10 hflip RUTH singles g10/g12/g14/g16/g18/g20/g23/g25: the g21 wide puts SAM screen-right looking left, so RUTH must look screen-right; all 8 looked left (contact sheet at 3 s). No text in those frames.
+- Code: `Reframe.hflip` (edit.py) mirrors after the crop; REFRAME_TAG also warns on a flipped tagged event (titles.py). Test added in tests/test_production_titles.py (47 passed with versions/finish_p20).
+
+**Decisions + why:**
+- SC07 wides g07/g19: SAM's hoodie reads darker because he stands against the bright door glass (backlight). A per-shot gain would blow out the window, so it is accepted as motivated light; the scene median grade evens exposure.
+- SC07 g19_t2 (touch instead of lift-and-set) kept: best of two, no story change.
+- `animatic.srt` already carries the new SC12_g23 line (line 1075): nothing to change.
+- `dialoguecheck` reads the dialogue stem from `audio/mix.json`, so it runs after `mix`, not before.
+
+**Credits:** take log books 357 takes x 6 = 2,142 cr of the 3,210 film cap. gmail-4: 910 -> 792 over SC07 (118 debited vs 168 booked; the 50 cr gap is not a multiple of 6, so it is not whole-send refunds; most likely the 910 reading was stale), then 792 -> 786 (6 cr). The book (2,142) is the conservative figure; the Flow activity page on gmail-4 was not opened.
+
+**Open:** grade report/render, titles, mix, dialoguecheck (audio/sync still unverified), mastercheck, validate.

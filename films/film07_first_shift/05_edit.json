@@ -374,6 +374,1131 @@
       "event_id": "SC03_g25",
       "kind": "TAKE",
       "take_id": "SC03_g25_t1"
+    },
+    {
+      "event_id": "SC04_g01",
+      "kind": "TAKE",
+      "take_id": "SC04_g01_t2"
+    },
+    {
+      "event_id": "SC04_g02",
+      "kind": "TAKE",
+      "take_id": "SC04_g02_t2"
+    },
+    {
+      "event_id": "SC04_g03",
+      "kind": "TAKE",
+      "take_id": "SC04_g03_t1"
+    },
+    {
+      "event_id": "SC04_g04",
+      "kind": "TAKE",
+      "take_id": "SC04_g04_t1"
+    },
+    {
+      "event_id": "SC04_g05",
+      "kind": "TAKE",
+      "take_id": "SC04_g05_t3"
+    },
+    {
+      "event_id": "SC04_g06",
+      "kind": "TAKE",
+      "take_id": "SC04_g06_t1"
+    },
+    {
+      "event_id": "SC04_g07",
+      "kind": "TAKE",
+      "take_id": "SC04_g07_t1"
+    },
+    {
+      "event_id": "SC04_g08",
+      "kind": "TAKE",
+      "take_id": "SC04_g08_t3"
+    },
+    {
+      "event_id": "SC04_g09",
+      "kind": "TAKE",
+      "take_id": "SC04_g09_t2"
+    },
+    {
+      "event_id": "SC04_g10",
+      "kind": "TAKE",
+      "take_id": "SC04_g10_t1"
+    },
+    {
+      "event_id": "SC04_g11",
+      "kind": "TAKE",
+      "take_id": "SC04_g11_t1"
+    },
+    {
+      "event_id": "SC04_g12",
+      "kind": "TAKE",
+      "take_id": "SC04_g12_t1"
+    },
+    {
+      "event_id": "SC04_g13",
+      "kind": "TAKE",
+      "take_id": "SC04_g13_t2"
+    },
+    {
+      "event_id": "SC04_g14",
+      "kind": "TAKE",
+      "take_id": "SC04_g14_t2"
+    },
+    {
+      "event_id": "SC04_g15",
+      "kind": "TAKE",
+      "take_id": "SC04_g15_t1"
+    },
+    {
+      "event_id": "SC04_g16",
+      "kind": "TAKE",
+      "take_id": "SC04_g16_t1"
+    },
+    {
+      "event_id": "SC04_g17",
+      "kind": "TAKE",
+      "take_id": "SC04_g17_t1"
+    },
+    {
+      "event_id": "SC04_g18",
+      "kind": "TAKE",
+      "take_id": "SC04_g18_t1"
+    },
+    {
+      "event_id": "SC04_g19",
+      "kind": "TAKE",
+      "take_id": "SC04_g19_t1"
+    },
+    {
+      "event_id": "SC04_g20",
+      "kind": "TAKE",
+      "take_id": "SC04_g20_t1"
+    },
+    {
+      "event_id": "SC04_g21",
+      "kind": "TAKE",
+      "take_id": "SC04_g21_t1"
+    },
+    {
+      "event_id": "SC04_g22",
+      "kind": "TAKE",
+      "take_id": "SC04_g22_t1"
+    },
+    {
+      "event_id": "SC04_g23",
+      "kind": "TAKE",
+      "take_id": "SC04_g23_t2"
+    },
+    {
+      "event_id": "SC04_g24",
+      "kind": "TAKE",
+      "take_id": "SC04_g24_t1"
+    },
+    {
+      "event_id": "SC04_g25",
+      "kind": "TAKE",
+      "take_id": "SC04_g25_t1"
+    },
+    {
+      "event_id": "SC05_g01",
+      "kind": "TAKE",
+      "take_id": "SC05_g01_t1"
+    },
+    {
+      "event_id": "SC05_g02",
+      "kind": "TAKE",
+      "take_id": "SC05_g02_t4"
+    },
+    {
+      "event_id": "SC05_g03",
+      "kind": "TAKE",
+      "take_id": "SC05_g03_t1"
+    },
+    {
+      "event_id": "SC05_g04",
+      "kind": "TAKE",
+      "take_id": "SC05_g04_t3"
+    },
+    {
+      "event_id": "SC05_g05",
+      "kind": "TAKE",
+      "take_id": "SC05_g05_t2"
+    },
+    {
+      "event_id": "SC05_g06",
+      "kind": "TAKE",
+      "take_id": "SC05_g06_t1"
+    },
+    {
+      "event_id": "SC05_g07",
+      "kind": "TAKE",
+      "take_id": "SC05_g07_t1"
+    },
+    {
+      "event_id": "SC05_g08",
+      "kind": "TAKE",
+      "take_id": "SC05_g08_t1"
+    },
+    {
+      "event_id": "SC05_g09",
+      "kind": "TAKE",
+      "take_id": "SC05_g09_t1"
+    },
+    {
+      "event_id": "SC05_g10",
+      "kind": "TAKE",
+      "take_id": "SC05_g10_t1"
+    },
+    {
+      "event_id": "SC05_g11",
+      "kind": "TAKE",
+      "take_id": "SC05_g11_t1"
+    },
+    {
+      "event_id": "SC05_g12",
+      "kind": "TAKE",
+      "take_id": "SC05_g12_t2"
+    },
+    {
+      "event_id": "SC05_g13",
+      "kind": "TAKE",
+      "take_id": "SC05_g13_t1"
+    },
+    {
+      "event_id": "SC05_g14",
+      "kind": "TAKE",
+      "take_id": "SC05_g14_t2"
+    },
+    {
+      "event_id": "SC05_g15",
+      "kind": "TAKE",
+      "take_id": "SC05_g15_t1"
+    },
+    {
+      "event_id": "SC05_g16",
+      "kind": "TAKE",
+      "take_id": "SC05_g16_t1"
+    },
+    {
+      "event_id": "SC05_g17",
+      "kind": "TAKE",
+      "take_id": "SC05_g17_t1"
+    },
+    {
+      "event_id": "SC05_g18",
+      "kind": "TAKE",
+      "take_id": "SC05_g18_t1"
+    },
+    {
+      "event_id": "SC05_g19",
+      "kind": "TAKE",
+      "take_id": "SC05_g19_t3"
+    },
+    {
+      "event_id": "SC05_g20",
+      "kind": "TAKE",
+      "take_id": "SC05_g20_t1"
+    },
+    {
+      "event_id": "SC05_g21",
+      "kind": "TAKE",
+      "take_id": "SC05_g21_t2"
+    },
+    {
+      "event_id": "SC05_g22",
+      "kind": "TAKE",
+      "take_id": "SC05_g22_t2"
+    },
+    {
+      "event_id": "SC05_g23",
+      "kind": "TAKE",
+      "take_id": "SC05_g23_t2"
+    },
+    {
+      "event_id": "SC05_g24",
+      "kind": "TAKE",
+      "take_id": "SC05_g24_t2"
+    },
+    {
+      "event_id": "SC05_g25",
+      "kind": "TAKE",
+      "take_id": "SC05_g25_t1"
+    },
+    {
+      "event_id": "SC06_g01",
+      "kind": "TAKE",
+      "take_id": "SC06_g01_t1"
+    },
+    {
+      "event_id": "SC06_g02",
+      "kind": "TAKE",
+      "take_id": "SC06_g02_t1"
+    },
+    {
+      "event_id": "SC06_g03",
+      "kind": "TAKE",
+      "take_id": "SC06_g03_t2"
+    },
+    {
+      "event_id": "SC06_g04",
+      "kind": "TAKE",
+      "take_id": "SC06_g04_t1"
+    },
+    {
+      "event_id": "SC06_g05",
+      "kind": "TAKE",
+      "take_id": "SC06_g05_t1"
+    },
+    {
+      "event_id": "SC06_g06",
+      "kind": "TAKE",
+      "take_id": "SC06_g06_t1"
+    },
+    {
+      "event_id": "SC06_g07",
+      "kind": "TAKE",
+      "take_id": "SC06_g07_t1"
+    },
+    {
+      "event_id": "SC06_g08",
+      "kind": "TAKE",
+      "take_id": "SC06_g08_t1"
+    },
+    {
+      "event_id": "SC06_g09",
+      "kind": "TAKE",
+      "take_id": "SC06_g09_t1"
+    },
+    {
+      "event_id": "SC06_g10",
+      "kind": "TAKE",
+      "take_id": "SC06_g10_t2"
+    },
+    {
+      "event_id": "SC06_g11",
+      "kind": "TAKE",
+      "take_id": "SC06_g11_t1"
+    },
+    {
+      "event_id": "SC06_g12",
+      "kind": "TAKE",
+      "take_id": "SC06_g12_t1"
+    },
+    {
+      "event_id": "SC06_g13",
+      "kind": "TAKE",
+      "take_id": "SC06_g13_t1"
+    },
+    {
+      "event_id": "SC06_g14",
+      "kind": "TAKE",
+      "take_id": "SC06_g14_t1"
+    },
+    {
+      "event_id": "SC06_g15",
+      "kind": "TAKE",
+      "take_id": "SC06_g15_t1"
+    },
+    {
+      "event_id": "SC06_g16",
+      "kind": "TAKE",
+      "take_id": "SC06_g16_t1"
+    },
+    {
+      "event_id": "SC06_g17",
+      "kind": "TAKE",
+      "take_id": "SC06_g17_t1"
+    },
+    {
+      "event_id": "SC06_g18",
+      "kind": "TAKE",
+      "take_id": "SC06_g18_t1"
+    },
+    {
+      "event_id": "SC06_g19",
+      "kind": "TAKE",
+      "take_id": "SC06_g19_t1"
+    },
+    {
+      "event_id": "SC06_g20",
+      "kind": "TAKE",
+      "take_id": "SC06_g20_t2"
+    },
+    {
+      "event_id": "SC06_g21",
+      "kind": "TAKE",
+      "take_id": "SC06_g21_t1"
+    },
+    {
+      "event_id": "SC06_g22",
+      "kind": "TAKE",
+      "take_id": "SC06_g22_t2"
+    },
+    {
+      "event_id": "SC06_g23",
+      "kind": "TAKE",
+      "take_id": "SC06_g23_t1"
+    },
+    {
+      "event_id": "SC06_g24",
+      "kind": "TAKE",
+      "take_id": "SC06_g24_t1"
+    },
+    {
+      "event_id": "SC06_g25",
+      "kind": "TAKE",
+      "take_id": "SC06_g25_t1"
+    },
+    {
+      "event_id": "SC07_g01",
+      "kind": "TAKE",
+      "take_id": "SC07_g01_t1"
+    },
+    {
+      "event_id": "SC07_g02",
+      "kind": "TAKE",
+      "take_id": "SC07_g02_t1"
+    },
+    {
+      "event_id": "SC07_g03",
+      "kind": "TAKE",
+      "take_id": "SC07_g03_t1"
+    },
+    {
+      "event_id": "SC07_g04",
+      "kind": "TAKE",
+      "take_id": "SC07_g04_t1"
+    },
+    {
+      "event_id": "SC07_g05",
+      "kind": "TAKE",
+      "take_id": "SC07_g05_t1"
+    },
+    {
+      "event_id": "SC07_g06",
+      "kind": "TAKE",
+      "take_id": "SC07_g06_t1"
+    },
+    {
+      "event_id": "SC07_g07",
+      "kind": "TAKE",
+      "take_id": "SC07_g07_t1"
+    },
+    {
+      "event_id": "SC07_g08",
+      "kind": "TAKE",
+      "take_id": "SC07_g08_t1"
+    },
+    {
+      "event_id": "SC07_g09",
+      "kind": "TAKE",
+      "take_id": "SC07_g09_t1"
+    },
+    {
+      "event_id": "SC07_g10",
+      "kind": "TAKE",
+      "take_id": "SC07_g10_t2"
+    },
+    {
+      "event_id": "SC07_g11",
+      "kind": "TAKE",
+      "take_id": "SC07_g11_t1"
+    },
+    {
+      "event_id": "SC07_g12",
+      "kind": "TAKE",
+      "take_id": "SC07_g12_t1"
+    },
+    {
+      "event_id": "SC07_g13",
+      "kind": "TAKE",
+      "take_id": "SC07_g13_t1"
+    },
+    {
+      "event_id": "SC07_g14",
+      "kind": "TAKE",
+      "take_id": "SC07_g14_t2"
+    },
+    {
+      "event_id": "SC07_g15",
+      "kind": "TAKE",
+      "take_id": "SC07_g15_t1"
+    },
+    {
+      "event_id": "SC07_g16",
+      "kind": "TAKE",
+      "take_id": "SC07_g16_t1"
+    },
+    {
+      "event_id": "SC07_g17",
+      "kind": "TAKE",
+      "take_id": "SC07_g17_t1"
+    },
+    {
+      "event_id": "SC07_g18",
+      "kind": "TAKE",
+      "take_id": "SC07_g18_t1"
+    },
+    {
+      "event_id": "SC07_g19",
+      "kind": "TAKE",
+      "take_id": "SC07_g19_t2"
+    },
+    {
+      "event_id": "SC07_g20",
+      "kind": "TAKE",
+      "take_id": "SC07_g20_t1"
+    },
+    {
+      "event_id": "SC07_g21",
+      "kind": "TAKE",
+      "take_id": "SC07_g21_t1"
+    },
+    {
+      "event_id": "SC07_g22",
+      "kind": "TAKE",
+      "take_id": "SC07_g22_t1"
+    },
+    {
+      "event_id": "SC07_g23",
+      "kind": "TAKE",
+      "take_id": "SC07_g23_t1"
+    },
+    {
+      "event_id": "SC07_g24",
+      "kind": "TAKE",
+      "take_id": "SC07_g24_t1"
+    },
+    {
+      "event_id": "SC07_g25",
+      "kind": "TAKE",
+      "take_id": "SC07_g25_t1"
+    },
+    {
+      "event_id": "SC08_g01",
+      "kind": "TAKE",
+      "take_id": "SC08_g01_t3"
+    },
+    {
+      "event_id": "SC08_g02",
+      "kind": "TAKE",
+      "take_id": "SC08_g02_t1"
+    },
+    {
+      "event_id": "SC08_g03",
+      "kind": "TAKE",
+      "take_id": "SC08_g03_t1"
+    },
+    {
+      "event_id": "SC08_g04",
+      "kind": "TAKE",
+      "take_id": "SC08_g04_t1"
+    },
+    {
+      "event_id": "SC08_g05",
+      "kind": "TAKE",
+      "take_id": "SC08_g05_t5"
+    },
+    {
+      "event_id": "SC08_g06",
+      "kind": "TAKE",
+      "take_id": "SC08_g06_t2"
+    },
+    {
+      "event_id": "SC08_g07",
+      "kind": "TAKE",
+      "take_id": "SC08_g07_t1"
+    },
+    {
+      "event_id": "SC08_g08",
+      "kind": "TAKE",
+      "take_id": "SC08_g08_t2"
+    },
+    {
+      "event_id": "SC08_g09",
+      "kind": "TAKE",
+      "take_id": "SC08_g09_t1"
+    },
+    {
+      "event_id": "SC08_g10",
+      "kind": "TAKE",
+      "take_id": "SC08_g10_t2"
+    },
+    {
+      "event_id": "SC08_g11",
+      "kind": "TAKE",
+      "take_id": "SC08_g11_t2"
+    },
+    {
+      "event_id": "SC08_g12",
+      "kind": "TAKE",
+      "take_id": "SC08_g12_t1"
+    },
+    {
+      "event_id": "SC08_g13",
+      "kind": "TAKE",
+      "take_id": "SC08_g13_t2"
+    },
+    {
+      "event_id": "SC08_g14",
+      "kind": "TAKE",
+      "take_id": "SC08_g14_t1"
+    },
+    {
+      "event_id": "SC08_g15",
+      "kind": "TAKE",
+      "take_id": "SC08_g15_t2"
+    },
+    {
+      "event_id": "SC08_g16",
+      "kind": "TAKE",
+      "take_id": "SC08_g16_t1"
+    },
+    {
+      "event_id": "SC08_g17",
+      "kind": "TAKE",
+      "take_id": "SC08_g17_t1"
+    },
+    {
+      "event_id": "SC08_g18",
+      "kind": "TAKE",
+      "take_id": "SC08_g18_t1"
+    },
+    {
+      "event_id": "SC08_g19",
+      "kind": "TAKE",
+      "take_id": "SC08_g19_t1"
+    },
+    {
+      "event_id": "SC08_g20",
+      "kind": "TAKE",
+      "take_id": "SC08_g20_t1"
+    },
+    {
+      "event_id": "SC08_g21",
+      "kind": "TAKE",
+      "take_id": "SC08_g21_t2"
+    },
+    {
+      "event_id": "SC08_g22",
+      "kind": "TAKE",
+      "take_id": "SC08_g22_t1"
+    },
+    {
+      "event_id": "SC08_g23",
+      "kind": "TAKE",
+      "take_id": "SC08_g23_t2"
+    },
+    {
+      "event_id": "SC08_g24",
+      "kind": "TAKE",
+      "take_id": "SC08_g24_t1"
+    },
+    {
+      "event_id": "SC08_g25",
+      "kind": "TAKE",
+      "take_id": "SC08_g25_t1"
+    },
+    {
+      "event_id": "SC09_g01",
+      "kind": "TAKE",
+      "take_id": "SC09_g01_t8"
+    },
+    {
+      "event_id": "SC09_g02",
+      "kind": "TAKE",
+      "take_id": "SC09_g02_t1"
+    },
+    {
+      "event_id": "SC09_g03",
+      "kind": "TAKE",
+      "take_id": "SC09_g03_t1"
+    },
+    {
+      "event_id": "SC09_g04",
+      "kind": "TAKE",
+      "take_id": "SC09_g04_t1"
+    },
+    {
+      "event_id": "SC09_g05",
+      "kind": "TAKE",
+      "take_id": "SC09_g05_t3"
+    },
+    {
+      "event_id": "SC09_g06",
+      "kind": "TAKE",
+      "take_id": "SC09_g06_t3"
+    },
+    {
+      "event_id": "SC09_g07",
+      "kind": "TAKE",
+      "take_id": "SC09_g07_t1"
+    },
+    {
+      "event_id": "SC09_g08",
+      "kind": "TAKE",
+      "take_id": "SC09_g08_t1"
+    },
+    {
+      "event_id": "SC09_g09",
+      "kind": "TAKE",
+      "take_id": "SC09_g09_t2"
+    },
+    {
+      "event_id": "SC09_g10",
+      "kind": "TAKE",
+      "take_id": "SC09_g10_t1"
+    },
+    {
+      "event_id": "SC09_g11",
+      "kind": "TAKE",
+      "take_id": "SC09_g11_t2"
+    },
+    {
+      "event_id": "SC09_g12",
+      "kind": "TAKE",
+      "take_id": "SC09_g12_t1"
+    },
+    {
+      "event_id": "SC09_g13",
+      "kind": "TAKE",
+      "take_id": "SC09_g13_t1"
+    },
+    {
+      "event_id": "SC09_g14",
+      "kind": "TAKE",
+      "take_id": "SC09_g14_t1"
+    },
+    {
+      "event_id": "SC09_g15",
+      "kind": "TAKE",
+      "take_id": "SC09_g15_t2"
+    },
+    {
+      "event_id": "SC09_g16",
+      "kind": "TAKE",
+      "take_id": "SC09_g16_t1"
+    },
+    {
+      "event_id": "SC09_g17",
+      "kind": "TAKE",
+      "take_id": "SC09_g17_t1"
+    },
+    {
+      "event_id": "SC09_g18",
+      "kind": "TAKE",
+      "take_id": "SC09_g18_t1"
+    },
+    {
+      "event_id": "SC09_g19",
+      "kind": "TAKE",
+      "take_id": "SC09_g19_t1"
+    },
+    {
+      "event_id": "SC09_g20",
+      "kind": "TAKE",
+      "take_id": "SC09_g20_t1"
+    },
+    {
+      "event_id": "SC09_g21",
+      "kind": "TAKE",
+      "take_id": "SC09_g21_t1"
+    },
+    {
+      "event_id": "SC09_g22",
+      "kind": "TAKE",
+      "take_id": "SC09_g22_t1"
+    },
+    {
+      "event_id": "SC09_g23",
+      "kind": "TAKE",
+      "take_id": "SC09_g23_t3"
+    },
+    {
+      "event_id": "SC09_g24",
+      "kind": "TAKE",
+      "take_id": "SC09_g24_t1"
+    },
+    {
+      "event_id": "SC09_g25",
+      "kind": "TAKE",
+      "take_id": "SC09_g25_t1"
+    },
+    {
+      "event_id": "SC10_g01",
+      "kind": "TAKE",
+      "take_id": "SC10_g01_t1"
+    },
+    {
+      "event_id": "SC10_g02",
+      "kind": "TAKE",
+      "take_id": "SC10_g02_t1"
+    },
+    {
+      "event_id": "SC10_g03",
+      "kind": "TAKE",
+      "take_id": "SC10_g03_t1"
+    },
+    {
+      "event_id": "SC10_g04",
+      "kind": "TAKE",
+      "take_id": "SC10_g04_t1"
+    },
+    {
+      "event_id": "SC10_g05",
+      "kind": "TAKE",
+      "take_id": "SC10_g05_t1"
+    },
+    {
+      "event_id": "SC10_g06",
+      "kind": "TAKE",
+      "take_id": "SC10_g06_t1"
+    },
+    {
+      "event_id": "SC10_g07",
+      "kind": "TAKE",
+      "take_id": "SC10_g07_t2"
+    },
+    {
+      "event_id": "SC10_g08",
+      "kind": "TAKE",
+      "take_id": "SC10_g08_t2"
+    },
+    {
+      "event_id": "SC10_g09",
+      "kind": "TAKE",
+      "take_id": "SC10_g09_t1"
+    },
+    {
+      "event_id": "SC10_g10",
+      "kind": "TAKE",
+      "take_id": "SC10_g10_t1"
+    },
+    {
+      "event_id": "SC10_g11",
+      "kind": "TAKE",
+      "take_id": "SC10_g11_t2"
+    },
+    {
+      "event_id": "SC10_g12",
+      "kind": "TAKE",
+      "take_id": "SC10_g12_t1"
+    },
+    {
+      "event_id": "SC10_g13",
+      "kind": "TAKE",
+      "take_id": "SC10_g13_t4"
+    },
+    {
+      "event_id": "SC10_g14",
+      "kind": "TAKE",
+      "take_id": "SC10_g14_t1"
+    },
+    {
+      "event_id": "SC10_g15",
+      "kind": "TAKE",
+      "take_id": "SC10_g15_t2"
+    },
+    {
+      "event_id": "SC10_g16",
+      "kind": "TAKE",
+      "take_id": "SC10_g16_t1"
+    },
+    {
+      "event_id": "SC10_g17",
+      "kind": "TAKE",
+      "take_id": "SC10_g17_t2"
+    },
+    {
+      "event_id": "SC10_g18",
+      "kind": "TAKE",
+      "take_id": "SC10_g18_t3"
+    },
+    {
+      "event_id": "SC10_g19",
+      "kind": "TAKE",
+      "take_id": "SC10_g19_t1"
+    },
+    {
+      "event_id": "SC10_g20",
+      "kind": "TAKE",
+      "take_id": "SC10_g20_t1"
+    },
+    {
+      "event_id": "SC10_g21",
+      "kind": "TAKE",
+      "take_id": "SC10_g21_t1"
+    },
+    {
+      "event_id": "SC10_g22",
+      "kind": "TAKE",
+      "take_id": "SC10_g22_t1"
+    },
+    {
+      "event_id": "SC10_g23",
+      "kind": "TAKE",
+      "take_id": "SC10_g23_t2"
+    },
+    {
+      "event_id": "SC10_g24",
+      "kind": "TAKE",
+      "take_id": "SC10_g24_t1"
+    },
+    {
+      "event_id": "SC10_g25",
+      "kind": "TAKE",
+      "take_id": "SC10_g25_t1"
+    },
+    {
+      "event_id": "SC11_g01",
+      "kind": "TAKE",
+      "take_id": "SC11_g01_t1"
+    },
+    {
+      "event_id": "SC11_g02",
+      "kind": "TAKE",
+      "take_id": "SC11_g02_t1"
+    },
+    {
+      "event_id": "SC11_g03",
+      "kind": "TAKE",
+      "take_id": "SC11_g03_t1"
+    },
+    {
+      "event_id": "SC11_g04",
+      "kind": "TAKE",
+      "take_id": "SC11_g04_t1"
+    },
+    {
+      "event_id": "SC11_g05",
+      "kind": "TAKE",
+      "take_id": "SC11_g05_t1"
+    },
+    {
+      "event_id": "SC11_g06",
+      "kind": "TAKE",
+      "take_id": "SC11_g06_t1"
+    },
+    {
+      "event_id": "SC11_g07",
+      "kind": "TAKE",
+      "take_id": "SC11_g07_t1"
+    },
+    {
+      "event_id": "SC11_g08",
+      "kind": "TAKE",
+      "take_id": "SC11_g08_t1"
+    },
+    {
+      "event_id": "SC11_g09",
+      "kind": "TAKE",
+      "take_id": "SC11_g09_t1"
+    },
+    {
+      "event_id": "SC11_g10",
+      "kind": "TAKE",
+      "take_id": "SC11_g10_t1"
+    },
+    {
+      "event_id": "SC11_g11",
+      "kind": "TAKE",
+      "take_id": "SC11_g11_t1"
+    },
+    {
+      "event_id": "SC11_g12",
+      "kind": "TAKE",
+      "take_id": "SC11_g12_t1"
+    },
+    {
+      "event_id": "SC11_g13",
+      "kind": "TAKE",
+      "take_id": "SC11_g13_t1"
+    },
+    {
+      "event_id": "SC11_g14",
+      "kind": "TAKE",
+      "take_id": "SC11_g14_t1"
+    },
+    {
+      "event_id": "SC11_g15",
+      "kind": "TAKE",
+      "take_id": "SC11_g15_t1"
+    },
+    {
+      "event_id": "SC11_g16",
+      "kind": "TAKE",
+      "take_id": "SC11_g16_t1"
+    },
+    {
+      "event_id": "SC11_g17",
+      "kind": "TAKE",
+      "take_id": "SC11_g17_t1"
+    },
+    {
+      "event_id": "SC11_g18",
+      "kind": "TAKE",
+      "take_id": "SC11_g18_t1"
+    },
+    {
+      "event_id": "SC11_g19",
+      "kind": "TAKE",
+      "take_id": "SC11_g19_t1"
+    },
+    {
+      "event_id": "SC11_g20",
+      "kind": "TAKE",
+      "take_id": "SC11_g20_t1"
+    },
+    {
+      "event_id": "SC11_g21",
+      "kind": "TAKE",
+      "take_id": "SC11_g21_t1"
+    },
+    {
+      "event_id": "SC11_g22",
+      "kind": "TAKE",
+      "take_id": "SC11_g22_t1"
+    },
+    {
+      "event_id": "SC11_g23",
+      "kind": "TAKE",
+      "take_id": "SC11_g23_t1"
+    },
+    {
+      "event_id": "SC11_g24",
+      "kind": "TAKE",
+      "take_id": "SC11_g24_t1"
+    },
+    {
+      "event_id": "SC11_g25",
+      "kind": "TAKE",
+      "take_id": "SC11_g25_t1"
+    },
+    {
+      "event_id": "SC12_g01",
+      "kind": "TAKE",
+      "take_id": "SC12_g01_t4"
+    },
+    {
+      "event_id": "SC12_g02",
+      "kind": "TAKE",
+      "take_id": "SC12_g02_t2"
+    },
+    {
+      "event_id": "SC12_g03",
+      "kind": "TAKE",
+      "take_id": "SC12_g03_t1"
+    },
+    {
+      "event_id": "SC12_g04",
+      "kind": "TAKE",
+      "take_id": "SC12_g04_t1"
+    },
+    {
+      "event_id": "SC12_g05",
+      "kind": "TAKE",
+      "take_id": "SC12_g05_t2"
+    },
+    {
+      "event_id": "SC12_g06",
+      "kind": "TAKE",
+      "take_id": "SC12_g06_t1"
+    },
+    {
+      "event_id": "SC12_g07",
+      "kind": "TAKE",
+      "take_id": "SC12_g07_t1"
+    },
+    {
+      "event_id": "SC12_g08",
+      "kind": "TAKE",
+      "take_id": "SC12_g08_t1"
+    },
+    {
+      "event_id": "SC12_g09",
+      "kind": "TAKE",
+      "take_id": "SC12_g09_t1"
+    },
+    {
+      "event_id": "SC12_g10",
+      "kind": "TAKE",
+      "take_id": "SC12_g10_t1"
+    },
+    {
+      "event_id": "SC12_g11",
+      "kind": "TAKE",
+      "take_id": "SC12_g11_t1"
+    },
+    {
+      "event_id": "SC12_g12",
+      "kind": "TAKE",
+      "take_id": "SC12_g12_t1"
+    },
+    {
+      "event_id": "SC12_g13",
+      "kind": "TAKE",
+      "take_id": "SC12_g13_t4"
+    },
+    {
+      "event_id": "SC12_g14",
+      "kind": "TAKE",
+      "take_id": "SC12_g14_t1"
+    },
+    {
+      "event_id": "SC12_g15",
+      "kind": "TAKE",
+      "take_id": "SC12_g15_t2"
+    },
+    {
+      "event_id": "SC12_g16",
+      "kind": "TAKE",
+      "take_id": "SC12_g16_t1"
+    },
+    {
+      "event_id": "SC12_g17",
+      "kind": "TAKE",
+      "take_id": "SC12_g17_t2"
+    },
+    {
+      "event_id": "SC12_g18",
+      "kind": "TAKE",
+      "take_id": "SC12_g18_t1"
+    },
+    {
+      "event_id": "SC12_g19",
+      "kind": "TAKE",
+      "take_id": "SC12_g19_t1"
+    },
+    {
+      "event_id": "SC12_g20",
+      "kind": "TAKE",
+      "take_id": "SC12_g20_t1"
+    },
+    {
+      "event_id": "SC12_g21",
+      "kind": "TAKE",
+      "take_id": "SC12_g21_t2"
+    },
+    {
+      "event_id": "SC12_g22",
+      "kind": "TAKE",
+      "take_id": "SC12_g22_t1"
+    },
+    {
+      "event_id": "SC12_g23",
+      "kind": "TAKE",
+      "take_id": "SC12_g23_t4"
+    },
+    {
+      "event_id": "SC12_g24",
+      "kind": "TAKE",
+      "take_id": "SC12_g24_t2"
+    },
+    {
+      "event_id": "SC12_g25",
+      "kind": "TAKE",
+      "take_id": "SC12_g25_t1"
     }
   ],
   "title": [
