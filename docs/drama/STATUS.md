@@ -484,3 +484,8 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - The Owner reports that manual creation in Flow works. Agent-driven sends are stopped for good; the wait-and-retry wakeup is cancelled.
 - New flow: the coordinator builds a pack per batch (D:/film-work/film07-manual/<batch>/HUONG_DAN.md, start frames, prompt files, inbox/). The Owner sends and downloads 720p into inbox/, then a Sonnet agent registers, reviews and commits in the right worktree.
 - Pack SC09_b1 is ready: g23/g25 reuse the g21 RUTH frame and g24 reuses the g22 SAM frame, which also fixes the background continuity; mug lines are removed.
+
+### 2026-11-13 pane retry (Owner: use the built-in browser)
+- About 2 h after the flag, three video sends reused the g21/g22 frames. SC09_g24_t1 was accepted (767c3a6). SC09_g23_t2 was rejected for SAM at the right edge, 4-9% (8d88f5b). The SC09_g25 send failed with the same "hoạt động bất thường" text (not charged). STOPPED.
+- Pattern: a 2 h cool-down buys only about 2 sends before the next flag. Agent-driven Flow is not a reliable route.
+- The manual pack SC09_b1 is updated to g23 + g25 only; the prompts gain "right side stays empty diner background".
