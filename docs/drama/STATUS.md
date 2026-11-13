@@ -513,3 +513,16 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - Drawing still S02 (SAM, image mode, 0 cr) failed with the "hoạt động bất thường" tile, marked uncharged. STOPPED: no retry, no reload. No SC07 video sent; 0 cr. Balance last read 467.
 - Pattern: about 21 generations per window (20 video + 1 image) since the 11:00 restart, then a flag. Both pane flags today hit an image draw.
 - Next: 2 h cool-down until ~15:05, then S02-S06 and g01-g25 with the same NO-JS rules.
+
+### 2026-11-13 SC07 done via Claude in Chrome (gmail-4)
+- The Owner installed the Claude in Chrome extension in the GPM profile `gmail-4` and said "Dùng flow". A Sonnet agent drove Flow project 2acd7acd (shard-4) through the extension in NO-JS mode, with no flag.
+- File upload does NOT work on Flow even with the extension: there is no `input[type=file]`, and Upload opens the OS picker. So S01-S06 were redrawn in image mode (0 cr); S01 was re-registered (e5961bb).
+- SC07 is DONE at 25/25 (e5961bb..66ce224). 28 sends at 6 cr: g10_t1, g14_t1 (listener head 8-11% at the edge) and g19_t1 (cloth already on the counter) were rejected.
+- The balance moved 910 -> 792 (118), but 28 x 6 = 168 were sent; the gap is unexplained (possibly refunds). Check Flow activity before the final cost report.
+- Notes for the edit:
+  - reframe g02, g10_t2, g15, g17, g23 and g25 (2-5% edge slivers);
+  - g19_t2 is a 2 s touch instead of lift-and-set, and the camera drifts slightly;
+  - in the g07/g19 wides SAM's hoodie reads darker than in the singles;
+  - audio/sync was not listened to (agent PASS from frames only).
+- Coordinator contact sheet: identity and wardrobe hold, and the RUTH and SAM setups are consistent.
+- Remaining before the edit: the SC12_g23 policy gap; merge shard-3/4 (`film.py takes --merge-from`); an audio/sync listen pass; then edit, mix and master.
