@@ -62,6 +62,17 @@ def top_sections(sections: dict[str, int], n: int = 3) -> str:
     return ", ".join(f"{BUDGET_LABELS[k]} {v}" for k, v in ranked)
 
 
+def _anchored_eyeline(decl: ShotDecl) -> dict[str, str]:
+    """A single's eyeline from where its gaze target is anchored off frame (LEFT -> screen-left).
+
+    With three people the axis pair cannot give the centre person an eyeline; the shot's own listener anchor can.
+    """
+    anchor = decl.listener_anchors.get(decl.gaze_target)
+    if not decl.subject or anchor is None or anchor.mode != "OFF_FRAME" or anchor.side not in ("LEFT", "RIGHT"):
+        return {}
+    return {decl.subject: "screen-left" if anchor.side == "LEFT" else "screen-right"}
+
+
 def _scaled_feasibility(base, seconds: float):
     factor = seconds / base.scene_duration_s
     return base.model_copy(update={"scene_duration_s": seconds,
@@ -152,7 +163,8 @@ class _Plan:
         shot = CoverageShot(
             shot_id=shot_id, coverage=decl.coverage, shot_size=size, subject=decl.subject,
             foreground=decl.foreground, start_s=0.0, end_s=seconds, lines=self.lines_for(decl),
-            action=self.action_text(decl), axis=axis_record(book, shot_id, decl.visible))
+            action=self.action_text(decl),
+            axis=axis_record(book, shot_id, decl.visible, eyelines=_anchored_eyeline(decl)))
         return SceneUnit(scene_id=sid, duration_s=seconds, shots=[shot], axis_book=book)
 
     def handoff_for(self, decl: ShotDecl) -> GenerationHandoff | None:

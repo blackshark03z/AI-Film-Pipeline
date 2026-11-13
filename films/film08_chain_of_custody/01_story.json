@@ -1,0 +1,278 @@
+{
+  "concept": "In a courthouse records room a young deputy watches his sergeant open a sealed packet after three warnings and has to decide whether to make the call that turns the opening into evidence.",
+  "theme": "A seal exists so that no one, however sure of himself, can change what is inside; the one who breaks it writes his own page.",
+  "genre": "One-room procedural drama (a standoff over a sealed packet at a records counter, about 27 minutes)",
+  "audience": {
+    "who": "General online audience watching English-language dramas with Vietnamese subtitles; anyone who has watched a powerful person hang himself with his own hands.",
+    "expectation": "A patient, tense one-room confrontation with no violence that ends in accountability and a quiet release."
+  },
+  "premise": "Dr. Naomi Bell, an evidence auditor for the federal court, brings a sealed packet to the county records room to be logged out to the grand jury by eleven; Sgt. Hollis, who runs the room, refuses to log what he has not seen, while Deputy Eli Moreno's body camera records every minute.",
+  "central_conflict": "Hollis wants to control what leaves his room and to learn what the audit knows; Naomi will not tell him and will not touch the seal; Eli must decide whether to keep following his sergeant or keep the record honest.",
+  "logline": {
+    "text": "Deputy Eli Moreno must keep the record honest when the sergeant who trained him ignores three warnings and breaks a court seal on camera, even though protecting that sergeant would be easier.",
+    "protagonist": "ELI",
+    "goal": "keep the record honest",
+    "obstacle": "the sergeant who trained him"
+  },
+  "structure": [
+    {
+      "id": "ACT1",
+      "name": "The log",
+      "beats": [
+        {
+          "id": "B1",
+          "function": "SETUP",
+          "scene_ids": [
+            "SC01"
+          ],
+          "summary": "Naomi brings a sealed packet; Hollis refuses to log it unseen and closes the ledger."
+        },
+        {
+          "id": "B2",
+          "function": "INCITING",
+          "scene_ids": [
+            "SC02"
+          ],
+          "summary": "Hollis demands her name and authority and orders Eli to stop her leaving."
+        }
+      ]
+    },
+    {
+      "id": "ACT2",
+      "name": "Three warnings",
+      "beats": [
+        {
+          "id": "B3",
+          "function": "ESCALATION",
+          "scene_ids": [
+            "SC03"
+          ],
+          "summary": "Her record is clean; Hollis keeps her card and makes her sit."
+        },
+        {
+          "id": "B4",
+          "function": "ESCALATION",
+          "scene_ids": [
+            "SC04"
+          ],
+          "summary": "Hollis guesses at old cases and names Calvin Reed, exposing his fear."
+        },
+        {
+          "id": "B5",
+          "function": "MIDPOINT",
+          "scene_ids": [
+            "SC05"
+          ],
+          "summary": "Hollis takes the packet under his hand; Naomi gives the first warning."
+        },
+        {
+          "id": "B6",
+          "function": "CRISIS",
+          "scene_ids": [
+            "SC06"
+          ],
+          "summary": "Eli refuses to write a report of what did not happen and keeps the camera running."
+        },
+        {
+          "id": "B7",
+          "function": "CRISIS",
+          "scene_ids": [
+            "SC07"
+          ],
+          "summary": "Naomi will not say who is behind the audit and warns Hollis a second time."
+        },
+        {
+          "id": "B8",
+          "function": "CRISIS",
+          "scene_ids": [
+            "SC08"
+          ],
+          "summary": "She shows what a seal is for; Eli learns that opening it cannot be undone."
+        },
+        {
+          "id": "B9",
+          "function": "CRISIS",
+          "scene_ids": [
+            "SC09"
+          ],
+          "summary": "Third warning; Naomi steps back and Hollis starts to break the seal."
+        }
+      ]
+    },
+    {
+      "id": "ACT3",
+      "name": "The call",
+      "beats": [
+        {
+          "id": "B10",
+          "function": "CLIMAX",
+          "scene_ids": [
+            "SC10"
+          ],
+          "summary": "The cover sheet names Hollis; he asks Eli to turn the camera off and Eli refuses."
+        },
+        {
+          "id": "B11",
+          "function": "CLIMAX",
+          "scene_ids": [
+            "SC11"
+          ],
+          "summary": "Eli calls upstairs; Hollis walks out on his own and Naomi asks Eli to log the opening."
+        },
+        {
+          "id": "B12",
+          "function": "RESOLUTION",
+          "scene_ids": [
+            "SC12"
+          ],
+          "summary": "A month later Eli runs the room under a two-signature rule and Calvin Reed signs for his belongings."
+        }
+      ]
+    }
+  ],
+  "plot": "Naomi brings a sealed packet to be logged out by eleven and Hollis closes the ledger on it (SC01); he demands her name and orders Eli to stop her leaving (SC02), keeps her card (SC03) and guesses at old cases, naming Calvin Reed (SC04). He takes the packet under his hand and she warns him the first time (SC05); Eli refuses to write what did not happen (SC06); she warns him a second time (SC07), explains the seal (SC08) and warns him a third time (SC09). Hollis breaks the seal and finds himself named; Eli refuses to turn the camera off (SC10); Eli calls upstairs and Hollis walks out on his own (SC11). A month later Eli runs the room under a new rule and Calvin Reed signs for his property (SC12).",
+  "subplots": [],
+  "characters": {
+    "ELI": {
+      "id": "ELI",
+      "name": "Deputy Eli Moreno",
+      "role": "protagonist",
+      "want": "To keep his place and his sergeant's good opinion.",
+      "need": "To keep the record true even when it costs him the man who trained him.",
+      "flaw": "He defers to whoever speaks loudest in the room.",
+      "arc_change": "From standing quietly by the door to making the call on his own judgement.",
+      "change_scene_id": "SC11"
+    },
+    "NAOMI": {
+      "id": "NAOMI",
+      "name": "Dr. Naomi Bell",
+      "role": "supporting",
+      "want": "To deliver the sealed packet to the grand jury unopened.",
+      "need": "To let the process, not her, show what the seal protects.",
+      "flaw": "She will not explain, so the warnings sound like threats.",
+      "arc_change": "",
+      "change_scene_id": null
+    },
+    "HOLLIS": {
+      "id": "HOLLIS",
+      "name": "Sgt. Wade Hollis",
+      "role": "antagonist",
+      "want": "To know what is inside before it leaves his room.",
+      "need": "To stop and let himself be accountable.",
+      "flaw": "He cannot bear to be seen hesitating.",
+      "arc_change": "",
+      "change_scene_id": null
+    },
+    "CALVIN": {
+      "id": "CALVIN",
+      "name": "Calvin Reed",
+      "role": "supporting",
+      "want": "To be heard and to have his property back.",
+      "need": "To be believed.",
+      "flaw": "He no longer expects to be believed.",
+      "arc_change": "",
+      "change_scene_id": null
+    }
+  },
+  "scenes": {
+    "SC01": {
+      "purpose": "Naomi wants one sealed exhibit logged out to grand jury room 3B before eleven.",
+      "conflict": "Naomi needs a signature on the ledger; Hollis wants to know what is inside before he gives it.",
+      "outcome": "Hollis refuses to log it without knowing the contents and closes the ledger; the clock starts.",
+      "value": "integrity",
+      "shift": "-"
+    },
+    "SC02": {
+      "purpose": "Hollis wants her name and her authority; Naomi gives only what the ledger needs.",
+      "conflict": "Hollis demands her name and authority; Naomi gives only what the ledger needs.",
+      "outcome": "Naomi agrees to show identification but not the contents; Eli is ordered to stop her if she leaves.",
+      "value": "integrity",
+      "shift": "-"
+    },
+    "SC03": {
+      "purpose": "Hollis wants something on her record he can use.",
+      "conflict": "Hollis hunts for a flaw in her record; Naomi has none and will not be hurried.",
+      "outcome": "Her record is clear, but Hollis keeps the card and makes her wait.",
+      "value": "integrity",
+      "shift": "-"
+    },
+    "SC04": {
+      "purpose": "Hollis tries to learn what the audit is about by guessing.",
+      "conflict": "Every guess Hollis makes about the audit exposes what he fears.",
+      "outcome": "Every guess exposes what he fears: a quitting technician, a stalled records request, and Calvin Reed.",
+      "value": "integrity",
+      "shift": "-"
+    },
+    "SC05": {
+      "purpose": "Hollis takes physical control of the packet on the counter.",
+      "conflict": "Hollis takes the packet under his hand; Naomi warns him that a broken seal cannot be closed.",
+      "outcome": "Naomi gives her first clear warning and explains the custody form; Hollis keeps his hand on it.",
+      "value": "integrity",
+      "shift": "+"
+    },
+    "SC06": {
+      "purpose": "Hollis wants Eli to write a report that makes Naomi the problem.",
+      "conflict": "Hollis wants Eli to write what did not happen; Eli will not.",
+      "outcome": "Eli refuses to write what did not happen and keeps the camera running.",
+      "value": "integrity",
+      "shift": "+"
+    },
+    "SC07": {
+      "purpose": "Hollis tries to name who is behind the audit.",
+      "conflict": "Hollis names who might be behind the audit; Naomi neither confirms nor denies and warns him again.",
+      "outcome": "Naomi neither confirms nor denies, explains why she will not just walk out, and warns him a second time as he picks up the packet.",
+      "value": "integrity",
+      "shift": "+"
+    },
+    "SC08": {
+      "purpose": "Hollis wants to believe the seal is paperwork for lawyers.",
+      "conflict": "Hollis calls the seal paperwork; Naomi shows him it exists to protect everyone, including him.",
+      "outcome": "Naomi shows him the custody form carries only her name; Eli learns that opening it cannot be undone.",
+      "value": "integrity",
+      "shift": "+"
+    },
+    "SC09": {
+      "purpose": "Hollis decides that being seen to hesitate is worse than acting.",
+      "conflict": "Hollis decides that hesitating in front of Eli is worse than acting; Naomi warns him a third time.",
+      "outcome": "Naomi warns a third time and steps back; Eli notes both the time and the warning; Hollis starts to break the seal.",
+      "value": "integrity",
+      "shift": "+"
+    },
+    "SC10": {
+      "purpose": "Hollis wants to see what is coming at him.",
+      "conflict": "Hollis opens the packet and finds himself named; he asks Eli to turn the camera off and Eli refuses.",
+      "outcome": "The cover sheet names him; he denies it and asks Eli to turn off the camera; Eli refuses.",
+      "value": "integrity",
+      "shift": "+"
+    },
+    "SC11": {
+      "purpose": "Hollis wants Eli to protect him.",
+      "conflict": "Hollis begs Eli to protect him; Eli has to choose whether to make the call.",
+      "outcome": "Eli calls upstairs; Hollis is summoned and walks out on his own; Naomi asks Eli to log the opened exhibit properly.",
+      "value": "integrity",
+      "shift": "+"
+    },
+    "SC12": {
+      "purpose": "Naomi returns the released exhibit; Calvin Reed comes for his property.",
+      "conflict": "Eli runs the room under a new rule; Calvin Reed finally comes for what was taken from him.",
+      "outcome": "Eli runs the records room under a two-signature rule; Calvin signs for the belongings held for nine years.",
+      "value": "integrity",
+      "shift": "+"
+    }
+  },
+  "source_note": "Premise-only adaptation of an outside story (source SRT sha256 f5f9b7c219233b8eeea7e3f0649f1b2e74b7830580808b5ec52c4b44d40b6787): a federal auditor, a sealed file, an official who is warned three times and opens it himself, a file that turns out to be about him, and a wrongly convicted man freed. Names, setting, conflict mechanics, scene structure, dialogue and ending are new; no source text, audio or metadata is used.",
+  "rewrite_log": [
+    {
+      "version": 1,
+      "date": "2026-11-14",
+      "reason": "First draft by the Tech Lead for Owner review (docs/production/pilots/film08_chain_of_custody).",
+      "changed": "docs/production/pilots/film08_chain_of_custody/script.fountain, beats.json"
+    },
+    {
+      "version": 2,
+      "date": "2026-11-14",
+      "reason": "Owner approved the film brief; package built from the draft without a change of meaning, dialogue or order. Only the SC12 heading changed (time of day AFTERNOON, 'one month later' as a note) and an Approval line was added; draft script SHA-256 66b7db87994d72122320b8c1f515bbae554204c3ccbc04792ef6d19c687023e3.",
+      "changed": "films/film08_chain_of_custody/script.fountain"
+    }
+  ]
+}

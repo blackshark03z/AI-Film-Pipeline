@@ -1,0 +1,1492 @@
+{
+  "vision": {
+    "tone": "Plain, tense and close: three people in one courthouse records room, the turns carried by faces and long pauses, never by speeches, violence or camera tricks.",
+    "references": [
+      "a courthouse records room in flat morning light seen at standing and seated eye level",
+      "a low-key procedural standoff played in pauses and glances"
+    ]
+  },
+  "visual_rules": [
+    {
+      "rule": "Static eye-level camera, no dutch angles, no handheld shake.",
+      "why": "The turn comes from the faces, not from the camera."
+    },
+    {
+      "rule": "Keep Hollis screen-left, Eli in the middle and Naomi screen-right in the morning scenes; Eli screen-left and Naomi screen-right in the last scene.",
+      "why": "Everyone's place stays readable and the cut never flips who is where."
+    },
+    {
+      "rule": "One person moves or handles one prop at a time, never together; no hand-over and no contact.",
+      "why": "Hands on small props and two bodies in contact are the least reliable things the video model does (film01, film04)."
+    },
+    {
+      "rule": "Paper never shows legible text: pages stay face down, turned away from the camera or out of focus.",
+      "why": "Generated text on a prop cannot be trusted to read correctly."
+    },
+    {
+      "rule": "Singles keep the counter edge, the green wall or the door frame in frame.",
+      "why": "film05: a close single reads as standing or seated by chance; the furniture makes posture readable."
+    }
+  ],
+  "reveals": [
+    {
+      "fact_id": "seal_cannot_go_back",
+      "scene_id": "SC05"
+    },
+    {
+      "fact_id": "three_warnings",
+      "scene_id": "SC09"
+    },
+    {
+      "fact_id": "hollis_is_the_subject",
+      "scene_id": "SC10"
+    },
+    {
+      "fact_id": "hollis_called_upstairs",
+      "scene_id": "SC11"
+    },
+    {
+      "fact_id": "calvin_signs",
+      "scene_id": "SC12"
+    }
+  ],
+  "coverage_plan": {
+    "B1": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B2": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B3": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B4": [
+      "SINGLE"
+    ],
+    "B5": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B6": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B7": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B8": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B9": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B10": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B11": [
+      "MASTER",
+      "SINGLE"
+    ],
+    "B12": [
+      "MASTER",
+      "SINGLE"
+    ]
+  },
+  "scenes": {
+    "SC01": {
+      "pov": {
+        "whose": "NAOMI",
+        "audience_knows": [
+          "exhibit_due_3B"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "exhibit_due_3B"
+          ],
+          "NAOMI": [
+            "exhibit_due_3B"
+          ],
+          "ELI": [
+            "exhibit_due_3B"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "The packet has to reach room 3B by eleven",
+          "device": "hold",
+          "generation_id": "SC01_g08",
+          "fact_id": "exhibit_due_3B"
+        }
+      ],
+      "curve": {
+        "HOLLIS": {
+          "start": 3,
+          "end": 3
+        },
+        "NAOMI": {
+          "start": 2,
+          "end": 2
+        },
+        "ELI": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC01_g08",
+            "seconds": 1.0,
+            "why": "hold on Naomi after she names the deadline"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "title card, then a hard cut into the records room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC02": {
+      "pov": {
+        "whose": "NAOMI",
+        "audience_knows": [
+          "exhibit_due_3B"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "exhibit_due_3B"
+          ],
+          "NAOMI": [
+            "exhibit_due_3B"
+          ],
+          "ELI": [
+            "exhibit_due_3B"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "HOLLIS": {
+          "start": 3,
+          "end": 4
+        },
+        "NAOMI": {
+          "start": 2,
+          "end": 2
+        },
+        "ELI": {
+          "start": 3,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC02_g19",
+            "seconds": 3.0,
+            "why": "Hollis studies her face"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC03": {
+      "pov": {
+        "whose": "NAOMI",
+        "audience_knows": [
+          "exhibit_due_3B"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "exhibit_due_3B"
+          ],
+          "NAOMI": [
+            "exhibit_due_3B"
+          ],
+          "ELI": [
+            "exhibit_due_3B"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "HOLLIS": {
+          "start": 4,
+          "end": 3
+        },
+        "NAOMI": {
+          "start": 2,
+          "end": 2
+        },
+        "ELI": {
+          "start": 3,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC03_g15",
+            "seconds": 3.0,
+            "why": "Hollis stares at the clean record"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC04": {
+      "pov": {
+        "whose": "HOLLIS",
+        "audience_knows": [
+          "calvin_reed_named",
+          "exhibit_due_3B"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "calvin_reed_named",
+            "exhibit_due_3B"
+          ],
+          "NAOMI": [
+            "calvin_reed_named",
+            "exhibit_due_3B"
+          ],
+          "ELI": [
+            "calvin_reed_named",
+            "exhibit_due_3B"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "HOLLIS": {
+          "start": 3,
+          "end": 4
+        },
+        "NAOMI": {
+          "start": 2,
+          "end": 3
+        },
+        "ELI": {
+          "start": 3,
+          "end": 4
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC04_g17",
+            "seconds": 3.0,
+            "why": "Naomi gives nothing back"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC05": {
+      "pov": {
+        "whose": "NAOMI",
+        "audience_knows": [
+          "calvin_reed_named",
+          "exhibit_due_3B",
+          "seal_cannot_go_back"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "seal_cannot_go_back"
+          ],
+          "NAOMI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "seal_cannot_go_back"
+          ],
+          "ELI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "seal_cannot_go_back"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Naomi says the seal cannot go back",
+          "device": "hold",
+          "generation_id": "SC05_g11",
+          "fact_id": "seal_cannot_go_back"
+        }
+      ],
+      "curve": {
+        "HOLLIS": {
+          "start": 4,
+          "end": 4
+        },
+        "NAOMI": {
+          "start": 3,
+          "end": 3
+        },
+        "ELI": {
+          "start": 4,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC05_g11",
+            "seconds": 1.0,
+            "why": "hold on Naomi after the first warning"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC06": {
+      "pov": {
+        "whose": "ELI",
+        "audience_knows": [
+          "calvin_reed_named",
+          "exhibit_due_3B",
+          "seal_cannot_go_back"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "seal_cannot_go_back"
+          ],
+          "NAOMI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "seal_cannot_go_back"
+          ],
+          "ELI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "seal_cannot_go_back"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "HOLLIS": {
+          "start": 4,
+          "end": 3
+        },
+        "NAOMI": {
+          "start": 3,
+          "end": 3
+        },
+        "ELI": {
+          "start": 3,
+          "end": 4
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC06_g09",
+            "seconds": 3.0,
+            "why": "Hollis turns on Eli"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC07": {
+      "pov": {
+        "whose": "NAOMI",
+        "audience_knows": [
+          "calvin_reed_named",
+          "exhibit_due_3B",
+          "seal_cannot_go_back"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "seal_cannot_go_back"
+          ],
+          "NAOMI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "seal_cannot_go_back"
+          ],
+          "ELI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "seal_cannot_go_back"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "HOLLIS": {
+          "start": 3,
+          "end": 4
+        },
+        "NAOMI": {
+          "start": 3,
+          "end": 3
+        },
+        "ELI": {
+          "start": 4,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC07_g08",
+            "seconds": 3.0,
+            "why": "Naomi lets the question hang"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC08": {
+      "pov": {
+        "whose": "ELI",
+        "audience_knows": [
+          "calvin_reed_named",
+          "exhibit_due_3B",
+          "form_names_only_naomi",
+          "seal_cannot_go_back"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "seal_cannot_go_back"
+          ],
+          "NAOMI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "seal_cannot_go_back"
+          ],
+          "ELI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "seal_cannot_go_back"
+          ]
+        }
+      },
+      "emphasis": [],
+      "curve": {
+        "HOLLIS": {
+          "start": 4,
+          "end": 4
+        },
+        "NAOMI": {
+          "start": 3,
+          "end": 3
+        },
+        "ELI": {
+          "start": 3,
+          "end": 4
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC08_g10",
+            "seconds": 3.0,
+            "why": "Hollis studies the custody form"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC09": {
+      "pov": {
+        "whose": "ELI",
+        "audience_knows": [
+          "calvin_reed_named",
+          "exhibit_due_3B",
+          "form_names_only_naomi",
+          "seal_cannot_go_back",
+          "three_warnings"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ],
+          "NAOMI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ],
+          "ELI": [
+            "calvin_reed_named",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Naomi's third warning",
+          "device": "hold",
+          "generation_id": "SC09_g15",
+          "fact_id": "three_warnings"
+        }
+      ],
+      "curve": {
+        "HOLLIS": {
+          "start": 4,
+          "end": 5
+        },
+        "NAOMI": {
+          "start": 3,
+          "end": 4
+        },
+        "ELI": {
+          "start": 4,
+          "end": 4
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC09_g15",
+            "seconds": 1.0,
+            "why": "hold on Naomi after the third warning"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC10": {
+      "pov": {
+        "whose": "ELI",
+        "audience_knows": [
+          "calvin_reed_named",
+          "eli_will_not_switch_off",
+          "exhibit_due_3B",
+          "form_names_only_naomi",
+          "hollis_is_the_subject",
+          "hollis_opens_on_camera",
+          "seal_cannot_go_back",
+          "three_warnings"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "calvin_reed_named",
+            "eli_will_not_switch_off",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "hollis_is_the_subject",
+            "hollis_opens_on_camera",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ],
+          "NAOMI": [
+            "calvin_reed_named",
+            "eli_will_not_switch_off",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "hollis_is_the_subject",
+            "hollis_opens_on_camera",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ],
+          "ELI": [
+            "calvin_reed_named",
+            "eli_will_not_switch_off",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "hollis_is_the_subject",
+            "hollis_opens_on_camera",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "The cover sheet names Hollis",
+          "device": "hold",
+          "generation_id": "SC10_g14",
+          "fact_id": "hollis_is_the_subject"
+        }
+      ],
+      "curve": {
+        "HOLLIS": {
+          "start": 5,
+          "end": 5
+        },
+        "NAOMI": {
+          "start": 4,
+          "end": 3
+        },
+        "ELI": {
+          "start": 4,
+          "end": 5
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC10_g14",
+            "seconds": 1.0,
+            "why": "hold on Naomi after she names the six cases"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    },
+    "SC11": {
+      "pov": {
+        "whose": "ELI",
+        "audience_knows": [
+          "calvin_reed_named",
+          "calvin_weight_changed",
+          "eli_will_not_switch_off",
+          "exhibit_due_3B",
+          "form_names_only_naomi",
+          "hollis_called_upstairs",
+          "hollis_is_the_subject",
+          "hollis_opens_on_camera",
+          "seal_cannot_go_back",
+          "three_warnings"
+        ],
+        "characters_know": {
+          "HOLLIS": [
+            "calvin_reed_named",
+            "calvin_weight_changed",
+            "eli_will_not_switch_off",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "hollis_called_upstairs",
+            "hollis_is_the_subject",
+            "hollis_opens_on_camera",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ],
+          "NAOMI": [
+            "calvin_reed_named",
+            "calvin_weight_changed",
+            "eli_will_not_switch_off",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "hollis_called_upstairs",
+            "hollis_is_the_subject",
+            "hollis_opens_on_camera",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ],
+          "ELI": [
+            "calvin_reed_named",
+            "calvin_weight_changed",
+            "eli_will_not_switch_off",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "hollis_called_upstairs",
+            "hollis_is_the_subject",
+            "hollis_opens_on_camera",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "The clerk calls Hollis upstairs",
+          "device": "hold",
+          "generation_id": "SC11_g19",
+          "fact_id": "hollis_called_upstairs"
+        }
+      ],
+      "curve": {
+        "HOLLIS": {
+          "start": 5,
+          "end": 3
+        },
+        "NAOMI": {
+          "start": 3,
+          "end": 3
+        },
+        "ELI": {
+          "start": 5,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC11_g19",
+            "seconds": 1.0,
+            "why": "hold on Eli after he says the clerk wants Hollis upstairs"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "a month later, the same room in afternoon light"
+      }
+    },
+    "SC12": {
+      "pov": {
+        "whose": "ELI",
+        "audience_knows": [
+          "calvin_collects",
+          "calvin_reed_named",
+          "calvin_signs",
+          "calvin_weight_changed",
+          "eli_will_not_switch_off",
+          "exhibit_due_3B",
+          "form_names_only_naomi",
+          "hollis_called_upstairs",
+          "hollis_indicted",
+          "hollis_is_the_subject",
+          "hollis_opens_on_camera",
+          "seal_cannot_go_back",
+          "three_warnings"
+        ],
+        "characters_know": {
+          "ELI": [
+            "calvin_collects",
+            "calvin_reed_named",
+            "calvin_signs",
+            "calvin_weight_changed",
+            "eli_will_not_switch_off",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "hollis_called_upstairs",
+            "hollis_indicted",
+            "hollis_is_the_subject",
+            "hollis_opens_on_camera",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ],
+          "NAOMI": [
+            "calvin_collects",
+            "calvin_reed_named",
+            "calvin_signs",
+            "calvin_weight_changed",
+            "eli_will_not_switch_off",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "hollis_called_upstairs",
+            "hollis_indicted",
+            "hollis_is_the_subject",
+            "hollis_opens_on_camera",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ],
+          "CALVIN": [
+            "calvin_collects",
+            "calvin_reed_named",
+            "calvin_signs",
+            "calvin_weight_changed",
+            "eli_will_not_switch_off",
+            "exhibit_due_3B",
+            "form_names_only_naomi",
+            "hollis_called_upstairs",
+            "hollis_indicted",
+            "hollis_is_the_subject",
+            "hollis_opens_on_camera",
+            "seal_cannot_go_back",
+            "three_warnings"
+          ]
+        }
+      },
+      "emphasis": [
+        {
+          "moment": "Calvin signs for his belongings",
+          "device": "hold",
+          "generation_id": "SC12_g25",
+          "fact_id": "calvin_signs"
+        }
+      ],
+      "curve": {
+        "ELI": {
+          "start": 2,
+          "end": 1
+        },
+        "NAOMI": {
+          "start": 2,
+          "end": 2
+        },
+        "CALVIN": {
+          "start": 2,
+          "end": 3
+        }
+      },
+      "pacing": {
+        "target_avg_shot_s": 6.0,
+        "holds": [
+          {
+            "generation_id": "SC12_g25",
+            "seconds": 1.5,
+            "why": "the pen lies still beside the signed ledger"
+          }
+        ]
+      },
+      "transition_in": {
+        "kind": "CUT",
+        "reason": "a month later, the same room in afternoon light"
+      },
+      "transition_out": {
+        "kind": "CUT",
+        "reason": "continuous morning, the same room"
+      }
+    }
+  },
+  "comprehension": {
+    "intros": [
+      {
+        "character": "NAOMI",
+        "label": "DR. NAOMI BELL",
+        "relation": "evidence auditor for the federal court",
+        "needed_by": "SC01_g02",
+        "carriers": []
+      },
+      {
+        "character": "HOLLIS",
+        "label": "SGT. WADE HOLLIS",
+        "relation": "runs the county records room",
+        "needed_by": "SC01_g03",
+        "carriers": []
+      },
+      {
+        "character": "ELI",
+        "label": "DEPUTY ELI MORENO",
+        "relation": "county deputy, six months on the job",
+        "needed_by": "SC01_g12",
+        "carriers": []
+      },
+      {
+        "character": "CALVIN",
+        "label": "CALVIN REED",
+        "relation": "here for his belongings",
+        "needed_by": "SC12_g17",
+        "carriers": []
+      }
+    ],
+    "facts": [
+      {
+        "fact_id": "exhibit_due_3B",
+        "text": "A sealed exhibit has to reach grand jury room 3B upstairs by eleven",
+        "needed_by": "SC01_g09",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC01_g08",
+            "detail": "Nothing's leaving the building. It goes upstairs to 3B by eleven."
+          }
+        ]
+      },
+      {
+        "fact_id": "calvin_reed_named",
+        "text": "Hollis fears the old case of Calvin Reed, who was convicted nine years ago",
+        "needed_by": "SC04_g18",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC04_g16",
+            "detail": "Calvin Reed. That's the one, isn't it? Somebody's crying about Reed."
+          },
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC04_g18",
+            "detail": "Reed was nine years ago. The jury took forty minutes."
+          }
+        ]
+      },
+      {
+        "fact_id": "hollis_trained_eli",
+        "text": "Hollis calls Eli 'son' as a form of address: he trained Eli, they are not related",
+        "needed_by": "SC06_g08",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC06_g07",
+            "detail": "You've been here six months. You don't decide what happened, son."
+          }
+        ]
+      },
+      {
+        "fact_id": "seal_cannot_go_back",
+        "text": "Once the wax seal is broken it cannot be closed again and the opener's name is recorded",
+        "needed_by": "SC05_g12",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC05_g11",
+            "detail": "If that seal breaks in your hands, it can't go back."
+          }
+        ]
+      },
+      {
+        "fact_id": "form_names_only_naomi",
+        "text": "The custody form on the packet carries only Naomi's name and times",
+        "needed_by": "SC08_g12",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC08_g11",
+            "detail": "Bell, nine-oh-four. Bell, ten-thirty-eight. That's all it says. Just you."
+          }
+        ]
+      },
+      {
+        "fact_id": "three_warnings",
+        "text": "Naomi warned Hollis three times not to open the packet",
+        "needed_by": "SC09_g22",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC05_g21",
+            "detail": "I can't tell you. I'm warning you. Those are different things."
+          },
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC07_g23",
+            "detail": "Second time, Sergeant. Opening that won't end what you're afraid of."
+          },
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC09_g15",
+            "detail": "This is the third time I'm saying it. Don't open that."
+          }
+        ]
+      },
+      {
+        "fact_id": "hollis_opens_on_camera",
+        "text": "Hollis breaks the seal in front of Eli's body camera",
+        "needed_by": "SC10_g02",
+        "carriers": [
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC10_g01",
+            "detail": "HOLLIS breaks the red wax seal of the packet"
+          },
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC10_g02",
+            "detail": "Ten fifty-four. Exhibit forty-one, seventeen, A. Seal broken by Sergeant Hollis."
+          }
+        ]
+      },
+      {
+        "fact_id": "hollis_is_the_subject",
+        "text": "The grand jury cover sheet names Hollis as the subject of an investigation into six cases",
+        "needed_by": "SC10_g15",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC10_g09",
+            "detail": "The line underneath it names the subject of the investigation."
+          },
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC10_g14",
+            "detail": "Six where the weights changed before trial. Your signature both times."
+          }
+        ]
+      },
+      {
+        "fact_id": "eli_will_not_switch_off",
+        "text": "Eli refuses to turn his body camera off",
+        "needed_by": "SC11_g13",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC10_g25",
+            "detail": "I can't, Sarge. You know I can't. And I won't."
+          }
+        ]
+      },
+      {
+        "fact_id": "calvin_weight_changed",
+        "text": "Calvin Reed's evidence weighed eleven grams at intake and fifty-two at trial in Hollis's handwriting",
+        "needed_by": "SC11_g07",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC11_g05",
+            "detail": "At intake it was eleven grams. At trial, it was fifty-two."
+          },
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC11_g06",
+            "detail": "Eleven grams is a misdemeanor. Fifty-two was nine years. Your handwriting."
+          }
+        ]
+      },
+      {
+        "fact_id": "hollis_called_upstairs",
+        "text": "The clerk upstairs has called Hollis up and he leaves on his own",
+        "needed_by": "SC11_g20",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC11_g19",
+            "detail": "Two marshals are coming down. The clerk wants you upstairs."
+          }
+        ]
+      },
+      {
+        "fact_id": "hollis_indicted",
+        "text": "Hollis has been indicted and suspended, his certification gone",
+        "needed_by": "SC12_g10",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC12_g09",
+            "detail": "Suspended. His certification's gone. Trial's set for March, they're saying."
+          }
+        ]
+      },
+      {
+        "fact_id": "calvin_collects",
+        "text": "Calvin Reed has come to collect his belongings after nine years",
+        "needed_by": "SC12_g16",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC12_g15",
+            "detail": "Any minute. He's coming for his property envelope. Nine years shelved."
+          },
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC12_g16",
+            "detail": "CALVIN walks in through the hallway door"
+          }
+        ]
+      },
+      {
+        "fact_id": "calvin_signs",
+        "text": "Calvin signs the ledger for his belongings",
+        "needed_by": "SC12_g25",
+        "carriers": [
+          {
+            "kind": "DIALOGUE",
+            "generation_id": "SC12_g24",
+            "detail": "You don't owe me anything. Sign for your things. They're yours."
+          },
+          {
+            "kind": "VISUAL",
+            "generation_id": "SC12_g25",
+            "detail": "CALVIN signs the ledger page with the pen"
+          }
+        ]
+      }
+    ],
+    "tags": [
+      {
+        "character": "NAOMI",
+        "generation_id": "SC01_g02",
+        "start_s": 0.3,
+        "end_s": 4.8,
+        "anchor_x": null,
+        "anchor_y": null
+      },
+      {
+        "character": "HOLLIS",
+        "generation_id": "SC01_g03",
+        "start_s": 0.3,
+        "end_s": 4.8,
+        "anchor_x": null,
+        "anchor_y": null
+      },
+      {
+        "character": "ELI",
+        "generation_id": "SC01_g12",
+        "start_s": 0.3,
+        "end_s": 4.8,
+        "anchor_x": null,
+        "anchor_y": null
+      },
+      {
+        "character": "CALVIN",
+        "generation_id": "SC12_g17",
+        "start_s": 0.3,
+        "end_s": 4.8,
+        "anchor_x": null,
+        "anchor_y": null
+      }
+    ],
+    "cards": []
+  },
+  "translations": {
+    "CHAIN OF CUSTODY": "CHUỖI LƯU GIỮ",
+    "evidence auditor for the federal court": "kiểm toán viên bằng chứng của tòa liên bang",
+    "runs the county records room": "quản lý phòng hồ sơ của hạt",
+    "county deputy, six months on the job": "phó cảnh sát hạt, mới vào nghề sáu tháng",
+    "here for his belongings": "đến nhận lại tài sản của mình",
+    "Morning, Sergeant. I need one exhibit logged out to room 3B.": "Chào Trung sĩ. Tôi cần xuất một vật chứng lên phòng 3B.",
+    "That's a court seal. Nobody brought anything like that in here.": "Đó là niêm phong của tòa. Chưa ai mang thứ như vậy vào đây.",
+    "I sealed it downstairs this morning, after the inventory was finished.": "Sáng nay tôi niêm phong dưới tầng hầm, sau khi kiểm kê xong.",
+    "Downstairs is my property room. Who let you in down there?": "Tầng hầm là kho của tôi. Ai cho cô xuống đó?",
+    "The same court order you signed for six weeks ago, Sergeant.": "Chính lệnh tòa ông đã ký nhận sáu tuần trước, Trung sĩ.",
+    "I signed for an inventory. Counting boxes. Not carrying things out.": "Tôi ký cho việc kiểm kê. Đếm thùng. Không phải mang đồ ra ngoài.",
+    "Nothing's leaving the building. It goes upstairs to 3B by eleven.": "Không có gì rời khỏi tòa nhà. Nó lên 3B trước 11 giờ.",
+    "Then it goes in my ledger first, with what's inside it.": "Vậy phải vào sổ của tôi trước, kèm thứ bên trong.",
+    "The ledger asks for an exhibit number. Not for contents.": "Sổ chỉ hỏi số vật chứng. Không hỏi bên trong có gì.",
+    "In this room, the ledger asks what I tell it to.": "Trong phòng này, sổ hỏi những gì tôi bảo nó hỏi.",
+    "Deputy, is your camera running? I'd like it to keep running.": "Phó cảnh sát, camera của anh đang chạy chứ? Tôi muốn nó cứ chạy.",
+    "It runs the whole shift, ma'am. I don't switch it off.": "Nó chạy suốt ca, chị. Tôi không bao giờ tắt.",
+    "Nobody asked you, Moreno. Stand where you're standing and stay quiet.": "Không ai hỏi cậu, Moreno. Đứng yên đó và im miệng.",
+    "Exhibit number is on the tape. Forty-one dash seventeen dash A.": "Số vật chứng ở trên băng keo. Bốn mươi mốt, mười bảy, A.",
+    "I can read tape. I'm asking what that seal is protecting.": "Tôi biết đọc. Tôi hỏi cái niêm phong đó đang che giấu gì.",
+    "It's protecting the contents from everyone who isn't the grand jury.": "Nó bảo vệ nội dung khỏi tất cả, trừ bồi thẩm đoàn.",
+    "Grand jury. In my building, and nobody thought to tell me.": "Bồi thẩm đoàn. Ngay trong tòa nhà của tôi, mà không ai báo.",
+    "Nobody is supposed to tell you. That's what sealed means, Sergeant.": "Không ai được phép báo ông. Niêm phong nghĩa là vậy, Trung sĩ.",
+    "Then it sits right here until somebody tells me something true.": "Vậy nó nằm yên đây cho đến khi có người nói thật với tôi.",
+    "It's ten forty now. I'm expected upstairs in twenty minutes, Sergeant.": "Bây giờ là 10 giờ 40. Hai mươi phút nữa tôi phải lên trên, Trung sĩ.",
+    "Then you'd better start talking. Twenty minutes is all you've got.": "Thế thì cô nên bắt đầu nói đi. Cô chỉ có hai mươi phút.",
+    "I'll talk. But nothing I say will be about what's inside.": "Tôi sẽ nói. Nhưng không về những gì bên trong.",
+    "Start with your name. Everybody who signs this ledger gives one.": "Bắt đầu bằng tên cô. Ai ký sổ này cũng phải khai tên.",
+    "My name is on the court order in your file drawer.": "Tên tôi có trong lệnh tòa, ở ngăn tủ của ông.",
+    "I'm not opening drawers. I'm asking you, standing at my counter.": "Tôi không mở tủ. Tôi hỏi cô, đang đứng ở quầy của tôi.",
+    "Naomi Bell. Evidence auditor, under contract to the federal court.": "Naomi Bell. Kiểm toán viên vật chứng, hợp đồng với tòa liên bang.",
+    "Federal. So somebody downtown sent you here to count my boxes.": "Liên bang. Vậy là có người trên thành phố cử cô xuống đếm thùng.",
+    "A judge sent me. I've counted every box, and every shelf.": "Một thẩm phán cử tôi. Tôi đã đếm từng thùng, từng kệ.",
+    "Six weeks in my basement, and I never heard your name.": "Sáu tuần trong hầm của tôi mà tôi chưa nghe tên cô.",
+    "That was deliberate. People behave normally when nobody knows who's watching.": "Cố ý cả đấy. Người ta cư xử bình thường khi không biết ai đang nhìn.",
+    "You hear that, Moreno? She's been watching us. Write that down.": "Nghe chưa, Moreno? Cô ta theo dõi chúng ta. Ghi lại đi.",
+    "Write down what, Sarge? She hasn't done anything I can write.": "Ghi gì, sếp? Cô ấy có làm gì đâu mà ghi.",
+    "You write what I tell you. That's what a report is.": "Tôi bảo ghi gì thì cậu ghi nấy. Báo cáo là thế.",
+    "If you doubt me, call the grand jury clerk. Extension four-one-one.": "Nếu ông nghi ngờ, gọi thư ký bồi thẩm đoàn. Số nội bộ bốn-một-một.",
+    "I don't call upstairs because a stranger hands me a number.": "Tôi không gọi lên trên chỉ vì người lạ đưa số.",
+    "Then call the switchboard and ask for 3B. Same answer, Sergeant.": "Vậy gọi tổng đài hỏi 3B. Câu trả lời vẫn thế, Trung sĩ.",
+    "I've worked this building fourteen years. I know who belongs here.": "Tôi làm ở đây mười bốn năm. Tôi biết ai thuộc về nơi này.",
+    "You know who used to belong. Things changed six weeks ago.": "Ông biết ai từng thuộc về. Sáu tuần trước mọi thứ đã khác.",
+    "What changed six weeks ago? Go on, say it plainly.": "Sáu tuần trước có gì khác? Nói thẳng ra đi.",
+    "A judge ordered an audit. That's plain. That's all I'll say.": "Một thẩm phán ra lệnh kiểm toán. Chỉ vậy thôi. Tôi chỉ nói thế.",
+    "Put some identification on the counter. Then we'll see what's plain.": "Đặt giấy tờ tùy thân lên quầy. Rồi xem cái gì là thẳng.",
+    "You'll get my ID. You won't get what's under the seal.": "Ông sẽ có giấy tờ của tôi. Không có thứ dưới niêm phong.",
+    "Moreno, if she walks out with that, you stop her. Understood?": "Moreno, nếu cô ta mang nó ra khỏi đây, cậu chặn lại. Rõ chưa?",
+    "Stop her how, Sarge? She hasn't broken any rule I know.": "Chặn thế nào, sếp? Cô ấy có phạm quy gì tôi biết đâu.",
+    "She's breaking mine. In this room, that's the one that counts.": "Cô ta phạm quy của tôi. Trong phòng này, quy đó mới tính.",
+    "Bell. Washington address. You drove four hours to count boxes?": "Bell. Địa chỉ Washington. Cô lái bốn tiếng để đếm thùng à?",
+    "I drove four hours every Monday. I left every Friday afternoon.": "Tôi lái bốn tiếng mỗi thứ Hai. Chiều thứ Sáu thì về.",
+    "And slept where? Not anywhere in this county, or I'd know.": "Rồi ngủ ở đâu? Không phải trong quận này, nếu không tôi biết.",
+    "The motel by the interstate. Room twelve. Check that too.": "Nhà nghỉ cạnh đường liên bang. Phòng mười hai. Cứ kiểm tra.",
+    "Sit down over there. This takes as long as it takes.": "Ngồi xuống đằng kia. Việc này mất bao lâu thì mất.",
+    "It takes about a minute. I'll stand, if that's all right.": "Chắc khoảng một phút. Tôi đứng được rồi, nếu ông không phiền.",
+    "It isn't all right. Chairs are right there. Use one.": "Tôi phiền. Ghế ở ngay đó. Ngồi đi.",
+    "Ma'am, would you like some water? There's a cooler outside.": "Chị có muốn uống nước không? Ngoài kia có bình nước.",
+    "No, thank you. I'd rather nobody leaves the room right now.": "Không, cảm ơn anh. Tôi muốn lúc này không ai rời phòng.",
+    "Understood. Then I'll stay right here by the door, ma'am.": "Rõ. Vậy tôi sẽ đứng ngay đây cạnh cửa, thưa chị.",
+    "Funny. A woman alone, sealed packet, worried about who leaves rooms.": "Lạ nhỉ. Một phụ nữ một mình, gói niêm phong, lại lo ai ra khỏi phòng.",
+    "Not funny. Careful. You'd want the same if it were yours.": "Không lạ đâu. Cẩn thận đi. Nếu là của ông, ông cũng muốn vậy.",
+    "No warrants. No tickets. Not one parking violation. Nothing at all.": "Không lệnh truy nã. Không vé phạt. Đến lỗi đậu xe cũng không. Không có gì.",
+    "That's usually what it says about people who mind their business.": "Thường thì người ta ghi vậy về những người lo chuyện của mình.",
+    "Or people who know how to keep their names off screens.": "Hoặc những người biết cách giữ tên mình khỏi màn hình.",
+    "You'd know more about keeping names off records than I would.": "Ông biết về giữ tên khỏi hồ sơ rõ hơn tôi.",
+    "What's that supposed to mean? Say it again for the camera.": "Ý cô là sao? Nói lại cho camera nghe.",
+    "I said nothing that isn't already true. The camera heard it.": "Tôi không nói gì không đúng sự thật. Camera đã nghe rồi.",
+    "Sarge, her record's clear. Normally we'd hand back the card now.": "Sếp, hồ sơ cô ấy sạch. Thường thì giờ mình trả thẻ rồi.",
+    "Normally isn't today. The card stays with me until I'm done.": "Hôm nay không thường. Thẻ ở lại với tôi cho đến khi tôi xong.",
+    "Keep the card. It changes nothing about the seal, Sergeant Hollis.": "Cứ giữ thẻ. Nó không thay đổi gì về niêm phong, Trung sĩ Hollis.",
+    "We'll see. Fifteen minutes is long in a small room.": "Rồi xem. Mười lăm phút là dài trong căn phòng nhỏ.",
+    "Let me guess. This started with Ray Pruitt, didn't it?": "Để tôi đoán. Chuyện này bắt đầu từ Ray Pruitt, đúng không?",
+    "I'm not going to talk about anyone by name, Sergeant.": "Tôi sẽ không nói về ai bằng tên, Trung sĩ.",
+    "Property tech. Quit in August. Hired a lawyer the same week.": "Nhân viên kho. Nghỉ hồi tháng Tám. Cùng tuần thuê luật sư.",
+    "People hire lawyers for all kinds of reasons. Mostly ordinary ones.": "Người ta thuê luật sư vì đủ thứ lý do. Phần lớn là bình thường.",
+    "Not Ray. Ray couldn't afford coffee. Somebody paid for that lawyer.": "Ray thì không. Ray không có tiền uống cà phê. Có người trả tiền luật sư đó.",
+    "You've thought about this a great deal, haven't you, Sergeant?": "Ông đã nghĩ về chuyện này nhiều lắm, phải không, Trung sĩ?",
+    "A records request has sat on my desk for three weeks.": "Một yêu cầu cung cấp hồ sơ nằm trên bàn tôi ba tuần rồi.",
+    "Three weeks is long for a records request. Most take days.": "Ba tuần là lâu cho một yêu cầu hồ sơ. Thường chỉ vài ngày.",
+    "Most aren't asking for every property log from twenty-seventeen.": "Thường thì người ta không đòi mọi nhật ký kho năm 2017.",
+    "You haven't answered it. That's what three weeks usually means.": "Ông chưa trả lời. Ba tuần thường có nghĩa như vậy.",
+    "I answer when I'm ready. Downstairs runs on my schedule.": "Khi nào sẵn sàng tôi trả lời. Tầng hầm chạy theo lịch của tôi.",
+    "It used to. For six weeks, it ran on mine.": "Từng là vậy. Sáu tuần qua, nó chạy theo lịch của tôi.",
+    "Is it Pike Street? Or Delmar? Just tell me which one.": "Là Pike Street? Hay Delmar? Nói tôi biết vụ nào.",
+    "I haven't mentioned a single case. You've mentioned two already.": "Tôi chưa nhắc vụ nào. Ông đã nhắc hai vụ rồi.",
+    "Calvin Reed. That's the one, isn't it? Somebody's crying about Reed.": "Calvin Reed. Chính là vụ đó, đúng không? Có người đang kêu oan cho Reed.",
+    "Reed was nine years ago. The jury took forty minutes.": "Vụ Reed chín năm trước. Bồi thẩm đoàn chỉ mất bốn mươi phút.",
+    "I'm not here to argue about any jury. Only about paper.": "Tôi không đến để tranh luận về bồi thẩm đoàn. Chỉ về giấy tờ.",
+    "Paper. You think paper can hurt fourteen years of my work?": "Giấy tờ. Cô nghĩ giấy tờ làm hại được mười bốn năm làm việc của tôi?",
+    "Paper doesn't hurt anyone. It remembers what people did to it.": "Giấy không làm hại ai. Nó nhớ những gì người ta đã làm với nó.",
+    "Sarge, maybe we just let her go up. She's expected.": "Sếp, hay mình cứ cho cô ấy lên đi. Người ta đang đợi.",
+    "Maybe you just go stand in the hall if you're nervous.": "Hay cậu ra hành lang đứng đi, nếu cậu lo.",
+    "I'm not nervous. I'm only saying she's been patient with us.": "Tôi không lo. Tôi chỉ nói cô ấy đã rất kiên nhẫn với mình.",
+    "Patient people are the ones you watch, Moreno. Remember that one.": "Người kiên nhẫn mới là người phải để mắt, Moreno. Nhớ lấy.",
+    "Please take your hand off that. It isn't in your custody.": "Làm ơn bỏ tay khỏi nó. Nó không thuộc quyền lưu giữ của ông.",
+    "Everything in this room is in my custody. That's my job.": "Mọi thứ trong phòng này thuộc quyền lưu giữ của tôi. Đó là việc của tôi.",
+    "Not this. This was sealed by order of a federal judge.": "Không phải cái này. Nó được niêm phong theo lệnh thẩm phán liên bang.",
+    "Then the judge can come down and tell me so himself.": "Vậy thẩm phán xuống đây mà nói với tôi.",
+    "Herself. And she would, but you won't like how it goes.": "Là nữ thẩm phán. Bà ấy sẽ xuống, nhưng ông sẽ không thích đâu.",
+    "You think I scare easy? I've been in worse rooms.": "Cô nghĩ tôi dễ sợ à? Tôi từng ở những chỗ tệ hơn.",
+    "I don't want you scared. I want you to hear me.": "Tôi không muốn ông sợ. Tôi muốn ông nghe tôi.",
+    "Go on, then. I'm listening. Moreno's camera is listening too.": "Nói đi. Tôi đang nghe. Camera của Moreno cũng đang nghe.",
+    "If that seal breaks in your hands, it can't go back.": "Nếu niêm phong vỡ trong tay ông, không thể hàn lại.",
+    "Wax is wax. Anybody can buy a stick of red wax.": "Sáp là sáp. Ai cũng mua được cây sáp đỏ.",
+    "The wax isn't the point. The tape and the form are.": "Sáp không quan trọng. Băng keo và phiếu mới quan trọng.",
+    "Everyone who touches that packet signs the form. Times, names, reasons.": "Ai chạm vào gói này cũng ký phiếu. Giờ, tên, lý do.",
+    "So I sign it too. Sergeant Hollis, opened for review. Simple.": "Thì tôi ký. Trung sĩ Hollis, mở để xem xét. Đơn giản.",
+    "That's exactly what it would say. Forever, on every copy.": "Đúng như vậy, nó sẽ ghi thế. Mãi mãi, trên mọi bản sao.",
+    "Signatures. You people and your signatures. Like ink ever proved anything.": "Chữ ký. Các người và chữ ký. Như thể mực chứng minh được gì.",
+    "You keep talking like you know what's inside better than me.": "Cô nói như thể cô biết bên trong có gì hơn tôi.",
+    "I do know. I wrote most of it. That's the difference.": "Tôi biết. Phần lớn là tôi viết. Khác biệt là ở đó.",
+    "Then there's nothing in there you can't just tell me yourself.": "Vậy chẳng có gì trong đó mà cô không nói thẳng với tôi được.",
+    "I can't tell you. I'm warning you. Those are different things.": "Tôi không thể nói. Tôi đang cảnh báo ông. Hai việc khác nhau.",
+    "Sounded like a threat. Moreno, did that sound like one?": "Nghe như đe dọa. Moreno, cậu thấy có giống không?",
+    "It sounded like a warning, Sarge. She said it real calm.": "Nghe như cảnh báo, sếp. Cô ấy nói rất bình tĩnh.",
+    "Calm. Everybody's calm until the paper's out on the table.": "Bình tĩnh. Ai cũng bình tĩnh cho đến khi giấy tờ phơi ra bàn.",
+    "The paper's already on the table. You're the one holding it.": "Giấy tờ đã ở trên bàn rồi. Người đang cầm nó là ông.",
+    "Moreno, get your notebook out. We're writing this up right now.": "Moreno, lấy sổ tay ra. Ta lập biên bản ngay bây giờ.",
+    "Subject refused to identify contents of an unlogged item. Write that.": "Đối tượng từ chối nêu nội dung của một vật chưa vào sổ. Ghi vào.",
+    "She gave her name, Sarge. And the exhibit number. It's logged.": "Cô ấy đã khai tên, sếp. Và số vật chứng. Nó đã được ghi.",
+    "Not in my ledger, it isn't. So it's unlogged. Write it.": "Không có trong sổ của tôi. Tức là chưa ghi. Ghi vào.",
+    "I can write that she asked to log it. That's true.": "Tôi ghi được là cô ấy đã yêu cầu ghi sổ. Đó là sự thật.",
+    "You've been here six months. You don't decide what happened, son.": "Cậu mới sáu tháng. Cậu không quyết định chuyện gì đã xảy ra, nhóc.",
+    "The camera decides, Sarge. That's what you told us in training.": "Camera quyết định, sếp. Sếp dạy chúng tôi vậy.",
+    "I told you a lot. Pick the parts that help you.": "Tôi dạy nhiều thứ. Chọn phần nào có lợi cho cậu.",
+    "Deputy Moreno. You don't have to write anything you didn't see.": "Phó cảnh sát Moreno. Anh không phải ghi điều anh không thấy.",
+    "Ma'am, with respect, please let me handle my own sergeant.": "Thưa chị, xin phép, để tôi tự lo với sếp của tôi.",
+    "Fair. Then I'll ask one thing. Please don't stop that camera.": "Được. Vậy tôi chỉ xin một điều. Đừng tắt camera.",
+    "I already told you. It runs the whole shift. That's policy.": "Tôi nói rồi. Nó chạy suốt ca. Đó là quy định.",
+    "Policy. You both love policy until it's your name on something.": "Quy định. Hai người mê quy định cho đến khi tên mình dính vào.",
+    "I'd like my identification back now, Sergeant. You've checked it.": "Giờ tôi muốn lấy lại giấy tờ, Trung sĩ. Ông kiểm tra xong rồi.",
+    "You'll get it back when that packet's logged properly.": "Cô sẽ lấy lại khi gói đó được ghi sổ đàng hoàng.",
+    "Then write it in properly. Exhibit number, time, my signature, done.": "Vậy ghi cho đúng. Số vật chứng, giờ, chữ ký của tôi, xong.",
+    "And contents. My ledger has a contents column. Always has.": "Và nội dung. Sổ của tôi có cột nội dung. Từ trước tới giờ vẫn có.",
+    "Your ledger has a column for sealed items too. Page one.": "Sổ của ông cũng có cột cho vật niêm phong. Trang một.",
+    "She's right, Sarge. There's a sealed column. I've seen it used.": "Cô ấy đúng, sếp. Có cột niêm phong. Tôi thấy từng dùng.",
+    "Moreno, one more word and you're working nights till Christmas.": "Moreno, nói thêm một chữ là cậu trực đêm tới Giáng sinh.",
+    "Yes, Sarge. But the column's still there either way.": "Rõ, sếp. Nhưng cái cột vẫn ở đó, dù thế nào.",
+    "Fine. Then the seal comes off, and the column won't matter.": "Được. Vậy niêm phong sẽ bị bóc, và cái cột chẳng còn quan trọng.",
+    "You say that like it's decided. It doesn't have to be.": "Ông nói như đã quyết rồi. Không nhất thiết phải vậy.",
+    "Who are you working for? Internal affairs? A defense firm?": "Cô làm cho ai? Nội vụ? Hay công ty luật bên bào chữa?",
+    "I work for the court. I've said that three times now.": "Tôi làm cho tòa. Tôi nói ba lần rồi.",
+    "Courts don't send auditors for nothing. Somebody complained. Who complained?": "Tòa không cử kiểm toán viên vô cớ. Có người khiếu nại. Ai khiếu nại?",
+    "Nobody complained to me. I counted. Counting doesn't need a complaint.": "Không ai khiếu nại với tôi. Tôi đếm. Đếm không cần khiếu nại.",
+    "Counting what? Boxes? I count boxes every Friday. They're all there.": "Đếm gì? Thùng à? Thứ Sáu nào tôi cũng đếm thùng. Đủ cả.",
+    "The boxes are all there. That isn't what I was counting.": "Thùng đủ cả. Nhưng tôi không đếm thùng.",
+    "Then what? Bags? Weights? Signatures? Just tell me what you counted.": "Vậy đếm gì? Túi? Cân nặng? Chữ ký? Nói thẳng đi.",
+    "Signatures. You were counting my signatures. That's what this is.": "Chữ ký. Cô đang đếm chữ ký của tôi. Chuyện là vậy.",
+    "Guess all you like. I'm not answering any of it here.": "Cứ đoán thoải mái. Ở đây tôi không trả lời câu nào.",
+    "That's not a no. Moreno, you heard. That wasn't a no.": "Đó không phải phủ nhận. Moreno, cậu nghe rồi. Không phải phủ nhận.",
+    "It wasn't a yes. I'm declining a question you can't ask.": "Cũng không phải thừa nhận. Tôi từ chối một câu hỏi ông không được hỏi.",
+    "I can ask anything I want in my own records room.": "Tôi muốn hỏi gì cũng được trong phòng hồ sơ của tôi.",
+    "You can ask. You can't open. That's where the line is.": "Ông hỏi được. Mở thì không. Ranh giới ở đó.",
+    "Lines. Everybody's got lines for me today. Nobody's got answers.": "Ranh giới. Hôm nay ai cũng có ranh giới cho tôi. Không ai có câu trả lời.",
+    "Here's an answer. It's ten fifty-two. I'm still standing here.": "Đây là câu trả lời. Bây giờ 10 giờ 52. Tôi vẫn đứng đây.",
+    "I could have walked out ten minutes ago. I didn't.": "Mười phút trước tôi đã có thể bỏ đi. Tôi không đi.",
+    "Because Moreno would've stopped you. I told him to stop you.": "Vì Moreno sẽ chặn cô. Tôi đã bảo nó chặn cô.",
+    "Because walking out breaks the chain. I don't break the chain.": "Vì bỏ đi là đứt chuỗi lưu giữ. Tôi không làm đứt chuỗi.",
+    "So you need my signature. You need me. Say it.": "Vậy cô cần chữ ký của tôi. Cô cần tôi. Nói đi.",
+    "I need a clean record. Your signature is part of it.": "Tôi cần một hồ sơ sạch. Chữ ký của ông là một phần.",
+    "Second time, Sergeant. Opening that won't end what you're afraid of.": "Lần thứ hai, Trung sĩ. Mở nó ra không chấm dứt điều ông sợ.",
+    "It will finish it. With your own hands, on camera.": "Nó sẽ kết thúc ông. Bằng chính tay ông, trước camera.",
+    "My camera? That's Moreno's camera. Moreno works for me. Not you.": "Camera của tôi? Đó là camera của Moreno. Moreno làm cho tôi. Không phải cô.",
+    "I hand-carried one of these once. Federal seal. Twenty-eleven, I think.": "Tôi từng tự tay mang một cái thế này. Niêm phong liên bang. Hình như năm 2011.",
+    "Then you remember how careful everyone was. Nobody touched the seal.": "Vậy ông nhớ mọi người cẩn thận thế nào. Không ai chạm vào niêm phong.",
+    "The captain made me sign three times between car and courtroom.": "Đại úy bắt tôi ký ba lần từ xe tới phòng xử.",
+    "Three signatures for one envelope. Did you wonder why, back then?": "Ba chữ ký cho một phong bì. Hồi đó ông có thắc mắc tại sao không?",
+    "I figured lawyers like paperwork. Lawyers always like their paperwork.": "Tôi nghĩ luật sư thích giấy tờ. Luật sư lúc nào cũng thích giấy tờ.",
+    "It's not for lawyers. It's for the accused. And the accuser.": "Không phải cho luật sư. Mà cho bị cáo. Và cả bên buộc tội.",
+    "A seal means nobody added anything, and nobody took anything away.": "Niêm phong nghĩa là không ai thêm gì, cũng không ai lấy bớt gì.",
+    "And you're telling me nobody's taken anything away from this one.": "Và cô bảo tôi là chưa ai lấy bớt gì khỏi cái này.",
+    "Not since I signed it at nine. Read the form yourself.": "Từ lúc tôi ký lúc chín giờ thì chưa. Ông tự đọc phiếu đi.",
+    "Bell, nine-oh-four. Bell, ten-thirty-eight. That's all it says. Just you.": "Bell, 9 giờ 04. Bell, 10 giờ 38. Chỉ vậy. Chỉ mình cô.",
+    "Just me. So everything inside is exactly as I left it.": "Chỉ mình tôi. Nên mọi thứ bên trong đúng như tôi để lại.",
+    "Ma'am, can I ask something? What happens if somebody opens it?": "Thưa chị, tôi hỏi được không? Nếu có người mở nó thì sao?",
+    "Then the next line on that form gets their name.": "Thì dòng tiếp theo trên phiếu sẽ ghi tên họ.",
+    "And the grand jury asks why. The answer goes on record.": "Và bồi thẩm đoàn sẽ hỏi tại sao. Câu trả lời vào hồ sơ.",
+    "Even if they just look? Even if they put it back?": "Kể cả chỉ nhìn thôi? Kể cả đặt lại?",
+    "There's no straight back, Deputy. The wax breaks once. Only once.": "Không có chuyện trả về như cũ, Phó cảnh sát. Sáp chỉ vỡ một lần.",
+    "She wants you scared, Moreno. It's a performance. Don't buy it.": "Cô ta muốn cậu sợ, Moreno. Chỉ là diễn thôi. Đừng tin.",
+    "I'm not scared, Sarge. I'm trying to understand what we're doing.": "Tôi không sợ, sếp. Tôi chỉ muốn hiểu mình đang làm gì.",
+    "What we're doing is our jobs. Somebody in this room should.": "Việc mình đang làm là công việc. Phải có người trong phòng này làm đi.",
+    "My job ends when that packet reaches 3B, seal whole.": "Việc của tôi kết thúc khi gói này tới 3B, niêm phong còn nguyên.",
+    "And when does my job end? When your paper says so?": "Còn việc của tôi kết thúc khi nào? Khi giấy của cô bảo vậy à?",
+    "I can't answer that. I only know where mine ends.": "Tôi không trả lời được. Tôi chỉ biết việc của tôi kết thúc ở đâu.",
+    "Eight minutes. You've got eight minutes, and so have I, apparently.": "Tám phút. Cô còn tám phút, và có vẻ tôi cũng vậy.",
+    "Here's what I think. You want me to be afraid.": "Tôi nghĩ thế này. Cô muốn tôi sợ.",
+    "Afraid men hand things over. I've watched it for years.": "Người sợ thì chịu giao nộp. Tôi xem cảnh đó nhiều năm rồi.",
+    "I don't want anything handed over. I want you to stop.": "Tôi không muốn ông giao nộp gì. Tôi muốn ông dừng lại.",
+    "Stop what? Asking questions in my own room? Doing my job?": "Dừng gì? Hỏi chuyện trong phòng của tôi? Làm việc của tôi?",
+    "Stop before your hands do something your head hasn't decided yet.": "Dừng trước khi tay ông làm điều đầu óc ông chưa quyết.",
+    "Moreno's watching. The camera's watching. Everyone wants to see me blink.": "Moreno đang nhìn. Camera đang nhìn. Ai cũng muốn thấy tôi chùn.",
+    "Nobody wants you to blink. I'd rather you just walked away.": "Không ai muốn ông chùn. Tôi chỉ mong ông bỏ đi.",
+    "Walk away and wait for a call? I've waited three weeks.": "Bỏ đi rồi chờ điện thoại? Tôi chờ ba tuần rồi.",
+    "Three weeks of nobody calling. Every morning, waiting for that phone.": "Ba tuần không ai gọi. Sáng nào cũng ngồi chờ cái điện thoại đó.",
+    "I know. That part I'm sorry about. Waiting is hard.": "Tôi biết. Chuyện đó tôi tiếc. Chờ đợi rất khó.",
+    "Don't you dare feel sorry for me. Not in my building.": "Đừng có thương hại tôi. Không phải trong tòa nhà của tôi.",
+    "Sarge, please. Let her sign it out. It's not too late.": "Sếp, làm ơn. Để cô ấy ký xuất đi. Chưa muộn đâu.",
+    "Right is me knowing what's coming before it lands.": "Đúng là khi tôi biết trước chuyện gì sắp tới.",
+    "This is the third time I'm saying it. Don't open that.": "Lần thứ ba tôi nói. Đừng mở nó.",
+    "Whatever you think is in there, opening it is worse.": "Dù ông nghĩ bên trong có gì, mở ra còn tệ hơn.",
+    "Believe you. A stranger who spent six weeks in my basement.": "Tin cô. Một người lạ ở hầm của tôi sáu tuần.",
+    "I won't reach for it again. It's yours now, Sergeant.": "Tôi sẽ không với tới nữa. Giờ nó là của ông, Trung sĩ.",
+    "Mine. Good. That's the first thing you've said that makes sense.": "Của tôi. Tốt. Đó là câu đầu tiên của cô có lý.",
+    "Moreno, note the time. Ten fifty-four. Sergeant Hollis reviewing contents.": "Moreno, ghi giờ. 10 giờ 54. Trung sĩ Hollis xem nội dung.",
+    "I'm noting the time, Sarge. And that she warned you.": "Tôi ghi giờ, sếp. Và ghi cả việc cô ấy đã cảnh báo sếp.",
+    "Note whatever you want. You'll see I was right about her.": "Muốn ghi gì thì ghi. Rồi cậu sẽ thấy tôi đúng về cô ta.",
+    "Ten fifty-four. I'll remember that time for a long while.": "10 giờ 54. Tôi sẽ nhớ giờ này rất lâu.",
+    "Ten fifty-four. Exhibit forty-one, seventeen, A. Seal broken by Sergeant Hollis.": "10 giờ 54. Vật chứng bốn mươi mốt, mười bảy, A. Niêm phong bị Trung sĩ Hollis phá.",
+    "Say it like a newsreader if you want. It's just wax.": "Muốn đọc như phát thanh viên cũng được. Chỉ là sáp thôi.",
+    "Sarge, you actually did it. You actually broke a federal seal.": "Sếp, sếp thật sự làm rồi. Sếp thật sự phá niêm phong liên bang.",
+    "Sarge? What does it say? You've gone completely white, Sarge.": "Sếp? Trong đó ghi gì? Mặt sếp trắng bệch rồi, sếp.",
+    "It's a grand jury cover sheet. Linwood County property room investigation.": "Là bìa hồ sơ bồi thẩm đoàn. Điều tra kho vật chứng quận Linwood.",
+    "The line underneath it names the subject of the investigation.": "Dòng bên dưới ghi tên đối tượng điều tra.",
+    "Whose name, Sarge? Tell me whose name is on that page.": "Tên ai vậy, sếp? Nói tôi nghe tên ai trên trang đó.",
+    "It's a mistake. Somebody typed this wrong. This is all wrong.": "Nhầm rồi. Ai đó đánh máy sai. Sai hết rồi.",
+    "Nobody typed it wrong. I checked that line three times.": "Không ai đánh sai. Tôi kiểm tra dòng đó ba lần.",
+    "Six cases. I logged thousands of bags. Thousands of them.": "Sáu vụ. Tôi ghi hàng nghìn túi. Hàng nghìn.",
+    "Six where the weights changed before trial. Your signature both times.": "Sáu vụ mà trọng lượng đổi trước phiên tòa. Cả hai lần đều chữ ký ông.",
+    "Signatures get copied. Anybody could have signed my name on those.": "Chữ ký bị sao chép. Ai cũng ký tên tôi được.",
+    "Ray Pruitt watched you sign them. He kept copies nine years.": "Ray Pruitt đã nhìn ông ký. Anh ấy giữ bản sao chín năm.",
+    "Ray. Of course it's Ray. He never could keep quiet.": "Ray. Tất nhiên là Ray. Nó chưa bao giờ giữ được mồm.",
+    "Ray kept quiet nine years. That's the part that broke him.": "Ray im lặng chín năm. Chính điều đó làm anh ấy gục.",
+    "Ma'am, is that why you needed it sealed? Because of him?": "Thưa chị, vì thế chị cần niêm phong? Vì anh ta?",
+    "It's sealed because every page has to reach the jury untouched.": "Niêm phong để mọi trang đến tay bồi thẩm đoàn nguyên vẹn.",
+    "Now it reaches them with one new page. His.": "Giờ nó đến với một trang mới. Của ông ta.",
+    "I didn't write anything. I opened an envelope. That's all.": "Tôi không viết gì. Tôi chỉ mở một phong bì. Vậy thôi.",
+    "On camera. After three warnings. In front of a deputy.": "Trước camera. Sau ba lần cảnh báo. Trước mặt một phó cảnh sát.",
+    "Moreno. Turn that thing off. Just for one minute. Off.": "Moreno. Tắt cái đó đi. Chỉ một phút. Tắt.",
+    "I can't, Sarge. You know I can't. And I won't.": "Tôi không thể, sếp. Sếp biết mà. Và tôi sẽ không tắt.",
+    "Reed. Calvin Reed is one of the six, isn't he?": "Reed. Calvin Reed là một trong sáu vụ, đúng không?",
+    "He's the first of the six. Nine years in Barlow State.": "Ông ấy là người đầu tiên trong sáu. Chín năm ở Barlow State.",
+    "The bag weighed what it weighed. I wrote what was there.": "Cái túi nặng bao nhiêu thì nặng bấy nhiêu. Tôi ghi những gì có đó.",
+    "At intake it was eleven grams. At trial, it was fifty-two.": "Lúc nhập kho là mười một gram. Lúc xét xử là năm mươi hai.",
+    "Eleven grams is a misdemeanor. Fifty-two was nine years. Your handwriting.": "Mười một gram là tội nhẹ. Năm mươi hai gram là chín năm. Chữ viết của ông.",
+    "You think a number on a form says who I am?": "Cô nghĩ một con số trên tờ phiếu nói lên tôi là ai sao?",
+    "No. But it tells a jury what a man did.": "Không. Nhưng nó cho bồi thẩm đoàn biết một người đã làm gì.",
+    "What happens now, ma'am? What am I supposed to do?": "Giờ sao, thưa chị? Tôi phải làm gì?",
+    "That's your call, Deputy. Not mine, and not his. Yours.": "Anh quyết định, Phó cảnh sát. Không phải tôi, không phải ông ta. Là anh.",
+    "Moreno. Eli. Listen to me. Think about your career.": "Moreno. Eli. Nghe tôi. Nghĩ đến sự nghiệp của cậu.",
+    "Six months in. Make this call and nobody here trusts you.": "Mới sáu tháng. Gọi cú này là không ai ở đây tin cậu nữa.",
+    "Sarge, you taught us the camera decides. It already decided.": "Sếp, sếp dạy là camera quyết định. Nó đã quyết định rồi.",
+    "I was talking about other people, son. Not about us.": "Tôi nói về người khác, nhóc. Không phải về chúng ta.",
+    "There isn't an us, Sarge. There's just what the camera saw.": "Không có chúng ta, sếp. Chỉ có những gì camera thấy.",
+    "Records to 3B. Sealed exhibit opened at the counter. Clerk, please.": "Phòng hồ sơ gọi 3B. Vật chứng niêm phong đã bị mở tại quầy. Mời thư ký.",
+    "They knew she was coming, Sarge. They've been waiting since ten.": "Họ biết cô ấy sẽ đến, sếp. Họ đợi từ 10 giờ.",
+    "Two marshals are coming down. The clerk wants you upstairs.": "Hai nhân viên tư pháp đang xuống. Thư ký muốn sếp lên trên.",
+    "Upstairs. Fourteen years, and I've never once been called upstairs.": "Lên trên. Mười bốn năm, chưa lần nào tôi được gọi lên trên.",
+    "You can walk up yourself, Sergeant. Nobody has to walk you.": "Ông tự đi lên được, Trung sĩ. Không ai phải dẫn ông.",
+    "Is that a kindness? From you? After everything you've just done?": "Đó là lòng tốt à? Từ cô? Sau tất cả những gì cô vừa làm?",
+    "It's the last choice you still get to make yourself.": "Đó là lựa chọn cuối cùng ông còn tự quyết được.",
+    "Deputy, log it with me. Opened at ten fifty-four.": "Phó cảnh sát, cùng tôi ghi sổ. Mở lúc 10 giờ 54.",
+    "Doctor Bell. I didn't think we'd see you down here again.": "Tiến sĩ Bell. Tôi không nghĩ sẽ gặp chị ở đây lần nữa.",
+    "Just one more signature. The grand jury released the exhibit back.": "Chỉ thêm một chữ ký. Bồi thẩm đoàn đã trả lại vật chứng.",
+    "Two signatures now, for everything. Mine and the clerk's. New rule.": "Giờ mọi thứ phải hai chữ ký. Của tôi và của thư ký. Quy định mới.",
+    "Good rule. Sounds like somebody who learned something. Who wrote it?": "Quy định hay. Nghe như người đã học được điều gì. Ai viết?",
+    "The oversight board. I asked them to keep the sealed column.": "Hội đồng giám sát. Tôi đã xin họ giữ cột niêm phong.",
+    "How are things here? Honestly. Not the version for the board.": "Ở đây thế nào? Nói thật. Không phải bản dành cho hội đồng.",
+    "Quiet. Some people don't talk to me. Most people do, actually.": "Yên ắng. Vài người không nói chuyện với tôi. Thật ra phần lớn thì có.",
+    "And Sergeant Hollis? I heard about the indictment, not much else.": "Còn Trung sĩ Hollis? Tôi nghe về bản cáo trạng, không biết gì thêm.",
+    "Suspended. His certification's gone. Trial's set for March, they're saying.": "Bị đình chỉ. Mất chứng chỉ. Nghe nói tháng Ba xét xử.",
+    "He sent me a note. Said I wrote the report right.": "Ông ấy gửi tôi một tờ giấy. Nói tôi viết báo cáo đúng.",
+    "That might be the truest thing he's written in years.": "Có lẽ là điều thật nhất ông ta viết trong nhiều năm.",
+    "Four of the six cases are vacated. Two more by Christmas.": "Bốn trong sáu vụ đã bị hủy án. Hai vụ nữa trước Giáng sinh.",
+    "And Mr. Reed? I was told he'd be down here today.": "Còn ông Reed? Tôi nghe nói hôm nay ông ấy xuống đây.",
+    "Any minute. He's coming for his property envelope. Nine years shelved.": "Sắp tới rồi. Ông ấy đến lấy phong bì tài sản. Nằm trên kệ chín năm.",
+    "They said upstairs to come here for my things. Calvin Reed.": "Họ bảo lên trên rồi xuống đây lấy đồ. Calvin Reed.",
+    "Yes, sir. It's ready. Watch, wallet, keys. Everything's logged.": "Vâng, thưa ông. Xong rồi. Đồng hồ, ví, chìa khóa. Đều đã ghi sổ.",
+    "You're Doctor Bell. My lawyer said you read every page twice.": "Cô là Tiến sĩ Bell. Luật sư tôi nói cô đọc mỗi trang hai lần.",
+    "Three times, Mr. Reed. Some pages I couldn't stop reading.": "Ba lần, ông Reed. Có trang tôi không dứt ra được.",
+    "Nine years I said the weight was wrong. Nobody listened.": "Chín năm tôi nói cân nặng sai. Không ai nghe.",
+    "It's written down now. In a place nobody gets to change.": "Giờ nó được viết ra rồi. Ở nơi không ai đổi được.",
+    "I don't know what to say to you. I keep trying.": "Tôi không biết nói gì với cô. Tôi cứ thử mãi.",
+    "You don't owe me anything. Sign for your things. They're yours.": "Ông không nợ tôi gì cả. Ký nhận đồ đi. Là của ông."
+  }
+}

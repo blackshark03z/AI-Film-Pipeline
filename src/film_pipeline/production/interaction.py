@@ -232,6 +232,9 @@ def placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[s
         elif a.mode == "OFF_FRAME":
             text = a.placement.strip()
             add(text if text.endswith(".") else text + ".")
+            if decl.gaze_target and decl.gaze_target != name:
+                # film08 SC10_g01: "eyes go just past the lens to frame-left" beside "looks at the sealed packet"
+                continue
             if a.side == "BEHIND_CAMERA":
                 add(f"{subject} looks toward the camera's side, never into the lens.")
             else:

@@ -73,21 +73,30 @@ class CoverageShot(ContractModel):
             # film04 SC01_g1 asked for a "two-shot, THEO left" with MARA alone in
             # frame, because the scene's axis book lists both people
             alone = [c for c in self.axis.visible if c in book.sides]
-            if len(self.axis.visible) == 1 and alone:
+            # film08: a third person off the axis pair (HOLLIS, centre) was
+            # dropped and the master read "wide two-shot" for three people
+            extra = [c for c in self.axis.eyelines if c not in book.sides]
+            if len(self.axis.visible) == 1 and alone and not extra:
                 return f"wide shot, {alone[0]} {book.sides[alone[0]].lower()}"
             placed = ", ".join(f"{c} {s.lower()}"
                                for c, s in book.sides.items())
-            kind = "wide two-shot" if len(book.sides) <= 2 else "wide shot"
-            return f"{kind}, {placed}"
+            kind = "wide two-shot" if len(book.sides) <= 2 and not extra \
+                else "wide shot"
+            also = f", with {' and '.join(extra)} also in frame" if extra else ""
+            return f"{kind}, {placed}{also}"
         if self.coverage == "TWO_SHOT":
             return "medium two-shot, profiles facing each other"
         if self.coverage == "OTS":
             return f"over {self.foreground}'s shoulder onto {self.subject}"
+        # the shot's own eyeline (set from its off-frame listener) wins over
+        # the axis partner; film08 HOLLIS has no partner and read "looking none"
+        look = self.axis.eyelines.get(self.subject, "none")
+        if look not in ("screen-left", "screen-right"):
+            look = book.eyeline_toward_partner(self.subject)
+        looking = f" looking {look}" if look != "none" else ""
         if self.coverage == "SINGLE":
-            return (f"close-up of {self.subject} looking "
-                    f"{book.eyeline_toward_partner(self.subject)}")
-        return (f"silent close-up of {self.subject} looking "
-                f"{book.eyeline_toward_partner(self.subject)}")
+            return f"close-up of {self.subject}{looking}"
+        return f"silent close-up of {self.subject}{looking}"
 
 
 class SceneUnit(ContractModel):

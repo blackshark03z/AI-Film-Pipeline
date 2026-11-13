@@ -1,0 +1,30 @@
+{
+  "film_id": "film08_chain_of_custody",
+  "title": "Chain of Custody",
+  "profile": "drama",
+  "language": "en",
+  "aspect": "16:9",
+  "fps": 24,
+  "resolution": "1280x720",
+  "generation_s": 6,
+  "budget": {
+    "credits_estimate": 2140,
+    "cap_factor": 1.5,
+    "caps": {}
+  },
+  "route": null,
+  "experiment": false,
+  "disclosure": {
+    "ai_label": "always"
+  },
+  "delegated_reviewers": [],
+  "rehearsal": false,
+  "gates": {
+    "1": "NOT_RUN",
+    "2": "NOT_RUN",
+    "3": "NOT_RUN",
+    "4": "NOT_RUN",
+    "5": "NOT_RUN",
+    "6": "NOT_RUN"
+  }
+}

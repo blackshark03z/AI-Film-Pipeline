@@ -1,0 +1,14 @@
+[
+  {
+    "role": "video+audio",
+    "name": "Google Flow",
+    "model": "Omni 1.2 Flash",
+    "settings": "360p, 6 s clips from start-frame stills"
+  },
+  {
+    "role": "image",
+    "name": "Google Flow",
+    "model": "Nano Banana 2.1",
+    "settings": "start-frame stills"
+  }
+]

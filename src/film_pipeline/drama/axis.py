@@ -66,14 +66,22 @@ class ShotAxisRecord(ContractModel):
 
 
 def axis_record(book: AxisBook, shot_id: str, visible: list[str], *,
-                looking_at_partner: bool = True) -> ShotAxisRecord:
-    """Build the record a compliant shot should have."""
+                looking_at_partner: bool = True,
+                eyelines: dict[str, Eyeline] | None = None) -> ShotAxisRecord:
+    """Build the record a compliant shot should have.
+
+    ``eyelines`` overrides the partner-derived eyeline per character: with
+    three people only two hold the axis, and the third (film08 HOLLIS,
+    centre) looks toward whoever the shot addresses, not a fixed partner.
+    """
+    looks = {c: (book.eyeline_toward_partner(c)
+                 if looking_at_partner and book.partner(c) else "none")
+             for c in visible}
+    looks.update({c: e for c, e in (eyelines or {}).items() if c in looks})
     return ShotAxisRecord(
         shot_id=shot_id,
         visible={c: book.sides[c] for c in visible if c in book.sides},
-        eyelines={c: (book.eyeline_toward_partner(c)
-                      if looking_at_partner and book.partner(c) else "none")
-                  for c in visible})
+        eyelines=looks)
 
 
 def check_axis(book: AxisBook, shots: list[ShotAxisRecord]) -> list[str]:
