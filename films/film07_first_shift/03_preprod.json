@@ -11438,6 +11438,36 @@
       "registered_at": "2026-11-12T12:59:39+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
       "approved_at": "2026-11-12T12:59:40+00:00"
+    },
+    "SC11_g01": {
+      "file": "media/stills/start_SC11_g01.jpg",
+      "sha256": "ea1e588f63dd64511b5b5ebda85612723b3d125c39b69f68e43b376e240d67ac",
+      "prompt_sha256": "b1ac8396c4ca1d90c6a9aa9d67a1148ddf31a8adbd8c8f0f2fab7ded9c0c619f",
+      "source": "Flow image mode (pane, gmail-3)",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T01:06:20+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T01:06:23+00:00"
+    },
+    "SC11_g03": {
+      "file": "media/stills/start_SC11_g03.jpg",
+      "sha256": "ea1e588f63dd64511b5b5ebda85612723b3d125c39b69f68e43b376e240d67ac",
+      "prompt_sha256": "b1ac8396c4ca1d90c6a9aa9d67a1148ddf31a8adbd8c8f0f2fab7ded9c0c619f",
+      "source": "Flow image mode (pane, gmail-3)",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T01:06:26+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T01:06:28+00:00"
+    },
+    "SC11_g02": {
+      "file": "media/stills/start_SC11_g02.jpg",
+      "sha256": "265f975c2b3485eb62007387d54076c56005ac9df1f2b5c2ba59505314034a99",
+      "prompt_sha256": "7d39895938837e066d7e800bf34969779c147394fc33dca3f94b32ec75c1c949",
+      "source": "Flow image mode (pane, gmail-3)",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T01:11:10+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T01:11:11+00:00"
     }
   }
 }
