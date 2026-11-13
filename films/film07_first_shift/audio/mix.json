@@ -1,0 +1,223 @@
+{
+  "film_id": "film07_first_shift",
+  "cut": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\media\\cut\\titled_cut.mp4",
+  "cut_sha256": "41b88e0bbddfb8f5b3d1ca5091555509e01237ce01b71d1b2365f38b2f37943b",
+  "output": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\media\\cut\\mixed.mp4",
+  "output_sha256": "3ff0e6af123e1dfcf288fd1d2fbc2c092134bdedecdf22a15c5f02da7b6584f2",
+  "total_s": 1799.458273,
+  "plan": {
+    "ambience_lufs": -40.0,
+    "sfx_gain_db": -6.0,
+    "duck_threshold_db": -50.0,
+    "duck_ratio": 8.0,
+    "duck_attack_ms": 20.0,
+    "duck_release_ms": 400.0,
+    "min_duck_depth_db": 6.0,
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "lufs_tolerance": 1.0,
+    "music": []
+  },
+  "stems": {
+    "dialogue": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\audio\\stems\\dialogue.wav",
+    "ambience": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\audio\\stems\\ambience.wav",
+    "sfx": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\audio\\stems\\sfx.wav",
+    "music": "D:\\AI FILM MAKER\\AFP-stable\\films\\film07_first_shift\\audio\\stems\\music.wav"
+  },
+  "ambience": [
+    {
+      "scene_id": "SC01",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 3.0,
+      "end_s": 152.499996,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC02",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 152.499996,
+      "end_s": 302.041659,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC03",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 302.041659,
+      "end_s": 451.416654,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC04",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 451.416654,
+      "end_s": 600.999984,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC05",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 600.999984,
+      "end_s": 750.416646,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC06",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 750.416646,
+      "end_s": 900.08331,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC07",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 900.08331,
+      "end_s": 1049.041635,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC08",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 1049.041635,
+      "end_s": 1198.541631,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC09",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 1198.541631,
+      "end_s": 1347.833292,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC10",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 1347.833292,
+      "end_s": 1497.208287,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC11",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 1497.208287,
+      "end_s": 1646.166612,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC12",
+      "location": "diner_morning",
+      "room_tone": "quiet empty diner, a refrigerator hum, a clock ticking, faint street air through the open door",
+      "start_s": 1646.166612,
+      "end_s": 1795.458273,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    }
+  ],
+  "sfx": [
+    {
+      "event_id": "SC02_g14",
+      "text": "no one speaks, no voices, no spoken words",
+      "slug": "no_one_speaks_no_voices_no_spoken_words",
+      "at_s": 230.208327,
+      "asset": "",
+      "sha256": ""
+    },
+    {
+      "event_id": "SC02_g24",
+      "text": "no one speaks, no voices, no spoken words",
+      "slug": "no_one_speaks_no_voices_no_spoken_words",
+      "at_s": 290.041659,
+      "asset": "",
+      "sha256": ""
+    }
+  ],
+  "music": [],
+  "duck": {
+    "frames": 5985,
+    "depth_db": 23.0,
+    "wanted_db": 6.0
+  },
+  "loudness": {
+    "before": {
+      "integrated_lufs": -26.1,
+      "peak_dbfs": -4.5
+    },
+    "after": {
+      "integrated_lufs": -14.3,
+      "peak_dbfs": -1.7
+    },
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "ok": true
+  },
+  "problems": [
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC02_g14: 'no one speaks, no voices, no spoken words' has no asset audio/sfx/no_one_speaks_no_voices_no_spoken_words.wav; the take's own sound stays"
+    },
+    {
+      "code": "SFX_UNSOURCED",
+      "severity": "WARN",
+      "detail": "SC02_g24: 'no one speaks, no voices, no spoken words' has no asset audio/sfx/no_one_speaks_no_voices_no_spoken_words.wav; the take's own sound stays"
+    }
+  ],
+  "ok": true
+}

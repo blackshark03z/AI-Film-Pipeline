@@ -583,7 +583,7 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - Code: `Reframe.hflip` (edit.py) mirrors after the crop; REFRAME_TAG also warns on a flipped tagged event (titles.py). Test added in tests/test_production_titles.py (47 passed with versions/finish_p20).
 
 **Decisions + why:**
-- SC07 wides g07/g19: SAM's hoodie reads darker because he stands against the bright door glass (backlight). A per-shot gain would blow out the window, so it is accepted as motivated light; the scene median grade evens exposure.
+- SC07 wides g07/g19: SAM's hoodie read darker against the bright door glass. The grade (median reference, clamp 1.25) lifts both wides +25%, which brings the hoodie close to the singles; the window clips slightly, accepted.
 - SC07 g19_t2 (touch instead of lift-and-set) kept: best of two, no story change.
 - `animatic.srt` already carries the new SC12_g23 line (line 1075): nothing to change.
 - `dialoguecheck` reads the dialogue stem from `audio/mix.json`, so it runs after `mix`, not before.
@@ -591,3 +591,22 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 **Credits:** take log books 357 takes x 6 = 2,142 cr of the 3,210 film cap. gmail-4: 910 -> 792 over SC07 (118 debited vs 168 booked; the 50 cr gap is not a multiple of 6, so it is not whole-send refunds; most likely the 910 reading was stale), then 792 -> 786 (6 cr). The book (2,142) is the conservative figure; the Flow activity page on gmail-4 was not opened.
 
 **Open:** grade report/render, titles, mix, dialoguecheck (audio/sync still unverified), mastercheck, validate.
+
+## 2026-11-13 HANDOFF: film07 post — MIX + MASTER QC done -> open: gate 4 SC09 g15-g19, gate 6 Owner accept
+**Run (all PASS):** grade (299/300 corrected, worst 63.6 -> 45.8) -> titles --render --color --clean-copy (270 cues en+vi, 21 reframes, 0 blocks, 17 WARN = CUE_TOO_FAST/REFRAME_TAG) -> mix (-14.3 LUFS, -1.7 dBTP) -> mastercheck (technical/audio/delivery PASS; sync WARN 18 CUE_NO_SPEECH; color WARN 1) -> dialoguecheck (Vosk: 269/270 PASS, mean recall 0.981). Master 29:59.5.
+
+**Decisions + why:**
+- Subtitle timing: `titles/cues.json` (new) holds explicit per-line cue times from Vosk word timings on the raw takes (first word -0.12 s, last word +0.3 s, min 0.7 s). The default whole-clip cues gave 32 SYNC_OFFSET blocks. SC08_g22 (long pauses) tightened by hand to 1.15-5.85 s.
+- Mix limiter 0.8 -> 0.75 (`drama/post.py normalize_loudness`): AAC encode added ~1 dB of true peak (-0.9 dBTP > -1.0 limit).
+- Concat lists use absolute paths (`production/edit.py`): ffmpeg resolved relative entries against the temp list dir.
+- SC04_g21 STT WARN ("alright" for "I'll write"): homophone, line audible and in sync on listen; no retake.
+- COLOR_MATCH WARN SC08_g19 (luma 39 vs ~78 for SAM singles): the dark red booth back fills half the frame; face exposure matches g18/g21 on a contact sheet. SC06 SAM singles (~31 after) are consistent with each other. Accepted.
+- SFX_UNSOURCED SC02_g14/g24 ("no one speaks..." is a negative prompt, not an SFX): take sound kept.
+- SC12_g23_t4 audio/sync PASS (recall 1.0, lip motion within ~0.2 s); picture lock signed agent:tech-lead.delegated-by.owner-khoikk03 (film05/06 precedent).
+- `generators.json`: Flow Omni 1.2 Flash 360p + Nano Banana 2.1 stills, no account labels.
+
+**Open defects:**
+- Gate 4 BLOCK: SC09_g15_t2, g16_t1, g17_t1, g18_t1, g19_t1 "prompt changed after this take was generated". The pane sends used hand-edited prompts that `plan` later overwrote; the original text is in no git object, worktree or transcript, and the shot declarations (04_shots) are identical at accept time and HEAD. Options: retake 5 x 6 cr = 30 cr (Chrome gmail-4), or an audited prompt-record-lost waiver in the gate (Codex review first). Hashes NOT altered, gate NOT weakened.
+- Gate 6: needs `deliver` (local archive) + Owner `deliver --accept` (reserved).
+
+**Test commands:** `PYTHONPATH=src uv run --frozen --extra qc pytest tests/test_production_titles.py tests/test_production_versions.py -q` (47 passed); render tests (38 passed); mix/post tests (14 passed). Chain env: `TMP=D:/tmp_film TEMP=D:/tmp_film AFP_STT_PYTHON=C:/Users/ADMIN/AppData/Local/Programs/Python/Python311/python.exe`, absolute `--film` path.

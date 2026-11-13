@@ -375,8 +375,8 @@ def normalize_loudness(path: Path, *, target_i: float = -14.0,
     """Rewrite ``path`` in place with normalised audio (video copied).
 
     1. loudnorm measure; 2. linear loudnorm; 3. a make-up gain (target
-    minus what pass 2 measured, capped) and an ``alimiter`` at 0.8
-    (~-1.9 dBFS) so the gain cannot push peaks over. Returns the measured
+    minus what pass 2 measured, capped) and an ``alimiter`` at 0.75
+    (~-2.5 dBFS, room for AAC overshoot) so the gain cannot push peaks over. Returns the measured
     {"integrated_lufs", "peak_dbfs"} of the written file.
     """
     probe = subprocess.run(
@@ -399,7 +399,7 @@ def normalize_loudness(path: Path, *, target_i: float = -14.0,
         p3 = Path(tmp) / "pass3.wav"
         _run("-i", str(p2), "-af",
              f"aresample=192000,volume={gain:.2f}dB,"
-             "alimiter=limit=0.8:attack=1:release=60:level=false,"
+             "alimiter=limit=0.75:attack=1:release=60:level=false,"  # -2.5 dBFS: AAC adds up to ~1 dB of true peak
              "aresample=48000", "-c:a", "pcm_f32le", str(p3))
         tmp_out = path.with_name(path.stem + ".norm" + path.suffix)
         _run("-i", str(path), "-i", str(p3), "-map", "0:v", "-map", "1:a",

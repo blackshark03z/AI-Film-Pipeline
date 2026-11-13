@@ -1,0 +1,3082 @@
+{
+  "film_id": "film07_first_shift",
+  "ok": true,
+  "engine": "vosk-small-en-us-0.15",
+  "rows": [
+    {
+      "event_id": "SC01_g02",
+      "line_no": 28,
+      "character": "RUTH",
+      "expected": "You're early. I haven't even switched the front lights on.",
+      "heard": "your early i haven't even switch the front lights on",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g03",
+      "line_no": 33,
+      "character": "SAM",
+      "expected": "Six meant six. I didn't want you waiting for me.",
+      "heard": "six months six i didn't want you waiting for me",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "meant"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g04",
+      "line_no": 38,
+      "character": "RUTH",
+      "expected": "I wasn't expecting new shoes. Those look properly dry, anyway.",
+      "heard": "i wasn't expecting new shoes those look properly dry anyway",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g05",
+      "line_no": 43,
+      "character": "SAM",
+      "expected": "The shop had one pair left that actually fit me.",
+      "heard": "the shop had one pair left that actually fit me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g06",
+      "line_no": 48,
+      "character": "RUTH",
+      "expected": "Good. You can leave your coat on for a minute.",
+      "heard": "good you can leave your code on for a minute",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "coat"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g07",
+      "line_no": 53,
+      "character": "SAM",
+      "expected": "Is that notice on the counter meant for the window?",
+      "heard": "is that notice on the counter meant for the window",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g09",
+      "line_no": 62,
+      "character": "RUTH",
+      "expected": "I hadn't decided where it ought to go just yet.",
+      "heard": "i hadn't decided where it ought to go just yet",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g10",
+      "line_no": 67,
+      "character": "SAM",
+      "expected": "It says permanently. That's quite a word to leave out.",
+      "heard": "it says permanently that's quite a word to leave out",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g11",
+      "line_no": 72,
+      "character": "RUTH",
+      "expected": "I know what it says. I had it printed myself.",
+      "heard": "i know what it says i had it printed myself",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g12",
+      "line_no": 77,
+      "character": "SAM",
+      "expected": "Then should I have called before coming down this morning?",
+      "heard": "then should i have called before coming down this morning",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g13",
+      "line_no": 82,
+      "character": "RUTH",
+      "expected": "No. You came when I asked you. You did right.",
+      "heard": "no you came when i asked you you did right",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g14",
+      "line_no": 87,
+      "character": "SAM",
+      "expected": "I thought the first thing would be learning the till.",
+      "heard": "i thought the first thing would be learning the to",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "till"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g15",
+      "line_no": 92,
+      "character": "RUTH",
+      "expected": "We can leave the till alone until we've had coffee.",
+      "heard": "we can leave the till alone until we've had coffee",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g17",
+      "line_no": 101,
+      "character": "SAM",
+      "expected": "This one's empty. Were you going to make some now?",
+      "heard": "this one's empty where you gonna make some now",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "going",
+        "to"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g18",
+      "line_no": 106,
+      "character": "RUTH",
+      "expected": "I was going to ask if you still take milk.",
+      "heard": "i was going to ask if you still take milk",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g19",
+      "line_no": 111,
+      "character": "SAM",
+      "expected": "I do, but coffee isn't why I came here today.",
+      "heard": "i do but coffee isn't why i came here today",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g20",
+      "line_no": 116,
+      "character": "RUTH",
+      "expected": "I didn't say it was. Please give me a minute.",
+      "heard": "i didn't say it was please give me a minute",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g21",
+      "line_no": 121,
+      "character": "SAM",
+      "expected": "Was that notice printed before you offered me the job?",
+      "heard": "was that noticed printed before you offered me the job",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g22",
+      "line_no": 126,
+      "character": "RUTH",
+      "expected": "Yes. It was already here when we talked that night.",
+      "heard": "yes it was already here when we talk that night",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g23",
+      "line_no": 131,
+      "character": "SAM",
+      "expected": "Then I need you to explain what I'm here for.",
+      "heard": "then i need you to explain what i'm here for",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g25",
+      "line_no": 140,
+      "character": "RUTH",
+      "expected": "All right. Let's sit where we can actually hear ourselves.",
+      "heard": "alright let's sit where we can actually hear ourselves",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "all"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g02",
+      "line_no": 157,
+      "character": "RUTH",
+      "expected": "I thought we'd sit a while before doing anything else.",
+      "heard": "i thought we'd sit a while before doing anything else",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g03",
+      "line_no": 162,
+      "character": "SAM",
+      "expected": "You could have asked me for breakfast instead of work.",
+      "heard": "you could have asked me for breakfast instead of work",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g04",
+      "line_no": 167,
+      "character": "RUTH",
+      "expected": "You might not have come if I'd called it breakfast.",
+      "heard": "you might not have come if i'd called it breakfast",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g05",
+      "line_no": 172,
+      "character": "SAM",
+      "expected": "You don't know that. You never gave me that choice.",
+      "heard": "you don't know that you never gave me that choice",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g06",
+      "line_no": 177,
+      "character": "RUTH",
+      "expected": "No. I didn't. I thought I was making it easier.",
+      "heard": "no i didn't i thought i was making it easier",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g08",
+      "line_no": 186,
+      "character": "SAM",
+      "expected": "Easier for which of us? I'm honestly asking you that.",
+      "heard": "easier for which of us i'm honestly asking you that",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g09",
+      "line_no": 191,
+      "character": "RUTH",
+      "expected": "For me, probably. I didn't want another morning here alone.",
+      "heard": "for me probably i didn't want another morning here alone",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g10",
+      "line_no": 196,
+      "character": "SAM",
+      "expected": "So this was supposed to be your last morning here?",
+      "heard": "so this was supposed to be your last morning here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g11",
+      "line_no": 201,
+      "character": "RUTH",
+      "expected": "One proper morning. Before I put that thing on display.",
+      "heard": "one proper morning before i put that thing on display",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g12",
+      "line_no": 206,
+      "character": "SAM",
+      "expected": "And I was supposed to sit here while you closed?",
+      "heard": "and i was supposed to sit here while you closed",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g13",
+      "line_no": 211,
+      "character": "RUTH",
+      "expected": "I hadn't worked out what I'd say when you arrived.",
+      "heard": "i hadn't worked out what i'd say when you arrived",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g15",
+      "line_no": 220,
+      "character": "SAM",
+      "expected": "You told me six. I spent the night planning around it.",
+      "heard": "you told me six i spent the night planning around it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g16",
+      "line_no": 225,
+      "character": "RUTH",
+      "expected": "I meant that part. I wanted you to be here.",
+      "heard": "i meant that part i wanted you to be here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g17",
+      "line_no": 230,
+      "character": "SAM",
+      "expected": "Being here isn't the same as having somewhere to work.",
+      "heard": "being here isn't the same as having somewhere to work",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g18",
+      "line_no": 235,
+      "character": "RUTH",
+      "expected": "No. It isn't. I should have said what was happening.",
+      "heard": "no it isn't i should have said what was happening",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g19",
+      "line_no": 240,
+      "character": "SAM",
+      "expected": "I can hear bad news. I can't plan around guesses.",
+      "heard": "i can hear bad news i can't plan around guesses",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g20",
+      "line_no": 245,
+      "character": "RUTH",
+      "expected": "Then ask me what you need to know. I'll answer.",
+      "heard": "then ask me what you need to know i'll answer",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g21",
+      "line_no": 250,
+      "character": "SAM",
+      "expected": "Is there any work here that you actually need done?",
+      "heard": "is there any work here that you actually need done",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g22",
+      "line_no": 255,
+      "character": "RUTH",
+      "expected": "There is plenty. I just can't promise where it leads.",
+      "heard": "there is plenty i just can't promise where it leads",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g23",
+      "line_no": 260,
+      "character": "SAM",
+      "expected": "I'm asking about this morning. Start with what's actually here.",
+      "heard": "i'm asking about this morning start with what's actually here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g25",
+      "line_no": 269,
+      "character": "RUTH",
+      "expected": "The counter needs setting. We can start with that much.",
+      "heard": "the counter need setting we can start with that much",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g01",
+      "line_no": 282,
+      "character": "RUTH",
+      "expected": "Only this end first. The other stools can stay empty.",
+      "heard": "only this and first the other stores can stay empty",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "end",
+        "stools"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g02",
+      "line_no": 287,
+      "character": "SAM",
+      "expected": "How many places do you normally set before opening up?",
+      "heard": "how many places do you normally set before opening up",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g03",
+      "line_no": 292,
+      "character": "RUTH",
+      "expected": "All eight, usually. Then the booths, if I have time.",
+      "heard": "eight usually then the booths if i have time",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "all"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g04",
+      "line_no": 297,
+      "character": "SAM",
+      "expected": "You said this end. Does that mean two places today?",
+      "heard": "you said this end does that mean to places today",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g05",
+      "line_no": 302,
+      "character": "RUTH",
+      "expected": "Two is enough for now. I keep forgetting that part.",
+      "heard": "two is enough for now i keep forgetting that part",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g07",
+      "line_no": 311,
+      "character": "SAM",
+      "expected": "Do the handles face the person or face the till?",
+      "heard": "do the handles face the person or face the till",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g08",
+      "line_no": 316,
+      "character": "RUTH",
+      "expected": "The person, unless they're left handed and move it themselves.",
+      "heard": "the person unless they're left handed and move it themselves",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g09",
+      "line_no": 321,
+      "character": "SAM",
+      "expected": "Good. That's something I can check without guessing your mind.",
+      "heard": "good that's something i can check without getting your mind",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "guessing"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g10",
+      "line_no": 326,
+      "character": "RUTH",
+      "expected": "You'll have to ask things. I haven't trained anyone lately.",
+      "heard": "you'll have to ask things i haven't trained any one lately",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "anyone"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g11",
+      "line_no": 331,
+      "character": "SAM",
+      "expected": "I can ask. Will you tell me when something matters?",
+      "heard": "i can ask where you tell me when something matters",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "will"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g12",
+      "line_no": 336,
+      "character": "RUTH",
+      "expected": "Yes. And when it doesn't, I'll try to say that.",
+      "heard": "yes and when it doesn't i'll try to say that",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g14",
+      "line_no": 345,
+      "character": "SAM",
+      "expected": "Are these two clean, or are they waiting for washing?",
+      "heard": "are these to clean are they waiting for washing",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "for"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g15",
+      "line_no": 350,
+      "character": "RUTH",
+      "expected": "Clean. The dirty ones stay in the tray behind me.",
+      "heard": "clean the dirty ones stay in the tray behind me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g16",
+      "line_no": 355,
+      "character": "SAM",
+      "expected": "Separate trays would help me keep the two things straight.",
+      "heard": "separate trays would help me keep the to things straight",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g17",
+      "line_no": 360,
+      "character": "RUTH",
+      "expected": "There used to be one. It cracked a while back.",
+      "heard": "there used to be one it cracked a while back",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g18",
+      "line_no": 365,
+      "character": "SAM",
+      "expected": "Could an empty shelf do until you replace the tray?",
+      "heard": "could an empty shelf do until you replace the tray",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g19",
+      "line_no": 370,
+      "character": "RUTH",
+      "expected": "The lower shelf is free. Don't put anything hot there.",
+      "heard": "the lower shelf is free don't put anything hot there",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g21",
+      "line_no": 379,
+      "character": "SAM",
+      "expected": "I'll leave this here, away from the clean cup spaces.",
+      "heard": "i'll leave this here away from the clean cup spaces",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g22",
+      "line_no": 384,
+      "character": "RUTH",
+      "expected": "That's sensible. I usually end up looking for the thing.",
+      "heard": "that's sensible i usually end up looking for the thing",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g23",
+      "line_no": 389,
+      "character": "SAM",
+      "expected": "Then that can be my first job. Keeping this end ready.",
+      "heard": "then that can be my first job keeping this and ready",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "end"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g24",
+      "line_no": 394,
+      "character": "RUTH",
+      "expected": "It won't take three hours to put two mugs out.",
+      "heard": "it won't take three hours to put two mugs out",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g25",
+      "line_no": 399,
+      "character": "SAM",
+      "expected": "Then tell me the next job when this one's done.",
+      "heard": "then tell me the next job when this one's done",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g01",
+      "line_no": 412,
+      "character": "SAM",
+      "expected": "Before we do another job, we need to discuss pay.",
+      "heard": "before we do another job we need to discuss pay",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g02",
+      "line_no": 417,
+      "character": "RUTH",
+      "expected": "I was going to get to that. Fifteen an hour.",
+      "heard": "i was gonna get to that fifteen an hour",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "going",
+        "to"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g03",
+      "line_no": 422,
+      "character": "SAM",
+      "expected": "For how many hours today, including the time we're talking?",
+      "heard": "for how many hours today including the time we're talking",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g04",
+      "line_no": 427,
+      "character": "RUTH",
+      "expected": "Six until nine. Forty five dollars for the whole morning.",
+      "heard": "six until nine forty five dollars for the whole morning",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g05",
+      "line_no": 432,
+      "character": "SAM",
+      "expected": "And that's work, even if nobody comes through the door?",
+      "heard": "and that's work even if nobody comes through the door",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g06",
+      "line_no": 437,
+      "character": "RUTH",
+      "expected": "Of course it is. You came here because I asked.",
+      "heard": "of course it is you came here because i asked",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g08",
+      "line_no": 446,
+      "character": "SAM",
+      "expected": "Can you pay that today, without using tomorrow's takings first?",
+      "heard": "can you pay that today without using tomorrow's takings first",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g09",
+      "line_no": 451,
+      "character": "RUTH",
+      "expected": "Yes. Today's money is already separate from the bill money.",
+      "heard": "yes today's money is already separate from the bill money",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g10",
+      "line_no": 456,
+      "character": "SAM",
+      "expected": "I need to ask. I've worked places that answered differently.",
+      "heard": "i need to ask i've worked places that answered differently",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g11",
+      "line_no": 461,
+      "character": "RUTH",
+      "expected": "You don't need to explain why you want paying, Sam.",
+      "heard": "you don't need to explain why you want paying sam",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g12",
+      "line_no": 466,
+      "character": "SAM",
+      "expected": "Then don't make that face when I ask about it.",
+      "heard": "then don't make that face when i ask about it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g13",
+      "line_no": 471,
+      "character": "RUTH",
+      "expected": "What face? I'm trying to remember where I put things.",
+      "heard": "what face i'm trying to remember where i put things",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g15",
+      "line_no": 480,
+      "character": "RUTH",
+      "expected": "All right. I don't like admitting how little is certain.",
+      "heard": "alright i don't like admitting how little is certain",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "all"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g16",
+      "line_no": 485,
+      "character": "SAM",
+      "expected": "I don't need everything certain. I need today's part clear.",
+      "heard": "i don't need everything certain i need to days part clear",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g17",
+      "line_no": 490,
+      "character": "RUTH",
+      "expected": "Today is paid. Tomorrow is something we haven't agreed yet.",
+      "heard": "today is paid tomorrow is something we haven't agreed yet",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g18",
+      "line_no": 495,
+      "character": "SAM",
+      "expected": "If today goes well, would there actually be another shift?",
+      "heard": "if today goes well with their actually be another shift",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "would"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g19",
+      "line_no": 500,
+      "character": "RUTH",
+      "expected": "I don't know yet. I'm sorry, but that's the answer.",
+      "heard": "i don't know yet i'm sorry but that's the answer",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g21",
+      "line_no": 509,
+      "character": "SAM",
+      "expected": "I'll write today down. I won't write tomorrow in yet.",
+      "heard": "alright today down i won't write tomorrow and yet",
+      "source": "stem",
+      "recall": 0.7,
+      "missing": [
+        "ill",
+        "write",
+        "in"
+      ],
+      "verdict": "WARN"
+    },
+    {
+      "event_id": "SC04_g22",
+      "line_no": 514,
+      "character": "RUTH",
+      "expected": "That sounds fair. You can stop at nine without asking.",
+      "heard": "that sounds fair you can stop at nine without asking",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g23",
+      "line_no": 519,
+      "character": "SAM",
+      "expected": "If you're behind, I still stop unless we agree otherwise?",
+      "heard": "if you're behind i still stop unless we agree otherwise",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g24",
+      "line_no": 524,
+      "character": "RUTH",
+      "expected": "Yes. I won't keep you here by looking worn out.",
+      "heard": "yes i won't keep you here by looking worn out",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g25",
+      "line_no": 529,
+      "character": "SAM",
+      "expected": "Good. Then we can talk about the work without guessing.",
+      "heard": "good then we can talk about the work without guessing",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g01",
+      "line_no": 542,
+      "character": "RUTH",
+      "expected": "You haven't asked whether this changes what we discussed before.",
+      "heard": "you haven't asked whether this changes what we discussed before",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g02",
+      "line_no": 547,
+      "character": "SAM",
+      "expected": "I've been trying to keep those things apart this morning.",
+      "heard": "i've been trying to keep those things apart this morning",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g03",
+      "line_no": 552,
+      "character": "RUTH",
+      "expected": "I told you to buy shoes. I meant that, Sam.",
+      "heard": "i told you to buy shoes i meant that sam",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g04",
+      "line_no": 557,
+      "character": "SAM",
+      "expected": "I did. But the rest of that money is mine?",
+      "heard": "i did but the rest of that money is mine",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g05",
+      "line_no": 562,
+      "character": "RUTH",
+      "expected": "Yes. It isn't a deposit on keeping this place open.",
+      "heard": "yes it isn't a deposit on keeping this place open",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g07",
+      "line_no": 571,
+      "character": "SAM",
+      "expected": "I needed you to say that without me offering first.",
+      "heard": "i needed you to say that without me offering first",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g08",
+      "line_no": 576,
+      "character": "RUTH",
+      "expected": "Were you going to offer? Please don't tell me yes.",
+      "heard": "where you going to offer please don't tell me yes",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g09",
+      "line_no": 581,
+      "character": "SAM",
+      "expected": "I thought about it when I saw the closed notice.",
+      "heard": "i thought about it when i saw the clothes notice",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "closed"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g10",
+      "line_no": 586,
+      "character": "RUTH",
+      "expected": "Then I gave you the wrong idea by hiding things.",
+      "heard": "then i gave you the wrong idea by hiding things",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g11",
+      "line_no": 591,
+      "character": "SAM",
+      "expected": "You made it hard to know what you actually wanted.",
+      "heard": "you made it hard to know what you actually wanted",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g12",
+      "line_no": 596,
+      "character": "RUTH",
+      "expected": "I wanted someone here. I should have asked you plainly.",
+      "heard": "i wanted someone here i should have asked you plainly",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g14",
+      "line_no": 605,
+      "character": "SAM",
+      "expected": "I can come for breakfast without buying part of your problems.",
+      "heard": "i can come for breakfast without buying part of your problems",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g15",
+      "line_no": 610,
+      "character": "RUTH",
+      "expected": "You can. And you can take another job without asking.",
+      "heard": "you can and you can take another job without asking",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g16",
+      "line_no": 615,
+      "character": "SAM",
+      "expected": "Even if you teach me things and this goes badly?",
+      "heard": "even if you teach me things and this goes badly",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g17",
+      "line_no": 620,
+      "character": "RUTH",
+      "expected": "Yes. Teaching you doesn't make your next decision belong here.",
+      "heard": "yes teaching you doesn't make your next decision belong here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g18",
+      "line_no": 625,
+      "character": "SAM",
+      "expected": "I don't want every mistake measured against what happened then.",
+      "heard": "i don't want every mistake measured against what happened then",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g19",
+      "line_no": 630,
+      "character": "RUTH",
+      "expected": "Neither do I. But money mistakes will still need explaining.",
+      "heard": "neither do i but money mistakes will still need explaining",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g21",
+      "line_no": 639,
+      "character": "SAM",
+      "expected": "That's fair, if you ask before deciding what I meant.",
+      "heard": "that's fair if you ask before deciding what i meant",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g22",
+      "line_no": 644,
+      "character": "RUTH",
+      "expected": "I'll ask. You tell me straight, even when you're embarrassed.",
+      "heard": "i'll ask you tell me straight even when you're embarrassed",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g23",
+      "line_no": 649,
+      "character": "SAM",
+      "expected": "I can do that better if the answer isn't already chosen.",
+      "heard": "i can do that better if the answer is and already chosen",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "isnt"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g24",
+      "line_no": 654,
+      "character": "RUTH",
+      "expected": "Then we'll both have something to practise while we're here.",
+      "heard": "then we'll both have something to practice while we're here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g25",
+      "line_no": 659,
+      "character": "SAM",
+      "expected": "All right. My savings stay separate. So does this job.",
+      "heard": "my savings stay separate so does this job",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "all",
+        "right"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g01",
+      "line_no": 672,
+      "character": "SAM",
+      "expected": "What made you print the notice instead of asking for help?",
+      "heard": "what made you print the notice instead of asking for help",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g02",
+      "line_no": 677,
+      "character": "RUTH",
+      "expected": "I asked in little ways. Nobody knew what I meant.",
+      "heard": "i asked in little ways nobody knew what i meant",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g03",
+      "line_no": 682,
+      "character": "SAM",
+      "expected": "You could have said the cook leaving changes the hours.",
+      "heard": "you could have said the cook leaving changes the hours",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g04",
+      "line_no": 687,
+      "character": "RUTH",
+      "expected": "I kept thinking I'd manage until I found somebody else.",
+      "heard": "i kept thinking i'd manage until i found somebody else",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g05",
+      "line_no": 692,
+      "character": "SAM",
+      "expected": "Was there somebody else coming, or were you just hoping?",
+      "heard": "was there somebody else coming or were you just hoping",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g06",
+      "line_no": 697,
+      "character": "RUTH",
+      "expected": "Just hoping. Then I started leaving jobs for the next morning.",
+      "heard": "just hoping then i started leaving jobs for the next morning",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g08",
+      "line_no": 706,
+      "character": "RUTH",
+      "expected": "I can still do the work. I can't do all of it.",
+      "heard": "i can still do the work i can't do all of it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g09",
+      "line_no": 711,
+      "character": "SAM",
+      "expected": "Which part makes you want to turn round at the door?",
+      "heard": "which part makes you want to turn round at the door",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g10",
+      "line_no": 716,
+      "character": "RUTH",
+      "expected": "Opening everything when I know I'll be closing everything alone.",
+      "heard": "opening everything when i know i'll be closing everything alone",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g11",
+      "line_no": 721,
+      "character": "SAM",
+      "expected": "Then maybe everything is too much to open this week.",
+      "heard": "then maybe everything is too much to open this week",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g12",
+      "line_no": 726,
+      "character": "RUTH",
+      "expected": "People expect the booths, the hot food, all of it.",
+      "heard": "people expect the booths the hot food all of it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g14",
+      "line_no": 735,
+      "character": "SAM",
+      "expected": "You don't have to promise every usual thing before breakfast.",
+      "heard": "you don't have to promise every usual thing before breakfast",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g15",
+      "line_no": 740,
+      "character": "RUTH",
+      "expected": "I don't want them walking in and thinking we've given up.",
+      "heard": "i don't want them walking in and thinking we've given up",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g16",
+      "line_no": 745,
+      "character": "SAM",
+      "expected": "They might think you changed the hours because you needed to.",
+      "heard": "they might think you change the hours because you needed to",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g17",
+      "line_no": 750,
+      "character": "RUTH",
+      "expected": "You make it sound simple. I know it won't be.",
+      "heard": "you make it sound simple i know it won't be",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g18",
+      "line_no": 755,
+      "character": "SAM",
+      "expected": "I'm saying smaller. You can still tell me it's hard.",
+      "heard": "i'm saying smaller you can still tell me it's hard",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g20",
+      "line_no": 764,
+      "character": "RUTH",
+      "expected": "I wanted that notice to make the decision for me.",
+      "heard": "i wanted that notice to make the decision for me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g21",
+      "line_no": 769,
+      "character": "SAM",
+      "expected": "Do you want to close, if you can choose again?",
+      "heard": "do you want a close if you can choose again",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "to"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g22",
+      "line_no": 774,
+      "character": "RUTH",
+      "expected": "I want to stop doing mornings that leave me flattened.",
+      "heard": "i want to stop doing mornings that leave me flattened",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g23",
+      "line_no": 779,
+      "character": "SAM",
+      "expected": "That's different. What would a morning you could manage look like?",
+      "heard": "that's different what would a morning you could manage look like",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g24",
+      "line_no": 784,
+      "character": "RUTH",
+      "expected": "One counter. Short hours. And somebody telling me to stop.",
+      "heard": "one counter short hours and some telling me to stop",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "somebody"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g25",
+      "line_no": 789,
+      "character": "SAM",
+      "expected": "Let's work out that morning before we decide about forever.",
+      "heard": "let's work out that morning before we decide about forever",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g01",
+      "line_no": 802,
+      "character": "RUTH",
+      "expected": "Coffee and toast first. That's what I could manage myself.",
+      "heard": "coffee and toast first that's what i could manage myself",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g02",
+      "line_no": 807,
+      "character": "SAM",
+      "expected": "Can you manage both while showing me what to do?",
+      "heard": "can you manage both while showing me what to do",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g03",
+      "line_no": 812,
+      "character": "RUTH",
+      "expected": "If you handle the clean cups and keep this counter clear.",
+      "heard": "if you handle the clean cups and keep this counter clear",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g04",
+      "line_no": 817,
+      "character": "SAM",
+      "expected": "I haven't worked the machine. I shouldn't guess with that.",
+      "heard": "i haven't worked the machine i shouldn't guess with that",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g05",
+      "line_no": 822,
+      "character": "RUTH",
+      "expected": "You won't. I do the hot things until you've learned.",
+      "heard": "you won't i do the hot things until you've learned",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g06",
+      "line_no": 827,
+      "character": "SAM",
+      "expected": "And if somebody asks me for something we aren't serving?",
+      "heard": "and if somebody asked me for something we aren't serving",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "asks"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g08",
+      "line_no": 836,
+      "character": "RUTH",
+      "expected": "Tell them the choices. If they're unhappy, you call me.",
+      "heard": "tell them the choices if they're unhappy you call me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g09",
+      "line_no": 841,
+      "character": "SAM",
+      "expected": "You won't change your mind and start the whole kitchen?",
+      "heard": "you won't change your mind and start the whole kitchen",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g10",
+      "line_no": 846,
+      "character": "RUTH",
+      "expected": "I might want to. You'll probably see it on my face.",
+      "heard": "i might want to you'll probably see it on my face",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g11",
+      "line_no": 851,
+      "character": "SAM",
+      "expected": "Then give me something definite I can remind you of.",
+      "heard": "then give me something definite i can remind you of",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g12",
+      "line_no": 856,
+      "character": "RUTH",
+      "expected": "No breakfast plates this week. Just the things we agreed.",
+      "heard": "no breakfast plates this week just the things we agreed",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g13",
+      "line_no": 861,
+      "character": "SAM",
+      "expected": "Do we leave the booths closed, even if they're empty?",
+      "heard": "do we leave the booths closed even if they're empty",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g14",
+      "line_no": 866,
+      "character": "RUTH",
+      "expected": "Yes. Four counter seats, so I can see what's happening.",
+      "heard": "yes for counter seats so i can see what's happening",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g15",
+      "line_no": 871,
+      "character": "SAM",
+      "expected": "You said two places earlier. Are we changing that already?",
+      "heard": "you said two places earlier are we changing that already",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g16",
+      "line_no": 876,
+      "character": "RUTH",
+      "expected": "You're right. Two first. We can discuss four another day.",
+      "heard": "you're right to first we can discuss for another day",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g17",
+      "line_no": 881,
+      "character": "SAM",
+      "expected": "I'm not trying to catch you. I need instructions that hold.",
+      "heard": "i'm not trying to catch you i need instructions that hold",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g18",
+      "line_no": 886,
+      "character": "RUTH",
+      "expected": "Then two seats hold. I can live with two seats.",
+      "heard": "then to seats hold i can live with two seats",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g20",
+      "line_no": 895,
+      "character": "SAM",
+      "expected": "We should put the short menu somewhere people can read.",
+      "heard": "we should put the short menu some where people can read",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "somewhere"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g21",
+      "line_no": 900,
+      "character": "RUTH",
+      "expected": "I'll explain it before they sit. That's my job today.",
+      "heard": "i'll explain it before they said that's my job today",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "sit"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g22",
+      "line_no": 905,
+      "character": "SAM",
+      "expected": "And I keep this bit ready without promising anything extra.",
+      "heard": "and i keep this bit ready without promising anything extra",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g23",
+      "line_no": 910,
+      "character": "RUTH",
+      "expected": "Exactly. If we're slow, we say we're slow, without excuses.",
+      "heard": "exactly if we're slow we say were slow without excuses",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g24",
+      "line_no": 915,
+      "character": "SAM",
+      "expected": "I can say that. I don't want to invent answers.",
+      "heard": "i can say that i don't want to invent answers",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g25",
+      "line_no": 920,
+      "character": "RUTH",
+      "expected": "Neither do I. We can leave the bigger menu put away.",
+      "heard": "neither do i we can leave the bigger menu put away",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g01",
+      "line_no": 933,
+      "character": "SAM",
+      "expected": "If we're discussing a week, I need numbers for that.",
+      "heard": "if we're discussing a week i need numbers for that",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g02",
+      "line_no": 938,
+      "character": "RUTH",
+      "expected": "Five mornings, three hours each. Nothing on the weekend yet.",
+      "heard": "five mornings three hours each nothing on the weekend yet",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g03",
+      "line_no": 943,
+      "character": "SAM",
+      "expected": "That's fifteen hours. At fifteen, you'd need two hundred twenty five.",
+      "heard": "that's fifteen hours at fifteen you'd need to hundred and twenty five",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g04",
+      "line_no": 948,
+      "character": "RUTH",
+      "expected": "I have that much set aside. It includes today's forty five.",
+      "heard": "i have that much set aside it includes today's forty five dollars",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g05",
+      "line_no": 953,
+      "character": "SAM",
+      "expected": "Is that money needed for a bill that's due tomorrow?",
+      "heard": "is that money needed for a bill that's due tomorrow",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g06",
+      "line_no": 958,
+      "character": "RUTH",
+      "expected": "Not tomorrow. The rent is the bill I'm worried about.",
+      "heard": "not tomorrow the rent is the bill i'm worried about",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g07",
+      "line_no": 963,
+      "character": "SAM",
+      "expected": "Would paying me mean you can't pay the rent afterward?",
+      "heard": "would paying me mean you can't pay the rent afterward",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g09",
+      "line_no": 972,
+      "character": "RUTH",
+      "expected": "The rent was a problem before you walked in here.",
+      "heard": "the rent was a problem before you walked in here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g10",
+      "line_no": 977,
+      "character": "SAM",
+      "expected": "That doesn't answer whether a week makes the problem worse.",
+      "heard": "that doesn't answer whether a week makes the problem worse",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g11",
+      "line_no": 982,
+      "character": "RUTH",
+      "expected": "It costs money. Staying shut also costs money every day.",
+      "heard": "it costs money staying shot also costs money every day",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g12",
+      "line_no": 987,
+      "character": "SAM",
+      "expected": "I don't want you calling my wages another favour later.",
+      "heard": "i don't want you calling my wages another favor later",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g13",
+      "line_no": 992,
+      "character": "RUTH",
+      "expected": "They aren't a favour. They're the cost of asking you here.",
+      "heard": "they aren't a favor their the cost of asking you here",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "here"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g14",
+      "line_no": 997,
+      "character": "SAM",
+      "expected": "Then keep the full week separate before we call it agreed.",
+      "heard": "then keep the for week separate before we call it agreed",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "full"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g15",
+      "line_no": 1002,
+      "character": "RUTH",
+      "expected": "That's reasonable. But I can't reserve another week behind it.",
+      "heard": "that's reasonable but i can't reserve another week behind it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g16",
+      "line_no": 1007,
+      "character": "SAM",
+      "expected": "I'm not asking for another week. I'm asking about this one.",
+      "heard": "i'm not asking for another week i'm asking about this one",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g17",
+      "line_no": 1012,
+      "character": "RUTH",
+      "expected": "Two hundred twenty five. Paid each morning, not after Friday.",
+      "heard": "two hundred and twenty five paid each morning not after friday",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g19",
+      "line_no": 1021,
+      "character": "SAM",
+      "expected": "If we stop early, we settle the hours already worked?",
+      "heard": "if we stop early we settle the hours already worked",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g20",
+      "line_no": 1026,
+      "character": "RUTH",
+      "expected": "Yes. And if I cancel, I tell you before you travel.",
+      "heard": "yes and if i cancel i tell you before you travel",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g21",
+      "line_no": 1031,
+      "character": "SAM",
+      "expected": "Before I leave home. That matters more than it sounds.",
+      "heard": "before i leave home that matters more than it sounds",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g22",
+      "line_no": 1036,
+      "character": "RUTH",
+      "expected": "All right. Before you leave home. We choose a time.",
+      "heard": "all right before you leave home we choose a time",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g23",
+      "line_no": 1041,
+      "character": "SAM",
+      "expected": "Don't promise now if you need to check your figures.",
+      "heard": "don't promise now if you need to check your figures",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g24",
+      "line_no": 1046,
+      "character": "RUTH",
+      "expected": "I checked them last night. The wage money is there.",
+      "heard": "i checked them last night the wage money is there",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g25",
+      "line_no": 1051,
+      "character": "SAM",
+      "expected": "Then that's the limit. We don't cover gaps with my savings.",
+      "heard": "then that's the limit we don't cover gaps with my savings",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g01",
+      "line_no": 1064,
+      "character": "RUTH",
+      "expected": "You'll make mistakes. I need to say that before we start.",
+      "heard": "you'll make mistakes i need to say that before we start",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g02",
+      "line_no": 1069,
+      "character": "SAM",
+      "expected": "I know. I don't know which ones you expect first.",
+      "heard": "i know i don't know which ones you expect first",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g03",
+      "line_no": 1074,
+      "character": "RUTH",
+      "expected": "Probably putting things where I can't find them at first.",
+      "heard": "probably putting things where i can't find them at first",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g04",
+      "line_no": 1079,
+      "character": "SAM",
+      "expected": "If you haven't shown me, tell me where they belong.",
+      "heard": "if you haven't shown me tell me where they belong",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g05",
+      "line_no": 1084,
+      "character": "RUTH",
+      "expected": "Fair. And if I've shown you, ask me again anyway.",
+      "heard": "fair and if i've shown you ask me again anyway",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g07",
+      "line_no": 1093,
+      "character": "SAM",
+      "expected": "Suppose I put that cup in the wrong place twice?",
+      "heard": "suppose i put that cup in the wrong place twice",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g08",
+      "line_no": 1098,
+      "character": "RUTH",
+      "expected": "Then we mark the shelf, instead of having an argument.",
+      "heard": "then we mark the shelf instead of having an argument",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g09",
+      "line_no": 1103,
+      "character": "SAM",
+      "expected": "And if you change the place halfway through the morning?",
+      "heard": "and if you change the place halfway through the morning",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g10",
+      "line_no": 1108,
+      "character": "RUTH",
+      "expected": "I tell you first. You don't have to notice everything.",
+      "heard": "i tell you first you don't have to notice everything",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g11",
+      "line_no": 1113,
+      "character": "SAM",
+      "expected": "If the till is short, we check the numbers together?",
+      "heard": "if the till his short we check the numbers together",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g12",
+      "line_no": 1118,
+      "character": "RUTH",
+      "expected": "Yes. Neither of us starts by deciding who to blame.",
+      "heard": "yes neither of us starts by deciding who to blame",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g13",
+      "line_no": 1123,
+      "character": "SAM",
+      "expected": "I don't want access to it until I've been shown.",
+      "heard": "i don't want access to it until i've been shown",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g14",
+      "line_no": 1128,
+      "character": "RUTH",
+      "expected": "You won't have to use it today. I handle payments.",
+      "heard": "you won't have to use it today i handle payments",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g15",
+      "line_no": 1133,
+      "character": "SAM",
+      "expected": "If something breaks, I tell you before trying a repair.",
+      "heard": "if something breaks i tell you before trying a repair",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g16",
+      "line_no": 1138,
+      "character": "RUTH",
+      "expected": "Please do. I'm attached to several very unreliable old things.",
+      "heard": "please do i'm attached to several very unreliable old things",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g17",
+      "line_no": 1143,
+      "character": "SAM",
+      "expected": "And if a job feels unsafe, I can say no?",
+      "heard": "and if a job feels unsafe i can say no",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g18",
+      "line_no": 1148,
+      "character": "RUTH",
+      "expected": "Yes. Then we find another way or leave it undone.",
+      "heard": "yes then we find another way or leave it on done",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g19",
+      "line_no": 1153,
+      "character": "SAM",
+      "expected": "That includes carrying anything heavy because you're too tired, right?",
+      "heard": "that includes carrying anything heavy because you're too tired right",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g21",
+      "line_no": 1162,
+      "character": "RUTH",
+      "expected": "It does. Asking for help doesn't mean ordering you about.",
+      "heard": "it does asking for help doesn't mean ordering you about",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g22",
+      "line_no": 1167,
+      "character": "SAM",
+      "expected": "I can work hard. I just need to know the difference.",
+      "heard": "i can work hard i just need to know the difference",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g23",
+      "line_no": 1172,
+      "character": "RUTH",
+      "expected": "If I forget, remind me without waiting until you're furious.",
+      "heard": "if i forget remind me without waiting until your furious",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g24",
+      "line_no": 1177,
+      "character": "SAM",
+      "expected": "I'll try. You might have to hear it twice sometimes.",
+      "heard": "i'll try you might have to hear it twice sometimes",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g25",
+      "line_no": 1182,
+      "character": "RUTH",
+      "expected": "That's all right. I haven't learned this part properly either.",
+      "heard": "that's all right i haven't learned this part properly either",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g01",
+      "line_no": 1195,
+      "character": "SAM",
+      "expected": "I need a minute before I say yes to anything.",
+      "heard": "i need a minute before i say yes to anything",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g02",
+      "line_no": 1200,
+      "character": "RUTH",
+      "expected": "Take it. You don't have to answer while I'm watching.",
+      "heard": "take it you don't have to answer while i'm watching",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g03",
+      "line_no": 1205,
+      "character": "SAM",
+      "expected": "I'm not trying to make you ask me twice, Ruth.",
+      "heard": "not trying to make you ask me twice ruth",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "im"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g04",
+      "line_no": 1210,
+      "character": "RUTH",
+      "expected": "I know. I gave you rather more than you expected.",
+      "heard": "i know i gave you rather more than you expected",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g05",
+      "line_no": 1215,
+      "character": "SAM",
+      "expected": "I thought I'd be nervous about remembering orders this morning.",
+      "heard": "i thought i'd be nervous about remembering orders this morning",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g06",
+      "line_no": 1220,
+      "character": "RUTH",
+      "expected": "I thought I'd have found a better way to explain.",
+      "heard": "i thought i'd have found a better way to explain",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g07",
+      "line_no": 1225,
+      "character": "SAM",
+      "expected": "Please don't follow me. I'll only be by the doorway.",
+      "heard": "please don't follow me i'll only be by the doorway",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g09",
+      "line_no": 1234,
+      "character": "SAM",
+      "expected": "I can still hear you from here if you need something.",
+      "heard": "i can still hear you from here if you need something",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g10",
+      "line_no": 1239,
+      "character": "RUTH",
+      "expected": "I don't need anything right now. Take your minute properly.",
+      "heard": "i don't need anything right now take your minute properly",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g11",
+      "line_no": 1244,
+      "character": "SAM",
+      "expected": "I used to leave places before anyone could turn me down.",
+      "heard": "i used to leave places before anyone could turn me down",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g12",
+      "line_no": 1249,
+      "character": "RUTH",
+      "expected": "You can leave here because you want to. That's allowed.",
+      "heard": "you can leave here because you want to that's allowed",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g13",
+      "line_no": 1254,
+      "character": "SAM",
+      "expected": "I'm trying to work out whether I actually want to.",
+      "heard": "i'm trying to work out whether i actually want to",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g14",
+      "line_no": 1259,
+      "character": "RUTH",
+      "expected": "Then I should stop talking and let you do that.",
+      "heard": "then i should stop talking and let you do that",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g15",
+      "line_no": 1264,
+      "character": "SAM",
+      "expected": "There's something I could learn here, if we keep it small.",
+      "heard": "there's something i could learn here if we keep it small",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g16",
+      "line_no": 1269,
+      "character": "RUTH",
+      "expected": "There is. But you can learn things in other places.",
+      "heard": "there is but you can learn things in other places",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g17",
+      "line_no": 1274,
+      "character": "SAM",
+      "expected": "I know. I don't want you to be my only option.",
+      "heard": "i know i don't want you to be my only option",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g18",
+      "line_no": 1279,
+      "character": "RUTH",
+      "expected": "You shouldn't. Keep looking if you need more paid hours.",
+      "heard": "you shouldn't keep looking if you need more paid hours",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g19",
+      "line_no": 1284,
+      "character": "SAM",
+      "expected": "Would that bother you, knowing I'm still looking somewhere else?",
+      "heard": "with that bother you knowing i'm still looking somewhere else",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "would"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g20",
+      "line_no": 1289,
+      "character": "RUTH",
+      "expected": "A little, probably. But that doesn't make it your problem.",
+      "heard": "a little probably but that doesn't make it your problem",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g22",
+      "line_no": 1298,
+      "character": "SAM",
+      "expected": "Then I can offer one week, with the limits we discussed.",
+      "heard": "then i can offer one week with the limits we discussed",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g23",
+      "line_no": 1303,
+      "character": "RUTH",
+      "expected": "Are you sure that's an offer you want to make?",
+      "heard": "are you sure that's an offer you want to make",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g24",
+      "line_no": 1308,
+      "character": "SAM",
+      "expected": "Yes. Not because you need saving. Because I want the work.",
+      "heard": "yes not because you need saving because i want to work",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "the"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g25",
+      "line_no": 1313,
+      "character": "RUTH",
+      "expected": "All right. Then I'll answer you as someone hiring you.",
+      "heard": "then i'll answer you as someone hiring you",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "all",
+        "right"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g01",
+      "line_no": 1326,
+      "character": "RUTH",
+      "expected": "Five mornings, counting today. Six until nine, fifteen an hour.",
+      "heard": "five mornings counting today six until nine fifteen an hour",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g02",
+      "line_no": 1331,
+      "character": "SAM",
+      "expected": "Paid each morning. Any extra time gets agreed before it happens.",
+      "heard": "paid each morning any extra time gets agreed before it happens",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g03",
+      "line_no": 1336,
+      "character": "RUTH",
+      "expected": "Two counter seats. Coffee and toast. I handle the hot things.",
+      "heard": "to counter seats coffee and toast i handle the hot things",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g04",
+      "line_no": 1341,
+      "character": "SAM",
+      "expected": "I handle cups and clearing. You teach me the rest gradually.",
+      "heard": "i handle cups and clearing you teach me the rest gradually",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g05",
+      "line_no": 1346,
+      "character": "RUTH",
+      "expected": "If I cancel, I call before you leave home for work.",
+      "heard": "if i cancel i call before you leave home for work",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g06",
+      "line_no": 1351,
+      "character": "SAM",
+      "expected": "By five fifteen, please. After that, I've already left home.",
+      "heard": "by five fifteen please after that i've already left home",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g07",
+      "line_no": 1356,
+      "character": "RUTH",
+      "expected": "Five fifteen. I'll keep the number by the phone here.",
+      "heard": "five fifteen or keep the number by the phone here",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "ill"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g08",
+      "line_no": 1361,
+      "character": "SAM",
+      "expected": "If I can't come, I call then too, not just disappear.",
+      "heard": "if i can't come i call them to not just disappear",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g09",
+      "line_no": 1366,
+      "character": "RUTH",
+      "expected": "After each morning, ten minutes to say what didn't work.",
+      "heard": "after each morning ten minutes to say what didn't work",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g10",
+      "line_no": 1371,
+      "character": "SAM",
+      "expected": "Inside the paid time. I don't want that sliding afterward.",
+      "heard": "inside the paid time i don't want that sliding afterward",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g11",
+      "line_no": 1376,
+      "character": "RUTH",
+      "expected": "Inside it. We stop serving early enough to finish by nine.",
+      "heard": "inside it we stop serving early enough to finish by nine",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g12",
+      "line_no": 1381,
+      "character": "SAM",
+      "expected": "At the end, we decide whether another week makes sense.",
+      "heard": "at the end we decide whether another week make sense",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g14",
+      "line_no": 1390,
+      "character": "RUTH",
+      "expected": "Either of us can say no. We settle what's been worked.",
+      "heard": "either of us can say no we settle what's been worked",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g15",
+      "line_no": 1395,
+      "character": "SAM",
+      "expected": "And I don't lose today's pay if tomorrow doesn't happen.",
+      "heard": "and i don't lose today's pay if tomorrow doesn't happen",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g16",
+      "line_no": 1400,
+      "character": "RUTH",
+      "expected": "You don't. I'm paying for work, not for keeping promises forever.",
+      "heard": "you don't i'm paying for work not for keeping promises forever",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g17",
+      "line_no": 1405,
+      "character": "SAM",
+      "expected": "You don't have to guarantee the place will still be here.",
+      "heard": "you don't have to guarantee the place will still be here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g18",
+      "line_no": 1410,
+      "character": "RUTH",
+      "expected": "I can't guarantee that. I can tell you what I know.",
+      "heard": "i can't guarantee that i can tell you what i know",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g19",
+      "line_no": 1415,
+      "character": "SAM",
+      "expected": "Tell me when it changes, before I'm standing outside again.",
+      "heard": "tell me when it changes form standing outside again",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "before",
+        "im"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g20",
+      "line_no": 1420,
+      "character": "RUTH",
+      "expected": "I will. I won't leave you reading another notice first.",
+      "heard": "i will i won't leave you reading another notice first",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g21",
+      "line_no": 1425,
+      "character": "SAM",
+      "expected": "Then I want the week. I don't need a bigger promise.",
+      "heard": "then i want the week i don't need a bigger promise",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g22",
+      "line_no": 1430,
+      "character": "RUTH",
+      "expected": "I'd like the week too. Even knowing it might not work.",
+      "heard": "i'd like the week to even knowing it might not work",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g23",
+      "line_no": 1435,
+      "character": "SAM",
+      "expected": "We can find that out without pretending we've already solved it.",
+      "heard": "we can find that out without pretending we've already solved it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g24",
+      "line_no": 1440,
+      "character": "RUTH",
+      "expected": "Agreed. We'll check the work, the hours, and the money.",
+      "heard": "agreed will check the work the hours and the money",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g25",
+      "line_no": 1445,
+      "character": "SAM",
+      "expected": "All right. Tell me where you'd like me to start.",
+      "heard": "or i tell me where you'd like me to start",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "all",
+        "right"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g01",
+      "line_no": 1458,
+      "character": "RUTH",
+      "expected": "First, put that cup back. I can never find one.",
+      "heard": "first put that come back i can never find one",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "cup"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g02",
+      "line_no": 1463,
+      "character": "SAM",
+      "expected": "The cup's already there. You're looking past it at me.",
+      "heard": "the cops already there you're looking past it at me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g03",
+      "line_no": 1468,
+      "character": "RUTH",
+      "expected": "So it is. I'm going to have to get used to this.",
+      "heard": "so it is i'm gonna have to get used to this",
+      "source": "stem",
+      "recall": 0.833,
+      "missing": [
+        "going",
+        "to"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g04",
+      "line_no": 1473,
+      "character": "SAM",
+      "expected": "Having the cups ready, or somebody telling you where they are?",
+      "heard": "having the cops ready or somebody telling you where they are",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g05",
+      "line_no": 1478,
+      "character": "RUTH",
+      "expected": "Both, probably. Don't expect me to be graceful about it.",
+      "heard": "both probably don't expect me to be graceful about it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g06",
+      "line_no": 1483,
+      "character": "SAM",
+      "expected": "I wasn't. I'd like instructions more than graceful, to start.",
+      "heard": "i wasn't i'd like instructions more than graceful to start",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g07",
+      "line_no": 1488,
+      "character": "RUTH",
+      "expected": "The clean cloth stays here. The other one stays behind me.",
+      "heard": "the clean cloth stays here the other one stays behind me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g08",
+      "line_no": 1493,
+      "character": "SAM",
+      "expected": "And nothing hot on the lower shelf. I remember that.",
+      "heard": "and nothing hard on the lower shelf i remember that",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "hot"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g09",
+      "line_no": 1498,
+      "character": "RUTH",
+      "expected": "Good. We'll check the two places before we open anything.",
+      "heard": "good will check the two places before we open anything",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g10",
+      "line_no": 1503,
+      "character": "SAM",
+      "expected": "What time do you want to start serving this morning?",
+      "heard": "what time do you wanna start serving this morning",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "want",
+        "to"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g11",
+      "line_no": 1508,
+      "character": "RUTH",
+      "expected": "Seven. That gives us time to get the counter ready.",
+      "heard": "seven that gives us time to get the counter ready",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g12",
+      "line_no": 1513,
+      "character": "SAM",
+      "expected": "Then we should say seven, rather than let people guess.",
+      "heard": "then we should say seven rather than let people guess",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g13",
+      "line_no": 1518,
+      "character": "RUTH",
+      "expected": "I'll put the hours by the door before we serve.",
+      "heard": "i'll put the hours by the door before we serve",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g14",
+      "line_no": 1523,
+      "character": "SAM",
+      "expected": "Do you want the old notice put away for now?",
+      "heard": "do you want the old noticed put away for know",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g15",
+      "line_no": 1528,
+      "character": "RUTH",
+      "expected": "Leave it folded on the back counter. Don't throw it out.",
+      "heard": "leave it folded on the back counter don't throw it out",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g16",
+      "line_no": 1533,
+      "character": "SAM",
+      "expected": "All right. We don't have to decide what happens afterward.",
+      "heard": "we don't have to decide what happens afterward",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "all",
+        "right"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g17",
+      "line_no": 1538,
+      "character": "RUTH",
+      "expected": "And if this feels wrong tomorrow, you'll tell me then?",
+      "heard": "and if this feels wrong tomorrow you'll tell me then",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g18",
+      "line_no": 1543,
+      "character": "SAM",
+      "expected": "Yes. Will you tell me, instead of printing another notice?",
+      "heard": "yes we you tell me instead of printing another notice",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "will"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g19",
+      "line_no": 1548,
+      "character": "RUTH",
+      "expected": "I'll tell you. Probably over coffee that actually has coffee in it.",
+      "heard": "i'll tell you probably over coffee that actually has coffee in it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g20",
+      "line_no": 1553,
+      "character": "SAM",
+      "expected": "I'd settle for knowing which mug you're putting mine in.",
+      "heard": "i'd settle for knowing which mug you're putting mine and",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "in"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g21",
+      "line_no": 1558,
+      "character": "RUTH",
+      "expected": "The one on your side. I can keep that much straight.",
+      "heard": "the one on your side i can keep that much straight",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g22",
+      "line_no": 1563,
+      "character": "SAM",
+      "expected": "Good. I'll leave it there until you need the space.",
+      "heard": "good i'll leave it there until you need the space",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g23",
+      "line_no": 1568,
+      "character": "RUTH",
+      "expected": "There's a little note card by the register. Use that one.",
+      "heard": "there's a little note card by the register use that one",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g24",
+      "line_no": 1573,
+      "character": "RUTH",
+      "expected": "Put it here on the counter, where we can see it.",
+      "heard": "put it here on the counter where we can see it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    }
+  ],
+  "problems": [
+    {
+      "code": "DIALOGUE_STT_MISMATCH",
+      "severity": "WARN",
+      "detail": "SC04_g21 line 509: heard \"alright today down i won't write tomorrow and yet\" for \"I'll write today down. I won't write tomorrow in yet.\" (missing: ill write in)"
+    }
+  ],
+  "summary": {
+    "lines": 270,
+    "pass": 269,
+    "warn": 1,
+    "mean_recall": 0.981
+  }
+}

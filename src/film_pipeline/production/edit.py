@@ -635,7 +635,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
                 picture_parts.append({"key": overlay_key, "start_frame": frames(section.title_s + cut_start),
                                       "end_frame": frames(section.title_s + cut_end)})
             concat_list = work / "fine_concat.txt"
-            concat_list.write_text("".join(f"file '{p.as_posix()}'\n" for p in chunk_paths), encoding="utf-8")
+            concat_list.write_text("".join(f"file '{p.resolve().as_posix()}'\n" for p in chunk_paths), encoding="utf-8")
             body = work / "body.mkv"
             join_video_chunks(concat_list, body)
             assemble([body], out, cues=[], title_lines=title, end_lines=end, title_s=section.title_s,
@@ -752,7 +752,8 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
                                           "end_frame": frames(start_s + elapsed)})
                     start = stop
                 concat_list = work / "body_concat.txt"
-                concat_list.write_text("".join(f"file '{p.as_posix()}'\n" for p in chunk_paths), encoding="utf-8")
+                # absolute: ffmpeg's concat demuxer resolves relative entries against the list's (temp) directory
+                concat_list.write_text("".join(f"file '{p.resolve().as_posix()}'\n" for p in chunk_paths), encoding="utf-8")
                 body = work / "body.mkv"
                 join_video_chunks(concat_list, body)
                 assemble([body], out, cues=[], title_lines=title, end_lines=end, title_s=section.title_s,
