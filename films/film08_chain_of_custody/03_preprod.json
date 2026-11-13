@@ -12898,6 +12898,46 @@
       "registered_at": "2026-11-13T23:24:50+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
       "approved_at": "2026-11-13T23:24:51+00:00"
+    },
+    "SC01_g12": {
+      "file": "media/stills/start_SC01_g12.jpg",
+      "sha256": "6d4b65185056520ea275f3842ac1ae4f85ca2ffca16bb2f2c1183c3425ba71b4",
+      "prompt_sha256": "4f5a5828e8ef7bbddc3de4699fd33e1b9c3a7848a91d9e279dc51a844e11289b",
+      "source": "Flow Nano Banana 2.1, gmail-4 Chrome, project 6f8e24af, still S05",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T23:26:21+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T23:26:22+00:00"
+    },
+    "SC01_g14": {
+      "file": "media/stills/start_SC01_g14.jpg",
+      "sha256": "6d4b65185056520ea275f3842ac1ae4f85ca2ffca16bb2f2c1183c3425ba71b4",
+      "prompt_sha256": "9c2cbac0fc35465fd3559fb75919faf67474cd2646246c9e371c0a8a19ecb900",
+      "source": "Flow Nano Banana 2.1, gmail-4 Chrome, project 6f8e24af, still S05",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T23:26:23+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T23:26:24+00:00"
+    },
+    "SC02_g10": {
+      "file": "media/stills/start_SC02_g10.jpg",
+      "sha256": "6d4b65185056520ea275f3842ac1ae4f85ca2ffca16bb2f2c1183c3425ba71b4",
+      "prompt_sha256": "49a6054f717e8b99410f766f9fd9569d7fb070d3db76dc6bdbebbabd3d5a720e",
+      "source": "Flow Nano Banana 2.1, gmail-4 Chrome, project 6f8e24af, still S05",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T23:26:25+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T23:26:26+00:00"
+    },
+    "SC02_g23": {
+      "file": "media/stills/start_SC02_g23.jpg",
+      "sha256": "6d4b65185056520ea275f3842ac1ae4f85ca2ffca16bb2f2c1183c3425ba71b4",
+      "prompt_sha256": "49a6054f717e8b99410f766f9fd9569d7fb070d3db76dc6bdbebbabd3d5a720e",
+      "source": "Flow Nano Banana 2.1, gmail-4 Chrome, project 6f8e24af, still S05",
+      "credits": 0.0,
+      "registered_at": "2026-11-13T23:26:27+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
+      "approved_at": "2026-11-13T23:26:29+00:00"
     }
   }
 }
