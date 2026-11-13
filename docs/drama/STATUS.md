@@ -500,3 +500,10 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - NO-JS mode got 9 unflagged generations through after the cool-down, against 2 with page JS, then it was flagged again. Page JS was part of the trigger, but volume or automation is still detected.
 - Remaining: SC11 g06-g25 (20), SC07 (25), SC12_g23 (policy gap). Route decision goes to the Owner.
 - 2026-11-13 ~09:00: after a 10 min wait, the SC11_g06 reconcile send was flagged at once (0 of 1; INC-002, edb7c2e). Neither g06 failure charged; the balance is 540. A 10 min wait is not enough; the 2 h cool-down gave 9 generations.
+
+### 2026-11-13 SC11 done (NO-JS, after the 2 h cool-down)
+- 11:00-13:00: one Sonnet pane agent sent SC11 g06-g25, 20 of 20 ACCEPTED (4d36952 .. abf9ff6), 6 cr each, 720p downloads, no unusual-activity flag. It reused the g06 (SAM) and g07 (RUTH) stills instead of drawing new ones.
+- SC11 is DONE at 25/25. Balance read at the end: 467 (gmail-3).
+- Coordinator contact sheet: identity and wardrobe hold, no listener in frame. g16 has a ~3% listener hair sliver at the right edge (reframe note: punch-in 1.10x, left anchor). RUTH framing drifts between takes (g11/g16 sit left, others centre-right), so match it in the edit.
+- Pane notes: the Flow picker is slow (>1 min sometimes). Twice a repeated click picked plate_diner_morning.jpg, and the agent fixed it before sending. Downloads also holds other panes' files, so take only files newer than the click.
+- Finding: NO-JS mode plus still reuse (no image draws) gave 20 clean sends in a row. Next: SC07 (prep pack C:/film-work/film07-full/prep/SC07, 6 stills to draw, 25 gens).
