@@ -63,11 +63,16 @@ class ShotAxisRecord(ContractModel):
     eyelines: dict[str, Eyeline] = Field(default_factory=dict)
     crosses_axis: bool = False
     cross_justification: str = ""
+    # characters looking at someone other than their axis partner (a third
+    # person anchored off frame); their lateral eyeline is not checked
+    # against the partner
+    off_partner: list[str] = Field(default_factory=list)
 
 
 def axis_record(book: AxisBook, shot_id: str, visible: list[str], *,
                 looking_at_partner: bool = True,
-                eyelines: dict[str, Eyeline] | None = None) -> ShotAxisRecord:
+                eyelines: dict[str, Eyeline] | None = None,
+                gaze_target: str = "") -> ShotAxisRecord:
     """Build the record a compliant shot should have.
 
     ``eyelines`` overrides the partner-derived eyeline per character: with
@@ -77,11 +82,14 @@ def axis_record(book: AxisBook, shot_id: str, visible: list[str], *,
     looks = {c: (book.eyeline_toward_partner(c)
                  if looking_at_partner and book.partner(c) else "none")
              for c in visible}
-    looks.update({c: e for c, e in (eyelines or {}).items() if c in looks})
+    overrides = {c: e for c, e in (eyelines or {}).items() if c in looks}
+    looks.update(overrides)
+    off_partner = [c for c in overrides if gaze_target and book.partner(c)
+                   and gaze_target != book.partner(c)]
     return ShotAxisRecord(
         shot_id=shot_id,
         visible={c: book.sides[c] for c in visible if c in book.sides},
-        eyelines=looks)
+        eyelines=looks, off_partner=off_partner)
 
 
 def check_axis(book: AxisBook, shots: list[ShotAxisRecord]) -> list[str]:
@@ -107,6 +115,7 @@ def check_axis(book: AxisBook, shots: list[ShotAxisRecord]) -> list[str]:
                                 "the lens (breaks the fourth wall)")
             elif eyeline in ("screen-left", "screen-right") and \
                     book.partner(character) and \
+                    character not in shot.off_partner and \
                     eyeline != book.eyeline_toward_partner(character):
                 problems.append(
                     f"{shot.shot_id}: {character} looks {eyeline}, must "

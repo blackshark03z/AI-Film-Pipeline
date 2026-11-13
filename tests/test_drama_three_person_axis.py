@@ -83,3 +83,32 @@ def test_board_draws_the_unsided_centre_person(tmp_path):
     out = render_schematic_frame(unit, shot, tmp_path / "f.png", width=640)
     im = Image.open(out).convert("RGB")
     assert im.getpixel((320, 230)) != (238, 236, 230)  # a figure at frame centre, not background
+
+
+def test_object_gaze_drops_the_lateral_eyeline():
+    """Codex 2026-11-14: SC04_g10 said "looking screen-left" then sent ELI's eyes to the floor."""
+    people = {"NAOMI", "HOLLIS", "ELI"}
+    assert _anchored_eyeline(_Decl("ELI", "floor", {}), people) == {"ELI": "none"}
+    assert _anchored_eyeline(_Decl("ELI", "LENS", {}), people) == {}
+    assert _shot("SINGLE", "ELI", ["ELI"], {"ELI": "none"}).describe(BOOK) == "close-up of ELI"
+
+
+def test_third_person_eyeline_passes_the_axis_check():
+    """Codex 2026-11-14: a listener anchored left of NAOMI failed "must look screen-right toward ELI"."""
+    from film_pipeline.drama.axis import check_axis
+    third = axis_record(BOOK, "S", ["NAOMI"], eyelines={"NAOMI": "screen-left"}, gaze_target="HOLLIS")
+    assert third.off_partner == ["NAOMI"] and check_axis(BOOK, [third]) == []
+    wrong = axis_record(BOOK, "S", ["NAOMI"], eyelines={"NAOMI": "screen-left"}, gaze_target="ELI")
+    assert check_axis(BOOK, [wrong]) != []
+
+
+@__import__("pytest").mark.skipif(not (FILM08 / "04_shots.json").is_file(), reason="film08 package not present")
+def test_film08_centre_single_still_keeps_his_look_and_packet(tmp_path):
+    """Codex 2026-11-14: HOLLIS (unsided) was dropped from his own start still, with the packet in his hands."""
+    from film_pipeline.production.package import load_package
+    from film_pipeline.production.plan import plan_package
+    plan_package(load_package(FILM08), tmp_path, storyboard=False)
+    still = (tmp_path / "stills" / "start_SC10_g01.txt").read_text(encoding="utf-8")
+    assert "HOLLIS (" in still and "packet" in still
+    header = (tmp_path / "prompts" / "SC04_g10.txt").read_text(encoding="utf-8").split(".")[0]
+    assert "screen-" not in header, header

@@ -90,8 +90,10 @@ class CoverageShot(ContractModel):
             return f"over {self.foreground}'s shoulder onto {self.subject}"
         # the shot's own eyeline (set from its off-frame listener) wins over
         # the axis partner; film08 HOLLIS has no partner and read "looking none"
-        look = self.axis.eyelines.get(self.subject, "none")
-        if look not in ("screen-left", "screen-right"):
+        # an explicit "none" (gaze on a set object, film08 SC04_g10) drops
+        # the lateral clause instead of falling back to the partner
+        look = self.axis.eyelines.get(self.subject)
+        if look is None or look not in ("screen-left", "screen-right", "none"):
             look = book.eyeline_toward_partner(self.subject)
         looking = f" looking {look}" if look != "none" else ""
         if self.coverage == "SINGLE":

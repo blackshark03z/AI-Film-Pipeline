@@ -62,13 +62,19 @@ def top_sections(sections: dict[str, int], n: int = 3) -> str:
     return ", ".join(f"{BUDGET_LABELS[k]} {v}" for k, v in ranked)
 
 
-def _anchored_eyeline(decl: ShotDecl) -> dict[str, str]:
+def _anchored_eyeline(decl: ShotDecl, people: set[str] | None = None) -> dict[str, str]:
     """A single's eyeline from where its gaze target is anchored off frame (LEFT -> screen-left).
 
     With three people the axis pair cannot give the centre person an eyeline; the shot's own listener anchor can.
+    A gaze on a set object (not a person, not the lens) has no lateral eyeline: "none".
     """
-    anchor = decl.listener_anchors.get(decl.gaze_target)
-    if not decl.subject or anchor is None or anchor.mode != "OFF_FRAME" or anchor.side not in ("LEFT", "RIGHT"):
+    if not decl.subject:
+        return {}
+    gaze = decl.gaze_target
+    if people is not None and gaze and gaze != "LENS" and gaze not in people:
+        return {decl.subject: "none"}
+    anchor = decl.listener_anchors.get(gaze)
+    if anchor is None or anchor.mode != "OFF_FRAME" or anchor.side not in ("LEFT", "RIGHT"):
         return {}
     return {decl.subject: "screen-left" if anchor.side == "LEFT" else "screen-right"}
 
@@ -164,7 +170,8 @@ class _Plan:
             shot_id=shot_id, coverage=decl.coverage, shot_size=size, subject=decl.subject,
             foreground=decl.foreground, start_s=0.0, end_s=seconds, lines=self.lines_for(decl),
             action=self.action_text(decl),
-            axis=axis_record(book, shot_id, decl.visible, eyelines=_anchored_eyeline(decl)))
+            axis=axis_record(book, shot_id, decl.visible, gaze_target=decl.gaze_target or "",
+                             eyelines=_anchored_eyeline(decl, set(self.pre.characters))))
         return SceneUnit(scene_id=sid, duration_s=seconds, shots=[shot], axis_book=book)
 
     def handoff_for(self, decl: ShotDecl) -> GenerationHandoff | None:
@@ -234,7 +241,8 @@ class _Plan:
         scene = self.pre.scenes[decl.scene_id]
         shot = unit.shots[0]
         start = self.state(decl.start_state)
-        shown = [c for c in start.positions if c in shot.axis.visible or shot.coverage == "MASTER"]
+        # declared cast, not axis sides: film08 HOLLIS (centre, unsided) lost his look and the packet he holds
+        shown = [c for c in start.positions if c in decl.visible or shot.coverage == "MASTER"]
         people = "; ".join(f"{c} ({self.pre.characters[c].look.text}) {start.positions[c]}" for c in shown)
         # a prop placed on someone out of frame would summon a stranger
         hidden = [c for c in self.pre.characters if c not in shown]
