@@ -1,0 +1,25 @@
+{
+  "film_id": "film08_chain_of_custody",
+  "takes": [
+    {
+      "take_id": "SC01_g01_t1",
+      "generation_id": "SC01_g01",
+      "prompt_sha256": "2e397c389dd7d18fc854a3881f07532a858151f60913dd08f17ac8b376db487a",
+      "start_frame_sha256": "e476d1cfdec132c360426a9d0063e58c8ea6ac751a9c35cb5f83cb105220383c",
+      "route": "start_frame+Khung hinh",
+      "model": "omni-1.2-flash",
+      "credits": 6.0,
+      "output_file": "SC01_g01_t1.mp4",
+      "output_sha256": "f9e041c8490bf70ec3f579359f7456c25d0c9a2257a60048e1cc6592af1b281d",
+      "status": "GENERATED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-13T23:43:54Z",
+      "review_file": "dailies/SC01_g01_t1.review.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
+    }
+  ]
+}
