@@ -592,7 +592,7 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 
 **Open:** grade report/render, titles, mix, dialoguecheck (audio/sync still unverified), mastercheck, validate.
 
-## 2026-11-13 HANDOFF: film07 post — MASTER done, delivered locally -> next: Owner accept (gate 6)
+## 2026-11-13 HANDOFF: film07 post — MASTER done, Owner ACCEPTED, gates 1-6 PASS
 **Run (all PASS):** grade (299/300 corrected, worst 63.6 -> 45.8) -> titles --render --color --clean-copy (270 cues en+vi, 21 reframes, 0 blocks, 17 WARN = CUE_TOO_FAST/REFRAME_TAG) -> mix (-14.3 LUFS, -1.7 dBTP) -> mastercheck (technical/audio/delivery PASS; sync WARN 18 CUE_NO_SPEECH; color WARN 1) -> dialoguecheck (Vosk: 269/270 PASS, mean recall 0.981). Master 29:59.5.
 
 **Decisions + why:**
@@ -614,3 +614,5 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 **Next step (Owner only):** watch media/cut/mixed.mp4 (and versions/film07_first_shift_9x16.mp4), then `film.py deliver --film films/film07_first_shift --accept <name>`. Publishing stays with the Owner.
 
 **Test commands:** `PYTHONPATH=src uv run --frozen --extra qc pytest tests/test_production_titles.py tests/test_production_versions.py -q` (47 passed); render tests (38 passed); mix/post tests (14 passed); `pytest tests/test_production_gate_checks.py -q` (24 passed). Chain env: `TMP=D:/tmp_film TEMP=D:/tmp_film AFP_STT_PYTHON=C:/Users/ADMIN/AppData/Local/Programs/Python/Python311/python.exe`, absolute `--film` path.
+
+**Owner acceptance:** "Chất lượng ổn, có thể coi là pass" (Owner in chat, 2026-11-13) -> `deliver --accept "Owner khoikk03 (explicit chat approval, 2026-11-13)"`, manifest f3476aa2ecb7. validate: gates 1-6 PASS. Publishing stays with the Owner.
