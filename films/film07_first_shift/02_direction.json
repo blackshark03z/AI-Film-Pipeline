@@ -912,7 +912,7 @@
           {
             "kind": "DIALOGUE",
             "generation_id": "SC12_g23",
-            "detail": "There's a small open card beside the till. Use that one."
+            "detail": "There's a little note card by the register. Use that one."
           },
           {
             "kind": "VISUAL",
@@ -1214,7 +1214,7 @@
     "I'd settle for knowing which mug you're putting mine in.": "Cháu chỉ cần biết cô định rót phần cháu vào chiếc cốc nào.",
     "The one on your side. I can keep that much straight.": "Chiếc phía cậu. Chừng đó thì tôi vẫn phân biệt được.",
     "Good. I'll leave it there until you need the space.": "Tốt. Cháu cứ để đó đến khi cô cần chỗ trống.",
-    "There's a small open card beside the till. Use that one.": "Có thẻ mở cửa nhỏ cạnh máy tính tiền. Dùng tấm đó nhé.",
+    "There's a little note card by the register. Use that one.": "Có thẻ mở cửa nhỏ cạnh máy tính tiền. Dùng tấm đó nhé.",
     "Put it here on the counter, where we can see it.": "Đặt nó ở đây trên quầy, chỗ chúng ta nhìn thấy được."
   }
 }

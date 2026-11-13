@@ -26343,7 +26343,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 3,
+      "version": 4,
       "coverage": "SINGLE",
       "subject": "RUTH",
       "foreground": "",
@@ -26421,8 +26421,8 @@
         }
       },
       "gaze_target": "SAM",
-      "repair_of": "SC12_g23@v2",
-      "repair_reason": "g23_t1 and g23_t2 both failed at submit with no clip (t2: no charge); suspected silent block of the start still or prompt. v3: tight centred still on a plain wall redrawn in Flow image mode from the RUTH ref, listener several metres behind the lens, shorter prompt wording; coordinator-approved, last allowed version (cap 3)"
+      "repair_of": "SC12_g23@v3",
+      "repair_reason": "v4 coordinator override of the 3-version cap; line reworded to avoid a payment-card reading"
     },
     {
       "generation_id": "SC12_g24",
@@ -31141,6 +31141,96 @@
       "gaze_target": "SAM",
       "repair_of": "SC09_g05@v1",
       "repair_reason": "SC09_g05_t1 rejected: SAM head and face enter at the right edge from 1.2 s; stronger off-frame placement and bare-right-edge composition"
+    },
+    {
+      "generation_id": "SC12_g23",
+      "scene_id": "SC12",
+      "start_state": "SC12_g23",
+      "end_state": "SC12_g24",
+      "previous_generation_id": "SC12_g22",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 3,
+      "coverage": "SINGLE",
+      "subject": "RUTH",
+      "foreground": "",
+      "visible": [
+        "RUTH"
+      ],
+      "dialogue": [
+        1568
+      ],
+      "choreography": {
+        "generation_id": "SC12_g23",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "RUTH looks at SAM"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.7,
+            "description": "RUTH speaks to SAM warmly"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.7,
+            "end_s": 6.0,
+            "description": "RUTH holds SAM's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "RUTH speaks to SAM"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "RUTH",
+            "emotion_intent": "dry, warm",
+            "visible_cues": [
+              "slight smile",
+              "steady eyes"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "mockery"
+          }
+        ]
+      },
+      "design_refs": [
+        "RUTH_look@1",
+        "RUTH_costume@1",
+        "loc_diner_morning@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "tight centred close single on RUTH against one plain cream wall: her head and shoulders sit in the middle of the frame; the wall fills the rest of the frame; the camera is level with her face",
+        "declared_repeat": "static alternating close singles are the deliberate grammar of this two-person talking scene"
+      },
+      "camera_position": "cC_ctr",
+      "addressees": {
+        "1568": [
+          "SAM"
+        ]
+      },
+      "listener_anchors": {
+        "SAM": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "SAM stands several metres away behind the lens, outside the picture. Only RUTH is in frame. The camera stays locked",
+          "established_by": "SC10_g21"
+        }
+      },
+      "gaze_target": "SAM",
+      "repair_of": "SC12_g23@v2",
+      "repair_reason": "g23_t1 and g23_t2 both failed at submit with no clip (t2: no charge); suspected silent block of the start still or prompt. v3: tight centred still on a plain wall redrawn in Flow image mode from the RUTH ref, listener several metres behind the lens, shorter prompt wording; coordinator-approved, last allowed version (cap 3)"
     }
   ]
 }
