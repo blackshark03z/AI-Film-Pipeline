@@ -1,3 +1,28 @@
+# film08 "Chain of Custody" — package + refs + SC01–SC02 boards approved; pilot sends next (2026-11-14 04:20)
+
+Goal: second accepted 25-30 min film for P20 M4. Owner approved brief/cast/caps 535 pilot / 3,210 full on 2026-11-14.
+Done this session:
+- Refs (Flow image, 0 cr, gmail-4 Chrome, project 6f8e24af): char_NAOMI/HOLLIS/ELI/CALVIN + plate_records_room in
+  films/film08_chain_of_custody/media/stills/ (gitignored); hashes + agent approval in media/stills/references.json.
+- Package (17f5f35): _author.py from the approved beats; gates 1-2 PASS; 0 prompts over 230 words (waiver removed).
+- Pipeline fixes for 3 people on one axis (17f5f35, f432113; tests/test_drama_three_person_axis.py):
+  single headers take the eyeline from the off-frame gaze-target anchor (126 "looking none" fixed); masters name the
+  off-axis person; the lens-eyeline sentence only for the gaze target (object-gaze shots no longer contradict);
+  boards draw the off-axis person at centre (HOLLIS singles were blank).
+  Side effect: 4 delivered film07 prompts change text (SC02_g01, SC03_g13, SC06_g13, SC10_g08); no re-send.
+- Boards SC01-SC02 (50) approved by agent:tech-lead (delegated) after 2 contact sheets; gate 3 PASS 50/50.
+Decisions + why: axis pair NAOMI/ELI (outer two) with HOLLIS centre unsided, because screen order is N-H-E;
+10 still draws serve 50 gens (C:/film-work/film08/stills.md) to cut image draws, which preceded film07 flags.
+Open: Codex review of script + pipeline diff not run (Codex usage limit until 05:20); pre-existing failure
+tests/test_prompt_safeguards.py::test_accepted_film07_takes_do_not_go_stale (fails on clean HEAD too);
+213 HANDEDNESS_BARE warns; SC03_g09, SC05_g02, SC09_g18, SC11_g24, SC12_g16 need end frames (LOOK_NOT_PINNED);
+still prompts have template grammar glitches ("is runs", "open ledger" label when closed).
+Tests: `PYTHONPATH=src python -m pytest -q tests/test_drama_three_person_axis.py`;
+`PYTHONPATH=src python tools/film.py plan --film films/film08_chain_of_custody --out films/film08_chain_of_custody/media/plan`.
+Next: pilot executor per C:/film-work/film08/PANE_BRIEF.md (10 stills, 50 sends, stop at 300 cr) -> coordinator QC.
+
+---
+
 # film08 "Chain of Custody" — Owner approved brief; screenplay draft 1 done (2026-11-14)
 
 Goal: second accepted 25-30 min film for P20 M4 (STABLE_SUPERVISED needs film07 + film08 accepted).
