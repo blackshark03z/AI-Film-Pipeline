@@ -1,6 +1,8 @@
-# Chain of Custody (film08) — dự toán chờ Owner duyệt
+**OWNER_APPROVED 2026-11-14 — "Approve, write the script":** trần pilot 535, toàn phim 3.210 credits (đã gồm pilot). Pilot SC01–SC02 trước; phần còn lại cần pilot QC PASS.
 
-**DRAFT_NOT_AUTHORIZED.** Chưa Generate, upload hay chi credits. Trần thường trực 256,8 credits giữ nguyên.
+# Chain of Custody (film08) — dự toán
+
+Chưa Generate, upload hay chi credits. Trần thường trực 256,8 credits giữ nguyên.
 
 Route: Flow Omni 1.2 Flash 360p (theo OWNER_POLICY). Giá dùng lần đọc gần nhất (11/11/2026, chỉ xem giá, không gắn đầu vào):
 6 s = 6 credits, 1 credit/s đến 10 s, 2 credits/s từ giây 11; ảnh Nano Banana 2.1 = 0 credits. Phải đọc lại giá trước lượt

@@ -1,6 +1,7 @@
 # Chain of Custody (film08) — bản nháp để Owner duyệt
 
-**DRAFT_FOR_OWNER_REVIEW — chưa được duyệt làm phim.** Owner chọn nguồn ngày 2026-11-13 ("Dùng …[exfqsQTAYW4]").
+**OWNER_APPROVED 2026-11-14 — "Approve, write the script"** (trả lời câu hỏi: duyệt brief film08, 4 nhân vật, trần 3.210 credits).
+Owner chọn nguồn ngày 2026-11-13 ("Dùng …[exfqsQTAYW4]").
 Bản này đề xuất *ý nghĩa* phim; chưa có kịch bản đầy đủ, Generate, upload, provider call hay chi tiêu nào. Đây là
 phim dài thứ hai của P20 (M4): nếu được Owner duyệt bản cuối, cùng film07 sẽ đủ điều kiện xét STABLE_SUPERVISED.
 
@@ -55,9 +56,9 @@ nhưng mất khoảnh khắc cảm xúc của người được minh oan). Đề
 | SC06 — Eli's line | ELI: "Chúng ta không có căn cứ." HOLLIS ép ELI viết biên bản theo ý mình. NAOMI nói với ELI: anh không phải làm gì, chỉ cần để camera chạy. |
 | SC07 — Second warning | HOLLIS đoán: nội vụ? luật sư bào chữa? mở lại vụ cũ? Cô không xác nhận, không phủ nhận. Cảnh báo lần hai. |
 | SC08 — What a seal is for | NAOMI giải thích chuỗi lưu giữ: mọi bàn tay chạm vào đều được ghi, con dấu tồn tại để chứng minh không ai mở. HOLLIS nhớ lần anh ta từng tự tay giao một trát niêm phong. ELI hỏi thẳng: nếu mở thì sao? |
-| SC09 — Third warning | HOLLIS quyết: bị người khác thấy mình chần chừ còn tệ hơn. "Ghi là tôi mở." Cảnh báo lần ba; NAOMI lùi lại, không chạm vào nữa. |
-| SC10 — The seal | Anh ta bẻ sáp, rút trang bìa. ELI đọc to tiêu đề: hồ sơ điều tra của bồi thẩm đoàn — có tên HOLLIS. Im lặng; HOLLIS ngồi xuống. |
-| SC11 — Who makes the call | NAOMI nói rõ hồ sơ là gì (sổ vật chứng bị sửa trong sáu vụ kết án) và việc vừa xảy ra đã được ghi lại. HOLLIS xin ELI tắt camera; ELI từ chối, gọi lên văn phòng thư ký. HOLLIS được gọi lên, tự đứng dậy đi ra cửa. |
+| SC09 — Third warning | HOLLIS quyết: bị người khác thấy mình chần chừ còn tệ hơn; bảo ELI ghi giờ. Cảnh báo lần ba; NAOMI lùi lại, không chạm vào nữa. |
+| SC10 — The seal | Anh ta bẻ sáp, rút trang bìa. HOLLIS đọc trang bìa và lặng đi; NAOMI nói đó là hồ sơ bồi thẩm đoàn và dòng dưới ghi tên người bị điều tra. HOLLIS chối, xin ELI tắt camera; ELI từ chối. |
+| SC11 — Who makes the call | NAOMI nói rõ hồ sơ là gì (sổ vật chứng bị sửa trong sáu vụ kết án) và việc vừa xảy ra đã được ghi lại. HOLLIS xin ELI nghĩ đến sự nghiệp; ELI gọi bộ đàm lên văn phòng thư ký. HOLLIS được gọi lên, tự đi ra cửa. |
 | SC12 — A month later | Cùng phòng, ánh sáng khác. ELI giữ sổ theo quy trình kiểm tra mới; hậu quả được nói ngắn (án, mất chứng chỉ, giám sát độc lập). CALVIN REED đến nhận lại hồ sơ của mình; lời cảm ơn ngắn, không diễn văn. |
 
 Kết giữ đúng ý nghĩa nguồn: cảnh báo ba lần bị bỏ qua, tự tay anh ta tạo ra bằng chứng, người bị kết án oan được tự do.
@@ -96,3 +97,12 @@ Kết giữ đúng ý nghĩa nguồn: cảnh báo ba lần bị bỏ qua, tự t
 
 Sau khi duyệt: agent viết `script.fountain` + `beats.json` 300 nhịp, tạo ảnh tham chiếu (Flow ảnh 0 credits; ChatGPT
 nếu Flow ảnh không đạt), tự duyệt still/board theo OWNER_POLICY, rồi chạy pilot SC01–SC02.
+
+## Kịch bản (2026-11-14, bản nháp 1)
+
+`script.fountain` (đọc/duyệt) và `beats.json` (300 nhịp: 270 thoại, 18 hành động, 12 phản ứng; lời Anh 9–11 từ/câu,
+tổng 2.884 từ; `text_vi` đủ 270 câu). Lời thoại chia: NAOMI 113, HOLLIS 112, ELI 41, CALVIN 4.
+Kiểm tra cấu trúc chỉ đọc: `python -B docs/production/pilots/film08_chain_of_custody/check_draft.py` → PASS.
+So với SRT nguồn: 0 cụm 6 từ trùng, 0 tên nhân vật/địa danh trùng (một cụm 5 từ chung chung đã được viết lại).
+Giấy tờ trong khung (trang bìa, phiếu lưu giữ, sổ) luôn quay khỏi camera hoặc mờ nét.
+Chưa có: ảnh tham chiếu 4 nhân vật và phòng hồ sơ, Codex review (hết lượt đến 03:36 14/11), quote Flow mới, pilot.
