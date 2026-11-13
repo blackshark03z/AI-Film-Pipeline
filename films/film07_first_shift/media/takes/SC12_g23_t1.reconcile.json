@@ -1,0 +1,14 @@
+{
+  "receipt_id": "SC12_g23_t1",
+  "already_registered": [],
+  "result": "NOT_IN_GALLERY",
+  "why": "no unregistered clip among 30 scanned holds the whole prompt",
+  "scanned": 30,
+  "prompt_sha256": "17d04a417f2ee8df39a924070d28415e9186d4469be033d3225615b50f0c096c",
+  "project": "10b9a87d-4287-4f27-bec9-824378fad8f2",
+  "scan_verified": true,
+  "native_sha256": "50e618d0244164d87c4267b260fd17ea65587d5e3332e6f589fecf32cd1eb9b1",
+  "provider_no_clip": true,
+  "resolution": "PROVIDER_NO_CLIP",
+  "intent_sha256": "5c3d40e50a94b2174445fd9041b6b4f88c87de2543bb4306b557949d365e6514"
+}

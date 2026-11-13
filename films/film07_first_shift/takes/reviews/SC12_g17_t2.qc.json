@@ -1,0 +1,140 @@
+{
+  "take_id": "SC12_g17_t2",
+  "generation_id": "SC12_g17",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1538": "yes RUTH speaks toward frame-right to SAM"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:SAM": "yes off-screen through 0-4.8s; SAM hair/nose enters right edge in the last second (trim out-point 4.8s)",
+        "REL_GAZE": "yes never lens"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): sheet + edge strips: clean 0-4.8s (wide blank wall on right); SAM hair/nose enters right edge only from ~5.0s in the HOLD tail -> use out-point 4.8s in edit (dialogue ends 4.4s); STT matches line 1538; t1 was a Flow stall (no clip)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1538",
+    "REL_LISTENER:SAM",
+    "REL_GAZE"
+  ],
+  "output_sha256": "5aa7f9ec7bed26bb452c62b3741ff3f7c465c630a099d1724290dfa0286647c0"
+}

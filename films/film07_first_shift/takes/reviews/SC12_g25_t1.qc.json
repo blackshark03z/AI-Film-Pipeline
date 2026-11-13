@@ -1,0 +1,131 @@
+{
+  "take_id": "SC12_g25_t1",
+  "generation_id": "SC12_g25",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): ACCEPT: 1280x720 pane send; wide two-shot, SAM sets the OPEN card down with his near (left) arm at ~3 s, card legible and still to the last frame, RUTH clear of his reach, no touching, identity and wardrobe hold, nobody looks into the lens; no speech expected (not STT-checked)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [],
+  "output_sha256": "908b93cf47cb6710b38d41a643d55345c6dea45165eb6d0bd1ef731a7c87a39e"
+}

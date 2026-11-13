@@ -1,0 +1,239 @@
+{
+  "take": {
+    "take_id": "SC08_g08_t2",
+    "generation_id": "SC08_g08",
+    "prompt_sha256": "cfd5285052a5038e959fbb0d6f7358a96155dde757176f40023889124d5c8a3a",
+    "start_frame_sha256": "e6aee74a4ec71862352ba402c290456c34d84d9314d028a869a9215b86345ea3",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC08_g08_t2.mp4",
+    "output_sha256": "6885091415efd74de58d80e0b23f062f5f2057d9951fb85ace7e148d0455c0e8",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-12T05:30:39Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "RUTH",
+      "SAM"
+    ],
+    "start_state": "SC08_g08",
+    "end_state": "SC08_g09",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "RUTH and SAM sit facing each other, RUTH holds one sheet of paper in her right hand (the arm nearer the camera, on screen-left)"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.6,
+        "description": "RUTH lays the wage sheet down flat on her own side of the table with her right hand (the arm nearer the camera, on screen-left)"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.6,
+        "end_s": 4.0,
+        "description": "the wage sheet lies still on RUTH's side"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "both sit still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - RUTH and SAM sit facing each other, RUTH holds one sheet of paper in her right hand (the arm nearer the camera, on screen-left)?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.6s ACTION: does this happen on screen - RUTH lays the wage sheet down flat on her own side of the table with her right hand (the arm nearer the camera, on screen-left)?"
+    },
+    {
+      "group": "action",
+      "question": "2.6-4s CONSEQUENCE: does this happen on screen - the wage sheet lies still on RUTH's side?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - both sit still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): RUTH lays the wage sheet down"
+    },
+    {
+      "group": "character",
+      "question": "RUTH: does the face/body read as honest, exposed (restrained)? Must NOT read as: defensiveness."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC08_g08: Continues from the previous shot: RUTH seated on the far booth seat across the table, frame-left; SAM seated on the near booth seat across the table, frame-right."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC08_g09: Continues from the previous shot: RUTH seated on the far booth seat across the table, frame-left; SAM seated on the near booth seat across the table, frame-right; the wage sheet: lying flat on RUTH's side of the booth table."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.",
+  "qc": {
+    "take_id": "SC08_g08_t2",
+    "generation_id": "SC08_g08",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [],
+    "output_sha256": "6885091415efd74de58d80e0b23f062f5f2057d9951fb85ace7e148d0455c0e8"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}
