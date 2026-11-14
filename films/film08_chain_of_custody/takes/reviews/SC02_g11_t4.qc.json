@@ -1,0 +1,142 @@
+{
+  "take_id": "SC02_g11_t4",
+  "generation_id": "SC02_g11",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:201": "yes: v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "yes: v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+        "REL_GAZE": "yes: v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+        "REL_BARRIER": "yes: v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): v2 (clear-eyeline prompt). Contact sheet 0/24/72/120/140/143 + 720p eye crops + corner crops: head held a quarter to frame-right, eyes on the off-frame listener well clear of the lens (fixes t2); archive shelves behind HOLLIS match S09 v3; hand on ledger holds, packet unchanged; mouth moves on the line (local STT: 'you write what i tell you that's what a report is'); audio mean -31.9 dB. Only a faint top-right sliver of the listener's hair (~2.7% of the width, from ~1 s) -> fixed by reframe 0.96 anchored left (titles/reframe.json SC02_g11; checked clean at 3 s and 6 s), as accepted for film07 SC07/SC09 slivers",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:201",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "67134236f0b833efb63d3dd5fdf34ca5bdd912e1d786b122f52b27092beaf18a"
+}
