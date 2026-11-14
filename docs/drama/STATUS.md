@@ -61,6 +61,14 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   Decision: Muse is not used for any character shot in film08 (dialogue refused, silent faces drift). Possible use
   only for insert/B-roll beats without faces, and those still carry the watermark -> not planned for the pilot.
   The 9 missing SC02 takes stay on Flow 360p Omni Flash after the cool-down.
+- 10:00 Owner: try Muse native (text-to-video) with dialogue. The main chat still refused (it remembered the
+  blocked still request); a new side chat with a text-only prompt worked. 2 clips (media/muse_test/, gitignored):
+  SC02_g09_muse_t2v.mp4 + SC02_g11_muse_t2v.mp4, each 1280x720 (native 720p), 10 s, speech from ~1.3 s, no watermark
+  seen, packet+seal+ledger right, locked framing held. Asking "no patches/badge" removed the shoulder insignia.
+  Limits: the face is Muse's own casting, not the approved HOLLIS ref (cannot cut with the 41 accepted Flow takes);
+  shot 2 asked for "the exact same man" and got a similar type with a different face and different shelves. Line
+  wording/lip sync not verified (no local speech-to-text). Using Muse means recasting from text, with face drift
+  between shots -> Owner decision (cast look was Owner-approved).
 
 ---
 
