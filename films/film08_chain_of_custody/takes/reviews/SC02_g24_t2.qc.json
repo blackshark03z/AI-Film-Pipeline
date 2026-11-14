@@ -1,0 +1,142 @@
+{
+  "take_id": "SC02_g24_t2",
+  "generation_id": "SC02_g24",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:265": "yes: contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "no: off-frame listener's head enters the frame-right edge although the prompt says that edge shows only the room; render once more unchanged",
+        "REL_GAZE": "no: off-frame listener's head enters the frame-right edge although the prompt says that edge shows only the room; render once more unchanged",
+        "REL_BARRIER": "no: off-frame listener's head enters the frame-right edge although the prompt says that edge shows only the room; render once more unchanged"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143: a second head (off-frame listener's hair/ear) enters the frame-right edge from ~1 s to the end; HOLLIS eyes screen-right off the lens, line correct (local STT: 'she's breaking mine in this room that's the one that counts'), audio -32.1 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROVIDER_LIMIT",
+  "cause_note": "off-frame listener's head enters the frame-right edge although the prompt says that edge shows only the room; render once more unchanged",
+  "required_answers": [
+    "REL_ADDRESS:265",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "d28f01695d14d262d1771151ae7bc0d18bf0f680f94ede5ef5edda4b2af29915"
+}

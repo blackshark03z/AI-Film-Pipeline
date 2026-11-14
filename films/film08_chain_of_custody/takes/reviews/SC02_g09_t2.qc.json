@@ -1,0 +1,142 @@
+{
+  "take_id": "SC02_g09_t2",
+  "generation_id": "SC02_g09",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:191": "yes: contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "yes: contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+        "REL_GAZE": "yes: contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+        "REL_BARRIER": "yes: contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + eye crops: head a quarter to frame-right, eyes stay screen-right off the lens throughout; frame-right edge shows only shelves; archive shelves behind HOLLIS match S09 v3; hand on ledger holds; mouth moves on the line (local STT: 'you hear that moreno she's been watching us write that down'); audio mean -32.0 dB",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:191",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "cf47be1471246bcb842fa262fc3e66b796bf9766695ed9ef5627c4515faad668"
+}

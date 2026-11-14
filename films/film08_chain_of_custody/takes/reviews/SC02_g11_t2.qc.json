@@ -1,0 +1,142 @@
+{
+  "take_id": "SC02_g11_t2",
+  "generation_id": "SC02_g11",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:201": "yes: contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "no: eyes drift to just past the lens from ~3 s although the prompt says well clear of the lens; render once more unchanged",
+        "REL_GAZE": "no: eyes drift to just past the lens from ~3 s although the prompt says well clear of the lens; render once more unchanged",
+        "REL_BARRIER": "no: eyes drift to just past the lens from ~3 s although the prompt says well clear of the lens; render once more unchanged"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): contact sheet 0/24/72/120/140/143 + 720p eye crops vs accepted g09: from ~3 s HOLLIS turns square to camera and his eyes sit just right of the lens; line correct (local STT), shelves, ledger and frame-right edge OK",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROVIDER_LIMIT",
+  "cause_note": "eyes drift to just past the lens from ~3 s although the prompt says well clear of the lens; render once more unchanged",
+  "required_answers": [
+    "REL_ADDRESS:201",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "685d7c6ae8a87a568b6f23b9265eae9fbed12e9d2ef9edaed67a87e0446211bf"
+}
