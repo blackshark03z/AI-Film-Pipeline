@@ -111,6 +111,11 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   4 HOLLIS shots (g09 g11 g22 g24, S09 v2) wait for downloads (QC needed, and the S09 v2 tile must be verified).
   Finding: the account panel says "Visible watermarking is required in your region" (switch disabled) -> the
   Gemini sparkle cannot be turned off on this account.
+- 12:10 Owner allowed downloads; still no file. Facts: drive C: was full (442 MB free; removed the regenerable
+  Temp/pytest-of-ADMIN -> 1.6 GB free); the Flow tab runs in a GPM-Browser window (not plain Chrome); after a page
+  reload the download request to flow-content.google returns 200, but no file or .crdownload appears anywhere on
+  C:/D:. The save step is blocked inside the GPM browser (likely its own automatic-downloads block for
+  flow.google.com, or the earlier disk-full failure). Needs the Owner in that GPM window; no sends meanwhile.
 
 ---
 
