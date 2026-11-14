@@ -1,4 +1,4 @@
-# film08 "Chain of Custody" — Codex review done, pipeline fixes in; pilot running (2026-11-14 07:00)
+# film08 "Chain of Custody" — pilot SC01-SC02 50/50 accepted (2026-11-14 17:30; latest under "Update 07:50")
 
 Goal: second accepted 25-30 min film for P20 M4. Pilot SC01-SC02 runs in session "film08 pilot SC01–SC02"
 (Chrome tab 214901168, gmail-4, brief C:/film-work/film08/PANE_BRIEF.md, run cap 300 cr).
@@ -116,6 +116,37 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   reload the download request to flow-content.google returns 200, but no file or .crdownload appears anywhere on
   C:/D:. The save step is blocked inside the GPM browser (likely its own automatic-downloads block for
   flow.google.com, or the earlier disk-full failure). Needs the Owner in that GPM window; no sends meanwhile.
+- 13:00-17:30 MILESTONE: pilot SC01-SC02 50/50 ACCEPTED (gmail-4 Chrome, Omni 1.2 Flash 360p x1, 6 cr, no flag).
+  Downloads: fixed by opening a NEW Flow tab (the old tab's download state was stuck; memory feedback-download-720p).
+  Every take now has a free 720p copy (`_720.mp4`, unregistered; registered takes stay the 640x360 originals).
+  NAOMI: g18_t2/g21_t2 rejected (push-in; listener at edge), t3 accepted (b40e49e, 858bea9).
+  HOLLIS: S09 v3 = Flow image edit (0 cr) of v2, head a quarter to frame-right, eyes off the lens, shelves behind
+  (1a44529); same fix as S07 v3. g09_t2, g22_t2, g24_t3 accepted; g24_t2 + g11_t3 rejected (listener head/face
+  at the frame-right edge), g11_t2 rejected (eyes drift to just past the lens) (9af5335, 0c78693).
+  g11 restage after 3 rejects (OWNER_POLICY 3) in 06a6a7c: `clear_eyeline_scenes` accepts a generation id
+  ("SC02_g11"), so one shot gets the clear-eyeline text without moving the accepted SC02 hashes; the
+  clear-eyeline sentences were shortened (the old text pushed 121 prompts past the 230-word gate). Package
+  regenerated from _author.py (Codex Part A fixes now in 01-04 json + script.fountain); SC01-SC02 prompts and
+  still prompts byte-identical except SC02_g11. g11_t4 (v2) accepted with a 0.96 reframe anchored left for a
+  ~2.7% top-right hair sliver: titles/reframe.json (632d238), checked clean at 3 s and 6 s.
+  Take identity: Flow tile titles repeat ("Older man speaking in room" x2) and the stored mapping was wrong once;
+  takes are now identified by local speech-to-text (vosk small-en, ~/.cache/vosk) against the scripted line.
+  A Flow generation stuck at "99%" vanished after a fresh page load: failed, not charged; re-sent.
+  Credits: 76 registered takes = 456 cr (pilot cap 535). Balance 668 before the last 4 sends -> 644 after
+  (exactly 4 x 6). Earlier gap: 648 (after g21_t2) - 30 cr of later sends should give 618, but 668 was read ->
+  +50 unexplained (refunds?), same pattern as the gmail-4 SC07 gap; check Flow activity before the cost report.
+  Open:
+  - 34 SC03+ video prompts are still over 230 words (gate 3 PROMPT_LENGTH BLOCK) after the shorter clear-eyeline
+    text -> trim in the compiler or _author.py before SC03+ sends. Gate 3 also BLOCKs on SC03+ boards (PENDING).
+  - HOLLIS singles pull the off-frame listener in at frame-right (3 of 7 takes even with S09 v3). Before SC03+:
+    consider not naming the listener's position in single prompts, or a wider empty margin in start stills.
+  - Pipeline QC gaps to add: still eyeline check (start still with eyes on the lens -> lens stares), corner-mark
+    check; Gemini sparkle mark treatment = Owner decision (not removed).
+  - Known failure test_accepted_film07_takes_do_not_go_stale (unchanged).
+  Tests: `PYTHONPATH=src python -m pytest -q tests/test_production_interaction_prompt.py` (the
+  interaction/preflight/film08/three-person/safeguard selection: 100 pass, known film07 failure deselected); `python tools/film.py retake --film films/film08_chain_of_custody`
+  -> DONE 50.
+  Next: fix the 34 long prompts + listener-edge pattern -> SC03+ stills/boards -> full run (cap 3,210).
 
 ---
 
