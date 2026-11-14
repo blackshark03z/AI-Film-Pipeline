@@ -1,0 +1,142 @@
+{
+  "take_id": "SC02_g02_t2",
+  "generation_id": "SC02_g02",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:156": "no: other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs)"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "no: other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs)",
+        "REL_GAZE": "no: other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs)",
+        "REL_BARRIER": "no: other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs)"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs). Audio: mean level -30.6 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "other person's head (older man profile) intrudes at the right edge in all 3 edge crops; background now correct (green wall, windows, chairs)",
+  "required_answers": [
+    "REL_ADDRESS:156",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "09b239c8cd4acd318f4c5239ec90fbd10d493f3d3c8a09d4277f9243bbf96000"
+}
