@@ -69,6 +69,18 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   shot 2 asked for "the exact same man" and got a similar type with a different face and different shelves. Line
   wording/lip sync not verified (no local speech-to-text). Using Muse means recasting from text, with face drift
   between shots -> Owner decision (cast look was Owner-approved).
+- 10:10 Owner: "find a way to force the reference". Muse itself says (asked in chat) there is no character slot
+  or saved character; options are an attached image as plain visual input, chaining from its own clip snapshot,
+  and repeating the same text. Tests (new side chat, char_HOLLIS.jpg attached as appearance reference):
+  SC02_g09_muse_ref.mp4 and SC02_g11_muse_ref_chain.mp4 (chained, ref re-attached, "about 55, full hair"). Both
+  accepted, 1280x720, 10 s, speech. Face strip (ref | Muse 1 | Muse 2 | Flow SC02_g11_t1): Muse gets the type
+  (uniform, epaulettes, grey hair) but not the person; 1 reads ~70 and balding, 2 is closer but a different face
+  and in near profile; Flow matches the ref. Verdict: Muse cannot hold the approved cast; not mixable with Flow
+  takes. The only route that would lock the face (our still as first frame + dialogue) is refused; not pursued.
+- FINDING (pipeline QC miss): every Flow/Nano Banana image we made (char_*, plate, start_S01..S10, v2) carries
+  the visible Gemini sparkle mark bottom-right, and it survives into the Flow takes (checked SC01_g01, SC01_g03,
+  SC02_g01, SC02_g11 at 4 s). Muse clips made from those images inherit it; Muse text-only clips have none.
+  The take review never checked corners for marks. Owner to decide how the film treats it (not removed by us).
 
 ---
 
