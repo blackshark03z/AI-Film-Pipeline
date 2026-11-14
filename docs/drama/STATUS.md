@@ -44,6 +44,12 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   _720.mp4 copies (unregistered).
   Follow-up: the pipeline should own still prompts. start_<GEN>.txt already carries the camera view; the
   hand-written stills.md bypassed it.
+- HARD STOP: Flow flagged "unusual activity" on the SC02_g18 t2 send (gmail-4, Chrome). No retry; nothing sent since.
+  SC01 25/25 accepted (t2 retakes for g04 g13 g15 g18 accepted). SC02: 16 accepted. Missing 9: g02, g06, g08 (t2
+  rejected: edge head / eyes into the lens), g18 (flagged), g21, g09, g11, g22, g24 (t2 not sent). Spent ~372 cr.
+  The 720p test was not done. Resume only after a >= 2 h cool-down (memory: flow-unusual-activity-no-evasion), with
+  no evasion tricks, at most 9 sends (<= 54 cr; pilot cap 535).
+  Pattern to fix before SC03+: NAOMI singles keep pulling the off-frame HOLLIS in at the edge or look into the lens.
 
 ---
 
