@@ -89,6 +89,15 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   darker slicked hair, different face. Also: legible prop text ("RECORDS LEDGER", "ARCHIVES CASE FILES"), shot 1
   pushes in, back wall differs between shots. Verdict unchanged: Muse cannot reproduce an approved face; it
   holds its own face across a chain.
+- 10:25 Owner: "Giữ Flow" -> character shots stay on Flow 360p Omni Flash; Muse is not used in film08.
+  NAOMI single defects traced: S07 v2 still (hand prompt said "centred in frame") is square-on to camera, and the
+  video prompt said "eyes go just past the lens" -> lens stares + HOLLIS's head at the right edge.
+  Fix in f194991: preflight.clear_eyeline_scenes (opt-in per scene, accepted hashes kept) -> "head turned a
+  quarter toward frame-X; eyes stay on Y off frame-X, well clear of the lens" + "the frame-X edge shows only the
+  room". film08 _author.py enables SC03-SC12 (regenerate after the pilot). Test added; 275 related tests pass;
+  pre-existing failures unchanged: film03 golden x3 (also at HEAD), test_accepted_film07_takes_do_not_go_stale.
+  SC02 remainder (after the 11:15 cool-down): S07 v3 = Flow image edit of v2 (stills.md) for g02 g06 g08 g18
+  g21; S09 v2 for g09 g11 g22 g24; 9 sends <= 54 cr (run ~426 <= 535); one 720p download test.
 
 ---
 
