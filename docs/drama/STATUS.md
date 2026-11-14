@@ -50,6 +50,17 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   The 720p test was not done. Resume only after a >= 2 h cool-down (memory: flow-unusual-activity-no-evasion), with
   no evasion tricks, at most 9 sends (<= 54 cr; pilot cap 535).
   Pattern to fix before SC03+: NAOMI singles keep pulling the off-frame HOLLIS in at the edge or look into the lens.
+- 09:35 Owner: "Đổi sang dùng muse"; Muse limits per Owner: 6 shots per batch, 200 x 10 s shots per day.
+  Muse test on SC02_g09 (start still start_SC02_g09.jpg, Chrome tab muse.ai):
+  1. Dialogue prompt (HOLLIS line) -> refused: "I couldn't generate that video from the image as described"
+     (same as the 2026-11-13 test: no talking close-up from a photoreal still).
+  2. Muse's own offer, silent version -> clip 1216x672, 10 s, 24 fps, ambient audio. QC (strip still + 0.5/3/5.5/8/
+     9.8 s): REJECT. Identity drifts (face older/different man by 5 s), strong push-in from MCU to ECU, shelf
+     colours shift, and a visible sparkle watermark bottom-right. Kept only as a local test file
+     (media/muse_test/, gitignored, not registered).
+  Decision: Muse is not used for any character shot in film08 (dialogue refused, silent faces drift). Possible use
+  only for insert/B-roll beats without faces, and those still carry the watermark -> not planned for the pilot.
+  The 9 missing SC02 takes stay on Flow 360p Omni Flash after the cool-down.
 
 ---
 
