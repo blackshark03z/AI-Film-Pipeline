@@ -22,6 +22,19 @@ Also open: pre-existing failure test_accepted_film07_takes_do_not_go_stale; LOOK
 Tests: `PYTHONPATH=src python -m pytest -q tests/test_drama_three_person_axis.py`; plan as below.
 Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ boards -> full run (cap 3,210).
 
+## Update 2026-11-14 07:50 (pilot still running in its own session)
+- Script fixes from Codex Part A in dd724a3 (sources only: beats.json, pilot script.fountain, _author.py): clock
+  10:54->10:58 and "eight"->"four minutes"; ID card pocketed SC03_g15, laid on the counter SC11_g01; radio call moved
+  to SC11_g16 (shoulder radio), SC11_g17 = listening beat; lines SC07_g24, SC08_g17, SC09_g14, SC12_g17 (+VI).
+  Verified in worktree wt-film08-script: check_draft PASS, gates 1-2 PASS, SC01-SC02 prompts+stills byte-identical.
+  NOT yet regenerated here: after the pilot ends run `PYTHONPATH=src python films/film08_chain_of_custody/_author.py`,
+  re-plan, commit 01-04 json + films/.../script.fountain. New WARNs: OBJECT_NO_CAUSE card SC09_g23->SC10_g01 (inserts).
+  Not changed (judgement): SC07-SC08 pacing (story meaning); seal SC09_g24/SC10_g01/g05-06 stay UNKNOWN ->
+  start/end-state QC on review.
+- Coordinator QC SC01 t1: reject g13 + g18 (second face at right edge); g12 AMBER (drift). Owner 2026-11-14: download
+  takes at 720p/highest (memory feedback-download-720p); SC01-SC02 so far are 640x360 -> re-download after sends.
+- Worktree D:/AI FILM MAKER/wt-film08-script (branch film08-script-fixes) can be removed.
+
 ---
 
 # film08 "Chain of Custody" — package + refs + SC01–SC02 boards approved; pilot sends next (2026-11-14 04:20)
