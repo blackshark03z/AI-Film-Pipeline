@@ -812,3 +812,12 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 **Owner acceptance:** "Chất lượng ổn, có thể coi là pass" (Owner in chat, 2026-11-13) -> `deliver --accept "Owner khoikk03 (explicit chat approval, 2026-11-13)"`, manifest f3476aa2ecb7. validate: gates 1-6 PASS. Publishing stays with the Owner.
 
 **Publish package (PUBLISH SOT v3.0, 2026-11-13):** `films/film07_first_shift/media/publish/publish_package.zip` (gitignored, sha256 79f9aa27…938db2, 13 files, status COMPLETE). Title "His First Shift at the Diner Began With a Closing Notice on the Counter" (71 chars); 10 chapters from scene starts; thumbnail = approved still start_SC10_g11 (Sam at doorway, ref char_SAM), cropped 1248x702 to exclude the generator sparkle, Lanczos to 3840x2160. Channel folder (wanglin08ma) read only. Upload file: deliveries/20261113T142538-339d5830f2/masters/film07_first_shift_16x9.mp4 (not media/cut/mixed.mp4). At upload the Owner must set "Altered or synthetic content = Yes". Nothing uploaded.
+
+## 2026-11-14 20:15 DISK CLEANUP (coordinator, Owner: "chọn những phần không dùng tới rồi xóa")
+- Freed C: 23 -> 36 GiB, D: 4.4 -> 6.7 GiB. Removed: Temp/pytest-of-ADMIN; Claude scratchpads > 24 h (this project);
+  259 Downloads files with a sha1 copy in the project; C:/film-work/film07-rehearsal (film07 mastered + accepted);
+  C:/film-work/production-stability-p20/* except proof/ (cited above); unreferenced C:/AFP-*QA* and film-test dirs;
+  worktrees AFP-shard-1..4 (0 unmerged commits, branches kept) and 6 clean Oct AI-Film-Pipeline-* worktrees; worktree prune.
+- Kept (cited as evidence or holding unique work): AI-Film-Pipeline/projects (all 40 dirs cited in docs), C:/AFP-Live-v3,
+  AFP-Cold-v3, AFP-QA-20261110-audit, AFP-Releases, Film120-Gemini, AFP-film-package, wt-*, unmatched Downloads (0.7 GB).
+- Empty stubs D:/AI FILM MAKER/AFP-shard-3 and AI-Film-Pipeline-OneClick stay until the shells holding them exit.
