@@ -1,0 +1,142 @@
+{
+  "take_id": "SC02_g18_t2",
+  "generation_id": "SC02_g18",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:236": "yes: retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "yes: retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+        "REL_GAZE": "yes: retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+        "REL_BARRIER": "yes: retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2 (S07 v3, Chrome send, 6 credits): 2x2 contact sheet frames 24/72/120/140 @360p, first/last frame compared with accepted g02/g06/g08 t3, plus 720p copy; eyes off the lens to screen-right, mouth moves, no edge intrusion. Audio: mean -31.9 dB measured, not listened to.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROVIDER_LIMIT",
+  "cause_note": "camera pushes in from about 0.5 s to 3 s: the counter, sealed packet and ledger leave the frame and the close-up no longer matches the held framing of accepted g02/g06/g08 t3; same prompt and still held the frame there, so render once more unchanged",
+  "required_answers": [
+    "REL_ADDRESS:236",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "f232565103ee2adf1e190d30f49eb1907577333163337ad75817977cff29bd77"
+}
