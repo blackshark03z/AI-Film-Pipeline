@@ -36,9 +36,9 @@
       "note": "",
       "waiver": null,
       "answers": {
-        "REL_LISTENER:ELI": "no: eyes drift to just past the lens from ~3 s although the prompt says well clear of the lens; render once more unchanged",
-        "REL_GAZE": "no: eyes drift to just past the lens from ~3 s although the prompt says well clear of the lens; render once more unchanged",
-        "REL_BARRIER": "no: eyes drift to just past the lens from ~3 s although the prompt says well clear of the lens; render once more unchanged"
+        "REL_LISTENER:ELI": "no: eyes drift to just past the lens from ~3 s. The SC02 prompt still says 'eyes go just past the lens to frame-right' (clear_eyeline_scenes is enabled only for SC03-SC12, to keep accepted SC02 hashes); g09_t2 with the same template and S09 v3 kept the eyes clear, so this is provider variance: render once more unchanged",
+        "REL_GAZE": "no: eyes drift to just past the lens from ~3 s. The SC02 prompt still says 'eyes go just past the lens to frame-right' (clear_eyeline_scenes is enabled only for SC03-SC12, to keep accepted SC02 hashes); g09_t2 with the same template and S09 v3 kept the eyes clear, so this is provider variance: render once more unchanged",
+        "REL_BARRIER": "no: eyes drift to just past the lens from ~3 s. The SC02 prompt still says 'eyes go just past the lens to frame-right' (clear_eyeline_scenes is enabled only for SC03-SC12, to keep accepted SC02 hashes); g09_t2 with the same template and S09 v3 kept the eyes clear, so this is provider variance: render once more unchanged"
       }
     },
     {
@@ -131,7 +131,7 @@
     }
   ],
   "cause": "PROVIDER_LIMIT",
-  "cause_note": "eyes drift to just past the lens from ~3 s although the prompt says well clear of the lens; render once more unchanged",
+  "cause_note": "eyes drift to just past the lens from ~3 s. The SC02 prompt still says 'eyes go just past the lens to frame-right' (clear_eyeline_scenes is enabled only for SC03-SC12, to keep accepted SC02 hashes); g09_t2 with the same template and S09 v3 kept the eyes clear, so this is provider variance: render once more unchanged",
   "required_answers": [
     "REL_ADDRESS:201",
     "REL_LISTENER:ELI",

@@ -36,9 +36,9 @@
       "note": "",
       "waiver": null,
       "answers": {
-        "REL_LISTENER:ELI": "no: off-frame listener's head enters the frame-right edge although the prompt says that edge shows only the room; render once more unchanged",
-        "REL_GAZE": "no: off-frame listener's head enters the frame-right edge although the prompt says that edge shows only the room; render once more unchanged",
-        "REL_BARRIER": "no: off-frame listener's head enters the frame-right edge although the prompt says that edge shows only the room; render once more unchanged"
+        "REL_LISTENER:ELI": "no: off-frame listener's head enters the frame-right edge although the prompt says the young man stays fully out of frame; g09_t2 with the same template and S09 v3 had a clean edge, so this is provider variance: render once more unchanged",
+        "REL_GAZE": "no: off-frame listener's head enters the frame-right edge although the prompt says the young man stays fully out of frame; g09_t2 with the same template and S09 v3 had a clean edge, so this is provider variance: render once more unchanged",
+        "REL_BARRIER": "no: off-frame listener's head enters the frame-right edge although the prompt says the young man stays fully out of frame; g09_t2 with the same template and S09 v3 had a clean edge, so this is provider variance: render once more unchanged"
       }
     },
     {
@@ -131,7 +131,7 @@
     }
   ],
   "cause": "PROVIDER_LIMIT",
-  "cause_note": "off-frame listener's head enters the frame-right edge although the prompt says that edge shows only the room; render once more unchanged",
+  "cause_note": "off-frame listener's head enters the frame-right edge although the prompt says the young man stays fully out of frame; g09_t2 with the same template and S09 v3 had a clean edge, so this is provider variance: render once more unchanged",
   "required_answers": [
     "REL_ADDRESS:265",
     "REL_LISTENER:ELI",
