@@ -192,6 +192,28 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   - Left: T03 (redraw), T06-T58 (53 draws) -> 241 SC03+ generations without a start still.
   - Next (coordinator decides): continue in ChatGPT treating a content-policy refusal as BLOCKED (reword, move on)
     rather than a stop, or wait / switch route. Free-plan image limit not hit yet (5 images in ~40 min).
+- 2026-11-14 21:25 (system clock; the "~22:10" label above was an estimate) STOP (ChatGPT Free-plan image limit) after T26. Owner answer via chat "Yes, continue":
+  a content-policy refusal = BLOCKED, reword once and move on; limits/warnings/"unusual activity" still stop.
+  - Exact stop text: "You've hit the Free plan limit for image generations requests. You can create more images
+    when the limit resets in 23 hours." + "I couldn't generate this image right now. Your prompt is ready to retry
+    when the limit resets." Card: "You're out of image creations for now ... wait for more tomorrow at 8:28 PM."
+    No retry; tab closed. ~24 images drawn in this chat before the limit.
+  - Prompt form from T15 on: compact prompt built from the plan by C:/film-work/film08/cmp.py T..:
+    which ref is who, shot size, posture + side, the plan's eyeline sentence ("head a quarter toward frame-Y,
+    eyes off to frame-Y, NOT at the camera; frame-Y side shows only the room"), props state from the plan, first
+    instant, no text. Why: the full 2,000-char plan prompt drew a content-policy refusal on T13 (2nd time, after
+    T06); the compact form passed 14/14. Police-like words (body camera, radio) are left to the refs.
+  - T13/T14 redrawn: the plan prompt says "The open ledger is on the counter" while the state says "the ledger
+    lying closed" (template glitch, already open in the 04:20 handoff); v1 drew it open. v2 states CLOSED.
+  - APPROVED (agent:tech-lead, delegated; contact-sheet review: faces vs refs, eyeline side, props, corners clean):
+    T03 v2, T06 (+T07 merged), T08, T09, T05 image reused for T10, T11, T12, T13, T14, T15 (+T21 merged),
+    T16, T17, T18, T19, T20 (+T22 merged), T23, T24, T25, T26 -> 162 generations registered + approved
+    (SC03-SC10). Total SC03+ approved with the 9 from 22:10: 171 of 250.
+  - Left: T27-T58 (32 still groups; unique draws T27 T28 T29 T30 T31 T32 T33 T34 T35 T36 T37 T40 T41 T42 T43
+    T44 T46 T48 T49 T50 T51 T52 T53 T54 T56 T58 = 26 draws, merges T38<-T36 T39<-T35 T45<-T43 T47<-T44
+    T55<-T51 T57<-T52). T53/T54/T56/T58 need char_CALVIN uploaded first. T30 plan text conflicts (state "under
+    HOLLIS's right hand" vs first instant "holds in both hands").
+  - Next: ChatGPT limit resets ~2026-11-15 20:28 (per the card); or another route the coordinator picks.
 
 ---
 
