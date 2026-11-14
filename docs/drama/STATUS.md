@@ -174,6 +174,24 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   references attached with file_upload, same plan prompts + refs; register each with --source ChatGPT, QC with
   STILL_EYELINE / STILL_CORNER_MARK on a contact sheet, self-approve as agent:tech-lead (delegated). Stop on any
   ChatGPT warning/rate limit/unusual activity. No Flow clicks before 23:15; no video sends this turn.
+- 2026-11-14 ~22:10 STOP (ChatGPT content-policy message) after 4 of 58 stills; 9 SC03 generations approved.
+  Route that works: new Claude-group tab on chatgpt.com (free plan, logged in), refs N/H/E/plate attached once with
+  file_upload on the hidden "Attach photos" input, then one message per still = short wrapper (which ref is who,
+  only X appears, no text) + the plan prompt verbatim; type, then Enter (the Send-button click dropped the text
+  once). Download: image -> viewer "Download" -> ~/Downloads PNG 1672x941 -> media/stills/start_T??.jpg (q92).
+  Screenshots work in this tab only via files; review = contact sheets (refs row + stills row, 1280 px).
+  - APPROVED (agent:tech-lead, delegated): T01 -> SC03_g01; T02 -> SC03_g02 g04 g06 g08 g13; T04 -> SC03_g09;
+    T05 -> SC03_g10 g12. Faces match refs; eyes off the lens to the named side; packet/ledger/ID card right;
+    corners clean (ChatGPT has no visible mark). Source "ChatGPT GPM tab (Claude in Chrome), chat 6af86157".
+  - REJECTED: T03 (NAOMI, eyes almost on the lens) -> STILL_EYELINE fail, not registered (start_T03.jpg kept).
+    Wrapper now adds "X's head is turned a quarter toward frame-Y and the eyes look off to frame-Y, clearly NOT
+    at the camera" for singles.
+  - STOP: T06 (NAOMI seated in a waiting chair, close-up) returned, exact text: "We’re so sorry, but the image we
+    created may violate our content policies. If you think we got it wr..." (rest truncated by the a11y tree).
+    Per the rule (stop on any ChatGPT warning) no retry; tab closed. Likely a false positive on a portrait.
+  - Left: T03 (redraw), T06-T58 (53 draws) -> 241 SC03+ generations without a start still.
+  - Next (coordinator decides): continue in ChatGPT treating a content-policy refusal as BLOCKED (reword, move on)
+    rather than a stop, or wait / switch route. Free-plan image limit not hit yet (5 images in ~40 min).
 
 ---
 
