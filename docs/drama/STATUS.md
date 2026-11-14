@@ -147,6 +147,21 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   interaction/preflight/film08/three-person/safeguard selection: 100 pass, known film07 failure deselected); `python tools/film.py retake --film films/film08_chain_of_custody`
   -> DONE 50.
   Next: fix the 34 long prompts + listener-edge pattern -> SC03+ stills/boards -> full run (cap 3,210).
+- 2026-11-14 21:00 MILESTONE: SC03+ prompts, listener edge, still QC (code only, 0 cr, no Flow).
+  - Listener edge: new `preflight.listener_unplaced_scenes` (SC03-SC12; needs clear_eyeline too). Off-frame side
+    listeners are not placed in singles: "X faces a quarter toward frame-Y, eyes on Z, well clear of the lens. Only X
+    is in frame; the frame-Y edge shows only the room." and no "stays fully out of frame" safeguard (interaction.py,
+    plan.py). Why: the 3 SC02 HOLLIS edge rejects all named ELI's spot by the door.
+  - Prompt length: the shorter text also fixes gate 3 PROMPT_LENGTH: 300/300 PASS, max 230 words. Close inserts
+    keep all their props again (SC09_g24, SC10_g01, SC12_g25; the old trim caused OBJECT_NO_CAUSE and lost the pen).
+  - QC: `film.py stills --register` prints `still_checks` (STILL_EYELINE, STILL_CORNER_MARK); take review and
+    relation review ask about corners and "well clear of the lens" in clear-eyeline scenes.
+  - Boards: 300/300 APPROVED (SC03+ by agent:tech-lead 17:55 from contact sheets), unchanged by the re-plan.
+  - SC01-SC02 prompts unchanged: retake DONE 50.
+  - Stills plan: C:/film-work/film08/stills_sc03.{md,json} = 58 draws (T01-T58) serve the 250 SC03+ generations.
+  - Tests: 13 related files: 127 pass, 19 skip, 1 known film07 failure.
+  - Not committed here: the film07 edits in the tree (_author.py, SC12_g23_t1.reconcile.json) belong to another session.
+  - Next: draw T01-T58 in Flow image mode (0 cr, gmail-4, NO-JS Chrome), register and approve per served generation.
 
 ---
 

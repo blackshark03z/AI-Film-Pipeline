@@ -181,6 +181,13 @@ def bind_by_job_id(log: TakeLog, provider: str, provider_job_id: str) -> TakeEnt
     return next((t for t in log.takes if t.provider == provider and t.provider_job_id == provider_job_id), None)
 
 
+# film08 pilot: the Gemini sparkle sat bottom-right in every Flow still and survived into the takes, and no review
+# looked at the corners. Removing that mark is the Owner's decision; the review records it and fails any other mark.
+CORNER_MARK_QUESTION = ("Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. "
+                        "The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other "
+                        "mark fails.")
+
+
 def _questions(decl: Any, pre: Any, script_lines: dict[int, str]) -> list[dict[str, str]]:
     q: list[dict[str, str]] = []
     scene = pre.scenes.get(decl.scene_id)
@@ -227,6 +234,7 @@ def _questions(decl: Any, pre: Any, script_lines: dict[int, str]) -> list[dict[s
     q.append({"group": "visual", "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, "
                                              "text artefacts or flicker."})
     q.append({"group": "motion", "question": "Motion is physically plausible and smooth (full clip, not stills)."})
+    q.append({"group": "visual", "question": CORNER_MARK_QUESTION})
     return q
 
 

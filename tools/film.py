@@ -507,6 +507,9 @@ def _run(args, rest, parser) -> int:
                     rel = st_mod.relation_questions_for(pkg, args.register)
                     if rel:  # informational: the Owner answers in chat; approval logic is unchanged
                         out = {**out, "relation_questions": rel}
+                    look = st_mod.still_checks_for(pkg, args.register)
+                    if look:  # informational too: eyeline + corner marks (film08 pilot)
+                        out = {**out, "still_checks": look}
                     _emit({"registered": out})
                     return 0
                 if args.approve:

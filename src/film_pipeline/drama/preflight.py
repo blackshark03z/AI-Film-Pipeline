@@ -52,6 +52,11 @@ class PreflightLimits(ContractModel):
     # edge shows only the room (film08 SC02: "just past the lens" gave lens stares and the listener's head at the
     # edge). Per scene for the same reason as safeguard_scenes; a generation id (e.g. "SC02_g11") restages one shot.
     clear_eyeline_scenes: list[str] = Field(default_factory=list)
+    # clear-eyeline singles that do NOT say where the off-frame listener stands: the placement phrase and the
+    # "stays fully out of frame" safeguard become "Only X is in frame; the frame-Y edge shows only the room."
+    # (film08 SC02: 3 of 7 HOLLIS singles still drew ELI at the frame-right edge; every one of those prompts named
+    # where ELI stood, which reads to the video model as something to show). Scene or generation ids, as above.
+    listener_unplaced_scenes: list[str] = Field(default_factory=list)
     timing: SceneTiming = Field(default_factory=SceneTiming)
     feasibility: FeasibilityLimits = Field(default_factory=FeasibilityLimits)
 

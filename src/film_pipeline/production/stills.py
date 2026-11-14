@@ -197,6 +197,28 @@ def relation_questions_for(pkg: Any, key: str) -> list[dict[str, str]]:
     return [] if decl is None else _relation_questions(pkg.typed["preprod"], decl, script_dialogue(pkg))
 
 
+def still_checks_for(pkg: Any, key: str) -> list[dict[str, str]]:
+    """Look-checks for a drawn still (`end:GID` allowed): eyeline and corner marks (film08 pilot). A start still with
+    eyes on the lens gave lens stares in the take (NAOMI S07 v2: 3 rejects), and no review looked at the corners."""
+    from film_pipeline.production.takes import CORNER_MARK_QUESTION
+    gid = key.split(":", 1)[1] if key.startswith("end:") else key
+    decl = next((g for g in pkg.typed["shots"].generations if g.generation_id == gid), None)
+    if decl is None:
+        return []
+    out = []
+    if decl.visible and decl.gaze_target != "LENS":
+        subject = decl.subject or (decl.visible[0] if len(decl.visible) == 1 else "")
+        side = next((a.side for n, a in decl.listener_anchors.items()
+                     if a.mode == "OFF_FRAME" and a.side in ("LEFT", "RIGHT")
+                     and (not decl.gaze_target or decl.gaze_target == n)), None)
+        turn = f"; {subject}'s head turned a quarter toward frame-{side.lower()}" if subject and side else ""
+        out.append({"id": "STILL_EYELINE", "group": "spatial",
+                    "question": f"Are all eyes clearly off the lens{turn}? Eyes on the lens in the still become "
+                                "lens stares in the take: redraw."})
+    out.append({"id": "STILL_CORNER_MARK", "group": "visual", "question": CORNER_MARK_QUESTION})
+    return out
+
+
 def approve_still(pkg: Any, gid: str, by: str, *, now: str | None = None) -> dict[str, Any]:
     """Mark the registered still approved by a named reviewer; refuses a missing or stale still."""
     if not by.strip():

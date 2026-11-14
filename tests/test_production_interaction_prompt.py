@@ -92,3 +92,87 @@ def test_clear_eyeline_by_generation_id(tmp_path):
     (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
     video, _, _ = plan(root)
     assert "The woman's eyes go just past the lens to frame-left." in video
+
+
+def test_listener_unplaced_drops_the_listeners_spot(tmp_path):
+    # film08 SC02: 3 of 7 HOLLIS singles drew ELI at the frame-right edge; each prompt named ELI's spot by the door
+    root = off_frame(tmp_path)
+    pre = json.loads((root / "03_preprod.json").read_text(encoding="utf-8"))
+    pre["preflight"]["safeguard_scenes"] = ["SC02"]
+    pre["preflight"]["clear_eyeline_scenes"] = ["SC02"]
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+    placed_video, placed_still, _ = plan(root)
+    assert "beside the camera" in placed_video and "stays fully out of frame" in placed_video
+    pre["preflight"]["listener_unplaced_scenes"] = ["SC02"]
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+    video, still, res = plan(root)
+    for text in (video, still):
+        assert "beside the camera" not in text and "stays fully out of frame" not in text
+        assert "just past the lens" not in text
+    assert "MARA faces a quarter toward frame-left, eyes on THEO, well clear of the lens." in still
+    assert "Only MARA is in frame; the frame-left edge shows only the room." in still
+    assert "Only the woman is in frame; the frame-left edge shows only the room." in video
+    assert len(video.split()) < len(placed_video.split())
+    assert "HIDDEN_PERSON_UNPLACED" not in issues(res)
+
+
+def test_listener_unplaced_needs_the_clear_eyeline(tmp_path):
+    # the option only narrows clear-eyeline singles; alone it changes nothing (accepted hashes elsewhere stay put)
+    root = off_frame(tmp_path)
+    before = plan(root)[:2]
+    pre = json.loads((root / "03_preprod.json").read_text(encoding="utf-8"))
+    pre["preflight"]["listener_unplaced_scenes"] = ["SC02"]
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+    assert plan(root)[:2] == before
+
+
+def _clear_eyeline_pkg(tmp_path):
+    root = off_frame(tmp_path)
+    pre = json.loads((root / "03_preprod.json").read_text(encoding="utf-8"))
+    pre["preflight"]["clear_eyeline_scenes"] = ["SC02"]
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+    return load_package(root)
+
+
+def test_still_checks_ask_eyeline_and_corner_marks(tmp_path):
+    # film08 pilot: S07 v2 had eyes on the lens (lens stares in 3 takes); no review looked at the corner sparkle
+    from film_pipeline.production.stills import still_checks_for
+    from film_pipeline.production.takes import CORNER_MARK_QUESTION
+    pkg = _clear_eyeline_pkg(tmp_path)
+    checks = {c["id"]: c for c in still_checks_for(pkg, "SC02_g1")}
+    assert set(checks) == {"STILL_EYELINE", "STILL_CORNER_MARK"}
+    assert "off the lens; MARA's head turned a quarter toward frame-left" in checks["STILL_EYELINE"]["question"]
+    assert checks["STILL_CORNER_MARK"]["question"] == CORNER_MARK_QUESTION
+    assert still_checks_for(pkg, "end:SC02_g1") == still_checks_for(pkg, "SC02_g1")
+    assert still_checks_for(pkg, "SC99_g1") == []
+
+
+def test_take_review_asks_corners_and_clear_eyeline(tmp_path):
+    from film_pipeline.production.relation_review import relation_questions
+    from film_pipeline.production.takes import CORNER_MARK_QUESTION, _questions
+    pkg = _clear_eyeline_pkg(tmp_path)
+    pre = pkg.typed["preprod"]
+    decl = next(g for g in pkg.typed["shots"].generations if g.generation_id == "SC02_g1")
+    assert CORNER_MARK_QUESTION in [q["question"] for q in _questions(decl, pre, {})]
+    listener = next(q for q in relation_questions(pre, decl, {}) if q["id"] == "REL_LISTENER:THEO")
+    assert "eyes go to frame-left, well clear of the lens?" in listener["question"]
+    pre.preflight.clear_eyeline_scenes = []
+    listener = next(q for q in relation_questions(pre, decl, {}) if q["id"] == "REL_LISTENER:THEO")
+    assert "just past the lens to frame-left" in listener["question"]
+
+
+def test_listener_unplaced_object_gaze_says_only_subject(tmp_path):
+    # film08 SC09_g24/SC10_g01: the subject looks at a prop; the listener's spot is left unsaid there too
+    root = off_frame(tmp_path)
+    shots = json.loads((root / "04_shots.json").read_text(encoding="utf-8"))
+    next(g for g in shots["generations"] if g["generation_id"] == "SC02_g1")["gaze_target"] = "counter"
+    (root / "04_shots.json").write_text(json.dumps(shots, indent=2), encoding="utf-8")
+    pre = json.loads((root / "03_preprod.json").read_text(encoding="utf-8"))
+    pre["preflight"].update(safeguard_scenes=["SC02"], clear_eyeline_scenes=["SC02"], listener_unplaced_scenes=["SC02"])
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+    video, still, _ = plan(root)
+    assert "MARA looks at the wooden counter. Only MARA is in frame." in still
+    assert "Only the woman is in frame." in video
+    for text in (video, still):
+        assert "beside the camera" not in text and "stays fully out of frame" not in text
+        assert "well clear of the lens" not in text and "edge shows only the room" not in text

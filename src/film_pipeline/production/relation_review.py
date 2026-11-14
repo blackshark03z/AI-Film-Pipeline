@@ -49,7 +49,12 @@ def relation_questions(pre: Any, decl: Any, speakers: dict[int, str]) -> list[di
             q = (f"Is {name}'s shoulder and back of head in the near frame-{side} for the whole clip, "
                  f"recognisably {name}?")
         else:
-            eyes = "toward the camera's side" if a.side == "BEHIND_CAMERA" else f"just past the lens to frame-{(a.side or 'LEFT').lower()}"
+            clear = {decl.scene_id, decl.generation_id} & set(getattr(pre.preflight, "clear_eyeline_scenes", []))
+            off_side = (a.side or "LEFT").lower()
+            # a clear-eyeline prompt asks for eyes well clear of the lens: "just past the lens" would pass a lens stare
+            eyes = ("toward the camera's side" if a.side == "BEHIND_CAMERA"
+                    else f"to frame-{off_side}, well clear of the lens" if clear
+                    else f"just past the lens to frame-{off_side}")
             q = (f"Is the place where {name} stands kept out of frame (never shown empty), and do {subject}'s eyes "
                  f"go {eyes}?")
         add(f"REL_LISTENER:{name}", "spatial", q)

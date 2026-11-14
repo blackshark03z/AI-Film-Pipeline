@@ -25,7 +25,8 @@ from film_pipeline.drama.feasibility import check_script
 from film_pipeline.production.camera import camera_issues
 from film_pipeline.production.continuity import continuity_issues, temporal_issues
 from film_pipeline.production.interaction import (framing_phrase, hidden_names, hidden_person_issues,
-                                                   interaction_issues, placement_sentences)
+                                                   interaction_issues, placement_sentences,
+                                                   unplaced_listeners)
 from film_pipeline.production.evidence import end_state_verified, load_attestations
 from film_pipeline.production.package import FilmPackage, PackageError
 from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection, shot_seconds
@@ -225,7 +226,9 @@ class _Plan:
         """Video-prompt safeguards, only for scenes listed in `preflight.safeguard_scenes` (none by default)."""
         if decl.scene_id not in self.pre.preflight.safeguard_scenes:
             return {}
-        off = sorted(n for n, a in decl.listener_anchors.items() if a.mode == "OFF_FRAME")
+        # an unplaced listener is covered by "Only X is in frame" (interaction.placement_sentences)
+        unplaced = unplaced_listeners(self.pre, decl)
+        off = sorted(n for n, a in decl.listener_anchors.items() if a.mode == "OFF_FRAME" and n not in unplaced)
         return {"out_of_frame": off, "silent_line": not decl.dialogue}
 
     def placement(self, decl: ShotDecl) -> list[str]:

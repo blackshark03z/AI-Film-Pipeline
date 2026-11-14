@@ -344,9 +344,9 @@ for sc, cfg in SC.items():
                 pass
 if "SC12" in ENTER:
     pass
-# close inserts show only what is in frame: out-of-frame props are dropped from the start state to keep prompts short
-for _gid, _keep in {"SC09_g24": ("packet",), "SC10_g01": ("packet",), "SC12_g25": ("ledger",)}.items():
-    states[_gid]["props"] = {k: v for k, v in states[_gid]["props"].items() if any(w in k for w in _keep)}
+# close inserts keep every prop in their states: trimming them for prompt length made props vanish and reappear
+# between shots (gate 3 CONTINUITY OBJECT_NO_CAUSE x7) and dropped the pen CALVIN signs with (SC12_g25); the words
+# now come from listener_unplaced_scenes (no listener placement sentence in SC03+ singles)
 
 # --------------------------------------------------------------------------------------------------------------------
 # generations
@@ -754,7 +754,10 @@ preprod = {
                   "safeguard_scenes": [f"SC{n:02d}" for n in range(1, 13)],
                   # SC01-SC02 keep their accepted prompt hashes; SC03+ get the off-lens eyeline (pilot rejects);
                   # SC02_g11 restaged after 3 rejected takes (lens drift, listener face at the frame-right edge)
-                  "clear_eyeline_scenes": ["SC02_g11"] + [f"SC{n:02d}" for n in range(3, 13)]},
+                  "clear_eyeline_scenes": ["SC02_g11"] + [f"SC{n:02d}" for n in range(3, 13)],
+                  # SC03+: singles no longer say where the off-frame listener stands (SC02 HOLLIS singles drew ELI
+                  # at the frame-right edge in 3 of 7 takes; each prompt named ELI's spot by the door)
+                  "listener_unplaced_scenes": [f"SC{n:02d}" for n in range(3, 13)]},
     "characters": {ch: {"look": {"look_id": lid, "character": ch, "text": text, "invariants": inv, "approved": True},
                         "video_text": text, "voice": VOICE[ch], "handle": HANDLE[ch]} for ch, (lid, text, inv) in LOOKS.items()},
     "locations": {

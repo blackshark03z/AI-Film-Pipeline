@@ -206,11 +206,24 @@ def hidden_names(pre: Any, decl: Any, index: int) -> set[str]:
     return set(pre.scenes[decl.scene_id].occupancy.present_at(index)) - set(decl.visible)
 
 
+def unplaced_listeners(pre: Any, decl: Any) -> set[str]:
+    """Off-frame listeners whose position the prompts leave unsaid (`preflight.listener_unplaced_scenes`, only where
+    the scene also has the clear eyeline): they stand to a side (not behind the camera). The prompt says "Only X is in
+    frame" instead, with the clear eyeline when X looks at them."""
+    pf = pre.preflight
+    ids = {decl.scene_id, decl.generation_id}
+    if not (ids & set(pf.listener_unplaced_scenes) and ids & set(pf.clear_eyeline_scenes)):
+        return set()
+    return {name for name, a in decl.listener_anchors.items()
+            if a.mode == "OFF_FRAME" and a.side in ("LEFT", "RIGHT")}
+
+
 def placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[str]:
     """Who speaks to whom and where each listener is, in character NAMES (the video prompt maps them to handles)."""
     scene = pre.scenes[decl.scene_id]
     subject = decl.subject or (decl.visible[0] if decl.visible else "")
     out: list[str] = []
+    unplaced = unplaced_listeners(pre, decl)
 
     def add(text: str) -> None:
         if text not in out:
@@ -229,6 +242,12 @@ def placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[s
             side = (scene.axis.sides.get(name) or "LEFT").lower()
             add(f"Over {name}'s shoulder: the back of {name}'s head and one shoulder fill the near frame-{side}, "
                 f"out of focus; {subject} beyond faces {name}.")
+        elif a.mode == "OFF_FRAME" and name in unplaced:
+            if decl.gaze_target and decl.gaze_target != name:
+                continue  # looks elsewhere (an object, another listener): "Only X is in frame." below
+            side = (a.side or "LEFT").lower()
+            add(f"{subject} faces a quarter toward frame-{side}, eyes on {name}, well clear of the lens.")
+            add(f"Only {subject} is in frame; the frame-{side} edge shows only the room.")
         elif a.mode == "OFF_FRAME":
             text = a.placement.strip()
             add(text if text.endswith(".") else text + ".")
@@ -250,6 +269,8 @@ def placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[s
         layout = getattr(loc, "layout", None) if loc is not None else None
         obj = layout.object(gaze) if layout is not None else None
         add(f"{subject} looks at the {obj.label if obj is not None else gaze.replace('_', ' ')}.")
+    if unplaced and not any(t.startswith(f"Only {subject} is in frame") for t in out):
+        add(f"Only {subject} is in frame.")
     return out
 
 

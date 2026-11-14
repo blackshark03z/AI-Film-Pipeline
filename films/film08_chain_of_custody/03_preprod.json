@@ -52,6 +52,18 @@
       "SC10",
       "SC11",
       "SC12"
+    ],
+    "listener_unplaced_scenes": [
+      "SC03",
+      "SC04",
+      "SC05",
+      "SC06",
+      "SC07",
+      "SC08",
+      "SC09",
+      "SC10",
+      "SC11",
+      "SC12"
     ]
   },
   "characters": {
@@ -9711,7 +9723,10 @@
         "ELI": "standing by the door, frame-right"
       },
       "props": {
-        "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up"
+        "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
+        "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
+        "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -9822,7 +9837,10 @@
         "ELI": "standing by the door, frame-right"
       },
       "props": {
-        "the brown packet:": "held in HOLLIS's hands, his right thumb under the red seal's edge"
+        "the brown packet:": "held in HOLLIS's hands, his right thumb under the red seal's edge",
+        "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
+        "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -12574,7 +12592,8 @@
         "CALVIN": "standing at the counter, centre"
       },
       "props": {
-        "the ledger:": "lying open on the counter, page away from the camera"
+        "the ledger:": "lying open on the counter, page away from the camera",
+        "the pen:": "lying beside the ledger"
       },
       "looks": {
         "ELI": "eli_khaki",
