@@ -1,0 +1,142 @@
+{
+  "take_id": "SC01_g04_t1",
+  "generation_id": "SC01_g04",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:37": "no: glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit)"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "no: glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit)",
+        "REL_GAZE": "no: glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit)",
+        "REL_BARRIER": "no: glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit)"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit). Audio: mean level -30.1 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROMPT",
+  "cause_note": "glasses arms and part of a head intrude at the right edge in frames 2-3 (edge-crop audit)",
+  "required_answers": [
+    "REL_ADDRESS:37",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "b4bc2a8e19c8d02d6cee59cbbe7b31af03105e6520bc225d832ce6c77d457590"
+}

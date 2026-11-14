@@ -1,0 +1,247 @@
+{
+  "take": {
+    "take_id": "SC01_g25_t1",
+    "generation_id": "SC01_g25",
+    "prompt_sha256": "e502dabf84128ed6892f552a42aef582861a8bc91123186d0069a0b924cd2754",
+    "start_frame_sha256": "19ced94b81edf3ebb6524994fb8cbb08ccd52a58554fe284f5cdc2b0bce653ca",
+    "route": "start_frame+Khung hinh",
+    "model": "omni-1.2-flash",
+    "credits": 6.0,
+    "output_file": "SC01_g25_t1.mp4",
+    "output_sha256": "8a9e31e4c805c3cc791e47bb255874cf3d27f27996989e301b1cbe401859e646",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-14T00:28:17Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "NAOMI",
+      "HOLLIS",
+      "ELI"
+    ],
+    "start_state": "SC01_g25",
+    "end_state": "SC01_end",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "HOLLIS stands behind the counter, the ledger lies open in front of him"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.8,
+        "description": "HOLLIS closes the ledger with his right hand"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.8,
+        "end_s": 4.0,
+        "description": "the ledger lies closed, HOLLIS's right hand flat on its cover"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "all three stay still, NAOMI's hands at her sides"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - HOLLIS stands behind the counter, the ledger lies open in front of him?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.8s ACTION: does this happen on screen - HOLLIS closes the ledger with his right hand?"
+    },
+    {
+      "group": "action",
+      "question": "2.8-4s CONSEQUENCE: does this happen on screen - the ledger lies closed, HOLLIS's right hand flat on its cover?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - all three stay still, NAOMI's hands at her sides?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): HOLLIS closes the ledger"
+    },
+    {
+      "group": "character",
+      "question": "HOLLIS: does the face/body read as guarded, impatient (restrained)? Must NOT read as: friendliness."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC01_g25: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing at the counter, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed on the counter, red seal up; the ledger: lying open on the counter, pages facing HOLLIS, away from the camera."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC01_end: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing at the counter, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed on the counter, red seal up; the ledger: lying closed under HOLLIS's right hand."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC01_g25_t1",
+    "generation_id": "SC01_g25",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_BARRIER"
+    ],
+    "output_sha256": "8a9e31e4c805c3cc791e47bb255874cf3d27f27996989e301b1cbe401859e646"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}

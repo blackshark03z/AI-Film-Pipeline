@@ -1,0 +1,142 @@
+{
+  "take_id": "SC01_g20_t1",
+  "generation_id": "SC01_g20",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:116": "yes: identity ok, frame-right gaze, mouth moves, no edge intruders"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "yes: identity ok, frame-right gaze, mouth moves, no edge intruders",
+        "REL_GAZE": "yes: identity ok, frame-right gaze, mouth moves, no edge intruders",
+        "REL_BARRIER": "yes: identity ok, frame-right gaze, mouth moves, no edge intruders"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity ok, frame-right gaze, mouth moves, no edge intruders. Audio: mean level -31.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:116",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "3228d3e90bba5d95a551cec67dd5de354592898297909ae3c0bd770c3560b995"
+}

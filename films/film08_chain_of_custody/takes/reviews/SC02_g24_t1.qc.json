@@ -1,0 +1,142 @@
+{
+  "take_id": "SC02_g24_t1",
+  "generation_id": "SC02_g24",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:265": "yes: (warn: eyeline near-lens; mouth moves; alone)"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "yes: (warn: eyeline near-lens; mouth moves; alone)",
+        "REL_GAZE": "yes: (warn: eyeline near-lens; mouth moves; alone)",
+        "REL_BARRIER": "yes: (warn: eyeline near-lens; mouth moves; alone)"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; (warn: eyeline near-lens; mouth moves; alone). Audio: mean level -32.0 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:265",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "f50c44aa37ee7468f88e04fdd102407bec65721736a3368634bb2c712ba68e7b"
+}
