@@ -162,6 +162,13 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   - Tests: 13 related files: 127 pass, 19 skip, 1 known film07 failure.
   - Not committed here: the film07 edits in the tree (_author.py, SC12_g23_t1.reconcile.json) belong to another session.
   - Next: draw T01-T58 in Flow image mode (0 cr, gmail-4, NO-JS Chrome), register and approve per served generation.
+- 2026-11-14 21:15 HARD STOP (Flow flag) on the first SC03+ still. T01 sent once (Image, Nano Banana 2.1 x1, 16:9,
+  0 cr; ingredients N H E + plate a via the "Add ingredients" picker search) in a new Claude-group Chrome tab on
+  project 6f8e24af. Tile: "Failed. We noticed some unusual activity. Note that browser extensions that modify the
+  page may cause issues". No retry, no further Flow clicks, tab closed. 0 cr spent; T01-T58 not drawn, nothing
+  registered. Screenshots time out in new tabs (find/read_page work). Per memory flow-unusual-activity-no-evasion
+  and no-manual-work-for-owner: cool down ~2 h, no evasion tooling; the coordinator decides the route (another
+  account/profile, API, or waiting) before any further Flow sends.
 
 ---
 
