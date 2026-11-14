@@ -34,6 +34,16 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
 - Coordinator QC SC01 t1: reject g13 + g18 (second face at right edge); g12 AMBER (drift). Owner 2026-11-14: download
   takes at 720p/highest (memory feedback-download-720p); SC01-SC02 so far are 640x360 -> re-download after sends.
 - Worktree D:/AI FILM MAKER/wt-film08-script (branch film08-script-fixes) can be removed.
+- 08:30 pilot report: 50 t1 sent (300 cr, balance 750), 44 accepted / 5 rejected (SC01_g04 g13 g15 g18, SC02_g15,
+  edge intrusions). Coordinator QC of SC02 found a background continuity defect: still S07 (NAOMI, 9 takes) has
+  archive shelves behind her (SC01: green wall/windows/chairs); S09 (HOLLIS looking right, 4 takes) has the door
+  and chairs behind him. Root cause: coordinator still prompts said "Same as S02/S08", and Flow never sees the
+  other stills. Fix: self-contained prompts with an explicit background side (stills.md rule + S07/S09 v2), and a
+  background-side check added to take review. Approved 5 + 13 t2 retakes (108 cr; run cap 408 <= 535 pilot cap).
+  720p: the Download menu offers "720p Upscaled" with no shown cost; approved ONE test with a balance check, then
+  _720.mp4 copies (unregistered).
+  Follow-up: the pipeline should own still prompts. start_<GEN>.txt already carries the camera view; the
+  hand-written stills.md bypassed it.
 
 ---
 
