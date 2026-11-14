@@ -1,0 +1,142 @@
+{
+  "take_id": "SC01_g15_t2",
+  "generation_id": "SC01_g15",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:91": "yes: identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "yes: identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text",
+        "REL_GAZE": "yes: identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text",
+        "REL_BARRIER": "yes: identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t2: visual review of 3-frame contact strip (1/3/5 s) @360p plus edge-crop audit at frames 48/96/140; identity and wardrobe hold, head and eyes turned to screen-right (face crops at 1/2/4/5 s), mouth moves, left/right edge crops clean (wall/chair and shelves only), open ledger and packet as planned, no text. Audio: mean level -28.9 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:91",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "47d46418ddd2efdce54cb6d444ad60eeb64ab197bec5c15e31ee953c72edf04c"
+}
