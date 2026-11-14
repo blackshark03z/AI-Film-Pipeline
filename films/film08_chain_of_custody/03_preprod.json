@@ -39,6 +39,19 @@
       "SC10",
       "SC11",
       "SC12"
+    ],
+    "clear_eyeline_scenes": [
+      "SC02_g11",
+      "SC03",
+      "SC04",
+      "SC05",
+      "SC06",
+      "SC07",
+      "SC08",
+      "SC09",
+      "SC10",
+      "SC11",
+      "SC12"
     ]
   },
   "characters": {
@@ -3531,7 +3544,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3568,7 +3581,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3605,7 +3618,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3642,7 +3655,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3679,7 +3692,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3716,7 +3729,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3753,7 +3766,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3790,7 +3803,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3827,7 +3840,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3864,7 +3877,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3901,7 +3914,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3938,7 +3951,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -3975,7 +3988,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4012,7 +4025,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4049,7 +4062,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4086,7 +4099,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4123,7 +4136,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4160,7 +4173,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4197,7 +4210,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4234,7 +4247,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4271,7 +4284,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4308,7 +4321,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4345,7 +4358,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4382,7 +4395,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4419,7 +4432,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4456,7 +4469,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4493,7 +4506,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4530,7 +4543,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4567,7 +4580,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4604,7 +4617,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4641,7 +4654,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4678,7 +4691,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4715,7 +4728,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4752,7 +4765,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4789,7 +4802,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4826,7 +4839,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4863,7 +4876,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4900,7 +4913,7 @@
       "props": {
         "the brown packet:": "lying sealed on the counter, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4937,7 +4950,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -4974,7 +4987,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5011,7 +5024,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5048,7 +5061,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5085,7 +5098,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5122,7 +5135,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5159,7 +5172,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5196,7 +5209,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5233,7 +5246,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5270,7 +5283,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5307,7 +5320,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5344,7 +5357,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5381,7 +5394,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5418,7 +5431,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5455,7 +5468,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5492,7 +5505,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5529,7 +5542,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5566,7 +5579,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5603,7 +5616,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5640,7 +5653,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5677,7 +5690,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5714,7 +5727,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5751,7 +5764,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5788,7 +5801,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5825,7 +5838,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand"
+        "the ID card:": "in HOLLIS's pocket"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -5862,7 +5875,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "in ELI's chest pocket"
       },
       "looks": {
@@ -5900,7 +5913,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "in ELI's chest pocket"
       },
       "looks": {
@@ -5938,7 +5951,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -5976,7 +5989,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6014,7 +6027,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6052,7 +6065,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6090,7 +6103,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6128,7 +6141,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6166,7 +6179,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6204,7 +6217,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6242,7 +6255,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6280,7 +6293,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6318,7 +6331,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6356,7 +6369,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6394,7 +6407,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6432,7 +6445,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6470,7 +6483,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6508,7 +6521,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6546,7 +6559,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6584,7 +6597,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6622,7 +6635,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6660,7 +6673,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6698,7 +6711,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6736,7 +6749,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6774,7 +6787,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6812,7 +6825,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
-        "the ID card:": "held in HOLLIS's left hand",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6850,6 +6863,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6887,6 +6901,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6924,6 +6939,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6961,6 +6977,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -6998,6 +7015,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7035,6 +7053,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7072,6 +7091,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7109,6 +7129,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7146,6 +7167,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7183,6 +7205,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7220,6 +7243,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7257,6 +7281,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7294,6 +7319,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7331,6 +7357,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7368,6 +7395,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7405,6 +7433,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7442,6 +7471,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7479,6 +7509,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7516,6 +7547,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7553,6 +7585,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7590,6 +7623,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7627,6 +7661,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7664,6 +7699,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7701,6 +7737,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7738,6 +7775,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7775,6 +7813,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7812,6 +7851,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7849,6 +7889,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7886,6 +7927,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7923,6 +7965,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7960,6 +8003,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -7997,6 +8041,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8034,6 +8079,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8071,6 +8117,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8108,6 +8155,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8145,6 +8193,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8182,6 +8231,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8219,6 +8269,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8256,6 +8307,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8293,6 +8345,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8330,6 +8383,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8367,6 +8421,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8404,6 +8459,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8441,6 +8497,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8478,6 +8535,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8515,6 +8573,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8552,6 +8611,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8589,6 +8649,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8626,6 +8687,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8663,6 +8725,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal toward him",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8700,6 +8763,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8737,6 +8801,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8774,6 +8839,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8811,6 +8877,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8848,6 +8915,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8885,6 +8953,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8922,6 +8991,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8959,6 +9029,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -8996,6 +9067,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9033,6 +9105,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9070,6 +9143,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9107,6 +9181,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9144,6 +9219,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9181,6 +9257,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9218,6 +9295,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9255,6 +9333,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9292,6 +9371,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9329,6 +9409,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9366,6 +9447,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9403,6 +9485,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9440,6 +9523,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9477,6 +9561,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9514,6 +9599,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9551,6 +9637,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9588,6 +9675,7 @@
       "props": {
         "the brown packet:": "lying sealed under HOLLIS's right hand, red seal up",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9660,6 +9748,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, his right thumb under the red seal's edge",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9697,6 +9786,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, his right thumb under the red seal's edge",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9769,6 +9859,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal cracked and broken",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9806,6 +9897,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal cracked and broken",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9843,6 +9935,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal cracked and broken",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9880,6 +9973,7 @@
       "props": {
         "the brown packet:": "held in HOLLIS's hands, red seal cracked and broken",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9917,6 +10011,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand"
       },
       "looks": {
@@ -9954,6 +10049,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -9992,6 +10088,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10030,6 +10127,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10068,6 +10166,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10106,6 +10205,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10144,6 +10244,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10182,6 +10283,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10220,6 +10322,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10258,6 +10361,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10296,6 +10400,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10334,6 +10439,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10372,6 +10478,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10410,6 +10517,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10448,6 +10556,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10486,6 +10595,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10524,6 +10634,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10562,6 +10673,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10600,6 +10712,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10638,6 +10751,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10676,6 +10790,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the notebook:": "held closed in ELI's right hand",
         "the cover page:": "held in HOLLIS's right hand, printed side away from the camera"
       },
@@ -10714,6 +10829,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "in HOLLIS's pocket",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -10751,6 +10867,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -10788,6 +10905,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -10825,6 +10943,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -10862,6 +10981,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -10899,6 +11019,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -10936,6 +11057,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -10973,6 +11095,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -11010,6 +11133,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -11047,6 +11171,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -11084,6 +11209,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -11121,6 +11247,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -11158,6 +11285,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -11195,6 +11323,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -11232,6 +11361,7 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
         "the cover page:": "lying face down on the counter"
       },
       "looks": {
@@ -11266,7 +11396,12 @@
         "NAOMI": "standing a step back from the counter, frame-left",
         "ELI": "standing by the door, frame-right"
       },
-      "props": {},
+      "props": {
+        "the brown packet:": "open on the counter, papers halfway out, face down",
+        "the ledger:": "lying closed on the counter",
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
+      },
       "looks": {
         "HOLLIS": "hollis_khaki",
         "NAOMI": "naomi_coat",
@@ -11302,8 +11437,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at his mouth"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -11340,8 +11475,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at chest height"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -11378,8 +11513,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at chest height"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -11416,8 +11551,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at chest height"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -11454,8 +11589,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at chest height"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -11492,8 +11627,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at chest height"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -11530,8 +11665,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at chest height"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -11568,8 +11703,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at chest height"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -11606,8 +11741,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at chest height"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -11644,8 +11779,8 @@
       "props": {
         "the brown packet:": "open on the counter, papers halfway out, face down",
         "the ledger:": "lying closed on the counter",
-        "the cover page:": "lying face down on the counter",
-        "the radio:": "held in ELI's right hand at chest height"
+        "the ID card:": "lying on the customer side of the counter",
+        "the cover page:": "lying face down on the counter"
       },
       "looks": {
         "HOLLIS": "hollis_khaki",
@@ -13142,12 +13277,12 @@
     "SC02_g11": {
       "file": "media/stills/start_SC02_g11.jpg",
       "sha256": "54df82c046f030998ac99cc3a7dd5616c6c63a6f9bf619d4f3924c6b5f2dc950",
-      "prompt_sha256": "c2570173c010977a4eadbf94aff7904b0e725678dc83a0a68aff5cc78d44bcc6",
-      "source": "Flow Nano Banana 2.1, gmail-4 Chrome, project 6f8e24af, still S09 v3 (edit of S09 v2)",
+      "prompt_sha256": "520440c0b9b79bf563d60b0c680e14e132c3b96697a7a859beffbb688dd9e190",
+      "source": "Flow image edit S09 v3 (Nano Banana 2.1, 0 cr); re-registered for the SC02_g11 v2 clear-eyeline prompt",
       "credits": 0.0,
-      "registered_at": "2026-11-14T08:36:56+00:00",
-      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-14T08:36:58+00:00"
+      "registered_at": "2026-11-14T09:08:03+00:00",
+      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): S09 v3 head a quarter to frame-right, eyes on the off-frame listener well clear of the lens, frame-right edge only shelves; matches the restaged still text",
+      "approved_at": "2026-11-14T09:08:04+00:00"
     },
     "SC02_g22": {
       "file": "media/stills/start_SC02_g22.jpg",

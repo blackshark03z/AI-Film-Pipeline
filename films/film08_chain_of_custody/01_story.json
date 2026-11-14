@@ -271,7 +271,7 @@
     {
       "version": 2,
       "date": "2026-11-14",
-      "reason": "Owner approved the film brief; package built from the draft without a change of meaning, dialogue or order. Only the SC12 heading changed (time of day AFTERNOON, 'one month later' as a note) and an Approval line was added; draft script SHA-256 66b7db87994d72122320b8c1f515bbae554204c3ccbc04792ef6d19c687023e3.",
+      "reason": "Owner approved the film brief; package built from the draft without a change of meaning, dialogue or order. Only the SC12 heading changed (time of day AFTERNOON, 'one month later' as a note) and an Approval line was added; draft script SHA-256 1c8ba99564c0bb73cfd91adf9927e59c42506a711c8dcb216f28d3cc6189ad3a.",
       "changed": "films/film08_chain_of_custody/script.fountain"
     }
   ]

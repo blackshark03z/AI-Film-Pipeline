@@ -5770,31 +5770,31 @@
           {
             "kind": "SETUP",
             "start_s": 0.0,
-            "end_s": 1.5,
-            "description": "HOLLIS looks toward the desk computer"
+            "end_s": 1.0,
+            "description": "HOLLIS stands at the desk behind the counter, the ID card held in his hand"
           },
           {
             "kind": "ACTION",
-            "start_s": 1.5,
-            "end_s": 2.4,
-            "description": "HOLLIS types at the desk computer with his right hand, then stares at the screen without blinking",
-            "motion": "glance"
+            "start_s": 1.0,
+            "end_s": 2.8,
+            "description": "HOLLIS slips the ID card into his shirt pocket",
+            "motion": "put_down_small_object"
           },
           {
             "kind": "CONSEQUENCE",
-            "start_s": 2.4,
+            "start_s": 2.8,
             "end_s": 4.0,
-            "description": "HOLLIS stays with what they see"
+            "description": "the ID card sits in HOLLIS's shirt pocket, his hand back at his side"
           },
           {
             "kind": "HOLD",
             "start_s": 4.0,
             "end_s": 6.0,
-            "description": "HOLLIS holds the quiet look, nobody speaks"
+            "description": "HOLLIS stares at the computer screen without blinking, nobody speaks"
           }
         ],
         "once_actions": [
-          "HOLLIS types at the desk computer with his right hand, then stares at the screen without blinking"
+          "HOLLIS slips the ID card into his shirt pocket"
         ],
         "gesture_budget": 1,
         "performance": [
@@ -5824,12 +5824,19 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on HOLLIS standing at the desk behind the counter: head and shoulders, the computer screen edge-on at the edge of the frame, archive-box shelves behind him, everyone else out of frame on both sides",
+        "composition": "close single on HOLLIS standing at the desk behind the counter: head to chest, his left hand and shirt pocket in frame, the computer screen edge-on at the edge of the frame, archive-box shelves behind him, everyone else out of frame on both sides",
         "declared_repeat": "static close singles on whoever speaks are the deliberate grammar of this talking scene; the room never changes"
       },
       "camera_position": "c_hollis_desk",
       "gaze_target": "desk_computer",
-      "listener_anchors": {}
+      "listener_anchors": {
+        "NAOMI": {
+          "mode": "OFF_FRAME",
+          "side": "LEFT",
+          "placement": "NAOMI sits in a waiting chair against the wall off frame-left, wholly out of shot",
+          "established_by": "SC03_g09"
+        }
+      }
     },
     {
       "generation_id": "SC03_g16",
@@ -13635,6 +13642,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -13726,6 +13734,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -13817,6 +13826,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -13908,6 +13918,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -13999,6 +14010,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14090,6 +14102,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14181,6 +14194,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14277,6 +14291,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14363,6 +14378,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14454,6 +14470,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14545,6 +14562,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14636,6 +14654,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14727,6 +14746,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14818,6 +14838,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -14909,6 +14930,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15000,6 +15022,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15091,6 +15114,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15182,6 +15206,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15273,6 +15298,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15364,6 +15390,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15455,6 +15482,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15557,6 +15585,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15633,6 +15662,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15724,6 +15754,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15815,6 +15846,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15906,6 +15938,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -15997,6 +16030,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16088,6 +16122,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16179,6 +16214,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16270,6 +16306,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16361,6 +16398,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16452,6 +16490,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16543,6 +16582,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16634,6 +16674,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16730,6 +16771,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16809,6 +16851,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16900,6 +16943,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -16991,6 +17035,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17082,6 +17127,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17173,6 +17219,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17264,6 +17311,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17355,6 +17403,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17446,6 +17495,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17537,6 +17587,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17628,6 +17679,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17719,6 +17771,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17810,6 +17863,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -17901,6 +17955,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18003,6 +18058,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18079,6 +18135,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18170,6 +18227,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18261,6 +18319,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18352,6 +18411,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18443,6 +18503,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18534,6 +18595,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18630,6 +18692,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18716,6 +18779,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18807,6 +18871,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18898,6 +18963,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -18989,6 +19055,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19080,6 +19147,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19171,6 +19239,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19262,6 +19331,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19320,12 +19390,12 @@
           {
             "kind": "ACTION",
             "start_s": 0.5,
-            "end_s": 4.0,
+            "end_s": 4.3,
             "description": "HOLLIS speaks to ELI tersely"
           },
           {
             "kind": "HOLD",
-            "start_s": 4.0,
+            "start_s": 4.3,
             "end_s": 6.0,
             "description": "HOLLIS holds ELI's look, quite still"
           }
@@ -19353,6 +19423,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19444,6 +19515,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19535,6 +19607,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19626,6 +19699,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19728,6 +19802,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19804,6 +19879,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19895,6 +19971,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -19986,6 +20063,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20077,6 +20155,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20168,6 +20247,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20263,6 +20343,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20349,6 +20430,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20444,6 +20526,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20530,6 +20613,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20621,6 +20705,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20712,6 +20797,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20813,6 +20899,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1"
       ],
       "camera": {
@@ -20894,6 +20981,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -20974,6 +21062,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21066,6 +21155,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21158,6 +21248,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21250,6 +21341,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21342,6 +21434,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21434,6 +21527,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21526,6 +21620,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21618,6 +21713,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21710,6 +21806,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21802,6 +21899,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21894,6 +21992,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -21986,6 +22085,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -22078,6 +22178,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -22170,6 +22271,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -22262,6 +22364,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -22354,6 +22457,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -22446,6 +22550,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -22538,6 +22643,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -22630,6 +22736,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_notebook@1",
         "prop_coverpage@1"
       ],
@@ -22668,11 +22775,13 @@
       "readout": [],
       "duration_s": 6,
       "version": 1,
-      "coverage": "SINGLE",
+      "coverage": "MASTER",
       "subject": "HOLLIS",
       "foreground": "",
       "visible": [
-        "HOLLIS"
+        "NAOMI",
+        "HOLLIS",
+        "ELI"
       ],
       "dialogue": [],
       "choreography": {
@@ -22681,31 +22790,31 @@
           {
             "kind": "SETUP",
             "start_s": 0.0,
-            "end_s": 1.5,
-            "description": "HOLLIS looks toward the brown packet"
+            "end_s": 1.0,
+            "description": "HOLLIS stands behind the counter, the ID card in his shirt pocket, the opened packet before him"
           },
           {
             "kind": "ACTION",
-            "start_s": 1.5,
-            "end_s": 2.4,
-            "description": "HOLLIS stands motionless, staring down at the opened packet, both hands flat on the counter edge",
-            "motion": "glance"
+            "start_s": 1.0,
+            "end_s": 2.8,
+            "description": "HOLLIS lays the ID card on the customer side of the counter",
+            "motion": "put_down_small_object"
           },
           {
             "kind": "CONSEQUENCE",
-            "start_s": 2.4,
+            "start_s": 2.8,
             "end_s": 4.0,
-            "description": "HOLLIS stays with what they see"
+            "description": "the ID card lies on the customer side of the counter, HOLLIS's eyes on the opened packet"
           },
           {
             "kind": "HOLD",
             "start_s": 4.0,
             "end_s": 6.0,
-            "description": "HOLLIS holds the quiet look, nobody speaks"
+            "description": "all three stay still, nobody speaks"
           }
         ],
         "once_actions": [
-          "HOLLIS stands motionless, staring down at the opened packet, both hands flat on the counter edge"
+          "HOLLIS lays the ID card on the customer side of the counter"
         ],
         "gesture_budget": 1,
         "performance": [
@@ -22722,25 +22831,27 @@
         ]
       },
       "design_refs": [
+        "NAOMI_look@1",
         "HOLLIS_look@1",
+        "ELI_look@1",
+        "NAOMI_costume@1",
         "HOLLIS_costume@1",
+        "ELI_costume@1",
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
-        "size": "CLOSE",
+        "size": "WIDE",
         "angle": "EYE_LEVEL",
         "height": "EYE",
         "movement": "STATIC",
-        "lens_intent": "NORMAL",
-        "composition": "close single on HOLLIS standing behind the records counter: head and shoulders, the counter edge low in the frame, the archive-box shelves behind him, everyone else out of frame on both sides",
-        "declared_repeat": "static close singles on whoever speaks are the deliberate grammar of this talking scene; the room never changes"
+        "lens_intent": "WIDE_ESTABLISH",
+        "composition": "wide shot of the records room from the customer side: NAOMI on the customer side of the counter on the left, the counter across the middle with HOLLIS standing behind it, shelves of archive boxes behind the counter, ELI standing beside the frosted-glass hallway door on the right, two waiting chairs against the green wall on the left"
       },
-      "camera_position": "c_hollis",
-      "gaze_target": "brown_packet",
-      "listener_anchors": {}
+      "camera_position": "cA_rec"
     },
     {
       "generation_id": "SC11_g02",
@@ -22806,6 +22917,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -22828,7 +22940,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "NAOMI stands a step back from the counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "NAOMI"
@@ -22897,6 +23009,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -22919,7 +23032,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "HOLLIS stands behind the records counter off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -22988,6 +23101,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23010,7 +23124,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "NAOMI stands a step back from the counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "NAOMI"
@@ -23079,6 +23193,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23101,7 +23216,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "HOLLIS stands behind the records counter off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -23170,6 +23285,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23192,7 +23308,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "HOLLIS stands behind the records counter off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -23261,6 +23377,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23283,7 +23400,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "NAOMI stands a step back from the counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "NAOMI"
@@ -23352,6 +23469,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23374,7 +23492,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "HOLLIS stands behind the records counter off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -23443,6 +23561,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23465,7 +23584,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "NAOMI stands a step back from the counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "NAOMI"
@@ -23534,6 +23653,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23556,7 +23676,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "ELI stands beside the hallway door off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "ELI"
@@ -23625,6 +23745,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23647,7 +23768,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "ELI stands beside the hallway door off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "ELI"
@@ -23716,6 +23837,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23738,7 +23860,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "ELI stands beside the hallway door off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "ELI"
@@ -23807,6 +23929,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23829,7 +23952,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "HOLLIS stands behind the records counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -23898,6 +24021,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -23920,7 +24044,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "ELI stands beside the hallway door off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "ELI"
@@ -23989,6 +24113,7 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
+        "prop_idcard@1",
         "prop_coverpage@1"
       ],
       "camera": {
@@ -24011,7 +24136,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "HOLLIS stands behind the records counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -24032,109 +24157,17 @@
       "visible": [
         "ELI"
       ],
-      "dialogue": [],
+      "dialogue": [
+        1383
+      ],
       "choreography": {
         "generation_id": "SC11_g16",
         "phases": [
           {
             "kind": "SETUP",
             "start_s": 0.0,
-            "end_s": 1.0,
-            "description": "ELI stands by the door, the radio on his left shoulder"
-          },
-          {
-            "kind": "ACTION",
-            "start_s": 1.0,
-            "end_s": 2.8,
-            "description": "ELI unclips the radio and raises it to his mouth",
-            "motion": "pick_up_small_object"
-          },
-          {
-            "kind": "CONSEQUENCE",
-            "start_s": 2.8,
-            "end_s": 4.0,
-            "description": "ELI holds the radio at his mouth in his right hand"
-          },
-          {
-            "kind": "HOLD",
-            "start_s": 4.0,
-            "end_s": 6.0,
-            "description": "ELI holds quite still, the radio at his mouth"
-          }
-        ],
-        "once_actions": [
-          "ELI unclips the radio and raises it to his mouth"
-        ],
-        "gesture_budget": 1,
-        "performance": [
-          {
-            "character": "ELI",
-            "emotion_intent": "resolved, sorry",
-            "visible_cues": [
-              "steady eyes",
-              "slow nod"
-            ],
-            "intensity": "restrained",
-            "prohibited_misread": "coldness"
-          }
-        ]
-      },
-      "design_refs": [
-        "ELI_look@1",
-        "ELI_costume@1",
-        "loc_records_room@1",
-        "prop_packet@1",
-        "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
-      ],
-      "camera": {
-        "size": "CLOSE",
-        "angle": "EYE_LEVEL",
-        "height": "EYE",
-        "movement": "STATIC",
-        "lens_intent": "NORMAL",
-        "composition": "close on ELI standing beside the hallway door: head and shoulders, the frosted-glass door frame beside him, the chest body camera in view; he raises his hand to his shoulder",
-        "declared_repeat": "static close singles on whoever speaks are the deliberate grammar of this talking scene; the room never changes"
-      },
-      "camera_position": "c_eli_door",
-      "gaze_target": "shoulder_radio",
-      "listener_anchors": {
-        "NAOMI": {
-          "mode": "OFF_FRAME",
-          "side": "LEFT",
-          "placement": "NAOMI stands a step back from the counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
-        }
-      }
-    },
-    {
-      "generation_id": "SC11_g17",
-      "scene_id": "SC11",
-      "start_state": "SC11_g17",
-      "end_state": "SC11_g18",
-      "previous_generation_id": "SC11_g16",
-      "sfx": [],
-      "readout": [],
-      "duration_s": 6,
-      "version": 1,
-      "coverage": "SINGLE",
-      "subject": "ELI",
-      "foreground": "",
-      "visible": [
-        "ELI"
-      ],
-      "dialogue": [
-        1387
-      ],
-      "choreography": {
-        "generation_id": "SC11_g17",
-        "phases": [
-          {
-            "kind": "SETUP",
-            "start_s": 0.0,
             "end_s": 0.5,
-            "description": "ELI looks at the radio"
+            "description": "ELI turns his head to the radio on his left shoulder"
           },
           {
             "kind": "ACTION",
@@ -24146,7 +24179,7 @@
             "kind": "HOLD",
             "start_s": 4.7,
             "end_s": 6.0,
-            "description": "ELI holds the radio near his mouth, quite still"
+            "description": "ELI holds the radio on his shoulder in view, quite still"
           }
         ],
         "once_actions": [
@@ -24172,8 +24205,8 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
+        "prop_idcard@1",
+        "prop_coverpage@1"
       ],
       "camera": {
         "size": "CLOSE",
@@ -24186,12 +24219,97 @@
       },
       "camera_position": "c_eli_door",
       "addressees": {
-        "1387": [
+        "1383": [
           "SELF"
         ]
       },
       "listener_anchors": {},
       "gaze_target": "shoulder_radio"
+    },
+    {
+      "generation_id": "SC11_g17",
+      "scene_id": "SC11",
+      "start_state": "SC11_g17",
+      "end_state": "SC11_g18",
+      "previous_generation_id": "SC11_g16",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "SINGLE",
+      "subject": "ELI",
+      "foreground": "",
+      "visible": [
+        "ELI"
+      ],
+      "dialogue": [],
+      "choreography": {
+        "generation_id": "SC11_g17",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 1.5,
+            "description": "ELI looks toward the shoulder radio"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 1.5,
+            "end_s": 2.4,
+            "description": "ELI listens with his head tilted to the radio on his shoulder to a quiet reply nobody else can make out, then straightens, his face set",
+            "motion": "glance"
+          },
+          {
+            "kind": "CONSEQUENCE",
+            "start_s": 2.4,
+            "end_s": 4.0,
+            "description": "ELI stays with what they see"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.0,
+            "end_s": 6.0,
+            "description": "ELI holds the quiet look, nobody speaks"
+          }
+        ],
+        "once_actions": [
+          "ELI listens with his head tilted to the radio on his shoulder to a quiet reply nobody else can make out, then straightens, his face set"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "ELI",
+            "emotion_intent": "resolved, sorry",
+            "visible_cues": [
+              "steady eyes",
+              "slow nod"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "coldness"
+          }
+        ]
+      },
+      "design_refs": [
+        "ELI_look@1",
+        "ELI_costume@1",
+        "loc_records_room@1",
+        "prop_packet@1",
+        "prop_ledger@1",
+        "prop_idcard@1",
+        "prop_coverpage@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on ELI standing beside the hallway door: head and shoulders, the frosted-glass door frame beside him, the chest body camera in view, everyone else out of frame to the left",
+        "declared_repeat": "static close singles on whoever speaks are the deliberate grammar of this talking scene; the room never changes"
+      },
+      "camera_position": "c_eli_door",
+      "gaze_target": "shoulder_radio",
+      "listener_anchors": {}
     },
     {
       "generation_id": "SC11_g18",
@@ -24257,8 +24375,8 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
+        "prop_idcard@1",
+        "prop_coverpage@1"
       ],
       "camera": {
         "size": "CLOSE",
@@ -24280,7 +24398,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "HOLLIS stands behind the records counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -24349,8 +24467,8 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
+        "prop_idcard@1",
+        "prop_coverpage@1"
       ],
       "camera": {
         "size": "CLOSE",
@@ -24372,7 +24490,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "HOLLIS stands behind the records counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -24441,8 +24559,8 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
+        "prop_idcard@1",
+        "prop_coverpage@1"
       ],
       "camera": {
         "size": "CLOSE",
@@ -24464,7 +24582,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "NAOMI stands a step back from the counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "NAOMI"
@@ -24533,8 +24651,8 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
+        "prop_idcard@1",
+        "prop_coverpage@1"
       ],
       "camera": {
         "size": "CLOSE",
@@ -24556,7 +24674,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "HOLLIS stands behind the records counter off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -24625,8 +24743,8 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
+        "prop_idcard@1",
+        "prop_coverpage@1"
       ],
       "camera": {
         "size": "CLOSE",
@@ -24648,7 +24766,7 @@
           "mode": "OFF_FRAME",
           "side": "LEFT",
           "placement": "NAOMI stands a step back from the counter off frame-left, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "NAOMI"
@@ -24717,8 +24835,8 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
+        "prop_idcard@1",
+        "prop_coverpage@1"
       ],
       "camera": {
         "size": "CLOSE",
@@ -24740,7 +24858,7 @@
           "mode": "OFF_FRAME",
           "side": "RIGHT",
           "placement": "HOLLIS stands behind the records counter off frame-right, wholly out of shot",
-          "established_by": "SC10_g05"
+          "established_by": "SC11_g01"
         }
       },
       "gaze_target": "HOLLIS"
@@ -24814,8 +24932,8 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
+        "prop_idcard@1",
+        "prop_coverpage@1"
       ],
       "camera": {
         "size": "WIDE",
@@ -24891,8 +25009,8 @@
         "loc_records_room@1",
         "prop_packet@1",
         "prop_ledger@1",
-        "prop_coverpage@1",
-        "prop_radio@1"
+        "prop_idcard@1",
+        "prop_coverpage@1"
       ],
       "camera": {
         "size": "CLOSE",

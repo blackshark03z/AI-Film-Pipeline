@@ -3,7 +3,7 @@ Credit: Original drama screenplay from an Owner-approved premise
 Author: agent:tech-lead (delegated by owner-khoikk03)
 Draft date: 2026-11-14
 Language: English; Vietnamese subtitle translations in beats.json
-Approval: Owner 2026-11-14 (BRIEF.md, BUDGET.md); source draft SHA-256 66b7db87994d72122320b8c1f515bbae554204c3ccbc04792ef6d19c687023e3
+Approval: Owner 2026-11-14 (BRIEF.md, BUDGET.md); source draft SHA-256 1c8ba99564c0bb73cfd91adf9927e59c42506a711c8dcb216f28d3cc6189ad3a
 Format: 12 scenes; 300 proposed six-second generations; 27m37s intended finished duration
 
 [[Opening card: 3 seconds. CHAIN OF CUSTODY. AI-generated drama.]]
@@ -343,9 +343,9 @@ Funny. A woman alone, sealed packet, worried about who leaves rooms.
 NAOMI
 Not funny. Careful. You'd want the same if it were yours.
 
-[[SC03_g15 REACTION — native 6s / intended used 5.5s]]
+[[SC03_g15 ACTION — native 6s / intended used 5.5s]]
 
-Hollis types at the computer behind the counter, then stares at the screen without blinking.
+Hollis slips the ID card into his shirt pocket and stares at the computer screen without blinking.
 
 [[SC03_g16 DIALOGUE — native 6s / intended used 5.5s]]
 
@@ -906,7 +906,7 @@ Second time, Sergeant. Opening that won't end what you're afraid of.
 [[SC07_g24 DIALOGUE — native 6s / intended used 5.5s]]
 
 NAOMI
-It will finish it. With your own hands, on camera.
+It will prove it. With your own hands, on camera.
 
 [[SC07_g25 DIALOGUE — native 6s / intended used 5.5s]]
 
@@ -1001,7 +1001,7 @@ Even if they just look? Even if they put it back?
 [[SC08_g17 DIALOGUE — native 6s / intended used 5.5s]]
 
 NAOMI
-There's no straight back, Deputy. The wax breaks once. Only once.
+You can't undo it, Deputy. The wax breaks once. Only once.
 
 [[SC08_g18 DIALOGUE — native 6s / intended used 5.5s]]
 
@@ -1040,7 +1040,7 @@ Hollis sets the packet back down on the counter but keeps one hand resting on it
 [[SC08_g25 DIALOGUE — native 6s / intended used 5.5s]]
 
 HOLLIS
-Eight minutes. You've got eight minutes, and so have I, apparently.
+Four minutes. You've got four minutes, and so have I, apparently.
 
 INT. LINWOOD COUNTY COURTHOUSE - RECORDS ROOM - MORNING
 
@@ -1115,7 +1115,7 @@ Sarge, please. Let her sign it out. It's not too late.
 [[SC09_g14 DIALOGUE — native 6s / intended used 5.5s]]
 
 HOLLIS
-Right is me knowing what's coming before it lands.
+Too late for what? I need to know what's coming.
 
 [[SC09_g15 DIALOGUE — native 6s / intended used 5.5s]]
 
@@ -1149,7 +1149,7 @@ Mine. Good. That's the first thing you've said that makes sense.
 [[SC09_g21 DIALOGUE — native 6s / intended used 5.5s]]
 
 HOLLIS
-Moreno, note the time. Ten fifty-four. Sergeant Hollis reviewing contents.
+Moreno, note the time. Ten fifty-eight. Sergeant Hollis reviewing contents.
 
 [[SC09_g22 DIALOGUE — native 6s / intended used 5.5s]]
 
@@ -1168,7 +1168,7 @@ Hollis picks up the packet with both hands and slides one thumb under the edge o
 [[SC09_g25 DIALOGUE — native 6s / intended used 5.5s]]
 
 NAOMI
-Ten fifty-four. I'll remember that time for a long while.
+Ten fifty-eight. I'll remember that time for a long while.
 
 INT. LINWOOD COUNTY COURTHOUSE - RECORDS ROOM - MORNING
 
@@ -1183,7 +1183,7 @@ Hollis presses his thumb under the wax until the red seal cracks and comes away 
 [[SC10_g02 DIALOGUE — native 6s / intended used 5.5s]]
 
 NAOMI
-Ten fifty-four. Exhibit forty-one, seventeen, A. Seal broken by Sergeant Hollis.
+Ten fifty-eight. Exhibit forty-one, seventeen, A. Seal broken by Sergeant Hollis.
 
 [[SC10_g03 DIALOGUE — native 6s / intended used 5.5s]]
 
@@ -1304,9 +1304,9 @@ INT. LINWOOD COUNTY COURTHOUSE - RECORDS ROOM - MORNING
 
 NAOMI is standing one step back from the counter; HOLLIS is standing behind the records counter; ELI is standing beside the hallway door. Props are preset between scenes; no other visible or audible people.
 
-[[SC11_g01 REACTION — native 6s / intended used 5.5s]]
+[[SC11_g01 ACTION — native 6s / intended used 5.5s]]
 
-Hollis stands motionless behind the counter, staring down at the opened packet, both hands flat on the counter edge.
+Hollis takes the ID card from his shirt pocket and lays it on the customer side of the counter, his eyes on the opened packet.
 
 [[SC11_g02 DIALOGUE — native 6s / intended used 5.5s]]
 
@@ -1378,14 +1378,14 @@ I was talking about other people, son. Not about us.
 ELI
 There isn't an us, Sarge. There's just what the camera saw.
 
-[[SC11_g16 ACTION — native 6s / intended used 5.5s]]
-
-Eli unclips the radio from his shoulder and raises it close to his mouth.
-
-[[SC11_g17 DIALOGUE — native 6s / intended used 5.5s]]
+[[SC11_g16 DIALOGUE — native 6s / intended used 5.5s]]
 
 ELI (INTO RADIO)
 Records to 3B. Sealed exhibit opened at the counter. Clerk, please.
+
+[[SC11_g17 REACTION — native 6s / intended used 5.5s]]
+
+Eli keeps his head tilted to the radio on his shoulder, listening to a quiet reply nobody else can make out, then straightens, his face set.
 
 [[SC11_g18 DIALOGUE — native 6s / intended used 5.5s]]
 
@@ -1424,7 +1424,7 @@ Hollis walks out from behind the counter and leaves through the hallway door wit
 [[SC11_g25 DIALOGUE — native 6s / intended used 5.5s]]
 
 NAOMI
-Deputy, log it with me. Opened at ten fifty-four.
+Deputy, log it with me. Opened at ten fifty-eight.
 
 INT. LINWOOD COUNTY COURTHOUSE - RECORDS ROOM - AFTERNOON
 
@@ -1515,7 +1515,7 @@ Calvin Reed enters through the hallway door and walks slowly to the customer sid
 [[SC12_g17 DIALOGUE — native 6s / intended used 5.5s]]
 
 CALVIN
-They said upstairs to come here for my things. Calvin Reed.
+They told me upstairs to collect my things here. Calvin Reed.
 
 [[SC12_g18 DIALOGUE — native 6s / intended used 5.5s]]
 

@@ -74,6 +74,21 @@ def test_clear_eyeline_scene_keeps_eyes_off_the_lens(tmp_path):
     (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
     video, still, _ = plan(root)
     assert "just past the lens" not in video and "just past the lens" not in still
-    assert "MARA's eyes stay on THEO off frame-left, well clear of the lens." in still
-    assert "The frame-left edge shows only the room behind MARA." in still
-    assert "the woman's eyes stay on the young man off frame-left, well clear of the lens." in video.lower()
+    assert "MARA faces a quarter toward frame-left, eyes on THEO, well clear of the lens." in still
+    assert "The frame-left edge shows only the room." in still
+    assert "the woman faces a quarter toward frame-left, eyes on the young man, well clear of the lens." in video.lower()
+
+
+def test_clear_eyeline_by_generation_id(tmp_path):
+    # film08 SC02_g11: restage one shot after 3 rejects without changing the accepted shots' prompts in the scene
+    root = off_frame(tmp_path)
+    pre = json.loads((root / "03_preprod.json").read_text(encoding="utf-8"))
+    pre["preflight"]["clear_eyeline_scenes"] = ["SC02_g1"]
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+    video, still, _ = plan(root)
+    assert "just past the lens" not in video
+    assert "The frame-left edge shows only the room." in still
+    pre["preflight"]["clear_eyeline_scenes"] = ["SC02_g9"]
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+    video, _, _ = plan(root)
+    assert "The woman's eyes go just past the lens to frame-left." in video
