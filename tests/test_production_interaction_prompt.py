@@ -64,3 +64,16 @@ def test_contract_off_prompts_are_unchanged(tmp_path):
     video2, still2, _ = plan(make(tmp_path / "authored", contract=False, marks=True, addressees=True,
                                   shot={"gaze_target": "THEO", "listener_anchors": {"THEO": OFF_ANCHOR}}))
     assert video == video2 and still == still2
+
+
+def test_clear_eyeline_scene_keeps_eyes_off_the_lens(tmp_path):
+    # film08 SC02 rejects: NAOMI singles stared into the lens or pulled the off-frame listener in at the edge
+    root = off_frame(tmp_path)
+    pre = json.loads((root / "03_preprod.json").read_text(encoding="utf-8"))
+    pre["preflight"]["clear_eyeline_scenes"] = ["SC02"]
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+    video, still, _ = plan(root)
+    assert "just past the lens" not in video and "just past the lens" not in still
+    assert "MARA's eyes stay on THEO off frame-left, well clear of the lens." in still
+    assert "The frame-left edge shows only the room behind MARA." in still
+    assert "the woman's eyes stay on the young man off frame-left, well clear of the lens." in video.lower()

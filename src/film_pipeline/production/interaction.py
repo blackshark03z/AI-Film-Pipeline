@@ -237,6 +237,11 @@ def placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[s
                 continue
             if a.side == "BEHIND_CAMERA":
                 add(f"{subject} looks toward the camera's side, never into the lens.")
+            elif decl.scene_id in pre.preflight.clear_eyeline_scenes:
+                side = (a.side or "LEFT").lower()
+                add(f"{subject}'s head is turned a quarter toward frame-{side}; {subject}'s eyes stay on {name} "
+                    f"off frame-{side}, well clear of the lens.")
+                add(f"The frame-{side} edge shows only the room behind {subject}.")
             else:
                 add(f"{subject}'s eyes go just past the lens to frame-{(a.side or 'LEFT').lower()}.")
     gaze = decl.gaze_target

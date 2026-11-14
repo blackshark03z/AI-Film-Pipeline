@@ -751,7 +751,9 @@ preprod = {
                              "establish_s": 1.5, "reaction_s": 3.0},
                   "feasibility": feas, "interaction_contract": True,
                   # video prompt: off-screen listener fully out of frame + "No one speaks." (no accepted takes yet, so all scenes)
-                  "safeguard_scenes": [f"SC{n:02d}" for n in range(1, 13)]},
+                  "safeguard_scenes": [f"SC{n:02d}" for n in range(1, 13)],
+                  # SC01-SC02 keep their accepted prompt hashes; SC03+ get the off-lens eyeline (pilot rejects)
+                  "clear_eyeline_scenes": [f"SC{n:02d}" for n in range(3, 13)]},
     "characters": {ch: {"look": {"look_id": lid, "character": ch, "text": text, "invariants": inv, "approved": True},
                         "video_text": text, "voice": VOICE[ch], "handle": HANDLE[ch]} for ch, (lid, text, inv) in LOOKS.items()},
     "locations": {
