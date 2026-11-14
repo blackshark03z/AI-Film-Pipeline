@@ -169,6 +169,11 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   registered. Screenshots time out in new tabs (find/read_page work). Per memory flow-unusual-activity-no-evasion
   and no-manual-work-for-owner: cool down ~2 h, no evasion tooling; the coordinator decides the route (another
   account/profile, API, or waiting) before any further Flow sends.
+- 2026-11-14 21:30 OWNER DECISION (verbatim "Vẽ bằng ChatGPT", via the coordinator): draw the 58 SC03+ stills
+  (T01-T58) in ChatGPT, not Flow. Route: ChatGPT tab in the same GPM profile through Claude in Chrome (NO-JS),
+  references attached with file_upload, same plan prompts + refs; register each with --source ChatGPT, QC with
+  STILL_EYELINE / STILL_CORNER_MARK on a contact sheet, self-approve as agent:tech-lead (delegated). Stop on any
+  ChatGPT warning/rate limit/unusual activity. No Flow clicks before 23:15; no video sends this turn.
 
 ---
 
