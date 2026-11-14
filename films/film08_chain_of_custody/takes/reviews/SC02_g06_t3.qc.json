@@ -1,0 +1,142 @@
+{
+  "take_id": "SC02_g06_t3",
+  "generation_id": "SC02_g06",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:176": "yes: retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "yes: retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+        "REL_GAZE": "yes: retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+        "REL_BARRIER": "yes: retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): retake t3 (still S07 v3): visual review of 4-frame contact sheet (1/3/5/5.8 s) @720p download; identity, hair and cream coat hold; mouth moves at 1/3 s and settles by 5 s; head a quarter to frame-right, eyes off the lens toward HOLLIS off frame-right throughout; green wall/windows/chairs behind her (matches SC01 side); no one at either edge; packet with red seal and closed ledger on the counter; no text. Gemini sparkle marks bottom-right (known, Owner decision pending). Audio: mean -31.2 dB measured, not listened to; lip movement judged from sampled frames only.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:176",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "d57a9c5604c6f55d7eae7702507d059008a0545699b7edc971aee4bd5cc4dd86"
+}
