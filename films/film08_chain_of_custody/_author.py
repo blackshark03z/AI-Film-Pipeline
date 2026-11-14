@@ -180,6 +180,8 @@ P_LEDGER_SHUT = "lying closed on the counter"
 P_CARD_CTR = "lying on the counter beside the packet"
 P_CARD_HAND = "held in HOLLIS's left hand"
 P_CARD_DESK = "lying on the desk"
+P_CARD_POCKET = "in HOLLIS's pocket"
+P_CARD_CUST = "lying on the customer side of the counter"
 P_NB_POCKET = "in ELI's chest pocket"
 P_NB_HAND = "held closed in ELI's right hand"
 
@@ -195,38 +197,37 @@ SC = {
                  ev={25: ({}, {"the ID card:": P_CARD_CTR})}),
     "SC03": dict(tod="MORNING", light="morning", pos=dict(HOLLIS="H_CTR", NAOMI="N_CUST", ELI="E_DOOR"),
                  props={"the brown packet:": P_PACKET_CUST, "the ledger:": P_LEDGER_SHUT, "the ID card:": P_CARD_CTR},
-                 ev={1: ({}, {"the ID card:": P_CARD_HAND}), 9: ({"NAOMI": "N_CHAIR"}, {})}),
+                 ev={1: ({}, {"the ID card:": P_CARD_HAND}), 9: ({"NAOMI": "N_CHAIR"}, {}), 15: ({}, {"the ID card:": P_CARD_POCKET})}),
     "SC04": dict(tod="MORNING", light="morning", pos=dict(HOLLIS="H_CTR", NAOMI="N_CHAIR", ELI="E_DOOR"),
-                 props={"the brown packet:": P_PACKET_NEAR, "the ledger:": P_LEDGER_SHUT, "the ID card:": P_CARD_HAND}, ev={}),
+                 props={"the brown packet:": P_PACKET_NEAR, "the ledger:": P_LEDGER_SHUT, "the ID card:": P_CARD_POCKET}, ev={}),
     "SC05": dict(tod="MORNING", light="morning", pos=dict(HOLLIS="H_CTR", NAOMI="N_CHAIR", ELI="E_DOOR"),
-                 props={"the brown packet:": P_PACKET_NEAR, "the ledger:": P_LEDGER_SHUT, "the ID card:": P_CARD_HAND},
+                 props={"the brown packet:": P_PACKET_NEAR, "the ledger:": P_LEDGER_SHUT, "the ID card:": P_CARD_POCKET},
                  ev={1: ({}, {"the brown packet:": P_PACKET_UNDER}), 2: ({"NAOMI": "N_CUST"}, {})}),
     "SC06": dict(tod="MORNING", light="morning", pos=dict(HOLLIS="H_CTR", NAOMI="N_CUST", ELI="E_DOOR"),
-                 props={"the brown packet:": P_PACKET_UNDER, "the ledger:": P_LEDGER_SHUT, "the ID card:": P_CARD_HAND,
+                 props={"the brown packet:": P_PACKET_UNDER, "the ledger:": P_LEDGER_SHUT, "the ID card:": P_CARD_POCKET,
                         "the notebook:": P_NB_POCKET},
                  ev={2: ({}, {"the notebook:": P_NB_HAND})}),
     "SC07": dict(tod="MORNING", light="morning", pos=dict(HOLLIS="H_CTR", NAOMI="N_CUST", ELI="E_DOOR"),
                  props={"the brown packet:": P_PACKET_UNDER, "the ledger:": P_LEDGER_SHUT,
-                        "the notebook:": P_NB_HAND},
+                        "the ID card:": P_CARD_POCKET, "the notebook:": P_NB_HAND},
                  ev={22: ({}, {"the brown packet:": P_PACKET_HELD})}),
     "SC08": dict(tod="MORNING", light="morning", pos=dict(HOLLIS="H_CTR", NAOMI="N_CUST", ELI="E_DOOR"),
                  props={"the brown packet:": P_PACKET_HELD, "the ledger:": P_LEDGER_SHUT,
-                        "the notebook:": P_NB_HAND},
+                        "the ID card:": P_CARD_POCKET, "the notebook:": P_NB_HAND},
                  ev={24: ({}, {"the brown packet:": P_PACKET_UNDER})}),
     "SC09": dict(tod="MORNING", light="morning", pos=dict(HOLLIS="H_CTR", NAOMI="N_CUST", ELI="E_DOOR"),
                  props={"the brown packet:": P_PACKET_UNDER, "the ledger:": P_LEDGER_SHUT,
-                        "the notebook:": P_NB_HAND},
+                        "the ID card:": P_CARD_POCKET, "the notebook:": P_NB_HAND},
                  ev={18: ({"NAOMI": "N_BACK"}, {}), 24: ({}, {"the brown packet:": P_PACKET_THUMB})}),
     "SC10": dict(tod="MORNING", light="morning", pos=dict(HOLLIS="H_CTR", NAOMI="N_BACK", ELI="E_DOOR"),
                  props={"the brown packet:": P_PACKET_THUMB, "the ledger:": P_LEDGER_SHUT,
-                        "the notebook:": P_NB_HAND},
+                        "the ID card:": P_CARD_POCKET, "the notebook:": P_NB_HAND},
                  ev={1: ({}, {"the brown packet:": P_PACKET_CRACKED}), 5: ({}, {"the brown packet:": P_PACKET_OPEN}),
                      6: ({}, {"the cover page:": "held in HOLLIS's right hand, printed side away from the camera"})}),
     "SC11": dict(tod="MORNING", light="morning", pos=dict(HOLLIS="H_CTR", NAOMI="N_BACK", ELI="E_DOOR"),
                  props={"the brown packet:": P_PACKET_OPEN, "the ledger:": P_LEDGER_SHUT,
-                        "the cover page:": "lying face down on the counter"},
-                 ev={16: ({}, {"the radio:": "held in ELI's right hand at his mouth"}),
-                     17: ({}, {"the radio:": "held in ELI's right hand at chest height"}),
+                        "the ID card:": P_CARD_POCKET, "the cover page:": "lying face down on the counter"},
+                 ev={1: ({}, {"the ID card:": P_CARD_CUST}),
                      24: ({"HOLLIS": "H_OUT"}, {})}),
     "SC12": dict(tod="AFTERNOON", light="afternoon", pos=dict(ELI="E_CTR", NAOMI="N_CUST"),
                  props={"the ledger:": "lying open on the counter, page away from the camera",
@@ -344,7 +345,7 @@ for sc, cfg in SC.items():
 if "SC12" in ENTER:
     pass
 # close inserts show only what is in frame: out-of-frame props are dropped from the start state to keep prompts short
-for _gid, _keep in {"SC11_g16": (), "SC09_g24": ("packet",), "SC10_g01": ("packet",), "SC12_g25": ("ledger",)}.items():
+for _gid, _keep in {"SC09_g24": ("packet",), "SC10_g01": ("packet",), "SC12_g25": ("ledger",)}.items():
     states[_gid]["props"] = {k: v for k, v in states[_gid]["props"].items() if any(w in k for w in _keep)}
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -397,6 +398,15 @@ ACTIONS = {
                                           "NAOMI sits upright in the chair, her eyes on the sealed packet on the counter",
                                           "all three stay still, HOLLIS holds the ID card in his left hand", "sit_down", t=(1.0, 3.0, 4.0)),
                       once=["NAOMI sits down in the waiting chair"]),
+    ("SC03", 15): dict(who="HOLLIS", campos="c_hollis_desk", gaze="desk_computer",
+                       close=("HOLLIS", "close single on HOLLIS standing at the desk behind the counter: head to chest, his left hand and shirt pocket "
+                                        "in frame, the computer screen edge-on at the edge of the frame, archive-box shelves behind him, everyone else "
+                                        "out of frame on both sides"),
+                       ph=act("HOLLIS stands at the desk behind the counter, the ID card held in his hand",
+                              "HOLLIS slips the ID card into his shirt pocket",
+                              "the ID card sits in HOLLIS's shirt pocket, his hand back at his side",
+                              "HOLLIS stares at the computer screen without blinking, nobody speaks", "put_down_small_object"),
+                       once=["HOLLIS slips the ID card into his shirt pocket"]),
     ("SC05", 1): dict(who="HOLLIS", ph=act("HOLLIS stands behind the counter, the sealed packet lies on the counter near NAOMI's chair side",
                                            "HOLLIS slides the sealed packet along the counter toward himself with his right hand",
                                            "HOLLIS holds his right hand flat on top of the sealed packet at his side of the counter",
@@ -446,14 +456,11 @@ ACTIONS = {
                                            "the papers lie halfway out of the packet on the counter, the pages face down",
                                            "all three stay still, NAOMI's hands at her sides", ""),
                       once=["HOLLIS draws the papers halfway out of the packet"]),
-    ("SC11", 16): dict(who="ELI", close=("ELI", "close on ELI standing beside the hallway door: head and shoulders, the frosted-glass door frame beside him, "
-                                         "the chest body camera in view; he raises his hand to his shoulder"),
-                       gaze="shoulder_radio",
-                       ph=act("ELI stands by the door, the radio on his left shoulder",
-                              "ELI unclips the radio and raises it to his mouth",
-                              "ELI holds the radio at his mouth in his right hand",
-                              "ELI holds quite still, the radio at his mouth", "pick_up_small_object"),
-                       once=["ELI raises the radio to his mouth"]),
+    ("SC11", 1): dict(who="HOLLIS", ph=act("HOLLIS stands behind the counter, the ID card in his shirt pocket, the opened packet before him",
+                                           "HOLLIS lays the ID card on the customer side of the counter",
+                                           "the ID card lies on the customer side of the counter, HOLLIS's eyes on the opened packet",
+                                           "all three stay still, nobody speaks", "put_down_small_object"),
+                       once=["HOLLIS lays the ID card on the customer side of the counter"]),
     ("SC11", 24): dict(who="HOLLIS", ph=phases(
         ("SETUP", 0.0, 1.0, "HOLLIS stands behind the counter, NAOMI one step back from it, ELI beside the hallway door", ""),
         ("ACTION", 1.0, 4.0, "HOLLIS walks out from behind the counter and leaves through the hallway door without looking back", "walk_across_room"),
@@ -478,9 +485,6 @@ ACTIONS = {
 REACTIONS = {
     ("SC01", 12): ("ELI", "ELI watches the counter, the green light on his chest camera steady, his face carefully neutral", "counter", None),
     ("SC02", 19): ("HOLLIS", "HOLLIS studies NAOMI's face for a long moment, jaw tight, saying nothing", "NAOMI", None),
-    ("SC03", 15): ("HOLLIS", "HOLLIS types at the desk computer with his right hand, then stares at the screen without blinking", "desk_computer",
-                   "close single on HOLLIS standing at the desk behind the counter: head and shoulders, the computer screen edge-on at the "
-                   "edge of the frame, archive-box shelves behind him, everyone else out of frame on both sides"),
     ("SC04", 10): ("ELI", "ELI glances aside, then down at the floor, uneasy", "floor", None),
     ("SC04", 17): ("NAOMI", "NAOMI holds her face completely still, hands folded in her lap, giving nothing back", "HOLLIS", None),
     ("SC06", 9): ("HOLLIS", "HOLLIS turns slowly to look at ELI, surprised, his mouth tightening", "ELI", None),
@@ -490,7 +494,8 @@ REACTIONS = {
     ("SC09", 6): ("HOLLIS", "HOLLIS glances toward ELI and the hallway door, as though measuring who is watching him", "ELI", None),
     ("SC10", 6): ("HOLLIS", "HOLLIS lifts the top page close to his face, its printed side turned away from the camera, and the colour slowly drains from his face",
                   "cover_page", None),
-    ("SC11", 1): ("HOLLIS", "HOLLIS stands motionless, staring down at the opened packet, both hands flat on the counter edge", "brown_packet", None),
+    ("SC11", 17): ("ELI", "ELI listens with his head tilted to the radio on his shoulder to a quiet reply nobody else can make out, then straightens, his face set",
+                   "shoulder_radio", None),
     ("SC12", 11): ("NAOMI", "NAOMI takes that in quietly with a small, tired nod", "ELI", None),
 }
 REACTION_MOTION = {"glance"}
@@ -557,9 +562,9 @@ for beat_scene in BEATS["scenes"]:
                 to_what, gaze = to, to
                 anchors = {to: anchor_for(sc, who, to, keys[to])}
                 addressees = {str(line_no): [to]}
-            ph = [("SETUP", 0.0, 0.5, f"{who} looks at {to_what}", ""),
+            ph = [("SETUP", 0.0, 0.5, f"{who} turns his head to {to_what} on his left shoulder" if to == "RADIO" else f"{who} looks at {to_what}", ""),
                   ("ACTION", 0.5, round(min(5.5, 0.5 + len(b["text_en"].split()) / 2.6), 1), f"{who} speaks to {to_what} {manner}", ""),
-                  ("HOLD", round(min(5.5, 0.5 + len(b["text_en"].split()) / 2.6), 1), 6.0, f"{who} holds {to_what}'s look, quite still" if to != "RADIO" else f"{who} holds the radio near his mouth, quite still", "")]
+                  ("HOLD", round(min(5.5, 0.5 + len(b["text_en"].split()) / 2.6), 1), 6.0, f"{who} holds {to_what}'s look, quite still" if to != "RADIO" else f"{who} holds the radio on his shoulder in view, quite still", "")]
             g = dict(base, coverage="SINGLE", subject=who, foreground="", visible=[who], dialogue=[line_no],
                      choreography={"generation_id": g_id, "phases": phases(*ph), "once_actions": [f"{who} speaks to {to_what}"],
                                    "gesture_budget": 1, "performance": [perf(who, num)]},
@@ -590,7 +595,7 @@ for beat_scene in BEATS["scenes"]:
                                    "performance": [perf(a["who"], num)]},
                      design_refs=[],
                      camera=cam("CLOSE", close[1], repeat=REPEAT) if close else cam("WIDE", MASTER_TXT[tod], "WIDE_ESTABLISH"),
-                     camera_position=CAMPOS[keys[a["who"]]] if close else ("cA_rec12" if sc == "SC12" else "cA_rec"))
+                     camera_position=a.get("campos") or (CAMPOS[keys[a["who"]]] if close else ("cA_rec12" if sc == "SC12" else "cA_rec")))
             if close:
                 g["gaze_target"] = a["gaze"]
                 o = "NAOMI" if "NAOMI" in present and a["who"] != "NAOMI" else sorted(present - {a["who"]})[0]
