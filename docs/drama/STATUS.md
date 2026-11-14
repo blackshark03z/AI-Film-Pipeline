@@ -81,6 +81,14 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   the visible Gemini sparkle mark bottom-right, and it survives into the Flow takes (checked SC01_g01, SC01_g03,
   SC02_g01, SC02_g11 at 4 s). Muse clips made from those images inherit it; Muse text-only clips have none.
   The take review never checked corners for marks. Owner to decide how the film treats it (not removed by us).
+- 10:20 Owner: "let Muse draw the image + use its own drawing as reference". New side chat: Muse drew a portrait
+  from char_HOLLIS.jpg (muse_HOLLIS_portrait.webp, 2048x1152), a near copy of the ref without the Gemini mark
+  (the prompt asked for no marks; not used as a production ref: it would strip the AI mark, Owner call). Then
+  SC02_g09_muse_own.mp4 (portrait as appearance ref) + SC02_g11_muse_own_chain.mp4 (chained). Result: the two
+  Muse shots now show the SAME man (best shot-to-shot hold so far), but he is not the portrait: balding,
+  darker slicked hair, different face. Also: legible prop text ("RECORDS LEDGER", "ARCHIVES CASE FILES"), shot 1
+  pushes in, back wall differs between shots. Verdict unchanged: Muse cannot reproduce an approved face; it
+  holds its own face across a chain.
 
 ---
 
