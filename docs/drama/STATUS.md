@@ -98,6 +98,19 @@ Next: pilot report -> contact-sheet QC of takes -> Part A script fixes -> SC03+ 
   pre-existing failures unchanged: film03 golden x3 (also at HEAD), test_accepted_film07_takes_do_not_go_stale.
   SC02 remainder (after the 11:15 cool-down): S07 v3 = Flow image edit of v2 (stills.md) for g02 g06 g08 g18
   g21; S09 v2 for g09 g11 g22 g24; 9 sends <= 54 cr (run ~426 <= 535); one 720p download test.
+- 11:25-12:00 SC02 resume (gmail-4 Chrome, Omni 1.2 Flash 360p x1, 6 cr each, no flag): 5 sends with S07 v3
+  (g02 g06 g08 g18 g21). Balance 672 after g02 -> 648 after g21 (= 4 x 6). Spent this run ~402 <= 535.
+  Accepted t3: SC02_g02 (b6bc764), g06 (d559887), g08 (3f6ff72) - S07 v3 fixed both defects: head a quarter to
+  frame-right, eyes off the lens, green wall/windows/chairs behind, no edge intrusion.
+  720p: "720p Upscaled" download is FREE (balance 672 before and after). _720.mp4 copies kept for g02 g06
+  (unregistered); registered takes stay the 640x360 originals.
+  BLOCKED: from the g08 720p click on, Chrome downloads no file at all (g08 720p, g18 360p+720p, g21 360p; one
+  .crdownload appeared and vanished). Probably Chrome's "automatic multiple downloads" block for flow.google.com
+  (a browser site setting -> Owner; screen-read access to Chrome was declined). g18 t2 and g21 t2 are generated
+  in the project (tiles "Woman speaking to older man", newest two) but not downloaded/QC'd. Sends stopped: the
+  4 HOLLIS shots (g09 g11 g22 g24, S09 v2) wait for downloads (QC needed, and the S09 v2 tile must be verified).
+  Finding: the account panel says "Visible watermarking is required in your region" (switch disabled) -> the
+  Gemini sparkle cannot be turned off on this account.
 
 ---
 
