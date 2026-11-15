@@ -894,3 +894,23 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   Ready to send: 171 generations with approved stills (SC03 25, SC04 25, SC05 25, SC06 25, SC07 25, SC08 24, SC09 21,
   SC10 1); 76 takes in the log (50 accepted), nothing changed. Needs: the Owner reconnects the extension in the gmail-4
   GPM profile (Claude side panel signed in), then restart this task. Next: send in order from SC03_g01, 6 cr each.
+- 2026-11-15 film08 SC03-SC10 video sends (session "Flow video sends", gmail-4 via Claude in Chrome, Omni 1.2 Flash 360p x1 Frames, 6 cr):
+  - Route for the ChatGPT stills: Flow has no input[type=file] and the OS picker is off limits, so the 171 stills enter Flow with
+    `tools/drama_flow_ui/cdp_upload.py` (Owner approval "Cho chạy cdp_upload", 2026-11-15, via the coordinator; commits 0c9b8de, 9fe22d9).
+    It runs no page JS, clicks the "Upload media" button of the Start-frame picker and fills the intercepted file chooser. Uploaded
+    tiles carry the file name (start_SC03_g0N.jpg), so the picker search by name is an exact match. First upload + 6-file batch: no flag.
+  - Browser notes: tile menus misfire when opened within ~10 s of a download (a "1 item copied" toast = wrong item); wait >=2 s
+    between menu steps. After ~6 downloads Chrome stopped saving files in that tab; a NEW tab fixed it (memory feedback-download-720p).
+    Opening a new tab recreated the tab group and left the old Flow tab as an orphan (2 tabs on the project); screenshots then fail
+    on and off in my tab. 720p "Upscaled" files arrive minutes later (one upscale job at a time); they are saved as media/takes/<take>_720.mp4.
+  - ACCEPTED t1: SC03_g01, g03, g05, g07 (contact sheet + local STT for dialogue; 6 cr each; commit 9f32d51 for the first three).
+  - BLOCKED by Flow policy, not an account warning: SC03_g02 and SC03_g04 (HOLLIS close-up singles, ChatGPT still T02).
+    Exact tile text: "Failed. This prompt might violate our policies about generating prominent people. Please try a different prompt or
+    send feedback. You will be refunded for this generation. It may take several minutes for your refund to appear. Track status".
+  - HOLLIS diagnosis (coordinator): ChatGPT HOLLIS face is sharper/more celebrity-like than the Flow char_HOLLIS; NAOMI stills pass.
+    85 of the 171 gens show HOLLIS, from 15 unique stills (sha 220fb097 x5 g02-g13, 8d4ae731 x14, 5e0962c4 x34, 14e9cc9b x12,
+    54ffbd20 x8, 140cf956 x3, and 9 singles). Fix: Flow image edit (Nano Banana 2.1, 0 cr) with image 1 = the ChatGPT still and image 2 =
+    char_HOLLIS: "Edit image 1. Keep its exact framing, room, props, hands, pose, head angle, eyeline and lighting. Replace the man's face
+    and hair with those of the man in image 2, same age and build. Photoreal film still, no text." Test on T02 (SC03_g02): framing, props,
+    pose and eyeline kept, face now like char_HOLLIS; the edit adds the Gemini sparkle (bottom-right, known, not removed). Registered +
+    approved for SC03_g02 only (still sha 451b9892), source "Flow Nano Banana 2.1 image edit ... T02h". Send result: see below.

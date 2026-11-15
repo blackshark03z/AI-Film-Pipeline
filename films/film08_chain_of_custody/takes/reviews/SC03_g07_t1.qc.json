@@ -1,0 +1,142 @@
+{
+  "take_id": "SC03_g07_t1",
+  "generation_id": "SC03_g07",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:309": "yes: 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "yes: 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+        "REL_GAZE": "yes: 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+        "REL_BARRIER": "yes: 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens in all samples; face/hair/coat match refs; packet sealed + ledger closed on the counter edge; only NAOMI in frame, frame-right edge shows door/room only; mouth moves on the line (local STT: 'it takes about a minute i'll stand if that's alright' = script); audio mean -32.3 dB; no text; Gemini sparkle on the ledger = known, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:309",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "dd808a4b2304ccda456d277b1827de049a9226f9691cffe0b0354cfdbc9e45c2"
+}
