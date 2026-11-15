@@ -1,0 +1,142 @@
+{
+  "take_id": "SC06_g01_t1",
+  "generation_id": "SC06_g01",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:666": "yes: STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "yes: STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+        "REL_GAZE": "yes: STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+        "REL_BARRIER": "yes: STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): STT matches script (minor STT errors); accepted with reframe 0/0/0.94/0.94; leak confined to outer 4.5%, head/hands inside crop",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:666",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "6eaaad4954b4de2bd53f2dbcbe3eae7d83f8de9cc3e99028371c6484c77281c1"
+}
