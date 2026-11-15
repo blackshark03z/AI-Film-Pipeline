@@ -1,9 +1,10 @@
 """Upload local files into an open Flow tab through its Upload button, over raw CDP.
 
 Why: Claude in Chrome cannot upload on Flow (no input[type=file]; Upload opens the OS picker) and the
-NO-JS rule forbids page JavaScript. This tool runs no page JavaScript and never enables the Runtime
-domain: it finds the button with DOM.performSearch (XPath), clicks it with Input events, intercepts
-the native file chooser (Page.setInterceptFileChooserDialog) and fills it with DOM.setFileInputFiles.
+NO-JS rule forbids page JavaScript. This tool uses only the DOM, Input and Page domains it needs: it
+finds the button with DOM.performSearch (XPath), clicks it with Input events, intercepts the native
+file chooser (Page.setInterceptFileChooserDialog) and fills it with DOM.setFileInputFiles. It does not
+hide or disguise automation; an account warning after an upload stops the run like any other send.
 
 Usage:
   python cdp_upload.py --port 65204 --url-part 6f8e24af --dry            # find tab + button only
