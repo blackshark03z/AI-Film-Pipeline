@@ -950,3 +950,6 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   (no clip; the "you have not been charged" line was not visible in the tile, so whether 6 cr was taken is UNVERIFIED; balance not re-read).
 - Per brief: stopped at once, no retry, no reload, no further sends/uploads, no evasion. Nothing else in flight. The 4 tg_ stills were uploaded to the project earlier this turn (0 cr).
 - State: accepted SC03 25-held gens as listed in checkpoint 2; SC05 g01-g08 done; SC05_g09 onward unsent (rule-B stills ready). Next step: Owner/coordinator decide whether gmail-4 resumes.
+- Offline test (2026-11-15, coordinator suggestion): bottom-anchored crop scale 0.90, y 0.10 on the 4 un-tightened stills (5e0962c4, 14e9cc9b, 54ffbd20, f91748cd). Hand and packet stay in frame
+  but the crown is cut at the top edge on all four (the heads start at y~0-0.03), so no headroom: NOT registered, originals kept, those 52 gens rely on rule A. Nothing was registered or sent.
+  Sends remain stopped on the account warning above until the Owner decides.
