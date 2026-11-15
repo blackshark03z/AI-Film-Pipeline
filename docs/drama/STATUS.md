@@ -956,3 +956,10 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - 2026-11-15 13:19 OWNER DECISION (coordinator chat, verbatim "Nghỉ 2 giờ rồi chạy tiếp"): gmail-4 resumes after a 2 h cool-down
   from the 13:11 SC05_g09 warning -> sends restart ~15:15 from SC05_g09 (tightened stills already uploaded). Same rules: >= 4 min
   between generations, any further warning stops gmail-4 at once; avoid browser restarts/new tab groups (both warnings followed one).
+- 2026-11-15 15:25 PLAN-TEXT FIXES (stills-session reports): (1) new plan WARN LABEL_STATE_CONFLICT (plan.py
+  label_state_issues): an emitted layout label with a state word ("open ledger") against an opposite continuity state
+  ("the ledger: lying closed"). film08 flags 13 gens; label kept on purpose (renaming re-hashes every ledger still prompt
+  -> approved stills STALE); ChatGPT prompts (C:/film-work/film08/cmp.py) state CLOSED explicitly. (2) T30 = SC09_g24:
+  SETUP said "holds in both hands" while the start state is P_PACKET_UNDER; SETUP now rests his right hand on it and the
+  ACTION lifts it in both hands before the thumb goes under the seal. Only SC09_g24 prompt/still text changed (not drawn
+  yet). Tests: tests/test_label_state_conflict.py (2).

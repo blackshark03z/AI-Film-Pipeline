@@ -8,6 +8,7 @@ storyboard/ (frames + gate), gate3.json.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -48,6 +49,11 @@ BUDGET_LABELS = {"prefix": "start prefix", "characters": "cast/looks", "setting"
 _UNIT_SIZE = {"EXTREME_WIDE": "WIDE", "INSERT": "CLOSE"}
 
 # words that leave the stopping point of a mid-travel motion to the model
+# A set-object label that names a state ("open ledger") is emitted verbatim by the layout and gaze text, so it contradicts
+# a continuity state with the opposite word ("the ledger: lying closed"): film08 SC03_g09 still said both (2026-11-15).
+LABEL_STATE_OPPOSITES = {"open": ("closed", "shut"), "closed": ("open",), "shut": ("open",), "full": ("empty",),
+                         "empty": ("full",), "lit": ("unlit", "dark"), "unlit": ("lit",), "locked": ("unlocked",),
+                         "unlocked": ("locked",), "sealed": ("unsealed", "torn open"), "unsealed": ("sealed",)}
 VAGUE_POSITION_WORDS = ("halfway", "half way", "half-closed", "middle", "upper half", "lower half", "partway",
                         "part way", "a third")
 
@@ -345,6 +351,31 @@ class _Plan:
                 add("TARGET_CONFLICT", f"end_pose must mention the stop object ({', '.join(labels)})")
         return out
 
+    def label_state_issues(self, decl: ShotDecl, texts: list[str]) -> list[PreflightIssue]:
+        """LABEL_STATE_CONFLICT (WARN): an emitted set-object label carries a state word that a start/end continuity state
+        of the same object contradicts. Fix the label (drop the state word) or the state, not the prompt by hand."""
+        layout = self.pre.locations[self.pre.scenes[decl.scene_id].location].layout
+        if layout is None:
+            return []
+        emitted = " ".join(texts).lower()
+        props = [(k.lower(), v.lower()) for sid in (decl.start_state, decl.end_state)
+                 for k, v in self.state(sid).props.items()]
+        out: list[PreflightIssue] = []
+        for obj in layout.objects:
+            words = re.findall(r"[a-z]+", obj.label.lower())
+            state_words = [w for w in words if w in LABEL_STATE_OPPOSITES]
+            noun = " ".join(w for w in words if w not in LABEL_STATE_OPPOSITES)
+            if not state_words or not noun or obj.label.lower() not in emitted:
+                continue
+            for word in state_words:
+                clash = sorted({v for k, v in props if noun in k
+                                and any(re.search(rf"\b{o}\b", v) for o in LABEL_STATE_OPPOSITES[word])})
+                if clash:
+                    out.append(PreflightIssue(check="LABEL_STATE_CONFLICT", severity="WARN",
+                                              detail=f"{decl.generation_id}: prompt says {obj.label!r} but the state has "
+                                                     f"the {noun} {clash[0]!r}; drop {word!r} from the layout label"))
+        return out
+
     def look_pin_issues(self, decl: ShotDecl) -> list[PreflightIssue]:
         """A character who moves across a start-frame shot is pinned only by the first frame, where he may be small and
         far: film04 SC01_g2 t1 walked THEO to the camera and his olive rain jacket turned into a black hoodie. Without an
@@ -501,6 +532,7 @@ def plan_package(pkg: FilmPackage, out: str | Path, *, takes_dir: str | Path | N
         if p.pre.preflight.interaction_contract:
             issues += hidden_person_issues(p.pre, decl, p.gen_index[gid], [text, still])
         issues += p.motion_target_issues(decl) + p.look_pin_issues(decl) + p.handedness_issues(decl)
+        issues += p.label_state_issues(decl, [text, still])
         rating = None
         if p.pre.preflight.generability:
             rating, extra = generability_issues(decl)

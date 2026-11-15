@@ -20299,19 +20299,19 @@
             "kind": "SETUP",
             "start_s": 0.0,
             "end_s": 1.0,
-            "description": "HOLLIS holds the sealed packet in both hands at the counter edge"
+            "description": "HOLLIS's right hand rests on the sealed packet lying on the counter edge"
           },
           {
             "kind": "ACTION",
             "start_s": 1.0,
             "end_s": 2.8,
-            "description": "HOLLIS slides his right thumb under the edge of the red wax seal"
+            "description": "HOLLIS lifts the sealed packet in both hands and slides his right thumb under the edge of the red wax seal"
           },
           {
             "kind": "CONSEQUENCE",
             "start_s": 2.8,
             "end_s": 4.0,
-            "description": "HOLLIS's right thumb rests under the edge of the red wax seal, both hands still on the packet"
+            "description": "HOLLIS holds the packet in both hands, his right thumb under the edge of the red wax seal"
           },
           {
             "kind": "HOLD",
@@ -20321,7 +20321,7 @@
           }
         ],
         "once_actions": [
-          "HOLLIS slides his right thumb under the edge of the red wax seal"
+          "HOLLIS lifts the sealed packet in both hands and slides his right thumb under the edge of the red wax seal"
         ],
         "gesture_budget": 1,
         "performance": [
@@ -20352,7 +20352,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close on HOLLIS behind the counter: head and shoulders, both hands holding the packet low in the frame",
+        "composition": "close on HOLLIS behind the counter: head and shoulders, the packet low in the frame",
         "declared_repeat": "static close singles on whoever speaks are the deliberate grammar of this talking scene; the room never changes"
       },
       "camera_position": "c_hollis",
