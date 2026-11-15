@@ -1,0 +1,142 @@
+{
+  "take_id": "SC03_g02_t1",
+  "generation_id": "SC03_g02",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:284": "no: edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "no: edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+        "REL_GAZE": "no: edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+        "REL_BARRIER": "no: edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still sent, NOT blocked by Flow; STT matches script; but another person's head/hair profile enters the frame-left edge from ~3.2 s to 6 s (single must show only the room there)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROVIDER_LIMIT",
+  "cause_note": "prompt already states frame-left edge shows only the room; the model drifted the listener's head into the left edge for ~3 s",
+  "required_answers": [
+    "REL_ADDRESS:284",
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "507a4ab1736bea94566721227a4a02966405ee94bd6580b3b2d1bc4cefe56b7d"
+}
