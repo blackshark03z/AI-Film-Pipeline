@@ -940,5 +940,6 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   - C) PIPELINE LEARNING (film08, coordinator 2026-11-15): 17 of ~70 SC03-SC05 sends leaked the off-frame listener into the edge, always in the outer 3% of the frame
     except for 5 deep cases. Cheap fix order: (1) tighten the start still before the first send; (2) if a leak stays inside the outer 10%, accept with a 0.88 reframe
     instead of resending; (3) only deeper leaks cost a retake or restage.
-  - BACKLOG (coordinator): automate (1) the still-tighten step in `film.py stills` (crop + register + approve per sha group) and (2) accept-with-reframe in `film.py review`
-    (leak-band measurement, reframe.json entry, evidence text). Pipeline code not changed by the executor.
+  - BACKLOG (coordinator): automate (1) the still-tighten step in `film.py stills` and (2) accept-with-reframe in `film.py review`: BOTH DONE (cb26db5):
+    `film.py stills --tighten <GID> [--side] [--scale] [--y]` registers an unapproved 0-cr version; a review sheet with `"reframe": {x,y,w,h}` on an ACCEPTED verdict
+    merges into titles/reframe.json. Pipeline code not changed by the executor; the 3 hand-written reframes (fa32897) stay.
