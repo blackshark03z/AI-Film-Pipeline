@@ -1,0 +1,142 @@
+{
+  "take_id": "SC03_g03_t1",
+  "generation_id": "SC03_g03",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:289": "yes: 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "yes: 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+        "REL_GAZE": "yes: 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+        "REL_BARRIER": "yes: 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): 6-frame contact sheet @360p + eye crops at 1.2/3/5.5 s: NAOMI close-up, head a quarter toward frame-right, eyes off to frame-right and clear of the lens (head drifts toward front by ~3 s but pupils stay right of centre); face/hair/coat match refs; packet sealed and ledger closed on the counter at the bottom edge; only NAOMI in frame, frame-right edge shows only the door/room; mouth moves on the line (local STT: 'i drove four hours every monday i left every friday afternoon' = script); audio mean -28.8 dB; no text; Gemini sparkle on the ledger = known mark, not removed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:289",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "f277f3726147deb2b16ea9554d1b2dd42ce250f012fa3d27d082e81782bda349"
+}
