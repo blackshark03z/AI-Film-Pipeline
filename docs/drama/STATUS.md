@@ -888,3 +888,9 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - Kept (cited as evidence or holding unique work): AI-Film-Pipeline/projects (all 40 dirs cited in docs), C:/AFP-Live-v3,
   AFP-Cold-v3, AFP-QA-20261110-audit, AFP-Releases, Film120-Gemini, AFP-film-package, wt-*, unmatched Downloads (0.7 GB).
 - Empty stubs D:/AI FILM MAKER/AFP-shard-3 and AI-Film-Pipeline-OneClick stay until the shells holding them exit.
+- 2026-11-15 film08 SC03-SC10 take sends: BLOCKED at start, 0 sends, 0 cr. Claude in Chrome is not connected
+  (`tabs_context_mcp` and `list_connected_browsers` return "not connected" / [] on 3 tries over ~1 min; chrome.exe and
+  GPMLoginGlobal.exe are running). No Flow page opened, no warning seen, balance not re-read (last known 644, gmail-4).
+  Ready to send: 171 generations with approved stills (SC03 25, SC04 25, SC05 25, SC06 25, SC07 25, SC08 24, SC09 21,
+  SC10 1); 76 takes in the log (50 accepted), nothing changed. Needs: the Owner reconnects the extension in the gmail-4
+  GPM profile (Claude side panel signed in), then restart this task. Next: send in order from SC03_g01, 6 cr each.
