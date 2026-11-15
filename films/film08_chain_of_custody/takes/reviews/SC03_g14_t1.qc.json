@@ -1,0 +1,142 @@
+{
+  "take_id": "SC03_g14_t1",
+  "generation_id": "SC03_g14",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:343": "no: NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "no: NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+        "REL_GAZE": "no: NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+        "REL_BARRIER": "no: NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: STT matches script, but the model changed the setup: the older man's face profile fills the frame-right edge for the whole 6 s plus a packet pile (still shows only the woman)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROVIDER_LIMIT",
+  "cause_note": "the single still shows only the woman; the model drifted the listener (older man) into the frame-right edge for the full shot",
+  "required_answers": [
+    "REL_ADDRESS:343",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "16e2b04c742edbf07fedd2a476f26baad3b6fbd865c77856e4654da09987af5b"
+}
