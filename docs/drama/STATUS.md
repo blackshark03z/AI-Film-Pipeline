@@ -924,3 +924,21 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   (g02_t1, g14_t1, g17 x2, g19, g23_t1, SC04_g01 x2). Plain retake fixes about half. Still 29f1bdc7 (NAOMI looking screen-right, 16 gens: SC03_g14,17,19,21,24,
   SC04_g02,04,06,08...) failed 4 of 5 sends: gens of this still are PAUSED (not sent) until the coordinator decides: prompt amendment ("the frame edge shows only the
   wall, no second person") or restage. Credit balance read 516 cr after SC03_g18 (baseline 644).
+
+### film08 SC03-SC10 sends — checkpoint 2 (agent:tech-lead, Chrome gmail-4, 2026-11-15)
+- Sends so far: SC05 g01-g08 done (g07 accepted with reframe). Balance ~296 cr estimated (332 read after SC05_g04_t1, then 6 more sends); not re-read yet. Chrome extension dropped mid-send of SC05_g09 (nothing sent); resume needs reconnection.
+- Coordinator rules A/B/C applied (OWNER_POLICY §5, technical decision, relayed 2026-11-15):
+  - A) Re-review of the 17 listener-edge rejects with the "leak confined to outer 10%" rule (pixel strips at 64 px, red line at the 10% mark, every 12th frame).
+    Qualified and now ACCEPTED with reframe (titles/reframe.json, crop 0.88, anchored away from the leak, y=0 to keep headroom): SC05_g07_t1 (right, ~1%),
+    SC04_g01_t2 (left, ~2%), SC04_g25_t2 (right, ~3%); cropped 24-frame sheets show no listener pixels and the head inside. Stay REJECTED (leak deeper than 10%):
+    SC03_g14_t1, SC03_g17_t1+t2, SC03_g19_t1, SC05_g05_t1 (faces reach well past the band). The other qualifying rejects (SC03_g02_t1, SC03_g23_t1, SC04_g03_t1,
+    SC04_g09_t1, SC04_g12_t1, SC04_g25_t1, SC05_g03_t1, SC05_g07_t2, SC04_g01_t1) were left rejected because the shot already has an accepted take.
+  - B) Pre-restage: start stills tightened (crop w=h=0.85 anchored away from the listener side, y=0 because faces sit at the top edge, Lanczos back to 1376x768,
+    registered --credits 0, approved agent:tech-lead) for 72 unsent gens: 29f1bdc7 (14 gens incl. SC03_g17, g19, g21, g24, SC04 held gens), 128929cc (44), eb3a2088 (1),
+    b5c8e29c (13). NOT tightened: 5e0962c4, 14e9cc9b, 54ffbd20, f91748cd (52 gens): the older man's hand and packet sit in the bottom 15%, a 0.85 crop would cut them;
+    those rely on rule A (accept-with-reframe) and a restage only for deep leaks. New files for Flow upload: C:/film-work/film08/up/tg_<sha>.jpg.
+  - C) PIPELINE LEARNING (film08, coordinator 2026-11-15): 17 of ~70 SC03-SC05 sends leaked the off-frame listener into the edge, always in the outer 3% of the frame
+    except for 5 deep cases. Cheap fix order: (1) tighten the start still before the first send; (2) if a leak stays inside the outer 10%, accept with a 0.88 reframe
+    instead of resending; (3) only deeper leaks cost a retake or restage.
+  - BACKLOG (coordinator): automate (1) the still-tighten step in `film.py stills` (crop + register + approve per sha group) and (2) accept-with-reframe in `film.py review`
+    (leak-band measurement, reframe.json entry, evidence text). Pipeline code not changed by the executor.
