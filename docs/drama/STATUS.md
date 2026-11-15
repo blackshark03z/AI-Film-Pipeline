@@ -953,3 +953,6 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
 - Offline test (2026-11-15, coordinator suggestion): bottom-anchored crop scale 0.90, y 0.10 on the 4 un-tightened stills (5e0962c4, 14e9cc9b, 54ffbd20, f91748cd). Hand and packet stay in frame
   but the crown is cut at the top edge on all four (the heads start at y~0-0.03), so no headroom: NOT registered, originals kept, those 52 gens rely on rule A. Nothing was registered or sent.
   Sends remain stopped on the account warning above until the Owner decides.
+- 2026-11-15 13:19 OWNER DECISION (coordinator chat, verbatim "Nghỉ 2 giờ rồi chạy tiếp"): gmail-4 resumes after a 2 h cool-down
+  from the 13:11 SC05_g09 warning -> sends restart ~15:15 from SC05_g09 (tightened stills already uploaded). Same rules: >= 4 min
+  between generations, any further warning stops gmail-4 at once; avoid browser restarts/new tab groups (both warnings followed one).
