@@ -1,0 +1,142 @@
+{
+  "take_id": "SC03_g19_t1",
+  "generation_id": "SC03_g19",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:367": "no: listener head at frame-right edge of a single (3rd time on still 29f1bdc7)"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "no: listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+        "REL_GAZE": "no: listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+        "REL_BARRIER": "no: listener head at frame-right edge of a single (3rd time on still 29f1bdc7)"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener head at frame-right edge of a single (3rd time on still 29f1bdc7)",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "START_FRAME",
+  "cause_note": "NAOMI close-up still 29f1bdc7 has an empty right side; the model adds the listener head at the right edge (g14_t1, g17_t1/t2, g19_t1); same still serves 16 gens",
+  "required_answers": [
+    "REL_ADDRESS:367",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "c1193dc30da6f64f4e6e433cdb19c243d2b73e1bf4fafbcf70b31242f2f7cec7"
+}
