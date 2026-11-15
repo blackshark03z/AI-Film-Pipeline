@@ -967,3 +967,16 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   from gmail-4 to "acct-5" = GPM profile 5db03bd5-23da-439d-8d1f-7ab2ba5b7a18 (started via GPM API, CDP 51670 this run).
   gmail-4: finish the in-flight gen only, record final balance, leave browser open. acct-5: one new Flow project, HOLLIS
   face edits redone there, same rules (>= 4 min gap, NO-JS, warning = stop, 20 cr floor, film cap 3,210 cr).
+
+### film08 SC03-SC10 sends — gmail-4 final (agent:tech-lead, Chrome gmail-4, 2026-11-15)
+- STOPPED at the credit floor: balance 22 cr after SC06_g17 (a further 6-cr send would end below 20). No account warning after the 2 h cool-down.
+- Result: 97 of 171 gens accepted (SC03 25, SC04 25, SC05 25, SC06 22). Since the cool-down: SC04_g17/g19/g21 and 22 SC06 gens (g01,03-18,20-23,25), all accepted at t1.
+  Takes ledger: 41 rejected takes in total (PROMPT 21, PROVIDER_LIMIT 18, START_FRAME 2), no new rejects in this stretch.
+- Listener-edge leaks accepted with Rule A reframes in titles/reframe.json (crop w==h 0.88-0.94, anchored away from the leak): SC04_g19, g21; SC06 g01, 05, 06, 08, 09,
+  10, 12, 13, 14, 17, 20, 21 (g08 0.88 at x=0.12; g17 0.94 at x=0.06).
+- Left (74 gens): SC06_g02, g19, g24; SC07 g01-g25; SC08 g01-g23+g25 (24); SC09 g01-g17, g20-g23 (21); SC10_g04. SC09_g24 awaits its redrawn still (T30).
+  Next send is SC06_g19 (still ed_SC05_g04, older man left; prompt ready, not sent). Spend this run ~ 6 cr x accepted sends; gmail-4 balance 22 cr.
+- Open defects: listener-edge leaks (handled by reframe, not fixed at the source); Gemini sparkle mark in every Flow still; takes are 640x360 (no 720p copies);
+  older-man stills not tightened (4); packet/ledger sometimes off-frame in tight stills; STT spells Moreno as marina/marino (STT error, not a take defect);
+  LABEL_STATE_CONFLICT on 13 gens judged a label glitch; old orphan Flow tab #mine2 (half-typed prompt) may remain open.
+- Next step: Owner decision (see 3fdf7f8e) — continue the 74 gens on acct-5 (needs ~444+ cr) or top up; SC06 remainder first, then SC07-SC10.
