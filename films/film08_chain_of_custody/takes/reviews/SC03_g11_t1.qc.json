@@ -1,0 +1,142 @@
+{
+  "take_id": "SC03_g11_t1",
+  "generation_id": "SC03_g11",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:328": "yes: NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "yes: NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+        "REL_GAZE": "yes: NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+        "REL_BARRIER": "yes: NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): NAOMI single: identity/wardrobe/props hold, eyeline screen-right, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:328",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "2d72c48fb7058232d8471d19981e96f6472da774e240097af241a9f52cbee366"
+}
