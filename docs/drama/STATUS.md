@@ -943,3 +943,10 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   - BACKLOG (coordinator): automate (1) the still-tighten step in `film.py stills` and (2) accept-with-reframe in `film.py review`: BOTH DONE (cb26db5):
     `film.py stills --tighten <GID> [--side] [--scale] [--y]` registers an unapproved 0-cr version; a review sheet with `"reframe": {x,y,w,h}` on an ACCEPTED verdict
     merges into titles/reframe.json. Pipeline code not changed by the executor; the 3 hand-written reframes (fa32897) stay.
+
+### film08 ACCOUNT WARNING — STOPPED (agent:tech-lead, Chrome gmail-4, 2026-11-15)
+- First send after the extension reconnect (new tab group, project 6f8e24af, tab #mine3) was SC05_g09_t1 with the tightened still tg_128929cc (rule B). The new tile came back
+  "Failed | We noticed some unusual activity. Note that browser extensions that modify the page may cause issues. Please visit the Help Center for more information."
+  (no clip; the "you have not been charged" line was not visible in the tile, so whether 6 cr was taken is UNVERIFIED; balance not re-read).
+- Per brief: stopped at once, no retry, no reload, no further sends/uploads, no evasion. Nothing else in flight. The 4 tg_ stills were uploaded to the project earlier this turn (0 cr).
+- State: accepted SC03 25-held gens as listed in checkpoint 2; SC05 g01-g08 done; SC05_g09 onward unsent (rule-B stills ready). Next step: Owner/coordinator decide whether gmail-4 resumes.
