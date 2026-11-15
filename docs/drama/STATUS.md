@@ -914,3 +914,13 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
     and hair with those of the man in image 2, same age and build. Photoreal film still, no text." Test on T02 (SC03_g02): framing, props,
     pose and eyeline kept, face now like char_HOLLIS; the edit adds the Gemini sparkle (bottom-right, known, not removed). Registered +
     approved for SC03_g02 only (still sha 451b9892), source "Flow Nano Banana 2.1 image edit ... T02h". Send result: see below.
+
+### film08 SC03-SC10 sends — checkpoint (agent:tech-lead, Chrome gmail-4)
+- HOLLIS "prominent people" fix done for all unique HOLLIS singles (Flow image edit, char_HOLLIS as image 2, 0 cr): 8d4ae731, 140cf956,
+  5e0962c4, 14e9cc9b, 54ffbd20, f226aa76, f91748cd, 9ae286d0, 220fb097, 451b9892 registered + approved (commit 9823206). No further policy blocks on edited stills.
+- Takes so far (360p, 6 cr each): ACCEPTED SC03_g01,03,04,05,06,07,08,09,10,11,12,13,14(t2),15,16,18,20,22,23(t2),25; REJECTED SC03_g02_t1, g14_t1,
+  g17_t1+t2, g19_t1, g23_t1, SC04_g01_t1+t2.
+- Open defect (systematic): in close-up singles the video model slides the listener's head/profile into the frame edge opposite the look direction
+  (g02_t1, g14_t1, g17 x2, g19, g23_t1, SC04_g01 x2). Plain retake fixes about half. Still 29f1bdc7 (NAOMI looking screen-right, 16 gens: SC03_g14,17,19,21,24,
+  SC04_g02,04,06,08...) failed 4 of 5 sends: gens of this still are PAUSED (not sent) until the coordinator decides: prompt amendment ("the frame edge shows only the
+  wall, no second person") or restage. Credit balance read 516 cr after SC03_g18 (baseline 644).
