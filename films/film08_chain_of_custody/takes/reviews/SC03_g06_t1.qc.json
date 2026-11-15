@@ -1,0 +1,142 @@
+{
+  "take_id": "SC03_g06_t1",
+  "generation_id": "SC03_g06",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:304": "yes: edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "yes: edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+        "REL_GAZE": "yes: edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+        "REL_BARRIER": "yes: edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe/props hold, eyeline screen-left, both edges clear all 6 s, mouth moves, STT matches script, no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:304",
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "168b406fb2f26bd3359e8d97a5dcdb7731baedd9d63a98c45b0f35e4a68d5f7d"
+}
