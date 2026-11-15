@@ -1,0 +1,142 @@
+{
+  "take_id": "SC04_g11_t1",
+  "generation_id": "SC04_g11",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:457": "no: listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "no: listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+        "REL_GAZE": "no: listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+        "REL_BARRIER": "no: listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): listener (older man) face and hair enter the right edge deeper than 10% of width, ear and cheek inside outer 11% whole take; too deep for reframe",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROVIDER_LIMIT",
+  "cause_note": "listener-edge leak deeper than 10%, not coverable by reframe",
+  "required_answers": [
+    "REL_ADDRESS:457",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "3f118395013960cc9a5780108114331f136d8aed427318d00a1ceac15c4c90c3"
+}
