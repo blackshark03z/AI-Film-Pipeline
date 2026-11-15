@@ -1,0 +1,139 @@
+{
+  "take_id": "SC03_g15_t1",
+  "generation_id": "SC03_g15",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "yes: edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+        "REL_GAZE": "yes: edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+        "REL_BARRIER": "yes: edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): edited HOLLIS still: identity/wardrobe hold, ID card goes from hand to shirt pocket and stays, eyes on the computer, packet/ledger unchanged, nobody else in frame (edges clear), no speech (-47 dB), no text; only known Gemini sparkle",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "fd1f6faf70c3fac17e94919b14768bab3449657cf85cddb1c1c874a9ddb4a7fa"
+}
