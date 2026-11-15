@@ -1,0 +1,255 @@
+{
+  "take": {
+    "take_id": "SC04_g10_t1",
+    "generation_id": "SC04_g10",
+    "prompt_sha256": "c931f7855b09296e9788fa00101ebc3eb3758fb7b47325efc7bf17a9c10bb96c",
+    "start_frame_sha256": "82e919659f86e2c8aca95c98e9e5d1bfced9a4e51915610b72e6f59ef7b0f3ab",
+    "route": "start_frame+Khung hinh",
+    "model": "omni-1.2-flash",
+    "credits": 6.0,
+    "output_file": "SC04_g10_t1.mp4",
+    "output_sha256": "ecc5f21627911d5ca906d6bf472d7a9a8edd81b8f245401aef759f1406445802",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-15T04:26:53Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "ELI"
+    ],
+    "start_state": "SC04_g10",
+    "end_state": "SC04_g11",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.5,
+        "description": "ELI looks toward the floor"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.5,
+        "end_s": 2.4,
+        "description": "ELI glances aside, then down at the floor, uneasy"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.4,
+        "end_s": 4.0,
+        "description": "ELI stays with what they see"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "ELI holds the quiet look, nobody speaks"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1.5s SETUP: does this happen on screen - ELI looks toward the floor?"
+    },
+    {
+      "group": "action",
+      "question": "1.5-2.4s ACTION: does this happen on screen - ELI glances aside, then down at the floor, uneasy?"
+    },
+    {
+      "group": "action",
+      "question": "2.4-4s CONSEQUENCE: does this happen on screen - ELI stays with what they see?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - ELI holds the quiet look, nobody speaks?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): ELI glances aside, then down at the floor, uneasy"
+    },
+    {
+      "group": "character",
+      "question": "ELI: does the face/body read as uneasy, watchful (restrained)? Must NOT read as: boredom."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC04_g10: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI seated in the waiting chair, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed on the counter, red seal up; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC04_g11: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI seated in the waiting chair, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed on the counter, red seal up; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does ELI look at floor and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC04_g10_t1",
+    "generation_id": "SC04_g10",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "ecc5f21627911d5ca906d6bf472d7a9a8edd81b8f245401aef759f1406445802"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}
