@@ -189,6 +189,47 @@ def register_still(pkg: Any, gid: str, image: Path, *, source: str = "", credits
             "approved": bool(record.approved_by)}
 
 
+def tighten_still(pkg: Any, gid: str, *, side: str | None = None, scale: float = 0.85,
+                  y: float | None = None) -> dict[str, Any]:
+    """Crop the current start still to a square-fraction box anchored away from the off-frame listener, scale it back to
+    the original pixel size and register it as a new (unapproved) version. Listener frame-right -> x=0, frame-left -> x=1-w."""
+    import tempfile
+    from PIL import Image
+    from film_pipeline.production.interaction import off_frame_side
+    if not 0.80 <= scale <= 0.95:
+        raise ValueError(f"scale {scale} must lie between 0.80 and 0.95")
+    decl = next((g for g in pkg.typed["shots"].generations if g.generation_id == gid), None)
+    if decl is None:
+        raise ValueError(f"unknown generation {gid!r}")
+    side = (side or off_frame_side(decl) or "").strip().lower()
+    if side not in ("left", "right"):
+        raise ValueError(f"{gid}: no off-frame listener side to derive; pass --side left|right" if not side
+                         else f"side must be left or right, got {side!r}")
+    rec = _records(pkg).get(gid)
+    if rec is None:
+        raise ValueError(f"{gid}: no registered start still to tighten")
+    src = Path(pkg.root) / rec.file
+    if not src.is_file():
+        raise ValueError(f"{gid}: still file missing: {rec.file}")
+    w = h = scale
+    x = 0.0 if side == "right" else 1.0 - w
+    top = (1.0 - h) / 2 if y is None else min(max(y, 0.0), 1.0 - h)
+    with Image.open(src) as pic:
+        pic.load()
+        width, height = pic.size
+        box = (round(x * width), round(top * height), round((x + w) * width), round((top + h) * height))
+        out = pic.crop(box).resize((width, height), Image.LANCZOS)
+        fmt = "PNG" if src.suffix.lower() == ".png" else "JPEG"
+        if fmt == "JPEG" and out.mode != "RGB":
+            out = out.convert("RGB")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_image = Path(tmp) / f"tighten{src.suffix}"
+        out.save(tmp_image, format=fmt)
+        source = f"tighten of {rec.file} x={x:.3f} y={top:.3f} w={w:.3f} (listener {side})"
+        done = register_still(pkg, gid, tmp_image, source=source, credits=0.0)
+    return {**done, "box": {"x": round(x, 4), "y": round(top, 4), "w": w, "h": h}, "side": side}
+
+
 def relation_questions_for(pkg: Any, key: str) -> list[dict[str, str]]:
     """P16-04 relation questions for a still's generation (`end:GID` allowed); empty when the contract is off."""
     from film_pipeline.production.takes import _relation_questions, script_dialogue

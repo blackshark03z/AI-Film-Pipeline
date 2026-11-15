@@ -204,6 +204,10 @@ def main(argv: list[str] | None = None) -> int:
     st.add_argument("--credits", type=float, default=0.0)
     st.add_argument("--approve", metavar="GENERATION_ID|end:GENERATION_ID")
     st.add_argument("--by", help="reviewer name for --approve")
+    st.add_argument("--tighten", metavar="GENERATION_ID", help="crop the current start still away from the off-frame listener and register it (unapproved)")
+    st.add_argument("--side", choices=("left", "right"), help="frame side of the off-frame listener for --tighten (default: from the shot)")
+    st.add_argument("--scale", type=float, default=0.85, help="--tighten box size, 0.80-0.95 (default 0.85)")
+    st.add_argument("--y", type=float, default=None, help="--tighten box top as a fraction of the height (default: centred)")
     rt = actions.add_parser("retake", help="retake/pickup policy over the take log; --pickup GID starts a new shot version")
     rt.add_argument("--film", required=True, type=Path)
     rt.add_argument("--pickup", metavar="GENERATION_ID")
@@ -511,6 +515,12 @@ def _run(args, rest, parser) -> int:
                     if look:  # informational too: eyeline + corner marks (film08 pilot)
                         out = {**out, "still_checks": look}
                     _emit({"registered": out})
+                    return 0
+                if args.tighten:
+                    out = st_mod.tighten_still(pkg, args.tighten, side=args.side, scale=args.scale, y=args.y)
+                    box = out["box"]
+                    print(f"tightened {out['file']} box x={box['x']} y={box['y']} w={box['w']} h={box['h']} "
+                          f"(listener {out['side']})")
                     return 0
                 if args.approve:
                     _emit({"approved": st_mod.approve_still(pkg, args.approve, args.by or "")})

@@ -372,6 +372,9 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: An
     supplemental = filled.get("supplemental") == "relations"
     qc_raw = dict(filled.get("qc", filled))
     claimed = qc_raw.pop("output_sha256", None)
+    reframe = qc_raw.pop("reframe", None)
+    if reframe is None:
+        reframe = filled.get("reframe")
     take = TakeQc.model_validate(qc_raw)  # raises on any invalid check (auto PASS on content, missing proof, ...)
     from film_pipeline.production.rehearsal import refuse_bot, refuse_undelegated
     refuse_bot(film_root, *(c.reviewer for c in take.checks), *(c.waiver.by for c in take.checks if c.waiver))
@@ -395,6 +398,11 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: An
     supp = _load_supplement(film_root, take.take_id)
     if supp is not None:  # a relations review is already on file: the main review does not erase it
         status, reasons, cause = _combine(status, reasons, cause, supp)
+    box = None
+    if reframe is not None:  # validated before anything is written
+        if status != "ACCEPTED":
+            raise ValueError(f"a reframe can only ride on an ACCEPTED verdict (this one is {status})")
+        box = _check_reframe(reframe)
     entry.status = _STATUS_OF[status]  # type: ignore[assignment]
     entry.cause = cause
     rel = f"reviews/{take.take_id}.qc.json"
@@ -405,7 +413,36 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: An
     path.write_text(json.dumps(stored, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     entry.review_file = rel  # the stored, bound review - not the dailies sheet that wraps it
     save_log(film_root, log)
-    return {"take_id": take.take_id, "status": entry.status, "reasons": reasons, "review": str(path)}
+    out = {"take_id": take.take_id, "status": entry.status, "reasons": reasons, "review": str(path)}
+    if box is not None:
+        out["reframe"] = _merge_reframe(film_root, entry.generation_id, box)
+    return out
+
+
+def _check_reframe(raw: Any) -> dict[str, float]:
+    """A square crop box 0.88..1.0 wide inside the frame (the `edit.Reframe` rule); returns {x, y, w, h}."""
+    from film_pipeline.production.edit import Reframe
+    if not isinstance(raw, dict) or not {"x", "y", "w", "h"} <= set(raw) or set(raw) - {"x", "y", "w", "h"}:
+        raise ValueError("reframe must be an object with exactly x, y, w, h")
+    try:
+        box = {k: float(raw[k]) for k in ("x", "y", "w", "h")}
+        Reframe(**box)  # ranges and "the crop box leaves the frame"
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"invalid reframe {raw!r}: {str(exc).splitlines()[-1] if str(exc) else exc}") from exc
+    if abs(box["w"] - box["h"]) > 1e-3:
+        raise ValueError(f"invalid reframe: w ({box['w']}) must equal h ({box['h']}) to keep the aspect ratio")
+    if not 0.88 <= box["w"] <= 1.0:
+        raise ValueError(f"invalid reframe: w {box['w']} must lie between 0.88 and 1.0")
+    return box
+
+
+def _merge_reframe(film_root: Path, gid: str, box: dict[str, float]) -> str:
+    path = Path(film_root) / "titles" / "reframe.json"
+    raw = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {"events": {}}
+    raw.setdefault("events", {})[gid] = box
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(raw, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return str(path)
 
 
 def _load_supplement(film_root: Path, take_id: str) -> TakeQc | None:

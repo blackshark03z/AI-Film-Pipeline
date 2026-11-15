@@ -218,6 +218,13 @@ def unplaced_listeners(pre: Any, decl: Any) -> set[str]:
             if a.mode == "OFF_FRAME" and a.side in ("LEFT", "RIGHT")}
 
 
+def off_frame_side(decl: Any) -> str | None:
+    """Frame side ("LEFT"/"RIGHT") of the shot's off-frame listener (same test as `unplaced_listeners`: OFF_FRAME and a
+    side, not behind the camera); None when there is none or the listeners stand on both sides."""
+    sides = {a.side for a in decl.listener_anchors.values() if a.mode == "OFF_FRAME" and a.side in ("LEFT", "RIGHT")}
+    return sides.pop() if len(sides) == 1 else None
+
+
 def placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[str]:
     """Who speaks to whom and where each listener is, in character NAMES (the video prompt maps them to handles)."""
     scene = pre.scenes[decl.scene_id]
