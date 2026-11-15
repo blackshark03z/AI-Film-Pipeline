@@ -1,0 +1,142 @@
+{
+  "take_id": "SC04_g09_t1",
+  "generation_id": "SC04_g09",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:448": "no: second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "no: second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+        "REL_GAZE": "no: second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+        "REL_BARRIER": "no: second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): second person's face profile (nose/chin) visible at frame-left edge from ~1s onward; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROVIDER_LIMIT",
+  "cause_note": "listener-at-edge defect despite prompt line about frame-left edge",
+  "required_answers": [
+    "REL_ADDRESS:448",
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "102c648a677ff1bdd61dcd18148c5098399da84856f2416819a8aaaff01a19ab"
+}
