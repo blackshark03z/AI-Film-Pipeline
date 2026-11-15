@@ -1,0 +1,142 @@
+{
+  "take_id": "SC05_g11_t1",
+  "generation_id": "SC05_g11",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:585": "yes: accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok"
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "yes: accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+        "REL_GAZE": "yes: accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+        "REL_BARRIER": "yes: accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok"
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md): accepted with reframe 0/0/0.88/0.88; leak confined to outer 6% (older man's face at right edge, nose ~40 px from edge); head inside crop; STT ok",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:585",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "31f01139a9ee9b2ed12f3d9ca89962ff68334b9a6d88f63d7a0640755ccbf854"
+}
