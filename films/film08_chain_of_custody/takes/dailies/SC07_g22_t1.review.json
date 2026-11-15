@@ -1,0 +1,263 @@
+{
+  "take": {
+    "take_id": "SC07_g22_t1",
+    "generation_id": "SC07_g22",
+    "prompt_sha256": "ad14b034033adb374ca80d691aa8dac2b7034d8943c7bc8c09c1c6cf7fe99259",
+    "start_frame_sha256": "b5eb03d41a2a18dcc9b9bdde7c0faa8c3d95bb21033c0fb804cfd13da60a6b26",
+    "route": "start_frame+Khung hinh",
+    "model": "omni-1.2-flash",
+    "credits": 6.0,
+    "output_file": "SC07_g22_t1.mp4",
+    "output_sha256": "5885379f96aef81d6341b49e1029d41f05b755bb9e3a5d887e683f11141aa77b",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-15T14:07:03Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "NAOMI",
+      "HOLLIS",
+      "ELI"
+    ],
+    "start_state": "SC07_g22",
+    "end_state": "SC07_g23",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "HOLLIS stands behind the counter, his right hand flat on the sealed packet"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.8,
+        "description": "HOLLIS lifts the sealed packet in both hands and turns it over, the red wax seal toward himself"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.8,
+        "end_s": 4.0,
+        "description": "HOLLIS holds the sealed packet in both hands, the red wax seal toward himself"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "all three stay still, NAOMI's hands at her sides"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - HOLLIS stands behind the counter, his right hand flat on the sealed packet?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.8s ACTION: does this happen on screen - HOLLIS lifts the sealed packet in both hands and turns it over, the red wax seal toward himself?"
+    },
+    {
+      "group": "action",
+      "question": "2.8-4s CONSEQUENCE: does this happen on screen - HOLLIS holds the sealed packet in both hands, the red wax seal toward himself?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - all three stay still, NAOMI's hands at her sides?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): HOLLIS lifts the sealed packet in both hands"
+    },
+    {
+      "group": "character",
+      "question": "HOLLIS: does the face/body read as forceful, wary (restrained)? Must NOT read as: calm."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC07_g22: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing at the counter, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed under HOLLIS's right hand, red seal up; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC07_g23: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing at the counter, frame-left; ELI standing by the door, frame-right; the brown packet: held in HOLLIS's hands, red seal toward him; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC07_g22_t1",
+    "generation_id": "SC07_g22",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_BARRIER"
+    ],
+    "output_sha256": "5885379f96aef81d6341b49e1029d41f05b755bb9e3a5d887e683f11141aa77b"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 1 warning(s)",
+    "warnings": [
+      {
+        "group": "camera",
+        "result": "WARN",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "SC07_g22_t1.mp4: SHOT_SCALE_MISMATCH",
+        "reviewer": "auto:autoqc",
+        "note": "planned WS, rendered MCU in SC07_g22_t1.mp4",
+        "waiver": null,
+        "answers": {}
+      }
+    ]
+  }
+}
