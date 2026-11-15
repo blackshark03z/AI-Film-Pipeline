@@ -1,0 +1,265 @@
+{
+  "take": {
+    "take_id": "SC06_g10_t1",
+    "generation_id": "SC06_g10",
+    "prompt_sha256": "bb10ec3fb588277cf0678b795fa42be491d9b0f5d2c33f8cb7ce4c2176d0f735",
+    "start_frame_sha256": "76aee44b022e2f2097cd4a22bcb99bc0288f8e21cad27ab2f7529e32ae592332",
+    "route": "start_frame+Khung hinh",
+    "model": "omni-1.2-flash",
+    "credits": 6.0,
+    "output_file": "SC06_g10_t1.mp4",
+    "output_sha256": "26449a7bd6f068b005ee66ab769b820d1756b780014d9c868441f643247a815a",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-15T10:54:23Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "HOLLIS"
+    ],
+    "start_state": "SC06_g10",
+    "end_state": "SC06_g11",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 0.5,
+        "description": "HOLLIS looks at ELI"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 0.5,
+        "end_s": 4.7,
+        "description": "HOLLIS speaks to ELI sharply"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.7,
+        "end_s": 6.0,
+        "description": "HOLLIS holds ELI's look, quite still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-0.5s SETUP: does this happen on screen - HOLLIS looks at ELI?"
+    },
+    {
+      "group": "action",
+      "question": "0.5-4.7s ACTION: does this happen on screen - HOLLIS speaks to ELI sharply?"
+    },
+    {
+      "group": "action",
+      "question": "4.7-6s HOLD: does this happen on screen - HOLLIS holds ELI's look, quite still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): HOLLIS speaks to ELI"
+    },
+    {
+      "group": "character",
+      "question": "HOLLIS: does the face/body read as forceful, wary (restrained)? Must NOT read as: calm."
+    },
+    {
+      "group": "sync",
+      "question": "Line 709 is audible, spoken by the right character, lips match: HOLLIS: I told you a lot. Pick the parts that help you."
+    },
+    {
+      "group": "audio",
+      "question": "HOLLIS sounds like the voice bible: low, gravelly male voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC06_g10: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing at the counter, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed under HOLLIS's right hand, red seal up; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC06_g11: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing at the counter, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed under HOLLIS's right hand, red seal up; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_ADDRESS:709",
+      "group": "narrative",
+      "question": "Line 709: does HOLLIS clearly speak to ELI (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:ELI",
+      "group": "spatial",
+      "question": "Is the place where ELI stands kept out of frame (never shown empty), and do HOLLIS's eyes go to frame-right, well clear of the lens?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does HOLLIS look at ELI and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC06_g10_t1",
+    "generation_id": "SC06_g10",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "action",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "UNASSESSED",
+        "severity": null,
+        "level": null,
+        "evidence": "",
+        "reviewer": "",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:709",
+      "REL_LISTENER:ELI",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "26449a7bd6f068b005ee66ab769b820d1756b780014d9c868441f643247a815a"
+  },
+  "auto_evidence": {
+    "note": "autoqc ran: 0 warning(s)",
+    "warnings": []
+  }
+}
