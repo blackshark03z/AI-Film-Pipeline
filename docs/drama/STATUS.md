@@ -963,3 +963,7 @@ P16-11 DONE (boards carry a shot fingerprint; generate BLOCKs STORYBOARD_STALE).
   SETUP said "holds in both hands" while the start state is P_PACKET_UNDER; SETUP now rests his right hand on it and the
   ACTION lifts it in both hands before the thumb goes under the seal. Only SC09_g24 prompt/still text changed (not drawn
   yet). Tests: tests/test_label_state_conflict.py (2).
+- 2026-11-15 OWNER DECISION (coordinator chat, account named by the Owner; address not recorded here): film08 Flow sends move
+  from gmail-4 to "acct-5" = GPM profile 5db03bd5-23da-439d-8d1f-7ab2ba5b7a18 (started via GPM API, CDP 51670 this run).
+  gmail-4: finish the in-flight gen only, record final balance, leave browser open. acct-5: one new Flow project, HOLLIS
+  face edits redone there, same rules (>= 4 min gap, NO-JS, warning = stop, 20 cr floor, film cap 3,210 cr).
