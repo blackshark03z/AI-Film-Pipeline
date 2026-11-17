@@ -1,0 +1,142 @@
+{
+  "take_id": "SC12_g02_t2",
+  "generation_id": "SC12_g02",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi asks for just one more signature and explains the grand jury released the exhibit back; Whisper matches verbatim.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1444": "Naomi faces 1/4 toward frame-right well clear of lens speaking to off-screen Eli; frame-right green wall and archive shelf edge stay completely empty with zero listener intrusion."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi matches start_SC12_g02.jpg in face, hair, gold stud earrings, cream coat and navy blouse.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi faces 1/4 toward frame-right well clear of lens speaking to off-screen Eli; frame-right green wall and archive shelf edge stay completely empty with zero listener intrusion.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "Naomi faces 1/4 toward frame-right well clear of lens speaking to off-screen Eli; frame-right green wall and archive shelf edge stay completely empty with zero listener intrusion.",
+        "REL_GAZE": "Naomi faces 1/4 toward frame-right well clear of lens speaking to off-screen Eli; frame-right green wall and archive shelf edge stay completely empty with zero listener intrusion.",
+        "REL_BARRIER": "Naomi faces 1/4 toward frame-right well clear of lens speaking to off-screen Eli; frame-right green wall and archive shelf edge stay completely empty with zero listener intrusion."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "All 144 sequential frames show natural speaking close-up and steady off-screen right hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Inspected motion-1..3.jpg across all 144 frames: clean head micro-motion and mouth articulation throughout speaking window.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static eye-level close single, no scene cuts.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Records room background and bottom-right open ledger corner remain crisp and stable; bottom-right sparkle intact.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.0s clip; Whisper ends final word at 4.78s leaving ~1.22s clean hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Local Faster-Whisper transcribed: \"Just one more signature the grand jury released the exhibit back\" (0.40-4.78s); no human listening.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Visible mouth opening and articulation match Whisper speech span (0.40-4.78s) and settle cleanly into hold; phoneme sync not human-assessed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames H.264/AAC verified to EOF with ffprobe + ffmpeg -xerror.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1444",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "d12e1aab72db23951ea09e4d0acbc7c4973aef2d3ceb061d83dbd4bb1d8610ec"
+}

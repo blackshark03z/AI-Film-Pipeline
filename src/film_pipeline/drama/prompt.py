@@ -121,7 +121,8 @@ def compile_scene_prompt(unit: SceneUnit, *,
                          handles: dict[str, str] | None = None,
                          placement: str = "",
                          out_of_frame: list[str] | None = None,
-                         silent_line: bool = False
+                         silent_line: bool = False,
+                         interperson_no_touch: bool = False
                          ) -> ScenePromptPlan:
     """style="start_frame": the image carries looks and set, the prompt describes motion only (P13-04).
     `handles` adds names of characters who are not in `characters` (out of frame) to the name->handle map.
@@ -199,6 +200,11 @@ def compile_scene_prompt(unit: SceneUnit, *,
         visible = {c for shot in unit.shots for c in shot.axis.visible}
         if len(visible) < 2:
             prohibitions = tuple(p for p in prohibitions if p != "No touching.")
+        elif interperson_no_touch:
+            prohibitions = tuple(
+                "Nobody touches another person." if p == "No touching." else p
+                for p in prohibitions
+            )
         continuity = " ".join(t for t in (
             end_state.describe_change(start_state or ContinuityState()),
             end_state.describe_static(start_state or ContinuityState())) if t) if end_state else ""

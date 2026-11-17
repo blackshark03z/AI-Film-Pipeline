@@ -176,3 +176,38 @@ def test_listener_unplaced_object_gaze_says_only_subject(tmp_path):
     for text in (video, still):
         assert "beside the camera" not in text and "stays fully out of frame" not in text
         assert "well clear of the lens" not in text and "edge shows only the room" not in text
+
+
+def test_de_personify_off_frame_preserves_still_and_strips_hidden_listener(tmp_path):
+    root = off_frame(tmp_path)
+    pre = json.loads((root / "03_preprod.json").read_text(encoding="utf-8"))
+    pre["preflight"].update(
+        safeguard_scenes=["SC02"],
+        clear_eyeline_scenes=["SC02"],
+        listener_unplaced_scenes=["SC02"],
+        object_gaze_neutral_eyeline=True,
+    )
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+    _, base_still, _ = plan(root)
+
+    pre["preflight"]["de_personify_off_frame"] = ["SC02_g1"]
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+
+    video, still, res = plan(root)
+    assert still == base_still
+    assert "THEO" not in video and "young man" not in video.lower() and "listener" not in video.lower()
+    assert "off-screen" in video
+    assert "empty room space" in video
+    assert {i["check"] for i in res.record["generations"]["SC02_g1"]["issues"]} <= {"STORYBOARD"}
+
+
+def test_interperson_no_touch_replaces_blanket_no_touching(tmp_path):
+    root = make(tmp_path, shot=OTS_SHOT)
+    pre = json.loads((root / "03_preprod.json").read_text(encoding="utf-8"))
+    pre["preflight"]["safeguard_scenes"] = ["SC02"]
+    pre["preflight"]["interperson_no_touch_ids"] = ["SC02_g1"]
+    (root / "03_preprod.json").write_text(json.dumps(pre, indent=2), encoding="utf-8")
+
+    video, _, _ = plan(root)
+    assert "Nobody touches another person." in video
+    assert "No touching." not in video

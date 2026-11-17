@@ -1,0 +1,142 @@
+{
+  "take_id": "SC08_g23_t1",
+  "generation_id": "SC08_g23",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi says she cannot answer that and only knows where her job ends; Whisper matches verbatim.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1033": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right green wall shows zero listener intrusion."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi matches start_SC08_g23.jpg in face, hair, earrings, cream coat and navy blouse.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right green wall shows zero listener intrusion.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right green wall shows zero listener intrusion.",
+        "REL_GAZE": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right green wall shows zero listener intrusion.",
+        "REL_BARRIER": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right green wall shows zero listener intrusion."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Inspected all144.jpg: calm spoken delivery across two sentences into quiet closed-mouth hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Natural facial micro-expressions, blinks and lip motion through ~3.94s, steady hold thereafter.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static eye-level close single, no scene cuts.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Sage-green wall and waiting chairs stay stable across all 144 frames; bottom-right sparkle intact.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.0s clip; Whisper ends at 3.94s leaving ~2.06s quiet hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Local Faster-Whisper transcribed: \"I can't answer that.\" (0.30-1.60s) + \"I only know where mine ends.\" (2.36-3.94s); no human listening.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Mouth movement tracks 0.30-3.94s speech intervals cleanly and rests closed in hold; phoneme sync not human-assessed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames H.264/AAC verified to EOF with ffprobe + ffmpeg -xerror.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1033",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "af4f94b0cafd36f0d43f309ff8812e7a0c77a9ef79f86603b3453b2a592a3aac"
+}

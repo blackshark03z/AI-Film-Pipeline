@@ -18360,7 +18360,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 2,
+      "version": 3,
       "coverage": "SINGLE",
       "subject": "NAOMI",
       "foreground": "",
@@ -18442,8 +18442,8 @@
         }
       },
       "gaze_target": "HOLLIS",
-      "repair_of": "SC09_g03@v1",
-      "repair_reason": "The v1 output put the off-frame listener inside the shot. Hold a clean single with the frame edge showing only the room."
+      "repair_of": "SC09_g03@v2",
+      "repair_reason": "De-personified off-frame listener wording (de_personify_off_frame) so no hidden character name or room presence leaks into the Flow video prompt."
     },
     {
       "generation_id": "SC09_g04",
@@ -20564,7 +20564,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "NAOMI",
       "foreground": "",
@@ -20580,18 +20580,18 @@
           {
             "kind": "SETUP",
             "start_s": 0.0,
-            "end_s": 0.5,
+            "end_s": 0.2,
             "description": "NAOMI looks at HOLLIS"
           },
           {
             "kind": "ACTION",
-            "start_s": 0.5,
-            "end_s": 4.7,
-            "description": "NAOMI speaks to HOLLIS quietly"
+            "start_s": 0.2,
+            "end_s": 5.4,
+            "description": "NAOMI speaks to HOLLIS briskly without pausing between sentences"
           },
           {
             "kind": "HOLD",
-            "start_s": 4.7,
+            "start_s": 5.4,
             "end_s": 6.0,
             "description": "NAOMI holds HOLLIS's look, quite still"
           }
@@ -20645,7 +20645,9 @@
           "established_by": "SC09_g18"
         }
       },
-      "gaze_target": "HOLLIS"
+      "gaze_target": "HOLLIS",
+      "repair_of": "SC10_g02@v1",
+      "repair_reason": "v1 paused 1.3s after '1058' inside a 4.2s window and dropped the third sentence; widen speaking phase to 0.2-5.4s and cue brisk continuous delivery."
     },
     {
       "generation_id": "SC10_g03",
@@ -25143,7 +25145,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "NAOMI",
       "foreground": "",
@@ -25222,7 +25224,9 @@
           "established_by": "SC11_g24"
         }
       },
-      "gaze_target": "ELI"
+      "gaze_target": "ELI",
+      "repair_of": "SC12_g02@v1",
+      "repair_reason": "De-personified off-frame listener wording (de_personify_off_frame) so no hidden character name or room presence leaks into the Flow video prompt."
     },
     {
       "generation_id": "SC12_g03",

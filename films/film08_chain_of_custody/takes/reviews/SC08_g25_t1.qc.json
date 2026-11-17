@@ -1,0 +1,142 @@
+{
+  "take_id": "SC08_g25_t1",
+  "generation_id": "SC08_g25",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis closes SC08 saying four minutes, Naomi has four minutes and so has he apparently; Whisper matches verbatim.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1042": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left CRT desk and shelves show zero listener intrusion."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis matches start_SC08_g25.jpg in face, hair, tan uniform, tie clasp, pocket ID tag and hand over sealed packet.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left CRT desk and shelves show zero listener intrusion.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left CRT desk and shelves show zero listener intrusion.",
+        "REL_GAZE": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left CRT desk and shelves show zero listener intrusion.",
+        "REL_BARRIER": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left CRT desk and shelves show zero listener intrusion."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Inspected all144.jpg: speaking single behind counter ending in quiet uneasy hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Natural oral articulation over 0.37-4.59s with clean closed-mouth 1.41s tail hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static eye-level close single, no scene cuts.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "CRT desk, archive boxes and counter packet stay crisp and stable; bottom-right sparkle intact.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.0s clip; Whisper ends at 4.59s leaving ~1.41s clean hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Local Faster-Whisper transcribed: \"Four minutes. You've got four minutes and so have I apparently\" (0.37-4.59s); no human listening.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Mouth articulation matches 0.37-4.59s ASR span and rests shut afterward; phoneme sync not human-assessed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames H.264/AAC verified to EOF with ffprobe + ffmpeg -xerror.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1042",
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "4dd2e1b73dab78cb3f94a173e76a0f1e9a04b1c6a50b4e1cc0a69472ecc84f6e"
+}

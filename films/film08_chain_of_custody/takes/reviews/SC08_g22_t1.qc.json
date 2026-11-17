@@ -1,0 +1,142 @@
+{
+  "take_id": "SC08_g22_t1",
+  "generation_id": "SC08_g22",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis asks when his job ends and whether it ends when Naomi's paper says so; Whisper matches verbatim.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1028": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left archive shelves show zero listener intrusion."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis matches start_SC08_g22.jpg in face, sandy-grey hair, tan uniform, epaulettes and tie.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left archive shelves show zero listener intrusion.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left archive shelves show zero listener intrusion.",
+        "REL_GAZE": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left archive shelves show zero listener intrusion.",
+        "REL_BARRIER": "Hollis faces 1/4 frame-left well clear of lens speaking to off-screen Naomi; frame-left archive shelves show zero listener intrusion."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "144 frames on all144.jpg show Hollis holding the packet top edge while speaking tersely off-screen left and holding quiet gaze.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Inspected all144.jpg (rows 1-12): smooth speech articulation through ~4.25s followed by still close-mouthed hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static eye-level close single, no scene cuts.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Shelves, hallway door trim and uniform stay stable; bottom-right Gemini sparkle intact.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.0s clip; Whisper ends at 4.25s leaving ~1.75s clean hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Local Faster-Whisper transcribed: \"And when does my job end, when your paper says so?\" (0.27-4.25s); no human listening.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Mouth articulation aligns with 0.27-4.25s ASR window and closes cleanly afterward; phoneme sync not human-assessed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames H.264/AAC verified to EOF with ffprobe + ffmpeg -xerror.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1028",
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "05d60c83bf90daeccb34ae0e923ba6e6e1916a09a85ad53db5a6dd3e11e5d31d"
+}

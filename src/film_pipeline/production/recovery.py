@@ -14,15 +14,19 @@ ROOT = Path(__file__).resolve().parents[3]
 _ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]*_t[0-9]+")
 
 
-def pending_receipts(pkg) -> list[dict]:
+def pending_receipts(pkg, *, cdp_scope: str | None = None) -> list[dict]:
     from film_pipeline.production.generate import _sent_receipts, _fallback_price
     shots = pkg.typed.get("shots")
     prices = {s.generation_id: _fallback_price(pkg.header, s) for s in shots.generations} if shots else {}
     sent = _sent_receipts(Path(pkg.root), pkg.header.film_id, prices)
+    scope = (cdp_scope or "").strip() or None
+    items = unresolved_sends(T.load_log(Path(pkg.root), pkg.header.film_id), sent).items()
+    if scope is not None:
+        items = [(tid, r) for tid, r in items if not r.get("project") or r.get("project") == scope]
     return [{"take_id": tid, "result": r.get("result", "PENDING"), "provider": r.get("provider", "flow"),
              "cost_unit": r.get("cost_unit", "credits"),
              "reserved_cost": r.get("expected_cost", r.get("expected_credits", 0))}
-            for tid, r in unresolved_sends(T.load_log(Path(pkg.root), pkg.header.film_id), sent).items()]
+            for tid, r in items]
 
 
 def sent_prompt(root: Path, take_id: str, receipt: dict) -> str:

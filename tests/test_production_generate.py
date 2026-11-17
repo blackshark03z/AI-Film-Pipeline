@@ -457,3 +457,60 @@ def test_an_ambiguous_send_is_not_resent(tmp_path, result):
     done = live(pkg, tmp_path, runner, auto_resend=1)
     assert len(runner.calls) == 1 and "auto_resend" not in done and not _send_log(pkg)[0]["incident"]
     assert [(p["take_id"], p["result"]) for p in pending_receipts(pkg)] == [("SC01_g1_t1", result)]
+
+
+def test_cdp_scope_isolates_pending_sends_between_projects_but_not_same_shot(tmp_path, monkeypatch):
+    from film_pipeline.production.recovery import pending_receipts
+
+    pkg = film(tmp_path, 100)
+    sd = still(tmp_path, "SC01_g1")
+    still(tmp_path, "SC01_g2")
+    accept(pkg, "SC01_g1")
+
+    folder = T.takes_dir(pkg.root) / "intents"
+    folder.mkdir(parents=True, exist_ok=True)
+    proj_a = "https://flow.google.com/project/aaaaaaaa-0000-0000-0000-000000000001"
+    proj_b = "https://flow.google.com/project/bbbbbbbb-0000-0000-0000-000000000002"
+    (folder / "SC01_g1_t2.intent.json").write_text(json.dumps({
+        "film_id": "film03_front_desk", "generation_id": "SC01_g1", "take_id": "SC01_g1_t2",
+        "sent": True, "result": "PENDING", "expected_credits": 12.0, "project": proj_a,
+    }), encoding="utf-8")
+
+    monkeypatch.setenv("AFP_FLOW_PROJECT", proj_b)
+    # Other account's pending send on a different shot is isolated; same shot or same account stays blocked.
+    assert "SEND_PENDING" not in codes(G.build_payload(pkg, "SC01_g2", stills_dir=sd, start_token="tok:abc"))
+    assert "SEND_PENDING" in codes(G.build_payload(pkg, "SC01_g1", stills_dir=sd, start_token="tok:abc"))
+    assert "SEND_PENDING" in codes(G.build_payload(pkg, "SC01_g2", stills_dir=sd, start_token="tok:abc",
+                                                   cdp_scope=proj_a))
+    assert pending_receipts(pkg, cdp_scope=proj_b) == []
+    assert [p["take_id"] for p in pending_receipts(pkg, cdp_scope=proj_a)] == ["SC01_g1_t2"]
+
+    # Legacy receipt without a project still blocks conservatively everywhere.
+    _receipt(folder, "SC01_g1_t3", "PENDING")
+    assert "SEND_PENDING" in codes(G.build_payload(pkg, "SC01_g2", stills_dir=sd, start_token="tok:abc",
+                                                   cdp_scope=proj_b))
+
+
+def test_plan_cache_reuses_and_invalidates_on_prompt_edit(tmp_path, monkeypatch):
+    G._PLAN_CACHE.clear()
+    pkg = film(tmp_path, 100)
+    sd = still(tmp_path, "SC01_g1")
+    calls = 0
+    orig_plan = G.plan_package
+
+    def counted_plan(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        return orig_plan(*args, **kwargs)
+
+    monkeypatch.setattr(G, "plan_package", counted_plan)
+    first = G.build_payload(pkg, "SC01_g1", stills_dir=sd, start_token="tok:abc")
+    second = G.build_payload(pkg, "SC01_g1", stills_dir=sd, start_token="tok:abc")
+    assert calls == 1
+    assert first["prompt_sha256"] == second["prompt_sha256"]
+
+    prompt_file = pkg.root / "media" / "plan" / "prompts" / "SC01_g1.txt"
+    prompt_file.write_text("tampered prompt text\n", encoding="utf-8")
+    third = G.build_payload(pkg, "SC01_g1", stills_dir=sd, start_token="tok:abc")
+    assert calls == 2
+    assert third["prompt_sha256"] == first["prompt_sha256"]

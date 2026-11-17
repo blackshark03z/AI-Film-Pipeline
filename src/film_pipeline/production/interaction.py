@@ -258,7 +258,7 @@ def placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[s
         elif a.mode == "OFF_FRAME":
             text = a.placement.strip()
             add(text if text.endswith(".") else text + ".")
-            if decl.gaze_target and decl.gaze_target != name:
+            if pre.preflight.object_gaze_neutral_eyeline and decl.gaze_target and decl.gaze_target != name:
                 # film08 SC10_g01: "eyes go just past the lens to frame-left" beside "looks at the sealed packet"
                 continue
             if a.side == "BEHIND_CAMERA":
@@ -278,6 +278,57 @@ def placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[s
         add(f"{subject} looks at the {obj.label if obj is not None else gaze.replace('_', ' ')}.")
     if unplaced and not any(t.startswith(f"Only {subject} is in frame") for t in out):
         add(f"Only {subject} is in frame.")
+    return out
+
+
+def video_placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> list[str]:
+    """Video-prompt variant of `placement_sentences`: keeps `placement_sentences` intact for `still_prompt` so
+    approved start stills never go stale, while optionally stripping off-frame listener names/handles on opted-in
+    SINGLE shots (`preflight.de_personify_off_frame`)."""
+    pf = pre.preflight
+    ids = {decl.scene_id, decl.generation_id}
+    if not (ids & set(pf.de_personify_off_frame)) or len(decl.visible) != 1:
+        return placement_sentences(pre, decl, speakers)
+
+    scene = pre.scenes[decl.scene_id]
+    subject = decl.subject or decl.visible[0]
+    out: list[str] = []
+
+    def add(text: str) -> None:
+        if text not in out:
+            out.append(text)
+
+    for n in decl.dialogue:
+        names, who = decl.addressees.get(n) or [], speakers.get(n)
+        if not names or not who:
+            continue
+        if names == ["SELF"]:
+            add(f"{who} speaks aloud to no one in particular.")
+        else:
+            side = (off_frame_side(decl) or "LEFT").lower()
+            add(f"{who} speaks steadily toward off-screen {side}.")
+
+    for name, a in sorted(decl.listener_anchors.items()):
+        if a.mode != "OFF_FRAME":
+            continue
+        if decl.gaze_target and decl.gaze_target != name:
+            continue
+        if a.side in ("LEFT", "RIGHT"):
+            side = a.side.lower()
+            add(f"{subject} faces a quarter toward frame-{side}, holding a steady off-screen {side} gaze, "
+                "well clear of the lens.")
+            add(f"Solo close-up of {subject} alone; the frame-{side} background shows only empty room space.")
+        elif a.side == "BEHIND_CAMERA":
+            add(f"{subject} looks toward the camera's side, never into the lens.")
+
+    gaze = decl.gaze_target
+    if gaze and gaze != "LENS" and gaze not in pre.characters:
+        loc = pre.locations.get(scene.location)
+        layout = getattr(loc, "layout", None) if loc is not None else None
+        obj = layout.object(gaze) if layout is not None else None
+        add(f"{subject} looks at the {obj.label if obj is not None else gaze.replace('_', ' ')}.")
+    if not any(t.startswith("Solo close-up") or t.startswith(f"Only {subject} is in frame") for t in out):
+        add(f"Solo close-up of {subject} alone.")
     return out
 
 

@@ -26,8 +26,8 @@ from film_pipeline.drama.feasibility import check_script
 from film_pipeline.production.camera import camera_issues
 from film_pipeline.production.continuity import continuity_issues, temporal_issues
 from film_pipeline.production.interaction import (framing_phrase, hidden_names, hidden_person_issues,
-                                                   interaction_issues, placement_sentences,
-                                                   unplaced_listeners)
+                                                   interaction_issues, off_frame_side, placement_sentences,
+                                                   unplaced_listeners, video_placement_sentences)
 from film_pipeline.production.evidence import end_state_verified, load_attestations
 from film_pipeline.production.package import FilmPackage, PackageError
 from film_pipeline.production.sections import DirectionSection, PreprodSection, ShotDecl, ShotsSection, shot_seconds
@@ -91,6 +91,41 @@ def _scaled_feasibility(base, seconds: float):
     return base.model_copy(update={"scene_duration_s": seconds,
                                    "max_dialogue_syllables": int(base.max_dialogue_syllables * factor),
                                    "min_silence_s": base.min_silence_s * factor})
+
+
+def _de_personify_choreography(choreo, hidden_chars: set[str], handles: dict[str, str], side: str | None):
+    """Strip hidden-character names/handles from choreography text for opted-in de_personify_off_frame singles."""
+    if not hidden_chars:
+        return choreo
+    off = f"off-screen {(side or 'right').lower()}"
+    frame_side = f"frame-{(side or 'right').lower()}"
+    tokens: list[str] = []
+    for name in sorted(hidden_chars):
+        tokens.append(name)
+        if handles.get(name):
+            tokens.append(handles[name])
+    tokens = sorted({t for t in tokens if t}, key=len, reverse=True)
+    if not tokens:
+        return choreo
+    joined = "|".join(re.escape(t) for t in tokens)
+
+    def scrub(text: str) -> str:
+        s = text
+        s = re.sub(rf"\bglances\s+toward\s+(?:{joined})\s+and\s+the\s+hallway\s+door\b",
+                   f"glances toward the {frame_side} hallway door", s, flags=re.IGNORECASE)
+        s = re.sub(rf"\bholds\s+(?:{joined})'s\s+look\b", f"holds a steady {off} gaze", s, flags=re.IGNORECASE)
+        s = re.sub(rf"\bmeets\s+(?:{joined})'s\s+eyes\b", f"holds a steady {off} gaze", s, flags=re.IGNORECASE)
+        s = re.sub(rf"\blooks\s+(?:at|toward)\s+(?:{joined})\b", f"looks steadily {off}", s, flags=re.IGNORECASE)
+        s = re.sub(rf"\blistens\s+to\s+(?:{joined})\b", f"listens intently toward {off}", s, flags=re.IGNORECASE)
+        s = re.sub(rf"\bspeaks\s+to\s+(?:{joined})\s+([a-zA-Z]+)\b", rf"speaks \1 toward {off}", s, flags=re.IGNORECASE)
+        s = re.sub(rf"\bspeaks\s+to\s+(?:{joined})\b", f"speaks toward {off}", s, flags=re.IGNORECASE)
+        s = re.sub(rf"(?<!\w)(?:{joined})'s(?!\w)", "that", s, flags=re.IGNORECASE)
+        s = re.sub(rf"(?<!\w)(?:{joined})(?!\w)", off, s, flags=re.IGNORECASE)
+        return s
+
+    phases = [p.model_copy(update={"description": scrub(p.description)}) for p in choreo.phases]
+    once = [scrub(o) for o in choreo.once_actions]
+    return choreo.model_copy(update={"phases": phases, "once_actions": once})
 
 
 class _Plan:
@@ -173,12 +208,13 @@ class _Plan:
         size = _SIZE[decl.coverage]
         if self.pre.preflight.interaction_contract and decl.camera is not None:  # the declared size, not the coverage default
             size = _UNIT_SIZE.get(decl.camera.size, decl.camera.size)
+        people = set(self.pre.characters) if self.pre.preflight.object_gaze_neutral_eyeline else None
         shot = CoverageShot(
             shot_id=shot_id, coverage=decl.coverage, shot_size=size, subject=decl.subject,
             foreground=decl.foreground, start_s=0.0, end_s=seconds, lines=self.lines_for(decl),
             action=self.action_text(decl),
             axis=axis_record(book, shot_id, decl.visible, gaze_target=decl.gaze_target or "",
-                             eyelines=_anchored_eyeline(decl, set(self.pre.characters))))
+                             eyelines=_anchored_eyeline(decl, people)))
         return SceneUnit(scene_id=sid, duration_s=seconds, shots=[shot], axis_book=book)
 
     def handoff_for(self, decl: ShotDecl) -> GenerationHandoff | None:
@@ -205,19 +241,26 @@ class _Plan:
         start = self.cut(self.state(decl.start_state), decl.visible)
         end = self.cut(self.state(decl.end_state), decl.visible)
         placement = ""
+        away = hidden_names(self.pre, decl, self.gen_index[decl.generation_id])
+        handles = {n: c.handle for n, c in self.pre.characters.items() if c.handle}
+        ids = {decl.scene_id, decl.generation_id}
+        de_personify = bool(ids & set(self.pre.preflight.de_personify_off_frame)) and len(decl.visible) == 1
         if self.pre.preflight.interaction_contract:
-            placement = " ".join(self.placement(decl))
+            placement = " ".join(self.video_placement(decl))
             # a prop held by someone out of frame would summon a stranger (the still prompt does the same)
-            away = hidden_names(self.pre, decl, self.gen_index[decl.generation_id])
             start, end = self.without_props_of(start, away), self.without_props_of(end, away)
+        choreo_for_prompt = (_de_personify_choreography(decl.choreography, away, handles, off_frame_side(decl))
+                             if de_personify else decl.choreography)
+        interperson_no_touch = bool(ids & set(self.pre.preflight.interperson_no_touch_ids))
         cast = [CharacterBrief(name=c, look=self.video_looks[c], voice=self.pre.characters[c].voice,
                                handle=self.pre.characters[c].handle) for c in start.positions]
         plan = compile_scene_prompt(
             unit, characters=cast, setting=scene.extras, room_tone=location.room_tone, sfx=decl.sfx or None,
             dialogue_language=self.language, start_state=start,
             end_state=end if self.pre.preflight.end_state_in_prompt else None, location=location.look,
-            choreography=decl.choreography, style=self.pre.preflight.prompt_style,
-            handles={n: c.handle for n, c in self.pre.characters.items() if c.handle}, placement=placement,
+            choreography=choreo_for_prompt, style=self.pre.preflight.prompt_style,
+            handles=handles, placement=placement,
+            interperson_no_touch=interperson_no_touch,
             **self.safeguards(decl))
         report = preflight_scene(
             scene=self.scenes[decl.scene_id], unit=unit, prompt=plan, reference_sets=[],
@@ -239,6 +282,9 @@ class _Plan:
 
     def placement(self, decl: ShotDecl) -> list[str]:
         return placement_sentences(self.pre, decl, {l.line_no: l.character for l in self.lines_for(decl)})
+
+    def video_placement(self, decl: ShotDecl) -> list[str]:
+        return video_placement_sentences(self.pre, decl, {l.line_no: l.character for l in self.lines_for(decl)})
 
     @staticmethod
     def without_props_of(state: ContinuityState, away: set[str]) -> ContinuityState:

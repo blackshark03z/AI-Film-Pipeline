@@ -1,0 +1,142 @@
+{
+  "take_id": "SC10_g02_t1",
+  "generation_id": "SC10_g02",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Line truncated: Naomi speaks '1058, Exhibit 4117A' up to 4.66s then closes her mouth, omitting the final sentence 'Seal broken by Sergeant Hollis.'",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1185": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right wall edge shows zero listener intrusion."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi matches start_SC10_g02.jpg cleanly in face, hair and coat.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right wall edge shows zero listener intrusion.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right wall edge shows zero listener intrusion.",
+        "REL_GAZE": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right wall edge shows zero listener intrusion.",
+        "REL_BARRIER": "Naomi faces 1/4 frame-right well clear of lens speaking to off-screen Hollis; frame-right wall edge shows zero listener intrusion."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Mouth stops speaking cleanly around 4.66s (motion-3.jpg rows 2-6 closed) before speaking the final scripted sentence.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Facial and mouth articulation hold steady through 4.66s then rest closed; video pacing failed to fit the third sentence into the 4.2s speaking phase.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static eye-level close single, no scene cuts.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Room wall and chairs stay stable; bottom-right sparkle intact.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Speech ends at 4.66s having spoken only two of three sentences.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "Local Faster-Whisper transcribed only \"1058, Exhibit 4117A.\" (0.30-4.66s); final clause \"Seal broken by Sergeant Hollis.\" was completely omitted.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Mouth visibly stops at ~4.66s matching incomplete ASR; clip cannot be cut without losing essential story beat.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames H.264/AAC decoded cleanly to EOF.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1185",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "4f7a8d25a0ba4e7ba85679b6b388151e2a150beaa20bdc06bac6cc377860e182"
+}

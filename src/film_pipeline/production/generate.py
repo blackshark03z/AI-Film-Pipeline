@@ -35,6 +35,7 @@ by job id.
 from __future__ import annotations
 
 import json
+import os
 import re
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -119,9 +120,40 @@ def _start_still(pkg: Any, generation_id: str, stills_dir: Path | None, blockers
     return _frame_still(pkg, generation_id, stills_dir, blockers, "start")
 
 
+_PLAN_CACHE: dict[tuple[Any, ...], tuple[Any, dict[str, str]]] = {}
+
+
+def _cached_plan_package(pkg: Any, root: Path, plan_out: Path, verified: frozenset[str],
+                         generation_id: str) -> Any:
+    """Reuse an in-process ``plan_package`` result when package inputs and rendered prompt files match."""
+    from film_pipeline.production.gate_checks import plan_inputs_sha
+
+    key = (
+        str(root.resolve()),
+        str(plan_out.resolve()),
+        tuple(sorted(plan_inputs_sha(root).items())),
+        verified,
+        id(plan_package),
+    )
+    cached = _PLAN_CACHE.get(key)
+    prompt_path = plan_out / "prompts" / f"{generation_id}.txt"
+    gate3_path = plan_out / "gate3.json"
+    if cached is not None:
+        result, prompt_shas = cached
+        expected_sha = prompt_shas.get(generation_id)
+        if expected_sha and prompt_path.is_file() and gate3_path.is_file() and sha256_file(prompt_path) == expected_sha:
+            return result
+        _PLAN_CACHE.pop(key, None)
+    result = plan_package(pkg, plan_out, storyboard=False, verified_handoffs=verified)
+    prompts_dir = plan_out / "prompts"
+    prompt_shas = {p.stem: sha256_file(p) for p in prompts_dir.glob("*.txt")} if prompts_dir.is_dir() else {}
+    _PLAN_CACHE[key] = (result, prompt_shas)
+    return result
+
+
 def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None, stills_dir: Path | None = None,
                   start_token: str | None = None, end_token: str | None = None,
-                  today: date | None = None) -> dict[str, Any]:
+                  today: date | None = None, cdp_scope: str | None = None) -> dict[str, Any]:
     shots, pre = pkg.typed.get("shots"), pkg.typed.get("preprod")
     if shots is None or pre is None:
         raise ValueError("generate needs a valid 03_preprod.json and 04_shots.json")
@@ -137,7 +169,7 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     versions = {g.generation_id: g.version for g in shots.generations}
     verified = frozenset(t.generation_id for t in log.takes
                          if t.status == "ACCEPTED" and t.shot_version == versions.get(t.generation_id))
-    result = plan_package(pkg, plan_out, storyboard=False, verified_handoffs=verified)
+    result = _cached_plan_package(pkg, root, plan_out, verified, generation_id)
     # another shot's preflight or prompt length (e.g. one that waits for this take) is not a reason to hold this one back
     own = [p for p in result.problems if _problem_subject(p) in (None, generation_id)]
     blockers += [_blocker("PACKAGE_PROBLEM", p) for p in own]
@@ -181,7 +213,15 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     out = root / "media" / "takes" / f"{take_id}.mp4"
     ledger = money_ledger(log, sent)
     spent = ledger.get(unit, {}).get("spent", 0.0)
+    scope = (os.environ.get("AFP_FLOW_PROJECT", "").strip() if cdp_scope is None else cdp_scope.strip()) or None
     pending = unresolved_sends(log, sent)
+    if scope is not None:
+        pending = {
+            tid: r for tid, r in pending.items()
+            if r.get("generation_id", tid.rsplit("_t", 1)[0]) == generation_id
+            or not r.get("project")
+            or r.get("project") == scope
+        }
     if pending:
         blockers.append(_blocker("SEND_PENDING", f"{', '.join(pending)} still needs reconciliation; run film.py reconcile "
                                  f"for the existing send before another submission", live_only=True))
@@ -468,7 +508,8 @@ PROVIDER_FAILURES_BEFORE_RESTAGE = 3    # OWNER_POLICY.md: after 3 provider fail
 def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Path | None = None,
              stills_dir: Path | None = None, start_token: str | None = None, backlog: Path | None = None,
              runner: Runner | None = None, end_token: str | None = None,
-             today: date | None = None, adapter: Any | None = None, auto_resend: int = AUTO_RESEND) -> dict[str, Any]:
+             today: date | None = None, adapter: Any | None = None, auto_resend: int = AUTO_RESEND,
+             cdp_scope: str | None = None) -> dict[str, Any]:
     """``runner`` replaces flow_send on a Flow route; ``adapter`` replaces the HTTP adapter on an API route (tests and
     rehearsals: on a rehearsal package an explicit runner/adapter is a mock and records cost 0).
 
@@ -477,7 +518,7 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     fewer than PROVIDER_FAILURES_BEFORE_RESTAGE provider failures (OWNER_POLICY: 3 on one shot -> restage). The resend
     is an ordinary send through every gate (go-live, budget, cap). Each send is logged in takes/send_log.jsonl."""
     payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
-                            end_token=end_token, today=today)
+                            end_token=end_token, today=today, cdp_scope=cdp_scope)
     root = Path(pkg.root)
     cap = get_capability(payload["provider"], payload["provider_model"])
     flow = cap.adapter == "flow_ui"
@@ -530,7 +571,7 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
         return _generate_api(pkg, payload, adapter, mock, receipt)
     out = Path(payload["output"])
     def before_submit(context):
-        payload.update(dispatch_phase="SUBMITTING", project=context.get("project", ""))
+        payload.update(dispatch_phase="SUBMITTING", project=context.get("project") or payload.get("project", ""))
         _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
     native_runner = runner if runner is not None else lambda argv, output: controller_runner(argv, output, before_submit)
     # On exception keep the last durable phase; a dead controller cannot issue a later Enter.
@@ -562,7 +603,8 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     if resend:
         result["auto_resend"] = generate(pkg, generation_id, dry_run=False, plan_out=plan_out, stills_dir=stills_dir,
                                          start_token=start_token, backlog=backlog, runner=runner, end_token=end_token,
-                                         today=today, adapter=adapter, auto_resend=auto_resend - 1)
+                                         today=today, adapter=adapter, auto_resend=auto_resend - 1,
+                                         cdp_scope=cdp_scope)
     return result
 
 

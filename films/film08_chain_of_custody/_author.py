@@ -757,7 +757,8 @@ preprod = {
                   "clear_eyeline_scenes": ["SC02_g11"] + [f"SC{n:02d}" for n in range(3, 13)],
                   # SC03+: singles no longer say where the off-frame listener stands (SC02 HOLLIS singles drew ELI
                   # at the frame-right edge in 3 of 7 takes; each prompt named ELI's spot by the door)
-                  "listener_unplaced_scenes": [f"SC{n:02d}" for n in range(3, 13)]},
+                  "listener_unplaced_scenes": [f"SC{n:02d}" for n in range(3, 13)],
+                  "object_gaze_neutral_eyeline": True},
     "characters": {ch: {"look": {"look_id": lid, "character": ch, "text": text, "invariants": inv, "approved": True},
                         "video_text": text, "voice": VOICE[ch], "handle": HANDLE[ch]} for ch, (lid, text, inv) in LOOKS.items()},
     "locations": {

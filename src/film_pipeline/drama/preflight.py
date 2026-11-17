@@ -57,6 +57,13 @@ class PreflightLimits(ContractModel):
     # (film08 SC02: 3 of 7 HOLLIS singles still drew ELI at the frame-right edge; every one of those prompts named
     # where ELI stood, which reads to the video model as something to show). Scene or generation ids, as above.
     listener_unplaced_scenes: list[str] = Field(default_factory=list)
+    # object-gaze shots set neutral lateral eyeline ("none") when True; False preserves pre-200a34b accepted hashes
+    object_gaze_neutral_eyeline: bool = False
+    # clear-eyeline singles whose VIDEO prompt removes every off-frame character name/handle (to stop DiT
+    # cross-attention from pulling the off-screen listener into the frame edge); start stills stay unchanged.
+    de_personify_off_frame: list[str] = Field(default_factory=list)
+    # multi-actor shots with prop actions: replace ambiguous "No touching." with "Nobody touches another person."
+    interperson_no_touch_ids: list[str] = Field(default_factory=list)
     timing: SceneTiming = Field(default_factory=SceneTiming)
     feasibility: FeasibilityLimits = Field(default_factory=FeasibilityLimits)
 
