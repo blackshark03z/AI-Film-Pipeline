@@ -1,0 +1,271 @@
+{
+  "take": {
+    "take_id": "SC09_g13_t1",
+    "generation_id": "SC09_g13",
+    "prompt_sha256": "b3a733e9ed87261e2faabc3d297ac01438cd92c4a96ab0973666b45eea9c9ac0",
+    "start_frame_sha256": "942276c9cc764b14a050e5eb32239e3c195c44cfd1a4a9d0de6aa317099713e9",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC09_g13_t1.mp4",
+    "output_sha256": "a59ecf989a0d51814028de9e99f9903445d59233c71de5380ec308b5cb3e41fc",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-17T21:45:16Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "ELI"
+    ],
+    "start_state": "SC09_g13",
+    "end_state": "SC09_g14",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 0.5,
+        "description": "ELI looks at HOLLIS"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 0.5,
+        "end_s": 4.7,
+        "description": "ELI speaks to HOLLIS firmly"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.7,
+        "end_s": 6.0,
+        "description": "ELI holds HOLLIS's look, quite still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-0.5s SETUP: does this happen on screen - ELI looks at HOLLIS?"
+    },
+    {
+      "group": "action",
+      "question": "0.5-4.7s ACTION: does this happen on screen - ELI speaks to HOLLIS firmly?"
+    },
+    {
+      "group": "action",
+      "question": "4.7-6s HOLD: does this happen on screen - ELI holds HOLLIS's look, quite still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): ELI speaks to HOLLIS"
+    },
+    {
+      "group": "character",
+      "question": "ELI: does the face/body read as steadying, resolved (restrained)? Must NOT read as: defiance."
+    },
+    {
+      "group": "sync",
+      "question": "Line 1112 is audible, spoken by the right character, lips match: ELI: Sarge, please. Let her sign it out. It's not too late."
+    },
+    {
+      "group": "audio",
+      "question": "ELI sounds like the voice bible: young, careful male voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC09_g13: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing at the counter, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed under HOLLIS's right hand, red seal up; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC09_g14: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing at the counter, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed under HOLLIS's right hand, red seal up; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_ADDRESS:1112",
+      "group": "narrative",
+      "question": "Line 1112: does ELI clearly speak to HOLLIS (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:HOLLIS",
+      "group": "spatial",
+      "question": "Is the place where HOLLIS stands kept out of frame (never shown empty), and do ELI's eyes go to frame-left, well clear of the lens?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does ELI look at HOLLIS and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC09_g13_t1",
+    "generation_id": "SC09_g13",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Eli earnestly pleads line 1112 toward off-screen Hollis; Faster-Whisper matches word-for-word.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_ADDRESS:1112": "Eli looks and speaks toward frame-left off-screen Hollis over 0.50-4.28s."
+        }
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Eli matches char_ELI (tan uniform, chest clip mic, dark parted hair) with urgent restrained plea.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Solo Eli in front of archive boxes and frosted hallway door; zero left-edge Hollis intrusion.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_LISTENER:HOLLIS": "Frame-left shows brown file boxes only with zero Hollis edge intrusion; eyes clear left of lens.",
+          "REL_GAZE": "Eyes track 1/4 frame-left toward Hollis, never looking into lens.",
+          "REL_BARRIER": "Eli remains stationary on staff side by doorway/shelves throughout."
+        }
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Inspected all144.jpg: 0.5s beat, single pleading spoken delivery 0.50-4.28s, quiet hold through 6.0s.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Natural pleading brow inflection and jaw cadence; smooth across all 144 frames.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Static eye-level close single, no cuts.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Uniform, shelves, frosted door and lighting stable across 144 frames; bottom-right sparkle intact.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "6.0s clip; Whisper ends at 4.28s leaving ~1.72s hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Faster-Whisper small.en: \"Sarge, please, let her sign it out. It's not too late.\" (0.50-4.28s); no human listening.",
+        "reviewer": "auto:whisper",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Mouth activity matches 0.50-4.28s speech interval and rests closed afterward; phoneme sync not human-assessed.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "640x360 24fps 144 frames verified with ffprobe + ffmpeg -xerror; 6 credits debited on account 03.",
+        "reviewer": "auto:ffmpeg",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:1112",
+      "REL_LISTENER:HOLLIS",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "a59ecf989a0d51814028de9e99f9903445d59233c71de5380ec308b5cb3e41fc"
+  },
+  "auto_evidence": {
+    "note": "autoqc skipped: ONNX models not installed (tools/drama_fetch_qc_models.py)",
+    "warnings": []
+  }
+}

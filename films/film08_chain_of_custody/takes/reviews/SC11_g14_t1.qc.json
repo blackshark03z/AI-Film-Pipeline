@@ -1,0 +1,142 @@
+{
+  "take_id": "SC11_g14_t1",
+  "generation_id": "SC11_g14",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Speech covers line 1373 cleanly in audio, but camera/visual continuity breaks via mid-shot jump cut.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1373": "Hollis faces frame-right toward Eli across 0.30-3.94s."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis wardrobe and face match char_HOLLIS before and after jump.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "No listener intrusion; however lower-counter props pop into view on jump cut.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "Frame-right clear of Eli across all 144 frames.",
+        "REL_GAZE": "Hollis looks frame-right toward Eli clear of lens.",
+        "REL_BARRIER": "Hollis stays behind counter throughout."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Speaking action completes across 0.30-3.94s with quiet hold afterward.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Facial vocal motion smooth except for abrupt ~0.3s framing jump cut.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Inspected all144.jpg & contact.jpg: abrupt framing/camera cut between 0.0s (row 1 col 1, brown doorway visible right) and ~0.3-0.5s (col 2 onward, doorway disappeared and shelves shifted).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Background doorway vanishes and ID card + folder pop into bottom-right counter edge at the ~0.3s cut.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.0s clip; audio ends at 3.94s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Faster-Whisper small.en: \"I was talking about other people, son, not about us.\" (0.30-3.94s); no human listening.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Mouth activity matches 0.30-3.94s speech; phoneme sync not human-assessed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames verified with ffprobe + ffmpeg -xerror; 6 credits debited on account 02.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROVIDER_LIMIT",
+  "cause_note": "Flow jumped/cut framing around ~0.3s (frame 1 shows hallway doorway on right and clean counter; by 0.5s camera jumps wider/tighter with doorway vanished and ID card/packet popped onto lower frame).",
+  "required_answers": [
+    "REL_ADDRESS:1373",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "090f6bb52808f8de890442e0ebabdb77000e70e8dd9813624e68b003c39de82f"
+}

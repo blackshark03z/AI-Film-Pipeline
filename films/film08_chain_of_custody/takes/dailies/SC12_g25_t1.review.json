@@ -1,0 +1,265 @@
+{
+  "take": {
+    "take_id": "SC12_g25_t1",
+    "generation_id": "SC12_g25",
+    "prompt_sha256": "6ff7dd4aac6f572da08df058fc8a071c1887b47a672ba28a5a2665ada0c471f4",
+    "start_frame_sha256": "1426177c14dce85b39a4b452d39309394a2ec32b86735c9f72417dfef135ed42",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC12_g25_t1.mp4",
+    "output_sha256": "098bd0da64d52a15a3340e49eda8e13fbf0ee1cb1ee3c5d9c8e56a478c633997",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-17T23:06:42Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "CALVIN"
+    ],
+    "start_state": "SC12_g25",
+    "end_state": "SC12_end",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "CALVIN stands at the counter, the pen beside the ledger"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 3.5,
+        "description": "CALVIN picks up the pen in his right hand and draws it across the ledger page"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 3.5,
+        "end_s": 5.0,
+        "description": "CALVIN sets the pen down beside the ledger"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 5.0,
+        "end_s": 6.0,
+        "description": "the pen lies still beside the ledger"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - CALVIN stands at the counter, the pen beside the ledger?"
+    },
+    {
+      "group": "action",
+      "question": "1-3.5s ACTION: does this happen on screen - CALVIN picks up the pen in his right hand and draws it across the ledger page?"
+    },
+    {
+      "group": "action",
+      "question": "3.5-5s CONSEQUENCE: does this happen on screen - CALVIN sets the pen down beside the ledger?"
+    },
+    {
+      "group": "action",
+      "question": "5-6s HOLD: does this happen on screen - the pen lies still beside the ledger?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): CALVIN picks up the pen in his right hand and draws it across the ledger page"
+    },
+    {
+      "group": "character",
+      "question": "CALVIN: does the face/body read as quiet, moved (restrained)? Must NOT read as: anger."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC12_g25: Continues from the previous shot: ELI standing behind the counter, frame-right; NAOMI standing at the counter, frame-left; CALVIN standing at the counter, centre; the ledger: lying open on the counter, page away from the camera; the pen: lying beside the ledger."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC12_end: Continues from the previous shot: ELI standing behind the counter, frame-right; NAOMI standing at the counter, frame-left; CALVIN standing at the counter, centre; the ledger: lying open on the counter, page away from the camera; the pen: lying beside the ledger."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_LISTENER:NAOMI",
+      "group": "spatial",
+      "question": "Is the place where NAOMI stands kept out of frame (never shown empty), and do CALVIN's eyes go to frame-left, well clear of the lens?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does CALVIN look at ledger and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do CALVIN and ELI stay on their own sides (customer side and waiting chairs / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC12_g25_t1",
+    "generation_id": "SC12_g25",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Silent prop finale: Calvin picks up the pen from beside the open ledger, signs neatly across the page, and sets the pen back down beside the ledger.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Calvin matches char_CALVIN (forest-green jacket, heather grey tee, grey beard) with composed quiet grace.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Inspected contact.jpg & all144.jpg: solo Calvin centered customer-side; eyes stay on the open ledger; frame-left wall/table clean with zero Naomi intrusion.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_LISTENER:NAOMI": "Frame-left table/wall edge clean across all 144 frames with zero Naomi intrusion.",
+          "REL_GAZE": "Calvin looks strictly down at the open ledger, never into lens.",
+          "REL_BARRIER": "Calvin stays customer-side throughout."
+        }
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Inspected contact.jpg & all144.jpg: 0-1s hands steady, single pen pickup & ledger stroke ~1-4s, pen placed back beside ledger ~4-4.8s, calm still hold 4.8-6s; happens once.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Natural wrist/finger articulation gripping pen and smoothly replacing it on counter; zero extra digits or morphing.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Static eye-level close-medium shot, locked frame.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Open cream ledger pages, counter wood, pen, ceiling light fixtures and jacket crisp across 144 frames; bottom-right sparkle intact.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "6.0s clip; clean settled closing hold across final frames.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Faster-Whisper reports empty asr_segments [] matching silent signature beat; no human listening.",
+        "reviewer": "auto:whisper",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Mouth remains closed throughout silent beat; phoneme sync N/A.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "640x360 24fps 144 frames verified with ffprobe + ffmpeg -xerror; 6 credits debited on account 571.",
+        "reviewer": "auto:ffmpeg",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_LISTENER:NAOMI",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "098bd0da64d52a15a3340e49eda8e13fbf0ee1cb1ee3c5d9c8e56a478c633997"
+  },
+  "auto_evidence": {
+    "note": "autoqc skipped: ONNX models not installed (tools/drama_fetch_qc_models.py)",
+    "warnings": []
+  }
+}

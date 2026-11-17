@@ -1,0 +1,135 @@
+{
+  "take_id": "SC12_g16_t1",
+  "generation_id": "SC12_g16",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Silent entrance beat: Calvin enters room from hallway doorway without dialogue.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Calvin (dark green work jacket), Eli (tan uniform), and Naomi (cream trench) match cast bibles cleanly.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Inspected contact.jpg & all144.jpg: counter runs edge-to-edge in start frame so Calvin stays behind the counter on the staff side next to Eli instead of standing on the customer side at counter center (required by SC12_g17).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_BARRIER": "NO - Calvin walks forward from behind-counter doorway and stops on the staff side beside Eli rather than remaining on the customer side of the counter."
+      }
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "Inspected contact.jpg: Calvin walks forward inside doorway but fails to walk to and stop on the customer side of the counter facing Eli.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Walking stride is smooth over 144 frames with no limb morphing.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static eye-level wide shot, no cuts.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Shelves, open ledger, pen and lighting stay consistent; bottom-right sparkle intact.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.0s clip; Calvin settles into standing hold in final frames.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Faster-Whisper reports empty asr_segments [] matching silent script action; no human listening.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Closed mouths across all three actors matching silent beat; phoneme sync N/A.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames verified with ffprobe + ffmpeg -xerror; 6 credits debited on account 571.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "START_FRAME",
+  "cause_note": "start_SC12_g16.jpg spans counter edge-to-edge blocking the doorway from the customer floor, so Calvin walks forward behind the counter next to Eli instead of stopping at the counter center on the customer side.",
+  "required_answers": [
+    "REL_BARRIER"
+  ],
+  "output_sha256": "f19335df204934a24c9d9e6f12125ad8d5fe1ef07adeee1f44ee95b5a540c4fc"
+}

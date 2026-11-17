@@ -15931,13 +15931,13 @@
     },
     "SC12_g16": {
       "file": "media/stills/start_SC12_g16.jpg",
-      "sha256": "51b02d2f60fcfb194513f8552b83d0b2bcd31cbd953e94afd4951575278da9f3",
+      "sha256": "aaebc0adeeadc9745d366bac26cbcea6f15404fd91ef82859e3ceba72ce057df",
       "prompt_sha256": "caaad0d74a0a8411786e910a1abe5b0088ed82a5d79f516bd0ad09d5419a333e",
-      "source": "generated via image-generator T53: wide master NAOMI left, ELI behind counter open ledger+pen, CALVIN in hallway doorway",
+      "source": "Gemini image-generator subagent (oblique cA layout from start_SC08_g24.png)",
       "credits": 0.0,
-      "registered_at": "2026-11-17T20:29:10+00:00",
-      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-17T20:29:11+00:00"
+      "registered_at": "2026-11-17T22:07:43+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T22:07:44+00:00"
     }
   }
 }

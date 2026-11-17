@@ -1,0 +1,271 @@
+{
+  "take": {
+    "take_id": "SC11_g14_t1",
+    "generation_id": "SC11_g14",
+    "prompt_sha256": "53c247c352780b7bdfb69f4c884c4b4cfda15854bfa7f955698a876a17ad877b",
+    "start_frame_sha256": "f4338ee384e14979c0fdac3e874bf68c64822d9d579e78f3097fbe2bff2f17c7",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC11_g14_t1.mp4",
+    "output_sha256": "090f6bb52808f8de890442e0ebabdb77000e70e8dd9813624e68b003c39de82f",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-17T22:36:28Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "HOLLIS"
+    ],
+    "start_state": "SC11_g14",
+    "end_state": "SC11_g15",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 0.5,
+        "description": "HOLLIS looks at ELI"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 0.5,
+        "end_s": 4.3,
+        "description": "HOLLIS speaks to ELI pleadingly"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.3,
+        "end_s": 6.0,
+        "description": "HOLLIS holds ELI's look, quite still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-0.5s SETUP: does this happen on screen - HOLLIS looks at ELI?"
+    },
+    {
+      "group": "action",
+      "question": "0.5-4.3s ACTION: does this happen on screen - HOLLIS speaks to ELI pleadingly?"
+    },
+    {
+      "group": "action",
+      "question": "4.3-6s HOLD: does this happen on screen - HOLLIS holds ELI's look, quite still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): HOLLIS speaks to ELI"
+    },
+    {
+      "group": "character",
+      "question": "HOLLIS: does the face/body read as cornered, pleading (restrained)? Must NOT read as: menace."
+    },
+    {
+      "group": "sync",
+      "question": "Line 1373 is audible, spoken by the right character, lips match: HOLLIS: I was talking about other people, son. Not about us."
+    },
+    {
+      "group": "audio",
+      "question": "HOLLIS sounds like the voice bible: low, gravelly male voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC11_g14: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: open on the counter, papers halfway out, face down; the ledger: lying closed on the counter; the ID card: lying on the customer side of the counter; the cover page: lying face down on the counter."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC11_g15: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: open on the counter, papers halfway out, face down; the ledger: lying closed on the counter; the ID card: lying on the customer side of the counter; the cover page: lying face down on the counter."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_ADDRESS:1373",
+      "group": "narrative",
+      "question": "Line 1373: does HOLLIS clearly speak to ELI (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:ELI",
+      "group": "spatial",
+      "question": "Is the place where ELI stands kept out of frame (never shown empty), and do HOLLIS's eyes go to frame-right, well clear of the lens?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does HOLLIS look at ELI and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC11_g14_t1",
+    "generation_id": "SC11_g14",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Speech covers line 1373 cleanly in audio, but camera/visual continuity breaks via mid-shot jump cut.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_ADDRESS:1373": "Hollis faces frame-right toward Eli across 0.30-3.94s."
+        }
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Hollis wardrobe and face match char_HOLLIS before and after jump.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "No listener intrusion; however lower-counter props pop into view on jump cut.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_LISTENER:ELI": "Frame-right clear of Eli across all 144 frames.",
+          "REL_GAZE": "Hollis looks frame-right toward Eli clear of lens.",
+          "REL_BARRIER": "Hollis stays behind counter throughout."
+        }
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Speaking action completes across 0.30-3.94s with quiet hold afterward.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Facial vocal motion smooth except for abrupt ~0.3s framing jump cut.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "FAIL",
+        "severity": "P0",
+        "level": "SAMPLED",
+        "evidence": "Inspected all144.jpg & contact.jpg: abrupt framing/camera cut between 0.0s (row 1 col 1, brown doorway visible right) and ~0.3-0.5s (col 2 onward, doorway disappeared and shelves shifted).",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "FAIL",
+        "severity": "P0",
+        "level": "SAMPLED",
+        "evidence": "Background doorway vanishes and ID card + folder pop into bottom-right counter edge at the ~0.3s cut.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "6.0s clip; audio ends at 3.94s.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Faster-Whisper small.en: \"I was talking about other people, son, not about us.\" (0.30-3.94s); no human listening.",
+        "reviewer": "auto:whisper",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Mouth activity matches 0.30-3.94s speech; phoneme sync not human-assessed.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "640x360 24fps 144 frames verified with ffprobe + ffmpeg -xerror; 6 credits debited on account 02.",
+        "reviewer": "auto:ffmpeg",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": "PROVIDER_LIMIT",
+    "cause_note": "Flow jumped/cut framing around ~0.3s (frame 1 shows hallway doorway on right and clean counter; by 0.5s camera jumps wider/tighter with doorway vanished and ID card/packet popped onto lower frame).",
+    "required_answers": [
+      "REL_ADDRESS:1373",
+      "REL_LISTENER:ELI",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "090f6bb52808f8de890442e0ebabdb77000e70e8dd9813624e68b003c39de82f"
+  },
+  "auto_evidence": {
+    "note": "autoqc skipped: ONNX models not installed (tools/drama_fetch_qc_models.py)",
+    "warnings": []
+  }
+}

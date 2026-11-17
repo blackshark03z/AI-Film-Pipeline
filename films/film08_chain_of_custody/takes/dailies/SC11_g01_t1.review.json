@@ -1,0 +1,253 @@
+{
+  "take": {
+    "take_id": "SC11_g01_t1",
+    "generation_id": "SC11_g01",
+    "prompt_sha256": "9b7c086578bbb57c6b4330555a1688a2340da32d28ae0cbf27bf69df3bde87a5",
+    "start_frame_sha256": "76811a16290340f470cd65f004cce91c6e91cf24468d1a621c5760fb022c8d21",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC11_g01_t1.mp4",
+    "output_sha256": "d917a06f5ec5d299a9e46bc52c18ff63cec6c5196327419e104e0ed655663a4e",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-17T21:35:00Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "NAOMI",
+      "HOLLIS",
+      "ELI"
+    ],
+    "start_state": "SC11_g01",
+    "end_state": "SC11_g02",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.0,
+        "description": "HOLLIS stands behind the counter, the ID card in his shirt pocket, the opened packet before him"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.0,
+        "end_s": 2.8,
+        "description": "HOLLIS lays the ID card on the customer side of the counter"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.8,
+        "end_s": 4.0,
+        "description": "the ID card lies on the customer side of the counter, HOLLIS's eyes on the opened packet"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "all three stay still, nobody speaks"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1s SETUP: does this happen on screen - HOLLIS stands behind the counter, the ID card in his shirt pocket, the opened packet before him?"
+    },
+    {
+      "group": "action",
+      "question": "1-2.8s ACTION: does this happen on screen - HOLLIS lays the ID card on the customer side of the counter?"
+    },
+    {
+      "group": "action",
+      "question": "2.8-4s CONSEQUENCE: does this happen on screen - the ID card lies on the customer side of the counter, HOLLIS's eyes on the opened packet?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - all three stay still, nobody speaks?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): HOLLIS lays the ID card on the customer side of the counter"
+    },
+    {
+      "group": "character",
+      "question": "HOLLIS: does the face/body read as cornered, pleading (restrained)? Must NOT read as: menace."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC11_g01: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: open on the counter, papers halfway out, face down; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the cover page: lying face down on the counter."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC11_g02: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: open on the counter, papers halfway out, face down; the ledger: lying closed on the counter; the ID card: lying on the customer side of the counter; the cover page: lying face down on the counter."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC11_g01_t1",
+    "generation_id": "SC11_g01",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Silent beat: Hollis removes laminated ID card from shirt pocket, sets it on customer side of counter, pulls hand back cleanly.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Naomi (frame-left beige trench), Hollis (center counter, restrained/pleading), Eli (back-right door) all match cast bible.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Three characters occupy fixed stations; packet open, ledger closed, ID card moves smoothly to counter customer side without body contact.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_BARRIER": "Naomi remains customer-side frame-left, Hollis behind counter, Eli at right door throughout all 144 frames."
+        }
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Inspected all144.jpg + contact.jpg: 0-1s setup, single ID card laydown ~1-3.5s, calm silent three-person hold 4-6s; happens once.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Smooth single reach to shirt pocket and controlled card placement; no touching or teleporting props.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Static eye-level wide master, 0 camera drift or cuts.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Wardrobe, counter props (packet, ledger, placed ID card), shelves & lighting sharp across 144 frames; bottom-right sparkle intact.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "6.0s clip with settled closing hold from ~4.0-6.0s.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Faster-Whisper reports empty asr_segments [] matching silent script action; no human listening.",
+        "reviewer": "auto:whisper",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Closed mouths across all three actors matching silent hold; no spurious lip-flap.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "640x360 24fps 144 frames verified with ffprobe + ffmpeg -xerror; 6 credits debited on account 02.",
+        "reviewer": "auto:ffmpeg",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_BARRIER"
+    ],
+    "output_sha256": "d917a06f5ec5d299a9e46bc52c18ff63cec6c5196327419e104e0ed655663a4e"
+  },
+  "auto_evidence": {
+    "note": "autoqc skipped: ONNX models not installed (tools/drama_fetch_qc_models.py)",
+    "warnings": []
+  }
+}

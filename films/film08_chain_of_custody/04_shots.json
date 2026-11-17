@@ -23974,7 +23974,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "HOLLIS",
       "foreground": "",
@@ -23997,7 +23997,7 @@
             "kind": "ACTION",
             "start_s": 0.5,
             "end_s": 4.3,
-            "description": "HOLLIS speaks to ELI pleadingly"
+            "description": "HOLLIS speaks to ELI pleadingly while keeping steady framing"
           },
           {
             "kind": "HOLD",
@@ -24055,7 +24055,9 @@
           "established_by": "SC11_g01"
         }
       },
-      "gaze_target": "ELI"
+      "gaze_target": "ELI",
+      "repair_of": "SC11_g14@v1",
+      "repair_reason": "t1 had a ~0.3s framing jump cut; lock static shoulder framing without sudden prop reveals"
     },
     {
       "generation_id": "SC11_g15",
@@ -26407,7 +26409,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "MASTER",
       "subject": "CALVIN",
       "foreground": "",
@@ -26476,7 +26478,9 @@
         "lens_intent": "WIDE_ESTABLISH",
         "composition": "wide shot of the records room from the customer side: NAOMI on the left, CALVIN in the middle on the customer side of the counter, the counter across the middle with ELI standing behind it on the right, shelves of archive boxes behind the counter, the frosted-glass hallway door on the right, two waiting chairs against the green wall on the left"
       },
-      "camera_position": "cA_rec12"
+      "camera_position": "cA_rec12",
+      "repair_of": "SC12_g16@v1",
+      "repair_reason": "oblique wide start still opens customer walkway from doorway to counter front"
     },
     {
       "generation_id": "SC12_g17",

@@ -179,13 +179,25 @@ class FlowTab:
             self.ws = ws_url
             self.press_escape()
             time.sleep(0.2)
-            self.click(self.find_node("Nút quay lại để quay về trang trước"))
-            for _ in range(10):
+            back_btns = self.visible("Nút quay lại để quay về trang trước")
+            if len(back_btns) == 1:
+                self.click(back_btns[0])
+            else:
+                self.api("Page.navigate", {"url": cfg.project})
+            for _ in range(12):
                 time.sleep(0.35)
                 pages = [a for a in _http_json(f"{self.local}/json/list") if a.get("type") == "page"]
                 tabs = [a for a in pages if a.get("url", "").partition("?")[0].rstrip("/") == cfg.project]
                 if len(tabs) == 1:
                     break
+            if len(tabs) == 0:
+                self.api("Page.navigate", {"url": cfg.project})
+                for _ in range(12):
+                    time.sleep(0.35)
+                    pages = [a for a in _http_json(f"{self.local}/json/list") if a.get("type") == "page"]
+                    tabs = [a for a in pages if a.get("url", "").partition("?")[0].rstrip("/") == cfg.project]
+                    if len(tabs) == 1:
+                        break
         if len(tabs) != 1:
             seen = [a.get("url", "").partition("?")[0] for a in pages]
             raise ValueError(f"Expected 1 Flow tab on {cfg.email} ({cfg.project}); got {len(tabs)}. Open URLs: {seen}")
@@ -556,8 +568,8 @@ def do_prep(tab: FlowTab, pkg: Any, film: Path, gid: str) -> None:
                 break
             if any(s == "Bản xem trước của " + chosen_asset for _, s, _ in tab.snap()):
                 tab.click(tab.find_node("Thêm vào câu lệnh"))
-                time.sleep(0.6)
-                break
+                time.sleep(0.5)
+                continue
         if not attached():
             raise RuntimeError(f"Exact start frame {chosen_asset} did not bind to composer")
 
@@ -779,12 +791,15 @@ def do_acquire(tab: FlowTab, pkg: Any, film: Path, gid: str | None, title: str |
         tab.click(tab.find_node(r"360p .*gốc", ("menuitem",)))
         norm = lambda s: re.sub(r"[^a-z0-9]", "", s.lower())
         want_norm = norm(chosen["title"])
+        prefix_norm = want_norm[:16]
         hits: list[Path] = []
-        for _ in range(20):
+        for _ in range(40):
             time.sleep(0.5)
+            if any(dl_dir.glob("*.crdownload")):
+                continue
             hits = [
                 x for x in dl_dir.glob("*.mp4")
-                if (not want_norm or norm(x.stem).startswith(want_norm))
+                if (not prefix_norm or norm(x.stem).startswith(prefix_norm))
                 and x.stat().st_mtime_ns > before_files.get(x.name, 0)
             ]
             if len(hits) == 1:
@@ -793,6 +808,9 @@ def do_acquire(tab: FlowTab, pkg: Any, film: Path, gid: str | None, title: str |
             raise RuntimeError(f"Download not unique for title={chosen['title']!r}; hits={[h.name for h in hits]}")
         shutil.copyfile(hits[0], raw_copy)
         dl_name = hits[0].name
+        if not (raw_copy.is_file() and raw_copy.stat().st_size == hits[0].stat().st_size > 0):
+            raise RuntimeError(f"Copied raw clip verification failed for {raw_copy}")
+        hits[0].unlink(missing_ok=True)
 
     probe = json.loads(subprocess.check_output([
         "ffprobe", "-v", "error",

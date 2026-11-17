@@ -1,0 +1,271 @@
+{
+  "take": {
+    "take_id": "SC09_g20_t1",
+    "generation_id": "SC09_g20",
+    "prompt_sha256": "db6a3d821fd0e7e4aa93559dc64495c24854425e72d023a7136c91ebfd6c0c25",
+    "start_frame_sha256": "357e312c7eb960462206d783da1fb1d733b06e941a5796c894b65ae3de74ad53",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC09_g20_t1.mp4",
+    "output_sha256": "5d3802c4d3bc1e8a8e483d6e4134d8b7b799b76860f0cf2d383391802a2ec95d",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-17T22:18:34Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "HOLLIS"
+    ],
+    "start_state": "SC09_g20",
+    "end_state": "SC09_g21",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 0.5,
+        "description": "HOLLIS looks at NAOMI"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 0.5,
+        "end_s": 4.7,
+        "description": "HOLLIS speaks to NAOMI tersely"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.7,
+        "end_s": 6.0,
+        "description": "HOLLIS holds NAOMI's look, quite still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-0.5s SETUP: does this happen on screen - HOLLIS looks at NAOMI?"
+    },
+    {
+      "group": "action",
+      "question": "0.5-4.7s ACTION: does this happen on screen - HOLLIS speaks to NAOMI tersely?"
+    },
+    {
+      "group": "action",
+      "question": "4.7-6s HOLD: does this happen on screen - HOLLIS holds NAOMI's look, quite still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): HOLLIS speaks to NAOMI"
+    },
+    {
+      "group": "character",
+      "question": "HOLLIS: does the face/body read as rattled, stubborn (restrained)? Must NOT read as: amusement."
+    },
+    {
+      "group": "sync",
+      "question": "Line 1146 is audible, spoken by the right character, lips match: HOLLIS: Mine. Good. That's the first thing you've said that makes sense."
+    },
+    {
+      "group": "audio",
+      "question": "HOLLIS sounds like the voice bible: low, gravelly male voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC09_g20: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed under HOLLIS's right hand, red seal up; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC09_g21: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: lying sealed under HOLLIS's right hand, red seal up; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_ADDRESS:1146",
+      "group": "narrative",
+      "question": "Line 1146: does HOLLIS clearly speak to NAOMI (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:NAOMI",
+      "group": "spatial",
+      "question": "Is the place where NAOMI stands kept out of frame (never shown empty), and do HOLLIS's eyes go to frame-left, well clear of the lens?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does HOLLIS look at NAOMI and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC09_g20_t1",
+    "generation_id": "SC09_g20",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Hollis delivers line 1146 bitingly to off-screen Naomi; Faster-Whisper matches word-for-word.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_ADDRESS:1146": "Hollis looks and speaks toward frame-left off-screen Naomi across 0.24-5.14s."
+        }
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Hollis matches char_HOLLIS (tan uniform, black tie, tie clasp, ID tag) with defensive bitter focus.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Solo Hollis behind counter; CRT desk & shelves frame-left clean across all 144 frames.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_LISTENER:NAOMI": "Frame-left shows CRT desk/shelves only with zero Naomi coat or shoulder intrusion.",
+          "REL_GAZE": "Eyes stay 1/4 frame-left toward Naomi clear of camera lens.",
+          "REL_BARRIER": "Hollis remains behind counter on staff side throughout."
+        }
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Inspected all144.jpg: three distinct clipped clauses (0.24-0.90s, 2.00-2.12s, 3.24-5.14s) followed by steady closing glare.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Natural head thrust on final sentence and crisp vocal pauses; zero artifacts.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Static eye-level close single, no cuts.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Shelves, CRT monitor, uniform and lighting consistent across 144 frames; bottom-right sparkle intact.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "6.0s clip; Whisper ends at 5.14s leaving ~0.86s clean hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Faster-Whisper small.en: \"Mine.\" (0.24-0.9s) + \"Good.\" (2.0-2.12s) + \"That's the first thing you've said that makes sense.\" (3.24-5.14s); no human listening.",
+        "reviewer": "auto:whisper",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Mouth activity tracks all three spaced speech windows and closes cleanly afterward; phoneme sync not human-assessed.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "640x360 24fps 144 frames verified with ffprobe + ffmpeg -xerror; 6 credits debited on account 03.",
+        "reviewer": "auto:ffmpeg",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:1146",
+      "REL_LISTENER:NAOMI",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "5d3802c4d3bc1e8a8e483d6e4134d8b7b799b76860f0cf2d383391802a2ec95d"
+  },
+  "auto_evidence": {
+    "note": "autoqc skipped: ONNX models not installed (tools/drama_fetch_qc_models.py)",
+    "warnings": []
+  }
+}

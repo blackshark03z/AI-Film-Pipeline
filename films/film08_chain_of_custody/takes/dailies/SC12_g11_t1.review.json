@@ -1,0 +1,265 @@
+{
+  "take": {
+    "take_id": "SC12_g11_t1",
+    "generation_id": "SC12_g11",
+    "prompt_sha256": "84e88301e5f9cd6dd02792b8e21a8c5fec21a48914c34b67203ce807006b66cd",
+    "start_frame_sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC12_g11_t1.mp4",
+    "output_sha256": "5ced3f8fc6d27edecd756b8c8a024596d4cd4e5421a1de45995931994972b1dc",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-17T21:42:43Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "NAOMI"
+    ],
+    "start_state": "SC12_g11",
+    "end_state": "SC12_g12",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 1.5,
+        "description": "NAOMI looks toward ELI"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 1.5,
+        "end_s": 2.4,
+        "description": "NAOMI takes that in quietly with a small, tired nod"
+      },
+      {
+        "kind": "CONSEQUENCE",
+        "start_s": 2.4,
+        "end_s": 4.0,
+        "description": "NAOMI stays with what they see"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.0,
+        "end_s": 6.0,
+        "description": "NAOMI holds the quiet look, nobody speaks"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-1.5s SETUP: does this happen on screen - NAOMI looks toward ELI?"
+    },
+    {
+      "group": "action",
+      "question": "1.5-2.4s ACTION: does this happen on screen - NAOMI takes that in quietly with a small, tired nod?"
+    },
+    {
+      "group": "action",
+      "question": "2.4-4s CONSEQUENCE: does this happen on screen - NAOMI stays with what they see?"
+    },
+    {
+      "group": "action",
+      "question": "4-6s HOLD: does this happen on screen - NAOMI holds the quiet look, nobody speaks?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): NAOMI takes that in quietly with a small, tired nod"
+    },
+    {
+      "group": "character",
+      "question": "NAOMI: does the face/body read as warm, tired (restrained)? Must NOT read as: smugness."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC12_g11: Continues from the previous shot: ELI standing behind the counter, frame-right; NAOMI standing at the counter, frame-left; the ledger: lying open on the counter, page away from the camera; the pen: lying beside the ledger."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC12_g12: Continues from the previous shot: ELI standing behind the counter, frame-right; NAOMI standing at the counter, frame-left; the ledger: lying open on the counter, page away from the camera; the pen: lying beside the ledger."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_LISTENER:ELI",
+      "group": "spatial",
+      "question": "Is the place where ELI stands kept out of frame (never shown empty), and do NAOMI's eyes go to frame-right, well clear of the lens?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does NAOMI look at ELI and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and NAOMI stay on their own sides (counter, staff side and archive shelves / customer side and waiting chairs) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC12_g11_t1",
+    "generation_id": "SC12_g11",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Silent reaction shot: Naomi holds gaze on off-screen Eli with faint composed acknowledgement.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Naomi matches char_NAOMI (cream trench coat, black collar) with quiet restraint.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Solo Naomi customer-side with clear archive shelves/aisle right; zero listener intrusion.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_LISTENER:ELI": "Frame-right edge shows clean shelves and aisle with zero Eli shoulder or sleeve intrusion.",
+          "REL_GAZE": "Eyes track 1/4 frame-right toward Eli, never looking into lens.",
+          "REL_BARRIER": "Naomi remains customer-side throughout."
+        }
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Inspected all144.jpg: calm silent listening reaction and micro-nod across all 6.0s.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Subtle natural blinking and slight composed smile/exhale; smooth over 144 frames.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Static eye-level close single, no cuts.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Trench coat, hair, chair back and green-gray shelves consistent; bottom-right sparkle intact.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Full 6.0s quiet reaction hold with no abrupt reset.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Faster-Whisper reports empty asr_segments [] matching silent script action; no human listening.",
+        "reviewer": "auto:whisper",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Lips stay closed across all 144 frames with zero spurious lip-flap; phoneme sync N/A for silent beat.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "640x360 24fps 144 frames verified with ffprobe + ffmpeg -xerror; 6 credits debited on account 571.",
+        "reviewer": "auto:ffmpeg",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_LISTENER:ELI",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "5ced3f8fc6d27edecd756b8c8a024596d4cd4e5421a1de45995931994972b1dc"
+  },
+  "auto_evidence": {
+    "note": "autoqc skipped: ONNX models not installed (tools/drama_fetch_qc_models.py)",
+    "warnings": []
+  }
+}
