@@ -1,0 +1,142 @@
+{
+  "take_id": "SC12_g01_t1",
+  "generation_id": "SC12_g01",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Eli addresses Doctor Bell; Whisper transcribes the complete line.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1439": "Original has a face at extreme left; after the mandatory x=.12, y=.06, w=h=.88 crop, 144 ordered frames show only Eli looking screen-left toward off-frame Naomi."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Eli matches approved still and uniform, with visible body camera and radio.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Original has a face at extreme left; after the mandatory x=.12, y=.06, w=h=.88 crop, 144 ordered frames show only Eli looking screen-left toward off-frame Naomi.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "Original has a face at extreme left; after the mandatory x=.12, y=.06, w=h=.88 crop, 144 ordered frames show only Eli looking screen-left toward off-frame Naomi.",
+        "REL_GAZE": "Original has a face at extreme left; after the mandatory x=.12, y=.06, w=h=.88 crop, 144 ordered frames show only Eli looking screen-left toward off-frame Naomi.",
+        "REL_BARRIER": "Original has a face at extreme left; after the mandatory x=.12, y=.06, w=h=.88 crop, 144 ordered frames show only Eli looking screen-left toward off-frame Naomi."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "All 144 cropped frames show a speaking single and hold; room stays consistent.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "All ordered frames reviewed for visible face and mouth movement.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static continuous close single, no cuts.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Records room and archive shelves stable. Known sparkle remains visible on the right after the proposed crop; ledger is partly in the original but outside cropped view.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Six seconds, dialogue transcribed through 4.34s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Local Whisper transcribed the scripted words; no human listening performed.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Ordered frame movement broadly coincides with ASR intervals; phoneme-level sync not assessed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames with AAC fully decoded to EOF.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1439",
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "00094d06fe4114ee4b3ed8420595559f68c30261ed7dfd103c846eab37d60a50"
+}

@@ -1,0 +1,142 @@
+{
+  "take_id": "SC08_g18_t2",
+  "generation_id": "SC08_g18",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis warns Moreno not to buy the performance; Whisper transcribes the complete line.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1008": "Hollis looks screen-right to Eli, who stays outside the original frame; no person crosses the barrier."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis matches approved still and uniform.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis looks screen-right to Eli, who stays outside the original frame; no person crosses the barrier.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "Hollis looks screen-right to Eli, who stays outside the original frame; no person crosses the barrier.",
+        "REL_GAZE": "Hollis looks screen-right to Eli, who stays outside the original frame; no person crosses the barrier.",
+        "REL_BARRIER": "Hollis looks screen-right to Eli, who stays outside the original frame; no person crosses the barrier."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "144 sequential frames show one speaking single; blank packet face stays toward camera.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "All ordered frames reviewed for visible face and mouth movement.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static continuous close single, no cuts.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Original frame has a plain packet face towards camera, archive room, and known sparkle at bottom right.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Six seconds, last spoken word transcribed at 5.37s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Local Whisper transcribed the scripted words; no human listening performed.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Ordered frame movement broadly coincides with ASR intervals; phoneme-level sync not assessed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames with AAC fully decoded to EOF.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1008",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "b14470f985864d325476268f73710c427b4ae22539b5836d6e82aa18abca98c8"
+}

@@ -1,0 +1,54 @@
+{
+  "take_id": "SC09_g03_t2",
+  "generation_id": "SC09_g03",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi addresses Hollis; Whisper matches the two scripted sentences.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1063": "Naomi looks screen-right to Hollis, but a partial face enters the right edge after the restaging. The proposed crop would also remove the known corner mark, so it is not used."
+      }
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "Naomi looks screen-right to Hollis, but a partial face enters the right edge after the restaging. The proposed crop would also remove the known corner mark, so it is not used.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "Naomi looks screen-right to Hollis, but a partial face enters the right edge after the restaging. The proposed crop would also remove the known corner mark, so it is not used.",
+        "REL_GAZE": "Naomi looks screen-right to Hollis, but a partial face enters the right edge after the restaging. The proposed crop would also remove the known corner mark, so it is not used.",
+        "REL_BARRIER": "Naomi looks screen-right to Hollis, but a partial face enters the right edge after the restaging. The proposed crop would also remove the known corner mark, so it is not used."
+      }
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Original 640x360 24fps, 144 frames with AAC fully decoded.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "STAGING",
+  "cause_note": "Listener again appears at right edge even after tightening and explicit empty-edge staging. Change approach before any further take.",
+  "required_answers": [
+    "REL_ADDRESS:1063",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "d18150ca704baae80669c7c1e71cf6b576c53acb5fe66ddd9a0c9310503e18e0"
+}
