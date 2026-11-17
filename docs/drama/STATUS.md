@@ -1,5 +1,7 @@
 # 2026-11-17 — Continue Film08 toward 300 accepted takes
 
+- Offline reviewed and registered the existing Naomi close single for SC10_g08, g09, g20 and g21, whose still prompts specify the same gaze and initial staging. The opened packet and ledger are outside this still crop and must be checked in the adjacent footage. The approved still does not qualify any video output or clear the repeated-defect stop; no Flow send or credits used.
+
 - Offline compared the identical Naomi start-state prompts for SC11_g03, g05, g06, g08, g21 and g23, then registered and approved the previously reviewed SC08_g17 single for each. Counter props lie outside the close crop and the output must still be checked for listener intrusion. No live sends or credits; the repeated-defect stop remains in force.
 
 - Offline prepared T42_SC11_g02_start.png from character and room references, reviewed the gaze and single framing, then registered and approved it for SC11_g02, g04, g07, g20 and g22 after checking their identical initial states. All counter props are outside the still crop and must be checked in the resulting video and adjacent coverage; still approvals do not clear the recurring listener intrusion or the unattended-send stop. No Flow credits used.
