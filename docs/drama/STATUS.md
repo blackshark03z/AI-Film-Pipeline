@@ -1,3 +1,9 @@
+# 2026-11-17 — Film08 SC08_g10 one-take check
+
+- One CDP submit on the Film08 project in `khoicaesar02` used the approved start still and exact plan prompt. Flow quoted 6 credits for Omni 1.2 Flash, 6 s, 360p, 16:9, x1. The account balance changed from 345 to 339 after the output completed.
+- `SC08_g10_t1` was reconciled by the exact prompt shown on the new Flow detail page and the downloaded original. The 640×360, 24 fps clip fully decoded. The form faced the camera after Hollis tilted the packet, contrary to the script. The take is recorded as rejected for action continuity. Sampled frames and proof are in `D:/AI FILM MAKER/_exports/FILM08_SC08_g10_20261117/`.
+- Film08 now shows 184 accepted, 42 rejected, 1,356 credits booked and zero pending local sends. `OWNER_GO_LIVE` is back to `NO`. The one-take request is complete. `SC08_g10` still needs restaging before a later retake.
+
 # 2026-11-17 — Codex resumes Film08 Flow engineering
 
 - Active source: `AFP-stable`, `feature/drama-preprod-p0`, taken over at `9b74093d`; last accepted take `SC08_g09_t1`. The October `claude/flow-max-causal-forensics-001` branch is historical.

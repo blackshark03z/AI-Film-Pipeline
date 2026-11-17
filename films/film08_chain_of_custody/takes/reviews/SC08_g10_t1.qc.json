@@ -1,0 +1,60 @@
+{
+  "take_id": "SC08_g10_t1",
+  "generation_id": "SC08_g10",
+  "checks": [
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "SAMPLED",
+      "evidence": "In the sampled original, Hollis rotates the packet once but its printed custody form faces the camera from roughly 2.0 s through 5.5 s. The script calls for the form to face away. See the 2 fps contact sheet.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis face and uniform hold against the approved start frame; no second person visible.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Original 640x360, 24 fps, H.264/AAC, 6.037 s container, decoded to EOF without error.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "At 2 fps Hollis keeps gaze down at the packet; no gaze into camera. The packet stays in hand and no second person crosses the frame.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_GAZE": "Hollis looks down at the packet rather than at the lens.",
+        "REL_BARRIER": "The prop stays in Hollis’s hands; the form angle fails the action check."
+      }
+    }
+  ],
+  "cause": "STAGING",
+  "cause_note": "Stage the envelope angle or camera position so Hollis can read it and the camera sees only the blank side or edge. Review the angle before any retake.",
+  "required_answers": [
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "59d1e88fc549d3bbb489cf85aac9c541177b123e58091936ec7442f0830366ad"
+}
