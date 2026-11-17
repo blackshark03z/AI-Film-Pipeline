@@ -4820,6 +4820,46 @@
       "provider_job_id": "",
       "cost_unit": "credits",
       "cost_amount": null
+    },
+    {
+      "take_id": "SC08_g19_t1",
+      "generation_id": "SC08_g19",
+      "prompt_sha256": "a2d6c0c9f789df2dd2f508102847b5a13b13aa3b19f976aac1fa811d8ae45d94",
+      "start_frame_sha256": "942276c9cc764b14a050e5eb32239e3c195c44cfd1a4a9d0de6aa317099713e9",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 6.0,
+      "output_file": "SC08_g19_t1.mp4",
+      "output_sha256": "6752026fc9519914e6df8da520af1030e60824839374403dda53fd5ab24c5255",
+      "status": "ACCEPTED",
+      "shot_version": 1,
+      "cause": "",
+      "registered_at": "2026-11-17T16:35:33Z",
+      "review_file": "reviews/SC08_g19_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
+    },
+    {
+      "take_id": "SC12_g02_t1",
+      "generation_id": "SC12_g02",
+      "prompt_sha256": "da357cd936436742d10c177650d6fd7b1a62b5b0483f3fd1e1acadf6919794db",
+      "start_frame_sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "route": "start_frame+Khung hinh",
+      "model": "Omni 1.2 Flash 360p",
+      "credits": 6.0,
+      "output_file": "SC12_g02_t1.mp4",
+      "output_sha256": "08c8110dc90658d6b698f97274dc5c75ff62704895d1d11e88ac65300c849355",
+      "status": "REJECTED",
+      "shot_version": 1,
+      "cause": "STAGING",
+      "registered_at": "2026-11-17T16:35:34Z",
+      "review_file": "reviews/SC12_g02_t1.qc.json",
+      "provider": "flow",
+      "provider_job_id": "",
+      "cost_unit": "credits",
+      "cost_amount": null
     }
   ]
 }

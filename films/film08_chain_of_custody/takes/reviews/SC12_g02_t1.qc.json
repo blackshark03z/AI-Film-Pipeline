@@ -1,0 +1,54 @@
+{
+  "take_id": "SC12_g02_t1",
+  "generation_id": "SC12_g02",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi addresses Eli; local Whisper matches the scripted lines.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1444": "A partial face appears on the right edge throughout, despite the required single and off-frame Eli; cropping right would remove the known bottom-right sparkle."
+      }
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "A partial face appears on the right edge throughout, despite the required single and off-frame Eli; cropping right would remove the known bottom-right sparkle.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "A partial face appears on the right edge throughout, despite the required single and off-frame Eli; cropping right would remove the known bottom-right sparkle.",
+        "REL_GAZE": "A partial face appears on the right edge throughout, despite the required single and off-frame Eli; cropping right would remove the known bottom-right sparkle.",
+        "REL_BARRIER": "A partial face appears on the right edge throughout, despite the required single and off-frame Eli; cropping right would remove the known bottom-right sparkle."
+      }
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Original 640x360 24fps, 144 frames with AAC decoded to EOF.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "STAGING",
+  "cause_note": "Listener enters the right edge; change approach and preserve the corner mark before another attempt.",
+  "required_answers": [
+    "REL_ADDRESS:1444",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "08c8110dc90658d6b698f97274dc5c75ff62704895d1d11e88ac65300c849355"
+}
