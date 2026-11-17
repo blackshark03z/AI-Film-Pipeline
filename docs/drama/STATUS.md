@@ -1,3 +1,9 @@
+# 2026-11-17 — Continue Film08 toward 300 accepted takes
+
+- Owner requested automatic continuation to 300 accepted takes. `SC08_g11_t1` passed visual and dialogue QC. Flow debited 6 credits on `khoicaesar02` (333 → 327). Retain at least 5.75 s of the original in the edit because the final word ends near 5.56 s.
+- `SC08_g12_t1` also passed the sequential-frame and local transcription checks. Flow balance 327 → 321. Count is 187/300 accepted; `SC08_g13` is prepared. The T27 start image for `SC08_g24` was redrawn in ChatGPT ImageGen against the accepted room and character references, checked for placement and prop state, then registered and approved.
+- The remaining run includes 78 missing start-image registrations and the pending board for `SC09_g24`. Existing approved shot and account limits apply. Audit files and the CDP operator script are in `D:/AI FILM MAKER/_exports/FILM08_CONTINUE_20261117/`.
+
 # 2026-11-17 — Film08 SC08_g10 retake accepted
 
 - `SC08_g10` v2 keeps the same approved start still and restages the action so Hollis tips the packet toward his chest and keeps the plain kraft face toward the camera. The new storyboard fingerprint was reviewed against the storyboard frame and start image.

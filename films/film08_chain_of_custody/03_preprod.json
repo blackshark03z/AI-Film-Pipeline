@@ -15042,6 +15042,16 @@
       "registered_at": "2026-11-15T03:00:33+00:00",
       "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
       "approved_at": "2026-11-15T03:00:33+00:00"
+    },
+    "SC08_g24": {
+      "file": "media/stills/start_SC08_g24.png",
+      "sha256": "2e10c7e0e2679d8bb8411bf53db18d938cbacb3da17402b2f25f0297eef484d2",
+      "prompt_sha256": "c8b99b3cb68cd46db3dbde36829cc55bcb61ac187d2fd0b452a06f3eafe574fd",
+      "source": "ChatGPT ImageGen T27 v2, approved character and location references; hidden wax side, ledger closed at staff edge",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T13:30:42+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T13:30:43+00:00"
     }
   }
 }
