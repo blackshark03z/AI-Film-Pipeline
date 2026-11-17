@@ -1,5 +1,7 @@
 # 2026-11-17 — Continue Film08 toward 300 accepted takes
 
+- Offline prepared T42_SC11_g02_start.png from character and room references, reviewed the gaze and single framing, then registered and approved it for SC11_g02, g04, g07, g20 and g22 after checking their identical initial states. All counter props are outside the still crop and must be checked in the resulting video and adjacent coverage; still approvals do not clear the recurring listener intrusion or the unattended-send stop. No Flow credits used.
+
 - Offline prepared and individually registered/approved the reviewed SC12_g01 Eli still for SC12_g03, g05, g07, g09, g10, g13 and g15 after comparing each planned initial state and eyeline. Ledger/pen are outside the close crop, not visually verified in the still. SC12_g01 generated listener intrusion despite a clean start and is usable only with its recorded crop; these still approvals do not qualify future renders or override the repeated-defect stop. No Flow credits used.
 
 - Offline candidate T31_SC10_g01_candidate.png preserved in _exports/FILM08_CONTINUE_20261117. The right thumb visibly touches the lower edge of the intact wax seal, but it is not clear enough that it is underneath as required, so the image is not registered or approved. SC12_g02 and its related Naomi singles use the same start framing; the g02 render nevertheless introduced an off-frame person, so do not blindly treat matching stills as proof of a reliable generation. No new sends; repeated-defect stop remains in force.

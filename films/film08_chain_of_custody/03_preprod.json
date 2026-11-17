@@ -15192,6 +15192,56 @@
       "registered_at": "2026-11-17T16:43:00+00:00",
       "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
       "approved_at": "2026-11-17T16:43:00+00:00"
+    },
+    "SC11_g02": {
+      "file": "media/stills/start_SC11_g02.png",
+      "sha256": "12dcac5402a01eb18a4424614f4e03edef79614df534684d1266d587a4b114a0",
+      "prompt_sha256": "b649a98d1af7b331a1d27f058a32eaa1d689ce3f571767f1691f3c1573cfff58",
+      "source": "ImageGen Hollis and room references; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:19+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:20+00:00"
+    },
+    "SC11_g04": {
+      "file": "media/stills/start_SC11_g04.png",
+      "sha256": "12dcac5402a01eb18a4424614f4e03edef79614df534684d1266d587a4b114a0",
+      "prompt_sha256": "b649a98d1af7b331a1d27f058a32eaa1d689ce3f571767f1691f3c1573cfff58",
+      "source": "ImageGen Hollis and room references; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:20+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:20+00:00"
+    },
+    "SC11_g07": {
+      "file": "media/stills/start_SC11_g07.png",
+      "sha256": "12dcac5402a01eb18a4424614f4e03edef79614df534684d1266d587a4b114a0",
+      "prompt_sha256": "b649a98d1af7b331a1d27f058a32eaa1d689ce3f571767f1691f3c1573cfff58",
+      "source": "ImageGen Hollis and room references; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:20+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:20+00:00"
+    },
+    "SC11_g20": {
+      "file": "media/stills/start_SC11_g20.png",
+      "sha256": "12dcac5402a01eb18a4424614f4e03edef79614df534684d1266d587a4b114a0",
+      "prompt_sha256": "b649a98d1af7b331a1d27f058a32eaa1d689ce3f571767f1691f3c1573cfff58",
+      "source": "ImageGen Hollis and room references; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:20+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:20+00:00"
+    },
+    "SC11_g22": {
+      "file": "media/stills/start_SC11_g22.png",
+      "sha256": "12dcac5402a01eb18a4424614f4e03edef79614df534684d1266d587a4b114a0",
+      "prompt_sha256": "b649a98d1af7b331a1d27f058a32eaa1d689ce3f571767f1691f3c1573cfff58",
+      "source": "ImageGen Hollis and room references; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:21+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:21+00:00"
     }
   }
 }
