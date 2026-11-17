@@ -17442,7 +17442,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "HOLLIS",
       "foreground": "",
@@ -17465,7 +17465,7 @@
             "kind": "ACTION",
             "start_s": 0.5,
             "end_s": 4.7,
-            "description": "HOLLIS speaks to ELI tersely"
+            "description": "HOLLIS speaks to ELI tersely; the frame edge remains empty"
           },
           {
             "kind": "HOLD",
@@ -17506,7 +17506,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on HOLLIS standing behind the records counter: head and shoulders, the counter edge low in the frame, the archive-box shelves behind him, everyone else out of frame on both sides",
+        "composition": "close single on HOLLIS behind the records counter, archive shelves behind him, frame-right showing only the empty room; packet blank face toward camera",
         "declared_repeat": "static close singles on whoever speaks are the deliberate grammar of this talking scene; the room never changes"
       },
       "camera_position": "c_hollis",
@@ -17523,7 +17523,9 @@
           "established_by": "SC07_g22"
         }
       },
-      "gaze_target": "ELI"
+      "gaze_target": "ELI",
+      "repair_of": "SC08_g18@v1",
+      "repair_reason": "The listener entered the v1 single and the packet showed its seal to camera. Keep the listener out of frame and the blank packet side toward camera."
     },
     {
       "generation_id": "SC08_g19",
@@ -18358,7 +18360,7 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
       "coverage": "SINGLE",
       "subject": "NAOMI",
       "foreground": "",
@@ -18381,7 +18383,7 @@
             "kind": "ACTION",
             "start_s": 0.5,
             "end_s": 4.7,
-            "description": "NAOMI speaks to HOLLIS steadily"
+            "description": "NAOMI speaks to HOLLIS steadily; the frame edge remains empty"
           },
           {
             "kind": "HOLD",
@@ -18422,7 +18424,7 @@
         "height": "EYE",
         "movement": "STATIC",
         "lens_intent": "NORMAL",
-        "composition": "close single on NAOMI standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the green wall behind her, everyone else out of frame to the right",
+        "composition": "close single of NAOMI on the customer side, green wall behind her; frame-right contains only the empty room and no part of another person",
         "declared_repeat": "static close singles on whoever speaks are the deliberate grammar of this talking scene; the room never changes"
       },
       "camera_position": "c_naomi_cust",
@@ -18439,7 +18441,9 @@
           "established_by": "SC08_g24"
         }
       },
-      "gaze_target": "HOLLIS"
+      "gaze_target": "HOLLIS",
+      "repair_of": "SC09_g03@v1",
+      "repair_reason": "The v1 output put the off-frame listener inside the shot. Hold a clean single with the frame edge showing only the room."
     },
     {
       "generation_id": "SC09_g04",
@@ -27366,6 +27370,190 @@
       "camera_position": "c_hollis",
       "gaze_target": "brown_packet",
       "listener_anchors": {}
+    },
+    {
+      "generation_id": "SC09_g03",
+      "scene_id": "SC09",
+      "start_state": "SC09_g03",
+      "end_state": "SC09_g04",
+      "previous_generation_id": "SC09_g02",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "SINGLE",
+      "subject": "NAOMI",
+      "foreground": "",
+      "visible": [
+        "NAOMI"
+      ],
+      "dialogue": [
+        1063
+      ],
+      "choreography": {
+        "generation_id": "SC09_g03",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "NAOMI looks at HOLLIS"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.7,
+            "description": "NAOMI speaks to HOLLIS steadily"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.7,
+            "end_s": 6.0,
+            "description": "NAOMI holds HOLLIS's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "NAOMI speaks to HOLLIS"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "NAOMI",
+            "emotion_intent": "firm, steady, warning",
+            "visible_cues": [
+              "steady eyes",
+              "slow nod"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "threat"
+          }
+        ]
+      },
+      "design_refs": [
+        "NAOMI_look@1",
+        "NAOMI_costume@1",
+        "loc_records_room@1",
+        "prop_packet@1",
+        "prop_ledger@1",
+        "prop_idcard@1",
+        "prop_notebook@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on NAOMI standing on the customer side of the counter: head and shoulders, the counter edge low in the frame, the green wall behind her, everyone else out of frame to the right",
+        "declared_repeat": "static close singles on whoever speaks are the deliberate grammar of this talking scene; the room never changes"
+      },
+      "camera_position": "c_naomi_cust",
+      "addressees": {
+        "1063": [
+          "HOLLIS"
+        ]
+      },
+      "listener_anchors": {
+        "HOLLIS": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "HOLLIS stands behind the records counter off frame-right, wholly out of shot",
+          "established_by": "SC08_g24"
+        }
+      },
+      "gaze_target": "HOLLIS"
+    },
+    {
+      "generation_id": "SC08_g18",
+      "scene_id": "SC08",
+      "start_state": "SC08_g18",
+      "end_state": "SC08_g19",
+      "previous_generation_id": "SC08_g17",
+      "sfx": [],
+      "readout": [],
+      "duration_s": 6,
+      "version": 1,
+      "coverage": "SINGLE",
+      "subject": "HOLLIS",
+      "foreground": "",
+      "visible": [
+        "HOLLIS"
+      ],
+      "dialogue": [
+        1008
+      ],
+      "choreography": {
+        "generation_id": "SC08_g18",
+        "phases": [
+          {
+            "kind": "SETUP",
+            "start_s": 0.0,
+            "end_s": 0.5,
+            "description": "HOLLIS looks at ELI"
+          },
+          {
+            "kind": "ACTION",
+            "start_s": 0.5,
+            "end_s": 4.7,
+            "description": "HOLLIS speaks to ELI tersely"
+          },
+          {
+            "kind": "HOLD",
+            "start_s": 4.7,
+            "end_s": 6.0,
+            "description": "HOLLIS holds ELI's look, quite still"
+          }
+        ],
+        "once_actions": [
+          "HOLLIS speaks to ELI"
+        ],
+        "gesture_budget": 1,
+        "performance": [
+          {
+            "character": "HOLLIS",
+            "emotion_intent": "rattled, stubborn",
+            "visible_cues": [
+              "tight mouth",
+              "shifting eyes"
+            ],
+            "intensity": "restrained",
+            "prohibited_misread": "amusement"
+          }
+        ]
+      },
+      "design_refs": [
+        "HOLLIS_look@1",
+        "HOLLIS_costume@1",
+        "loc_records_room@1",
+        "prop_packet@1",
+        "prop_ledger@1",
+        "prop_idcard@1",
+        "prop_notebook@1"
+      ],
+      "camera": {
+        "size": "CLOSE",
+        "angle": "EYE_LEVEL",
+        "height": "EYE",
+        "movement": "STATIC",
+        "lens_intent": "NORMAL",
+        "composition": "close single on HOLLIS standing behind the records counter: head and shoulders, the counter edge low in the frame, the archive-box shelves behind him, everyone else out of frame on both sides",
+        "declared_repeat": "static close singles on whoever speaks are the deliberate grammar of this talking scene; the room never changes"
+      },
+      "camera_position": "c_hollis",
+      "addressees": {
+        "1008": [
+          "ELI"
+        ]
+      },
+      "listener_anchors": {
+        "ELI": {
+          "mode": "OFF_FRAME",
+          "side": "RIGHT",
+          "placement": "ELI stands beside the hallway door off frame-right, wholly out of shot",
+          "established_by": "SC07_g22"
+        }
+      },
+      "gaze_target": "ELI"
     }
   ]
 }

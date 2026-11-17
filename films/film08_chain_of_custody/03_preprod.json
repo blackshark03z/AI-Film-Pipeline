@@ -14215,13 +14215,13 @@
     },
     "SC09_g03": {
       "file": "media/stills/start_SC09_g03.jpg",
-      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "sha256": "ed41f410cccd438343368b1fe612015ea584e22bc8b93b1b05e8b557fb99fbec",
       "prompt_sha256": "dbadc6fce4f9f2f3616f87b32a9661c4803f3bc60bf47108d1bde4bd312b1d83",
-      "source": "tightened (rule B): crop w=h=0.85, x=0, y=0, Lanczos to 1376x768, from still sha 128929cc; Flow image edit kept; 0 credits",
+      "source": "tighten of media/stills/start_SC09_g03.jpg x=0.000 y=0.075 w=0.850 (listener right)",
       "credits": 0.0,
-      "registered_at": "2026-11-15T06:08:05+00:00",
-      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-15T06:08:06+00:00"
+      "registered_at": "2026-11-17T16:24:19+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:24:34+00:00"
     },
     "SC09_g05": {
       "file": "media/stills/start_SC09_g05.jpg",
@@ -15034,14 +15034,14 @@
       "approved_at": "2026-11-15T02:56:29+00:00"
     },
     "SC08_g18": {
-      "file": "media/stills/start_SC08_g18.jpg",
-      "sha256": "2aefe3fe83191d5c81bffece6609cf24cb16b8fe2fc0386e5cb186db1a1af94c",
+      "file": "media/stills/start_SC08_g18.png",
+      "sha256": "69f26eadb07ba5c78aba08e5243e95a66c64364c7585d208bac4a48f8a863aec",
       "prompt_sha256": "ff394f9425047ee39afe083364235298853d0c52133f5e7c3de7a64ba6d52320",
-      "source": "Flow Nano Banana 2.1 image edit (face from char_HOLLIS), gmail-4 Chrome, project 6f8e24af, still f91748cd face edit",
+      "source": "ImageGen edit of approved character frame",
       "credits": 0.0,
-      "registered_at": "2026-11-15T03:00:33+00:00",
-      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-15T03:00:33+00:00"
+      "registered_at": "2026-11-17T16:24:14+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:24:33+00:00"
     },
     "SC08_g24": {
       "file": "media/stills/start_SC08_g24.png",
@@ -15092,6 +15092,16 @@
       "registered_at": "2026-11-17T15:39:39+00:00",
       "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
       "approved_at": "2026-11-17T15:39:40+00:00"
+    },
+    "SC12_g01": {
+      "file": "media/stills/start_SC12_g01.png",
+      "sha256": "7b71121ead629b531005ca2bed7e330957fd0afeed4825d633ddb914d386bf50",
+      "prompt_sha256": "83280b4c9a71adf769e94de89f3fedef416026dc68308258bf39aea1d0085630",
+      "source": "ImageGen character and location references; open ledger below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:24:28+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:24:35+00:00"
     }
   }
 }
