@@ -15122,6 +15122,76 @@
       "registered_at": "2026-11-17T16:39:14+00:00",
       "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
       "approved_at": "2026-11-17T16:39:20+00:00"
+    },
+    "SC12_g03": {
+      "file": "media/stills/start_SC12_g03.png",
+      "sha256": "7b71121ead629b531005ca2bed7e330957fd0afeed4825d633ddb914d386bf50",
+      "prompt_sha256": "83280b4c9a71adf769e94de89f3fedef416026dc68308258bf39aea1d0085630",
+      "source": "Reviewed Eli single reused; ledger below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:42:58+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:42:58+00:00"
+    },
+    "SC12_g05": {
+      "file": "media/stills/start_SC12_g05.png",
+      "sha256": "7b71121ead629b531005ca2bed7e330957fd0afeed4825d633ddb914d386bf50",
+      "prompt_sha256": "83280b4c9a71adf769e94de89f3fedef416026dc68308258bf39aea1d0085630",
+      "source": "Reviewed Eli single reused; ledger below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:42:59+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:42:59+00:00"
+    },
+    "SC12_g07": {
+      "file": "media/stills/start_SC12_g07.png",
+      "sha256": "7b71121ead629b531005ca2bed7e330957fd0afeed4825d633ddb914d386bf50",
+      "prompt_sha256": "83280b4c9a71adf769e94de89f3fedef416026dc68308258bf39aea1d0085630",
+      "source": "Reviewed Eli single reused; ledger below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:42:59+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:42:59+00:00"
+    },
+    "SC12_g09": {
+      "file": "media/stills/start_SC12_g09.png",
+      "sha256": "7b71121ead629b531005ca2bed7e330957fd0afeed4825d633ddb914d386bf50",
+      "prompt_sha256": "83280b4c9a71adf769e94de89f3fedef416026dc68308258bf39aea1d0085630",
+      "source": "Reviewed Eli single reused; ledger below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:42:59+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:42:59+00:00"
+    },
+    "SC12_g10": {
+      "file": "media/stills/start_SC12_g10.png",
+      "sha256": "7b71121ead629b531005ca2bed7e330957fd0afeed4825d633ddb914d386bf50",
+      "prompt_sha256": "83280b4c9a71adf769e94de89f3fedef416026dc68308258bf39aea1d0085630",
+      "source": "Reviewed Eli single reused; ledger below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:42:59+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:43:00+00:00"
+    },
+    "SC12_g13": {
+      "file": "media/stills/start_SC12_g13.png",
+      "sha256": "7b71121ead629b531005ca2bed7e330957fd0afeed4825d633ddb914d386bf50",
+      "prompt_sha256": "83280b4c9a71adf769e94de89f3fedef416026dc68308258bf39aea1d0085630",
+      "source": "Reviewed Eli single reused; ledger below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:43:00+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:43:00+00:00"
+    },
+    "SC12_g15": {
+      "file": "media/stills/start_SC12_g15.png",
+      "sha256": "7b71121ead629b531005ca2bed7e330957fd0afeed4825d633ddb914d386bf50",
+      "prompt_sha256": "83280b4c9a71adf769e94de89f3fedef416026dc68308258bf39aea1d0085630",
+      "source": "Reviewed Eli single reused; ledger below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:43:00+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:43:00+00:00"
     }
   }
 }
