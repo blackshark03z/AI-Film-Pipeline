@@ -191,6 +191,23 @@ def test_a_new_failed_tile_without_a_clip_is_flow_failed(tmp_path, monkeypatch):
     assert res["reconcile_bind"]["tries"] == 1
 
 
+def test_account_warning_takes_priority_over_failed_tile(tmp_path, monkeypatch):
+    class WarningPage(_Page):
+        async def evaluate(self, js, *args):
+            if js == fs.JS_JOB_STATE:
+                return {"running": False, "failed": 1, "account_warning": True}
+            return await super().evaluate(js, *args)
+
+    async def unexpected_bind(*_args, **_kwargs):
+        raise AssertionError("account warning must stop the sender")
+
+    monkeypatch.setattr(fs, "reconcile_bind", unexpected_bind)
+    old = [_frame(0)]
+    res = asyncio.run(fs._video_wait_and_bind(WarningPage([_gallery(old)]), None, SimpleNamespace(timeout=600),
+                                              PROMPT, tmp_path / "X_t1.mp4", {}, _pre(old), 1000.0, 0))
+    assert res["result"] == "FLOW_ACCOUNT_WARNING"
+
+
 def test_a_vanished_job_times_out_after_one_last_scan(tmp_path, monkeypatch):
     # SC02_g2 v1 / SC04_g1 v1 (12:09, 13:23): no tile, no failed tile; TIMEOUT, not a wrong clip
     old = [_frame(i) for i in range(3)]

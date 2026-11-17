@@ -60,6 +60,19 @@ def test_pinned_project_picks_that_tab_only():
     assert fs.select_flow_page([Page("https://example.com")], "") is None
 
 
+def test_project_selection_rejects_lookalikes_and_detail_tabs():
+    wrong = [
+        Page(f"https://flow.google.com.example.org/project/{PROJ_A}"),
+        Page(f"https://example.org/?next={FLOW_URL}{PROJ_A}"),
+        Page(FLOW_URL + PROJ_A + "-other"),
+        Page(FLOW_URL + PROJ_A + "/edit/media"),
+    ]
+    exact = Page(FLOW_URL + PROJ_A + "/?view=grid")
+    assert fs.select_flow_page(wrong, PROJ_A) is None
+    assert fs.select_flow_page(wrong + [exact], PROJ_A) is exact
+    assert fs.flow_project_id("https://labs.google/fx/tools/flow/project/" + PROJ_A) == PROJ_A
+
+
 # ---- the send journal records the target ----------------------------------------------------------------------------
 def test_receipt_and_send_log_record_endpoint_and_project(tmp_path, monkeypatch):
     monkeypatch.setenv("AFP_FLOW_CDP", A)
@@ -137,6 +150,7 @@ def test_target_problem_rules(monkeypatch):
     monkeypatch.setenv("AFP_FLOW_PROJECT", PROJ_A)
     assert RT.flow_target_problem({"cdp": A, "project": PROJ_A}) is None
     assert "project" in RT.flow_target_problem({"cdp": A, "project": PROJ_B})
+    assert "project" in RT.flow_target_problem({"cdp": A, "project": PROJ_A + "-other"})
     assert "endpoint" in RT.flow_target_problem({"cdp": B, "project": PROJ_A})
 
 
@@ -196,6 +210,15 @@ def test_native_scan_with_no_tab_of_the_pinned_project_does_not_scan(tmp_path, m
     fake_patchright(monkeypatch, [Page(FLOW_URL + PROJ_B)], connected)
     monkeypatch.setenv("AFP_FLOW_CDP", A)
     monkeypatch.setenv("AFP_FLOW_PROJECT", PROJ_A)
+    write_receipt(tmp_path, cdp=A, project=PROJ_A)
+    results = asyncio.run(fr.run(scan_args(tmp_path)))
+    assert connected == [A] and results["SC01_g1_t1"]["result"] == "NO_FLOW_TAB"
+
+
+def test_native_scan_uses_receipt_project_when_unpinned(tmp_path, monkeypatch):
+    connected = []
+    fake_patchright(monkeypatch, [Page(FLOW_URL + PROJ_B)], connected)
+    monkeypatch.setenv("AFP_FLOW_CDP", A)
     write_receipt(tmp_path, cdp=A, project=PROJ_A)
     results = asyncio.run(fr.run(scan_args(tmp_path)))
     assert connected == [A] and results["SC01_g1_t1"]["result"] == "NO_FLOW_TAB"

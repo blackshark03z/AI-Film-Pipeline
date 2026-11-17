@@ -84,6 +84,16 @@ def test_settled_needs_ten_minutes_after_the_send_ended(tmp_path):
     assert not fr.settled(m, now=datetime(2026, 11, 9, 12, 20, 0))   # aware vs naive: no crash, not settled
 
 
+def test_account_warning_checkpoint_cannot_settle_by_gallery_absence(tmp_path):
+    from datetime import datetime
+
+    import flow_reconcile as fr
+    out = tmp_path / "X_t1.mp4"
+    fr.fs.checkpoint(out, {"result": "FLOW_ACCOUNT_WARNING", "submission_phase": "SUBMITTED",
+                           "finished": "2026-11-09T12:13:10"})
+    assert not fr.settled(out.with_suffix(".take.json"), now=datetime(2026, 11, 9, 13, 0))
+
+
 def test_negative_scan_rejects_duplicates_invalid_details_and_wrong_project():
     import flow_reconcile as fr
     home = "https://labs.google/fx/tools/flow/project/p"

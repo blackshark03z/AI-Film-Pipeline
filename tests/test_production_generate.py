@@ -448,8 +448,12 @@ def test_the_third_provider_failure_asks_for_a_restage_instead_of_a_resend(tmp_p
     assert len(runner.calls) == 1 and "auto_resend" not in third and "restage" in third["restage_needed"]
 
 
-def test_an_ambiguous_send_is_not_resent(tmp_path):
+@pytest.mark.parametrize("result", ["UNBOUND", "FLOW_ACCOUNT_WARNING"])
+def test_an_ambiguous_send_is_not_resent(tmp_path, result):
+    from film_pipeline.production.recovery import pending_receipts
+
     pkg = film(tmp_path, 100)
-    runner = ScriptedRunner(["UNBOUND", "PASSED"])
+    runner = ScriptedRunner([result, "PASSED"])
     done = live(pkg, tmp_path, runner, auto_resend=1)
     assert len(runner.calls) == 1 and "auto_resend" not in done and not _send_log(pkg)[0]["incident"]
+    assert [(p["take_id"], p["result"]) for p in pending_receipts(pkg)] == [("SC01_g1_t1", result)]

@@ -38,6 +38,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from urllib.parse import urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import flow_bind as fb  # noqa: E402
@@ -414,6 +415,7 @@ ADD_TO_PROMPT_RE = re.compile(r"^\s*(Thêm vào câu lệnh|Add to prompt)\s*$")
 FAILED_WORDS = ("Không thành công", "Unsuccessful", "Something went wrong")
 FAILED_TEXT = FAILED_WORDS[0]   # the Vietnamese wording; kept for callers that need one marker
 FAILED_JS_RE = "/" + "|".join(FAILED_WORDS) + "/g"
+ACCOUNT_WARNING = "FLOW_ACCOUNT_WARNING"
 
 
 def has_failed_text(text: str) -> bool:
@@ -423,7 +425,8 @@ def has_failed_text(text: str) -> bool:
 # Flow job state on the gallery page: a running job shows "NN%" (0-99), a rejected one "Không thành công"
 JS_JOB_STATE = r"""() => { const t = document.body.innerText;
   return {running: /^\s*\d{1,2}%\s*$/m.test(t),
-          failed: 0}; }"""
+          failed: 0,
+          account_warning: /we noticed some unusual activity/i.test(t)}; }"""
 JS_JOB_STATE = JS_JOB_STATE.replace("failed: 0", "failed: (t.match(" + FAILED_JS_RE + ") || []).length")
 
 
@@ -751,6 +754,9 @@ async def _video_wait_and_bind(page, ctx, args, prompt: str, out: Path, rec: dic
     own_id = ((pre or {}).get("own") or {}).get("media_id")
     seen: list = []
     verdict = await _wait_for_verdict(page, args, pre, t0, failed_before, wait)
+    if verdict == ACCOUNT_WARNING:
+        rec["result"] = verdict
+        return rec
     # a FAILED page still gets one bind scan: the failed tile is page-wide (Codex review 2026-11-09). P18-07: with the
     # own tile known, a page-wide failed tile proves nothing; the bind polls on until the own tile binds or fails
     deadline = t0 + args.timeout if verdict == "BIND" or own_id else 0.0
@@ -761,6 +767,9 @@ async def _video_wait_and_bind(page, ctx, args, prompt: str, out: Path, rec: dic
             rec["stray_failures"] = 1   # the failed tile was another job's: this send's own clip bound
         return rec
     rec["elapsed_s"] = round(time.time() - t0)
+    if (await page.evaluate(JS_JOB_STATE)).get("account_warning"):
+        rec["result"] = ACCOUNT_WARNING
+        return rec
     if wait.get("running"):
         # Codex 2026-11-09: a job still rendering at the deadline may yet deliver this clip; a provider-failure label
         # here would auto-resend and pay twice, so it stays an unbound charged send for P17-07 to settle later
@@ -805,6 +814,9 @@ async def _wait_for_verdict(page, args, pre: dict, t0: float, failed_before: int
         wait["polls"] += 1
         try:
             job = await page.evaluate(JS_JOB_STATE)
+            if job.get("account_warning"):
+                verdict = ACCOUNT_WARNING
+                break
             fresh = new_tiles(pre.get("signatures") or [], await gallery_signatures(page))
         except Exception:  # noqa: BLE001 - page navigating; poll again
             job, fresh = {"running": True, "failed": failed_before}, 0
@@ -1073,7 +1085,11 @@ async def run(args, before_submit=None) -> dict:
         if page is None:   # 2026-11-09 SC03_g1 t1: no Flow tab crashed here and the receipt counted as a send
             rec["result"] = "PRE_SUBMIT_ERROR NO_FLOW_TAB"
             return rec
-        rec["project"] = page.url.rsplit("/", 1)[-1][:36]
+        project_url = page.url
+        rec["project"] = flow_project_id(project_url)
+        if (await page.evaluate(JS_JOB_STATE)).get("account_warning"):
+            rec["result"] = f"PRE_SUBMIT_ERROR {ACCOUNT_WARNING}"
+            return rec
         # the click coordinates above are calibrated for 1280x720 CSS px; a GPM window of another size shifts them
         await page.set_viewport_size({"width": 1280, "height": 720})
         await page.keyboard.press("Escape")
@@ -1170,10 +1186,17 @@ async def run(args, before_submit=None) -> dict:
         box = page.locator("textarea, [contenteditable='true']").first
         # Codex 2026-11-09: re-read the failed-tile count right before the submit, so a job that failed during the
         # snapshot and composer setup is not taken for this send's failure
-        failed_before = (await page.evaluate(JS_JOB_STATE))["failed"]
         await box.click()
         await box.fill(prompt)
         await page.wait_for_timeout(500)
+        if flow_project_id(page.url) != rec["project"]:
+            rec["result"] = "PRE_SUBMIT_ERROR FLOW_TARGET_CHANGED"
+            return rec
+        job = await page.evaluate(JS_JOB_STATE)
+        if job.get("account_warning"):
+            rec["result"] = f"PRE_SUBMIT_ERROR {ACCOUNT_WARNING}"
+            return rec
+        failed_before = job["failed"]
         if before_submit is not None:
             before_submit(rec)
         # submitting_at: a death between Enter and the SUBMITTED checkpoint still leaves a send time to settle from
@@ -1183,6 +1206,9 @@ async def run(args, before_submit=None) -> dict:
         await page.keyboard.press("Enter")
         t0 = time.time()
         await page.wait_for_timeout(8000)
+        if (await page.evaluate(JS_JOB_STATE)).get("account_warning"):
+            rec["result"] = ACCOUNT_WARNING
+            return rec
         left = await box.evaluate("e => (e.value ?? e.innerText) || ''")
         if prompt[:40] in left:
             rec["result"] = "SUBMIT_UNCONFIRMED"
@@ -1212,6 +1238,9 @@ async def run(args, before_submit=None) -> dict:
             pending = await page.evaluate(
                 "(p) => document.body.innerText.includes(p)", probe)
             job = await page.evaluate(JS_JOB_STATE)
+            if job.get("account_warning"):
+                rec["result"] = ACCOUNT_WARNING
+                return rec
             if job["failed"] > failed_before:
                 # a failed tile is page-wide: it may be an older job. Stop waiting, but only call this send
                 # FLOW_FAILED when no new clip can be bound to its prompt (Codex review 2026-11-09)
@@ -1350,12 +1379,24 @@ def flow_project() -> str:
     return _runtime().flow_project()
 
 
+def flow_project_id(url: str) -> str:
+    parsed = urlsplit(url)
+    if parsed.scheme != "https":
+        return ""
+    prefix = {"flow.google.com": "/project/", "labs.google": "/fx/tools/flow/project/"}.get(parsed.netloc)
+    if not prefix or not parsed.path.startswith(prefix):
+        return ""
+    project = parsed.path[len(prefix):].removesuffix("/")
+    return project if re.fullmatch(r"[a-zA-Z0-9-]+", project) else ""
+
+
 def select_flow_page(pages, project: str = ""):
-    """The Flow tab to drive: with a pinned project only a tab of that project, else the first Flow tab."""
-    flow = [p for p in pages if "flow.google" in p.url]
-    if not project:
-        return flow[0] if flow else None
-    return next((p for p in flow if f"/project/{project}" in p.url), None)
+    """Choose a Flow project composer, pinned to the exact project when configured."""
+    for page in pages:
+        found = flow_project_id(page.url)
+        if found and (not project or found == project):
+            return page
+    return None
 
 
 def checkpoint(out: Path, record: dict) -> None:

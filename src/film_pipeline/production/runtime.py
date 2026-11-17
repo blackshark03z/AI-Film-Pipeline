@@ -65,8 +65,8 @@ def flow_target_problem(receipt: dict) -> str | None:
     if sent != flow_cdp():
         return f"FLOW_TARGET_MISMATCH: the send used endpoint {sent}, this process drives {flow_cdp()}"
     pinned, was = flow_project(), str(receipt.get("project") or "")
-    if pinned and was and pinned[:36] != was[:36]:
-        return f"FLOW_TARGET_MISMATCH: the send used project {was[:36]}, this process is pinned to {pinned[:36]}"
+    if pinned and was and pinned != was:
+        return f"FLOW_TARGET_MISMATCH: the send used project {was}, this process is pinned to {pinned}"
     return None
 
 

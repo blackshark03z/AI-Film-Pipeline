@@ -65,6 +65,8 @@ def settled(manifest: Path, now: datetime | None = None) -> bool:
     """True when the send's take manifest says it finished SETTLE_S or more ago (film05: Flow jobs that vanished)."""
     try:
         record = json.loads(manifest.read_text(encoding="utf-8"))
+        if record.get("result") == fs.ACCOUNT_WARNING:
+            return False   # gallery absence cannot clear a stop for an account warning
         sent = record.get("submission_phase") in {"SUBMITTING", "SUBMITTED"}   # PREPARING never pressed Enter
         stamp = record.get("finished") or (record.get("submitted_at") or record.get("submitting_at") if sent else None)
         finished = datetime.fromisoformat(stamp)
@@ -199,7 +201,9 @@ async def run(args) -> dict[str, dict]:
     out_dir.mkdir(parents=True, exist_ok=True)
     known = known_ids(manifests, out_dir, frozenset(args.ids))
     results: dict[str, dict] = {}
-    todo: dict[str, str] = {}
+    todo: dict[str, tuple[str, dict]] = {}
+    projects: set[str] = set()
+    pinned = fs.flow_project()
     for rid in args.ids:
         receipt, prompt, problem = load_receipt(receipts, rid, prompts)
         wrong_target = fs._runtime().flow_target_problem(receipt)   # another profile / project: never scan it here
@@ -208,25 +212,35 @@ async def run(args) -> dict[str, dict]:
         elif problem:
             results[rid] = {"result": "NO_PROMPT", "why": problem}
         else:
-            todo[rid] = prompt
+            native = manifests / f"{rid}.take.json"
+            context = json.loads(native.read_text(encoding="utf-8")) if native.is_file() else {}
+            targets = {p for p in (pinned, receipt.get("project"), context.get("project")) if p}
+            if len(targets) > 1:
+                results[rid] = {"result": "WRONG_PROJECT"}
+                continue
+            projects.update(targets)
+            todo[rid] = (prompt, context)
+    if len(projects) > 1:
+        raise ValueError("Flow reconciliation needs one project per call")
     if todo:
         pw = await async_playwright().start()
         try:
             browser = await pw.chromium.connect_over_cdp(fs.cdp_endpoint(), timeout=30000)
             ctx = browser.contexts[0]
-            page = fs.select_flow_page(ctx.pages, fs.flow_project())
+            page = fs.select_flow_page(ctx.pages, next(iter(projects), pinned))
             if page is None:   # no tab of the pinned project on this profile: nothing is scanned
                 for rid in todo:
                     results[rid] = {"result": "NO_FLOW_TAB"}
             else:
+                home = page.url
+                project = fs.flow_project_id(home)
                 await page.set_viewport_size({"width": 1280, "height": 720})
                 await page.keyboard.press("Escape")
                 details = await scan_gallery(page, args.scan)   # once, shared by every receipt
-                exhausted = await confirm_exhausted(page, details, args.scan, page.url)
-                for rid, prompt in todo.items():
+                exhausted = await confirm_exhausted(page, details, args.scan, home)
+                for rid, (prompt, context) in todo.items():
                     native = manifests / f"{rid}.take.json"
-                    context = json.loads(native.read_text(encoding="utf-8")) if native.is_file() else {}
-                    if context.get("project") and f"/project/{context['project']}" not in page.url:
+                    if fs.flow_project_id(page.url) != project:
                         results[rid] = {"result": "WRONG_PROJECT"}
                         continue
                     res = bind_receipt(prompt, details, known, context)

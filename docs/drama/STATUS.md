@@ -1,3 +1,11 @@
+# 2026-11-17 — Codex resumes Film08 Flow engineering
+
+- Active source: `AFP-stable`, `feature/drama-preprod-p0`, taken over at `9b74093d`; last accepted take `SC08_g09_t1`. The October `claude/flow-max-causal-forensics-001` branch is historical.
+- Local film status: 184/300 accepted (41 rejected); 116 missing, starting with `SC08_g10`; booked 1,350 credits against the approved 3,210 cap. No unresolved local intent. Current Flow account balance and in-flight UI state were not checked.
+- Rebuilt `media/plan` from current package inputs and preserved the previous directory. Only `SC09_g24` changed prompt and storyboard approval; the accepted take count and Gate 4's 116 missing entries are unchanged. Offline generate dry-run for `SC08_g10`: approved start still, 6-credit quote, no blockers. For `SC09_g24`, the new board is pending, its still is missing, and `SC09_g23` must be accepted before the handoff can bind.
+- Flow sender/reconciler check exact project identity. An observed account warning keeps a submitted attempt pending and prevents automatic resend; a negative gallery scan cannot clear that stop. Offline scope only; `OWNER_GO_LIVE` stays `NO`. Before a live continuation, check the already approved project/account in the normal Flow UI for an in-flight job, warnings and balance. Keep the existing Omni Flash 360p, single output and no-JS conditions for the Film08 run.
+- Local custody and branch inventory: `D:/AI FILM MAKER/_exports/CODEX_BRANCH_AUDIT_20261117/`.
+
 # film08 "Chain of Custody" — pilot SC01-SC02 50/50 accepted (2026-11-14 17:30; latest under "Update 07:50")
 
 Goal: second accepted 25-30 min film for P20 M4. Pilot SC01-SC02 runs in session "film08 pilot SC01–SC02"
