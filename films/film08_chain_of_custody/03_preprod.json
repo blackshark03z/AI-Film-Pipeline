@@ -15052,6 +15052,46 @@
       "registered_at": "2026-11-17T13:30:42+00:00",
       "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
       "approved_at": "2026-11-17T13:30:43+00:00"
+    },
+    "SC09_g18": {
+      "file": "media/stills/start_SC09_g18.png",
+      "sha256": "da19d1af54ef1d4f76e1159083949d454a62cf3f75eb9584753134c3bbb0908c",
+      "prompt_sha256": "e48e55ef8dc40210d9bce188b18bff58e38623896bf25832a5ef8f39d7551598",
+      "source": "ChatGPT ImageGen T28 edit of T27, character and layout reviewed, right hand on sealed packet",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T15:37:21+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T15:37:22+00:00"
+    },
+    "SC09_g19": {
+      "file": "media/stills/start_SC09_g19.jpg",
+      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "prompt_sha256": "d3eef7942371945ae50c44151c9233e523e473282ebf619c00636ea5917de289",
+      "source": "Reuse reviewed Naomi close single from SC08_g12; same look, room, rightward eyeline and closed ledger state",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T15:39:36+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T15:39:36+00:00"
+    },
+    "SC09_g25": {
+      "file": "media/stills/start_SC09_g25.jpg",
+      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "prompt_sha256": "d3eef7942371945ae50c44151c9233e523e473282ebf619c00636ea5917de289",
+      "source": "Reuse reviewed Naomi close single from SC08_g12; same look, room, rightward eyeline and closed ledger state",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T15:39:37+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T15:39:38+00:00"
+    },
+    "SC10_g02": {
+      "file": "media/stills/start_SC10_g02.jpg",
+      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "prompt_sha256": "d3eef7942371945ae50c44151c9233e523e473282ebf619c00636ea5917de289",
+      "source": "Reuse reviewed Naomi close single from SC08_g12; same look, room, rightward eyeline and closed ledger state",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T15:39:39+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T15:39:40+00:00"
     }
   }
 }
