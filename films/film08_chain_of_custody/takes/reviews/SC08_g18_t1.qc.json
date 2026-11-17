@@ -1,0 +1,76 @@
+{
+  "take_id": "SC08_g18_t1",
+  "generation_id": "SC08_g18",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis addresses Eli about fear and performance; Whisper transcribes the complete line.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1008": "Hollis looks toward Eli at screen-right, but Eli enters as a visible partial face at the right edge; the listener is required to stay outside the frame."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Speaker appearance and clothing match the approved start frame.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "Hollis looks toward Eli at screen-right, but Eli enters as a visible partial face at the right edge; the listener is required to stay outside the frame.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:ELI": "Hollis looks toward Eli at screen-right, but Eli enters as a visible partial face at the right edge; the listener is required to stay outside the frame.",
+        "REL_GAZE": "Hollis looks toward Eli at screen-right, but Eli enters as a visible partial face at the right edge; the listener is required to stay outside the frame.",
+        "REL_BARRIER": "Hollis looks toward Eli at screen-right, but Eli enters as a visible partial face at the right edge; the listener is required to stay outside the frame."
+      }
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "Hollis holds the packet but the red seal faces the camera, while the prompt places the seal toward him.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps, 144 frames and AAC decoded to EOF.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "STAGING",
+  "cause_note": "Restage single-person framing so the listener never enters the image; verify the packet seal angle for SC08_g18.",
+  "required_answers": [
+    "REL_ADDRESS:1008",
+    "REL_LISTENER:ELI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "cf68ef207e01d8810b10dc13c2b5df3e69eddc4b0e66a70fd9a40470cf2990ee"
+}

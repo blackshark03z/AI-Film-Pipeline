@@ -1,0 +1,76 @@
+{
+  "take_id": "SC09_g03_t1",
+  "generation_id": "SC09_g03",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Naomi says she wants no handover and asks Hollis to stop; Whisper transcribes the complete line.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1063": "Naomi looks toward Hollis at screen-right, but the back of his head is visible at the right edge throughout; the listener is required to stay outside the frame."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Speaker appearance and clothing match the approved start frame.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "Naomi looks toward Hollis at screen-right, but the back of his head is visible at the right edge throughout; the listener is required to stay outside the frame.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:HOLLIS": "Naomi looks toward Hollis at screen-right, but the back of his head is visible at the right edge throughout; the listener is required to stay outside the frame.",
+        "REL_GAZE": "Naomi looks toward Hollis at screen-right, but the back of his head is visible at the right edge throughout; the listener is required to stay outside the frame.",
+        "REL_BARRIER": "Naomi looks toward Hollis at screen-right, but the back of his head is visible at the right edge throughout; the listener is required to stay outside the frame."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Naomi speaks and holds her gaze; ledger remains at the edge of frame.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps, 144 frames and AAC decoded to EOF.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "STAGING",
+  "cause_note": "Restage single-person framing so the listener never enters the image; verify the packet seal angle for SC08_g18.",
+  "required_answers": [
+    "REL_ADDRESS:1063",
+    "REL_LISTENER:HOLLIS",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "0f301fef84c8195519b1e5d56cef73a05f0e2d4807c66de6169cfea86b61cc22"
+}
