@@ -1,5 +1,7 @@
 # 2026-11-17 — Continue Film08 toward 300 accepted takes
 
+- `SC08_g15_t1` was accepted after frame and local transcription checks; the booked debit was 6 credits, `khoicaesar02` 309 → 303. Count 190/300 accepted, no pending sends. `SC08_g16` is next.
+- Owner requested parallel use of the four named Flow accounts. A new project was created on `khoicaesar03`, but it opens the newer Agent composer; its start-frame, duration, resolution and per-send quote still need confirmation before a production send. Project ID `1f023648-69d2-421f-9bbb-3ee32198b25a`. No generation was sent on that account.
 - Owner requested automatic continuation to 300 accepted takes. `SC08_g11_t1` passed visual and dialogue QC. Flow debited 6 credits on `khoicaesar02` (333 → 327). Retain at least 5.75 s of the original in the edit because the final word ends near 5.56 s.
 - `SC08_g12_t1`, `SC08_g13_t1` and `SC08_g14_t1` passed sequential-frame and local transcription checks. Flow balance 327 → 321 → 315 → 309. Count is 189/300 accepted; `SC08_g15` is next. The T27 and T28 start images were reviewed and registered for `SC08_g24` and `SC09_g18`; the approved Naomi single was reused for `SC09_g19`, `SC09_g25` and `SC10_g02`.
 - The remaining run includes 78 missing start-image registrations and the pending board for `SC09_g24`. Existing approved shot and account limits apply. Audit files and the CDP operator script are in `D:/AI FILM MAKER/_exports/FILM08_CONTINUE_20261117/`.
