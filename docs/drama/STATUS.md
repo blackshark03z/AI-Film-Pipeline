@@ -1,5 +1,7 @@
 # 2026-11-17 — Continue Film08 toward 300 accepted takes
 
+- Offline compared the identical Naomi start-state prompts for SC11_g03, g05, g06, g08, g21 and g23, then registered and approved the previously reviewed SC08_g17 single for each. Counter props lie outside the close crop and the output must still be checked for listener intrusion. No live sends or credits; the repeated-defect stop remains in force.
+
 - Offline prepared T42_SC11_g02_start.png from character and room references, reviewed the gaze and single framing, then registered and approved it for SC11_g02, g04, g07, g20 and g22 after checking their identical initial states. All counter props are outside the still crop and must be checked in the resulting video and adjacent coverage; still approvals do not clear the recurring listener intrusion or the unattended-send stop. No Flow credits used.
 
 - Offline prepared and individually registered/approved the reviewed SC12_g01 Eli still for SC12_g03, g05, g07, g09, g10, g13 and g15 after comparing each planned initial state and eyeline. Ledger/pen are outside the close crop, not visually verified in the still. SC12_g01 generated listener intrusion despite a clean start and is usable only with its recorded crop; these still approvals do not qualify future renders or override the repeated-defect stop. No Flow credits used.

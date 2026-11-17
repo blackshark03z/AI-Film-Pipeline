@@ -15242,6 +15242,66 @@
       "registered_at": "2026-11-17T16:44:21+00:00",
       "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
       "approved_at": "2026-11-17T16:44:21+00:00"
+    },
+    "SC11_g03": {
+      "file": "media/stills/start_SC11_g03.jpg",
+      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "prompt_sha256": "286432b6adb0baa39891e9e1904109a925543829aa0d151889dc4c3c9e9b6384",
+      "source": "Reviewed Naomi single reused; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:51+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:52+00:00"
+    },
+    "SC11_g05": {
+      "file": "media/stills/start_SC11_g05.jpg",
+      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "prompt_sha256": "286432b6adb0baa39891e9e1904109a925543829aa0d151889dc4c3c9e9b6384",
+      "source": "Reviewed Naomi single reused; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:52+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:52+00:00"
+    },
+    "SC11_g06": {
+      "file": "media/stills/start_SC11_g06.jpg",
+      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "prompt_sha256": "286432b6adb0baa39891e9e1904109a925543829aa0d151889dc4c3c9e9b6384",
+      "source": "Reviewed Naomi single reused; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:52+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:52+00:00"
+    },
+    "SC11_g08": {
+      "file": "media/stills/start_SC11_g08.jpg",
+      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "prompt_sha256": "286432b6adb0baa39891e9e1904109a925543829aa0d151889dc4c3c9e9b6384",
+      "source": "Reviewed Naomi single reused; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:52+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:52+00:00"
+    },
+    "SC11_g21": {
+      "file": "media/stills/start_SC11_g21.jpg",
+      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "prompt_sha256": "286432b6adb0baa39891e9e1904109a925543829aa0d151889dc4c3c9e9b6384",
+      "source": "Reviewed Naomi single reused; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:53+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:53+00:00"
+    },
+    "SC11_g23": {
+      "file": "media/stills/start_SC11_g23.jpg",
+      "sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+      "prompt_sha256": "286432b6adb0baa39891e9e1904109a925543829aa0d151889dc4c3c9e9b6384",
+      "source": "Reviewed Naomi single reused; counter below crop",
+      "credits": 0.0,
+      "registered_at": "2026-11-17T16:44:53+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T16:44:53+00:00"
     }
   }
 }
