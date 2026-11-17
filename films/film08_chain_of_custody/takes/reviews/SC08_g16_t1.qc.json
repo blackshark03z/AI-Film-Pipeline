@@ -1,0 +1,142 @@
+{
+  "take_id": "SC08_g16_t1",
+  "generation_id": "SC08_g16",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Eli asks about merely looking and putting it back.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:998": "Eli looks screen-left and addresses Naomi off frame; no listener visible."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Eli matches approved still in face, hair and uniform.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Eli looks left, no other person enters frame.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "Eli looks screen-left and addresses Naomi off frame; no listener visible.",
+        "REL_GAZE": "Eli looks screen-left and addresses Naomi off frame; no listener visible.",
+        "REL_BARRIER": "Eli looks screen-left and addresses Naomi off frame; no listener visible."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "144 ordered frames show the spoken question and hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Sequential face and mouth motion reviewed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static eye-level close single.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Room and uniform are consistent, no overlay text.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "Known sparkle mark.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Continuous six-second shot, speech ends at 4.42 seconds.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Whisper transcribed the complete scripted line.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Speech timing and ordered frames show mouth motion during the line.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames with AAC decoded to EOF.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:998",
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "8a285cce18678320a6c08c633a7aaf97ccc37687fdb05dcfdb893682870243c7"
+}

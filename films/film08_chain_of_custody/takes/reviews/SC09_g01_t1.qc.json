@@ -1,0 +1,142 @@
+{
+  "take_id": "SC09_g01_t1",
+  "generation_id": "SC09_g01",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis accuses Naomi of wanting him afraid.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1053": "Hollis addresses Naomi off frame to camera-left; no listener visible."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis matches approved still in face and uniform.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis looks left, no other person enters frame.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "Hollis addresses Naomi off frame to camera-left; no listener visible.",
+        "REL_GAZE": "Hollis addresses Naomi off frame to camera-left; no listener visible.",
+        "REL_BARRIER": "Hollis addresses Naomi off frame to camera-left; no listener visible."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "144 ordered frames show one line and hold, hand on packet.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Sequential face and mouth motion reviewed.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static eye-level single.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Room, packet and uniform consistent.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "Known sparkle mark.",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Continuous six-second shot, speech ends 4.23s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Whisper transcribed the scripted words.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Speech timing and ordered frames show mouth motion during the line.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames with AAC decoded to EOF.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1053",
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "6f10e15fc9ef2e5acaf723b6617ffbf8208e78b490a0a322fbcfe190abb5bc04"
+}

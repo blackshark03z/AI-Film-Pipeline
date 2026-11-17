@@ -1,5 +1,7 @@
 # 2026-11-17 — Continue Film08 toward 300 accepted takes
 
+- `SC08_g16_t1` and `SC09_g01_t1` passed frame and transcription review. Balances: `khoicaesar02` 303 → 297 and `khoicaesar03` 1050 → 1044. The second account's new Flow Agent project was switched to the standard frame composer and verified at Omni 1.2 Flash / 360p / 6 s / x1, then its first take was downloaded and reconciled by exact prompt. 192/300 accepted; `SC08_g17` and `SC09_g02` are next.
+- The single package currently blocks a new submission while any send is unresolved. Parallel sends need isolated production packages or a targeted concurrency-safe change to that gate, the global budget and shared journal. Until then, submit and reconcile one at a time.
 - `SC08_g15_t1` was accepted after frame and local transcription checks; the booked debit was 6 credits, `khoicaesar02` 309 → 303. Count 190/300 accepted, no pending sends. `SC08_g16` is next.
 - Owner requested parallel use of the four named Flow accounts. A new project was created on `khoicaesar03`, but it opens the newer Agent composer; its start-frame, duration, resolution and per-send quote still need confirmation before a production send. Project ID `1f023648-69d2-421f-9bbb-3ee32198b25a`. No generation was sent on that account.
 - Owner requested automatic continuation to 300 accepted takes. `SC08_g11_t1` passed visual and dialogue QC. Flow debited 6 credits on `khoicaesar02` (333 → 327). Retain at least 5.75 s of the original in the edit because the final word ends near 5.56 s.
