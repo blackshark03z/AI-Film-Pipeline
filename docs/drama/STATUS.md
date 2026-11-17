@@ -1,3 +1,9 @@
+# 2026-11-17 — Film08 SC08_g10 retake accepted
+
+- `SC08_g10` v2 keeps the same approved start still and restages the action so Hollis tips the packet toward his chest and keeps the plain kraft face toward the camera. The new storyboard fingerprint was reviewed against the storyboard frame and start image.
+- One CDP send on the same Film08 project in `khoicaesar02` yielded `SC08_g10_t2`. Flow debited 6 credits (339 → 333). The exact v2 prompt matched the new detail page and the original 640×360 clip decoded through all 144 frames. The form stays out of view. Local VAD and Whisper found no speech.
+- Film08 now has 185 accepted, 42 rejected, 1,362 credits booked and zero pending sends. `SC08_g11` is next and passed local preflight. `OWNER_GO_LIVE` is back to `NO`. Evidence is in `D:/AI FILM MAKER/_exports/FILM08_SC08_g10_v2_20261117/`.
+
 # 2026-11-17 — Film08 SC08_g10 one-take check
 
 - One CDP submit on the Film08 project in `khoicaesar02` used the approved start still and exact plan prompt. Flow quoted 6 credits for Omni 1.2 Flash, 6 s, 360p, 16:9, x1. The account balance changed from 345 to 339 after the output completed.
