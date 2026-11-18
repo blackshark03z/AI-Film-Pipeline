@@ -186,7 +186,7 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     prompt_file = plan_out / "prompts" / f"{generation_id}.txt"
     prompt = prompt_file.read_text(encoding="utf-8").strip()
 
-    if decl.previous_generation_id:
+    if decl.previous_generation_id and not decl.independent_still:
         prev = next(g for g in shots.generations if g.generation_id == decl.previous_generation_id)
         accepted = [t for t in log.for_generation(prev.generation_id)
                     if t.status == "ACCEPTED" and t.shot_version == prev.version]
@@ -195,6 +195,8 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
                                      f"{prev.generation_id} v{prev.version} has no ACCEPTED take; its end frame is "
                                      f"this shot's start frame"))
         start_source = f"end frame of {accepted[-1].take_id}" if accepted else f"end frame of {prev.generation_id}"
+    elif decl.independent_still:
+        start_source = "approved setup-anchor start still"
     else:
         start_source = "approved start still"
     still = _start_still(pkg, generation_id, stills_dir, blockers)
