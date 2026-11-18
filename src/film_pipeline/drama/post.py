@@ -25,7 +25,7 @@ from pathlib import Path
 from pydantic import Field
 
 from ..core import ContractModel
-from ..production.ffjoin import media_timeout, run_ffmpeg
+from ..production.ffjoin import media_timeout, run_ffmpeg, video_encode_args
 
 W, H, FPS = 1280, 720, 24
 FONT = "C:/Windows/Fonts/arial.ttf"
@@ -267,7 +267,7 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
              label_text: str = "AI-generated",
              fonts: Fonts = DEFAULT_FONTS,
              overlays: list[Overlay] = (), _body_only: bool = False,
-             _edge_fades: bool = True) -> Path:
+             _edge_fades: bool = True, hwaccel: bool | None = None) -> Path:
     """title card + graded clips + end card, AI label over the body,
     subtitle overlays for ``cues`` and faded ``overlays`` (both
     clip-relative, matched to clips by stem). Audio is edge-faded per clip
@@ -342,11 +342,11 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
             last = f"p{j}"
         graph_file = cards / "assemble.filter"
         graph_file.write_text(";".join(fl), encoding="utf-8")
+        vcodec_args, _ = video_encode_args("master", hwaccel=hwaccel)
         run_ffmpeg(["ffmpeg", "-v", "error", "-y", *inputs,
                     "-/filter_complex", str(graph_file),
                     "-map", f"[{last}]", "-map", "[aout]",
-                    "-c:v", "libx264", "-crf", "18",
-                    "-preset", "medium", "-pix_fmt", "yuv420p",
+                    *vcodec_args,
                     *( ["-c:a", "pcm_s16le"] if _body_only else ["-c:a", "aac", "-b:a", "192k"] ),
                     "-movflags", "+faststart", str(out)],
                    timeout_s=media_timeout(body_end + (0.0 if _body_only else end_s)))

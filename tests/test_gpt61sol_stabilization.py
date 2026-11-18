@@ -248,6 +248,7 @@ def test_p1_04_05_deliver_versions_binding_and_title_card_pixel_check(tmp_path):
     pkg = load_package(root)
     header = json.loads((root / "film.json").read_text(encoding="utf-8"))
     header["disclosure"] = {"ai_label": "title_card"}
+    header["portrait_9x16"] = True
     (root / "film.json").write_text(json.dumps(header, indent=2), encoding="utf-8")
 
     shots = pkg.typed["shots"].generations

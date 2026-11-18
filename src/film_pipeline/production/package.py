@@ -83,6 +83,7 @@ class FilmHeader(ContractModel):
     profile: Profile
     language: str = "vi"
     aspect: str = "16:9"
+    portrait_9x16: bool = False
     fps: int = Field(default=24, gt=0)
     resolution: str = "1280x720"
     generation_s: int = Field(default=8, gt=0)
@@ -200,3 +201,19 @@ def save_header(root: str | Path, header: FilmHeader) -> Path:
     path.write_text(json.dumps(header.model_dump(mode="json"), ensure_ascii=False, indent=2) + "\n",
                     encoding="utf-8", newline="\n")
     return path
+
+
+def wants_portrait(pkg_or_root: Any) -> bool:
+    """True when a package opts into 9:16 portrait delivery; mock roots without film.json keep legacy behavior."""
+    header = getattr(pkg_or_root, "header", None)
+    if header is not None and hasattr(header, "portrait_9x16"):
+        return bool(header.portrait_9x16)
+    root = Path(pkg_or_root.root if hasattr(pkg_or_root, "root") else pkg_or_root)
+    header_path = root / "film.json"
+    if not header_path.is_file():
+        return True
+    try:
+        data = json.loads(header_path.read_text(encoding="utf-8"))
+        return bool(data.get("portrait_9x16", False)) if isinstance(data, dict) else False
+    except (OSError, ValueError):
+        return False

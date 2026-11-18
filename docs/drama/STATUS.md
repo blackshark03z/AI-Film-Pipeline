@@ -1,4 +1,4 @@
-# 2026-11-18 — Film08 Chain of Custody Completed (300/300 Accepted, 16:9 & 9:16 Delivered, Gate 6 OWNER_PENDING) + Phase 2/3/4 Daily-Production Stabilization
+# 2026-11-18 — Film08 Chain of Custody Completed (300/300 Accepted, 16:9 & 9:16 Delivered, Gate 6 OWNER_PENDING) + Phase 2/3/4 Daily-Production Stabilization & Speed Upgrade
 
 - **Film08 Production & Delivery (`98535367`, P20 M4 Candidate):**
   - Eliminated off-frame listener intrusion root cause via opt-in `de_personify_off_frame` & `interperson_no_touch_ids` (0 changes to the 197 previously `ACCEPTED` prompt SHA-256s; verified `SC09_g03` v3 & `SC12_g02` v2 clean on right edge without cropping Gemini sparkle corner).
@@ -11,10 +11,15 @@
   - Closed the final `GAP` in [CATEGORY_COVERAGE_168.md](../production/CATEGORY_COVERAGE_168.md) (`110 Foley` / `111 Sound effects` via `assets/sfx_catalog.json` + `production/foley.py` `GENERATED_OFFLINE`), added `transition_alignment_issues` (`edit.py`), and added R44-informed assist-only `dailies_triage.py` (`film.py triage`, never bypasses human QC).
   - Ported `muse_gateway.py` (`5d981c34`) and opt-in `film_package_export` + `post_engine.py` (`eceaa135`), wrote [THE_SPARE_JACKET_ASR_REVIEW.md](../production/THE_SPARE_JACKET_ASR_REVIEW.md) (`25` `REVIEW_REQUIRED` lines), and [WORKTREE_CONSOLIDATION_MANIFEST.md](../production/WORKTREE_CONSOLIDATION_MANIFEST.md).
 - **Phase 3 Agentic Filmmaking v2:** Authored [AGENTIC_FILMMAKING_UPGRADE_RFC.md](../architecture/AGENTIC_FILMMAKING_UPGRADE_RFC.md) and implemented `src/film_pipeline/agentic/` (`WaveDAGScheduler`, `AccountLeasePool` SQLite WAL, `PreSendCritic`, `CausalRepairRouter`, `SceneIncrementalConformer`, `CapabilityRouter`) + read-only `film.py agentic-plan`.
-- **Phase 4 `gpt-6.1-sol` Audit, Remediation & Daily-Production Stabilization:**
+- **Phase 4 `gpt-6.1-sol` Audit, Remediation & Daily-Production Stabilization (`bb3f7c5`):**
   - Completed independent read-only `codex` CLI (`gpt-6.1-sol`) audit ([CODEX_GPT61SOL_PIPELINE_REVIEW_20261118.md](../production/CODEX_GPT61SOL_PIPELINE_REVIEW_20261118.md), session `01a1ed76-055f-77e2-8c1a-8a15b2cff43e`, initial verdict `FIX_FIRST`: `0 P0`, `12 P1`, `8 P2`).
   - Remediated all `20 / 20` findings (`P1 #1–#12`, `P2 #13–#20`) plus multi-account CDP endpoint concurrency locking (`composer_lock(cdp_endpoint)` + short `film_lock`), FFmpeg/ffprobe timeout & silent `loudnorm` guards, corrupt JSON gate guards, packaged resources (`production/data/sfx_catalog.json`, `film_package_export/film_package.v1.schema.json`, `providers/_flow_ui/*.py`), installable `afp-film` CLI (`film_pipeline.cli:main` + `doctor --operation ...`), and [DAILY_PRODUCTION_RUNBOOK.md](../production/DAILY_PRODUCTION_RUNBOOK.md).
   - Verified full unfiltered test suite (`2514 passed, 205 skipped, 0 failed`), isolated outside-checkout wheel qualification (`ai_film_pipeline-0.0.0-py3-none-any.whl`, `afp-film doctor --operation send` exit `0`), and untouched custody of delivered archives (`film06`, `film07`, `film08`).
+- **Phase 5 `16:9`-Only Default Delivery & End-to-End Speed Upgrade:**
+  - Switched `9:16` portrait rendering/packaging to opt-in (`FilmHeader.portrait_9x16: bool = False`, `wants_portrait()`, `--portrait` / `--no-portrait` flags on `versions`, `deliver`, `finish`; `titles`/`finish` skip `--clean-copy` double 16:9 render, `portrait_focus`, and `*_9x16.mp4` by default while preserving `film06`/`07`/`08` archive custody).
+  - Parallelized chunk FFmpeg rendering across workers (`ffjoin.render_workers` default `4`, `--jobs N` / `AFP_RENDER_JOBS`, thread-safe `render_cache.save`), added second-pass `assemble()` skip for unannotated fine chunks, and added opt-in GPU `h264_nvenc` acceleration (`--hwaccel` / `AFP_HWACCEL`, confirmed `"nvenc_available": true`).
+  - Added exact-hash start-still auto-binding (`afp-film stills --bind-matching --by <reviewer>`), Setup-Anchor DAG chain flattening (`ShotDecl.independent_still`, `afp-film setup-anchors --max-depth 4 --apply`, `agentic-plan --lookahead N`), and self-contained local HTML Batch Dailies Reviewer (`production/review_ui.py`, `afp-film review-ui --triage` + batch list `afp-film review --ingest`).
+  - Verified `4/4 PASS` in `test_production_speed_and_16x9_default.py` and **`163 passed, 0 failed`** across the 14-file production/delivery/edit/agentic regression suite plus `afp-film doctor --operation send` (`"ok": true`).
 
 ---
 

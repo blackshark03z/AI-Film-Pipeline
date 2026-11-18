@@ -120,8 +120,8 @@ class PreSendCritic:
                         "detail": "prompt contains 'No touching.' alongside prop-handling choreography; consider interperson_no_touch_ids",
                     })
 
-            # 3. Start-still approval & aspect ratio check for chain heads
-            if not decl.previous_generation_id:
+            # 3. Start-still approval & aspect ratio check for chain heads & setup-anchor shots
+            if not decl.previous_generation_id or getattr(decl, "independent_still", False):
                 st_state, st_reason = S.state_of(pkg, gid, still_prompt_map.get(gid, ""))
                 if st_state != "APPROVED":
                     findings.append({

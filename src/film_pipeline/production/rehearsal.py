@@ -138,7 +138,7 @@ def _review_sheet(root: Path, film_id: str, take_id: str, gid: str) -> dict[str,
 def rehearse(src: Path, dest: Path, *, stop_on_fail: bool = True) -> dict[str, Any]:
     """Copy *src* to *dest* (never touched afterwards: *src* stays as it is) and run the whole chain on the copy."""
     from film_pipeline.production.generate import generate
-    from film_pipeline.production.package import load_package
+    from film_pipeline.production.package import load_package, wants_portrait
     src, dest = Path(src).resolve(), Path(dest).resolve()
     if dest.exists() and any(dest.iterdir()):
         raise ValueError(f"{dest} is not empty; a rehearsal needs a fresh directory")
@@ -199,15 +199,18 @@ def rehearse(src: Path, dest: Path, *, stop_on_fail: bool = True) -> dict[str, A
     log.manual.append("generators.json written by the rehearsal (the real file names the provider and model)")
     cut_dir = dest / "media" / "cut"
     gen = str(dest / "generators.json")
+    use_portrait = wants_portrait(dest)
+    portrait_flag = "--portrait" if use_portrait else "--no-portrait"
     chain: list[tuple[str, list[str]]] = [
         ("cut", ["cut", "--film", film, "--render", "--out", str(cut_dir / "cut.mp4")]),
         ("lock", ["lock", "--film", film, "--lock", "--by", BOT, "--reason", STAMP]),
         ("grade", ["grade", "--film", film, "--render", "--out", str(cut_dir / "graded.mp4")]),
-        ("titles", ["titles", "--film", film, "--generators-file", gen, "--render", "--color", "--clean-copy", "--out", str(cut_dir / "titled_cut.mp4")]),
+        ("titles", ["titles", "--film", film, "--generators-file", gen, "--render", "--color",
+                    *( ["--clean-copy"] if use_portrait else [] ), "--out", str(cut_dir / "titled_cut.mp4")]),
         ("mix", ["mix", "--film", film, "--cut", str(cut_dir / "titled_cut.mp4"), "--out", str(cut_dir / "mixed.mp4")]),
         ("mastercheck", ["mastercheck", "--film", film, "--cut-report", str(cut_dir / "titled_cut.cut.json")]),
-        ("versions", ["versions", "--film", film, "--cut-report", str(cut_dir / "titled_cut.cut.json"), "--generators-file", gen]),
-        ("deliver", ["deliver", "--film", film, "--cut-report", str(cut_dir / "titled_cut.cut.json"), "--generators-file", gen]),
+        ("versions", ["versions", portrait_flag, "--cut-report", str(cut_dir / "titled_cut.cut.json"), "--generators-file", gen]),
+        ("deliver", ["deliver", portrait_flag, "--cut-report", str(cut_dir / "titled_cut.cut.json"), "--generators-file", gen]),
     ]
     for name, args in chain:
         log.cli(name, *args)

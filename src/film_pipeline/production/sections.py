@@ -214,6 +214,7 @@ class ShotDecl(ContractModel):
     start_state: Ident
     end_state: Ident  # state the next generation starts from
     previous_generation_id: Ident | None = None  # None = no handoff (opening of a continuous chain)
+    independent_still: bool = False  # True = launch from its own approved start still while keeping handoff continuity
     choreography: GenerationChoreography
     sfx: list[str] = Field(default_factory=list)
     design_refs: list[Annotated[str, StringConstraints(pattern=_PIN.pattern)]] = Field(default_factory=list)

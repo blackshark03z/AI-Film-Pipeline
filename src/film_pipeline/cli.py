@@ -39,11 +39,11 @@ def _generators(args):
     return load_generators_file(args.generators_file)
 
 
-def scaffold(film_id: str, profile: str, root: Path, title: str | None) -> Path:
+def scaffold(film_id: str, profile: str, root: Path, title: str | None, *, portrait_9x16: bool = False) -> Path:
     target = root / film_id
     if target.exists() and any(target.iterdir()):
         raise PackageError(f"{target} is not empty; refusing to overwrite")
-    header = FilmHeader(film_id=film_id, title=title or film_id, profile=profile)
+    header = FilmHeader(film_id=film_id, title=title or film_id, profile=profile, portrait_9x16=portrait_9x16)
     save_header(target, header)
     for name in STAGE_FILES.values():
         (target / name).write_text("{}\n", encoding="utf-8", newline="\n")
@@ -129,6 +129,7 @@ def main(argv: list[str] | None = None) -> int:
     new.add_argument("--profile", required=True, choices=["drama", "narration"])
     new.add_argument("--title")
     new.add_argument("--root", type=Path, default=DEFAULT_FILMS_DIR, help="directory holding film packages")
+    new.add_argument("--portrait-9x16", action="store_true", help="enable 9:16 portrait delivery in film.json (default: 16:9 only)")
     for name, text in (("validate", "evaluate gates; exit 1 if any gate BLOCKs"),
                        ("status", "stages present, gates, counts")):
         sub = actions.add_parser(name, help=text)
@@ -213,6 +214,12 @@ def main(argv: list[str] | None = None) -> int:
     fi = actions.add_parser("finish", help="run/resume local finishing from a locked EDL; never accepts for the Owner")
     fi.add_argument("--film", required=True, type=Path)
     fi.add_argument("--dry-run", action="store_true")
+    fi_p = fi.add_mutually_exclusive_group()
+    fi_p.add_argument("--portrait", dest="portrait_override", action="store_true", help="include 9:16 portrait rendering & delivery")
+    fi_p.add_argument("--no-portrait", dest="portrait_override", action="store_false", help="ship 16:9 master only (skip 9:16)")
+    fi_p.set_defaults(portrait_override=None)
+    fi.add_argument("--jobs", type=int, default=None, help="parallel chunk render workers")
+    fi.add_argument("--hwaccel", action="store_true", default=None, help="use GPU h264_nvenc when available")
     st = actions.add_parser("stills", help="start stills: list their state, --register an image made elsewhere, --approve it")
     st.add_argument("--film", required=True, type=Path)
     st.add_argument("--register", metavar="GENERATION_ID|end:GENERATION_ID")
@@ -220,7 +227,9 @@ def main(argv: list[str] | None = None) -> int:
     st.add_argument("--source", default="", help='where the image came from, e.g. "ChatGPT GPM tab 2"')
     st.add_argument("--credits", type=float, default=0.0)
     st.add_argument("--approve", metavar="GENERATION_ID|end:GENERATION_ID")
-    st.add_argument("--by", help="reviewer name for --approve")
+    st.add_argument("--by", help="reviewer name for --approve or --bind-matching")
+    st.add_argument("--bind-matching", action="store_true", help="copy approved stills onto unapproved shots with identical prompt_sha256")
+    st.add_argument("--dry-run", action="store_true", help="preview --bind-matching without modifying 03_preprod.json")
     st.add_argument("--tighten", metavar="GENERATION_ID", help="crop the current start still away from the off-frame listener and register it (unapproved)")
     st.add_argument("--side", choices=("left", "right"), help="frame side of the off-frame listener for --tighten (default: from the shot)")
     st.add_argument("--scale", type=float, default=0.85, help="--tighten box size, 0.80-0.95 (default 0.85)")
@@ -237,11 +246,15 @@ def main(argv: list[str] | None = None) -> int:
     ct.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
     ct.add_argument("--accepted-only", action="store_true", help="a take nobody accepted blocks instead of warning")
     ct.add_argument("--color", action="store_true", help="apply the colour match and look of color/color.json (film.py grade)")
+    ct.add_argument("--jobs", type=int, default=None, help="parallel chunk render workers")
+    ct.add_argument("--hwaccel", action="store_true", default=None, help="use GPU h264_nvenc when available")
     gr = actions.add_parser("grade", help="colour matching: per-scene reference, per-shot gains, before/after deviation; --render writes the matched cut")
     gr.add_argument("--film", required=True, type=Path)
     gr.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
     gr.add_argument("--render", action="store_true", help="also render the cut with the corrections and the look")
     gr.add_argument("--out", type=Path, help="matched cut (default <film>/media/cut/graded_cut.mp4)")
+    gr.add_argument("--jobs", type=int, default=None, help="parallel chunk render workers")
+    gr.add_argument("--hwaccel", action="store_true", default=None, help="use GPU h264_nvenc when available")
     tt = actions.add_parser("titles", help="credits card, dialogue cues, EN/VI sidecar SRTs, reframe check; --render writes the cut with them")
     tt.add_argument("--film", required=True, type=Path)
     tt.add_argument("--clips", type=Path, help="directory holding the take mp4s (default <film>/media/takes)")
@@ -253,19 +266,27 @@ def main(argv: list[str] | None = None) -> int:
     tt.add_argument("--color", action="store_true", help="also apply the colour match of color/color.json")
     tt.add_argument("--clean-copy", action="store_true",
                     help="with --render: also render <out>.clean.mp4 with no burned cues (versions re-lays the cues for 9:16)")
+    tt.add_argument("--jobs", type=int, default=None, help="parallel chunk render workers")
+    tt.add_argument("--hwaccel", action="store_true", default=None, help="use GPU h264_nvenc when available")
     mq = actions.add_parser("mastercheck", help="technical QC of a rendered master (black/freeze/duplicate frames, format, loudness, clipping, sync, colour, faststart) -> qc/master_qc.json")
     mq.add_argument("--film", required=True, type=Path)
     dc = actions.add_parser("dialoguecheck", help="advisory STT check that the actors said the scripted lines (Vosk, en only) -> qc/dialogue_stt.json")
     dc.add_argument("--film", required=True, type=Path)
     mq.add_argument("--video", type=Path, help="the master (default <film>/media/cut/mixed.mp4)")
     mq.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
-    vs = actions.add_parser("versions", help="9:16 version of the master, thumbnail candidates, metadata draft with AI disclosure -> versions/ (nothing is published)")
+    vs = actions.add_parser("versions", help="thumbnail candidates, metadata draft with AI disclosure, and opt-in 9:16 version -> versions/ (nothing is published)")
     vs.add_argument("--film", required=True, type=Path)
     vs.add_argument("--video", type=Path, help="the 16:9 master (default <film>/media/cut/mixed.mp4)")
     vs.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
     vs.add_argument("--portrait-source", type=Path, help="clean cut (no burned-in cues) with the master's clock and sound, cropped instead of the master")
     vs.add_argument("--generators", default="", help="generator line of the AI disclosure, e.g. 'Google Flow Omni 1.1 Flash'")
     vs.add_argument("--generators-file", type=Path, help=GENERATORS_FILE_HELP)
+    vs_p = vs.add_mutually_exclusive_group()
+    vs_p.add_argument("--portrait", dest="portrait_override", action="store_true", help="render 9:16 portrait version")
+    vs_p.add_argument("--no-portrait", dest="portrait_override", action="store_false", help="skip 9:16 portrait version (16:9 only)")
+    vs_p.set_defaults(portrait_override=None)
+    vs.add_argument("--jobs", type=int, default=None, help="parallel chunk render workers")
+    vs.add_argument("--hwaccel", action="store_true", default=None, help="use GPU h264_nvenc when available")
     lg = actions.add_parser("ledger", help="learnings ledger of a film (ledger.json): observation until a second film shows it again")
     lg.add_argument("--film", required=True, type=Path)
     lg.add_argument("--add", metavar="TEXT", help="record a learning (needs --ref)")
@@ -295,6 +316,10 @@ def main(argv: list[str] | None = None) -> int:
     dv.add_argument("--c2pa-cert", type=Path, help="PEM certificate chain for C2PA signing (with --c2pa-key)")
     dv.add_argument("--c2pa-key", type=Path, help="PEM private key for C2PA signing")
     dv.add_argument("--accept", metavar="NAME", help="record the Owner's acceptance of the current delivery (gates 1-5 must pass); builds nothing")
+    dv_p = dv.add_mutually_exclusive_group()
+    dv_p.add_argument("--portrait", dest="portrait_override", action="store_true", help="require & ship 9:16 version")
+    dv_p.add_argument("--no-portrait", dest="portrait_override", action="store_false", help="ship 16:9 master only")
+    dv_p.set_defaults(portrait_override=None)
     lk = actions.add_parser("lock", help="picture lock: status and dirty post/delivery items; --lock freezes the cut")
     lk.add_argument("--film", required=True, type=Path)
     lk.add_argument("--lock", action="store_true", help="freeze the cut (every take accepted, no BLOCK at a cut)")
@@ -331,6 +356,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--film", required=True, type=Path)
     ap.add_argument("--plan-dir", type=Path, help="plan output directory holding compiled prompts (default <film>/media/plan)")
     ap.add_argument("--json-out", type=Path, help="optional path OUTSIDE <film> to write JSON report")
+    ap.add_argument("--lookahead", type=int, default=0, help="optimistic lookahead hops over clean GENERATED takes into speculative_frontier")
+    sa = actions.add_parser("setup-anchors", help="suggest or apply independent start-still anchors to shorten deep sequential DAG chains")
+    sa.add_argument("--film", required=True, type=Path)
+    sa.add_argument("--max-depth", type=int, default=4, help="maximum sequential chain depth before breaking cleanly (default 4)")
+    sa.add_argument("--apply", action="store_true", help="write independent_still=true into 04_shots.json")
+    rui = actions.add_parser("review-ui", help="generate a local HTML batch dailies reviewer page without changing stage files")
+    rui.add_argument("--film", required=True, type=Path)
+    rui.add_argument("--out", type=Path, help="output directory (default <film>/media/review_ui)")
+    rui.add_argument("--scene", default=None, help="optional scene_id filter")
+    rui.add_argument("--triage", action="store_true", help="run advisory dailies triage across clips on disk")
+    rui.add_argument("--clips", type=Path, help="directory holding take clips (default <film>/media/takes)")
     dc = actions.add_parser("doctor", help="read-only runtime environment, FFmpeg filter, font, packaged resource and Flow check")
     dc.add_argument("--film", type=Path, help="optional film directory to check free disk space on")
     dc.add_argument("--probe-flow", action="store_true", help="also probe active CDP endpoint for a Flow tab")
@@ -351,6 +387,8 @@ def main(argv: list[str] | None = None) -> int:
     sc.add_argument("--film", required=True, type=Path)
     sc.add_argument("--render", action="store_true", help="render READY_TO_CONFORM scenes to media/scenes/<scene>.mkv")
     sc.add_argument("--scenes", nargs="*", help="optional subset of scene IDs")
+    sc.add_argument("--jobs", type=int, default=None, help="parallel chunk render workers")
+    sc.add_argument("--hwaccel", action="store_true", default=None, help="use GPU h264_nvenc when available")
     qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
     qcp.add_argument("--record", required=True, type=Path)
     rh = actions.add_parser("rehearse", help="offline dress rehearsal: run the whole chain on a COPY of the package with a mock "
@@ -384,12 +422,14 @@ def main(argv: list[str] | None = None) -> int:
         parser.error(f"unrecognized arguments: {' '.join(rest)}")
 
     from film_pipeline.production.runtime import writer, WriterBusy
-    readonly = {"status", "validate", "qc", "impact", "camera", "continuity", "triage", "agentic-plan", "doctor"}
+    readonly = {"status", "validate", "qc", "impact", "camera", "continuity", "triage", "agentic-plan", "doctor", "review-ui"}
     is_readonly = (
         (args.action in readonly and not (args.action == "validate" and getattr(args, "sync_gates", False)))
         or (args.action == "foley" and getattr(args, "list", False))
         or (args.action == "lease" and getattr(args, "verb", None) == "status")
         or (args.action == "scene-conform" and not getattr(args, "render", False))
+        or (args.action == "setup-anchors" and not getattr(args, "apply", False))
+        or (args.action == "stills" and getattr(args, "bind_matching", False) and getattr(args, "dry_run", False))
     )
     try:
         if getattr(args, "film", None) and args.action != "generate" and not is_readonly:
@@ -454,14 +494,14 @@ def _run(args, rest, parser) -> int:
             _emit(rp_mod.ledger_view(root, film_id))
             return 0
         if args.action == "new":
-            target = scaffold(args.film_id, args.profile, args.root, args.title)
-            _emit({"created": str(target), "profile": args.profile})
+            target = scaffold(args.film_id, args.profile, args.root, args.title, portrait_9x16=args.portrait_9x16)
+            _emit({"created": str(target), "profile": args.profile, "portrait_9x16": args.portrait_9x16})
             return 0
         if args.action == "doctor":
             from PIL import ImageFont
             from film_pipeline.drama.post import DEFAULT_FONTS, FPS, H, W
             from film_pipeline.film_package_export import validate as export_validate
-            from film_pipeline.production import foley as foley_mod, post_engine, preflight
+            from film_pipeline.production import ffjoin, foley as foley_mod, post_engine, preflight
             from film_pipeline.providers import flow_ui_adapter
 
             env = preflight.check(args.film or Path.cwd(), probe_flow=args.probe_flow, operation=args.operation)
@@ -515,6 +555,8 @@ def _run(args, rest, parser) -> int:
                 "resources": resources_info,
                 "post_engine": str(engine) if engine else None,
                 "render_profile": {"width": W, "height": H, "fps": FPS},
+                "nvenc_available": ffjoin.nvenc_available(),
+                "default_render_workers": ffjoin.render_workers(),
             })
             return 0 if all_ok else 1
         if args.action == "lease":
@@ -580,7 +622,8 @@ def _run(args, rest, parser) -> int:
         pkg = load_package(args.film)
         if args.action == "finish":
             from film_pipeline.production.finish import finish
-            report = finish(pkg, command=main, dry_run=args.dry_run)
+            report = finish(pkg, command=main, dry_run=args.dry_run, include_portrait=args.portrait_override,
+                            jobs=args.jobs, hwaccel=args.hwaccel)
             _emit(report)
             return 0 if report["ok"] else 1
         if args.action == "reconcile":
@@ -754,6 +797,10 @@ def _run(args, rest, parser) -> int:
                     print(f"tightened {out['file']} box x={box['x']} y={box['y']} w={box['w']} h={box['h']} "
                           f"(listener {out['side']})")
                     return 0
+                if args.bind_matching:
+                    out = st_mod.bind_matching_stills(pkg, by=args.by or "", dry_run=args.dry_run)
+                    _emit(out)
+                    return 0
                 if args.approve:
                     _emit({"approved": st_mod.approve_still(pkg, args.approve, args.by or "")})
                     return 0
@@ -818,7 +865,8 @@ def _run(args, rest, parser) -> int:
                 try:
                     rendered = ed_mod.render_cut(pkg, section, args.out or pkg.root / "media" / "cut" / "graded_cut.mp4",
                                                  clips_dir=args.clips, corrections=col_mod.corrections_of(report),
-                                                 look=report["plan"]["look"] or None)
+                                                 look=report["plan"]["look"] or None,
+                                                 jobs=args.jobs, hwaccel=args.hwaccel)
                 except ValueError as exc:
                     _emit({"error": str(exc)})
                     return 1
@@ -873,7 +921,8 @@ def _run(args, rest, parser) -> int:
                 return 2
             try:
                 report = dl_mod.deliver(pkg, video, report_path, generators=_generators(args),
-                                        c2pa=(args.c2pa_cert, args.c2pa_key) if args.c2pa_cert else None)
+                                        c2pa=(args.c2pa_cert, args.c2pa_key) if args.c2pa_cert else None,
+                                        require_portrait=args.portrait_override)
             except (ValueError, KeyError) as exc:
                 _emit({"error": str(exc)})
                 return 1
@@ -892,7 +941,8 @@ def _run(args, rest, parser) -> int:
                 _emit({"error": "versions needs the .cut.json of the master (--cut-report)"})
                 return 2
             try:
-                report = vs_mod.build(pkg, video, report_path, portrait_source=args.portrait_source, generators=_generators(args))
+                report = vs_mod.build(pkg, video, report_path, portrait_source=args.portrait_source, generators=_generators(args),
+                                      include_portrait=args.portrait_override, jobs=args.jobs, hwaccel=args.hwaccel)
             except (ValueError, KeyError) as exc:
                 _emit({"error": str(exc)})
                 return 1
@@ -922,7 +972,8 @@ def _run(args, rest, parser) -> int:
                 try:
                     rendered = ed_mod.render_cut(pkg, pkg.typed["edit"], args.out or pkg.root / "media" / "cut" / "titled_cut.mp4",
                                                  clips_dir=args.clips, cues=prepared["cues"], reframes=prepared["reframes"],
-                                                 end_lines=prepared["credits"][pkg.header.language], **extra)
+                                                 end_lines=prepared["credits"][pkg.header.language],
+                                                 jobs=args.jobs, hwaccel=args.hwaccel, **extra)
                 except (ValueError, KeyError) as exc:
                     _emit({"error": str(exc)})
                     return 1
@@ -933,7 +984,8 @@ def _run(args, rest, parser) -> int:
                     try:
                         clean = ed_mod.render_cut(pkg, pkg.typed["edit"], clean_out, clips_dir=args.clips, cues=[],
                                                   reframes=prepared["reframes"],
-                                                  end_lines=prepared["credits"][pkg.header.language], **extra)
+                                                  end_lines=prepared["credits"][pkg.header.language],
+                                                  jobs=args.jobs, hwaccel=args.hwaccel, **extra)
                     except (ValueError, KeyError) as exc:
                         _emit({"error": f"clean copy: {exc}"})
                         return 1
@@ -1002,7 +1054,7 @@ def _run(args, rest, parser) -> int:
                 SceneIncrementalConformer,
                 WaveDAGScheduler,
             )
-            waves = WaveDAGScheduler(pkg).plan_waves()
+            waves = WaveDAGScheduler(pkg, optimistic_lookahead=args.lookahead).plan_waves()
             critic = PreSendCritic().inspect(pkg, plan_dir=args.plan_dir) if "preprod" in pkg.typed and "shots" in pkg.typed else None
             repairs = CausalRepairRouter().diagnose_take_log(pkg)
             conform = SceneIncrementalConformer().scene_status(pkg) if "shots" in pkg.typed else None
@@ -1026,11 +1078,32 @@ def _run(args, rest, parser) -> int:
                 out_p.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             _emit(report)
             return 0
+        if args.action == "setup-anchors":
+            from film_pipeline.agentic import suggest_setup_anchors
+
+            try:
+                report = suggest_setup_anchors(pkg, max_chain_depth=args.max_depth, apply=args.apply)
+            except ValueError as exc:
+                _emit({"error": str(exc)})
+                return 2
+            _emit(report)
+            return 0
+        if args.action == "review-ui":
+            from film_pipeline.production.review_ui import build_review_ui
+
+            try:
+                report = build_review_ui(pkg, out_dir=args.out, scene_id=args.scene,
+                                         run_triage=args.triage, clips_dir=args.clips)
+            except ValueError as exc:
+                _emit({"error": str(exc)})
+                return 2
+            _emit(report)
+            return 0
         if args.action == "scene-conform":
             from film_pipeline.agentic.incremental_conform import SceneIncrementalConformer
 
             report = SceneIncrementalConformer().conform_ready_scenes(
-                pkg, render=args.render, scenes=args.scenes
+                pkg, render=args.render, scenes=args.scenes, jobs=args.jobs, hwaccel=args.hwaccel
             )
             _emit(report)
             return 0
@@ -1070,7 +1143,7 @@ def _run(args, rest, parser) -> int:
                             raise ValueError("--color needs color/color.json (run film.py grade first)")
                         extra = {"corrections": col_mod.corrections_of(found), "look": found["plan"]["look"] or None}
                     _emit(ed_mod.render_cut(pkg, section, out, clips_dir=args.clips, require_accepted=args.accepted_only,
-                                            **extra))
+                                            jobs=args.jobs, hwaccel=args.hwaccel, **extra))
                 except ValueError as exc:
                     _emit({"error": str(exc)})
                     return 1
@@ -1109,8 +1182,17 @@ def _run(args, rest, parser) -> int:
             if args.ingest:
                 from pydantic import ValidationError
                 try:
-                    _emit(tk_mod.ingest_review(pkg.root, pkg.header.film_id,
-                                               json.loads(args.ingest.read_text(encoding="utf-8")), pkg=pkg))
+                    payload = json.loads(args.ingest.read_text(encoding="utf-8"))
+                    if isinstance(payload, list):
+                        if not payload:
+                            raise ValueError("batch review list is empty")
+                        ingested = [
+                            tk_mod.ingest_review(pkg.root, pkg.header.film_id, item, pkg=pkg)
+                            for item in payload
+                        ]
+                        _emit({"batch": True, "count": len(ingested), "ingested": ingested})
+                    else:
+                        _emit(tk_mod.ingest_review(pkg.root, pkg.header.film_id, payload, pkg=pkg))
                 except ValidationError as exc:
                     _emit({"error": [e["msg"] for e in exc.errors()]})
                     return 2

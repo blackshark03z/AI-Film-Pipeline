@@ -173,6 +173,8 @@ class SceneIncrementalConformer:
         scenes: list[str] | None = None,
         out_dir: Path | None = None,
         clips_dir: Path | None = None,
+        jobs: int | None = None,
+        hwaccel: bool | None = None,
     ) -> dict[str, Any]:
         root = Path(pkg.root)
         sdir = Path(out_dir) if out_dir is not None else root / "media" / "scenes"
@@ -240,6 +242,8 @@ class SceneIncrementalConformer:
                         clips_dir=cdir,
                         require_accepted=True,
                         cache_dir=sdir / ".render_cache",
+                        jobs=jobs,
+                        hwaccel=hwaccel,
                     )
                     planned_cut = rep.get("planned") or {}
                     t0 = float(planned_cut.get("title_s", 1.0))

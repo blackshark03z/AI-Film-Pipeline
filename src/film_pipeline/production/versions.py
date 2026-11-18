@@ -22,6 +22,7 @@ platform compliance). Nothing here publishes anything: it writes files under ``v
 """
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 import statistics
@@ -29,7 +30,16 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-from film_pipeline.production.ffjoin import ffconcat_path, join_video_chunks, media_timeout, run_ffmpeg
+from film_pipeline.production.ffjoin import (
+    ffconcat_path,
+    join_video_chunks,
+    media_timeout,
+    render_workers,
+    run_ffmpeg,
+    use_hwaccel,
+    video_encode_args,
+)
+from film_pipeline.production.package import wants_portrait
 from film_pipeline.production.render_cache import cached as _cached_render, key_for as _render_key, save as _save_render
 
 PORTRAIT_H = 1280
@@ -280,11 +290,15 @@ def portrait_windows(segments: list[dict], fps: float, picture_parts: list[dict]
 def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, height: int, fps: float,
                     label: tuple[Path, float, float] | None = None, cues: list[tuple[Path, float, float]] | None = None,
                     audio_from: Path | None = None, cache_dir: Path | None = None,
-                    picture_parts: list[dict] | None = None) -> Path:
+                    picture_parts: list[dict] | None = None, *,
+                    jobs: int | None = None, hwaccel: bool | None = None) -> Path:
     """`label` = (PNG, start_s, end_s): the AI label burned over the body of the 9:16 picture; `cues` = more (PNG, start_s,
     end_s) layers; `audio_from` = the file whose sound is copied (default: the source)."""
     out.parent.mkdir(parents=True, exist_ok=True)
     cues = cues or []
+    hw = use_hwaccel(hwaccel)
+    vcodec_args, enc_name = video_encode_args("portrait", hwaccel=hwaccel)
+    workers = render_workers(jobs, hwaccel=hw)
     windows = portrait_windows(segments, fps, picture_parts)
     if len(windows) > 1:
         import tempfile
@@ -293,7 +307,9 @@ def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, hei
         audio_source = Path(audio_from) if audio_from is not None else Path(source)
         with tempfile.TemporaryDirectory(dir=str(out.parent)) as tmp:
             work = Path(tmp)
-            chunks: list[Path] = []
+            win_keys: list[str] = []
+            win_chunks: dict[str, Path] = {}
+            uncached: dict[str, dict[str, Any]] = {}
             for chunk_no, part in enumerate(windows):
                 first_frame, last_frame = part[0]["start_frame"], part[-1]["end_frame"]
                 start_s, end_s = first_frame / fps, last_frame / fps
@@ -310,33 +326,58 @@ def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, hei
                 label_window = ((round(max(0., active_label[1] - start_s), 3), round(min(end_s - start_s, active_label[2] - start_s), 3))
                                 if active_label else None)
                 cue_windows = [(round(max(0., a - start_s), 3), round(min(end_s - start_s, b - start_s), 3)) for _, a, b in active_cues]
-                settings = {"segments": local, "height": height, "fps": fps, "video_only_profile": 1,
-                            "source_start_frame": None if picture_parts else first_frame,
-                            "picture": picture_identity(picture_parts, first_frame, last_frame) if picture_parts else None,
-                            "label": label_window, "cues": cue_windows,
-                            "duration_frames": last_frame - first_frame}
+                settings: dict[str, Any] = {
+                    "segments": local, "height": height, "fps": fps, "video_only_profile": 1,
+                    "source_start_frame": None if picture_parts else first_frame,
+                    "picture": picture_identity(picture_parts, first_frame, last_frame) if picture_parts else None,
+                    "label": label_window, "cues": cue_windows,
+                    "duration_frames": last_frame - first_frame,
+                }
+                if enc_name == "h264_nvenc":
+                    settings["encoder"] = enc_name
                 key = _render_key(sources=files, settings=settings)
-                chunk = _cached_render(cache_dir, key, ".mkv")
-                if chunk is None:
-                    inputs = ["-ss", f"{start_s:.6f}", "-i", str(source)]
-                    if active_label:
-                        inputs += ["-loop", "1", "-i", str(active_label[0])]
-                    first_cue = 1 + int(bool(active_label))
-                    for png, _, _ in active_cues:
-                        inputs += ["-loop", "1", "-i", str(png)]
-                    layer_list = [(first_cue + i, a, b) for i, (a, b) in enumerate(cue_windows)]
-                    graph = portrait_graph(local, height, label_window, layer_list)
-                    graph_file = work / f"portrait_{chunk_no:06d}.filter"
-                    graph_file.write_text(graph, encoding="utf-8")
-                    generated = work / f"portrait_{chunk_no:06d}.mkv"
-                    chunk_dur = max(1.0, (last_frame - first_frame) / fps)
-                    run_ffmpeg(["ffmpeg", "-v", "error", "-y", *inputs,
-                                "-/filter_complex", str(graph_file), "-map", "[v]", "-an",
-                                "-c:v", "libx264", "-preset", "medium", "-crf", "18",
-                                "-pix_fmt", "yuv420p", "-r", f"{fps:g}", str(generated)],
-                               timeout_s=media_timeout(chunk_dur))
-                    chunk = _save_render(cache_dir, key, generated, ".mkv")
-                chunks.append(chunk)
+                win_keys.append(key)
+                if key in win_chunks or key in uncached:
+                    continue
+                hit = _cached_render(cache_dir, key, ".mkv")
+                if hit is not None:
+                    win_chunks[key] = hit
+                    continue
+                uncached[key] = {
+                    "no": chunk_no, "key": key, "start_s": start_s,
+                    "active_label": active_label, "active_cues": active_cues,
+                    "local": local, "label_window": label_window, "cue_windows": cue_windows,
+                    "chunk_dur": max(1.0, (last_frame - first_frame) / fps),
+                }
+
+            def _render_portrait_chunk(desc: dict[str, Any]) -> tuple[str, Path]:
+                inputs = ["-ss", f"{desc['start_s']:.6f}", "-i", str(source)]
+                if desc["active_label"]:
+                    inputs += ["-loop", "1", "-i", str(desc["active_label"][0])]
+                first_cue = 1 + int(bool(desc["active_label"]))
+                for png, _, _ in desc["active_cues"]:
+                    inputs += ["-loop", "1", "-i", str(png)]
+                layer_list = [(first_cue + i, a, b) for i, (a, b) in enumerate(desc["cue_windows"])]
+                graph = portrait_graph(desc["local"], height, desc["label_window"], layer_list)
+                graph_file = work / f"portrait_{desc['no']:06d}.filter"
+                graph_file.write_text(graph, encoding="utf-8")
+                generated = work / f"portrait_{desc['no']:06d}.mkv"
+                run_ffmpeg(["ffmpeg", "-v", "error", "-y", *inputs,
+                            "-/filter_complex", str(graph_file), "-map", "[v]", "-an",
+                            *vcodec_args, "-r", f"{fps:g}", str(generated)],
+                           timeout_s=media_timeout(desc["chunk_dur"]))
+                return desc["key"], generated
+
+            if uncached:
+                specs = list(uncached.values())
+                if len(specs) > 1 and workers > 1:
+                    with ThreadPoolExecutor(max_workers=workers) as pool:
+                        rendered_pairs = list(pool.map(_render_portrait_chunk, specs))
+                else:
+                    rendered_pairs = [_render_portrait_chunk(s) for s in specs]
+                for key, generated in rendered_pairs:
+                    win_chunks[key] = _save_render(cache_dir, key, generated, ".mkv")
+            chunks = [win_chunks[k] for k in win_keys]
             concat_list = work / "concat.txt"
             # Explicit exact durations: mkv timestamps are whole milliseconds, so without them every join took the
             # chunk's rounded-up length and a 30 min portrait ended a whole frame late.
@@ -363,7 +404,7 @@ def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, hei
     graph_file.write_text(portrait_graph(segments, height, (label[1], label[2]) if label else None, overlays), encoding="utf-8")
     total_s = max(1.0, max((float(s.get("end_s", s.get("end", 10.0))) for s in segments), default=10.0))
     run_ffmpeg(["ffmpeg", "-v", "error", "-y", *inputs, "-/filter_complex", str(graph_file),
-                "-map", "[v]", "-map", audio, "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+                "-map", "[v]", "-map", audio, *vcodec_args,
                 "-r", f"{fps:g}", "-c:a", "copy", "-movflags", "+faststart", str(out)],
                timeout_s=media_timeout(total_s))
     graph_file.unlink(missing_ok=True)
@@ -515,8 +556,9 @@ def metadata_draft(pkg: Any, plan: dict[str, Any], versions: list[dict[str, Any]
 
 
 def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = None, portrait_source: Path | None = None,
-          generators: Any = "") -> dict[str, Any]:
-    """Write ``versions/`` (9:16 mp4, thumbnails, metadata.json, versions.json) and return the report."""
+          generators: Any = "", include_portrait: bool | None = None,
+          jobs: int | None = None, hwaccel: bool | None = None) -> dict[str, Any]:
+    """Write ``versions/`` (thumbnails, metadata.json, versions.json, and opt-in 9:16 mp4) and return the report."""
     from film_pipeline.production import titles as ti
     section = pkg.typed.get("edit")
     if section is None:
@@ -528,57 +570,64 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
     out.mkdir(parents=True, exist_ok=True)
     width, height, fps = probe_size(master)
     problems: list[dict[str, Any]] = []
-    reframes = ti.resolve_reframes_for_section(pkg.root, section, ti.load_reframes(pkg.root).events)
     titles_path = ti.titles_dir(pkg.root) / "titles.json"
     titles_report = json.loads(titles_path.read_text(encoding="utf-8")) if titles_path.is_file() else None
-    clean = Path(portrait_source) if portrait_source else None
-    recorded = (titles_report or {}).get("clean_render") or {}
-    if clean is None and recorded:
-        candidate = Path(pkg.root) / recorded.get("output", "")
-        if candidate.is_file() and sha256_file(candidate) == recorded.get("sha256"):
-            clean = candidate
-        else:
-            problems.append(_problem("PORTRAIT_CLEAN_STALE", "WARN", f"titles.json names a clean render {recorded.get('output')} "
-                                     "that is missing or changed since; cropping the master instead"))
-    source = clean or master
-    from film_pipeline.production.takes import load_log
-    shots = pkg.typed.get("shots")
-    masters = {g.generation_id for g in shots.generations if g.coverage == "MASTER" and len(g.visible) > 1} if shots else set()
-    generations = {t.take_id: t.generation_id for t in load_log(pkg.root, pkg.header.film_id).takes}
-    fit_events = {event["event_id"] for event in plan["events"] if generations.get(event.get("take_id")) in masters}
-    segments, found = portrait_segments(plan, section, reframes, width, height, fps, load_portrait_focus(pkg.root), fit_events)
-    problems += found
-    if titles_report and titles_report.get("cues") and clean is None:
-        problems.append(_problem("PORTRAIT_BURNED_TEXT", "WARN",
-                                 "the master carries burned-in dialogue cues across the 16:9 frame; the 9:16 crop loses part of them "
-                                 "(use --portrait-source with a clean cut or ship the sidecar SRTs)"))
-    label_info: dict[str, Any] | None = None
-    label = None
-    if pkg.header.disclosure.ai_label == "always":  # same promise as the 16:9 body: the label stays on from the end of the title to the end card
-        from film_pipeline.production.deliver import BODY_LABEL
-        label_info = {"text": BODY_LABEL, "start_s": plan["title_s"], "end_s": plan["body_end_s"],
-                      "x": PORTRAIT_LABEL_X, "y": PORTRAIT_LABEL_Y}
-        label = (portrait_label_png(out / "portrait_label.png", BODY_LABEL), plan["title_s"], plan["body_end_s"])
-    cue_layers: list[tuple[Path, float, float]] = []
-    if clean is not None:  # the clean picture has no cues: burn them again, laid out for 9:16
-        for k, row in enumerate(r for r in (titles_report or {}).get("cues", []) if "abs_start_s" in r):
-            cue_layers.append((portrait_cue_png(out / "cues" / f"cue_{k:02d}.png", row["text"]),
-                               row["abs_start_s"], row["abs_end_s"]))
-    portrait = render_portrait(source, segments, out / f"{pkg.header.film_id}_9x16.mp4", height, fps, label,
-                               cue_layers, audio_from=master,
-                               picture_parts=verified_picture_parts(source, plan, fps)
-                               if clean is not None and portrait_source is None else None)
+    do_portrait = (wants_portrait(pkg) or portrait_source is not None) if include_portrait is None else bool(include_portrait)
+    versions: list[dict[str, Any]] = [
+        {"name": "master_16x9", "file": str(Path(master)), "width": width, "height": height, "fps": fps,
+         "sha256": sha256_file(master)},
+    ]
+    segments: list[dict[str, Any]] = []
+    if do_portrait:
+        reframes = ti.resolve_reframes_for_section(pkg.root, section, ti.load_reframes(pkg.root).events)
+        clean = Path(portrait_source) if portrait_source else None
+        recorded = (titles_report or {}).get("clean_render") or {}
+        if clean is None and recorded:
+            candidate = Path(pkg.root) / recorded.get("output", "")
+            if candidate.is_file() and sha256_file(candidate) == recorded.get("sha256"):
+                clean = candidate
+            else:
+                problems.append(_problem("PORTRAIT_CLEAN_STALE", "WARN", f"titles.json names a clean render {recorded.get('output')} "
+                                         "that is missing or changed since; cropping the master instead"))
+        source = clean or master
+        from film_pipeline.production.takes import load_log
+        shots = pkg.typed.get("shots")
+        masters = {g.generation_id for g in shots.generations if g.coverage == "MASTER" and len(g.visible) > 1} if shots else set()
+        generations = {t.take_id: t.generation_id for t in load_log(pkg.root, pkg.header.film_id).takes}
+        fit_events = {event["event_id"] for event in plan["events"] if generations.get(event.get("take_id")) in masters}
+        segments, found = portrait_segments(plan, section, reframes, width, height, fps, load_portrait_focus(pkg.root), fit_events)
+        problems += found
+        if titles_report and titles_report.get("cues") and clean is None:
+            problems.append(_problem("PORTRAIT_BURNED_TEXT", "WARN",
+                                     "the master carries burned-in dialogue cues across the 16:9 frame; the 9:16 crop loses part of them "
+                                     "(use --portrait-source with a clean cut or ship the sidecar SRTs)"))
+        label_info: dict[str, Any] | None = None
+        label = None
+        if pkg.header.disclosure.ai_label == "always":  # same promise as the 16:9 body: the label stays on from the end of the title to the end card
+            from film_pipeline.production.deliver import BODY_LABEL
+            label_info = {"text": BODY_LABEL, "start_s": plan["title_s"], "end_s": plan["body_end_s"],
+                          "x": PORTRAIT_LABEL_X, "y": PORTRAIT_LABEL_Y}
+            label = (portrait_label_png(out / "portrait_label.png", BODY_LABEL), plan["title_s"], plan["body_end_s"])
+        cue_layers: list[tuple[Path, float, float]] = []
+        if clean is not None:  # the clean picture has no cues: burn them again, laid out for 9:16
+            for k, row in enumerate(r for r in (titles_report or {}).get("cues", []) if "abs_start_s" in r):
+                cue_layers.append((portrait_cue_png(out / "cues" / f"cue_{k:02d}.png", row["text"]),
+                                   row["abs_start_s"], row["abs_end_s"]))
+        portrait = render_portrait(source, segments, out / f"{pkg.header.film_id}_9x16.mp4", height, fps, label,
+                                   cue_layers, audio_from=master,
+                                   picture_parts=verified_picture_parts(source, plan, fps)
+                                   if clean is not None and portrait_source is None else None,
+                                   jobs=jobs, hwaccel=hwaccel)
+        p_w, p_h, p_fps = probe_size(portrait)
+        versions.append({"name": "portrait_9x16", "file": str(portrait.relative_to(Path(pkg.root))).replace("\\", "/"),
+                         "width": p_w, "height": p_h, "fps": p_fps, "sha256": sha256_file(portrait),
+                         "upscale": round(PORTRAIT_H / height, 2), "ai_label": label_info,
+                         "source": "clean" if clean is not None else "master", "cues_relaid": len(cue_layers),
+                         "segments": segments})
+        if (p_w, p_h) != (PORTRAIT_W, PORTRAIT_H):
+            problems.append(_problem("PORTRAIT_SIZE", "BLOCK", f"portrait render is {p_w}x{p_h}, expected {PORTRAIT_W}x{PORTRAIT_H}"))
     thumbs, found = thumbnails(pkg, master, plan, section, out / "thumbs", titles_report)
     problems += found
-    p_w, p_h, p_fps = probe_size(portrait)
-    versions = [{"name": "master_16x9", "file": str(Path(master)), "width": width, "height": height, "fps": fps,
-                 "sha256": sha256_file(master)},
-                {"name": "portrait_9x16", "file": str(portrait.relative_to(Path(pkg.root))).replace("\\", "/"), "width": p_w,
-                 "height": p_h, "fps": p_fps, "sha256": sha256_file(portrait), "upscale": round(PORTRAIT_H / height, 2),
-                 "ai_label": label_info, "source": "clean" if clean is not None else "master",
-                 "cues_relaid": len(cue_layers), "segments": segments}]
-    if (p_w, p_h) != (PORTRAIT_W, PORTRAIT_H):
-        problems.append(_problem("PORTRAIT_SIZE", "BLOCK", f"portrait render is {p_w}x{p_h}, expected {PORTRAIT_W}x{PORTRAIT_H}"))
     draft, found = metadata_draft(pkg, plan, [{k: v for k, v in x.items() if k != "segments"} for x in versions], generators=generators)
     problems += found
     draft["thumbnails"] = [t["file"] for t in thumbs]
@@ -586,7 +635,8 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
     report = {"film_id": pkg.header.film_id, "cut_report_sha256": cut_report_sha,
               "ok": not any(p["severity"] == "BLOCK" for p in problems),
               "versions": versions, "thumbnails": thumbs, "metadata": "versions/metadata.json", "problems": problems,
-              "summary": {"portrait_segments": len(segments), "thumbnails": len(thumbs),
+              "summary": {"portrait_enabled": do_portrait, "portrait_segments": len(segments),
+                          "thumbnails": len(thumbs),
                           "blocks": sum(p["severity"] == "BLOCK" for p in problems),
                           "warnings": sum(p["severity"] == "WARN" for p in problems)}}
     (out / "versions.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

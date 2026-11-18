@@ -60,8 +60,9 @@ def still_prompts(pkg: Any) -> dict[str, str]:
 
 
 def chain_heads(pkg: Any) -> list[str]:
-    """Generations that start from a still (the others start from the previous take's end frame)."""
-    return [g.generation_id for g in pkg.typed["shots"].generations if not g.previous_generation_id]
+    """Generations that start from a still (chain openings or setup-anchor shots)."""
+    return [g.generation_id for g in pkg.typed["shots"].generations
+            if not g.previous_generation_id or getattr(g, "independent_still", False)]
 
 
 def stills_dir(root: Path) -> Path:
@@ -281,6 +282,81 @@ def approve_still(pkg: Any, gid: str, by: str, *, now: str | None = None) -> dic
     if pair is not None:
         out["pair_check"] = pair             # WARN only (P15-02); the approval above stands
     return out
+
+
+def bind_matching_stills(pkg: Any, *, by: str = "", dry_run: bool = False,
+                         now: str | None = None) -> dict[str, Any]:
+    """Reuse an APPROVED still onto unapproved/missing shots that share identical `(kind, prompt_sha256)`."""
+    from film_pipeline.production.rehearsal import refuse_bot, refuse_undelegated
+    from film_pipeline.production.runtime import atomic_json
+
+    reviewer = by.strip()
+    if not dry_run and not reviewer:
+        raise ValueError("bind_matching_stills needs a reviewer name (--by NAME)")
+    if reviewer:
+        refuse_bot(Path(pkg.root), reviewer)
+        refuse_undelegated(Path(pkg.root), reviewer)
+
+    root = Path(pkg.root)
+    prompts = still_prompts(pkg)
+    hashes = {k: prompt_hash(v) for k, v in prompts.items()}
+    records = _records(pkg)
+    donors: dict[tuple[str, str], tuple[str, StillRecord]] = {}
+    for k in prompts:
+        if state_of(pkg, k, prompts[k])[0] == "APPROVED":
+            donors.setdefault((kind_of(k), hashes[k]), (k, records[k]))
+
+    bound: list[dict[str, str]] = []
+    updates: dict[str, dict[str, Any]] = {}
+    stamp = now or _now()
+    for k in prompts:
+        if state_of(pkg, k, prompts[k])[0] == "APPROVED":
+            continue
+        match = donors.get((kind_of(k), hashes[k]))
+        if match is None:
+            continue
+        donor_key, donor_rec = match
+        donor_path = root / donor_rec.file
+        if not donor_path.is_file():
+            continue
+        decode_check(donor_path)
+        ext = donor_path.suffix or _extension(donor_path)
+        stem = _stem(k)
+        target = stills_dir(root) / f"{stem}{ext}"
+        rel = target.relative_to(root).as_posix()
+        bound.append({
+            "generation_id": k,
+            "donor": donor_key,
+            "prompt_sha256": hashes[k],
+            "file": rel,
+        })
+        if dry_run:
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.is_file() and sha256_file(target) != donor_rec.sha256:
+            history = target.parent / "history"
+            history.mkdir(exist_ok=True)
+            shutil.move(str(target), str(history / f"{stem}.{sha256_file(target)[:12]}{ext}"))
+        if not target.is_file():
+            shutil.copyfile(donor_path, target)
+        rec = StillRecord(
+            file=rel,
+            sha256=donor_rec.sha256,
+            prompt_sha256=hashes[k],
+            source=f"bound from approved {donor_key} (identical prompt_sha256)",
+            credits=0.0,
+            registered_at=stamp,
+            approved_by=reviewer,
+            approved_at=stamp,
+        )
+        updates[k] = rec.model_dump(mode="json")
+
+    if not dry_run and updates:
+        preprod_path = root / PREPROD_FILE
+        raw = json.loads(preprod_path.read_text(encoding="utf-8"))
+        raw.setdefault("stills", {}).update(updates)
+        atomic_json(preprod_path, raw)
+    return {"bound": bound, "count": len(bound), "dry_run": dry_run}
 
 
 # --- P15-02: start/end still pair check --------------------------------------------------------------------------

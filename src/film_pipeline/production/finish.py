@@ -12,7 +12,7 @@ from film_pipeline.production import deliver as D
 from film_pipeline.production import foley
 from film_pipeline.production.gates import evaluate_gates
 from film_pipeline.production.lock import lock_status
-from film_pipeline.production.package import load_package
+from film_pipeline.production.package import load_package, wants_portrait
 from film_pipeline.production.runtime import atomic_json, film_writer
 from film_pipeline.production import post_engine, preflight
 
@@ -40,12 +40,15 @@ def _work_file(root: Path, value: str) -> Path:
     return root / path if (root / path).is_file() or not path.is_file() else path
 
 
-def _outputs(root: Path, name: str) -> list[Path]:
+def _outputs(root: Path, name: str, *, portrait: bool | None = None) -> list[Path]:
+    use_portrait = wants_portrait(root) if portrait is None else bool(portrait)
+    title_files = ["titles/titles.json", "titles/credits.json",
+                   "media/cut/titled_cut.mp4", "media/cut/titled_cut.cut.json"]
+    if use_portrait:
+        title_files += ["media/cut/titled_cut.clean.mp4", "media/cut/titled_cut.clean.cut.json"]
     fixed = {"generators": ["generators.json"], "grade": ["color/color.json"],
              "foley": ["audio/assets.json"],
-             "titles": ["titles/titles.json", "titles/credits.json",
-                        "media/cut/titled_cut.mp4", "media/cut/titled_cut.cut.json", "media/cut/titled_cut.clean.mp4",
-                        "media/cut/titled_cut.clean.cut.json"],
+             "titles": title_files,
              "mix": ["audio/mix.json", "media/cut/mixed.mp4"], "mastercheck": ["qc/master_qc.json"],
              "versions": ["versions/versions.json", "versions/metadata.json"],
              "dialoguecheck": ["qc/dialogue_stt.json"], "deliver": ["07_delivery.json"]}
@@ -68,18 +71,22 @@ def _outputs(root: Path, name: str) -> list[Path]:
     return paths
 
 
-def _fingerprint(root: Path, name: str) -> str:
+def _fingerprint(root: Path, name: str, *, portrait: bool | None = None) -> str:
+    use_portrait = wants_portrait(root) if portrait is None else bool(portrait)
     files = [root / n for n in ("film.json", "script.fountain", "takes/index.json", "lock/picture.lock.json")]
     files.extend(root.glob("0[1-5]_*.json"))
+    title_deps = ["color/color.json", "generators.json", "titles/reframe.json", "titles/cues.json", "audio/assets.json"]
+    version_deps = ["media/cut/mixed.mp4", "media/cut/titled_cut.cut.json", "titles/titles.json", "generators.json"]
+    if use_portrait:
+        title_deps.append("titles/portrait_focus.json")
+        version_deps += ["media/cut/titled_cut.clean.mp4", "titles/portrait_focus.json"]
     dependencies = {
         "generators": [], "grade": ["color/color_plan.json"],
         "foley": [],
-        "titles": ["color/color.json", "generators.json", "titles/portrait_focus.json", "titles/reframe.json",
-                   "titles/cues.json", "audio/assets.json"],
+        "titles": title_deps,
         "mix": ["media/cut/titled_cut.mp4", "media/cut/titled_cut.cut.json", "audio/assets.json", "audio/mix_plan.json"],
         "mastercheck": ["media/cut/mixed.mp4", "media/cut/titled_cut.cut.json"],
-        "versions": ["media/cut/mixed.mp4", "media/cut/titled_cut.clean.mp4", "media/cut/titled_cut.cut.json",
-                     "titles/titles.json", "titles/portrait_focus.json", "generators.json"],
+        "versions": version_deps,
         "dialoguecheck": ["audio/stems/dialogue.wav", "titles/titles.json"],
         "deliver": ["media/cut/mixed.mp4", "media/cut/titled_cut.cut.json", "generators.json"],
     }
@@ -102,6 +109,8 @@ def _fingerprint(root: Path, name: str) -> str:
         if (root / "versions/versions.json").is_file():
             files.extend(_work_file(root, v["file"]) for v in json.loads((root / "versions/versions.json").read_text(encoding="utf-8"))["versions"])
     payload = {"step": name, "files": _hashes(files), "pipeline_code": _CODE_SHA}
+    if not use_portrait:
+        payload["portrait_9x16"] = False
     if name == "titles" and (root / "audio/mix_plan.json").is_file():
         try:
             music_cues = json.loads((root / "audio/mix_plan.json").read_text(encoding="utf-8")).get("music") or []
@@ -115,13 +124,13 @@ def _fingerprint(root: Path, name: str) -> str:
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
 
-def _fresh(root: Path, name: str, state: dict) -> bool:
+def _fresh(root: Path, name: str, state: dict, *, portrait: bool | None = None) -> bool:
     item = state.get(name, {})
     try:
-        paths = _outputs(root, name)
+        paths = _outputs(root, name, portrait=portrait)
         if not paths or any(not p.is_file() for p in paths):
             return False
-        if item.get("inputs") != _fingerprint(root, name) or item.get("outputs") != _hashes(paths):
+        if item.get("inputs") != _fingerprint(root, name, portrait=portrait) or item.get("outputs") != _hashes(paths):
             return False
         return name != "deliver" or D.verify_archive(D.current_archive(root))["ok"]
     except (OSError, ValueError, KeyError):
@@ -157,8 +166,10 @@ def _accepted_unchanged(pkg, gates) -> bool:
 
 
 @film_writer()
-def finish(pkg, *, command, dry_run: bool = False) -> dict:
+def finish(pkg, *, command, dry_run: bool = False, include_portrait: bool | None = None,
+           jobs: int | None = None, hwaccel: bool | None = None) -> dict:
     root = Path(pkg.root).resolve()
+    use_portrait = wants_portrait(pkg) if include_portrait is None else bool(include_portrait)
     gates = evaluate_gates(pkg)
     blocked = [f"gate {g.gate}: {g.status}" for g in gates if g.gate in "1234" and g.status != "PASS"]
     picture = lock_status(pkg)
@@ -166,7 +177,7 @@ def finish(pkg, *, command, dry_run: bool = False) -> dict:
         blocked.append("finish requires a fresh locked EDL")
     if blocked:
         return {"ok": False, "blocked": blocked, "steps": [], "dry_run": dry_run}
-    if _accepted_unchanged(pkg, gates):
+    if include_portrait is None and _accepted_unchanged(pkg, gates):
         return {"ok": True, "dry_run": dry_run, "reused": True, "steps": [],
                 "archive": str(D.current_archive(root)), "owner_acceptance_preserved": True}
     env = preflight.check(root)
@@ -176,6 +187,7 @@ def finish(pkg, *, command, dry_run: bool = False) -> dict:
     except ValueError:
         state = {}
     generators = ["--generators-file", str(root / "generators.json")]
+    perf_flags = (["--jobs", str(jobs)] if jobs else []) + (["--hwaccel"] if hwaccel else [])
     steps = [("generators", ["generators", "--init"])] if not (root / "generators.json").is_file() else []
     engine = post_engine.resolve_engine_dir()
     mix_argv = ["mix", "--cut", str(root / "media/cut/titled_cut.mp4"), "--stems", str(root / "audio/stems")]
@@ -190,15 +202,27 @@ def finish(pkg, *, command, dry_run: bool = False) -> dict:
     steps += [("grade", ["grade"])]
     if needs_foley:
         steps.append(("foley", ["foley"]))
-    steps += [("titles", ["titles", "--render", "--color", "--clean-copy", *generators]),
+    cut_report = str(root / "media/cut/titled_cut.cut.json")
+    if use_portrait:
+        titles_argv = ["titles", "--render", "--color", "--clean-copy", *perf_flags, *generators]
+        versions_argv = ["versions", *( ["--portrait"] if include_portrait is True else [] ),
+                         "--cut-report", cut_report, *perf_flags, *generators]
+        deliver_argv = ["deliver", *( ["--portrait"] if include_portrait is True else [] ),
+                        "--cut-report", cut_report, *generators]
+    else:
+        titles_argv = ["titles", "--render", "--color", *perf_flags, *generators]
+        versions_argv = ["versions", "--no-portrait", "--cut-report", cut_report, *perf_flags, *generators]
+        deliver_argv = ["deliver", "--no-portrait", "--cut-report", cut_report, *generators]
+    steps += [("titles", titles_argv),
               ("mix", mix_argv),
-              ("mastercheck", ["mastercheck", "--cut-report", str(root / "media/cut/titled_cut.cut.json")]),
-              ("versions", ["versions", "--cut-report", str(root / "media/cut/titled_cut.cut.json"), *generators]),
+              ("mastercheck", ["mastercheck", "--cut-report", cut_report]),
+              ("versions", versions_argv),
               ("dialoguecheck", ["dialoguecheck"]),
-              ("deliver", ["deliver", "--cut-report", str(root / "media/cut/titled_cut.cut.json"), *generators])]
-    planned = [{"step": name, "run": not _fresh(root, name, state)} for name, _ in steps]
+              ("deliver", deliver_argv)]
+    planned = [{"step": name, "run": not _fresh(root, name, state, portrait=use_portrait)} for name, _ in steps]
     if dry_run:
-        return {"ok": env["ok"], "dry_run": True, "steps": planned, "environment": env}
+        return {"ok": env["ok"], "dry_run": True, "portrait_9x16": use_portrait,
+                "steps": planned, "environment": env}
     if not env["ok"]:
         return {"ok": False, "blocked": env["issues"], "steps": planned, "environment": env}
     results, dirty = [], False
@@ -207,7 +231,7 @@ def finish(pkg, *, command, dry_run: bool = False) -> dict:
         if env["stt_python"]:
             os.environ["AFP_STT_PYTHON"] = env["stt_python"]
         for name, argv in steps:
-            if not dirty and _fresh(root, name, state):
+            if not dirty and _fresh(root, name, state, portrait=use_portrait):
                 results.append({"step": name, "reused": True})
                 continue
             dirty = True
@@ -220,10 +244,10 @@ def finish(pkg, *, command, dry_run: bool = False) -> dict:
                 result = {"error": stream.getvalue()[-500:] or "no command result"}
             if code:
                 return {"ok": False, "steps": results, "failed_step": name, "exit_code": code, "result": result}
-            outputs = _outputs(root, name)
+            outputs = _outputs(root, name, portrait=use_portrait)
             if any(not p.is_file() for p in outputs):
                 return {"ok": False, "steps": results, "failed_step": name, "error": "command left missing outputs"}
-            state[name] = {"inputs": _fingerprint(root, name), "outputs": _hashes(outputs)}
+            state[name] = {"inputs": _fingerprint(root, name, portrait=use_portrait), "outputs": _hashes(outputs)}
             atomic_json(state_path, state)
             results.append({"step": name, "reused": False})
     finally:

@@ -112,11 +112,15 @@ def test_a_low_key_frame_with_contrast_is_lifted_into_range_but_black_is_not(tmp
     assert V.frame_stats(black)[1] < V.THUMB_MIN_CONTRAST                                        # flat: never lifted
 
 
-def film(tmp_path: Path):
+def film(tmp_path: Path, *, portrait_9x16: bool = True):
     root = tmp_path / "film"
     root.mkdir()
     for name in ("film.json", "script.fountain", "01_story.json", "02_direction.json", "03_preprod.json", "04_shots.json"):
         shutil.copyfile(FILM03 / name, root / name)
+    if portrait_9x16:
+        header = json.loads((root / "film.json").read_text(encoding="utf-8"))
+        header["portrait_9x16"] = True
+        (root / "film.json").write_text(json.dumps(header, indent=2), encoding="utf-8")
     return root
 
 

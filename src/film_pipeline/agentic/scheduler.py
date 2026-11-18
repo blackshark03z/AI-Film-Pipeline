@@ -1,18 +1,22 @@
 """Topological handoff-wave DAG scheduler over `04_shots.json` and `takes/index.json`."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
+from film_pipeline.production.package import load_package
 from film_pipeline.production.recovery import pending_receipts
+from film_pipeline.production.runtime import atomic_json
 from film_pipeline.production.takes import load_log, sha256_file
 
 
 class WaveDAGScheduler:
     """Computes parallel dispatch waves without splitting worktrees."""
 
-    def __init__(self, pkg: Any) -> None:
+    def __init__(self, pkg: Any, *, optimistic_lookahead: int = 0) -> None:
         self.pkg = pkg
+        self.optimistic_lookahead = max(0, int(optimistic_lookahead))
 
     def plan_waves(self) -> dict[str, Any]:
         shots = self.pkg.typed.get("shots")
@@ -58,6 +62,9 @@ class WaveDAGScheduler:
             decl = by_id.get(gid)
             if decl is None:
                 return None
+            if getattr(decl, "independent_still", False):
+                wave_of[gid] = 0
+                return 0
             prev = decl.previous_generation_id
             if not prev:
                 wave_of[gid] = 0
@@ -98,6 +105,49 @@ class WaveDAGScheduler:
         crit_depth = (max(waves_map) + 1) if waves_map else 0
         unverified_unique = sorted(set(unverified_accepted))
         basis = "verified_media" if accepted_ids and not unverified_unique else "dependency_and_index"
+
+        speculative_frontier: list[str] = []
+        if self.optimistic_lookahead > 0:
+            blocked_ids = {b["generation_id"] for b in blocked}
+            ready_set = set(ready)
+            speculative_base: set[str] = set()
+            for t in log.takes:
+                if t.status != "GENERATED" or t.shot_version != getattr(by_id.get(t.generation_id), "version", None):
+                    continue
+                clip = root / "media" / "takes" / Path(t.output_file).name
+                if not clip.is_file():
+                    clip = root / "media" / "takes" / t.output_file
+                if not clip.is_file():
+                    continue
+                if t.output_sha256 and sha256_file(clip) != t.output_sha256:
+                    continue
+                triage_file = root / "takes" / "triage" / f"{t.take_id}.json"
+                if triage_file.is_file():
+                    try:
+                        triage_doc = json.loads(triage_file.read_text(encoding="utf-8"))
+                        if triage_doc.get("flags"):
+                            continue
+                    except (OSError, ValueError):
+                        continue
+                speculative_base.add(t.generation_id)
+
+            frontier_done = set(accepted_ids) | speculative_base
+            seen_spec: set[str] = set()
+            for _ in range(self.optimistic_lookahead):
+                hop_added: list[str] = []
+                for g in remaining:
+                    gid = g.generation_id
+                    if gid in ready_set or gid in seen_spec or gid in pending_set or gid in blocked_ids:
+                        continue
+                    prev = g.previous_generation_id
+                    if prev and prev in frontier_done and gid not in speculative_base:
+                        hop_added.append(gid)
+                        seen_spec.add(gid)
+                speculative_frontier.extend(hop_added)
+                frontier_done.update(hop_added)
+                if not hop_added:
+                    break
+
         return {
             "film_id": self.pkg.header.film_id,
             "readiness_basis": basis,
@@ -108,9 +158,97 @@ class WaveDAGScheduler:
             "remaining_count": len(remaining),
             "waves": waves,
             "ready_frontier": ready,
+            "speculative_frontier": speculative_frontier,
             "blocked_chains": blocked,
             "critical_path_depth": crit_depth,
         }
 
     def ready_generations(self) -> list[str]:
         return list(self.plan_waves()["ready_frontier"])
+
+
+def suggest_setup_anchors(
+    pkg: Any,
+    *,
+    max_chain_depth: int = 4,
+    apply: bool = False,
+) -> dict[str, Any]:
+    """Identify safe mid-chain generations to anchor to independent start stills to flatten deep sequential DAGs."""
+    shots = pkg.typed.get("shots")
+    pre = pkg.typed.get("preprod")
+    if shots is None:
+        raise ValueError("suggest_setup_anchors requires a valid 04_shots.json")
+
+    limit = max(2, int(max_chain_depth))
+    before = WaveDAGScheduler(pkg).plan_waves()
+    by_id = {g.generation_id: g for g in shots.generations}
+    states = pre.states if pre is not None else {}
+    stills = pre.stills if pre is not None else {}
+
+    chain_depth: dict[str, int] = {}
+    chosen: list[dict[str, Any]] = []
+    chosen_ids: set[str] = set()
+
+    for decl in shots.generations:
+        gid = decl.generation_id
+        prev_id = decl.previous_generation_id
+        if not prev_id or getattr(decl, "independent_still", False) or prev_id not in by_id:
+            chain_depth[gid] = 1
+            continue
+        prev_decl = by_id[prev_id]
+        depth_here = chain_depth.get(prev_id, 1) + 1
+        if depth_here <= limit:
+            chain_depth[gid] = depth_here
+            continue
+
+        prev_end = states.get(prev_decl.end_state)
+        cur_start = states.get(decl.start_state)
+        steady_props = bool(prev_end and cur_start and prev_end.props == cur_start.props)
+        has_approved_still = bool(stills.get(gid) and stills[gid].approved_by)
+        if has_approved_still:
+            reason = "approved_start_still_available"
+        elif decl.coverage == "SINGLE" and steady_props:
+            reason = "single_coverage_steady_props"
+        elif steady_props:
+            reason = "steady_props_chain_break"
+        else:
+            reason = "chain_depth_cap"
+
+        chosen_ids.add(gid)
+        chain_depth[gid] = 1
+        chosen.append({
+            "generation_id": gid,
+            "scene_id": decl.scene_id,
+            "previous_generation_id": prev_id,
+            "coverage": decl.coverage,
+            "reason": reason,
+        })
+
+    if apply and chosen_ids:
+        shots_path = Path(pkg.root) / "04_shots.json"
+        raw = json.loads(shots_path.read_text(encoding="utf-8"))
+        for g in raw.get("generations", []):
+            if g.get("generation_id") in chosen_ids:
+                g["independent_still"] = True
+        atomic_json(shots_path, raw)
+        pkg_after = load_package(pkg.root)
+    else:
+        sim_gens = [
+            g.model_copy(update={"independent_still": True}) if g.generation_id in chosen_ids else g
+            for g in shots.generations
+        ]
+        sim_shots = shots.model_copy(update={"generations": sim_gens})
+        pkg_after = pkg.model_copy(update={"typed": {**pkg.typed, "shots": sim_shots}})
+
+    after = WaveDAGScheduler(pkg_after).plan_waves()
+    return {
+        "film_id": pkg.header.film_id,
+        "max_chain_depth": limit,
+        "applied": apply,
+        "anchor_count": len(chosen),
+        "anchors": chosen,
+        "wave0_before": len(before["ready_frontier"]),
+        "wave0_after": len(after["ready_frontier"]),
+        "critical_path_before": before["critical_path_depth"],
+        "critical_path_after": after["critical_path_depth"],
+    }

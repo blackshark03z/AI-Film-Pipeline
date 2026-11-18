@@ -88,7 +88,8 @@ def current_archive(root: Path) -> Path:
     return manifest.parent
 
 
-def _inputs_fingerprint(pkg, master, cut_report, disclosure) -> str:
+def _inputs_fingerprint(pkg, master, cut_report, disclosure, *, include_portrait: bool | None = None) -> str:
+    from film_pipeline.production.package import wants_portrait
     root = Path(pkg.root)
     paths = {p for pattern in (*PACKAGE_GLOBS, "titles/*.srt", "versions/thumbs/*.jpg")
              for p in root.glob(pattern) if p.is_file()}
@@ -100,7 +101,8 @@ def _inputs_fingerprint(pkg, master, cut_report, disclosure) -> str:
     files.update(master=sha256_file(Path(master)), cut_report=sha256_file(Path(cut_report)))
     meta = disclosure.model_dump(mode="json")
     meta.pop("created", None)  # elapsed calendar days alone do not revoke a delivered film
-    return hashlib.sha256(json.dumps({"files": files, "disclosure": meta}, sort_keys=True).encode()).hexdigest()
+    portrait_mode = wants_portrait(pkg) if include_portrait is None else bool(include_portrait)
+    return hashlib.sha256(json.dumps({"files": files, "disclosure": meta, "portrait_mode": portrait_mode}, sort_keys=True).encode()).hexdigest()
 
 
 def _publication(pkg, archive: Path, manifest: ArchiveManifest, *, reused=False, label_check=None) -> dict:
@@ -398,7 +400,8 @@ def inventory(out: Path) -> list[FileEntry]:
 # ------------------------------------------------------------------ deliver
 
 @film_writer()
-def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c2pa: tuple[Path, Path] | None = None) -> dict[str, Any]:
+def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c2pa: tuple[Path, Path] | None = None,
+            require_portrait: bool | None = None) -> dict[str, Any]:
     """Build ``delivery/``; returns the report (``ok`` false and nothing replaced when a BLOCK finding stands)."""
     from film_pipeline.drama import disclosure as D
     from film_pipeline.production import master_qc as mq
@@ -406,11 +409,13 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
     from film_pipeline.production import versions as vs
     from film_pipeline.production.lock import lock_status
     from film_pipeline.production.mix import stamp_post_item
+    from film_pipeline.production.package import wants_portrait
     root = Path(pkg.root)
     section = pkg.typed.get("edit")
     if section is None:
         raise ValueError("deliver needs a valid 05_edit.json")
     film_id = pkg.header.film_id
+    want_portrait = wants_portrait(pkg) if require_portrait is None else bool(require_portrait)
     findings: list[dict[str, str]] = []
     master = Path(master)
 
@@ -430,16 +435,18 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
             elif not record.ok:
                 findings.append(_finding("QC_FAILED", "BLOCK", "the master QC record has a failing group"))
     versions_report = vs.versions_dir(root) / "versions.json"
+    meta_path = vs.versions_dir(root) / "metadata.json"
     portrait = None
     cut_report_sha = sha256_file(Path(cut_report)) if Path(cut_report).is_file() else ""
-    if versions_report.is_file():
+    if not versions_report.is_file() or not meta_path.is_file():
+        findings.append(_finding("VERSIONS_MISSING", "BLOCK", "no versions/versions.json or metadata.json: run film.py versions"))
+    else:
         try:
             vr = json.loads(versions_report.read_text(encoding="utf-8"))
             if not isinstance(vr, dict) or not isinstance(vr.get("versions"), list):
                 raise ValueError("versions.json missing versions list")
             master_item = next((v for v in vr["versions"] if v.get("name") == "master_16x9"), None)
             item = next((v for v in vr["versions"] if v.get("name") == "portrait_9x16"), None)
-            portrait = root / item["file"] if item and item.get("file") else None
         except (OSError, ValueError, KeyError, TypeError) as exc:
             findings.append(_finding("VERSIONS_CORRUPT", "BLOCK", f"versions/versions.json is unreadable: {str(exc)[:160]}"))
             portrait = None
@@ -452,11 +459,18 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
             elif vr.get("cut_report_sha256") and cut_report_sha and vr.get("cut_report_sha256") != cut_report_sha:
                 findings.append(_finding("VERSIONS_STALE", "BLOCK",
                                          "versions/versions.json was built from a different cut report: run film.py versions again"))
-            elif item and portrait is not None and portrait.is_file() and sha256_file(portrait) != item.get("sha256"):
-                findings.append(_finding("VERSIONS_STALE", "BLOCK", "the 9:16 file changed after film.py versions: run it again"))
-    if (portrait is None or not portrait.is_file()) and not any(f["code"] == "VERSIONS_CORRUPT" for f in findings):
-        findings.append(_finding("VERSIONS_MISSING", "BLOCK", "no 9:16 version: run film.py versions"))
-        portrait = None
+            if require_portrait is False:
+                portrait = None
+            elif item is not None:
+                portrait = root / item["file"] if item.get("file") else None
+                if portrait is None or not portrait.is_file():
+                    findings.append(_finding("VERSIONS_MISSING", "BLOCK", "the 9:16 file listed in versions.json is missing: run film.py versions"))
+                    portrait = None
+                elif sha256_file(portrait) != item.get("sha256"):
+                    findings.append(_finding("VERSIONS_STALE", "BLOCK", "the 9:16 file changed after film.py versions: run it again"))
+            elif want_portrait:
+                findings.append(_finding("VERSIONS_MISSING", "BLOCK", "no 9:16 version: run film.py versions --portrait"))
+                portrait = None
     disclosure = build_disclosure(pkg, section, generators)
     if not disclosure.visible_label.text:
         findings.append(_finding("AI_LABEL_MISSING", "BLOCK",
@@ -507,7 +521,7 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
                                          f"the body ({label_check['portrait_evidence']['detail']}): run film.py versions again"))
 
     # ---- stage the archive
-    fingerprint = _inputs_fingerprint(pkg, master, cut_report, disclosure) if not c2pa and not any(f["severity"] == "BLOCK" for f in findings) else ""
+    fingerprint = _inputs_fingerprint(pkg, master, cut_report, disclosure, include_portrait=portrait is not None) if not c2pa and not any(f["severity"] == "BLOCK" for f in findings) else ""
     if fingerprint:
         current = current_archive(root)
         candidates = [current, *sorted((root / "media/deliveries").glob("*"))]
@@ -569,7 +583,7 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
     sync_header_gates(pkg, gate6_override="OWNER_PENDING", force=True)
     pkg = load_package(root)
     if not c2pa:
-        fingerprint = _inputs_fingerprint(pkg, master, cut_report, disclosure)
+        fingerprint = _inputs_fingerprint(pkg, master, cut_report, disclosure, include_portrait=portrait is not None)
     copied = copy_package(root, stage / "package")
     release_ready = not any(f["severity"] in ("BLOCK", "WARN") for f in findings)
     manifest = ArchiveManifest(film_id=film_id, title=pkg.header.title, created=datetime.now(timezone.utc).isoformat(timespec="seconds"),
