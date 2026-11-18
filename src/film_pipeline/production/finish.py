@@ -13,7 +13,7 @@ from film_pipeline.production.gates import evaluate_gates
 from film_pipeline.production.lock import lock_status
 from film_pipeline.production.package import load_package
 from film_pipeline.production.runtime import atomic_json, film_writer
-from film_pipeline.production import preflight
+from film_pipeline.production import post_engine, preflight
 
 _source_root = Path(__file__).resolve().parents[1]
 _code_paths = sorted([*(_source_root / "production").glob("*.py"), *(_source_root / "drama").glob("*.py"),
@@ -79,6 +79,9 @@ def _fingerprint(root: Path, name: str) -> str:
         if (root / "versions/versions.json").is_file():
             files.extend(_work_file(root, v["file"]) for v in json.loads((root / "versions/versions.json").read_text(encoding="utf-8"))["versions"])
     payload = {"step": name, "files": _hashes(files), "pipeline_code": _CODE_SHA}
+    engine = post_engine.resolve_engine_dir() if name == "mix" else None
+    if engine is not None:  # a mix mastered by the engine is not the same output as AFP's own mix
+        payload["post_engine"] = {"dir": str(engine), "revision": post_engine.engine_revision(engine)}
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
 
@@ -144,8 +147,12 @@ def finish(pkg, *, command, dry_run: bool = False) -> dict:
         state = {}
     generators = ["--generators-file", str(root / "generators.json")]
     steps = [("generators", ["generators", "--init"])] if not (root / "generators.json").is_file() else []
+    engine = post_engine.resolve_engine_dir()
+    mix_argv = ["mix", "--cut", str(root / "media/cut/titled_cut.mp4"), "--stems", str(root / "audio/stems")]
+    if engine is not None:
+        mix_argv += ["--engine", str(engine)]
     steps += [("grade", ["grade"]), ("titles", ["titles", "--render", "--color", "--clean-copy", *generators]),
-              ("mix", ["mix", "--cut", str(root / "media/cut/titled_cut.mp4"), "--stems", str(root / "audio/stems")]),
+              ("mix", mix_argv),
               ("mastercheck", ["mastercheck", "--cut-report", str(root / "media/cut/titled_cut.cut.json")]),
               ("versions", ["versions", "--cut-report", str(root / "media/cut/titled_cut.cut.json"), *generators]),
               ("dialoguecheck", ["dialoguecheck"]),

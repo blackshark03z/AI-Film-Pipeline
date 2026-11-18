@@ -130,13 +130,16 @@ def _credits(pkg: Any, spent: float, expected: float | None) -> dict[str, Any]:
 
 def _production(pkg: Any) -> dict[str, Any]:
     from film_pipeline.production import takes as T
+    from film_pipeline.production.money import load_adjustments, money_ledger
     from film_pipeline.production.retake import retake_report
     shots = pkg.typed.get("shots")
-    log = T.load_log(Path(pkg.root), pkg.header.film_id)
+    root = Path(pkg.root)
+    log = T.load_log(root, pkg.header.film_id)
     by_status: dict[str, int] = {}
     for t in log.takes:
         by_status[t.status] = by_status.get(t.status, 0) + 1
-    spent = sum(t.credits for t in log.takes)
+    adj_log = load_adjustments(root)
+    spent = money_ledger(log, {}, adj_log.adjustments)["credits"]["spent"]
     out: dict[str, Any] = {"takes": len(log.takes), "by_status": by_status, "credits_spent": spent,
                            "retake_rate": round(by_status.get("REJECTED", 0) / len(log.takes), 3) if log.takes else None}
     if shots is None:

@@ -902,4 +902,51 @@ def cut_continuity(pkg: Any, section: EditSection, durations: dict[str, float]) 
                 and ga.subject and ga.subject == gb.subject and ca.side == cb.side:
             add("JUMP_CUT_RISK", "WARN", a, b,
                 f"same scene, same {ca.size} {ca.angle} on {ga.subject}: reads as a jump cut unless the action bridges it")
+    issues.extend(transition_alignment_issues(pkg, section))
     return {"cuts": checked, "issues": issues}
+
+
+def _direction_transition_matches(kind: str, event: EditEvent) -> bool:
+    if kind == "CUT":
+        return event.transition.type == "CUT"
+    if kind == "DISSOLVE":
+        return event.transition.type in ("DISSOLVE", "DIP_TO_BLACK")
+    if kind == "MATCH":
+        return event.transition.type == "MATCH_CUT"
+    if kind == "J_CUT":
+        return event.audio.j_cut_s > 0.0
+    if kind == "L_CUT":
+        return event.audio.l_cut_s > 0.0
+    return True
+
+
+def transition_alignment_issues(pkg: Any, section: EditSection) -> list[dict[str, Any]]:
+    """Advisory (WARN-only) comparison of `02_direction.json` scene boundary transitions vs `05_edit.json` EDL."""
+    direction, shots = pkg.typed.get("direction"), pkg.typed.get("shots")
+    if direction is None or shots is None:
+        return []
+    by_id = {g.generation_id: g for g in shots.generations}
+    issues: list[dict[str, Any]] = []
+    for a, b in zip(section.events, section.events[1:]):
+        if a.kind != "TAKE" or b.kind != "TAKE" or a.generation_id not in by_id or b.generation_id not in by_id:
+            continue
+        ga, gb = by_id[a.generation_id], by_id[b.generation_id]
+        if ga.scene_id == gb.scene_id:
+            continue
+        sd_out = direction.scenes.get(ga.scene_id)
+        sd_in = direction.scenes.get(gb.scene_id)
+        if sd_out is None or sd_in is None:
+            continue
+        exp_out = sd_out.transition_out.kind
+        exp_in = sd_in.transition_in.kind
+        required = [k for k in (exp_out, exp_in) if k != "CUT"] or ["CUT"]
+        mismatched = [k for k in required if not _direction_transition_matches(k, b)]
+        if mismatched:
+            issues.append({
+                "code": "DIRECTION_TRANSITION_MISMATCH",
+                "severity": "WARN",
+                "between": [a.event_id, b.event_id],
+                "detail": (f"scene boundary {ga.scene_id}->{gb.scene_id} expects transition {', '.join(required)}, "
+                           f"got {b.transition.type} (j_cut={b.audio.j_cut_s:g}s, l_cut={b.audio.l_cut_s:g}s)"),
+            })
+    return issues

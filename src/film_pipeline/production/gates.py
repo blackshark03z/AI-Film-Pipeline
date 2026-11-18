@@ -7,10 +7,12 @@ Later phases register real validators with `register_validator`.
 from __future__ import annotations
 
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 from film_pipeline.core import ContractModel
 from film_pipeline.production.package import GATE_NAMES, SCRIPT_FILE, STAGE_FILES, FilmPackage, GateState
+from film_pipeline.production.runtime import atomic_json
 from film_pipeline.production.direction import direction_issues
 from film_pipeline.production.narration import narration_direction_issues, narration_pending, narration_story_issues
 from film_pipeline.production.story import story_issues, story_pending
@@ -138,3 +140,49 @@ def summary(results: list[GateResult]) -> dict[str, Any]:
         "gates": {r.gate: {"name": r.name, "status": r.status, "issues": r.issues} for r in results},
         "blocked": any(r.status == "BLOCK" for r in results),
     }
+
+
+def _archive_locked_for_sync(root: Path) -> bool:
+    import json
+    from film_pipeline.production import deliver as dl_mod
+    dpath = root / "07_delivery.json"
+    if dpath.is_file():
+        try:
+            data = json.loads(dpath.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            data = {}
+        delivery = data.get("delivery") if isinstance(data, dict) else None
+        if isinstance(delivery, dict) and delivery.get("owner_acceptance"):
+            return True
+    try:
+        arch = dl_mod.current_archive(root)
+    except (OSError, ValueError):
+        return False
+    return (arch / dl_mod.MANIFEST).is_file() and bool(dl_mod.verify_archive(arch).get("ok"))
+
+
+def sync_header_gates(
+    pkg: FilmPackage,
+    results: list[GateResult] | None = None,
+    *,
+    force: bool = False,
+    gate6_override: GateState | None = None,
+) -> dict[str, str]:
+    """Synchronize ``film.json['gates']`` from evaluated gates.
+
+    Preserves existing verified delivery archives unless ``force=True``.
+    """
+    import json
+    root = Path(pkg.root)
+    if not force and _archive_locked_for_sync(root):
+        return {k: str(v) for k, v in pkg.header.gates.items()}
+    evaluated = results if results is not None else evaluate_gates(pkg)
+    desired: dict[str, str] = {r.gate: r.status for r in evaluated}
+    if gate6_override is not None:
+        desired["6"] = gate6_override
+    film_path = root / "film.json"
+    raw = json.loads(film_path.read_text(encoding="utf-8"))
+    if raw.get("gates") != desired:
+        raw["gates"] = desired
+        atomic_json(film_path, raw)
+    return desired

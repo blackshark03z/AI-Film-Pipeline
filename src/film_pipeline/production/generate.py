@@ -43,8 +43,8 @@ from typing import Any, Callable
 
 from film_pipeline.drama.generability import DRAFTS, rate_shot
 from film_pipeline.production.plan import plan_package
-from film_pipeline.production.money import (credit_ledger, money_ledger, receipt_amount, receipt_charged, unresolved_sends,
-                                            receipt_result, receipt_unit)
+from film_pipeline.production.money import (credit_ledger, load_adjustments, money_ledger, receipt_amount, receipt_charged,
+                                            unresolved_sends, receipt_result, receipt_unit)
 from film_pipeline.production.planning import flow_credits
 from film_pipeline.production.sections import shot_seconds
 from film_pipeline.production.takes import (load_log, register_take, sha256_file, sha256_text, takes_dir)
@@ -153,7 +153,8 @@ def _cached_plan_package(pkg: Any, root: Path, plan_out: Path, verified: frozens
 
 def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None, stills_dir: Path | None = None,
                   start_token: str | None = None, end_token: str | None = None,
-                  today: date | None = None, cdp_scope: str | None = None) -> dict[str, Any]:
+                  today: date | None = None, cdp_scope: str | None = None,
+                  account_scope: str | None = None) -> dict[str, Any]:
     shots, pre = pkg.typed.get("shots"), pkg.typed.get("preprod")
     if shots is None or pre is None:
         raise ValueError("generate needs a valid 03_preprod.json and 04_shots.json")
@@ -211,17 +212,24 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     number = max(used) + 1
     take_id = f"{generation_id}_t{number}"
     out = root / "media" / "takes" / f"{take_id}.mp4"
-    ledger = money_ledger(log, sent)
+    ledger = money_ledger(log, sent, load_adjustments(root).adjustments)
     spent = ledger.get(unit, {}).get("spent", 0.0)
     scope = (os.environ.get("AFP_FLOW_PROJECT", "").strip() if cdp_scope is None else cdp_scope.strip()) or None
+    acct = (os.environ.get("AFP_FLOW_ACCOUNT", "").strip() if account_scope is None else account_scope.strip()) or None
     pending = unresolved_sends(log, sent)
-    if scope is not None:
-        pending = {
-            tid: r for tid, r in pending.items()
-            if r.get("generation_id", tid.rsplit("_t", 1)[0]) == generation_id
-            or not r.get("project")
-            or r.get("project") == scope
-        }
+    if scope is not None or acct is not None:
+        filtered = {}
+        for tid, r in pending.items():
+            same_gen = r.get("generation_id", tid.rsplit("_t", 1)[0]) == generation_id
+            r_acct = str(r.get("account") or "").strip()
+            r_proj = str(r.get("project") or "").strip()
+            if same_gen:
+                filtered[tid] = r
+            elif not r_acct and not r_proj:
+                filtered[tid] = r
+            elif (acct and r_acct == acct) or (scope and r_proj == scope):
+                filtered[tid] = r
+        pending = filtered
     if pending:
         blockers.append(_blocker("SEND_PENDING", f"{', '.join(pending)} still needs reconciliation; run film.py reconcile "
                                  f"for the existing send before another submission", live_only=True))
@@ -509,7 +517,7 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
              stills_dir: Path | None = None, start_token: str | None = None, backlog: Path | None = None,
              runner: Runner | None = None, end_token: str | None = None,
              today: date | None = None, adapter: Any | None = None, auto_resend: int = AUTO_RESEND,
-             cdp_scope: str | None = None) -> dict[str, Any]:
+             cdp_scope: str | None = None, account_scope: str | None = None) -> dict[str, Any]:
     """``runner`` replaces flow_send on a Flow route; ``adapter`` replaces the HTTP adapter on an API route (tests and
     rehearsals: on a rehearsal package an explicit runner/adapter is a mock and records cost 0).
 
@@ -518,7 +526,7 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     fewer than PROVIDER_FAILURES_BEFORE_RESTAGE provider failures (OWNER_POLICY: 3 on one shot -> restage). The resend
     is an ordinary send through every gate (go-live, budget, cap). Each send is logged in takes/send_log.jsonl."""
     payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
-                            end_token=end_token, today=today, cdp_scope=cdp_scope)
+                            end_token=end_token, today=today, cdp_scope=cdp_scope, account_scope=account_scope)
     root = Path(pkg.root)
     cap = get_capability(payload["provider"], payload["provider_model"])
     flow = cap.adapter == "flow_ui"

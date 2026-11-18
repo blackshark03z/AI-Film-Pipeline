@@ -54,7 +54,7 @@ class TakeEntry(ContractModel):
     # provider adapters (docs/production/PROVIDER_INDEPENDENCE.md): every take before them is a Flow take
     provider: str = Field(default="flow", min_length=1)
     provider_job_id: str = ""  # API routes bind the take by job id; Flow binds by prompt text and media id ("")
-    cost_unit: Literal["credits", "USD", "VND"] = "credits"
+    cost_unit: Literal["credits", "USD", "VND", "muse_requests"] = "credits"
     cost_amount: float | None = Field(default=None, ge=0)  # None = `credits` (a Flow take)
 
     @property

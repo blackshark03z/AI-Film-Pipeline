@@ -1,3 +1,19 @@
+# 2026-11-18 — Film08 Chain of Custody Completed (300/300 Accepted, 16:9 & 9:16 Delivered, Gate 6 OWNER_PENDING) + Phase 2/3 System Upgrade
+
+- **Film08 Production & Delivery (`98535367`, P20 M4 Candidate):**
+  - Eliminated off-frame listener intrusion root cause via opt-in `de_personify_off_frame` & `interperson_no_touch_ids` (0 changes to the 197 previously `ACCEPTED` prompt SHA-256s; verified `SC09_g03` v3 & `SC12_g02` v2 clean on right edge without cropping Gemini sparkle corner).
+  - Completed remaining `49` start stills + `SC09_g24` storyboard approval and all `103` remaining generations across Flow accounts (`khoia1k571`, `khoicaesar02`, `04`): **`300 / 300` `ACCEPTED`**, `353` total takes, `53` rejected, `first_pass_rate = 0.863`, `credits.spent = 2118.0 / 2140.0` (`99.0%`), `0` pending sends.
+  - Picture lock (`edl_sha256: 9b5fd506863bb17e480021b04c8ad0f165e24ce0d266238330bf8462fd7ae79a`), speech-aligned `titles/cues.json` (`270` cues, `0` `SYNC_OFFSET` BLOCKs, `median_offset_s = 0.0`), `titles/portrait_focus.json` (`300` events, `PORTRAIT_FOCUS_UNKNOWN = 0`), closed-loop AAC true-peak normalizer in `drama/post.py` (`-14.6 LUFS / -2.9 dBTP`).
+  - Full `film.py finish` succeeded (`ok: true`, `release_ready: true`): archive `films/film08_chain_of_custody/media/deliveries/20261118T044106-40b49011c3` (`manifest_sha256: 357d662d61a3484d759f14eb98cc1e50d34334bbd231d69ab80a080fa3343d5`, `38` files, `verify_archive ok: True`), `Gates 1–5 == PASS`, **`Gate 6 == OWNER_PENDING`** (`owner_acceptance_written: false`; awaiting Owner creative review and explicit `film.py deliver --accept`).
+- **Phase 2 Tech Debt, 168-Category Closure & Consolidation:**
+  - Restored `test_accepted_film07_takes_do_not_go_stale` (`5/5 PASS`) by gating `_anchored_eyeline` behind opt-in `object_gaze_neutral_eyeline` + adding 5 human-reviewed `prompt_rebind.json` records (preserving `film07` delivered archive `f3476aa23f`).
+  - Closed `P20 money ledger adjustments` (`money.py` `LedgerAdjustment` & `BalanceCheckpoint`, `film.py ledger-adjust`), `plan_package` SHA cache & account-scoped `SEND_PENDING` (`generate.py`), and `sync_header_gates` (`gates.py`, `deliver.py`, `validate --sync-gates`).
+  - Closed the final `GAP` in [CATEGORY_COVERAGE_168.md](../production/CATEGORY_COVERAGE_168.md) (`110 Foley` / `111 Sound effects` via `assets/sfx_catalog.json` + `production/foley.py` `GENERATED_OFFLINE`), added `transition_alignment_issues` (`edit.py`), and added R44-informed assist-only `dailies_triage.py` (`film.py triage`, never bypasses human QC).
+  - Ported `muse_gateway.py` (`5d981c34`) and opt-in `film_package_export` + `post_engine.py` (`eceaa135`), wrote [THE_SPARE_JACKET_ASR_REVIEW.md](../production/THE_SPARE_JACKET_ASR_REVIEW.md) (`25` `REVIEW_REQUIRED` lines), and [WORKTREE_CONSOLIDATION_MANIFEST.md](../production/WORKTREE_CONSOLIDATION_MANIFEST.md).
+- **Phase 3 Agentic Filmmaking v2:** Authored [AGENTIC_FILMMAKING_UPGRADE_RFC.md](../architecture/AGENTIC_FILMMAKING_UPGRADE_RFC.md) and implemented `src/film_pipeline/agentic/` (`WaveDAGScheduler`, `AccountLeasePool` SQLite WAL, `PreSendCritic`, `CausalRepairRouter`, `SceneIncrementalConformer`, `CapabilityRouter`) + read-only `film.py agentic-plan`.
+
+---
+
 # 2026-11-17 — Continue Film08 toward 300 accepted takes
 
 - Offline reviewed and registered the existing Naomi close single for SC10_g08, g09, g20 and g21, whose still prompts specify the same gaze and initial staging. The opened packet and ledger are outside this still crop and must be checked in the adjacent footage. The approved still does not qualify any video output or clear the repeated-defect stop; no Flow send or credits used.

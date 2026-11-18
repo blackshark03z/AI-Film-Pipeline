@@ -514,3 +514,21 @@ def test_plan_cache_reuses_and_invalidates_on_prompt_edit(tmp_path, monkeypatch)
     third = G.build_payload(pkg, "SC01_g1", stills_dir=sd, start_token="tok:abc")
     assert calls == 2
     assert third["prompt_sha256"] == first["prompt_sha256"]
+
+
+def test_build_payload_isolates_pending_sends_by_account_scope(tmp_path, monkeypatch):
+    pkg = film(tmp_path, 200)
+    accept(pkg, "SC01_g1", n=1, credits=8.0)
+    sd = still(tmp_path, "SC01_g2")
+    folder = T.takes_dir(pkg.root) / "intents"
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "SC01_g1_t2.intent.json").write_text(json.dumps({
+        "film_id": "film03_front_desk", "generation_id": "SC01_g1", "take_id": "SC01_g1_t2",
+        "sent": True, "result": "PENDING", "expected_credits": 8.0, "account": "02",
+    }), encoding="utf-8")
+
+    monkeypatch.setenv("AFP_FLOW_ACCOUNT", "571")
+    assert "SEND_PENDING" not in codes(G.build_payload(pkg, "SC01_g2", stills_dir=sd, start_token="tok:abc"))
+    assert "SEND_PENDING" in codes(G.build_payload(pkg, "SC01_g1", stills_dir=sd, start_token="tok:abc"))
+    assert "SEND_PENDING" in codes(G.build_payload(pkg, "SC01_g2", stills_dir=sd, start_token="tok:abc",
+                                                   account_scope="02"))

@@ -2,7 +2,7 @@
 
 Branch `feature/drama-preprod-p0`, written 2026-11-06 (loop item P0-01). Source list: Owner's `Danh mục sản xuất phim e2e.txt`; prior root-branch analysis: `docs/research/E2E_FILM_CATEGORY_MATRIX_168_20261104.md` (root repo, read-only). Status describes this branch's code only, not Owner acceptance or quality of output.
 
-**Summary:** HAVE 58 · PARTIAL 83 · GAP 1 · N/A 26 · total 168
+**Summary:** HAVE 62 · PARTIAL 80 · GAP 0 · N/A 26 · total 168 (updated 2026-11-18: closed GAP 110 & 111 via `assets/sfx_catalog.json` + `production/foley.py`; added `transition_alignment_issues`, `dailies_triage.py`, and `sync_header_gates`/`LedgerAdjustment`)
 
 Status: HAVE = code path covers the responsibility at the level the dramas need; PARTIAL = covers plan/declared level or one slice; GAP = no path; N/A = not applicable to the AI route (reason in the responsibility column). Update Status/Backlog when an item closes.
 
@@ -45,7 +45,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 28 | Emotional direction | `SceneDirection.curve` 0-5 per character; Gate 2 blocks jumps > 2 without a cause beat | HAVE | P1-02 |
 | 29 | Rhythm & pacing | `Pacing` target + holds, now measured: `edit.rhythm_report` sets used shot lengths per scene against the target (30% band), flags holds over target + planned hold and unplanned long shots | HAVE | - |
 | 30 | Coverage strategy | `drama/coverage.CoveragePlanner` master/OTS/single/reaction | PARTIAL | P1-02 |
-| 31 | Transitions | `Transition` kind + reason per scene boundary; recorded, not yet applied by an edit stage | PARTIAL | P1-02 |
+| 31 | Transitions | `Transition` kind + reason per scene boundary; checked ad-hoc against `05_edit.json` by `edit.transition_alignment_issues` (`WARN` `DIRECTION_TRANSITION_MISMATCH`) | PARTIAL | P1-02 |
 | 32 | Visual storytelling | `action_meaning` + choreography once_actions (must-show) | PARTIAL | P1-02 |
 | 33 | Point of view | `SceneDirection.pov`: whose view, facts the audience/characters know (ids checked against comprehension) | PARTIAL | P1-02 |
 | 34 | Dramatic emphasis | `Emphasis` device per moment; `reveals` must have an emphasis device on a scene shot (Gate 2) | HAVE | P1-02 |
@@ -131,7 +131,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 99 | Performance editing | Per-event take choice and `src_in_s`/`src_out_s` trims; no automatic performance judgement (human at CUT level) | PARTIAL | - |
 | 100 | Narrative editing | Reorder events, insert context cards, drop or reuse takes (`SHOT_NOT_IN_CUT`, `TAKE_REUSED` warnings); narrative judgement stays human | PARTIAL | - |
 | 101 | Rhythm editing | `edit.rhythm_report` + per-event trims and holds; advisory WARNs, never BLOCK | HAVE | - |
-| 102 | Transition design | CUT / MATCH_CUT / DISSOLVE / DIP_TO_BLACK and J/L cuts declared per event and rendered (xfade); the direction's planned `transition_in/out` is not yet compared with the EDL | PARTIAL | - |
+| 102 | Transition design | CUT / MATCH_CUT / DISSOLVE / DIP_TO_BLACK and J/L cuts declared per event and rendered (xfade); `edit.transition_alignment_issues` checks scene boundaries against `02_direction.json` `transition_in/out` (`WARN` `DIRECTION_TRANSITION_MISMATCH`) | HAVE | - |
 | 103 | Montage | Not needed for current dramas; add only if a script needs it | N/A | - |
 | 104 | Fine cut | Per-event `src_in_s`/`src_out_s` trims (frame-accurate in the filter), dissolves, dips, J/L cuts rendered; `film.py cut` checks and reports | HAVE | - |
 | 105 | Picture lock | `production/lock.py`: `film.py lock --lock --by NAME` freezes EDL hash + per-event fingerprints (take bytes, accepted flag, tags) and keeps every lock; `dirty_items` flags post/delivery items built on a different cut; Gate 5 (drama) passes only for a fresh lock | HAVE | - |
@@ -139,8 +139,8 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 107 | Dialogue editing | `mix.build_stems`: dialogue stem = the cut's own sound (J/L cuts included); no editing beyond the EDL | PARTIAL | - |
 | 108 | Dialogue cleanup | Dialogue is generated with the clip; loudness normalised; no denoise/cleanup tool | PARTIAL | - |
 | 109 | ADR / dubbing | N/A for current route (no ADR) | N/A | - |
-| 110 | Foley | No Foley recording; effects only from licensed assets placed by `mix` (see 111) | GAP | - |
-| 111 | Sound effects | `mix` places declared `sfx` from `audio/sfx/<slug>.wav`; `sound_rights` blocks `validate` until each used file has a cleared record (source, license, sha256, usage); no sound library yet, assets are put in place by a human | PARTIAL | - |
+| 110 | Foley | `assets/sfx_catalog.json` + `production/foley.py` (`film.py foley`): deterministic offline FFmpeg `lavfi` Foley synthesis into `audio/sfx/<slug>.wav`, auto-cleared as `GENERATED_OFFLINE` in `sound_rights` (`audio/assets.json`) for `mix` | HAVE | - |
+| 111 | Sound effects | `assets/sfx_catalog.json` + `production/foley.py` synthesizes matching catalog cues (`film.py foley`), `mix` places `audio/sfx/<slug>.wav` and `sound_rights` verifies SHA-256 + `GENERATED_OFFLINE`/human-cleared license | HAVE | - |
 | 112 | Ambience | `mix`: one generated, calibrated (`ambience_lufs`) noise bed per scene span coloured by the location's `room_tone`, cross-faded at the edges | HAVE | - |
 | 113 | Room tone | `mix`: room tone per location from `room_tone` text; silent over title/end cards | HAVE | - |
 | 114 | Sound perspective | `mix.build_stems` writes dialogue/ambience/sfx/music stems and ducks dialogue; no spatial or perspective mixing per cue | PARTIAL | - |
@@ -167,12 +167,12 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 |---|---|---|---|---|
 | 131 | Narrative QC | `comprehension.check_comprehension` on the plan; `qc_model` records a human narrative verdict per take (auto cannot PASS) | PARTIAL | P3-02 |
 | 132 | Coverage QC | `CoveragePlanner` plan-level only | PARTIAL | P1-02 |
-| 133 | Character QC | `autoqc` identity WARN-only; dailies pre-fill WARNs but need anchors (not wired); human PASS in `qc_model` | PARTIAL | P6-01 |
-| 134 | Spatial QC | `autoqc` SET_DRIFT as a dailies WARN; start/end-state questions per take; `AxisBook` | PARTIAL | P6-01 |
-| 135 | Action QC | Dailies questions generated from every choreography phase/once-action; human FULL_MOTION review only; rejected action takes route to `retake` | PARTIAL | P6-01 |
-| 136 | Motion QC | `qc_model` motion group: human FULL_MOTION review, P0/P1/P2; `master_qc` detects frozen/black frames on the master (technical only, not motion quality) | PARTIAL | - |
-| 137 | Camera QC | `autoqc.shot_scale` WARN against the planned size in dailies | PARTIAL | P6-01 |
-| 138 | Visual QC | `qc_model` visual group: human SAMPLED review, P0/P1/P2; `master_qc.video_checks` flags black/frozen/duplicated frames and crushed/blown-out share on the master | PARTIAL | - |
+| 133 | Character QC | `autoqc` identity WARN-only + `dailies_triage.py` (`film.py triage`) edge-intrusion / corner-mark WARNs; never auto-PASSes human `qc_model` | PARTIAL | P6-01 |
+| 134 | Spatial QC | `autoqc` SET_DRIFT + `dailies_triage.py` left/right 8% strip delta WARNs; start/end-state questions per take; `AxisBook` | PARTIAL | P6-01 |
+| 135 | Action QC | Dailies questions from choreography phases/once-actions + `dailies_triage.py` assist-only metrics; human FULL_MOTION review only | PARTIAL | P6-01 |
+| 136 | Motion QC | `qc_model` motion group (human FULL_MOTION, P0/P1/P2) + `dailies_triage.py` border jitter signal (R44F); `master_qc` detects freeze/black frames on master | PARTIAL | - |
+| 137 | Camera QC | `autoqc.shot_scale` + `dailies_triage.py` R44F border stability WARN on `STATIC` camera declarations | PARTIAL | P6-01 |
+| 138 | Visual QC | `qc_model` visual group (human SAMPLED, P0/P1/P2) + `dailies_triage.py` bottom-right corner mark signal; `master_qc.video_checks` on master | PARTIAL | - |
 | 139 | Temporal QC | `master_qc`: black frames, frozen frames, duplicated-frame share on the master (title/end/card windows exempt); take-level temporal stays human | PARTIAL | - |
 | 140 | Sequence QC | `sequence.validate_shot_sequence` (plan); `drama/qc.py` `HandoffQC` + `evidence.end_state_verified` check hand-offs between takes; cut-level judgement is a human review | PARTIAL | - |
 | 141 | Audio QC | `master_qc`: codec, -14 LUFS +-1.5, true peak <= -1 dBTP, clipping runs, silent gaps > 3 s | HAVE | - |
@@ -180,7 +180,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 | 143 | Color QC | `color.match` deviation per shot + `OUT_OF_RANGE` WARN; `master_qc` crushed/blown-out frame share; no banding detector | PARTIAL | - |
 | 144 | Technical QC | `master_qc`: streams, resolution/fps/codec/pix_fmt, duration vs planned clock, black/freeze/duplicate frames, faststart; record `qc/master_qc.json` at level CUT | HAVE | - |
 | 145 | Compliance QC | `disclosure.check_release` + visible-label frame check, rights WARN/BLOCK findings in `deliver` (`planning.legal`, `sound_rights_issues`); platform rules are not checked against the live platform | PARTIAL | - |
-| 146 | Delivery QC | `delivery.verify`, `e2e status --package`; Gate 6 (`gate_checks.py`) checks QC record, picture lock, archive hashes and the Owner's `deliver --accept` bound to the manifest; run end to end only on a synthetic rehearsal (`film.py rehearse`, P10-05; REHEARSAL_FILM04.md), not yet on real takes | PARTIAL | P3-05 |
+| 146 | Delivery QC | `delivery.verify`, `status --package`, Gate 6 checks QC/lock/hashes/Owner `deliver --accept`, `gates.sync_header_gates` syncs `film.json["gates"]`; verified on real Owner-accepted `film06`/`film07` & `film08` candidate | HAVE | - |
 
 ## VII. Delivery & distribution
 
@@ -188,7 +188,7 @@ Status: HAVE = code path covers the responsibility at the level the dramas need;
 |---|---|---|---|---|
 | 147 | Mastering | `post.assemble` + `normalize_loudness` final master; `film.json disclosure.ai_label` (`always` default / `title_card`) sets the body label and `deliver` samples frames of the master against it (`AI_LABEL_NOT_BURNED`) | HAVE | - |
 | 148 | Encoding | H.264/AAC 16:9 master and 9:16 version (`versions`, 720x1280, sound copied), faststart | HAVE | - |
-| 149 | Versioning | `versions`: 16:9 master + 9:16 reframe (focus from tags / reframe boxes, cards fitted); language versions are sidecar SRTs only; generators named with role + settings (`--generators-file`). The 9:16 centre crop can cut off the bottom-left body label (not checked yet: P11-01) | PARTIAL | - |
+| 149 | Versioning | `versions`: 16:9 master + 9:16 reframe (focus from tags / reframe boxes / `portrait_focus.json`, `portrait_label_png` checked by `deliver.py` `AI_LABEL_NOT_BURNED_9X16`, cards fitted); language versions are sidecar SRTs only | PARTIAL | - |
 | 150 | Localization | EN/VI subtitle sidecars | PARTIAL | P5-04 |
 | 151 | Packaging | `delivery/`: marked masters, sidecars, thumbnails, metadata, QC, rights, package JSON, MANIFEST | HAVE | - |
 | 152 | Metadata | `versions/metadata.json`: title (source/vi), logline description, tags, AI disclosure, credits, hashes; DRAFT_NOT_PUBLISHED | HAVE | - |

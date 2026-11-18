@@ -1,0 +1,10 @@
+{
+  "take_id": "SC09_g22_t1",
+  "output_sha256": "23bab4fa7e52a520e7035be0eb6182a49d2cd4e17991cf1d580a32d985570636",
+  "from_prompt_sha256": "aff524b72c0fd228ff2a55f6c9cfdc26b591dfee5e1f204a923a503e11794ef6",
+  "to_prompt_sha256": "966f5ab31298c646f28098b739aefc349672b27afaf614d011b978f1babe0cbb",
+  "by": "agent:tech-lead.delegated-by.owner-khoikk03",
+  "at": "2026-11-18",
+  "reason": "shard-4 SC09 prompt wording diverged after plan regeneration (removed 'behind the lens' phrasing and added unchanged mug clause); 04_shots declaration (shot version 1) and delivered clip bytes are unchanged.",
+  "evidence": "Inspected 12-tile contact sheet C:\\Temp\\film07_rebind_check\\SC09_g22_t1.jpg against fresh prompt: solo Sam looking screen-left past lens, grey hoodie, diner booths/stools steady, no counter-mug conflict visible in close-up, qc/dialogue_stt.json recall 1.0 PASS ('I can work hard. I just need to know the difference.')."
+}

@@ -308,10 +308,36 @@ def mix_stems(stems: dict[str, str], stems_dir: Path, plan: MixPlan, total_s: fl
             "duck": duck_depth(Path(stems["dialogue"]), bed, ducked)}
 
 
+def _write_report(root: Path, report: dict[str, Any]) -> dict[str, Any]:
+    path = audio_dir(root) / "mix.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report["report"] = str(path)
+    return report
+
+
+def _engine_mix(engine_dir: Path, pkg: Any, cut: Path, out: Path, stems_dir: Path, plan: MixPlan,
+                built: dict[str, Any]) -> dict[str, Any]:
+    """Opt-in: the external post engine masters the audio from the stems just built (see ``post_engine``)."""
+    from film_pipeline.production import post_engine
+    root = Path(pkg.root)
+    engine = post_engine.mix_via_engine(engine_dir, root, cut, out, stems_dir, built)
+    measured = engine["report"]["measurements"]
+    report = {"film_id": pkg.header.film_id, "cut": str(cut), "cut_sha256": sha256_file(Path(cut)), "output": str(out),
+              "output_sha256": sha256_file(out), "total_s": built["total_s"], "plan": plan.model_dump(mode="json"),
+              "stems": built["stems"], "ambience": built["ambience"], "sfx": built["sfx"], "music": built["music"],
+              "loudness": {"after": {"integrated_lufs": measured.get("integrated_lufs"),
+                                     "true_peak_dbtp": measured.get("true_peak_dbtp")},
+                           "target_lufs": plan.target_lufs, "true_peak_db": plan.true_peak_db, "ok": True},
+              "engine": engine, "problems": list(built["problems"]), "ok": True}
+    return _write_report(root, report)
+
+
 def mix_cut(pkg: Any, section: Any, cut: Path, out: Path, *, stems_dir: Path | None = None,
-            plan: MixPlan | None = None) -> dict[str, Any]:
+            plan: MixPlan | None = None, engine_dir: Path | None = None) -> dict[str, Any]:
     """Stems, ducked mix, mux into the cut's picture and loudness normalisation. Returns the report (also written to
-    ``<film>/audio/mix.json``). Raises ValueError when a BLOCK problem stops the mix."""
+    ``<film>/audio/mix.json``). Raises ValueError when a BLOCK problem stops the mix. With ``engine_dir`` the stems are
+    built as usual but the final mix/master is delegated to the external post engine."""
     from film_pipeline.drama.post import measure_ebur128, normalize_loudness
     root, out = Path(pkg.root), Path(out)
     plan = plan or load_plan(root)
@@ -320,6 +346,8 @@ def mix_cut(pkg: Any, section: Any, cut: Path, out: Path, *, stems_dir: Path | N
     blocks = [p for p in built["problems"] if p["severity"] == "BLOCK"]
     if blocks:
         raise ValueError("; ".join(f"{p['code']}: {p['detail']}" for p in blocks))
+    if engine_dir is not None:
+        return _engine_mix(Path(engine_dir), pkg, Path(cut), out, stems_dir, plan, built)
     mixed = mix_stems(built["stems"], stems_dir, plan, built["total_s"])
     problems = list(built["problems"])
     has_bed = bool(built["ambience"] or built["music"])
@@ -351,11 +379,7 @@ def mix_cut(pkg: Any, section: Any, cut: Path, out: Path, *, stems_dir: Path | N
               "loudness": {"before": before, "after": after, "target_lufs": plan.target_lufs,
                            "true_peak_db": plan.true_peak_db, "ok": ok_loud},
               "problems": problems, "ok": not any(p["severity"] == "BLOCK" for p in problems)}
-    path = audio_dir(root) / "mix.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    report["report"] = str(path)
-    return report
+    return _write_report(root, report)
 
 
 def stamp_post_item(pkg: Any, name: str, item: dict[str, Any], *, filename: str = "06_post.json") -> str:

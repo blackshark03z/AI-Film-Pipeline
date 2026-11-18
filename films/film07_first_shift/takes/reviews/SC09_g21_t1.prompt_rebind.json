@@ -1,0 +1,10 @@
+{
+  "take_id": "SC09_g21_t1",
+  "output_sha256": "8e6b2779f11e274b4e7956129bb5b6a0f8feb528ae9d8cffd26a2b72701ea17b",
+  "from_prompt_sha256": "207b6210630d7aa26826ef0f5651ed08d88d48bb4036ee0915168bb919c3bf0d",
+  "to_prompt_sha256": "4f96314f4b93de3bbf71589677d0bc52929fec89466862ba69fd3e701e6368ef",
+  "by": "agent:tech-lead.delegated-by.owner-khoikk03",
+  "at": "2026-11-18",
+  "reason": "shard-4 SC09 prompt wording diverged after plan regeneration (removed 'behind the lens' phrasing and added unchanged mug clause); 04_shots declaration (shot version 1) and delivered clip bytes are unchanged.",
+  "evidence": "Inspected 12-tile contact sheet C:\\Temp\\film07_rebind_check\\SC09_g21_t1.jpg against fresh prompt: solo Ruth looking screen-right past lens, blue uniform/apron/glasses, diner shelves/front window steady, no counter-mug conflict visible in close-up, qc/dialogue_stt.json recall 1.0 PASS ('It does. Asking for help doesn't mean ordering you about.')."
+}

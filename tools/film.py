@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -130,6 +131,9 @@ def main(argv: list[str] | None = None) -> int:
                        ("status", "stages present, gates, counts")):
         sub = actions.add_parser(name, help=text)
         sub.add_argument("--film", required=name != "status", type=Path)
+        if name == "validate":
+            sub.add_argument("--sync-gates", action="store_true",
+                             help="sync evaluated gate statuses into film.json['gates'] when safe")
         if name == "status":
             sub.add_argument("--all", type=Path, metavar="FILMS_DIR", help="one row per package under FILMS_DIR: gates, credits, usable seconds, retake rate, next action")
             sub.add_argument("--package", type=Path, help="restore check of a delivery/ archive, wherever it was copied to: every hash, the package, the disclosure, missing dependencies")
@@ -190,6 +194,15 @@ def main(argv: list[str] | None = None) -> int:
     gn.add_argument("--backlog", type=Path, help="file holding the OWNER_GO_LIVE line (default: the loop backlog)")
     gn.add_argument("--no-auto-resend", action="store_true",
                     help="do not resend once after a provider failure (P18-03; default: resend once)")
+    mg = actions.add_parser("muse", help="browser-assisted Muse shot handoff; no automatic generation")
+    mg.add_argument("verb", choices=["prepare", "dispatch", "ingest"])
+    mg.add_argument("--film", required=True, type=Path)
+    mg.add_argument("--gid")
+    mg.add_argument("--condition-camera", action="store_true", help="render the declared camera plan as Muse prompt text")
+    mg.add_argument("--request", type=Path, help="immutable request directory returned by prepare")
+    mg.add_argument("--backlog", type=Path, help="OWNER_GO_LIVE file required by dispatch")
+    mg.add_argument("--clip", type=Path, help="actual downloaded video for ingest")
+    mg.add_argument("--response", type=Path, help="observed Muse response JSON for ingest")
     rc = actions.add_parser("reconcile", help="resolve one existing Flow send without submitting another job")
     rc.add_argument("--film", required=True, type=Path)
     rc.add_argument("--take-id", required=True)
@@ -256,6 +269,19 @@ def main(argv: list[str] | None = None) -> int:
     lg.add_argument("--ref", help="where the evidence can be checked: a file, commit or take id")
     lg.add_argument("--replicate", metavar="LEARNING_ID", help="add evidence from another film (needs --from-film and --ref)")
     lg.add_argument("--from-film", help="film_id of the film that shows the learning again")
+    la = actions.add_parser("ledger-adjust", help="audited money adjustments & scene balance checkpoints (takes/adjustments.json)")
+    la.add_argument("--film", required=True, type=Path)
+    la.add_argument("--add-adjustment", action="store_true", help="record a delta adjustment (needs --delta, --reason, --evidence, --by)")
+    la.add_argument("--delta", type=float)
+    la.add_argument("--unit", default="credits")
+    la.add_argument("--reason", default="")
+    la.add_argument("--evidence", default="")
+    la.add_argument("--by", default="")
+    la.add_argument("--checkpoint-scene", metavar="SCENE_ID", help="record Flow balance checkpoint at scene start/end")
+    la.add_argument("--boundary", choices=["start", "end"], default="end")
+    la.add_argument("--account", default="")
+    la.add_argument("--observed-balance", type=float)
+    la.add_argument("--note", default="")
     dv = actions.add_parser("deliver", help="delivery archive: marked masters (AI disclosure, optional C2PA), sidecars, thumbnails, metadata, QC, rights, package JSON, MANIFEST with hashes -> delivery/")
     dv.add_argument("--film", required=True, type=Path)
     dv.add_argument("--video", type=Path, help="the 16:9 master (default <film>/media/cut/mixed.mp4)")
@@ -276,6 +302,8 @@ def main(argv: list[str] | None = None) -> int:
     mx.add_argument("--cut", type=Path, help="rendered cut mp4 with its .cut.json (default <film>/media/cut/rough_cut.mp4)")
     mx.add_argument("--out", type=Path, help="mixed mp4 (default <film>/media/cut/mixed.mp4)")
     mx.add_argument("--stems", type=Path, help="stem directory (default <film>/audio/stems)")
+    mx.add_argument("--engine", type=Path, help="delegate the final mix/master to the AutoEdit v2 post engine in this "
+                    "directory (default: env AFP_POST_ENGINE_DIR; unset = AFP's own mix)")
     sn = actions.add_parser("sounds", help="rights check of the sound assets the mix uses + music cue sheet; --record registers an asset")
     sn.add_argument("--film", required=True, type=Path)
     sn.add_argument("--record", metavar="ASSET", help="path under the film, e.g. audio/music/theme.wav (hash is taken from the file)")
@@ -286,6 +314,19 @@ def main(argv: list[str] | None = None) -> int:
     sn.add_argument("--attribution", default="")
     sn.add_argument("--note", default="")
     sn.add_argument("--usage", action="append", default=[], metavar="START:END", help="usage range in seconds, END may be empty")
+    fl = actions.add_parser("foley", help="synthesize offline-cleared foley/sfx WAVs from assets/sfx_catalog.json and register sound_rights")
+    fl.add_argument("--film", required=True, type=Path)
+    fl.add_argument("--ids", default="", help="comma-separated catalog ids to synthesize (default: match 04_shots.sfx)")
+    fl.add_argument("--all", action="store_true", help="synthesize every entry in assets/sfx_catalog.json")
+    fl.add_argument("--list", action="store_true", help="list available catalog ids without writing files")
+    tr = actions.add_parser("triage", help="advisory pre-dailies scanner (edge intrusion, corner mark, R44F stability, speech trim hint)")
+    tr.add_argument("--film", required=True, type=Path)
+    tr.add_argument("--take-id", required=True)
+    tr.add_argument("--clips", type=Path, help="directory holding take clips (default <film>/media/takes)")
+    ap = actions.add_parser("agentic-plan", help="compute DAG waves, pre-send critic report, incremental scene conform status, and CP1-CP3 checkpoints")
+    ap.add_argument("--film", required=True, type=Path)
+    ap.add_argument("--plan-dir", type=Path, help="plan output directory holding compiled prompts (default <film>/media/plan)")
+    ap.add_argument("--json-out", type=Path, help="optional path OUTSIDE <film> to write JSON report")
     qcp = actions.add_parser("qc", help="validate a take QC record (JSON object or list) and print each verdict")
     qcp.add_argument("--record", required=True, type=Path)
     rh = actions.add_parser("rehearse", help="offline dress rehearsal: run the whole chain on a COPY of the package with a mock "
@@ -319,9 +360,13 @@ def main(argv: list[str] | None = None) -> int:
         parser.error(f"unrecognized arguments: {' '.join(rest)}")
 
     from film_pipeline.production.runtime import writer, WriterBusy
-    readonly = {"status", "validate", "qc", "impact", "camera", "continuity"}
+    readonly = {"status", "validate", "qc", "impact", "camera", "continuity", "triage", "agentic-plan"}
+    is_readonly = (
+        (args.action in readonly and not (args.action == "validate" and getattr(args, "sync_gates", False)))
+        or (args.action == "foley" and getattr(args, "list", False))
+    )
     try:
-        if getattr(args, "film", None) and args.action not in readonly:
+        if getattr(args, "film", None) and not is_readonly:
             with writer(args.film, flow=args.action in {"generate", "reconcile"}):
                 return _run(args, rest, parser)
         return _run(args, rest, parser)
@@ -480,6 +525,28 @@ def _run(args, rest, parser) -> int:
             log = tk_mod.load_log(pkg.root, pkg.header.film_id)
             _emit({"film_id": log.film_id, "takes": [t.model_dump(mode="json") for t in log.takes]})
             return 0
+        if args.action == "muse":
+            from film_pipeline.production import muse_gateway as mg_mod
+            try:
+                if args.verb == "prepare":
+                    if not args.gid:
+                        raise ValueError("muse prepare needs --gid")
+                    folder = mg_mod.prepare(pkg, args.gid, condition_camera=args.condition_camera)
+                    _emit({"request": str(folder), "handoff": str(folder / "handoff.zip"), "sent": False})
+                else:
+                    if args.request is None:
+                        raise ValueError("muse dispatch/ingest needs --request")
+                    if args.verb == "dispatch":
+                        _emit(mg_mod.dispatch(pkg, args.request, backlog=args.backlog))
+                    else:
+                        if args.clip is None or args.response is None:
+                            raise ValueError("muse ingest needs --clip and --response")
+                        _emit(mg_mod.ingest(pkg, args.request, args.clip,
+                                          json.loads(args.response.read_text(encoding="utf-8"))))
+                return 0
+            except (ValueError, OSError, subprocess.TimeoutExpired) as exc:
+                _emit({"error": str(exc)})
+                return 2
         if args.action == "generate":
             from film_pipeline.production.generate import generate
             try:
@@ -741,8 +808,62 @@ def _run(args, rest, parser) -> int:
                 sheet = {"error": str(exc)}
             _emit({"ok": not checked["issues"], **checked, "attributions": sr_mod.attributions(pkg), "cue_sheet": sheet})
             return 1 if checked["issues"] else 0
+        if args.action == "foley":
+            from film_pipeline.production import foley as fl_mod
+            if args.list:
+                cat = fl_mod.load_catalog()
+                _emit({"license": cat.get("license"), "entries": [{"id": e["id"], "category": e.get("category"), "duration_s": e.get("duration_s"), "description": e.get("description")} for e in cat["entries"]]})
+                return 0
+            ids = [x.strip() for x in args.ids.split(",") if x.strip()] if args.ids else None
+            try:
+                _emit(fl_mod.materialize_film_foley(pkg, ids, all_catalog=args.all))
+            except (ValueError, FileNotFoundError) as exc:
+                _emit({"error": str(exc)})
+                return 1
+            return 0
+        if args.action == "triage":
+            from film_pipeline.production import dailies_triage as dt_mod
+            try:
+                _emit(dt_mod.triage_take(pkg, args.take_id, clips_dir=args.clips))
+            except (ValueError, KeyError, FileNotFoundError) as exc:
+                _emit({"error": str(exc)})
+                return 2
+            return 0
+        if args.action == "agentic-plan":
+            from film_pipeline.agentic import (
+                CapabilityRouter,
+                CausalRepairRouter,
+                PreSendCritic,
+                SceneIncrementalConformer,
+                WaveDAGScheduler,
+            )
+            waves = WaveDAGScheduler(pkg).plan_waves()
+            critic = PreSendCritic().inspect(pkg, plan_dir=args.plan_dir) if "preprod" in pkg.typed and "shots" in pkg.typed else None
+            repairs = CausalRepairRouter().diagnose_take_log(pkg)
+            conform = SceneIncrementalConformer().scene_status(pkg) if "shots" in pkg.typed else None
+            checkpoints = CapabilityRouter().checkpoint_plan(pkg)
+            report = {
+                "film_id": pkg.header.film_id,
+                "readonly": True,
+                "waves": waves,
+                "critic": critic,
+                "repairs": repairs,
+                "incremental_conform": conform,
+                **checkpoints,
+            }
+            if args.json_out is not None:
+                out_p = Path(args.json_out).resolve()
+                film_root = Path(pkg.root).resolve()
+                if out_p == film_root or film_root in out_p.parents:
+                    _emit({"error": "agentic-plan --json-out must point outside the film package directory"})
+                    return 2
+                out_p.parent.mkdir(parents=True, exist_ok=True)
+                out_p.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            _emit(report)
+            return 0
         if args.action == "mix":
             from film_pipeline.production import mix as mix_mod
+            from film_pipeline.production import post_engine
             section = pkg.typed.get("edit")
             if section is None:
                 _emit({"error": "mix needs a valid 05_edit.json"})
@@ -750,7 +871,8 @@ def _run(args, rest, parser) -> int:
             cut_path = args.cut or pkg.root / "media" / "cut" / "rough_cut.mp4"
             try:
                 report = mix_mod.mix_cut(pkg, section, cut_path, args.out or pkg.root / "media" / "cut" / "mixed.mp4",
-                                         stems_dir=args.stems)
+                                         stems_dir=args.stems,
+                                         engine_dir=post_engine.resolve_engine_dir(args.engine))
             except ValueError as exc:
                 _emit({"error": str(exc)})
                 return 1
@@ -851,9 +973,36 @@ def _run(args, rest, parser) -> int:
                    "generations": {g: {"verdict": v["verdict"], "words": v["words"]}
                                    for g, v in record["generations"].items()}})
             return 0 if result.ok else 1
+        if args.action == "ledger-adjust":
+            from film_pipeline.production import money as mn_mod
+            from film_pipeline.production import takes as tk_mod
+            root = Path(pkg.root)
+            if args.add_adjustment:
+                missing = [f for f, v in (("--delta", args.delta), ("--reason", args.reason),
+                                          ("--evidence", args.evidence), ("--by", args.by)) if v in (None, "")]
+                if missing:
+                    _emit({"error": f"--add-adjustment needs {', '.join(missing)}"})
+                    return 2
+                mn_mod.record_adjustment(root, args.delta, args.reason, args.evidence, args.by, unit=args.unit)
+            if args.checkpoint_scene:
+                if args.observed_balance is None or not args.account:
+                    _emit({"error": "--checkpoint-scene needs --account and --observed-balance"})
+                    return 2
+                log = tk_mod.load_log(root, pkg.header.film_id)
+                adj_log = mn_mod.load_adjustments(root)
+                spent = mn_mod.money_ledger(log, {}, adj_log.adjustments).get("credits", {}).get("spent", 0.0)
+                mn_mod.record_checkpoint(root, args.checkpoint_scene, args.boundary, args.account,
+                                         args.observed_balance, spent, note=args.note)
+            log = tk_mod.load_log(root, pkg.header.film_id)
+            adj_log = mn_mod.load_adjustments(root)
+            _emit({"film_id": pkg.header.film_id, "money": mn_mod.money_ledger(log, {}, adj_log.adjustments),
+                   "adjustments": [a.model_dump(mode="json") for a in adj_log.adjustments],
+                   "checkpoints": [c.model_dump(mode="json") for c in adj_log.checkpoints]})
+            return 0
         results = evaluate_gates(pkg)
         report = summary(results)
         if args.action == "validate":
+            from film_pipeline.production.gates import sync_header_gates
             report["package_issues"] = pkg.issues
             blocked_by_planning = False
             if pkg.header.profile == "drama" and "preprod" in pkg.typed and "shots" in pkg.typed:
@@ -865,6 +1014,8 @@ def _run(args, rest, parser) -> int:
                     "owner_decisions": plan["legal"]["owner_decisions"], "issues": plan["issues"]}
                 blocked_by_planning = not plan["ok"]
             report["blocked"] = report["blocked"] or bool(pkg.issues) or blocked_by_planning
+            if args.sync_gates:
+                report["synced_gates"] = sync_header_gates(pkg, results)
             _emit(report)
             return 1 if report["blocked"] else 0
         from film_pipeline.production.report import status_report

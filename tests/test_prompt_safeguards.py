@@ -69,11 +69,17 @@ def film07_prompts(tmp_path_factory):
 
 @needs_film07
 def test_accepted_film07_takes_do_not_go_stale(film07_prompts):
-    from film_pipeline.production.takes import sha256_text
+    from film_pipeline.production.gate_checks import _prompt_rebind_issue
+    from film_pipeline.production.takes import TakeEntry, sha256_text
     index = json.loads((FILM07 / "takes" / "index.json").read_text(encoding="utf-8"))["takes"]
     accepted = [t for t in index if t["status"] == "ACCEPTED"]
     assert accepted, "film07 has accepted takes"
-    stale = [t["take_id"] for t in accepted if sha256_text(film07_prompts[t["generation_id"]].strip()) != t["prompt_sha256"]]
+    stale = []
+    for t in accepted:
+        current = sha256_text(film07_prompts[t["generation_id"]].strip())
+        if current != t["prompt_sha256"]:
+            if _prompt_rebind_issue(FILM07, TakeEntry.model_validate(t), current) != "":
+                stale.append(t["take_id"])
     assert stale == []
 
 

@@ -424,12 +424,18 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
         (stage / "thumbs").mkdir(parents=True, exist_ok=True)
         shutil.copyfile(src, stage / "thumbs" / src.name)
     shutil.copyfile(vs.versions_dir(root) / "metadata.json", stage / "metadata.json")
+    from film_pipeline.production.gates import sync_header_gates
+    from film_pipeline.production.package import load_package
     (stage / "qc").mkdir(parents=True, exist_ok=True)
     shutil.copyfile(qc_path, stage / "qc" / "master_qc.json")
     if Path(cut_report).is_file():
         shutil.copyfile(cut_report, stage / "qc" / Path(cut_report).name)
     (stage / "rights").mkdir(parents=True, exist_ok=True)
     (stage / "rights" / "rights.json").write_text(json.dumps(rights, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    sync_header_gates(pkg, gate6_override="OWNER_PENDING", force=True)
+    pkg = load_package(root)
+    if not c2pa:
+        fingerprint = _inputs_fingerprint(pkg, master, cut_report, disclosure)
     copied = copy_package(root, stage / "package")
     release_ready = not any(f["severity"] in ("BLOCK", "WARN") for f in findings)
     manifest = ArchiveManifest(film_id=film_id, title=pkg.header.title, created=datetime.now(timezone.utc).isoformat(timespec="seconds"),

@@ -1179,10 +1179,13 @@ Owner, 2026-11-09, in reply to "Sau P18, cho làm film06 để đo tỉ lệ bin
   accepted; final35-file ZIP CRC/hash/cold restorePASS. One-film observationL001 recorded without promotion to replicated.
 
 
-## P20 Approved long-form production stability — IN_PROGRESS (2026-11-10)
+## P20 Approved long-form production stability — CANDIDATE READY FOR OWNER ACCEPTANCE (2026-11-18)
 Owner explicitly approved implementation of [the plan](PRODUCTION_STABILITY_P20_PLAN.md):25–30minute drama,
 agent-run/Owner-final approval, quoted budget per film,2consecutive accepted films before stable operation.
 P20-M0 owned scratch reclaimed23.906GiB with preserved JUnit; M1recovery/delivery and M2long rendering active.
-No new provider effects until reviewable pilot/script/budget confirmation. Current checkpoint:docs/drama/STATUS.md.
-
-- P20 money ledger adjustments (backlog, test-first): `money_ledger` has no entry for uncharged sends (film07 SC03_g22_t1 FLOW_FAILED_NO_CLIP, -6) or stray jobs (INC-001, +12), so ledger spent differs from the real balance change. Add an adjustment record, then log the avatar-menu balance next to the ledger total at each scene start/end.
+First long film (`film07_first_shift`, `300/300`) is Owner-accepted (`Gates 1–6 PASS`, archive `f3476aa23f`).
+Second long film (`film08_chain_of_custody`, `300/300` `ACCEPTED`, `16:9` & `9:16` masters, `2118.0` cr, `first_pass_rate = 0.863`,
+archive `20261118T044106-40b49011c3`) has `Gates 1–5 == PASS`, `release_ready == true`, and `Gate 6 == OWNER_PENDING`.
+P20 money ledger adjustments — DONE (2026-11-18): added `LedgerAdjustment` and `BalanceCheckpoint` (`takes/adjustments.json`)
+in `src/film_pipeline/production/money.py`, surfaced in `report.py` (`credit_ledger` legacy 4-key preserved when empty) and
+`film.py ledger-adjust`, verified in `tests/test_money_adjustments.py`.

@@ -1,0 +1,10 @@
+{
+  "take_id": "SC09_g25_t1",
+  "output_sha256": "0ff4213bf40692495272d6156a4a86f099bbaedcb9ffa10b458f816a610ae2ed",
+  "from_prompt_sha256": "73a635da1f8161d89c6f487ff1b24cb9b16450b67f8f01e783af3b4f4061c754",
+  "to_prompt_sha256": "fdc29e76697ebc808dee8c7a45fbc555bd55805a3522cfd6ea662bcbc5807374",
+  "by": "agent:tech-lead.delegated-by.owner-khoikk03",
+  "at": "2026-11-18",
+  "reason": "shard-4 SC09 prompt wording diverged after plan regeneration; 04_shots declaration (shot version 1) and delivered clip bytes are unchanged.",
+  "evidence": "Inspected 12-tile contact sheet C:\\Temp\\film07_rebind_check\\SC09_g25_t1.jpg against fresh prompt: solo Ruth looking screen-right past lens, subtle nod and steady closing hold, qc/dialogue_stt.json recall 1.0 PASS ('That's all right. I haven't learned this part properly either.')."
+}
