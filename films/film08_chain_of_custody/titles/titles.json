@@ -2,8 +2,8 @@
   "film_id": "film08_chain_of_custody",
   "ok": true,
   "sidecars": {
-    "en": "films\\film08_chain_of_custody\\titles\\film08_chain_of_custody.en.srt",
-    "vi": "films\\film08_chain_of_custody\\titles\\film08_chain_of_custody.vi.srt"
+    "en": "D:\\AI FILM MAKER\\AFP-stable\\films\\film08_chain_of_custody\\titles\\film08_chain_of_custody.en.srt",
+    "vi": "D:\\AI FILM MAKER\\AFP-stable\\films\\film08_chain_of_custody\\titles\\film08_chain_of_custody.vi.srt"
   },
   "credits": "titles/credits.json",
   "cues": [
@@ -243,11 +243,11 @@
       "line_no": 136,
       "character": "NAOMI",
       "text": "I'll talk. But nothing I say will be about what's inside.",
-      "start_s": 0.41,
-      "end_s": 5.61,
+      "start_s": 1.95,
+      "end_s": 4.87,
       "source": "override",
-      "abs_start_s": 141.41,
-      "abs_end_s": 146.61
+      "abs_start_s": 142.95,
+      "abs_end_s": 145.87
     },
     {
       "event_id": "SC02_g01",
@@ -441,11 +441,11 @@
       "line_no": 236,
       "character": "NAOMI",
       "text": "A judge ordered an audit. That's plain. That's all I'll say.",
-      "start_s": 0.51,
-      "end_s": 5.71,
+      "start_s": 0.95,
+      "end_s": 4.75,
       "source": "override",
-      "abs_start_s": 255.51,
-      "abs_end_s": 260.71
+      "abs_start_s": 255.95,
+      "abs_end_s": 259.75
     },
     {
       "event_id": "SC02_g20",
@@ -573,22 +573,22 @@
       "line_no": 314,
       "character": "HOLLIS",
       "text": "It isn't all right. Chairs are right there. Use one.",
-      "start_s": 0.32,
-      "end_s": 5.52,
+      "start_s": 2.7,
+      "end_s": 5.37,
       "source": "override",
-      "abs_start_s": 345.32,
-      "abs_end_s": 350.52
+      "abs_start_s": 347.7,
+      "abs_end_s": 350.37
     },
     {
       "event_id": "SC03_g10",
       "line_no": 323,
       "character": "ELI",
       "text": "Ma'am, would you like some water? There's a cooler outside.",
-      "start_s": 0.61,
-      "end_s": 5.81,
+      "start_s": 0.05,
+      "end_s": 3.08,
       "source": "override",
-      "abs_start_s": 357.61,
-      "abs_end_s": 362.81
+      "abs_start_s": 357.05,
+      "abs_end_s": 360.08
     },
     {
       "event_id": "SC03_g11",
@@ -683,11 +683,11 @@
       "line_no": 372,
       "character": "HOLLIS",
       "text": "What's that supposed to mean? Say it again for the camera.",
-      "start_s": 0.25,
-      "end_s": 4.99,
+      "start_s": 0.65,
+      "end_s": 4.42,
       "source": "override",
-      "abs_start_s": 417.25,
-      "abs_end_s": 421.99
+      "abs_start_s": 417.65,
+      "abs_end_s": 421.42
     },
     {
       "event_id": "SC03_g21",
@@ -848,11 +848,11 @@
       "line_no": 457,
       "character": "NAOMI",
       "text": "You haven't answered it. That's what three weeks usually means.",
-      "start_s": 0.32,
-      "end_s": 5.52,
+      "start_s": 0.75,
+      "end_s": 4.85,
       "source": "override",
-      "abs_start_s": 513.32,
-      "abs_end_s": 518.52
+      "abs_start_s": 513.75,
+      "abs_end_s": 517.85
     },
     {
       "event_id": "SC04_g12",
@@ -870,11 +870,11 @@
       "line_no": 467,
       "character": "NAOMI",
       "text": "It used to. For six weeks, it ran on mine.",
-      "start_s": 0.29,
-      "end_s": 5.49,
+      "start_s": 2.65,
+      "end_s": 4.8,
       "source": "override",
-      "abs_start_s": 525.29,
-      "abs_end_s": 530.49
+      "abs_start_s": 527.65,
+      "abs_end_s": 529.8
     },
     {
       "event_id": "SC04_g14",
@@ -980,11 +980,11 @@
       "line_no": 521,
       "character": "ELI",
       "text": "I'm not nervous. I'm only saying she's been patient with us.",
-      "start_s": 0.32,
-      "end_s": 5.52,
+      "start_s": 0.75,
+      "end_s": 4.5,
       "source": "override",
-      "abs_start_s": 591.32,
-      "abs_end_s": 596.52
+      "abs_start_s": 591.75,
+      "abs_end_s": 595.5
     },
     {
       "event_id": "SC04_g25",
@@ -1046,11 +1046,11 @@
       "line_no": 565,
       "character": "NAOMI",
       "text": "Herself. And she would, but you won't like how it goes.",
-      "start_s": 0.32,
-      "end_s": 5.52,
+      "start_s": 1.8,
+      "end_s": 4.62,
       "source": "override",
-      "abs_start_s": 639.32,
-      "abs_end_s": 644.52
+      "abs_start_s": 640.8,
+      "abs_end_s": 643.62
     },
     {
       "event_id": "SC05_g08",
@@ -1090,11 +1090,11 @@
       "line_no": 585,
       "character": "NAOMI",
       "text": "If that seal breaks in your hands, it can't go back.",
-      "start_s": 0.32,
-      "end_s": 5.52,
+      "start_s": 1.2,
+      "end_s": 4.67,
       "source": "override",
-      "abs_start_s": 663.32,
-      "abs_end_s": 668.52
+      "abs_start_s": 664.2,
+      "abs_end_s": 667.67
     },
     {
       "event_id": "SC05_g12",
@@ -1200,11 +1200,11 @@
       "line_no": 635,
       "character": "NAOMI",
       "text": "I can't tell you. I'm warning you. Those are different things.",
-      "start_s": 0.32,
-      "end_s": 5.52,
+      "start_s": 0.75,
+      "end_s": 5.2,
       "source": "override",
-      "abs_start_s": 723.32,
-      "abs_end_s": 728.52
+      "abs_start_s": 723.75,
+      "abs_end_s": 728.2
     },
     {
       "event_id": "SC05_g22",
@@ -1222,11 +1222,11 @@
       "line_no": 645,
       "character": "ELI",
       "text": "It sounded like a warning, Sarge. She said it real calm.",
-      "start_s": 0.22,
-      "end_s": 5.42,
+      "start_s": 0.65,
+      "end_s": 4.9,
       "source": "override",
-      "abs_start_s": 735.22,
-      "abs_end_s": 740.42
+      "abs_start_s": 735.65,
+      "abs_end_s": 739.9
     },
     {
       "event_id": "SC05_g24",
@@ -1332,11 +1332,11 @@
       "line_no": 709,
       "character": "HOLLIS",
       "text": "I told you a lot. Pick the parts that help you.",
-      "start_s": 1.5,
-      "end_s": 5.7,
+      "start_s": 1.95,
+      "end_s": 5.2,
       "source": "override",
-      "abs_start_s": 808.5,
-      "abs_end_s": 812.7
+      "abs_start_s": 808.95,
+      "abs_end_s": 812.2
     },
     {
       "event_id": "SC06_g11",
@@ -1376,11 +1376,11 @@
       "line_no": 729,
       "character": "ELI",
       "text": "I already told you. It runs the whole shift. That's policy.",
-      "start_s": 0.57,
-      "end_s": 5.77,
+      "start_s": 0.65,
+      "end_s": 3.68,
       "source": "override",
-      "abs_start_s": 831.57,
-      "abs_end_s": 836.77
+      "abs_start_s": 831.65,
+      "abs_end_s": 834.68
     },
     {
       "event_id": "SC06_g15",
@@ -1453,11 +1453,11 @@
       "line_no": 764,
       "character": "ELI",
       "text": "She's right, Sarge. There's a sealed column. I've seen it used.",
-      "start_s": 0.22,
-      "end_s": 5.42,
+      "start_s": 0.65,
+      "end_s": 4.95,
       "source": "override",
-      "abs_start_s": 873.22,
-      "abs_end_s": 878.42
+      "abs_start_s": 873.65,
+      "abs_end_s": 877.95
     },
     {
       "event_id": "SC06_g22",
@@ -1519,11 +1519,11 @@
       "line_no": 800,
       "character": "NAOMI",
       "text": "I work for the court. I've said that three times now.",
-      "start_s": 0.38,
-      "end_s": 4.58,
+      "start_s": 0.8,
+      "end_s": 4.1,
       "source": "override",
-      "abs_start_s": 909.38,
-      "abs_end_s": 913.58
+      "abs_start_s": 909.8,
+      "abs_end_s": 913.1
     },
     {
       "event_id": "SC07_g03",
@@ -1563,11 +1563,11 @@
       "line_no": 820,
       "character": "NAOMI",
       "text": "The boxes are all there. That isn't what I was counting.",
-      "start_s": 0.19,
-      "end_s": 5.39,
+      "start_s": 0.6,
+      "end_s": 4.5,
       "source": "override",
-      "abs_start_s": 933.19,
-      "abs_end_s": 938.39
+      "abs_start_s": 933.6,
+      "abs_end_s": 937.5
     },
     {
       "event_id": "SC07_g07",
@@ -1717,11 +1717,11 @@
       "line_no": 894,
       "character": "NAOMI",
       "text": "I need a clean record. Your signature is part of it.",
-      "start_s": 0.54,
-      "end_s": 5.74,
+      "start_s": 0.95,
+      "end_s": 4.65,
       "source": "override",
-      "abs_start_s": 1023.54,
-      "abs_end_s": 1028.74
+      "abs_start_s": 1023.95,
+      "abs_end_s": 1027.65
     },
     {
       "event_id": "SC07_g23",
@@ -1739,11 +1739,11 @@
       "line_no": 908,
       "character": "NAOMI",
       "text": "It will prove it. With your own hands, on camera.",
-      "start_s": 0.22,
-      "end_s": 5.42,
+      "start_s": 1.9,
+      "end_s": 4.41,
       "source": "override",
-      "abs_start_s": 1041.22,
-      "abs_end_s": 1046.42
+      "abs_start_s": 1042.9,
+      "abs_end_s": 1045.41
     },
     {
       "event_id": "SC07_g25",
@@ -1816,11 +1816,11 @@
       "line_no": 949,
       "character": "NAOMI",
       "text": "It's not for lawyers. It's for the accused. And the accuser.",
-      "start_s": 0.22,
-      "end_s": 6.0,
+      "start_s": 0.8,
+      "end_s": 3.88,
       "source": "override",
-      "abs_start_s": 1083.22,
-      "abs_end_s": 1089.0
+      "abs_start_s": 1083.8,
+      "abs_end_s": 1086.88
     },
     {
       "event_id": "SC08_g07",
@@ -2014,10 +2014,10 @@
       "line_no": 1053,
       "character": "HOLLIS",
       "text": "Here's what I think. You want me to be afraid.",
-      "start_s": 0.32,
+      "start_s": 0.75,
       "end_s": 4.4,
       "source": "override",
-      "abs_start_s": 1203.32,
+      "abs_start_s": 1203.75,
       "abs_end_s": 1207.4
     },
     {
@@ -2113,11 +2113,11 @@
       "line_no": 1102,
       "character": "NAOMI",
       "text": "I know. That part I'm sorry about. Waiting is hard.",
-      "start_s": 0.29,
-      "end_s": 5.85,
+      "start_s": 2.4,
+      "end_s": 5.82,
       "source": "override",
-      "abs_start_s": 1263.29,
-      "abs_end_s": 1268.85
+      "abs_start_s": 1265.4,
+      "abs_end_s": 1268.82
     },
     {
       "event_id": "SC09_g12",
@@ -2201,11 +2201,11 @@
       "line_no": 1146,
       "character": "HOLLIS",
       "text": "Mine. Good. That's the first thing you've said that makes sense.",
-      "start_s": 0.19,
-      "end_s": 5.29,
+      "start_s": 1.95,
+      "end_s": 5.23,
       "source": "override",
-      "abs_start_s": 1317.19,
-      "abs_end_s": 1322.29
+      "abs_start_s": 1318.95,
+      "abs_end_s": 1322.23
     },
     {
       "event_id": "SC09_g21",
@@ -2399,11 +2399,11 @@
       "line_no": 1258,
       "character": "HOLLIS",
       "text": "Ray. Of course it's Ray. He never could keep quiet.",
-      "start_s": 0.19,
-      "end_s": 4.93,
+      "start_s": 2.35,
+      "end_s": 4.97,
       "source": "override",
-      "abs_start_s": 1449.19,
-      "abs_end_s": 1453.93
+      "abs_start_s": 1451.35,
+      "abs_end_s": 1453.97
     },
     {
       "event_id": "SC10_g18",
@@ -2421,11 +2421,11 @@
       "line_no": 1268,
       "character": "ELI",
       "text": "Ma'am, is that why you needed it sealed? Because of him?",
-      "start_s": 0.67,
-      "end_s": 5.43,
+      "start_s": 2.5,
+      "end_s": 5.37,
       "source": "override",
-      "abs_start_s": 1461.67,
-      "abs_end_s": 1466.43
+      "abs_start_s": 1463.5,
+      "abs_end_s": 1466.37
     },
     {
       "event_id": "SC10_g20",
@@ -2454,11 +2454,11 @@
       "line_no": 1283,
       "character": "HOLLIS",
       "text": "I didn't write anything. I opened an envelope. That's all.",
-      "start_s": 0.16,
-      "end_s": 5.52,
+      "start_s": 0.6,
+      "end_s": 3.97,
       "source": "override",
-      "abs_start_s": 1479.16,
-      "abs_end_s": 1484.52
+      "abs_start_s": 1479.6,
+      "abs_end_s": 1482.97
     },
     {
       "event_id": "SC10_g23",
@@ -2476,11 +2476,11 @@
       "line_no": 1293,
       "character": "HOLLIS",
       "text": "Moreno. Turn that thing off. Just for one minute. Off.",
-      "start_s": 0.16,
-      "end_s": 5.6,
+      "start_s": 1.5,
+      "end_s": 4.27,
       "source": "override",
-      "abs_start_s": 1491.16,
-      "abs_end_s": 1496.6
+      "abs_start_s": 1492.5,
+      "abs_end_s": 1495.27
     },
     {
       "event_id": "SC10_g25",
@@ -2564,22 +2564,22 @@
       "line_no": 1343,
       "character": "NAOMI",
       "text": "No. But it tells a jury what a man did.",
-      "start_s": 0.41,
-      "end_s": 4.97,
+      "start_s": 2.9,
+      "end_s": 4.9,
       "source": "override",
-      "abs_start_s": 1545.41,
-      "abs_end_s": 1549.97
+      "abs_start_s": 1547.9,
+      "abs_end_s": 1549.9
     },
     {
       "event_id": "SC11_g09",
       "line_no": 1348,
       "character": "ELI",
       "text": "What happens now, ma'am? What am I supposed to do?",
-      "start_s": 0.16,
-      "end_s": 4.62,
+      "start_s": 0.6,
+      "end_s": 4.2,
       "source": "override",
-      "abs_start_s": 1551.16,
-      "abs_end_s": 1555.62
+      "abs_start_s": 1551.6,
+      "abs_end_s": 1555.2
     },
     {
       "event_id": "SC11_g10",
@@ -2597,11 +2597,11 @@
       "line_no": 1358,
       "character": "HOLLIS",
       "text": "Moreno. Eli. Listen to me. Think about your career.",
-      "start_s": 0.13,
-      "end_s": 5.79,
+      "start_s": 3.2,
+      "end_s": 5.82,
       "source": "override",
-      "abs_start_s": 1563.13,
-      "abs_end_s": 1568.79
+      "abs_start_s": 1566.2,
+      "abs_end_s": 1568.82
     },
     {
       "event_id": "SC11_g12",
@@ -2718,11 +2718,11 @@
       "line_no": 1417,
       "character": "NAOMI",
       "text": "It's the last choice you still get to make yourself.",
-      "start_s": 0.29,
-      "end_s": 3.63,
+      "start_s": 0.85,
+      "end_s": 3.52,
       "source": "override",
-      "abs_start_s": 1635.29,
-      "abs_end_s": 1638.63
+      "abs_start_s": 1635.85,
+      "abs_end_s": 1638.52
     },
     {
       "event_id": "SC11_g25",
@@ -2872,11 +2872,11 @@
       "line_no": 1503,
       "character": "NAOMI",
       "text": "And Mr. Reed? I was told he'd be down here today.",
-      "start_s": 0.22,
-      "end_s": 4.48,
+      "start_s": 1.95,
+      "end_s": 4.46,
       "source": "override",
-      "abs_start_s": 1731.22,
-      "abs_end_s": 1735.48
+      "abs_start_s": 1732.95,
+      "abs_end_s": 1735.46
     },
     {
       "event_id": "SC12_g15",
@@ -2971,11 +2971,11 @@
       "line_no": 1552,
       "character": "NAOMI",
       "text": "You don't owe me anything. Sign for your things. They're yours.",
-      "start_s": 0.73,
-      "end_s": 5.63,
+      "start_s": 1.0,
+      "end_s": 4.23,
       "source": "override",
-      "abs_start_s": 1791.73,
-      "abs_end_s": 1796.63
+      "abs_start_s": 1792.0,
+      "abs_end_s": 1795.23
     }
   ],
   "reframed": [
@@ -3035,5 +3035,9 @@
     "reframed": 45,
     "blocks": 0,
     "warnings": 0
+  },
+  "clean_render": {
+    "output": "media/cut/titled_cut.clean.mp4",
+    "sha256": "663584ed69379ea50263ab5f065f03b80f8cf7b4328635379f1031c7a5053141"
   }
 }

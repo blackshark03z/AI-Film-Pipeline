@@ -1,0 +1,3185 @@
+{
+  "film_id": "film08_chain_of_custody",
+  "ok": true,
+  "engine": "vosk-small-en-us-0.15",
+  "rows": [
+    {
+      "event_id": "SC01_g02",
+      "line_no": 27,
+      "character": "NAOMI",
+      "expected": "Morning, Sergeant. I need one exhibit logged out to room 3B.",
+      "heard": "morning sergeant i need one exhibit logged out to room three be",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "3b"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g03",
+      "line_no": 32,
+      "character": "HOLLIS",
+      "expected": "That's a court seal. Nobody brought anything like that in here.",
+      "heard": "that's a court seal nobody brought anything like that in here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g04",
+      "line_no": 37,
+      "character": "NAOMI",
+      "expected": "I sealed it downstairs this morning, after the inventory was finished.",
+      "heard": "i sealed it downstairs this morning after the inventory was finished",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g05",
+      "line_no": 42,
+      "character": "HOLLIS",
+      "expected": "Downstairs is my property room. Who let you in down there?",
+      "heard": "downstairs is my property room who let you in down there",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g06",
+      "line_no": 47,
+      "character": "NAOMI",
+      "expected": "The same court order you signed for six weeks ago, Sergeant.",
+      "heard": "the same court order you signed for six weeks ago sergeant",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g07",
+      "line_no": 52,
+      "character": "HOLLIS",
+      "expected": "I signed for an inventory. Counting boxes. Not carrying things out.",
+      "heard": "i signed for an inventory counting boxes things out",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "not",
+        "carrying"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g08",
+      "line_no": 57,
+      "character": "NAOMI",
+      "expected": "Nothing's leaving the building. It goes upstairs to 3B by eleven.",
+      "heard": "nothing's leaving the building it goes upstairs to three be by eleven",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "3b"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g09",
+      "line_no": 62,
+      "character": "HOLLIS",
+      "expected": "Then it goes in my ledger first, with what's inside it.",
+      "heard": "then it goes in my lead your first with what's inside it",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "ledger"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g10",
+      "line_no": 67,
+      "character": "NAOMI",
+      "expected": "The ledger asks for an exhibit number. Not for contents.",
+      "heard": "the ledger asks for an exhibit number not for contents",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g11",
+      "line_no": 72,
+      "character": "HOLLIS",
+      "expected": "In this room, the ledger asks what I tell it to.",
+      "heard": "in this room the ledger asks what i tell it to",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g13",
+      "line_no": 81,
+      "character": "NAOMI",
+      "expected": "Deputy, is your camera running? I'd like it to keep running.",
+      "heard": "deputy is your camera running i'd like it to keep running",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g14",
+      "line_no": 86,
+      "character": "ELI",
+      "expected": "It runs the whole shift, ma'am. I don't switch it off.",
+      "heard": "it runs the whole shift ma'am i don't switch it off",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g15",
+      "line_no": 91,
+      "character": "HOLLIS",
+      "expected": "Nobody asked you, Moreno. Stand where you're standing and stay quiet.",
+      "heard": "nobody asked you moreno stand where you're standing and stay quiet",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g16",
+      "line_no": 96,
+      "character": "NAOMI",
+      "expected": "Exhibit number is on the tape. Forty-one dash seventeen dash A.",
+      "heard": "exhibit number is on the tape forty one dash seventeen dash a",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g17",
+      "line_no": 101,
+      "character": "HOLLIS",
+      "expected": "I can read tape. I'm asking what that seal is protecting.",
+      "heard": "i can read tape i'm asking what that seal is protecting",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g18",
+      "line_no": 106,
+      "character": "NAOMI",
+      "expected": "It's protecting the contents from everyone who isn't the grand jury.",
+      "heard": "it's protecting the contents from everyone who isn't the grand jury",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g19",
+      "line_no": 111,
+      "character": "HOLLIS",
+      "expected": "Grand jury. In my building, and nobody thought to tell me.",
+      "heard": "grand jury in my building and nobody thought to tell me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g20",
+      "line_no": 116,
+      "character": "NAOMI",
+      "expected": "Nobody is supposed to tell you. That's what sealed means, Sergeant.",
+      "heard": "nobody is supposed to tell you that's what sealed mean sergeant",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g21",
+      "line_no": 121,
+      "character": "HOLLIS",
+      "expected": "Then it sits right here until somebody tells me something true.",
+      "heard": "then it sits right here until somebody tells me something true",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g22",
+      "line_no": 126,
+      "character": "NAOMI",
+      "expected": "It's ten forty now. I'm expected upstairs in twenty minutes, Sergeant.",
+      "heard": "it's ten forty now i'm expected upstairs and twenty minute sergeant",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "in"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g23",
+      "line_no": 131,
+      "character": "HOLLIS",
+      "expected": "Then you'd better start talking. Twenty minutes is all you've got.",
+      "heard": "then you'd better start talking twenty minutes is all you've got",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC01_g24",
+      "line_no": 136,
+      "character": "NAOMI",
+      "expected": "I'll talk. But nothing I say will be about what's inside.",
+      "heard": "but nothing i say will be about what's inside",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "talk",
+        "will"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g01",
+      "line_no": 151,
+      "character": "HOLLIS",
+      "expected": "Start with your name. Everybody who signs this ledger gives one.",
+      "heard": "start with your name everybody who signs this ledger gives one",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g02",
+      "line_no": 156,
+      "character": "NAOMI",
+      "expected": "My name is on the court order in your file drawer.",
+      "heard": "my name is on the court order in your file drawer",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g03",
+      "line_no": 161,
+      "character": "HOLLIS",
+      "expected": "I'm not opening drawers. I'm asking you, standing at my counter.",
+      "heard": "i'm not opening drawers i'm asking you standing at my counter",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g04",
+      "line_no": 166,
+      "character": "NAOMI",
+      "expected": "Naomi Bell. Evidence auditor, under contract to the federal court.",
+      "heard": "naomi bell evidence auditor under contract to the federal court",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g05",
+      "line_no": 171,
+      "character": "HOLLIS",
+      "expected": "Federal. So somebody downtown sent you here to count my boxes.",
+      "heard": "federal so somebody downtown sent you here to count my boxes",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g06",
+      "line_no": 176,
+      "character": "NAOMI",
+      "expected": "A judge sent me. I've counted every box, and every shelf.",
+      "heard": "a judge sent me i've counted every box and every shelf",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g07",
+      "line_no": 181,
+      "character": "HOLLIS",
+      "expected": "Six weeks in my basement, and I never heard your name.",
+      "heard": "six weeks in my basement and i never heard your name",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g08",
+      "line_no": 186,
+      "character": "NAOMI",
+      "expected": "That was deliberate. People behave normally when nobody knows who's watching.",
+      "heard": "that was deliberate people behave normally when nobody knows who's watching",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g09",
+      "line_no": 191,
+      "character": "HOLLIS",
+      "expected": "You hear that, Moreno? She's been watching us. Write that down.",
+      "heard": "you hear that marino she's been watching us write that down",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "moreno"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g10",
+      "line_no": 196,
+      "character": "ELI",
+      "expected": "Write down what, Sarge? She hasn't done anything I can write.",
+      "heard": "write down what sarge she hasn't done anything i can write",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g11",
+      "line_no": 201,
+      "character": "HOLLIS",
+      "expected": "You write what I tell you. That's what a report is.",
+      "heard": "you write what i tell you that's what a report is",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g12",
+      "line_no": 206,
+      "character": "NAOMI",
+      "expected": "If you doubt me, call the grand jury clerk. Extension four-one-one.",
+      "heard": "if you doubt me call the grand jury clerk extension for one one",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g13",
+      "line_no": 211,
+      "character": "HOLLIS",
+      "expected": "I don't call upstairs because a stranger hands me a number.",
+      "heard": "i don't call upstairs because a stranger hands me a number",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g14",
+      "line_no": 216,
+      "character": "NAOMI",
+      "expected": "Then call the switchboard and ask for 3B. Same answer, Sergeant.",
+      "heard": "then call the switchboard and ask for three be same answer sergeant",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "3b"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g15",
+      "line_no": 221,
+      "character": "HOLLIS",
+      "expected": "I've worked this building fourteen years. I know who belongs here.",
+      "heard": "i've worked this building fourteen years i know who belongs here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g16",
+      "line_no": 226,
+      "character": "NAOMI",
+      "expected": "You know who used to belong. Things changed six weeks ago.",
+      "heard": "you know who used to belong things change six weeks ago",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g17",
+      "line_no": 231,
+      "character": "HOLLIS",
+      "expected": "What changed six weeks ago? Go on, say it plainly.",
+      "heard": "what change six weeks ago go on say it plainly",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g18",
+      "line_no": 236,
+      "character": "NAOMI",
+      "expected": "A judge ordered an audit. That's plain. That's all I'll say.",
+      "heard": "a judge ordered an audit that's plain that's all i'll say",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g20",
+      "line_no": 245,
+      "character": "HOLLIS",
+      "expected": "Put some identification on the counter. Then we'll see what's plain.",
+      "heard": "put some identification on the counter then we'll see what's plane",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g21",
+      "line_no": 250,
+      "character": "NAOMI",
+      "expected": "You'll get my ID. You won't get what's under the seal.",
+      "heard": "you'll get my id you won't get what's under the seal",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g22",
+      "line_no": 255,
+      "character": "HOLLIS",
+      "expected": "Moreno, if she walks out with that, you stop her. Understood?",
+      "heard": "moreno if she walks out with that you stopper understood",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "stop",
+        "her"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g23",
+      "line_no": 260,
+      "character": "ELI",
+      "expected": "Stop her how, Sarge? She hasn't broken any rule I know.",
+      "heard": "stop or how sarge she hasn't broken any rule i know",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "her"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC02_g24",
+      "line_no": 265,
+      "character": "HOLLIS",
+      "expected": "She's breaking mine. In this room, that's the one that counts.",
+      "heard": "she's breaking mine in this room that's the one that counts",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g02",
+      "line_no": 284,
+      "character": "HOLLIS",
+      "expected": "Bell. Washington address. You drove four hours to count boxes?",
+      "heard": "bell washington address you drove four hours to count boxes",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g03",
+      "line_no": 289,
+      "character": "NAOMI",
+      "expected": "I drove four hours every Monday. I left every Friday afternoon.",
+      "heard": "i drove four hours every monday i left every friday afternoon",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g04",
+      "line_no": 294,
+      "character": "HOLLIS",
+      "expected": "And slept where? Not anywhere in this county, or I'd know.",
+      "heard": "and slept were not anywhere in this county or i'd know",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g05",
+      "line_no": 299,
+      "character": "NAOMI",
+      "expected": "The motel by the interstate. Room twelve. Check that too.",
+      "heard": "the motel by the interstate room twelve check that too",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g06",
+      "line_no": 304,
+      "character": "HOLLIS",
+      "expected": "Sit down over there. This takes as long as it takes.",
+      "heard": "sit down over there this takes as long as it takes",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g07",
+      "line_no": 309,
+      "character": "NAOMI",
+      "expected": "It takes about a minute. I'll stand, if that's all right.",
+      "heard": "it takes about a minute i'll stand if that's alright",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "all"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g08",
+      "line_no": 314,
+      "character": "HOLLIS",
+      "expected": "It isn't all right. Chairs are right there. Use one.",
+      "heard": "chairs are right there use one",
+      "source": "stem",
+      "recall": 0.6,
+      "missing": [
+        "it",
+        "isnt",
+        "all",
+        "right"
+      ],
+      "verdict": "WARN"
+    },
+    {
+      "event_id": "SC03_g10",
+      "line_no": 323,
+      "character": "ELI",
+      "expected": "Ma'am, would you like some water? There's a cooler outside.",
+      "heard": "ma'am would you like some water there",
+      "source": "take",
+      "recall": 0.7,
+      "missing": [
+        "a",
+        "cooler",
+        "outside"
+      ],
+      "verdict": "WARN"
+    },
+    {
+      "event_id": "SC03_g11",
+      "line_no": 328,
+      "character": "NAOMI",
+      "expected": "No, thank you. I'd rather nobody leaves the room right now.",
+      "heard": "no thank you i'd rather nobody leaves the room right now",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g12",
+      "line_no": 333,
+      "character": "ELI",
+      "expected": "Understood. Then I'll stay right here by the door, ma'am.",
+      "heard": "understood then i'll stay right here by the door ma'am",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g13",
+      "line_no": 338,
+      "character": "HOLLIS",
+      "expected": "Funny. A woman alone, sealed packet, worried about who leaves rooms.",
+      "heard": "funny a woman alone sealed packet worried about who leaves rooms",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g14",
+      "line_no": 343,
+      "character": "NAOMI",
+      "expected": "Not funny. Careful. You'd want the same if it were yours.",
+      "heard": "not funny careful you'd want the same if it were yours",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g16",
+      "line_no": 352,
+      "character": "HOLLIS",
+      "expected": "No warrants. No tickets. Not one parking violation. Nothing at all.",
+      "heard": "no warrants no tickets not one parking violation nothing at all",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g17",
+      "line_no": 357,
+      "character": "NAOMI",
+      "expected": "That's usually what it says about people who mind their business.",
+      "heard": "that's usually what it says about people who mind their business",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g18",
+      "line_no": 362,
+      "character": "HOLLIS",
+      "expected": "Or people who know how to keep their names off screens.",
+      "heard": "or people who know how to keep their names off screens",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g19",
+      "line_no": 367,
+      "character": "NAOMI",
+      "expected": "You'd know more about keeping names off records than I would.",
+      "heard": "you'd know more about keeping names of records than i would",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g20",
+      "line_no": 372,
+      "character": "HOLLIS",
+      "expected": "What's that supposed to mean? Say it again for the camera.",
+      "heard": "what's that supposed to mean say it again for the camera",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g21",
+      "line_no": 377,
+      "character": "NAOMI",
+      "expected": "I said nothing that isn't already true. The camera heard it.",
+      "heard": "i said nothing that isn't already true the camera heard it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g22",
+      "line_no": 382,
+      "character": "ELI",
+      "expected": "Sarge, her record's clear. Normally we'd hand back the card now.",
+      "heard": "sarge her records clear normally we'd hang back the card now",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g23",
+      "line_no": 387,
+      "character": "HOLLIS",
+      "expected": "Normally isn't today. The card stays with me until I'm done.",
+      "heard": "normally isn't today the card stays with me until i'm done",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g24",
+      "line_no": 392,
+      "character": "NAOMI",
+      "expected": "Keep the card. It changes nothing about the seal, Sergeant Hollis.",
+      "heard": "keep the card it changes nothing about the seal sergeant hollis",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC03_g25",
+      "line_no": 397,
+      "character": "HOLLIS",
+      "expected": "We'll see. Fifteen minutes is long in a small room.",
+      "heard": "we'll see fifteen minutes is long and a small room",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "in"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g01",
+      "line_no": 408,
+      "character": "HOLLIS",
+      "expected": "Let me guess. This started with Ray Pruitt, didn't it?",
+      "heard": "let me guess the started with ray pruitt didn't it",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "this"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g02",
+      "line_no": 413,
+      "character": "NAOMI",
+      "expected": "I'm not going to talk about anyone by name, Sergeant.",
+      "heard": "i'm not going to talk about any one by name sergeant",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "anyone"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g03",
+      "line_no": 418,
+      "character": "HOLLIS",
+      "expected": "Property tech. Quit in August. Hired a lawyer the same week.",
+      "heard": "property tech quit in august hired a lawyer the same week",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g04",
+      "line_no": 423,
+      "character": "NAOMI",
+      "expected": "People hire lawyers for all kinds of reasons. Mostly ordinary ones.",
+      "heard": "people hire lawyers for all kinds of reasons mostly ordinary ones",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g05",
+      "line_no": 428,
+      "character": "HOLLIS",
+      "expected": "Not Ray. Ray couldn't afford coffee. Somebody paid for that lawyer.",
+      "heard": "not re re couldn't afford coffee somebody paid for that lawyer",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "ray",
+        "ray"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g06",
+      "line_no": 433,
+      "character": "NAOMI",
+      "expected": "You've thought about this a great deal, haven't you, Sergeant?",
+      "heard": "you've thought about this a great deal haven't you sergeant",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g07",
+      "line_no": 438,
+      "character": "HOLLIS",
+      "expected": "A records request has sat on my desk for three weeks.",
+      "heard": "a records request has sat on my desk for three weeks",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g08",
+      "line_no": 443,
+      "character": "NAOMI",
+      "expected": "Three weeks is long for a records request. Most take days.",
+      "heard": "three weeks is long for records request most take days",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "a"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g09",
+      "line_no": 448,
+      "character": "HOLLIS",
+      "expected": "Most aren't asking for every property log from twenty-seventeen.",
+      "heard": "most aren't asking for every property log from twenty seventeen",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g11",
+      "line_no": 457,
+      "character": "NAOMI",
+      "expected": "You haven't answered it. That's what three weeks usually means.",
+      "heard": "you haven't answered it that's what three weeks usually means",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g12",
+      "line_no": 462,
+      "character": "HOLLIS",
+      "expected": "I answer when I'm ready. Downstairs runs on my schedule.",
+      "heard": "i answer when i'm ready downstairs runs on my schedule",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g13",
+      "line_no": 467,
+      "character": "NAOMI",
+      "expected": "It used to. For six weeks, it ran on mine.",
+      "heard": "for six weeks it run on mine",
+      "source": "stem",
+      "recall": 0.6,
+      "missing": [
+        "used",
+        "to",
+        "it",
+        "ran"
+      ],
+      "verdict": "WARN"
+    },
+    {
+      "event_id": "SC04_g14",
+      "line_no": 472,
+      "character": "HOLLIS",
+      "expected": "Is it Pike Street? Or Delmar? Just tell me which one.",
+      "heard": "is it pike street or del mar just tell me which one",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "delmar"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g15",
+      "line_no": 477,
+      "character": "NAOMI",
+      "expected": "I haven't mentioned a single case. You've mentioned two already.",
+      "heard": "i haven't mentioned a single case you've mentioned to already",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g16",
+      "line_no": 482,
+      "character": "HOLLIS",
+      "expected": "Calvin Reed. That's the one, isn't it? Somebody's crying about Reed.",
+      "heard": "calvin read that's the one isn't it somebody crying about read",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g18",
+      "line_no": 491,
+      "character": "HOLLIS",
+      "expected": "Reed was nine years ago. The jury took forty minutes.",
+      "heard": "read was nine years ago the jury took forty minutes",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g19",
+      "line_no": 496,
+      "character": "NAOMI",
+      "expected": "I'm not here to argue about any jury. Only about paper.",
+      "heard": "i'm not here to argue about any jury only about paper",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g20",
+      "line_no": 501,
+      "character": "HOLLIS",
+      "expected": "Paper. You think paper can hurt fourteen years of my work?",
+      "heard": "paper you think paper can hurt fourteen years of my work",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g21",
+      "line_no": 506,
+      "character": "NAOMI",
+      "expected": "Paper doesn't hurt anyone. It remembers what people did to it.",
+      "heard": "paper doesn't hurt anyone it remembers what people did to it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g22",
+      "line_no": 511,
+      "character": "ELI",
+      "expected": "Sarge, maybe we just let her go up. She's expected.",
+      "heard": "sarge maybe we just let her go up she's expected",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g23",
+      "line_no": 516,
+      "character": "HOLLIS",
+      "expected": "Maybe you just go stand in the hall if you're nervous.",
+      "heard": "maybe just go stand in the hall if you're nervous",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "youre"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g24",
+      "line_no": 521,
+      "character": "ELI",
+      "expected": "I'm not nervous. I'm only saying she's been patient with us.",
+      "heard": "i'm not nervous i'm only saying she's been patient with us",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC04_g25",
+      "line_no": 526,
+      "character": "HOLLIS",
+      "expected": "Patient people are the ones you watch, Moreno. Remember that one.",
+      "heard": "patient people are the ones you watch marino remember that one",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "moreno"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g03",
+      "line_no": 545,
+      "character": "NAOMI",
+      "expected": "Please take your hand off that. It isn't in your custody.",
+      "heard": "please take your hand off that it isn't in your custody",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g04",
+      "line_no": 550,
+      "character": "HOLLIS",
+      "expected": "Everything in this room is in my custody. That's my job.",
+      "heard": "everything in this room is in my custody that's my job",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g05",
+      "line_no": 555,
+      "character": "NAOMI",
+      "expected": "Not this. This was sealed by order of a federal judge.",
+      "heard": "not this this was sealed by order of a federal judge",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g06",
+      "line_no": 560,
+      "character": "HOLLIS",
+      "expected": "Then the judge can come down and tell me so himself.",
+      "heard": "then the judge can come down and tell me so himself",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g07",
+      "line_no": 565,
+      "character": "NAOMI",
+      "expected": "Herself. And she would, but you won't like how it goes.",
+      "heard": "and she would but you won't like how it goes",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "herself"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g08",
+      "line_no": 570,
+      "character": "HOLLIS",
+      "expected": "You think I scare easy? I've been in worse rooms.",
+      "heard": "you think i scare easy i've been in worse rooms",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g09",
+      "line_no": 575,
+      "character": "NAOMI",
+      "expected": "I don't want you scared. I want you to hear me.",
+      "heard": "i don't want you scared i want you to hear me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g10",
+      "line_no": 580,
+      "character": "HOLLIS",
+      "expected": "Go on, then. I'm listening. Moreno's camera is listening too.",
+      "heard": "go on then i'm listening marino's camera is listening to",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "morenos"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g11",
+      "line_no": 585,
+      "character": "NAOMI",
+      "expected": "If that seal breaks in your hands, it can't go back.",
+      "heard": "that seal breaks in your hands it can't go back",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "if"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g12",
+      "line_no": 590,
+      "character": "HOLLIS",
+      "expected": "Wax is wax. Anybody can buy a stick of red wax.",
+      "heard": "waxes wax anybody can buy a stick a red wax",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "is",
+        "of"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g13",
+      "line_no": 595,
+      "character": "NAOMI",
+      "expected": "The wax isn't the point. The tape and the form are.",
+      "heard": "the wax isn't the point the tape and the form our",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "are"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g14",
+      "line_no": 600,
+      "character": "NAOMI",
+      "expected": "Everyone who touches that packet signs the form. Times, names, reasons.",
+      "heard": "everyone who touches that packet signs the form times name's reasons",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g15",
+      "line_no": 605,
+      "character": "HOLLIS",
+      "expected": "So I sign it too. Sergeant Hollis, opened for review. Simple.",
+      "heard": "so i sign it to sergeant hollis open for review simple",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g16",
+      "line_no": 610,
+      "character": "NAOMI",
+      "expected": "That's exactly what it would say. Forever, on every copy.",
+      "heard": "that's exactly what it would say forever on every copy",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g17",
+      "line_no": 615,
+      "character": "HOLLIS",
+      "expected": "Signatures. You people and your signatures. Like ink ever proved anything.",
+      "heard": "signatures you people and your signatures like inc ever proved anything",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "ink"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g18",
+      "line_no": 620,
+      "character": "HOLLIS",
+      "expected": "You keep talking like you know what's inside better than me.",
+      "heard": "you keep talking like you know what's inside better than me",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g19",
+      "line_no": 625,
+      "character": "NAOMI",
+      "expected": "I do know. I wrote most of it. That's the difference.",
+      "heard": "i do know i wrote most of it that's the difference",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g20",
+      "line_no": 630,
+      "character": "HOLLIS",
+      "expected": "Then there's nothing in there you can't just tell me yourself.",
+      "heard": "then there's nothing in there you can't just tell me yourself",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g21",
+      "line_no": 635,
+      "character": "NAOMI",
+      "expected": "I can't tell you. I'm warning you. Those are different things.",
+      "heard": "i can't tell you i'm warning you those are different things",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g22",
+      "line_no": 640,
+      "character": "HOLLIS",
+      "expected": "Sounded like a threat. Moreno, did that sound like one?",
+      "heard": "sounded like a threat marino did that sound like one",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "moreno"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g23",
+      "line_no": 645,
+      "character": "ELI",
+      "expected": "It sounded like a warning, Sarge. She said it real calm.",
+      "heard": "it sounded like a warning sarge she said it real calm",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g24",
+      "line_no": 650,
+      "character": "HOLLIS",
+      "expected": "Calm. Everybody's calm until the paper's out on the table.",
+      "heard": "calm everybody's calm until the papers out on the table",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC05_g25",
+      "line_no": 655,
+      "character": "NAOMI",
+      "expected": "The paper's already on the table. You're the one holding it.",
+      "heard": "the papers already on the table you're the one holding it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g01",
+      "line_no": 666,
+      "character": "HOLLIS",
+      "expected": "Moreno, get your notebook out. We're writing this up right now.",
+      "heard": "moreno get you know book out were right in this up right now",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "notebook",
+        "writing"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g03",
+      "line_no": 675,
+      "character": "HOLLIS",
+      "expected": "Subject refused to identify contents of an unlogged item. Write that.",
+      "heard": "subject refused to identify contents of an unlocked item right that",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g04",
+      "line_no": 680,
+      "character": "ELI",
+      "expected": "She gave her name, Sarge. And the exhibit number. It's logged.",
+      "heard": "she gave her name sarge and the exhibit number it's logged",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g05",
+      "line_no": 685,
+      "character": "HOLLIS",
+      "expected": "Not in my ledger, it isn't. So it's unlogged. Write it.",
+      "heard": "not in my ledger it isn't so it's on logged right it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g06",
+      "line_no": 690,
+      "character": "ELI",
+      "expected": "I can write that she asked to log it. That's true.",
+      "heard": "i can write that she asked to log it that's true",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g07",
+      "line_no": 695,
+      "character": "HOLLIS",
+      "expected": "You've been here six months. You don't decide what happened, son.",
+      "heard": "you've been here six months you don't decide what happened son",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g08",
+      "line_no": 700,
+      "character": "ELI",
+      "expected": "The camera decides, Sarge. That's what you told us in training.",
+      "heard": "the camera decide sarge that's what you told us and training",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "in"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g10",
+      "line_no": 709,
+      "character": "HOLLIS",
+      "expected": "I told you a lot. Pick the parts that help you.",
+      "heard": "i told you a lot pick the parts that help you",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g11",
+      "line_no": 714,
+      "character": "NAOMI",
+      "expected": "Deputy Moreno. You don't have to write anything you didn't see.",
+      "heard": "deputy marina you don't have to write anything you didn't see",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "moreno"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g12",
+      "line_no": 719,
+      "character": "ELI",
+      "expected": "Ma'am, with respect, please let me handle my own sergeant.",
+      "heard": "ma'am with respect please let me handle my own sergeant",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g13",
+      "line_no": 724,
+      "character": "NAOMI",
+      "expected": "Fair. Then I'll ask one thing. Please don't stop that camera.",
+      "heard": "fair then i'll ask one thing please don't stop that camera",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g14",
+      "line_no": 729,
+      "character": "ELI",
+      "expected": "I already told you. It runs the whole shift. That's policy.",
+      "heard": "i already told you it runs the whole shift",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "thats",
+        "policy"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g15",
+      "line_no": 734,
+      "character": "HOLLIS",
+      "expected": "Policy. You both love policy until it's your name on something.",
+      "heard": "policy you both love policy until it's your name on something",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g16",
+      "line_no": 739,
+      "character": "NAOMI",
+      "expected": "I'd like my identification back now, Sergeant. You've checked it.",
+      "heard": "i'd like my identification back now sergeant you've checked it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g17",
+      "line_no": 744,
+      "character": "HOLLIS",
+      "expected": "You'll get it back when that packet's logged properly.",
+      "heard": "you'll get it back when that packets logged properly",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g18",
+      "line_no": 749,
+      "character": "NAOMI",
+      "expected": "Then write it in properly. Exhibit number, time, my signature, done.",
+      "heard": "then write it and properly exhibit number time my signature done",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "in"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g19",
+      "line_no": 754,
+      "character": "HOLLIS",
+      "expected": "And contents. My ledger has a contents column. Always has.",
+      "heard": "and contents my ledger has a contents column always has",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g20",
+      "line_no": 759,
+      "character": "NAOMI",
+      "expected": "Your ledger has a column for sealed items too. Page one.",
+      "heard": "your ledger has a column for sealed items to page one",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g21",
+      "line_no": 764,
+      "character": "ELI",
+      "expected": "She's right, Sarge. There's a sealed column. I've seen it used.",
+      "heard": "she's right sarge there's a sealed column i've seen it used",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g22",
+      "line_no": 769,
+      "character": "HOLLIS",
+      "expected": "Moreno, one more word and you're working nights till Christmas.",
+      "heard": "moreno one more word and your work and night til christmas",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "working"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g23",
+      "line_no": 774,
+      "character": "ELI",
+      "expected": "Yes, Sarge. But the column's still there either way.",
+      "heard": "yes sarge but the column still there either way",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g24",
+      "line_no": 779,
+      "character": "HOLLIS",
+      "expected": "Fine. Then the seal comes off, and the column won't matter.",
+      "heard": "fine then the seal comes off and the column won't matter",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC06_g25",
+      "line_no": 784,
+      "character": "NAOMI",
+      "expected": "You say that like it's decided. It doesn't have to be.",
+      "heard": "you say that like it's decided it doesn't have to be",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g01",
+      "line_no": 795,
+      "character": "HOLLIS",
+      "expected": "Who are you working for? Internal affairs? A defense firm?",
+      "heard": "who are you working for internal affairs a defense from",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g02",
+      "line_no": 800,
+      "character": "NAOMI",
+      "expected": "I work for the court. I've said that three times now.",
+      "heard": "i work for the court i've said that three times now",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g03",
+      "line_no": 805,
+      "character": "HOLLIS",
+      "expected": "Courts don't send auditors for nothing. Somebody complained. Who complained?",
+      "heard": "courts don't send auditor's for nothing somebody complained who complained",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g04",
+      "line_no": 810,
+      "character": "NAOMI",
+      "expected": "Nobody complained to me. I counted. Counting doesn't need a complaint.",
+      "heard": "nobody complained to me i counted counting doesn't need a complaint",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g05",
+      "line_no": 815,
+      "character": "HOLLIS",
+      "expected": "Counting what? Boxes? I count boxes every Friday. They're all there.",
+      "heard": "counting what boxes i count boxes every friday they're all their",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g06",
+      "line_no": 820,
+      "character": "NAOMI",
+      "expected": "The boxes are all there. That isn't what I was counting.",
+      "heard": "the boxes are all their that isn't what i was counting",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g07",
+      "line_no": 825,
+      "character": "HOLLIS",
+      "expected": "Then what? Bags? Weights? Signatures? Just tell me what you counted.",
+      "heard": "then what bags weights signatures just tell me what you counted",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g09",
+      "line_no": 834,
+      "character": "HOLLIS",
+      "expected": "Signatures. You were counting my signatures. That's what this is.",
+      "heard": "signatures you were counting my signatures that's what this is",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g10",
+      "line_no": 839,
+      "character": "NAOMI",
+      "expected": "Guess all you like. I'm not answering any of it here.",
+      "heard": "guess all you like i'm not answering any of it here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g11",
+      "line_no": 844,
+      "character": "HOLLIS",
+      "expected": "That's not a no. Moreno, you heard. That wasn't a no.",
+      "heard": "that's not a know moreno you heard that wasn't a know",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g12",
+      "line_no": 849,
+      "character": "NAOMI",
+      "expected": "It wasn't a yes. I'm declining a question you can't ask.",
+      "heard": "it wasn't a yes i'm declining a question you can ask",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g13",
+      "line_no": 854,
+      "character": "HOLLIS",
+      "expected": "I can ask anything I want in my own records room.",
+      "heard": "i can ask anything i want in my own records room",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g14",
+      "line_no": 859,
+      "character": "NAOMI",
+      "expected": "You can ask. You can't open. That's where the line is.",
+      "heard": "you can ask you can't open that's where the line is",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g15",
+      "line_no": 864,
+      "character": "HOLLIS",
+      "expected": "Lines. Everybody's got lines for me today. Nobody's got answers.",
+      "heard": "lines everybody's got lines for me today nobody's got answers",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g16",
+      "line_no": 869,
+      "character": "NAOMI",
+      "expected": "Here's an answer. It's ten fifty-two. I'm still standing here.",
+      "heard": "here's an answer it's ten fifty two i'm still standing here",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g17",
+      "line_no": 874,
+      "character": "NAOMI",
+      "expected": "I could have walked out ten minutes ago. I didn't.",
+      "heard": "i could have walked out ten minutes ago i didn't",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g18",
+      "line_no": 879,
+      "character": "HOLLIS",
+      "expected": "Because Moreno would've stopped you. I told him to stop you.",
+      "heard": "because moreno what stopped you i told him to stop you",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "wouldve"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g19",
+      "line_no": 884,
+      "character": "NAOMI",
+      "expected": "Because walking out breaks the chain. I don't break the chain.",
+      "heard": "because walking outbreaks the chain i don't break the chain",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "out"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g20",
+      "line_no": 889,
+      "character": "HOLLIS",
+      "expected": "So you need my signature. You need me. Say it.",
+      "heard": "so you need my signature you need me say it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g21",
+      "line_no": 894,
+      "character": "NAOMI",
+      "expected": "I need a clean record. Your signature is part of it.",
+      "heard": "i need a clean record your signature is part of it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g23",
+      "line_no": 903,
+      "character": "NAOMI",
+      "expected": "Second time, Sergeant. Opening that won't end what you're afraid of.",
+      "heard": "second time sergeant opening that won't end which you are afraid of",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "what"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g24",
+      "line_no": 908,
+      "character": "NAOMI",
+      "expected": "It will prove it. With your own hands, on camera.",
+      "heard": "prove it with your own hands on camera",
+      "source": "take",
+      "recall": 0.8,
+      "missing": [
+        "will",
+        "it"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC07_g25",
+      "line_no": 913,
+      "character": "HOLLIS",
+      "expected": "My camera? That's Moreno's camera. Moreno works for me. Not you.",
+      "heard": "my camera that's marino's camera marino works for me not you",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "morenos",
+        "moreno"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g01",
+      "line_no": 924,
+      "character": "HOLLIS",
+      "expected": "I hand-carried one of these once. Federal seal. Twenty-eleven, I think.",
+      "heard": "i hand carried one of these once federal seal twenty eleven i think",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g02",
+      "line_no": 929,
+      "character": "NAOMI",
+      "expected": "Then you remember how careful everyone was. Nobody touched the seal.",
+      "heard": "then you remember how careful everyone was nobody touch the seal",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g03",
+      "line_no": 934,
+      "character": "HOLLIS",
+      "expected": "The captain made me sign three times between car and courtroom.",
+      "heard": "the captain made me sign three times between car and court room",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "courtroom"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g04",
+      "line_no": 939,
+      "character": "NAOMI",
+      "expected": "Three signatures for one envelope. Did you wonder why, back then?",
+      "heard": "three signatures for one envelope did you wonder why back then",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g05",
+      "line_no": 944,
+      "character": "HOLLIS",
+      "expected": "I figured lawyers like paperwork. Lawyers always like their paperwork.",
+      "heard": "i figured lawyers like paperwork lawyers always liked their paperwork",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g06",
+      "line_no": 949,
+      "character": "NAOMI",
+      "expected": "It's not for lawyers. It's for the accused. And the accuser.",
+      "heard": "it's not for lawyers it's for the accused",
+      "source": "stem",
+      "recall": 0.727,
+      "missing": [
+        "and",
+        "the",
+        "accuser"
+      ],
+      "verdict": "WARN"
+    },
+    {
+      "event_id": "SC08_g07",
+      "line_no": 954,
+      "character": "NAOMI",
+      "expected": "A seal means nobody added anything, and nobody took anything away.",
+      "heard": "a seal means but he added anything and nobody took anything away",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "nobody"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g08",
+      "line_no": 959,
+      "character": "HOLLIS",
+      "expected": "And you're telling me nobody's taken anything away from this one.",
+      "heard": "and you're telling me nobody's taking anything away from this one",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "taken"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g09",
+      "line_no": 964,
+      "character": "NAOMI",
+      "expected": "Not since I signed it at nine. Read the form yourself.",
+      "heard": "not since i signed it at nine read the form yourself",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g11",
+      "line_no": 973,
+      "character": "HOLLIS",
+      "expected": "Bell, nine-oh-four. Bell, ten-thirty-eight. That's all it says. Just you.",
+      "heard": "bell nine or for bell ten thirty eight that's all it says just you",
+      "source": "stem",
+      "recall": 0.929,
+      "missing": [
+        "oh"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g12",
+      "line_no": 978,
+      "character": "NAOMI",
+      "expected": "Just me. So everything inside is exactly as I left it.",
+      "heard": "just me so everything inside is exactly as i left it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g13",
+      "line_no": 983,
+      "character": "ELI",
+      "expected": "Ma'am, can I ask something? What happens if somebody opens it?",
+      "heard": "men can or something what happens if somebody opens it",
+      "source": "stem",
+      "recall": 0.727,
+      "missing": [
+        "maam",
+        "i",
+        "ask"
+      ],
+      "verdict": "WARN"
+    },
+    {
+      "event_id": "SC08_g14",
+      "line_no": 988,
+      "character": "NAOMI",
+      "expected": "Then the next line on that form gets their name.",
+      "heard": "then the next line on that form gets their name",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g15",
+      "line_no": 993,
+      "character": "NAOMI",
+      "expected": "And the grand jury asks why. The answer goes on record.",
+      "heard": "and the grand jury asks why the answer goes on record",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g16",
+      "line_no": 998,
+      "character": "ELI",
+      "expected": "Even if they just look? Even if they put it back?",
+      "heard": "even if they just look even if they put it back",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g17",
+      "line_no": 1003,
+      "character": "NAOMI",
+      "expected": "You can't undo it, Deputy. The wax breaks once. Only once.",
+      "heard": "you can undo it deputy the wax breaks once only once",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g18",
+      "line_no": 1008,
+      "character": "HOLLIS",
+      "expected": "She wants you scared, Moreno. It's a performance. Don't buy it.",
+      "heard": "she wants you scared marino it's a performance don't buy it",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "moreno"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g19",
+      "line_no": 1013,
+      "character": "ELI",
+      "expected": "I'm not scared, Sarge. I'm trying to understand what we're doing.",
+      "heard": "i'm not scared sarge i'm trying to understand what we're doing",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g20",
+      "line_no": 1018,
+      "character": "HOLLIS",
+      "expected": "What we're doing is our jobs. Somebody in this room should.",
+      "heard": "what we're doing is our jobs somebody in this room should",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g21",
+      "line_no": 1023,
+      "character": "NAOMI",
+      "expected": "My job ends when that packet reaches 3B, seal whole.",
+      "heard": "my job ends when that packet reaches three be seal whole",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "3b"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g22",
+      "line_no": 1028,
+      "character": "HOLLIS",
+      "expected": "And when does my job end? When your paper says so?",
+      "heard": "and when does my job and when your paper says so",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "end"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g23",
+      "line_no": 1033,
+      "character": "NAOMI",
+      "expected": "I can't answer that. I only know where mine ends.",
+      "heard": "i can answer that i only know where mine ends",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC08_g25",
+      "line_no": 1042,
+      "character": "HOLLIS",
+      "expected": "Four minutes. You've got four minutes, and so have I, apparently.",
+      "heard": "four minutes you've got four minutes and so have i apparently",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g01",
+      "line_no": 1053,
+      "character": "HOLLIS",
+      "expected": "Here's what I think. You want me to be afraid.",
+      "heard": "here's what i think you want me to be afraid",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g02",
+      "line_no": 1058,
+      "character": "HOLLIS",
+      "expected": "Afraid men hand things over. I've watched it for years.",
+      "heard": "afraid men han things over i've watched it for years",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g03",
+      "line_no": 1063,
+      "character": "NAOMI",
+      "expected": "I don't want anything handed over. I want you to stop.",
+      "heard": "i don't want anything handed over i want you to stop",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g04",
+      "line_no": 1068,
+      "character": "HOLLIS",
+      "expected": "Stop what? Asking questions in my own room? Doing my job?",
+      "heard": "stop what asking questions in my own room doing my job",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g05",
+      "line_no": 1073,
+      "character": "NAOMI",
+      "expected": "Stop before your hands do something your head hasn't decided yet.",
+      "heard": "stop before your hands do something your head hasn't decided yet",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g07",
+      "line_no": 1082,
+      "character": "HOLLIS",
+      "expected": "Moreno's watching. The camera's watching. Everyone wants to see me blink.",
+      "heard": "marino's watching the cameras watching everyone wants to see me blink",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "morenos"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g08",
+      "line_no": 1087,
+      "character": "NAOMI",
+      "expected": "Nobody wants you to blink. I'd rather you just walked away.",
+      "heard": "nobody wants you to blink i'd rather you just walked away",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g09",
+      "line_no": 1092,
+      "character": "HOLLIS",
+      "expected": "Walk away and wait for a call? I've waited three weeks.",
+      "heard": "walk away and wait for a call i've waited three weeks",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g10",
+      "line_no": 1097,
+      "character": "HOLLIS",
+      "expected": "Three weeks of nobody calling. Every morning, waiting for that phone.",
+      "heard": "three weeks of nobody calling every morning waiting for that phone",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g11",
+      "line_no": 1102,
+      "character": "NAOMI",
+      "expected": "I know. That part I'm sorry about. Waiting is hard.",
+      "heard": "that part i'm sorry about waiting is hard",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "i",
+        "know"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g12",
+      "line_no": 1107,
+      "character": "HOLLIS",
+      "expected": "Don't you dare feel sorry for me. Not in my building.",
+      "heard": "don't you dare feel sorry for me not in my building",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g13",
+      "line_no": 1112,
+      "character": "ELI",
+      "expected": "Sarge, please. Let her sign it out. It's not too late.",
+      "heard": "sarge please let her sign it out it's not too late",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g14",
+      "line_no": 1117,
+      "character": "HOLLIS",
+      "expected": "Too late for what? I need to know what's coming.",
+      "heard": "too late for what i need to know what's coming",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g15",
+      "line_no": 1122,
+      "character": "NAOMI",
+      "expected": "This is the third time I'm saying it. Don't open that.",
+      "heard": "this is the third time i'm saying it don't open that",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g16",
+      "line_no": 1127,
+      "character": "NAOMI",
+      "expected": "Whatever you think is in there, opening it is worse.",
+      "heard": "whatever you think is in their opening it is worse",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g17",
+      "line_no": 1132,
+      "character": "HOLLIS",
+      "expected": "Believe you. A stranger who spent six weeks in my basement.",
+      "heard": "believe you a stranger who spent six weeks in my basement",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g19",
+      "line_no": 1141,
+      "character": "NAOMI",
+      "expected": "I won't reach for it again. It's yours now, Sergeant.",
+      "heard": "i won't reach for it again it's yours now sergeant",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g20",
+      "line_no": 1146,
+      "character": "HOLLIS",
+      "expected": "Mine. Good. That's the first thing you've said that makes sense.",
+      "heard": "good as the first thing you've said that makes sense",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "mine",
+        "that"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g21",
+      "line_no": 1151,
+      "character": "HOLLIS",
+      "expected": "Moreno, note the time. Ten fifty-eight. Sergeant Hollis reviewing contents.",
+      "heard": "moreno note the time ten fifty eight sergeant hollis reviewing contents",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g22",
+      "line_no": 1156,
+      "character": "ELI",
+      "expected": "I'm noting the time, Sarge. And that she warned you.",
+      "heard": "i'm noting the time sarge and that she warned you",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g23",
+      "line_no": 1161,
+      "character": "HOLLIS",
+      "expected": "Note whatever you want. You'll see I was right about her.",
+      "heard": "note whatever you want you'll see i was right about her",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC09_g25",
+      "line_no": 1170,
+      "character": "NAOMI",
+      "expected": "Ten fifty-eight. I'll remember that time for a long while.",
+      "heard": "ten fifty eight i'll remember that time for a long while",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g02",
+      "line_no": 1185,
+      "character": "NAOMI",
+      "expected": "Ten fifty-eight. Exhibit forty-one, seventeen, A. Seal broken by Sergeant Hollis.",
+      "heard": "ten fifty eight exhibit forty one seventeen a seal broken by sergeant hollis",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g03",
+      "line_no": 1190,
+      "character": "HOLLIS",
+      "expected": "Say it like a newsreader if you want. It's just wax.",
+      "heard": "say it like a news reader if you want it's just wax",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g04",
+      "line_no": 1195,
+      "character": "ELI",
+      "expected": "Sarge, you actually did it. You actually broke a federal seal.",
+      "heard": "sarge you actually did it you actually broke a federal seal",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g07",
+      "line_no": 1208,
+      "character": "ELI",
+      "expected": "Sarge? What does it say? You've gone completely white, Sarge.",
+      "heard": "sarge what does it say you've gone completely white sarge",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g08",
+      "line_no": 1213,
+      "character": "NAOMI",
+      "expected": "It's a grand jury cover sheet. Linwood County property room investigation.",
+      "heard": "it's a grand jury cover sheet linwood county property room investigation",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g09",
+      "line_no": 1218,
+      "character": "NAOMI",
+      "expected": "The line underneath it names the subject of the investigation.",
+      "heard": "the line underneath it name's the subject of the investigation",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g10",
+      "line_no": 1223,
+      "character": "ELI",
+      "expected": "Whose name, Sarge? Tell me whose name is on that page.",
+      "heard": "whose name sarge tell me who's name is on that page",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g11",
+      "line_no": 1228,
+      "character": "HOLLIS",
+      "expected": "It's a mistake. Somebody typed this wrong. This is all wrong.",
+      "heard": "it's a mistake somebody type this wrong this is all wrong",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g12",
+      "line_no": 1233,
+      "character": "NAOMI",
+      "expected": "Nobody typed it wrong. I checked that line three times.",
+      "heard": "nobody typed it wrong i checked that line three times",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g13",
+      "line_no": 1238,
+      "character": "HOLLIS",
+      "expected": "Six cases. I logged thousands of bags. Thousands of them.",
+      "heard": "six cases i logged thousands of bags thousands of him",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "them"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g14",
+      "line_no": 1243,
+      "character": "NAOMI",
+      "expected": "Six where the weights changed before trial. Your signature both times.",
+      "heard": "six where the weights changed before trial your signature both times",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g15",
+      "line_no": 1248,
+      "character": "HOLLIS",
+      "expected": "Signatures get copied. Anybody could have signed my name on those.",
+      "heard": "signatures get copied anybody could have signed my name on those",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g16",
+      "line_no": 1253,
+      "character": "NAOMI",
+      "expected": "Ray Pruitt watched you sign them. He kept copies nine years.",
+      "heard": "ray pruitt watched you sign them he kept copies nine years",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g17",
+      "line_no": 1258,
+      "character": "HOLLIS",
+      "expected": "Ray. Of course it's Ray. He never could keep quiet.",
+      "heard": "of course it's ray he never could keep quiet",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "ray"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g18",
+      "line_no": 1263,
+      "character": "NAOMI",
+      "expected": "Ray kept quiet nine years. That's the part that broke him.",
+      "heard": "ray kept quiet nine years that's the part that broke him",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g19",
+      "line_no": 1268,
+      "character": "ELI",
+      "expected": "Ma'am, is that why you needed it sealed? Because of him?",
+      "heard": "is that why you needed it sealed because of him",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "maam"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g20",
+      "line_no": 1273,
+      "character": "NAOMI",
+      "expected": "It's sealed because every page has to reach the jury untouched.",
+      "heard": "it's sealed because every page has to reach the jury untouched",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g21",
+      "line_no": 1278,
+      "character": "NAOMI",
+      "expected": "Now it reaches them with one new page. His.",
+      "heard": "now it reaches them with one new page his",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g22",
+      "line_no": 1283,
+      "character": "HOLLIS",
+      "expected": "I didn't write anything. I opened an envelope. That's all.",
+      "heard": "i didn't write anything i opened an envelope",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "thats",
+        "all"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g23",
+      "line_no": 1288,
+      "character": "NAOMI",
+      "expected": "On camera. After three warnings. In front of a deputy.",
+      "heard": "on camera after three warnings in front of a deputy",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g24",
+      "line_no": 1293,
+      "character": "HOLLIS",
+      "expected": "Moreno. Turn that thing off. Just for one minute. Off.",
+      "heard": "turn that thing off just for one minute",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "moreno",
+        "off"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC10_g25",
+      "line_no": 1298,
+      "character": "ELI",
+      "expected": "I can't, Sarge. You know I can't. And I won't.",
+      "heard": "i can't sarge you know i can't and i won't",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g02",
+      "line_no": 1313,
+      "character": "HOLLIS",
+      "expected": "Reed. Calvin Reed is one of the six, isn't he?",
+      "heard": "read calvin read is one of the sixes knee",
+      "source": "stem",
+      "recall": 0.8,
+      "missing": [
+        "isnt",
+        "he"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g03",
+      "line_no": 1318,
+      "character": "NAOMI",
+      "expected": "He's the first of the six. Nine years in Barlow State.",
+      "heard": "he's the first of the six nine years and barlow state",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "in"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g04",
+      "line_no": 1323,
+      "character": "HOLLIS",
+      "expected": "The bag weighed what it weighed. I wrote what was there.",
+      "heard": "the bag wade what it weighed i wrote what was there",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "weighed"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g05",
+      "line_no": 1328,
+      "character": "NAOMI",
+      "expected": "At intake it was eleven grams. At trial, it was fifty-two.",
+      "heard": "at intake it was eleven grams at trial it was fifty two",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g06",
+      "line_no": 1333,
+      "character": "NAOMI",
+      "expected": "Eleven grams is a misdemeanor. Fifty-two was nine years. Your handwriting.",
+      "heard": "eleven grams is a misdemeanor fifty two was nine years your handwriting",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g07",
+      "line_no": 1338,
+      "character": "HOLLIS",
+      "expected": "You think a number on a form says who I am?",
+      "heard": "you think a number on a form says who i am",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g08",
+      "line_no": 1343,
+      "character": "NAOMI",
+      "expected": "No. But it tells a jury what a man did.",
+      "heard": "but it tells a jury what a man did",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "no"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g09",
+      "line_no": 1348,
+      "character": "ELI",
+      "expected": "What happens now, ma'am? What am I supposed to do?",
+      "heard": "what happens now ma'am what am i supposed to do",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g10",
+      "line_no": 1353,
+      "character": "NAOMI",
+      "expected": "That's your call, Deputy. Not mine, and not his. Yours.",
+      "heard": "that's your call deputy not mine and not his yours",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g11",
+      "line_no": 1358,
+      "character": "HOLLIS",
+      "expected": "Moreno. Eli. Listen to me. Think about your career.",
+      "heard": "listen to me think about your career",
+      "source": "stem",
+      "recall": 0.778,
+      "missing": [
+        "moreno",
+        "eli"
+      ],
+      "verdict": "WARN"
+    },
+    {
+      "event_id": "SC11_g12",
+      "line_no": 1363,
+      "character": "HOLLIS",
+      "expected": "Six months in. Make this call and nobody here trusts you.",
+      "heard": "six months in make this call and nobody here trust you",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g13",
+      "line_no": 1368,
+      "character": "ELI",
+      "expected": "Sarge, you taught us the camera decides. It already decided.",
+      "heard": "sarge you taught us the camera decides had already decided",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "it"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g14",
+      "line_no": 1373,
+      "character": "HOLLIS",
+      "expected": "I was talking about other people, son. Not about us.",
+      "heard": "i was talking about other people son not about us",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g15",
+      "line_no": 1378,
+      "character": "ELI",
+      "expected": "There isn't an us, Sarge. There's just what the camera saw.",
+      "heard": "there isn't enough sarge there's just what the camera saw",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "an",
+        "us"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g16",
+      "line_no": 1383,
+      "character": "ELI",
+      "expected": "Records to 3B. Sealed exhibit opened at the counter. Clerk, please.",
+      "heard": "records to three be sealed exhibit opened at the counter clerk please",
+      "source": "stem",
+      "recall": 0.909,
+      "missing": [
+        "3b"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g18",
+      "line_no": 1392,
+      "character": "ELI",
+      "expected": "They knew she was coming, Sarge. They've been waiting since ten.",
+      "heard": "they knew she was coming sarge they've been waiting since ten",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g19",
+      "line_no": 1397,
+      "character": "ELI",
+      "expected": "Two marshals are coming down. The clerk wants you upstairs.",
+      "heard": "to marshals are coming down the clerk once you upstairs",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "wants"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g20",
+      "line_no": 1402,
+      "character": "HOLLIS",
+      "expected": "Upstairs. Fourteen years, and I've never once been called upstairs.",
+      "heard": "upstairs fourteen years and i've never once been called upstairs",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g21",
+      "line_no": 1407,
+      "character": "NAOMI",
+      "expected": "You can walk up yourself, Sergeant. Nobody has to walk you.",
+      "heard": "you can walk up yourself sergeant nobody has to walk you",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g22",
+      "line_no": 1412,
+      "character": "HOLLIS",
+      "expected": "Is that a kindness? From you? After everything you've just done?",
+      "heard": "is that a kindness from you after everything you've just done",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g23",
+      "line_no": 1417,
+      "character": "NAOMI",
+      "expected": "It's the last choice you still get to make yourself.",
+      "heard": "it's the last choice you still get to make yourself",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC11_g25",
+      "line_no": 1426,
+      "character": "NAOMI",
+      "expected": "Deputy, log it with me. Opened at ten fifty-eight.",
+      "heard": "deputy log it with me opened at ten fifty eight",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g01",
+      "line_no": 1439,
+      "character": "ELI",
+      "expected": "Doctor Bell. I didn't think we'd see you down here again.",
+      "heard": "doctor bell i didn't think we'd see you down here again",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g02",
+      "line_no": 1444,
+      "character": "NAOMI",
+      "expected": "Just one more signature. The grand jury released the exhibit back.",
+      "heard": "just one more signature the grand jury release the exhibit back",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g03",
+      "line_no": 1449,
+      "character": "ELI",
+      "expected": "Two signatures now, for everything. Mine and the clerk's. New rule.",
+      "heard": "two signatures now for everything mine and the clerks new rule",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g04",
+      "line_no": 1454,
+      "character": "NAOMI",
+      "expected": "Good rule. Sounds like somebody who learned something. Who wrote it?",
+      "heard": "good rule sounds like somebody who learned something who wrote it",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g05",
+      "line_no": 1459,
+      "character": "ELI",
+      "expected": "The oversight board. I asked them to keep the sealed column.",
+      "heard": "the oversight board i asked them to keep the sealed column",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g06",
+      "line_no": 1464,
+      "character": "NAOMI",
+      "expected": "How are things here? Honestly. Not the version for the board.",
+      "heard": "how are things here honestly not the version for the board",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g07",
+      "line_no": 1469,
+      "character": "ELI",
+      "expected": "Quiet. Some people don't talk to me. Most people do, actually.",
+      "heard": "quiet some people don't talk to me most people do actually",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g08",
+      "line_no": 1474,
+      "character": "NAOMI",
+      "expected": "And Sergeant Hollis? I heard about the indictment, not much else.",
+      "heard": "and sergeant hollis i heard about the indictment not much else",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g09",
+      "line_no": 1479,
+      "character": "ELI",
+      "expected": "Suspended. His certification's gone. Trial's set for March, they're saying.",
+      "heard": "suspended his certifications gone trial set for march they're saying",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g10",
+      "line_no": 1484,
+      "character": "ELI",
+      "expected": "He sent me a note. Said I wrote the report right.",
+      "heard": "he sent me a note said i wrote the report right",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g12",
+      "line_no": 1493,
+      "character": "NAOMI",
+      "expected": "That might be the truest thing he's written in years.",
+      "heard": "that might be the truest thing he's written in years",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g13",
+      "line_no": 1498,
+      "character": "ELI",
+      "expected": "Four of the six cases are vacated. Two more by Christmas.",
+      "heard": "for of the six cases are vacated to more by christmas",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g14",
+      "line_no": 1503,
+      "character": "NAOMI",
+      "expected": "And Mr. Reed? I was told he'd be down here today.",
+      "heard": "read i was told he be down here today",
+      "source": "take",
+      "recall": 0.818,
+      "missing": [
+        "and",
+        "mr"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g15",
+      "line_no": 1508,
+      "character": "ELI",
+      "expected": "Any minute. He's coming for his property envelope. Nine years shelved.",
+      "heard": "any minute he's coming for his property envelope nine years shelved",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g17",
+      "line_no": 1517,
+      "character": "CALVIN",
+      "expected": "They told me upstairs to collect my things here. Calvin Reed.",
+      "heard": "they told me upstairs to collect my things here calvin read",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g18",
+      "line_no": 1522,
+      "character": "ELI",
+      "expected": "Yes, sir. It's ready. Watch, wallet, keys. Everything's logged.",
+      "heard": "yes sir it's ready watch wallet keys everything's logged",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g19",
+      "line_no": 1527,
+      "character": "CALVIN",
+      "expected": "You're Doctor Bell. My lawyer said you read every page twice.",
+      "heard": "your doctor bell my lawyer said you read every page twice",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g20",
+      "line_no": 1532,
+      "character": "NAOMI",
+      "expected": "Three times, Mr. Reed. Some pages I couldn't stop reading.",
+      "heard": "three times mister reed some pages i couldn't stop reading",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "mr"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g21",
+      "line_no": 1537,
+      "character": "CALVIN",
+      "expected": "Nine years I said the weight was wrong. Nobody listened.",
+      "heard": "nine years i said the wait was wrong nobody listened",
+      "source": "stem",
+      "recall": 0.9,
+      "missing": [
+        "weight"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g22",
+      "line_no": 1542,
+      "character": "NAOMI",
+      "expected": "It's written down now. In a place nobody gets to change.",
+      "heard": "it's written down now in a place nobody gets to change",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g23",
+      "line_no": 1547,
+      "character": "CALVIN",
+      "expected": "I don't know what to say to you. I keep trying.",
+      "heard": "i don't know what to say to you i keep trying",
+      "source": "stem",
+      "recall": 1.0,
+      "missing": [],
+      "verdict": "PASS"
+    },
+    {
+      "event_id": "SC12_g24",
+      "line_no": 1552,
+      "character": "NAOMI",
+      "expected": "You don't owe me anything. Sign for your things. They're yours.",
+      "heard": "you don't owe me anything signed for your things",
+      "source": "stem",
+      "recall": 0.818,
+      "missing": [
+        "theyre",
+        "yours"
+      ],
+      "verdict": "PASS"
+    }
+  ],
+  "problems": [
+    {
+      "code": "DIALOGUE_STT_MISMATCH",
+      "severity": "WARN",
+      "detail": "SC03_g08 line 314: heard 'chairs are right there use one' for \"It isn't all right. Chairs are right there. Use one.\" (missing: it isnt all right)"
+    },
+    {
+      "code": "DIALOGUE_STT_MISMATCH",
+      "severity": "WARN",
+      "detail": "SC03_g10 line 323: heard \"ma'am would you like some water there\" for \"Ma'am, would you like some water? There's a cooler outside.\" (missing: a cooler outside)"
+    },
+    {
+      "code": "DIALOGUE_STT_MISMATCH",
+      "severity": "WARN",
+      "detail": "SC04_g13 line 467: heard 'for six weeks it run on mine' for 'It used to. For six weeks, it ran on mine.' (missing: used to it ran)"
+    },
+    {
+      "code": "DIALOGUE_STT_MISMATCH",
+      "severity": "WARN",
+      "detail": "SC08_g06 line 949: heard \"it's not for lawyers it's for the accused\" for \"It's not for lawyers. It's for the accused. And the accuser.\" (missing: and the accuser)"
+    },
+    {
+      "code": "DIALOGUE_STT_MISMATCH",
+      "severity": "WARN",
+      "detail": "SC08_g13 line 983: heard 'men can or something what happens if somebody opens it' for \"Ma'am, can I ask something? What happens if somebody opens it?\" (missing: maam i ask)"
+    },
+    {
+      "code": "DIALOGUE_STT_MISMATCH",
+      "severity": "WARN",
+      "detail": "SC11_g11 line 1358: heard 'listen to me think about your career' for 'Moreno. Eli. Listen to me. Think about your career.' (missing: moreno eli)"
+    }
+  ],
+  "summary": {
+    "lines": 270,
+    "pass": 264,
+    "warn": 6,
+    "mean_recall": 0.965
+  }
+}

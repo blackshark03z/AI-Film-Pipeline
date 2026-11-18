@@ -1,0 +1,97 @@
+{
+  "film_id": "film08_chain_of_custody",
+  "status": "DRAFT_NOT_PUBLISHED",
+  "source_language": "en",
+  "title": {
+    "source": "Chain of Custody",
+    "vi": "CHUỖI LƯU GIỮ"
+  },
+  "description": "Deputy Eli Moreno must keep the record honest when the sergeant who trained him ignores three warnings and breaks a court seal on camera, even though protecting that sergeant would be easier.",
+  "description_note": "drafted from the logline; the Owner writes the final copy",
+  "tags": [
+    "AI film",
+    "AI generated",
+    "short film",
+    "One-room procedural drama (a standoff over a sealed packet at a records counter, about 27 minutes)",
+    "A seal exists so that no one, however sure of himself, can change what is inside; the one who breaks it writes his own page."
+  ],
+  "ai_disclosure": {
+    "ai_generated": true,
+    "digital_source_type": "trainedAlgorithmicMedia",
+    "synthetic_persons": true,
+    "generators": "Google Flow Omni 1.2 Flash (video+audio); Google Flow Nano Banana 2.1 (image); Google Gemini Gemini Image (image)",
+    "generator_records": [
+      {
+        "provider": "Google Flow",
+        "model": "Omni 1.2 Flash",
+        "role": "video+audio",
+        "settings": "360p, 6 s clips from start-frame stills"
+      },
+      {
+        "provider": "Google Flow",
+        "model": "Nano Banana 2.1",
+        "role": "image",
+        "settings": "start-frame stills"
+      },
+      {
+        "provider": "Google Gemini",
+        "model": "Gemini Image",
+        "role": "image",
+        "settings": "start-frame stills"
+      }
+    ],
+    "ai_label": "always",
+    "text": {
+      "en": "Generated with AI: Google Flow Omni 1.2 Flash (video+audio); Google Flow Nano Banana 2.1 (image); Google Gemini Gemini Image (image) Synthetic characters: faces and voices are AI-generated.",
+      "vi": "Tạo bằng AI: Google Flow Omni 1.2 Flash (video+audio); Google Flow Nano Banana 2.1 (image); Google Gemini Gemini Image (image) Nhân vật tổng hợp: gương mặt và giọng nói do AI tạo ra."
+    }
+  },
+  "credits": {
+    "characters": [
+      "NAOMI",
+      "HOLLIS",
+      "ELI",
+      "CALVIN"
+    ],
+    "sound_attributions": [],
+    "fiction_line": "A work of fiction. All characters are fictional."
+  },
+  "runtime_s": 1807.0,
+  "versions": [
+    {
+      "name": "master_16x9",
+      "file": "D:\\AI FILM MAKER\\AFP-stable\\films\\film08_chain_of_custody\\media\\cut\\mixed.mp4",
+      "width": 1280,
+      "height": 720,
+      "fps": 24.0,
+      "sha256": "9efbe2246c6621a154c4d85a4f43a70e10aa86d77f710d03860f20668f0994f3"
+    },
+    {
+      "name": "portrait_9x16",
+      "file": "versions/film08_chain_of_custody_9x16.mp4",
+      "width": 720,
+      "height": 1280,
+      "fps": 24.0,
+      "sha256": "e49b21948817d17c78b2cc8d560fb21e9d52b32968833bf54a938c429f2cde9e",
+      "upscale": 1.78,
+      "ai_label": {
+        "text": "AI-generated",
+        "start_s": 3.0,
+        "end_s": 1803.0,
+        "x": 24,
+        "y": 1020
+      },
+      "source": "clean",
+      "cues_relaid": 270
+    }
+  ],
+  "platform_note": "set the platform's own AI / synthetic-content label at upload; nothing was published",
+  "thumbnails": [
+    "versions/thumbs/thumb_01.jpg",
+    "versions/thumbs/thumb_02.jpg",
+    "versions/thumbs/thumb_03.jpg",
+    "versions/thumbs/thumb_04.jpg",
+    "versions/thumbs/thumb_05.jpg",
+    "versions/thumbs/thumb_06.jpg"
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "film_id": "film08_chain_of_custody",
+  "cut": "D:\\AI FILM MAKER\\AFP-stable\\films\\film08_chain_of_custody\\media\\cut\\titled_cut.mp4",
+  "cut_sha256": "a7b0870267d3a0ac71ecac909d90804ed1f256b8fad3787b29a3fe498f0ff346",
+  "output": "D:\\AI FILM MAKER\\AFP-stable\\films\\film08_chain_of_custody\\media\\cut\\mixed.mp4",
+  "output_sha256": "9efbe2246c6621a154c4d85a4f43a70e10aa86d77f710d03860f20668f0994f3",
+  "total_s": 1807.0,
+  "plan": {
+    "ambience_lufs": -40.0,
+    "sfx_gain_db": -6.0,
+    "duck_threshold_db": -50.0,
+    "duck_ratio": 8.0,
+    "duck_attack_ms": 20.0,
+    "duck_release_ms": 400.0,
+    "min_duck_depth_db": 6.0,
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "lufs_tolerance": 1.0,
+    "music": []
+  },
+  "stems": {
+    "dialogue": "D:\\AI FILM MAKER\\AFP-stable\\films\\film08_chain_of_custody\\audio\\stems\\dialogue.wav",
+    "ambience": "D:\\AI FILM MAKER\\AFP-stable\\films\\film08_chain_of_custody\\audio\\stems\\ambience.wav",
+    "sfx": "D:\\AI FILM MAKER\\AFP-stable\\films\\film08_chain_of_custody\\audio\\stems\\sfx.wav",
+    "music": "D:\\AI FILM MAKER\\AFP-stable\\films\\film08_chain_of_custody\\audio\\stems\\music.wav"
+  },
+  "ambience": [
+    {
+      "scene_id": "SC01",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 3.0,
+      "end_s": 153.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC02",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 153.0,
+      "end_s": 303.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC03",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 303.0,
+      "end_s": 453.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC04",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 453.0,
+      "end_s": 603.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC05",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 603.0,
+      "end_s": 753.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC06",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 753.0,
+      "end_s": 903.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC07",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 903.0,
+      "end_s": 1053.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC08",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 1053.0,
+      "end_s": 1203.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC09",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 1203.0,
+      "end_s": 1353.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC10",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 1353.0,
+      "end_s": 1503.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC11",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 1503.0,
+      "end_s": 1653.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    },
+    {
+      "scene_id": "SC12",
+      "location": "records_room",
+      "room_tone": "quiet records room, a ceiling-light hum, a wall clock ticking",
+      "start_s": 1653.0,
+      "end_s": 1803.0,
+      "tone": [
+        "brown",
+        900,
+        100
+      ]
+    }
+  ],
+  "sfx": [],
+  "music": [],
+  "duck": {
+    "frames": 6929,
+    "depth_db": 22.93,
+    "wanted_db": 6.0
+  },
+  "loudness": {
+    "before": {
+      "integrated_lufs": -25.8,
+      "peak_dbfs": -1.8
+    },
+    "after": {
+      "integrated_lufs": -14.6,
+      "peak_dbfs": -2.9
+    },
+    "target_lufs": -14.0,
+    "true_peak_db": -1.0,
+    "ok": true
+  },
+  "problems": [],
+  "ok": true
+}

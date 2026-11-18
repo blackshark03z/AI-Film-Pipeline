@@ -24,5 +24,40 @@
       "warnings": 0
     },
     "locked_against": "9b5fd506863bb17e480021b04c8ad0f165e24ce0d266238330bf8462fd7ae79a"
+  },
+  "mix": {
+    "output_sha256": "9efbe2246c6621a154c4d85a4f43a70e10aa86d77f710d03860f20668f0994f3",
+    "cut_sha256": "a7b0870267d3a0ac71ecac909d90804ed1f256b8fad3787b29a3fe498f0ff346",
+    "report": "audio/mix.json",
+    "ok": true,
+    "locked_against": "9b5fd506863bb17e480021b04c8ad0f165e24ce0d266238330bf8462fd7ae79a"
+  },
+  "master_qc": {
+    "report": "qc/master_qc.json",
+    "sha256": "9efbe2246c6621a154c4d85a4f43a70e10aa86d77f710d03860f20668f0994f3",
+    "ok": true,
+    "locked_against": "9b5fd506863bb17e480021b04c8ad0f165e24ce0d266238330bf8462fd7ae79a"
+  },
+  "versions": {
+    "report": "versions/versions.json",
+    "ok": true,
+    "summary": {
+      "portrait_segments": 302,
+      "thumbnails": 6,
+      "blocks": 0,
+      "warnings": 2
+    },
+    "locked_against": "9b5fd506863bb17e480021b04c8ad0f165e24ce0d266238330bf8462fd7ae79a"
+  },
+  "dialogue_stt": {
+    "report": "qc/dialogue_stt.json",
+    "ok": true,
+    "summary": {
+      "lines": 270,
+      "pass": 264,
+      "warn": 6,
+      "mean_recall": 0.965
+    },
+    "locked_against": "9b5fd506863bb17e480021b04c8ad0f165e24ce0d266238330bf8462fd7ae79a"
   }
 }

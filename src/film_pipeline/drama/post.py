@@ -375,9 +375,9 @@ def normalize_loudness(path: Path, *, target_i: float = -14.0,
     """Rewrite ``path`` in place with normalised audio (video copied).
 
     1. loudnorm measure; 2. linear loudnorm; 3. a make-up gain (target
-    minus what pass 2 measured, capped) and an ``alimiter`` at 0.75
-    (~-2.5 dBFS, room for AAC overshoot) so the gain cannot push peaks over. Returns the measured
-    {"integrated_lufs", "peak_dbfs"} of the written file.
+    minus what pass 2 measured, capped) and a closed-loop ``alimiter`` +
+    AAC pass so downsampling/AAC overshoot cannot push true peaks above
+    ``true_peak + 0.3`` dBTP. Returns {"integrated_lufs", "peak_dbfs"}.
     """
     probe = subprocess.run(
         ["ffmpeg", "-nostats", "-i", str(path), "-vn", "-af",
@@ -390,6 +390,9 @@ def normalize_loudness(path: Path, *, target_i: float = -14.0,
               f":measured_LRA={m['input_lra']}"
               f":measured_thresh={m['input_thresh']}"
               f":offset={m['target_offset']}:linear=true")
+    ceiling_db = true_peak + 0.3
+    limit_db = min(-3.5, true_peak - 2.0)
+    measured = {"integrated_lufs": target_i, "peak_dbfs": ceiling_db}
     with tempfile.TemporaryDirectory() as tmp:
         p2 = Path(tmp) / "pass2.wav"
         _run("-i", str(path), "-vn", "-af", f"{linear},aresample=48000",
@@ -397,16 +400,22 @@ def normalize_loudness(path: Path, *, target_i: float = -14.0,
         gain = target_i - measure_ebur128(p2)["integrated_lufs"]
         gain = max(-max_gain_db, min(max_gain_db, gain))
         p3 = Path(tmp) / "pass3.wav"
-        _run("-i", str(p2), "-af",
-             f"aresample=192000,volume={gain:.2f}dB,"
-             "alimiter=limit=0.75:attack=1:release=60:level=false,"  # -2.5 dBFS: AAC adds up to ~1 dB of true peak
-             "aresample=48000", "-c:a", "pcm_f32le", str(p3))
         tmp_out = path.with_name(path.stem + ".norm" + path.suffix)
-        _run("-i", str(path), "-i", str(p3), "-map", "0:v", "-map", "1:a",
-             "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
-             "-movflags", "+faststart", str(tmp_out))
+        for _ in range(3):
+            limit_lin = max(0.0625, min(1.0, 10 ** (limit_db / 20.0)))
+            _run("-i", str(p2), "-af",
+                 f"aresample=192000,volume={gain:.2f}dB,"
+                 f"alimiter=limit={limit_lin:.6f}:attack=1:release=60:level=false,"
+                 "aresample=48000", "-c:a", "pcm_f32le", str(p3))
+            _run("-i", str(path), "-i", str(p3), "-map", "0:v", "-map", "1:a",
+                 "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
+                 "-movflags", "+faststart", str(tmp_out))
+            measured = measure_ebur128(tmp_out)
+            if measured["peak_dbfs"] <= ceiling_db:
+                break
+            limit_db -= (measured["peak_dbfs"] - ceiling_db) + 0.5
     os.replace(tmp_out, path)
-    return measure_ebur128(path)
+    return measured
 
 
 # ---------------------------------------------------------------- manifest

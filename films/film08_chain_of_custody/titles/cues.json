@@ -129,8 +129,8 @@
     {
       "event_id": "SC01_g24",
       "line_no": 136,
-      "start_s": 0.41,
-      "end_s": 5.61
+      "start_s": 1.95,
+      "end_s": 4.87
     },
     {
       "event_id": "SC02_g01",
@@ -237,8 +237,8 @@
     {
       "event_id": "SC02_g18",
       "line_no": 236,
-      "start_s": 0.51,
-      "end_s": 5.71
+      "start_s": 0.95,
+      "end_s": 4.75
     },
     {
       "event_id": "SC02_g20",
@@ -309,14 +309,14 @@
     {
       "event_id": "SC03_g08",
       "line_no": 314,
-      "start_s": 0.32,
-      "end_s": 5.52
+      "start_s": 2.7,
+      "end_s": 5.37
     },
     {
       "event_id": "SC03_g10",
       "line_no": 323,
-      "start_s": 0.61,
-      "end_s": 5.81
+      "start_s": 0.05,
+      "end_s": 3.08
     },
     {
       "event_id": "SC03_g11",
@@ -369,8 +369,8 @@
     {
       "event_id": "SC03_g20",
       "line_no": 372,
-      "start_s": 0.25,
-      "end_s": 4.99
+      "start_s": 0.65,
+      "end_s": 4.42
     },
     {
       "event_id": "SC03_g21",
@@ -459,8 +459,8 @@
     {
       "event_id": "SC04_g11",
       "line_no": 457,
-      "start_s": 0.32,
-      "end_s": 5.52
+      "start_s": 0.75,
+      "end_s": 4.85
     },
     {
       "event_id": "SC04_g12",
@@ -471,8 +471,8 @@
     {
       "event_id": "SC04_g13",
       "line_no": 467,
-      "start_s": 0.29,
-      "end_s": 5.49
+      "start_s": 2.65,
+      "end_s": 4.8
     },
     {
       "event_id": "SC04_g14",
@@ -531,8 +531,8 @@
     {
       "event_id": "SC04_g24",
       "line_no": 521,
-      "start_s": 0.32,
-      "end_s": 5.52
+      "start_s": 0.75,
+      "end_s": 4.5
     },
     {
       "event_id": "SC04_g25",
@@ -567,8 +567,8 @@
     {
       "event_id": "SC05_g07",
       "line_no": 565,
-      "start_s": 0.32,
-      "end_s": 5.52
+      "start_s": 1.8,
+      "end_s": 4.62
     },
     {
       "event_id": "SC05_g08",
@@ -591,8 +591,8 @@
     {
       "event_id": "SC05_g11",
       "line_no": 585,
-      "start_s": 0.32,
-      "end_s": 5.52
+      "start_s": 1.2,
+      "end_s": 4.67
     },
     {
       "event_id": "SC05_g12",
@@ -651,8 +651,8 @@
     {
       "event_id": "SC05_g21",
       "line_no": 635,
-      "start_s": 0.32,
-      "end_s": 5.52
+      "start_s": 0.75,
+      "end_s": 5.2
     },
     {
       "event_id": "SC05_g22",
@@ -663,8 +663,8 @@
     {
       "event_id": "SC05_g23",
       "line_no": 645,
-      "start_s": 0.22,
-      "end_s": 5.42
+      "start_s": 0.65,
+      "end_s": 4.9
     },
     {
       "event_id": "SC05_g24",
@@ -723,8 +723,8 @@
     {
       "event_id": "SC06_g10",
       "line_no": 709,
-      "start_s": 1.5,
-      "end_s": 5.7
+      "start_s": 1.95,
+      "end_s": 5.2
     },
     {
       "event_id": "SC06_g11",
@@ -747,8 +747,8 @@
     {
       "event_id": "SC06_g14",
       "line_no": 729,
-      "start_s": 0.57,
-      "end_s": 5.77
+      "start_s": 0.65,
+      "end_s": 3.68
     },
     {
       "event_id": "SC06_g15",
@@ -789,8 +789,8 @@
     {
       "event_id": "SC06_g21",
       "line_no": 764,
-      "start_s": 0.22,
-      "end_s": 5.42
+      "start_s": 0.65,
+      "end_s": 4.95
     },
     {
       "event_id": "SC06_g22",
@@ -825,8 +825,8 @@
     {
       "event_id": "SC07_g02",
       "line_no": 800,
-      "start_s": 0.38,
-      "end_s": 4.58
+      "start_s": 0.8,
+      "end_s": 4.1
     },
     {
       "event_id": "SC07_g03",
@@ -849,8 +849,8 @@
     {
       "event_id": "SC07_g06",
       "line_no": 820,
-      "start_s": 0.19,
-      "end_s": 5.39
+      "start_s": 0.6,
+      "end_s": 4.5
     },
     {
       "event_id": "SC07_g07",
@@ -933,8 +933,8 @@
     {
       "event_id": "SC07_g21",
       "line_no": 894,
-      "start_s": 0.54,
-      "end_s": 5.74
+      "start_s": 0.95,
+      "end_s": 4.65
     },
     {
       "event_id": "SC07_g23",
@@ -945,8 +945,8 @@
     {
       "event_id": "SC07_g24",
       "line_no": 908,
-      "start_s": 0.22,
-      "end_s": 5.42
+      "start_s": 1.9,
+      "end_s": 4.41
     },
     {
       "event_id": "SC07_g25",
@@ -987,8 +987,8 @@
     {
       "event_id": "SC08_g06",
       "line_no": 949,
-      "start_s": 0.22,
-      "end_s": 6.0
+      "start_s": 0.8,
+      "end_s": 3.88
     },
     {
       "event_id": "SC08_g07",
@@ -1095,7 +1095,7 @@
     {
       "event_id": "SC09_g01",
       "line_no": 1053,
-      "start_s": 0.32,
+      "start_s": 0.75,
       "end_s": 4.4
     },
     {
@@ -1149,8 +1149,8 @@
     {
       "event_id": "SC09_g11",
       "line_no": 1102,
-      "start_s": 0.29,
-      "end_s": 5.85
+      "start_s": 2.4,
+      "end_s": 5.82
     },
     {
       "event_id": "SC09_g12",
@@ -1197,8 +1197,8 @@
     {
       "event_id": "SC09_g20",
       "line_no": 1146,
-      "start_s": 0.19,
-      "end_s": 5.29
+      "start_s": 1.95,
+      "end_s": 5.23
     },
     {
       "event_id": "SC09_g21",
@@ -1305,8 +1305,8 @@
     {
       "event_id": "SC10_g17",
       "line_no": 1258,
-      "start_s": 0.19,
-      "end_s": 4.93
+      "start_s": 2.35,
+      "end_s": 4.97
     },
     {
       "event_id": "SC10_g18",
@@ -1317,8 +1317,8 @@
     {
       "event_id": "SC10_g19",
       "line_no": 1268,
-      "start_s": 0.67,
-      "end_s": 5.43
+      "start_s": 2.5,
+      "end_s": 5.37
     },
     {
       "event_id": "SC10_g20",
@@ -1335,8 +1335,8 @@
     {
       "event_id": "SC10_g22",
       "line_no": 1283,
-      "start_s": 0.16,
-      "end_s": 5.52
+      "start_s": 0.6,
+      "end_s": 3.97
     },
     {
       "event_id": "SC10_g23",
@@ -1347,8 +1347,8 @@
     {
       "event_id": "SC10_g24",
       "line_no": 1293,
-      "start_s": 0.16,
-      "end_s": 5.6
+      "start_s": 1.5,
+      "end_s": 4.27
     },
     {
       "event_id": "SC10_g25",
@@ -1395,14 +1395,14 @@
     {
       "event_id": "SC11_g08",
       "line_no": 1343,
-      "start_s": 0.41,
-      "end_s": 4.97
+      "start_s": 2.9,
+      "end_s": 4.9
     },
     {
       "event_id": "SC11_g09",
       "line_no": 1348,
-      "start_s": 0.16,
-      "end_s": 4.62
+      "start_s": 0.6,
+      "end_s": 4.2
     },
     {
       "event_id": "SC11_g10",
@@ -1413,8 +1413,8 @@
     {
       "event_id": "SC11_g11",
       "line_no": 1358,
-      "start_s": 0.13,
-      "end_s": 5.79
+      "start_s": 3.2,
+      "end_s": 5.82
     },
     {
       "event_id": "SC11_g12",
@@ -1479,8 +1479,8 @@
     {
       "event_id": "SC11_g23",
       "line_no": 1417,
-      "start_s": 0.29,
-      "end_s": 3.63
+      "start_s": 0.85,
+      "end_s": 3.52
     },
     {
       "event_id": "SC11_g25",
@@ -1563,8 +1563,8 @@
     {
       "event_id": "SC12_g14",
       "line_no": 1503,
-      "start_s": 0.22,
-      "end_s": 4.48
+      "start_s": 1.95,
+      "end_s": 4.46
     },
     {
       "event_id": "SC12_g15",
@@ -1617,8 +1617,8 @@
     {
       "event_id": "SC12_g24",
       "line_no": 1552,
-      "start_s": 0.73,
-      "end_s": 5.63
+      "start_s": 1.0,
+      "end_s": 4.23
     }
   ]
 }

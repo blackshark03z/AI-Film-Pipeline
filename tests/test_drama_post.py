@@ -70,3 +70,24 @@ def test_assemble_and_normalize(tmp_path):
     assert stats["peak_dbfs"] <= -0.3
     assert measure_ebur128(out) == stats
     assert probe_video_duration(out) == pytest.approx(11, abs=0.2)
+
+
+@needs_ffmpeg
+def test_normalize_loudness_caps_aac_transient_overshoot(tmp_path):
+    """Sharp transients in quiet beds must stay <= -1.0 dBTP after AAC encode."""
+    mp4 = tmp_path / "transient.mp4"
+    subprocess.run(
+        ["ffmpeg", "-v", "error", "-y",
+         "-f", "lavfi", "-i", "color=c=black:s=320x180:r=24:d=8",
+         "-f", "lavfi", "-i", "sine=f=220:r=48000:d=8",
+         "-f", "lavfi", "-i", "sine=f=3500:r=48000:d=0.05",
+         "-filter_complex",
+         "[1:a]volume=-24dB[bed];"
+         "[2:a]volume=-1.8dB,adelay=3000|3000[pop];"
+         "[bed][pop]amix=inputs=2:normalize=0:duration=first,aformat=channel_layouts=stereo[a]",
+         "-map", "0:v", "-map", "[a]",
+         "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "256k", str(mp4)],
+        check=True)
+    stats = normalize_loudness(mp4, target_i=-14.0, true_peak=-1.5)
+    assert abs(stats["integrated_lufs"] - (-14.0)) <= 1.0
+    assert stats["peak_dbfs"] <= -1.0

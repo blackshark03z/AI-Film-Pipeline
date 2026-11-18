@@ -88,7 +88,7 @@ It's ten forty now. I'm expected upstairs in twenty minutes, Sergeant.
 Then you'd better start talking. Twenty minutes is all you've got.
 
 23
-00:02:21,410 --> 00:02:26,610
+00:02:22,950 --> 00:02:25,870
 I'll talk. But nothing I say will be about what's inside.
 
 24
@@ -160,7 +160,7 @@ You know who used to belong. Things changed six weeks ago.
 What changed six weeks ago? Go on, say it plainly.
 
 41
-00:04:15,510 --> 00:04:20,710
+00:04:15,950 --> 00:04:19,750
 A judge ordered an audit. That's plain. That's all I'll say.
 
 42
@@ -208,11 +208,11 @@ Sit down over there. This takes as long as it takes.
 It takes about a minute. I'll stand, if that's all right.
 
 53
-00:05:45,320 --> 00:05:50,520
+00:05:47,700 --> 00:05:50,370
 It isn't all right. Chairs are right there. Use one.
 
 54
-00:05:57,610 --> 00:06:02,810
+00:05:57,050 --> 00:06:00,080
 Ma'am, would you like some water? There's a cooler outside.
 
 55
@@ -248,7 +248,7 @@ Or people who know how to keep their names off screens.
 You'd know more about keeping names off records than I would.
 
 63
-00:06:57,250 --> 00:07:01,990
+00:06:57,650 --> 00:07:01,420
 What's that supposed to mean? Say it again for the camera.
 
 64
@@ -308,7 +308,7 @@ Three weeks is long for a records request. Most take days.
 Most aren't asking for every property log from twenty-seventeen.
 
 78
-00:08:33,320 --> 00:08:38,520
+00:08:33,750 --> 00:08:37,850
 You haven't answered it. That's what three weeks usually means.
 
 79
@@ -316,7 +316,7 @@ You haven't answered it. That's what three weeks usually means.
 I answer when I'm ready. Downstairs runs on my schedule.
 
 80
-00:08:45,290 --> 00:08:50,490
+00:08:47,650 --> 00:08:49,800
 It used to. For six weeks, it ran on mine.
 
 81
@@ -356,7 +356,7 @@ Sarge, maybe we just let her go up. She's expected.
 Maybe you just go stand in the hall if you're nervous.
 
 90
-00:09:51,320 --> 00:09:56,520
+00:09:51,750 --> 00:09:55,500
 I'm not nervous. I'm only saying she's been patient with us.
 
 91
@@ -380,7 +380,7 @@ Not this. This was sealed by order of a federal judge.
 Then the judge can come down and tell me so himself.
 
 96
-00:10:39,320 --> 00:10:44,520
+00:10:40,800 --> 00:10:43,620
 Herself. And she would, but you won't like how it goes.
 
 97
@@ -396,7 +396,7 @@ I don't want you scared. I want you to hear me.
 Go on, then. I'm listening. Moreno's camera is listening too.
 
 100
-00:11:03,320 --> 00:11:08,520
+00:11:04,200 --> 00:11:07,670
 If that seal breaks in your hands, it can't go back.
 
 101
@@ -436,7 +436,7 @@ I do know. I wrote most of it. That's the difference.
 Then there's nothing in there you can't just tell me yourself.
 
 110
-00:12:03,320 --> 00:12:08,520
+00:12:03,750 --> 00:12:08,200
 I can't tell you. I'm warning you. Those are different things.
 
 111
@@ -444,7 +444,7 @@ I can't tell you. I'm warning you. Those are different things.
 Sounded like a threat. Moreno, did that sound like one?
 
 112
-00:12:15,220 --> 00:12:20,420
+00:12:15,650 --> 00:12:19,900
 It sounded like a warning, Sarge. She said it real calm.
 
 113
@@ -484,7 +484,7 @@ You've been here six months. You don't decide what happened, son.
 The camera decides, Sarge. That's what you told us in training.
 
 122
-00:13:28,500 --> 00:13:32,700
+00:13:28,950 --> 00:13:32,200
 I told you a lot. Pick the parts that help you.
 
 123
@@ -500,7 +500,7 @@ Ma'am, with respect, please let me handle my own sergeant.
 Fair. Then I'll ask one thing. Please don't stop that camera.
 
 126
-00:13:51,570 --> 00:13:56,770
+00:13:51,650 --> 00:13:54,680
 I already told you. It runs the whole shift. That's policy.
 
 127
@@ -528,7 +528,7 @@ And contents. My ledger has a contents column. Always has.
 Your ledger has a column for sealed items too. Page one.
 
 133
-00:14:33,220 --> 00:14:38,420
+00:14:33,650 --> 00:14:37,950
 She's right, Sarge. There's a sealed column. I've seen it used.
 
 134
@@ -552,7 +552,7 @@ You say that like it's decided. It doesn't have to be.
 Who are you working for? Internal affairs? A defense firm?
 
 139
-00:15:09,380 --> 00:15:13,580
+00:15:09,800 --> 00:15:13,100
 I work for the court. I've said that three times now.
 
 140
@@ -568,7 +568,7 @@ Nobody complained to me. I counted. Counting doesn't need a complaint.
 Counting what? Boxes? I count boxes every Friday. They're all there.
 
 143
-00:15:33,190 --> 00:15:38,390
+00:15:33,600 --> 00:15:37,500
 The boxes are all there. That isn't what I was counting.
 
 144
@@ -624,7 +624,7 @@ Because walking out breaks the chain. I don't break the chain.
 So you need my signature. You need me. Say it.
 
 157
-00:17:03,540 --> 00:17:08,740
+00:17:03,950 --> 00:17:07,650
 I need a clean record. Your signature is part of it.
 
 158
@@ -632,7 +632,7 @@ I need a clean record. Your signature is part of it.
 Second time, Sergeant. Opening that won't end what you're afraid of.
 
 159
-00:17:21,220 --> 00:17:26,420
+00:17:22,900 --> 00:17:25,410
 It will prove it. With your own hands, on camera.
 
 160
@@ -660,7 +660,7 @@ Three signatures for one envelope. Did you wonder why, back then?
 I figured lawyers like paperwork. Lawyers always like their paperwork.
 
 166
-00:18:03,220 --> 00:18:09,000
+00:18:03,800 --> 00:18:06,880
 It's not for lawyers. It's for the accused. And the accuser.
 
 167
@@ -732,7 +732,7 @@ I can't answer that. I only know where mine ends.
 Four minutes. You've got four minutes, and so have I, apparently.
 
 184
-00:20:03,320 --> 00:20:07,400
+00:20:03,750 --> 00:20:07,400
 Here's what I think. You want me to be afraid.
 
 185
@@ -768,7 +768,7 @@ Walk away and wait for a call? I've waited three weeks.
 Three weeks of nobody calling. Every morning, waiting for that phone.
 
 193
-00:21:03,290 --> 00:21:08,850
+00:21:05,400 --> 00:21:08,820
 I know. That part I'm sorry about. Waiting is hard.
 
 194
@@ -800,7 +800,7 @@ Believe you. A stranger who spent six weeks in my basement.
 I won't reach for it again. It's yours now, Sergeant.
 
 201
-00:21:57,190 --> 00:22:02,290
+00:21:58,950 --> 00:22:02,230
 Mine. Good. That's the first thing you've said that makes sense.
 
 202
@@ -872,7 +872,7 @@ Signatures get copied. Anybody could have signed my name on those.
 Ray Pruitt watched you sign them. He kept copies nine years.
 
 219
-00:24:09,190 --> 00:24:13,930
+00:24:11,350 --> 00:24:13,970
 Ray. Of course it's Ray. He never could keep quiet.
 
 220
@@ -880,7 +880,7 @@ Ray. Of course it's Ray. He never could keep quiet.
 Ray kept quiet nine years. That's the part that broke him.
 
 221
-00:24:21,670 --> 00:24:26,430
+00:24:23,500 --> 00:24:26,370
 Ma'am, is that why you needed it sealed? Because of him?
 
 222
@@ -892,7 +892,7 @@ It's sealed because every page has to reach the jury untouched.
 Now it reaches them with one new page. His.
 
 224
-00:24:39,160 --> 00:24:44,520
+00:24:39,600 --> 00:24:42,970
 I didn't write anything. I opened an envelope. That's all.
 
 225
@@ -900,7 +900,7 @@ I didn't write anything. I opened an envelope. That's all.
 On camera. After three warnings. In front of a deputy.
 
 226
-00:24:51,160 --> 00:24:56,600
+00:24:52,500 --> 00:24:55,270
 Moreno. Turn that thing off. Just for one minute. Off.
 
 227
@@ -932,11 +932,11 @@ Eleven grams is a misdemeanor. Fifty-two was nine years. Your handwriting.
 You think a number on a form says who I am?
 
 234
-00:25:45,410 --> 00:25:49,970
+00:25:47,900 --> 00:25:49,900
 No. But it tells a jury what a man did.
 
 235
-00:25:51,160 --> 00:25:55,620
+00:25:51,600 --> 00:25:55,200
 What happens now, ma'am? What am I supposed to do?
 
 236
@@ -944,7 +944,7 @@ What happens now, ma'am? What am I supposed to do?
 That's your call, Deputy. Not mine, and not his. Yours.
 
 237
-00:26:03,130 --> 00:26:08,790
+00:26:06,200 --> 00:26:08,820
 Moreno. Eli. Listen to me. Think about your career.
 
 238
@@ -988,7 +988,7 @@ You can walk up yourself, Sergeant. Nobody has to walk you.
 Is that a kindness? From you? After everything you've just done?
 
 248
-00:27:15,290 --> 00:27:18,630
+00:27:15,850 --> 00:27:18,520
 It's the last choice you still get to make yourself.
 
 249
@@ -1044,7 +1044,7 @@ That might be the truest thing he's written in years.
 Four of the six cases are vacated. Two more by Christmas.
 
 262
-00:28:51,220 --> 00:28:55,480
+00:28:52,950 --> 00:28:55,460
 And Mr. Reed? I was told he'd be down here today.
 
 263
@@ -1080,7 +1080,7 @@ It's written down now. In a place nobody gets to change.
 I don't know what to say to you. I keep trying.
 
 271
-00:29:51,730 --> 00:29:56,630
+00:29:52,000 --> 00:29:55,230
 You don't owe me anything. Sign for your things. They're yours.
 
 272

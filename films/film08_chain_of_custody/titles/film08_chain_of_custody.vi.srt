@@ -88,7 +88,7 @@ Bây giờ là 10 giờ 40. Hai mươi phút nữa tôi phải lên trên, Trung
 Thế thì cô nên bắt đầu nói đi. Cô chỉ có hai mươi phút.
 
 23
-00:02:21,410 --> 00:02:26,610
+00:02:22,950 --> 00:02:25,870
 Tôi sẽ nói. Nhưng không về những gì bên trong.
 
 24
@@ -160,7 +160,7 @@ Tôi làm ở đây mười bốn năm. Tôi biết ai thuộc về nơi này.
 Sáu tuần trước có gì khác? Nói thẳng ra đi.
 
 41
-00:04:15,510 --> 00:04:20,710
+00:04:15,950 --> 00:04:19,750
 Một thẩm phán ra lệnh kiểm toán. Chỉ vậy thôi. Tôi chỉ nói thế.
 
 42
@@ -208,11 +208,11 @@ Ngồi xuống đằng kia. Việc này mất bao lâu thì mất.
 Chắc khoảng một phút. Tôi đứng được rồi, nếu ông không phiền.
 
 53
-00:05:45,320 --> 00:05:50,520
+00:05:47,700 --> 00:05:50,370
 Tôi phiền. Ghế ở ngay đó. Ngồi đi.
 
 54
-00:05:57,610 --> 00:06:02,810
+00:05:57,050 --> 00:06:00,080
 Chị có muốn uống nước không? Ngoài kia có bình nước.
 
 55
@@ -248,7 +248,7 @@ Hoặc những người biết cách giữ tên mình khỏi màn hình.
 Ông biết về giữ tên khỏi hồ sơ rõ hơn tôi.
 
 63
-00:06:57,250 --> 00:07:01,990
+00:06:57,650 --> 00:07:01,420
 Ý cô là sao? Nói lại cho camera nghe.
 
 64
@@ -308,7 +308,7 @@ Ba tuần là lâu cho một yêu cầu hồ sơ. Thường chỉ vài ngày.
 Thường thì người ta không đòi mọi nhật ký kho năm 2017.
 
 78
-00:08:33,320 --> 00:08:38,520
+00:08:33,750 --> 00:08:37,850
 Ông chưa trả lời. Ba tuần thường có nghĩa như vậy.
 
 79
@@ -316,7 +316,7 @@ Thường thì người ta không đòi mọi nhật ký kho năm 2017.
 Khi nào sẵn sàng tôi trả lời. Tầng hầm chạy theo lịch của tôi.
 
 80
-00:08:45,290 --> 00:08:50,490
+00:08:47,650 --> 00:08:49,800
 Từng là vậy. Sáu tuần qua, nó chạy theo lịch của tôi.
 
 81
@@ -356,7 +356,7 @@ Sếp, hay mình cứ cho cô ấy lên đi. Người ta đang đợi.
 Hay cậu ra hành lang đứng đi, nếu cậu lo.
 
 90
-00:09:51,320 --> 00:09:56,520
+00:09:51,750 --> 00:09:55,500
 Tôi không lo. Tôi chỉ nói cô ấy đã rất kiên nhẫn với mình.
 
 91
@@ -380,7 +380,7 @@ Không phải cái này. Nó được niêm phong theo lệnh thẩm phán liên
 Vậy thẩm phán xuống đây mà nói với tôi.
 
 96
-00:10:39,320 --> 00:10:44,520
+00:10:40,800 --> 00:10:43,620
 Là nữ thẩm phán. Bà ấy sẽ xuống, nhưng ông sẽ không thích đâu.
 
 97
@@ -396,7 +396,7 @@ Tôi không muốn ông sợ. Tôi muốn ông nghe tôi.
 Nói đi. Tôi đang nghe. Camera của Moreno cũng đang nghe.
 
 100
-00:11:03,320 --> 00:11:08,520
+00:11:04,200 --> 00:11:07,670
 Nếu niêm phong vỡ trong tay ông, không thể hàn lại.
 
 101
@@ -436,7 +436,7 @@ Tôi biết. Phần lớn là tôi viết. Khác biệt là ở đó.
 Vậy chẳng có gì trong đó mà cô không nói thẳng với tôi được.
 
 110
-00:12:03,320 --> 00:12:08,520
+00:12:03,750 --> 00:12:08,200
 Tôi không thể nói. Tôi đang cảnh báo ông. Hai việc khác nhau.
 
 111
@@ -444,7 +444,7 @@ Tôi không thể nói. Tôi đang cảnh báo ông. Hai việc khác nhau.
 Nghe như đe dọa. Moreno, cậu thấy có giống không?
 
 112
-00:12:15,220 --> 00:12:20,420
+00:12:15,650 --> 00:12:19,900
 Nghe như cảnh báo, sếp. Cô ấy nói rất bình tĩnh.
 
 113
@@ -484,7 +484,7 @@ Cậu mới sáu tháng. Cậu không quyết định chuyện gì đã xảy ra
 Camera quyết định, sếp. Sếp dạy chúng tôi vậy.
 
 122
-00:13:28,500 --> 00:13:32,700
+00:13:28,950 --> 00:13:32,200
 Tôi dạy nhiều thứ. Chọn phần nào có lợi cho cậu.
 
 123
@@ -500,7 +500,7 @@ Thưa chị, xin phép, để tôi tự lo với sếp của tôi.
 Được. Vậy tôi chỉ xin một điều. Đừng tắt camera.
 
 126
-00:13:51,570 --> 00:13:56,770
+00:13:51,650 --> 00:13:54,680
 Tôi nói rồi. Nó chạy suốt ca. Đó là quy định.
 
 127
@@ -528,7 +528,7 @@ Và nội dung. Sổ của tôi có cột nội dung. Từ trước tới giờ 
 Sổ của ông cũng có cột cho vật niêm phong. Trang một.
 
 133
-00:14:33,220 --> 00:14:38,420
+00:14:33,650 --> 00:14:37,950
 Cô ấy đúng, sếp. Có cột niêm phong. Tôi thấy từng dùng.
 
 134
@@ -552,7 +552,7 @@ Rõ, sếp. Nhưng cái cột vẫn ở đó, dù thế nào.
 Cô làm cho ai? Nội vụ? Hay công ty luật bên bào chữa?
 
 139
-00:15:09,380 --> 00:15:13,580
+00:15:09,800 --> 00:15:13,100
 Tôi làm cho tòa. Tôi nói ba lần rồi.
 
 140
@@ -568,7 +568,7 @@ Không ai khiếu nại với tôi. Tôi đếm. Đếm không cần khiếu n�
 Đếm gì? Thùng à? Thứ Sáu nào tôi cũng đếm thùng. Đủ cả.
 
 143
-00:15:33,190 --> 00:15:38,390
+00:15:33,600 --> 00:15:37,500
 Thùng đủ cả. Nhưng tôi không đếm thùng.
 
 144
@@ -624,7 +624,7 @@ Vì bỏ đi là đứt chuỗi lưu giữ. Tôi không làm đứt chuỗi.
 Vậy cô cần chữ ký của tôi. Cô cần tôi. Nói đi.
 
 157
-00:17:03,540 --> 00:17:08,740
+00:17:03,950 --> 00:17:07,650
 Tôi cần một hồ sơ sạch. Chữ ký của ông là một phần.
 
 158
@@ -632,7 +632,7 @@ Tôi cần một hồ sơ sạch. Chữ ký của ông là một phần.
 Lần thứ hai, Trung sĩ. Mở nó ra không chấm dứt điều ông sợ.
 
 159
-00:17:21,220 --> 00:17:26,420
+00:17:22,900 --> 00:17:25,410
 Nó sẽ chứng minh điều đó. Bằng chính tay ông, trước camera.
 
 160
@@ -660,7 +660,7 @@ Ba chữ ký cho một phong bì. Hồi đó ông có thắc mắc tại sao kh�
 Tôi nghĩ luật sư thích giấy tờ. Luật sư lúc nào cũng thích giấy tờ.
 
 166
-00:18:03,220 --> 00:18:09,000
+00:18:03,800 --> 00:18:06,880
 Không phải cho luật sư. Mà cho bị cáo. Và cả bên buộc tội.
 
 167
@@ -732,7 +732,7 @@ Tôi không trả lời được. Tôi chỉ biết việc của tôi kết thú
 Bốn phút. Cô còn bốn phút, và có vẻ tôi cũng vậy.
 
 184
-00:20:03,320 --> 00:20:07,400
+00:20:03,750 --> 00:20:07,400
 Tôi nghĩ thế này. Cô muốn tôi sợ.
 
 185
@@ -768,7 +768,7 @@ Bỏ đi rồi chờ điện thoại? Tôi chờ ba tuần rồi.
 Ba tuần không ai gọi. Sáng nào cũng ngồi chờ cái điện thoại đó.
 
 193
-00:21:03,290 --> 00:21:08,850
+00:21:05,400 --> 00:21:08,820
 Tôi biết. Chuyện đó tôi tiếc. Chờ đợi rất khó.
 
 194
@@ -800,7 +800,7 @@ Tin cô. Một người lạ ở hầm của tôi sáu tuần.
 Tôi sẽ không với tới nữa. Giờ nó là của ông, Trung sĩ.
 
 201
-00:21:57,190 --> 00:22:02,290
+00:21:58,950 --> 00:22:02,230
 Của tôi. Tốt. Đó là câu đầu tiên của cô có lý.
 
 202
@@ -872,7 +872,7 @@ Chữ ký bị sao chép. Ai cũng ký tên tôi được.
 Ray Pruitt đã nhìn ông ký. Anh ấy giữ bản sao chín năm.
 
 219
-00:24:09,190 --> 00:24:13,930
+00:24:11,350 --> 00:24:13,970
 Ray. Tất nhiên là Ray. Nó chưa bao giờ giữ được mồm.
 
 220
@@ -880,7 +880,7 @@ Ray. Tất nhiên là Ray. Nó chưa bao giờ giữ được mồm.
 Ray im lặng chín năm. Chính điều đó làm anh ấy gục.
 
 221
-00:24:21,670 --> 00:24:26,430
+00:24:23,500 --> 00:24:26,370
 Thưa chị, vì thế chị cần niêm phong? Vì anh ta?
 
 222
@@ -892,7 +892,7 @@ Niêm phong để mọi trang đến tay bồi thẩm đoàn nguyên vẹn.
 Giờ nó đến với một trang mới. Của ông ta.
 
 224
-00:24:39,160 --> 00:24:44,520
+00:24:39,600 --> 00:24:42,970
 Tôi không viết gì. Tôi chỉ mở một phong bì. Vậy thôi.
 
 225
@@ -900,7 +900,7 @@ Tôi không viết gì. Tôi chỉ mở một phong bì. Vậy thôi.
 Trước camera. Sau ba lần cảnh báo. Trước mặt một phó cảnh sát.
 
 226
-00:24:51,160 --> 00:24:56,600
+00:24:52,500 --> 00:24:55,270
 Moreno. Tắt cái đó đi. Chỉ một phút. Tắt.
 
 227
@@ -932,11 +932,11 @@ Mười một gram là tội nhẹ. Năm mươi hai gram là chín năm. Chữ v
 Cô nghĩ một con số trên tờ phiếu nói lên tôi là ai sao?
 
 234
-00:25:45,410 --> 00:25:49,970
+00:25:47,900 --> 00:25:49,900
 Không. Nhưng nó cho bồi thẩm đoàn biết một người đã làm gì.
 
 235
-00:25:51,160 --> 00:25:55,620
+00:25:51,600 --> 00:25:55,200
 Giờ sao, thưa chị? Tôi phải làm gì?
 
 236
@@ -944,7 +944,7 @@ Giờ sao, thưa chị? Tôi phải làm gì?
 Anh quyết định, Phó cảnh sát. Không phải tôi, không phải ông ta. Là anh.
 
 237
-00:26:03,130 --> 00:26:08,790
+00:26:06,200 --> 00:26:08,820
 Moreno. Eli. Nghe tôi. Nghĩ đến sự nghiệp của cậu.
 
 238
@@ -988,7 +988,7 @@ Lên trên. Mười bốn năm, chưa lần nào tôi được gọi lên trên.
 Đó là lòng tốt à? Từ cô? Sau tất cả những gì cô vừa làm?
 
 248
-00:27:15,290 --> 00:27:18,630
+00:27:15,850 --> 00:27:18,520
 Đó là lựa chọn cuối cùng ông còn tự quyết được.
 
 249
@@ -1044,7 +1044,7 @@ Có lẽ là điều thật nhất ông ta viết trong nhiều năm.
 Bốn trong sáu vụ đã bị hủy án. Hai vụ nữa trước Giáng sinh.
 
 262
-00:28:51,220 --> 00:28:55,480
+00:28:52,950 --> 00:28:55,460
 Còn ông Reed? Tôi nghe nói hôm nay ông ấy xuống đây.
 
 263
@@ -1080,7 +1080,7 @@ Giờ nó được viết ra rồi. Ở nơi không ai đổi được.
 Tôi không biết nói gì với cô. Tôi cứ thử mãi.
 
 271
-00:29:51,730 --> 00:29:56,630
+00:29:52,000 --> 00:29:55,230
 Ông không nợ tôi gì cả. Ký nhận đồ đi. Là của ông.
 
 272
