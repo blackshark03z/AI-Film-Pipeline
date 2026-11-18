@@ -130,6 +130,7 @@ def _credits(pkg: Any, spent: float, expected: float | None) -> dict[str, Any]:
 
 def _production(pkg: Any) -> dict[str, Any]:
     from film_pipeline.production import takes as T
+    from film_pipeline.production.generate import _fallback_price, _sent_receipts
     from film_pipeline.production.money import load_adjustments, money_ledger
     from film_pipeline.production.retake import retake_report
     shots = pkg.typed.get("shots")
@@ -139,8 +140,13 @@ def _production(pkg: Any) -> dict[str, Any]:
     for t in log.takes:
         by_status[t.status] = by_status.get(t.status, 0) + 1
     adj_log = load_adjustments(root)
-    spent = money_ledger(log, {}, adj_log.adjustments)["credits"]["spent"]
+    prices = {g.generation_id: _fallback_price(pkg.header, g) for g in shots.generations} if shots is not None else {}
+    sent = _sent_receipts(root, pkg.header.film_id, prices)
+    cred = money_ledger(log, sent, adj_log.adjustments)["credits"]
+    spent = cred["spent"]
+    unresolved_credits = round(sum(cred["unresolved"].values()), 4)
     out: dict[str, Any] = {"takes": len(log.takes), "by_status": by_status, "credits_spent": spent,
+                           "logged_credits": cred["logged"], "unregistered_charged_credits": unresolved_credits,
                            "retake_rate": round(by_status.get("REJECTED", 0) / len(log.takes), 3) if log.takes else None}
     if shots is None:
         return out

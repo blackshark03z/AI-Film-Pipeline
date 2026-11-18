@@ -8,6 +8,19 @@ import shutil
 from pathlib import Path
 from typing import Any
 
+_PROD_DIR = Path(__file__).resolve().parent
+_RENDER_IMPL_PATHS = [
+    p for p in (
+        _PROD_DIR / "render_cache.py",
+        _PROD_DIR / "edit.py",
+        _PROD_DIR / "versions.py",
+        _PROD_DIR / "titles.py",
+        _PROD_DIR / "ffjoin.py",
+        _PROD_DIR.parent / "drama" / "post.py",
+    ) if p.is_file()
+]
+_RENDER_IMPL_SHA = hashlib.sha256(b"".join(p.read_bytes() for p in _RENDER_IMPL_PATHS)).hexdigest()
+
 
 def digest(path: Path) -> str:
     h = hashlib.sha256()
@@ -21,6 +34,7 @@ def key_for(*, sources: list[Path], settings: dict[str, Any]) -> str:
     return hashlib.sha256(json.dumps({
         "sources": [digest(Path(p)) for p in sources],
         "settings": settings, "render_cache_version": 2,
+        "render_impl_sha": _RENDER_IMPL_SHA,
     }, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
 
 

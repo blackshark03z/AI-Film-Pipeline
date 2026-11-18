@@ -5,6 +5,9 @@ description = "Lean local-first AI film production pipeline"
 requires-python = ">=3.11"
 dependencies = ["pydantic>=2,<3", "jsonschema>=4,<5"]
 
+[project.scripts]
+afp-film = "film_pipeline.cli:main"
+
 [project.optional-dependencies]
 flow = ["patchright>=1,<2", "playwright>=1,<2", "Pillow>=10,<13"]
 qc = ["opencv-python-headless>=4.9,<5", "numpy>=1.26"]
@@ -19,7 +22,13 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.setuptools.package-data]
-"film_pipeline.providers" = ["registry/*.json", "routes.json"]
+"film_pipeline" = [
+    "providers/*.json",
+    "providers/registry/*.json",
+    "providers/_flow_ui/*.py",
+    "production/data/*.json",
+    "film_package_export/*.json",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

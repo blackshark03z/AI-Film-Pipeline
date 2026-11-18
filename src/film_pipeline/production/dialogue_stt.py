@@ -13,6 +13,21 @@ PASS_RECALL = 0.8
 ENGINE = "vosk-small-en-us-0.15"
 ROOT = Path(__file__).resolve().parents[3]
 HELPER = ROOT / "tools" / "stt_vosk.py"
+_INLINE_VOSK_SCRIPT = """import json, subprocess, sys, vosk
+model_dir, wav, spans = sys.argv[1], sys.argv[2], json.loads(sys.argv[3])
+vosk.SetLogLevel(-1)
+model = vosk.Model(model_dir)
+out = []
+for a, b in spans:
+    pcm = subprocess.run(
+        ["ffmpeg", "-v", "error", "-ss", str(a), "-t", str(max(b - a, 0.1)), "-i", wav,
+         "-ac", "1", "-ar", "16000", "-f", "s16le", "-"],
+        capture_output=True, check=True, timeout=120).stdout
+    rec = vosk.KaldiRecognizer(model, 16000)
+    rec.AcceptWaveform(pcm)
+    out.append(json.loads(rec.FinalResult()).get("text", ""))
+print(json.dumps(out))
+"""
 _HOMOPHONES = [{"to", "too", "two"}, {"fare", "fair"}, {"for", "four"}, {"there", "their"}, {"here", "hear"},
                {"right", "write"}, {"no", "know"}, {"ate", "eight"}, {"one", "won"}]
 
@@ -61,7 +76,7 @@ def transcribe(wav: Path, spans: list[list[float]]) -> list[str] | None:
             for a, b in spans:
                 pcm = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(a), "-t", str(max(b - a, 0.1)), "-i", str(wav),
                                       "-ac", "1", "-ar", "16000", "-f", "s16le", "-"],
-                                     capture_output=True, check=True).stdout
+                                     capture_output=True, check=True, timeout=120).stdout
                 rec = vosk.KaldiRecognizer(m, 16000)
                 rec.AcceptWaveform(pcm)
                 out.append(json.loads(rec.FinalResult()).get("text", ""))
@@ -69,11 +84,13 @@ def transcribe(wav: Path, spans: list[list[float]]) -> list[str] | None:
         py = os.environ.get("AFP_STT_PYTHON")
         if not py:
             return None
-        res = subprocess.run([py, str(HELPER), str(model), str(wav), json.dumps(spans)],
-                             capture_output=True, text=True, check=True)
+        cmd = [py, str(HELPER), str(model), str(wav), json.dumps(spans)] if HELPER.is_file() else [
+            py, "-c", _INLINE_VOSK_SCRIPT, str(model), str(wav), json.dumps(spans)
+        ]
+        res = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=300)
         out = json.loads(res.stdout)
         return out if isinstance(out, list) and len(out) == len(spans) else None
-    except (OSError, subprocess.CalledProcessError, ValueError):
+    except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired, ValueError):
         return None
 
 
@@ -85,8 +102,12 @@ def _stem(root: Path) -> Path | None:
     if not raw:
         return None
     p = Path(str(raw).replace("\\", "/"))
-    if not p.is_absolute() and not p.exists():
-        p = ROOT / p
+    if not p.is_absolute():
+        cand = root / p
+        if cand.is_file():
+            p = cand
+        elif not p.is_file():
+            p = ROOT / p
     return p if p.is_file() else None
 
 

@@ -4,9 +4,14 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from film_pipeline.production.retake import retake_plan
 from film_pipeline.production.takes import load_log
 
 _CAUSAL_ACTIONS: dict[str, tuple[str, ...]] = {
+    "PROMPT": ("rewrite_prompt_plain_single_action", "split_into_shorter_beat"),
+    "START_FRAME": ("regenerate_start_still", "restage_clean_character_still"),
+    "PROVIDER_LIMIT": ("retry_transient_once", "cover_with_insert_or_reaction"),
+    "STAGING": ("simplify_choreography_phase", "restage_blocking_or_insert"),
     "OFF_FRAME_INTRUSION": ("enable_de_personify_off_frame", "upgrade_single_to_ots"),
     "AXIS_EYELINE_DRIFT": ("restage_start_still", "reframe_safe_edge"),
     "PROP_CONTINUITY_BREAK": ("restage_start_still", "pin_end_frame_prop_state"),
@@ -50,6 +55,19 @@ class CausalRepairRouter:
                 "reason": detail or "Provider content/moderation refusal requires explicit Owner decision; never reword or bypass",
             }
 
+        if not code or code == "UNKNOWN":
+            return {
+                "generation_id": generation_id,
+                "failure_code": code or "UNCLASSIFIED",
+                "failed_attempts": failed_attempts,
+                "max_attempts": limit,
+                "action": "CLASSIFY",
+                "auto_retry_allowed": False,
+                "escalate": False,
+                "halted": False,
+                "reason": detail or "Rejected take has no classified cause (PROMPT / START_FRAME / PROVIDER_LIMIT / STAGING)",
+            }
+
         if failed_attempts >= limit:
             return {
                 "generation_id": generation_id,
@@ -68,7 +86,7 @@ class CausalRepairRouter:
         action = options[idx]
         return {
             "generation_id": generation_id,
-            "failure_code": code or "UNKNOWN",
+            "failure_code": code,
             "failed_attempts": failed_attempts,
             "max_attempts": limit,
             "action": action,
@@ -84,15 +102,23 @@ class CausalRepairRouter:
         if shots is None:
             return []
         log = load_log(Path(pkg.root), pkg.header.film_id)
+        retake_by_gid = {row["generation_id"]: row for row in retake_plan(log, shots)}
         out: list[dict[str, Any]] = []
         for g in shots.generations:
-            takes = [t for t in log.for_generation(g.generation_id) if t.shot_version == g.version]
-            if any(t.status == "ACCEPTED" for t in takes):
+            all_takes = log.for_generation(g.generation_id)
+            current = [t for t in all_takes if t.shot_version == g.version]
+            if any(t.status == "ACCEPTED" for t in current):
                 continue
-            rejected = [t for t in takes if t.status == "REJECTED"]
-            if not rejected:
+            rejected_current = [t for t in current if t.status == "REJECTED"]
+            if not rejected_current:
                 continue
-            latest = rejected[-1]
-            cause = (latest.cause or "OFF_FRAME_INTRUSION").upper()
-            out.append(self.route(g.generation_id, cause, failed_attempts=len(rejected)))
+            all_rejected = [t for t in all_takes if t.status == "REJECTED"]
+            latest = rejected_current[-1]
+            cause = str(latest.cause or "").strip().upper()
+            routed = self.route(g.generation_id, cause, failed_attempts=len(all_rejected))
+            r_row = retake_by_gid.get(g.generation_id, {})
+            routed["retake_action"] = r_row.get("action", "")
+            routed["rejected_in_version"] = len(rejected_current)
+            routed["total_rejected_across_versions"] = len(all_rejected)
+            out.append(routed)
         return out

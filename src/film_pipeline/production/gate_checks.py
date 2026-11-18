@@ -280,9 +280,13 @@ def master_issues(pkg: Any) -> list[str]:
     if not qc_path.is_file():
         out.append("no qc/master_qc.json: run film.py mastercheck on the master")
     else:
-        record = mq.MasterQc.model_validate_json(qc_path.read_text(encoding="utf-8"))
-        if not record.ok:
-            out.append("the master QC record has a failing group")
+        try:
+            record = mq.MasterQc.model_validate_json(qc_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            out.append(f"corrupt qc/master_qc.json: {str(exc)[:160]}")
+        else:
+            if not record.ok:
+                out.append("the master QC record has a failing group")
     out += [f"picture lock: {i}" for i in picture_lock_issues(pkg)]
     item = _delivery_item(pkg)
     try:

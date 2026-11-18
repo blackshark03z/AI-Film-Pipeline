@@ -1,6 +1,7 @@
 """Resolve one existing send. Reconciliation never submits or creatively accepts a take."""
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -14,18 +15,47 @@ ROOT = Path(__file__).resolve().parents[3]
 _ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]*_t[0-9]+")
 
 
-def pending_receipts(pkg, *, cdp_scope: str | None = None) -> list[dict]:
+def _matches_json_file_sha(path: Path, expected: str) -> bool:
+    """Match SHA-256 against exact bytes on disk or LF-normalized bytes (for Git CRLF checkouts)."""
+    if not expected or not path.is_file():
+        return False
+    if T.sha256_file(path) == expected:
+        return True
+    raw = path.read_bytes()
+    lf = raw.replace(b"\r\n", b"\n")
+    return lf != raw and hashlib.sha256(lf).hexdigest() == expected
+
+
+def _matches_scope(receipt: dict, scope: str | None, acct: str | None) -> bool:
+    r_proj = str(receipt.get("project") or "").strip()
+    r_acct = str(receipt.get("account") or "").strip()
+    if not r_proj and not r_acct:
+        return True
+    if acct is not None:
+        if r_acct:
+            return r_acct == acct
+        return True if scope is None else r_proj == scope
+    if scope is not None:
+        return True if not r_proj else r_proj == scope
+    return True
+
+
+def pending_receipts(pkg, *, cdp_scope: str | None = None, account_scope: str | None = None) -> list[dict]:
     from film_pipeline.production.generate import _sent_receipts, _fallback_price
+    from film_pipeline.production.muse_gateway import pending_muse_claims
     shots = pkg.typed.get("shots")
     prices = {s.generation_id: _fallback_price(pkg.header, s) for s in shots.generations} if shots else {}
     sent = _sent_receipts(Path(pkg.root), pkg.header.film_id, prices)
     scope = (cdp_scope or "").strip() or None
-    items = unresolved_sends(T.load_log(Path(pkg.root), pkg.header.film_id), sent).items()
-    if scope is not None:
-        items = [(tid, r) for tid, r in items if not r.get("project") or r.get("project") == scope]
+    acct = (account_scope or "").strip() or None
+    unresolved = {**unresolved_sends(T.load_log(Path(pkg.root), pkg.header.film_id), sent), **pending_muse_claims(Path(pkg.root))}
+    items = unresolved.items()
+    if scope is not None or acct is not None:
+        items = [(tid, r) for tid, r in items if _matches_scope(r, scope, acct)]
     return [{"take_id": tid, "result": r.get("result", "PENDING"), "provider": r.get("provider", "flow"),
              "cost_unit": r.get("cost_unit", "credits"),
-             "reserved_cost": r.get("expected_cost", r.get("expected_credits", 0))}
+             "reserved_cost": None if r.get("provider") == "muse" else r.get("expected_cost", r.get("expected_credits", 0)),
+             **({"generation_id": r["generation_id"]} if r.get("generation_id") else {})}
             for tid, r in items]
 
 
@@ -52,21 +82,21 @@ def resolved_receipt(root: Path, take_id: str, receipt: dict) -> dict:
         intent = root / "takes" / "intents" / f"{take_id}.intent.json"
         clip = root / "media" / "takes" / f"{take_id}.mp4"
         native = clip.with_suffix(".take.json")
-        if (result.get("resolution") == "QUALIFIED_PREPARING" and result.get("intent_sha256") == T.sha256_file(intent)
+        if (result.get("resolution") == "QUALIFIED_PREPARING" and _matches_json_file_sha(intent, result.get("intent_sha256", ""))
                 and receipt.get("submit_protocol") == "inprocess-checkpoint-v1" and receipt.get("dispatch_phase") == "PREPARING"):
             return {**receipt, "result": "PRE_SUBMIT_ERROR CONTROLLER_NOT_DISPATCHED", "reconciled": True}
-        if (result.get("resolution") == "PROVIDER_NO_CLIP" and result.get("intent_sha256") == T.sha256_file(intent)
-                and result.get("native_sha256") == T.sha256_file(native) and result.get("prompt_sha256") == receipt.get("prompt_sha256")
+        if (result.get("resolution") == "PROVIDER_NO_CLIP" and _matches_json_file_sha(intent, result.get("intent_sha256", ""))
+                and _matches_json_file_sha(native, result.get("native_sha256", "")) and result.get("prompt_sha256") == receipt.get("prompt_sha256")
                 and result.get("provider_no_clip") is True and result.get("scan_verified") is True):
             return {**receipt, "result": "FLOW_FAILED_NO_CLIP", "reconciled": True}
-        if (result.get("intent_sha256") == T.sha256_file(intent) and result.get("native_sha256")
-                and result["native_sha256"] == T.sha256_file(native)):
+        if (_matches_json_file_sha(intent, result.get("intent_sha256", "")) and result.get("native_sha256")
+                and _matches_json_file_sha(native, result["native_sha256"])):
             evidence = json.loads(native.read_text(encoding="utf-8"))
             outcome = {**receipt, "result": evidence.get("result")}
             if evidence.get("prompt_sha256") == receipt.get("prompt_sha256") and receipt_result(outcome) in {"NOT_SUBMITTED", "PROVIDER_FAILED"}:
                 return {**outcome, "reconciled": True}
         if (result.get("result") == "BOUND" and result.get("registered") is True
-                and result.get("intent_sha256") == T.sha256_file(intent)
+                and _matches_json_file_sha(intent, result.get("intent_sha256", ""))
                 and result.get("prompt_sha256") == receipt.get("prompt_sha256")
                 and result.get("sha256") == T.sha256_file(clip)):
             entry = next((t for t in T.load_log(root, receipt["film_id"]).takes if t.output_file == clip.name), None)

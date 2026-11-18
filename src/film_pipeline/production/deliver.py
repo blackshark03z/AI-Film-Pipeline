@@ -233,6 +233,100 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
     return {"checked": samples, "positive": positive, "ok": positive == samples, "missing_at_s": missing, "detail": detail}
 
 
+def title_card_evidence(media: Path, title_lines: list[tuple[str, int]], ai_text: str, title_s: float, *,
+                        min_contrast: float = 25.0, portrait: bool = False) -> dict[str, Any]:
+    """Verify the declared AI disclosure line appears cleanly on the opening title card."""
+    import subprocess
+    import tempfile
+    from PIL import Image, ImageChops, ImageFilter
+    from film_pipeline.drama.post import H, W, title_card
+    from film_pipeline.production import versions as vs
+
+    if title_s <= 0 or not ai_text:
+        return {"checked": 0, "positive": 0, "ok": False, "detail": "title card duration or AI text is missing"}
+    t = min(max(0.2, title_s * 0.5), max(0.2, title_s - 0.2))
+    out_w, out_h = (vs.PORTRAIT_W, vs.PORTRAIT_H) if portrait else (W, H)
+    stripped_lines = [("" if text == ai_text else text, size) for text, size in title_lines]
+    if stripped_lines == title_lines:
+        return {"checked": 0, "positive": 0, "ok": False, "detail": "declared AI label text not found in title lines"}
+    with tempfile.TemporaryDirectory() as tmp:
+        work = Path(tmp)
+        full_path = title_card(work / "full.png", title_lines)
+        without_path = title_card(work / "without.png", stripped_lines)
+        full_l = Image.open(full_path).convert("L")
+        without_l = Image.open(without_path).convert("L")
+        diff_l = ImageChops.subtract(full_l, without_l)
+        if portrait:
+            scaled_h = round(vs.PORTRAIT_W * H / W)
+            y_off = (vs.PORTRAIT_H - scaled_h) // 2
+            full_canvas = Image.new("L", (out_w, out_h), 0)
+            full_canvas.paste(full_l.resize((vs.PORTRAIT_W, scaled_h), Image.Resampling.BILINEAR), (0, y_off))
+            diff_canvas = Image.new("L", (out_w, out_h), 0)
+            diff_canvas.paste(diff_l.resize((vs.PORTRAIT_W, scaled_h), Image.Resampling.BILINEAR), (0, y_off))
+            threshold = 80
+        else:
+            full_canvas = full_l
+            diff_canvas = diff_l
+            threshold = 100
+        glyph = diff_canvas.point(lambda v: 255 if v > threshold else 0)
+        box = glyph.getbbox()
+        if box is None:
+            return {"checked": 0, "positive": 0, "ok": False, "detail": "title AI line renders no glyph pixels"}
+        ring_img = glyph.filter(ImageFilter.MaxFilter(7))
+        x0, y0, x1, y1 = max(0, box[0] - 4), max(0, box[1] - 4), min(out_w, box[2] + 4), min(out_h, box[3] + 4)
+        pixels = [(x, y) for y in range(y0, y1) for x in range(x0, x1)]
+        on = [p for p in pixels if glyph.getpixel(p)]
+        ring = [p for p in pixels if ring_img.getpixel(p) and not glyph.getpixel(p)]
+        if not on or not ring:
+            return {"checked": 0, "positive": 0, "ok": False, "detail": "title AI line glyph/ring empty"}
+        full_box = full_canvas.point(lambda v: 255 if v > 40 else 0).getbbox() or box
+        dy_ctrl = 0
+        for cand_y in range(20, out_h - (box[3] - box[1]) - 20, 20):
+            cand_bottom = cand_y + (box[3] - box[1])
+            if cand_bottom < full_box[1] - 12 or cand_y > full_box[3] + 12:
+                dy_ctrl = cand_y - box[1]
+                break
+        if dy_ctrl == 0:
+            dy_ctrl = (20 - y0) if y0 > 80 else (out_h - 20 - y1)
+        png = work / "card.png"
+        done = subprocess.run(
+            ["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", str(media), "-frames:v", "1", str(png)],
+            capture_output=True, text=True, timeout=60,
+        )
+        if done.returncode != 0 or not png.is_file():
+            raise ValueError(f"could not extract title card frame at {t:.2f} s: {done.stderr.strip()[:200]}")
+        frame = Image.open(png).convert("L").resize((out_w, out_h))
+
+        def contrast(dy: int) -> float:
+            on_vals = [frame.getpixel((x, min(max(0, y + dy), out_h - 1))) for x, y in on]
+            ring_vals = [frame.getpixel((x, min(max(0, y + dy), out_h - 1))) for x, y in ring]
+            return (sum(on_vals) / len(on_vals)) - (sum(ring_vals) / len(ring_vals))
+
+        luma_thresh = 60 if portrait else 80
+        min_lit = 0.45 if portrait else 0.60
+
+        def lit_ratio(dy: int) -> float:
+            on_vals = [frame.getpixel((x, min(max(0, y + dy), out_h - 1))) for x, y in on]
+            return sum(1 for v in on_vals if v >= luma_thresh) / len(on_vals)
+
+        shifts = (-2, -1, 0, 1, 2) if portrait else (0,)
+        best_dy = max(shifts, key=contrast)
+        target = contrast(best_dy)
+        lit = lit_ratio(best_dy)
+        ctrl = contrast(dy_ctrl)
+        ok = frame_shows_label(target, ctrl, min_contrast) and lit >= min_lit
+        return {
+            "checked": 1,
+            "positive": 1 if ok else 0,
+            "ok": ok,
+            "at_s": round(t, 2),
+            "target_contrast": round(target, 2),
+            "control_contrast": round(ctrl, 2),
+            "lit_ratio": round(lit, 3),
+            "detail": f"title card contrast {target:.1f} vs control {ctrl:.1f} (lit {lit:.0%}) at {t:.2f}s",
+        }
+
+
 def mark_master(src: Path, dst: Path, disclosure: Any, disclosure_json: Path, *, c2pa: tuple[Path, Path] | None = None) -> Any:
     """Embed the disclosure tags (stream copy), sign C2PA when asked, and write the record bound to the delivered bytes."""
     from film_pipeline.drama import disclosure as D
@@ -326,22 +420,41 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
     if not qc_path.is_file():
         findings.append(_finding("QC_MISSING", "BLOCK", "no qc/master_qc.json: run film.py mastercheck on the master"))
     else:
-        record = mq.MasterQc.model_validate_json(qc_path.read_text(encoding="utf-8"))
-        if record.sha256 != master_sha:
-            findings.append(_finding("QC_STALE", "BLOCK", "qc/master_qc.json was made on other bytes than this master: run mastercheck again"))
-        elif not record.ok:
-            findings.append(_finding("QC_FAILED", "BLOCK", "the master QC record has a failing group"))
+        try:
+            record = mq.MasterQc.model_validate_json(qc_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            findings.append(_finding("QC_CORRUPT", "BLOCK", f"qc/master_qc.json is unreadable: {str(exc)[:160]}"))
+        else:
+            if record.sha256 != master_sha:
+                findings.append(_finding("QC_STALE", "BLOCK", "qc/master_qc.json was made on other bytes than this master: run mastercheck again"))
+            elif not record.ok:
+                findings.append(_finding("QC_FAILED", "BLOCK", "the master QC record has a failing group"))
     versions_report = vs.versions_dir(root) / "versions.json"
     portrait = None
+    cut_report_sha = sha256_file(Path(cut_report)) if Path(cut_report).is_file() else ""
     if versions_report.is_file():
-        vr = json.loads(versions_report.read_text(encoding="utf-8"))
-        item = next((v for v in vr["versions"] if v["name"] == "portrait_9x16"), None)
-        portrait = root / item["file"] if item else None
-        if not vr.get("ok"):
-            findings.append(_finding("VERSIONS_FAILED", "BLOCK", "versions/versions.json has a BLOCK finding"))
-        elif item and portrait.is_file() and sha256_file(portrait) != item["sha256"]:
-            findings.append(_finding("VERSIONS_STALE", "BLOCK", "the 9:16 file changed after film.py versions: run it again"))
-    if portrait is None or not portrait.is_file():
+        try:
+            vr = json.loads(versions_report.read_text(encoding="utf-8"))
+            if not isinstance(vr, dict) or not isinstance(vr.get("versions"), list):
+                raise ValueError("versions.json missing versions list")
+            master_item = next((v for v in vr["versions"] if v.get("name") == "master_16x9"), None)
+            item = next((v for v in vr["versions"] if v.get("name") == "portrait_9x16"), None)
+            portrait = root / item["file"] if item and item.get("file") else None
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            findings.append(_finding("VERSIONS_CORRUPT", "BLOCK", f"versions/versions.json is unreadable: {str(exc)[:160]}"))
+            portrait = None
+        else:
+            if not vr.get("ok"):
+                findings.append(_finding("VERSIONS_FAILED", "BLOCK", "versions/versions.json has a BLOCK finding"))
+            elif master_item is None or master_item.get("sha256") != master_sha:
+                findings.append(_finding("VERSIONS_STALE", "BLOCK",
+                                         "versions/versions.json was built from a different 16:9 master: run film.py versions again"))
+            elif vr.get("cut_report_sha256") and cut_report_sha and vr.get("cut_report_sha256") != cut_report_sha:
+                findings.append(_finding("VERSIONS_STALE", "BLOCK",
+                                         "versions/versions.json was built from a different cut report: run film.py versions again"))
+            elif item and portrait is not None and portrait.is_file() and sha256_file(portrait) != item.get("sha256"):
+                findings.append(_finding("VERSIONS_STALE", "BLOCK", "the 9:16 file changed after film.py versions: run it again"))
+    if (portrait is None or not portrait.is_file()) and not any(f["code"] == "VERSIONS_CORRUPT" for f in findings):
         findings.append(_finding("VERSIONS_MISSING", "BLOCK", "no 9:16 version: run film.py versions"))
         portrait = None
     disclosure = build_disclosure(pkg, section, generators)
@@ -353,6 +466,27 @@ def deliver(pkg: Any, master: Path, cut_report: Path, *, generators: Any = "", c
                                  "no generator named for the disclosure (--generators or --generators-file)"))
     label_mode = pkg.header.disclosure.ai_label
     label_check: dict[str, Any] = {"mode": label_mode}
+    if label_mode == "title_card" and disclosure.visible_label.text and float(section.title_s) > 0:
+        title_lines, _ = ti.resolved_cards(pkg, section)
+        try:
+            tev = title_card_evidence(master, title_lines, disclosure.visible_label.text, float(section.title_s), portrait=False)
+        except Exception as exc:  # noqa: BLE001
+            tev = {"checked": 0, "positive": 0, "ok": False, "detail": str(exc)[:200]}
+        if not tev.get("ok"):
+            label_check["title_evidence"] = tev
+            findings.append(_finding("AI_TITLE_CARD_NOT_BURNED", "BLOCK",
+                                     f"film.json disclosure.ai_label is 'title_card' but the master opening card lacks the AI line "
+                                     f"({tev.get('detail')}): render with film.py titles --render"))
+        if portrait is not None:
+            try:
+                ptev = title_card_evidence(portrait, title_lines, disclosure.visible_label.text, float(section.title_s), portrait=True)
+            except Exception as exc:  # noqa: BLE001
+                ptev = {"checked": 0, "positive": 0, "ok": False, "detail": str(exc)[:200]}
+            if not ptev.get("ok"):
+                label_check["portrait_title_evidence"] = ptev
+                findings.append(_finding("AI_TITLE_CARD_NOT_BURNED_9X16", "BLOCK",
+                                         f"film.json disclosure.ai_label is 'title_card' but the 9:16 opening card lacks the AI line "
+                                         f"({ptev.get('detail')}): run film.py versions again"))
     if label_mode == "always":  # the setting promises a label on the whole body: the master has to show it
         try:
             label_check["evidence"] = label_evidence(master, float(section.title_s), float(section.end_s))
@@ -496,7 +630,13 @@ def verify_archive(archive: Path) -> dict[str, Any]:
     path = archive / MANIFEST
     if not path.is_file():
         return {"ok": False, "error": f"{MANIFEST} not found in {archive}"}
-    manifest = ArchiveManifest.model_validate_json(path.read_text(encoding="utf-8"))
+    try:
+        manifest = ArchiveManifest.model_validate_json(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        msg = f"corrupt {MANIFEST}: {str(exc)[:200]}"
+        return {"ok": False, "release_ready": False, "error": msg,
+                "missing_files": [], "hash_mismatch": [], "unlisted_files": [],
+                "problems": [_finding("MANIFEST_CORRUPT", "BLOCK", msg)]}
     missing, mismatched = [], []
     for entry in manifest.files:
         file = archive / entry.path

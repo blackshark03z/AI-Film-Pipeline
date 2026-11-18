@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "license": "GENERATED_OFFLINE",
+  "sample_rate": 48000,
+  "channels": 1,
+  "entries": [
+    {
+      "id": "paper_rustle",
+      "category": "foley",
+      "duration_s": 0.9,
+      "lavfi_input": "anoisesrc=color=pink:amplitude=0.35:sample_rate=48000:seed=101",
+      "filtergraph": "highpass=f=900,lowpass=f=5200,tremolo=f=7:d=0.65,afade=t=in:d=0.05,afade=t=out:st=0.65:d=0.25",
+      "description": "Crisp handling of official forms or case sheets across a counter"
+    },
+    {
+      "id": "envelope_open",
+      "category": "foley",
+      "duration_s": 1.1,
+      "lavfi_input": "anoisesrc=color=white:amplitude=0.28:sample_rate=48000:seed=102",
+      "filtergraph": "bandpass=f=2400:width_type=h:w=1800,tremolo=f=4:d=0.8,afade=t=in:d=0.04,afade=t=out:st=0.80:d=0.30",
+      "description": "Tearing or breaking an envelope seam / kraft flap"
+    },
+    {
+      "id": "stamp_press",
+      "category": "foley",
+      "duration_s": 0.45,
+      "lavfi_input": "anoisesrc=color=brown:amplitude=0.65:sample_rate=48000:seed=103",
+      "filtergraph": "lowpass=f=950,afade=t=in:d=0.005,afade=t=out:st=0.08:d=0.35",
+      "description": "Firm rubber date-stamp thud onto heavy paper on wood/laminate desk"
+    },
+    {
+      "id": "ledger_close",
+      "category": "foley",
+      "duration_s": 0.65,
+      "lavfi_input": "anoisesrc=color=brown:amplitude=0.75:sample_rate=48000:seed=104",
+      "filtergraph": "lowpass=f=700,afade=t=in:d=0.005,afade=t=out:st=0.14:d=0.48",
+      "description": "Heavy bound archive ledger closing firmly on counter"
+    },
+    {
+      "id": "chair_creak",
+      "category": "foley",
+      "duration_s": 0.85,
+      "lavfi_input": "sine=frequency=215:sample_rate=48000",
+      "filtergraph": "vibrato=f=5.5:d=0.35,bandpass=f=320:width_type=h:w=220,volume=-10dB,afade=t=in:d=0.08,afade=t=out:st=0.55:d=0.30",
+      "description": "Subtle swivel-chair weight shift behind an intake desk"
+    },
+    {
+      "id": "footsteps_hallway",
+      "category": "foley",
+      "duration_s": 1.6,
+      "lavfi_input": "anoisesrc=color=brown:amplitude=0.55:sample_rate=48000:seed=106",
+      "filtergraph": "lowpass=f=850,tremolo=f=2.0:d=0.95,aecho=0.8:0.3:45:0.25,afade=t=in:d=0.03,afade=t=out:st=1.25:d=0.35",
+      "description": "Measured hard-sole footsteps on tile hallway floor"
+    },
+    {
+      "id": "door_latch",
+      "category": "foley",
+      "duration_s": 0.5,
+      "lavfi_input": "anoisesrc=color=pink:amplitude=0.60:sample_rate=48000:seed=107",
+      "filtergraph": "bandpass=f=1450:width_type=h:w=1100,tremolo=f=6:d=0.85,afade=t=in:d=0.005,afade=t=out:st=0.16:d=0.32",
+      "description": "Metallic office or counter gate latch clicking shut"
+    },
+    {
+      "id": "keys_set_down",
+      "category": "foley",
+      "duration_s": 0.55,
+      "lavfi_input": "anoisesrc=color=white:amplitude=0.30:sample_rate=48000:seed=108",
+      "filtergraph": "highpass=f=3200,lowpass=f=7800,tremolo=f=9:d=0.75,afade=t=in:d=0.005,afade=t=out:st=0.18:d=0.35",
+      "description": "Small metallic jingle of duty keys placed onto a counter"
+    },
+    {
+      "id": "cup_set_down",
+      "category": "foley",
+      "duration_s": 0.4,
+      "lavfi_input": "sine=frequency=480:sample_rate=48000",
+      "filtergraph": "highpass=f=350,lowpass=f=1800,volume=-12dB,afade=t=in:d=0.003,afade=t=out:st=0.06:d=0.32",
+      "description": "Ceramic mug or plastic cup set quietly on laminate counter"
+    },
+    {
+      "id": "pen_write",
+      "category": "sfx",
+      "duration_s": 1.2,
+      "lavfi_input": "anoisesrc=color=pink:amplitude=0.22:sample_rate=48000:seed=110",
+      "filtergraph": "highpass=f=1600,lowpass=f=4800,tremolo=f=8:d=0.7,afade=t=in:d=0.04,afade=t=out:st=0.95:d=0.25",
+      "description": "Ballpoint pen scratching a signature or timestamp in logbook"
+    }
+  ]
+}

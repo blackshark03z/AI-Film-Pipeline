@@ -27,23 +27,45 @@ CORNER_ROWS = 5     # bottom-right ~13.9% height
 def _probe_duration_s(clip: Path) -> float:
     done = subprocess.run(
         ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(clip)],
-        capture_output=True, text=True, check=True,
+        capture_output=True, text=True, check=True, timeout=60,
     )
     return float((done.stdout or "0").strip() or 0.0)
 
 
 def _gray_frames(media: Path, *, max_frames: int = 12, duration_s: float | None = None) -> list[bytes]:
-    if duration_s is not None and duration_s > 0.2:
-        fps_expr = f"fps={max(1.0, max_frames / duration_s):.4f}"
-        vf = f"{fps_expr},scale={AN_W}:{AN_H}:flags=area,format=gray"
-    else:
-        vf = f"scale={AN_W}:{AN_H}:flags=area,format=gray"
-    raw = subprocess.run(
-        ["ffmpeg", "-v", "error", "-i", str(media), "-an", "-vf", vf,
-         "-frames:v", str(max_frames), "-f", "rawvideo", "-"],
-        capture_output=True, check=True,
-    ).stdout
     frame_bytes = AN_W * AN_H
+    scale_vf = f"scale={AN_W}:{AN_H}:flags=area,format=gray"
+    if duration_s is not None and duration_s > 0.2 and max_frames > 1:
+        head_budget = max_frames - 1
+        fps_expr = f"fps={max(0.05, head_budget / duration_s):.4f}"
+        vf = f"{fps_expr},{scale_vf}"
+        head_raw = subprocess.run(
+            ["ffmpeg", "-v", "error", "-i", str(media), "-an", "-vf", vf,
+             "-frames:v", str(head_budget), "-f", "rawvideo", "-"],
+            capture_output=True, check=True, timeout=60,
+        ).stdout
+        tail_proc = subprocess.run(
+            ["ffmpeg", "-v", "error", "-sseof", "-0.1", "-i", str(media), "-an", "-vf", scale_vf,
+             "-frames:v", "1", "-f", "rawvideo", "-"],
+            capture_output=True, check=False, timeout=60,
+        )
+        tail_raw = tail_proc.stdout if tail_proc.returncode == 0 and len(tail_proc.stdout) >= frame_bytes else b""
+        if not tail_raw:
+            tail_seek = max(0.0, duration_s - 0.1)
+            tail_raw = subprocess.run(
+                ["ffmpeg", "-v", "error", "-ss", f"{tail_seek:.3f}", "-i", str(media), "-an", "-vf", scale_vf,
+                 "-frames:v", "1", "-f", "rawvideo", "-"],
+                capture_output=True, check=False, timeout=60,
+            ).stdout
+        frames = [head_raw[i * frame_bytes:(i + 1) * frame_bytes] for i in range(len(head_raw) // frame_bytes)]
+        if len(tail_raw) >= frame_bytes:
+            frames.append(tail_raw[:frame_bytes])
+        return frames
+    raw = subprocess.run(
+        ["ffmpeg", "-v", "error", "-i", str(media), "-an", "-vf", scale_vf,
+         "-frames:v", str(max_frames), "-f", "rawvideo", "-"],
+        capture_output=True, check=True, timeout=60,
+    ).stdout
     count = len(raw) // frame_bytes
     return [raw[i * frame_bytes:(i + 1) * frame_bytes] for i in range(count)]
 
@@ -87,7 +109,7 @@ def _reference_still(pkg: Any, decl: Any) -> Path | None:
 
 def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dict[str, Any]:
     """Scan one generated take clip and emit assist-only QC metrics & WARN alerts (never bypasses human QC)."""
-    from film_pipeline.production.takes import load_log
+    from film_pipeline.production.takes import load_log, sha256_file
 
     root = Path(pkg.root)
     log = load_log(root, pkg.header.film_id)
@@ -96,6 +118,8 @@ def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dic
     clip = base_dir / entry.output_file
     if not clip.is_file():
         raise FileNotFoundError(f"Take clip not found for triage: {clip}")
+    actual_sha = sha256_file(clip)
+    hash_verified = not entry.output_sha256 or actual_sha == entry.output_sha256
 
     shots = pkg.typed.get("shots") if hasattr(pkg, "typed") else None
     decl = next((g for g in shots.generations if g.generation_id == entry.generation_id), None) if shots else None
@@ -186,11 +210,19 @@ def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dic
             "severity": "WARN",
             "detail": f"dialogue shot has only {active_ratio:.1%} audio frames above -45 dBFS; verify spoken line",
         })
+    if not hash_verified:
+        warnings.append({
+            "code": "TAKE_HASH_MISMATCH",
+            "severity": "WARN",
+            "detail": f"clip sha256 {actual_sha[:12]} differs from logged output_sha256 {entry.output_sha256[:12]}",
+        })
 
     return {
         "take_id": take_id,
         "generation_id": entry.generation_id,
         "clip": str(clip),
+        "output_sha256": actual_sha,
+        "hash_verified": hash_verified,
         "duration_s": round(duration_s, 3),
         "advisory_only": True,
         "auto_pass_forbidden": True,

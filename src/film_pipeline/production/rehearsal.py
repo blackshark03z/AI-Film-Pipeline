@@ -74,7 +74,7 @@ def mock_runner(argv: list[str], out: Path) -> dict[str, Any]:
            "-vf", "scale=1408:792,crop=1280:720:x='64+60*sin(t*0.9)':y='36+30*cos(t*0.7)',noise=alls=12:allf=t+u,format=yuv420p",
            "-af", "volume=0.05", "-c:v", "libx264", "-preset", "veryfast", "-r", "24", "-c:a", "aac", "-b:a", "128k",
            "-shortest", str(out)]
-    done = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    done = subprocess.run(cmd, capture_output=True, text=True, check=False, timeout=600)
     sha = hashlib.sha256(out.read_bytes()).hexdigest() if out.is_file() else ""
     manifest = {"result": "PASSED" if done.returncode == 0 and sha else "FAILED", "file": out.name, "sha256": sha,
                 "mock": True, "note": STAMP}
@@ -97,9 +97,12 @@ class _Log:
         return ok
 
     def cli(self, name: str, *args: str) -> tuple[bool, str]:
-        env = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONPATH": str(ROOT / "src")}
+        env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+        if (ROOT / "src").is_dir():
+            env["PYTHONPATH"] = str(ROOT / "src")
+        cmd = [sys.executable, str(FILM_CLI), *args] if FILM_CLI.is_file() else [sys.executable, "-m", "film_pipeline", *args]
         t0 = time.time()
-        done = subprocess.run([sys.executable, str(FILM_CLI), *args], capture_output=True, text=True, encoding="utf-8",
+        done = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
                               errors="replace", env=env, check=False)
         text = (done.stdout or "") + (done.stderr or "")
         self.add(name, done.returncode == 0, time.time() - t0, text if done.returncode else text[-200:])

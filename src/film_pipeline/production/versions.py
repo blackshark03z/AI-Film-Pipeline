@@ -29,7 +29,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-from film_pipeline.production.ffjoin import join_video_chunks
+from film_pipeline.production.ffjoin import ffconcat_path, join_video_chunks, media_timeout, run_ffmpeg
 from film_pipeline.production.render_cache import cached as _cached_render, key_for as _render_key, save as _save_render
 
 PORTRAIT_H = 1280
@@ -329,22 +329,26 @@ def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, hei
                     graph_file = work / f"portrait_{chunk_no:06d}.filter"
                     graph_file.write_text(graph, encoding="utf-8")
                     generated = work / f"portrait_{chunk_no:06d}.mkv"
-                    subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs,
-                                    "-/filter_complex", str(graph_file), "-map", "[v]", "-an",
-                                    "-c:v", "libx264", "-preset", "medium", "-crf", "18",
-                                    "-pix_fmt", "yuv420p", "-r", f"{fps:g}", str(generated)], check=True)
+                    chunk_dur = max(1.0, (last_frame - first_frame) / fps)
+                    run_ffmpeg(["ffmpeg", "-v", "error", "-y", *inputs,
+                                "-/filter_complex", str(graph_file), "-map", "[v]", "-an",
+                                "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+                                "-pix_fmt", "yuv420p", "-r", f"{fps:g}", str(generated)],
+                               timeout_s=media_timeout(chunk_dur))
                     chunk = _save_render(cache_dir, key, generated, ".mkv")
                 chunks.append(chunk)
             concat_list = work / "concat.txt"
             # Explicit exact durations: mkv timestamps are whole milliseconds, so without them every join took the
             # chunk's rounded-up length and a 30 min portrait ended a whole frame late.
             concat_list.write_text(
-                "".join(f"file '{p.as_posix()}'\nduration {(w[-1]['end_frame'] - w[0]['start_frame']) / fps:.9f}\n"
+                "".join(f"file '{ffconcat_path(p)}'\nduration {(w[-1]['end_frame'] - w[0]['start_frame']) / fps:.9f}\n"
                         for p, w in zip(chunks, windows)), encoding="utf-8")
             joined = work / "joined.mkv"
-            join_video_chunks(concat_list, joined)
-            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(joined), "-i", str(audio_source),
-                            "-map", "0:v:0", "-map", "1:a:0?", "-c", "copy", "-movflags", "+faststart", str(out)], check=True)
+            total_s = max(1.0, max((float(s.get("end_s", s.get("end", 10.0))) for s in segments), default=10.0))
+            join_video_chunks(concat_list, joined, timeout_s=media_timeout(total_s))
+            run_ffmpeg(["ffmpeg", "-v", "error", "-y", "-i", str(joined), "-i", str(audio_source),
+                        "-map", "0:v:0", "-map", "1:a:0?", "-c", "copy", "-movflags", "+faststart", str(out)],
+                       timeout_s=media_timeout(total_s))
         return out
     inputs = ["-i", str(source)] + (["-loop", "1", "-i", str(label[0])] if label else [])
     first = 2 if label else 1
@@ -357,9 +361,11 @@ def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, hei
         audio = f"{first + len(overlays)}:a?"
     graph_file = out.with_suffix(".filter")
     graph_file.write_text(portrait_graph(segments, height, (label[1], label[2]) if label else None, overlays), encoding="utf-8")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-/filter_complex", str(graph_file),
-                    "-map", "[v]", "-map", audio, "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
-                    "-r", f"{fps:g}", "-c:a", "copy", "-movflags", "+faststart", str(out)], check=True)
+    total_s = max(1.0, max((float(s.get("end_s", s.get("end", 10.0))) for s in segments), default=10.0))
+    run_ffmpeg(["ffmpeg", "-v", "error", "-y", *inputs, "-/filter_complex", str(graph_file),
+                "-map", "[v]", "-map", audio, "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+                "-r", f"{fps:g}", "-c:a", "copy", "-movflags", "+faststart", str(out)],
+               timeout_s=media_timeout(total_s))
     graph_file.unlink(missing_ok=True)
     return out
 
@@ -515,12 +521,14 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
     section = pkg.typed.get("edit")
     if section is None:
         raise ValueError("versions needs a valid 05_edit.json")
-    plan = json.loads(Path(cut_report).read_text(encoding="utf-8"))["planned"]
+    cut_report_path = Path(cut_report)
+    cut_report_sha = sha256_file(cut_report_path)
+    plan = json.loads(cut_report_path.read_text(encoding="utf-8"))["planned"]
     out = Path(out_dir) if out_dir else versions_dir(pkg.root)
     out.mkdir(parents=True, exist_ok=True)
     width, height, fps = probe_size(master)
     problems: list[dict[str, Any]] = []
-    reframes = ti.load_reframes(pkg.root).events
+    reframes = ti.resolve_reframes_for_section(pkg.root, section, ti.load_reframes(pkg.root).events)
     titles_path = ti.titles_dir(pkg.root) / "titles.json"
     titles_report = json.loads(titles_path.read_text(encoding="utf-8")) if titles_path.is_file() else None
     clean = Path(portrait_source) if portrait_source else None
@@ -575,7 +583,8 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
     problems += found
     draft["thumbnails"] = [t["file"] for t in thumbs]
     (out / "metadata.json").write_text(json.dumps(draft, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    report = {"film_id": pkg.header.film_id, "ok": not any(p["severity"] == "BLOCK" for p in problems),
+    report = {"film_id": pkg.header.film_id, "cut_report_sha256": cut_report_sha,
+              "ok": not any(p["severity"] == "BLOCK" for p in problems),
               "versions": versions, "thumbnails": thumbs, "metadata": "versions/metadata.json", "problems": problems,
               "summary": {"portrait_segments": len(segments), "thumbnails": len(thumbs),
                           "blocks": sum(p["severity"] == "BLOCK" for p in problems),

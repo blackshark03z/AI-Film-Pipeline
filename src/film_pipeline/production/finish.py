@@ -9,6 +9,7 @@ from contextlib import redirect_stdout
 from pathlib import Path
 
 from film_pipeline.production import deliver as D
+from film_pipeline.production import foley
 from film_pipeline.production.gates import evaluate_gates
 from film_pipeline.production.lock import lock_status
 from film_pipeline.production.package import load_package
@@ -16,8 +17,15 @@ from film_pipeline.production.runtime import atomic_json, film_writer
 from film_pipeline.production import post_engine, preflight
 
 _source_root = Path(__file__).resolve().parents[1]
-_code_paths = sorted([*(_source_root / "production").glob("*.py"), *(_source_root / "drama").glob("*.py"),
-                      _source_root.parents[1] / "tools/film.py"])
+_tool_cli = _source_root.parents[1] / "tools/film.py"
+_code_paths = sorted(
+    p for p in [
+        *(_source_root / "production").glob("*.py"),
+        *(_source_root / "drama").glob("*.py"),
+        _source_root / "cli.py",
+        _tool_cli,
+    ] if p.is_file()
+)
 _CODE_SHA = hashlib.sha256(b"".join(p.read_bytes() for p in _code_paths)).hexdigest()
 
 
@@ -34,6 +42,7 @@ def _work_file(root: Path, value: str) -> Path:
 
 def _outputs(root: Path, name: str) -> list[Path]:
     fixed = {"generators": ["generators.json"], "grade": ["color/color.json"],
+             "foley": ["audio/assets.json"],
              "titles": ["titles/titles.json", "titles/credits.json",
                         "media/cut/titled_cut.mp4", "media/cut/titled_cut.cut.json", "media/cut/titled_cut.clean.mp4",
                         "media/cut/titled_cut.clean.cut.json"],
@@ -41,6 +50,8 @@ def _outputs(root: Path, name: str) -> list[Path]:
              "versions": ["versions/versions.json", "versions/metadata.json"],
              "dialoguecheck": ["qc/dialogue_stt.json"], "deliver": ["07_delivery.json"]}
     paths = [root / n for n in fixed[name]]
+    if name == "foley" and (root / "audio/sfx").is_dir():
+        paths.extend(sorted((root / "audio/sfx").glob("*.wav")))
     if name == "titles":
         paths.extend((root / "titles").glob("*.srt"))
     if name == "mix" and (root / "audio/mix.json").is_file():
@@ -62,7 +73,9 @@ def _fingerprint(root: Path, name: str) -> str:
     files.extend(root.glob("0[1-5]_*.json"))
     dependencies = {
         "generators": [], "grade": ["color/color_plan.json"],
-        "titles": ["color/color.json", "generators.json", "titles/portrait_focus.json", "titles/reframe.json", "titles/cues.json"],
+        "foley": [],
+        "titles": ["color/color.json", "generators.json", "titles/portrait_focus.json", "titles/reframe.json",
+                   "titles/cues.json", "audio/assets.json"],
         "mix": ["media/cut/titled_cut.mp4", "media/cut/titled_cut.cut.json", "audio/assets.json", "audio/mix_plan.json"],
         "mastercheck": ["media/cut/mixed.mp4", "media/cut/titled_cut.cut.json"],
         "versions": ["media/cut/mixed.mp4", "media/cut/titled_cut.clean.mp4", "media/cut/titled_cut.cut.json",
@@ -72,13 +85,30 @@ def _fingerprint(root: Path, name: str) -> str:
     }
     files.extend(root / n for n in dependencies[name])
     if name == "mix":
-        files.extend((root / "audio").rglob("*.wav"))
+        for pattern in ("*.wav", "*.flac", "*.mp3"):
+            files.extend((root / "audio").rglob(pattern))
+        if (root / "audio/assets.json").is_file():
+            try:
+                assets_doc = json.loads((root / "audio/assets.json").read_text(encoding="utf-8"))
+                for item in assets_doc.get("assets", []):
+                    rel = str(item.get("path") or "").strip()
+                    if rel:
+                        files.append(_work_file(root, rel))
+            except ValueError:
+                pass
     if name == "deliver":
         files.extend(p for pattern in D.PACKAGE_GLOBS for p in root.glob(pattern))
         files.extend((root / "titles").glob("*.srt"))
         if (root / "versions/versions.json").is_file():
             files.extend(_work_file(root, v["file"]) for v in json.loads((root / "versions/versions.json").read_text(encoding="utf-8"))["versions"])
     payload = {"step": name, "files": _hashes(files), "pipeline_code": _CODE_SHA}
+    if name == "titles" and (root / "audio/mix_plan.json").is_file():
+        try:
+            music_cues = json.loads((root / "audio/mix_plan.json").read_text(encoding="utf-8")).get("music") or []
+            if music_cues:
+                payload["title_music_cues"] = music_cues
+        except ValueError:
+            payload["title_music_cues"] = None
     engine = post_engine.resolve_engine_dir() if name == "mix" else None
     if engine is not None:  # a mix mastered by the engine is not the same output as AFP's own mix
         payload["post_engine"] = {"dir": str(engine), "revision": post_engine.engine_revision(engine)}
@@ -151,7 +181,16 @@ def finish(pkg, *, command, dry_run: bool = False) -> dict:
     mix_argv = ["mix", "--cut", str(root / "media/cut/titled_cut.mp4"), "--stems", str(root / "audio/stems")]
     if engine is not None:
         mix_argv += ["--engine", str(engine)]
-    steps += [("grade", ["grade"]), ("titles", ["titles", "--render", "--color", "--clean-copy", *generators]),
+    needs_foley = (
+        hasattr(pkg, "typed")
+        and isinstance(getattr(pkg, "typed", None), dict)
+        and "shots" in pkg.typed
+        and bool(foley.unsourced_catalog_matches(pkg))
+    )
+    steps += [("grade", ["grade"])]
+    if needs_foley:
+        steps.append(("foley", ["foley"]))
+    steps += [("titles", ["titles", "--render", "--color", "--clean-copy", *generators]),
               ("mix", mix_argv),
               ("mastercheck", ["mastercheck", "--cut-report", str(root / "media/cut/titled_cut.cut.json")]),
               ("versions", ["versions", "--cut-report", str(root / "media/cut/titled_cut.cut.json"), *generators]),

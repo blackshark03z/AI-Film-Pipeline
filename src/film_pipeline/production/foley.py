@@ -19,12 +19,24 @@ DEFAULT_CATALOG = Path(__file__).resolve().parents[3] / "assets" / "sfx_catalog.
 
 def load_catalog(catalog_path: Path | None = None) -> dict[str, Any]:
     """Load the deterministic SFX/Foley recipe catalog."""
-    path = Path(catalog_path) if catalog_path is not None else DEFAULT_CATALOG
-    if not path.is_file():
-        raise FileNotFoundError(f"SFX catalog not found: {path}")
-    data = json.loads(path.read_text(encoding="utf-8"))
+    if catalog_path is not None:
+        path = Path(catalog_path)
+        if not path.is_file():
+            raise FileNotFoundError(f"SFX catalog not found: {path}")
+        raw = path.read_text(encoding="utf-8")
+        src_desc = str(path)
+    elif DEFAULT_CATALOG.is_file():
+        raw = DEFAULT_CATALOG.read_text(encoding="utf-8")
+        src_desc = str(DEFAULT_CATALOG)
+    else:
+        from importlib import resources
+
+        pkg_res = resources.files("film_pipeline.production.data").joinpath("sfx_catalog.json")
+        raw = pkg_res.read_text(encoding="utf-8")
+        src_desc = "package://film_pipeline/production/data/sfx_catalog.json"
+    data = json.loads(raw)
     if not isinstance(data, dict) or not isinstance(data.get("entries"), list):
-        raise ValueError(f"Invalid SFX catalog format: {path}")
+        raise ValueError(f"Invalid SFX catalog format: {src_desc}")
     return data
 
 
@@ -156,3 +168,42 @@ def materialize_film_foley(
         "synthesized": synthesized,
         "unmatched_slugs": skipped,
     }
+
+
+def unsourced_catalog_matches(pkg: Any, *, catalog_path: Path | None = None) -> list[str]:
+    """Return matched catalog entry IDs requested by shots in cut that lack a sourced audio file."""
+    root = Path(pkg.root) if hasattr(pkg, "root") else Path(pkg)
+    pkg_obj = pkg if hasattr(pkg, "root") else SimpleNamespace(root=root, typed={})
+    requested = _film_requested_sfx_slugs(pkg_obj)
+    if not requested:
+        return []
+    catalog = load_catalog(catalog_path)
+    entries = {str(e["id"]): e for e in catalog["entries"] if e.get("id")}
+    by_slug = {slug(eid): eid for eid in entries}
+
+    sourced_slugs: set[str] = set()
+    sfx_dir = audio_dir(root) / "sfx"
+    if sfx_dir.is_dir():
+        for ext in ("*.wav", "*.flac", "*.mp3"):
+            for p in sfx_dir.glob(ext):
+                if p.is_file():
+                    sourced_slugs.add(slug(p.stem))
+    assets_file = audio_dir(root) / "assets.json"
+    if assets_file.is_file():
+        try:
+            assets_doc = json.loads(assets_file.read_text(encoding="utf-8"))
+            for item in assets_doc.get("assets", []):
+                if item.get("kind") == "sfx" and item.get("path"):
+                    asset_p = root / str(item["path"])
+                    if asset_p.is_file():
+                        sourced_slugs.add(slug(asset_p.stem))
+        except Exception:
+            pass
+
+    missing_ids: list[str] = []
+    for s in requested:
+        if s in by_slug and s not in sourced_slugs:
+            eid = by_slug[s]
+            if eid not in missing_ids:
+                missing_ids.append(eid)
+    return missing_ids

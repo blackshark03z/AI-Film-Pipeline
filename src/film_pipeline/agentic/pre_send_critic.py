@@ -33,6 +33,7 @@ class PreSendCritic:
         *,
         plan_dir: Path | None = None,
         include_accepted: bool = False,
+        generation_id: str | None = None,
     ) -> dict[str, Any]:
         pre = pkg.typed.get("preprod")
         shots = pkg.typed.get("shots")
@@ -49,7 +50,7 @@ class PreSendCritic:
             if t.status == "ACCEPTED" and t.shot_version == getattr(by_id.get(t.generation_id), "version", None)
         }
 
-        plan_helper = _Plan(pkg, None, None)
+        plan_helper: _Plan | None = None
         still_prompt_map = S.still_prompts(pkg)
         w_ratio, _, h_ratio = pkg.header.aspect.partition(":")
         expected_aspect = float(w_ratio) / float(h_ratio or 1) if w_ratio else 16.0 / 9.0
@@ -58,6 +59,8 @@ class PreSendCritic:
         findings: list[dict[str, Any]] = []
         for decl in shots.generations:
             gid = decl.generation_id
+            if generation_id is not None and gid != generation_id:
+                continue
             if not include_accepted and gid in accepted_ids:
                 continue
             checked += 1
@@ -66,8 +69,25 @@ class PreSendCritic:
             if prompt_file.is_file():
                 prompt = prompt_file.read_text(encoding="utf-8").strip()
             else:
-                unit = plan_helper.unit_for(decl)
-                prompt = plan_helper.video_prompt(decl, unit)
+                findings.append({
+                    "generation_id": gid,
+                    "code": "PLAN_MISSING",
+                    "severity": "BLOCK",
+                    "detail": f"compiled prompt {prompt_file.name} is missing: run film.py plan first",
+                })
+                prompt = ""
+                if pkg.typed.get("direction") is not None and getattr(pkg, "script", None) is not None:
+                    from film_pipeline.drama.storyboard import StoryboardGate
+                    from film_pipeline.production.plan import END_FRAME_PREFIX, START_FRAME_PREFIX, START_PREFIX
+
+                    if plan_helper is None:
+                        plan_helper = _Plan(pkg, None, None)
+                    gate = StoryboardGate(pdir / "storyboard")
+                    _, compiled_plan, _ = plan_helper.build(decl, gate)
+                    prefix = START_FRAME_PREFIX if pre.preflight.prompt_style == "start_frame" else START_PREFIX
+                    if decl.end_frame and pre.preflight.prompt_style == "start_frame":
+                        prefix = END_FRAME_PREFIX
+                    prompt = prefix + compiled_plan.compiled_text
 
             # 1. Off-frame character / handle token leakage on SINGLE shots
             if decl.coverage == "SINGLE" and len(decl.visible) == 1:

@@ -25,6 +25,11 @@ def run_ffmpeg(cmd: Sequence[str], *, timeout_s: float) -> subprocess.CompletedP
         raise FfmpegTimeout(f"ffmpeg did not finish within {timeout_s:.0f}s: {' '.join(map(str, cmd[:6]))} ...") from exc
 
 
+def ffconcat_path(path: Path) -> str:
+    """Resolve and escape a filesystem path for an FFmpeg concat demuxer entry."""
+    return path.resolve().as_posix().replace("'", r"'\''")
+
+
 def media_timeout(seconds: float, *, factor: float = 20.0, floor: float = 600.0) -> float:
     """A generous wall-clock bound for work on ``seconds`` of media."""
     return max(floor, factor * seconds)

@@ -15,6 +15,7 @@ close-up.
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 import subprocess
@@ -115,16 +116,16 @@ def merge_cues(cues_abs: list[tuple[float, float, str]]
     return out
 
 
-def probe_video_duration(path: Path) -> float:
+def probe_video_duration(path: Path, *, timeout_s: float = 120.0) -> float:
     out = subprocess.run(
         ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
          "stream=duration", "-of", "csv=p=0", str(path)],
-        capture_output=True, text=True, check=True)
+        capture_output=True, text=True, check=True, timeout=timeout_s)
     value = out.stdout.strip()
     if value and value != "N/A":
         return float(value)
     out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
-                          "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True)
+                          "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True, timeout=timeout_s)
     return float(out.stdout.strip())
 
 
@@ -238,18 +239,21 @@ def identity_tag_png(path: Path, label: str, relation: str, anchor_x: float,
 
 
 def context_card_clip(out: Path, lines: list[str], duration_s: float, *,
-                      size: int = 40, fonts: Fonts = DEFAULT_FONTS) -> Path:
+                      size: int = 40, fonts: Fonts = DEFAULT_FONTS,
+                      timeout_s: float | None = None) -> Path:
     """White-on-black card as a clip (silent stereo, same format as the
     takes) to cut into the body: time jumps, facts the picture cannot
     carry. Length comes from ``comprehension.read_time``."""
     png = title_card(out.with_suffix(".png"), [(t, size) for t in lines],
                      fonts)
-    subprocess.run(
+    run_ffmpeg(
         ["ffmpeg", "-v", "error", "-y", "-loop", "1", "-t", f"{duration_s}",
          "-r", str(FPS), "-i", str(png), "-f", "lavfi", "-t",
          f"{duration_s}", "-i", "anullsrc=r=48000:cl=stereo",
          "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac",
-         "-shortest", str(out)], check=True)
+         "-shortest", str(out)],
+        timeout_s=timeout_s if timeout_s is not None else media_timeout(max(1.0, duration_s)),
+    )
     png.unlink()
     return out
 
@@ -351,27 +355,27 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
 
 # ---------------------------------------------------------------- loudness
 
-def measure_ebur128(path: Path) -> dict:
+def measure_ebur128(path: Path, *, timeout_s: float = 300.0) -> dict:
     """Integrated loudness and true peak of the first audio stream."""
     proc = subprocess.run(
         ["ffmpeg", "-nostats", "-i", str(path), "-vn", "-af",
          "ebur128=peak=true", "-f", "null", "-"],
-        capture_output=True, text=True, check=True)
+        capture_output=True, text=True, check=True, timeout=timeout_s)
     summary = proc.stderr.rsplit("Summary:", 1)[-1]
     lufs = re.search(r"I:\s+(-?[\d.]+|-inf) LUFS", summary)
     peak = re.search(r"Peak:\s+(-?[\d.]+|-inf) dBFS", summary)
-    return {"integrated_lufs": float(lufs.group(1)),
-            "peak_dbfs": float(peak.group(1))}
+    return {"integrated_lufs": float(lufs.group(1)) if lufs else float("-inf"),
+            "peak_dbfs": float(peak.group(1)) if peak else float("-inf")}
 
 
-def _run(*args: str) -> subprocess.CompletedProcess:
+def _run(*args: str, timeout_s: float = 600.0) -> subprocess.CompletedProcess:
     return subprocess.run(["ffmpeg", "-v", "error", "-nostats", "-y", *args],
-                          capture_output=True, text=True, check=True)
+                          capture_output=True, text=True, check=True, timeout=timeout_s)
 
 
 def normalize_loudness(path: Path, *, target_i: float = -14.0,
                        true_peak: float = -1.5, lra: float = 11.0,
-                       max_gain_db: float = 3.0) -> dict:
+                       max_gain_db: float = 3.0, timeout_s: float = 600.0) -> dict:
     """Rewrite ``path`` in place with normalised audio (video copied).
 
     1. loudnorm measure; 2. linear loudnorm; 3. a make-up gain (target
@@ -382,9 +386,17 @@ def normalize_loudness(path: Path, *, target_i: float = -14.0,
     probe = subprocess.run(
         ["ffmpeg", "-nostats", "-i", str(path), "-vn", "-af",
          f"loudnorm=I={target_i}:TP={true_peak}:LRA={lra}:print_format=json",
-         "-f", "null", "-"], capture_output=True, text=True, check=True)
+         "-f", "null", "-"], capture_output=True, text=True, check=True, timeout=timeout_s)
     m = json.loads(probe.stderr[probe.stderr.rindex("{"):
                                 probe.stderr.rindex("}") + 1])
+    if (
+        not all(
+            math.isfinite(float(m[k]))
+            for k in ("input_i", "input_tp", "input_lra", "input_thresh", "target_offset")
+        )
+        or float(m["input_i"]) <= -69.9
+    ):
+        return measure_ebur128(path, timeout_s=min(timeout_s, 300.0))
     linear = (f"loudnorm=I={target_i}:TP={true_peak}:LRA={lra}"
               f":measured_I={m['input_i']}:measured_TP={m['input_tp']}"
               f":measured_LRA={m['input_lra']}"
@@ -396,8 +408,9 @@ def normalize_loudness(path: Path, *, target_i: float = -14.0,
     with tempfile.TemporaryDirectory() as tmp:
         p2 = Path(tmp) / "pass2.wav"
         _run("-i", str(path), "-vn", "-af", f"{linear},aresample=48000",
-             "-c:a", "pcm_f32le", str(p2))
-        gain = target_i - measure_ebur128(p2)["integrated_lufs"]
+             "-c:a", "pcm_f32le", str(p2), timeout_s=timeout_s)
+        pass2_lufs = measure_ebur128(p2, timeout_s=min(timeout_s, 300.0))["integrated_lufs"]
+        gain = (target_i - pass2_lufs) if math.isfinite(pass2_lufs) else 0.0
         gain = max(-max_gain_db, min(max_gain_db, gain))
         p3 = Path(tmp) / "pass3.wav"
         tmp_out = path.with_name(path.stem + ".norm" + path.suffix)
@@ -406,11 +419,11 @@ def normalize_loudness(path: Path, *, target_i: float = -14.0,
             _run("-i", str(p2), "-af",
                  f"aresample=192000,volume={gain:.2f}dB,"
                  f"alimiter=limit={limit_lin:.6f}:attack=1:release=60:level=false,"
-                 "aresample=48000", "-c:a", "pcm_f32le", str(p3))
+                 "aresample=48000", "-c:a", "pcm_f32le", str(p3), timeout_s=timeout_s)
             _run("-i", str(path), "-i", str(p3), "-map", "0:v", "-map", "1:a",
                  "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
-                 "-movflags", "+faststart", str(tmp_out))
-            measured = measure_ebur128(tmp_out)
+                 "-movflags", "+faststart", str(tmp_out), timeout_s=timeout_s)
+            measured = measure_ebur128(tmp_out, timeout_s=min(timeout_s, 300.0))
             if measured["peak_dbfs"] <= ceiling_db:
                 break
             limit_db -= (measured["peak_dbfs"] - ceiling_db) + 0.5

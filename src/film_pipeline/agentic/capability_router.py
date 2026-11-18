@@ -1,11 +1,15 @@
 """Capability-Aware Hybrid Provider Router & 3-Checkpoint Human Loop Status."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
 from film_pipeline.agentic.scheduler import WaveDAGScheduler
 from film_pipeline.production.gates import evaluate_gates
+from film_pipeline.production.sections import shot_seconds
+from film_pipeline.providers.capability import DEFAULT_MODEL, DEFAULT_PROVIDER, get_capability
+from film_pipeline.providers.route import resolve_route
 
 
 class CapabilityRouter:
@@ -15,18 +19,30 @@ class CapabilityRouter:
         self,
         decl: Any,
         *,
+        pkg_header: Any | None = None,
+        duration_s: float | None = None,
         strict_face_lock_from_still: bool | None = None,
         multi_location_cast_anchor: bool = False,
         blocking_probe: bool = False,
         budget_remaining: float | None = None,
     ) -> dict[str, Any]:
         gid = decl.generation_id
+        if duration_s is not None:
+            secs = float(duration_s)
+        elif getattr(decl, "duration_s", None) is not None:
+            secs = float(decl.duration_s)
+        elif pkg_header is not None:
+            secs = shot_seconds(decl, pkg_header)
+        else:
+            secs = float(getattr(decl, "seconds", None) or 6.0)
+
         if blocking_probe:
             return {
                 "generation_id": gid,
                 "lane": "vilao_probe",
                 "provider": "vilao",
                 "model": "h3-480p",
+                "duration_s": secs,
                 "estimated_credits": 0.0,
                 "cost_unit": "USD",
                 "budget_blocked": False,
@@ -40,24 +56,35 @@ class CapabilityRouter:
                 "lane": "muse_gateway",
                 "provider": "muse",
                 "model": "Muse (browser-relay)",
+                "duration_s": secs,
                 "estimated_credits": 0.0,
                 "cost_unit": "muse_requests",
                 "budget_blocked": False,
                 "reason": "multi-location scene without strict start-frame face lock routed to Muse relay",
             }
 
-        est_credits = 6.0
+        if pkg_header is not None or getattr(decl, "route", None) is not None:
+            spec = resolve_route(pkg_header or type("_H", (), {"route": None, "experiment": False})(), decl)
+            cap = spec.capability()
+            tier = spec.tier
+        else:
+            cap = get_capability(DEFAULT_PROVIDER, DEFAULT_MODEL)
+            tier = "TEST"
+        est_credits = cap.price_of(secs, tier)
+        lane = "flow_omni_flash" if (cap.provider, cap.model) == ("flow", "omni-1.2-flash") else f"{cap.provider}_{cap.model}"
+        model_label = "omni-1.2-flash-360p" if (cap.provider, cap.model) == ("flow", "omni-1.2-flash") else cap.model
         blocked = budget_remaining is not None and float(budget_remaining) < est_credits
         return {
             "generation_id": gid,
-            "lane": "flow_omni_flash",
-            "provider": "flow",
-            "model": "omni-1.2-flash-360p",
+            "lane": lane,
+            "provider": cap.provider,
+            "model": model_label,
+            "duration_s": secs,
             "estimated_credits": est_credits,
-            "cost_unit": "credits",
+            "cost_unit": cap.price.unit,
             "budget_blocked": blocked,
             "reason": (
-                f"insufficient credits ({budget_remaining} < {est_credits})"
+                f"insufficient {cap.price.unit} ({budget_remaining} < {est_credits})"
                 if blocked
                 else "strict cast/face lock from start still or chained end frame"
             ),
@@ -76,7 +103,7 @@ class CapabilityRouter:
         else:
             cp1_status = "BLOCKED"
 
-        # CP2: Pilot reel covers first 2 scenes in order
+        # CP2: Pilot reel covers first 2 scenes in order; approval requires pilot_approval.json or Gate 6 PASS
         pilot_total, pilot_done = 0, 0
         if shots is not None:
             scene_order: list[str] = []
@@ -97,7 +124,19 @@ class CapabilityRouter:
                 if t.status == "ACCEPTED" and t.shot_version == by_id.get(t.generation_id)
             }
             pilot_done = len(acc)
-        cp2_status = "APPROVED" if pilot_total > 0 and pilot_done == pilot_total else "PENDING"
+        pilot_approved = gates.get("6") == "PASS"
+        pilot_path = Path(pkg.root) / "takes" / "pilot_approval.json"
+        if not pilot_approved and pilot_path.is_file():
+            try:
+                pdoc = json.loads(pilot_path.read_text(encoding="utf-8"))
+                if pdoc.get("approved") is True and pdoc.get("film_id") == pkg.header.film_id:
+                    pilot_approved = True
+            except (OSError, ValueError, AttributeError):
+                pilot_approved = False
+        if pilot_total > 0 and pilot_done == pilot_total:
+            cp2_status = "APPROVED" if pilot_approved else "READY_FOR_PILOT_REVIEW"
+        else:
+            cp2_status = "PENDING"
 
         if gates.get("6") == "PASS":
             cp3_status = "APPROVED"

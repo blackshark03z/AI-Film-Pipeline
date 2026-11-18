@@ -18,24 +18,48 @@ from .capability import ModelCapability, get_capability
 from .request import GenerationRequest
 
 ROOT = Path(__file__).resolve().parents[3]
-FLOW_SEND = ROOT / "tools" / "drama_flow_ui" / "flow_send.py"
+_REPO_FLOW_DIR = ROOT / "tools" / "drama_flow_ui"
+_PKG_FLOW_DIR = Path(__file__).resolve().parent / "_flow_ui"
+FLOW_DIR = _REPO_FLOW_DIR if (_REPO_FLOW_DIR / "flow_send.py").is_file() else _PKG_FLOW_DIR
+FLOW_SEND = FLOW_DIR / "flow_send.py"
 FLOW_MODEL = "Omni 1.2 Flash"  # the model name Flow's composer dropdown starts with
 PLACEHOLDER_END_TOKEN = "tok:<TAIL_OF_UPLOADED_END_FRAME>"
 
 Runner = Callable[[list[str], Path], dict[str, Any]]
 
 
+def _resolved_flow_dir() -> Path:
+    if FLOW_SEND.is_file():
+        return FLOW_SEND.parent
+    if (_REPO_FLOW_DIR / "flow_send.py").is_file():
+        return _REPO_FLOW_DIR
+    return _PKG_FLOW_DIR
+
+
 def flow_tool(name: str):
-    sys.path.insert(0, str(FLOW_SEND.parent))
+    flow_dir = _resolved_flow_dir()
+    if str(flow_dir) not in sys.path:
+        sys.path.insert(0, str(flow_dir))
     module = importlib.import_module(name)
-    if Path(module.__file__).resolve() != (FLOW_SEND.parent / f"{name}.py").resolve():
+    mod_file = Path(module.__file__).resolve()
+    allowed = {
+        (flow_dir / f"{name}.py").resolve(),
+        (_REPO_FLOW_DIR / f"{name}.py").resolve(),
+        (_PKG_FLOW_DIR / f"{name}.py").resolve(),
+    }
+    if mod_file not in allowed:
         raise ValueError("Flow tool belongs to a different checkout")
     return module
 
 
 def controller_runner(argv: list[str], out: Path, before_submit=None) -> dict[str, Any]:
     from film_pipeline.production.runtime import run_async
-    if Path(argv[1]).resolve() != FLOW_SEND.resolve():
+    allowed_send = {
+        FLOW_SEND.resolve(),
+        (_REPO_FLOW_DIR / "flow_send.py").resolve(),
+        (_PKG_FLOW_DIR / "flow_send.py").resolve(),
+    }
+    if Path(argv[1]).resolve() not in allowed_send:
         raise ValueError("production controller requires the qualified native Flow tool")
     tool = flow_tool("flow_send")
     args = tool.parse_args(argv[2:])
@@ -55,10 +79,10 @@ def default_runner(argv: list[str], out: Path) -> dict[str, Any]:  # pragma: no 
 
 class FlowUiAdapter:
     def __init__(self, cap: ModelCapability | None = None, runner: Runner | None = None,
-                 flow_send: Path = FLOW_SEND, python: str | None = None) -> None:
+                 flow_send: Path | None = None, python: str | None = None) -> None:
         self.cap = cap or get_capability("flow")
         self.runner = runner
-        self.flow_send = Path(flow_send)
+        self.flow_send = Path(flow_send) if flow_send is not None else (_resolved_flow_dir() / "flow_send.py")
         self.python = python or sys.executable
         self._manifests: dict[str, dict[str, Any]] = {}
 

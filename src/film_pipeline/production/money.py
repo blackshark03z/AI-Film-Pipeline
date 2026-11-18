@@ -7,13 +7,14 @@ adapters carry no provider or unit: they are Flow credits. The film's cap applie
 """
 from __future__ import annotations
 
+import math
 import uuid
 from collections.abc import Iterable
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal
 
-from pydantic import Field
+from pydantic import Field, field_validator, model_validator
 
 from film_pipeline.core import ContractModel
 from film_pipeline.production.runtime import atomic_json
@@ -30,6 +31,13 @@ class LedgerAdjustment(ContractModel):
     by: str = Field(min_length=1)
     at: str = Field(min_length=1)
 
+    @field_validator("delta")
+    @classmethod
+    def _finite_delta(cls, value: float) -> float:
+        if not math.isfinite(float(value)):
+            raise ValueError("adjustment delta must be finite")
+        return float(value)
+
 
 class BalanceCheckpoint(ContractModel):
     scene_id: str = Field(min_length=1)
@@ -40,10 +48,24 @@ class BalanceCheckpoint(ContractModel):
     at: str = Field(min_length=1)
     note: str = ""
 
+    @field_validator("observed_balance", "ledger_spent")
+    @classmethod
+    def _finite_amounts(cls, value: float) -> float:
+        if not math.isfinite(float(value)):
+            raise ValueError("checkpoint amount must be finite")
+        return float(value)
+
 
 class AdjustmentLog(ContractModel):
     adjustments: list[LedgerAdjustment] = Field(default_factory=list)
     checkpoints: list[BalanceCheckpoint] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _unique_ids(self) -> "AdjustmentLog":
+        ids = [a.adjustment_id for a in self.adjustments]
+        if len(ids) != len(set(ids)):
+            raise ValueError("duplicate adjustment_id in adjustments log")
+        return self
 
 
 def adjustments_path(root: Path) -> Path:
@@ -74,14 +96,26 @@ def record_adjustment(
     adjustment_id: str | None = None,
 ) -> LedgerAdjustment:
     log = load_adjustments(root)
+    norm_delta = float(delta)
+    if not math.isfinite(norm_delta):
+        raise ValueError("adjustment delta must be finite")
+    norm_reason, norm_evidence, norm_by = reason.strip(), evidence.strip(), by.strip()
+    if adjustment_id is not None:
+        existing = next((a for a in log.adjustments if a.adjustment_id == adjustment_id), None)
+        if existing is not None:
+            if (existing.unit, existing.delta, existing.reason, existing.evidence, existing.by) == (
+                unit, norm_delta, norm_reason, norm_evidence, norm_by
+            ):
+                return existing
+            raise ValueError(f"conflicting adjustment_id {adjustment_id!r}")
     adj_id = adjustment_id or f"ADJ-{len(log.adjustments) + 1:03d}-{uuid.uuid4().hex[:6]}"
     entry = LedgerAdjustment(
         adjustment_id=adj_id,
         unit=unit,
-        delta=float(delta),
-        reason=reason.strip(),
-        evidence=evidence.strip(),
-        by=by.strip(),
+        delta=norm_delta,
+        reason=norm_reason,
+        evidence=norm_evidence,
+        by=norm_by,
         at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
     )
     log.adjustments.append(entry)

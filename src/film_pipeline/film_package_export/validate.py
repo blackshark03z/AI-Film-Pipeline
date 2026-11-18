@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from fractions import Fraction
+from importlib import resources
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +12,15 @@ from jsonschema import Draft202012Validator
 from .media import ExportError, probe, sha256_file
 
 SCHEMA_PATH = Path(__file__).resolve().parents[3] / "docs" / "integration" / "film_package.v1.schema.json"
+
+
+def _load_schema(schema_path: Path | None = None) -> dict[str, Any]:
+    if schema_path is not None:
+        return json.loads(Path(schema_path).read_text(encoding="utf-8"))
+    if SCHEMA_PATH.is_file():
+        return json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+    pkg_res = resources.files("film_pipeline.film_package_export").joinpath("film_package.v1.schema.json")
+    return json.loads(pkg_res.read_text(encoding="utf-8"))
 DERIVED_STEMS = {"bed", "bed_ducked", "mix", "mixed", "master"}
 
 
@@ -119,7 +129,7 @@ def media_errors(pkg: dict[str, Any]) -> list[str]:
 
 def validate_package(pkg: dict[str, Any], *, schema_path: Path | None = None, check_media: bool = True) -> None:
     """Raise ExportError listing every problem; return None when the package is valid."""
-    schema = json.loads((schema_path or SCHEMA_PATH).read_text(encoding="utf-8"))
+    schema = _load_schema(schema_path)
     errors = [f"schema: {'/'.join(map(str, e.absolute_path)) or '<root>'}: {e.message}"
               for e in sorted(Draft202012Validator(schema).iter_errors(pkg), key=lambda e: list(map(str, e.absolute_path)))]
     if not errors:

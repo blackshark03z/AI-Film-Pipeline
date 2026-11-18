@@ -35,7 +35,19 @@ def build_timeline(cut: dict[str, Any], edit: dict[str, Any], lock: dict[str, An
         rows.append({"event_id": "TITLE_CARD", "kind": "CARD", "in_frame": 0, "out_frame": frames(title_s, fps)})
     for i, p in enumerate(body):
         nxt = body[i + 1] if i + 1 < len(body) else None
-        out = frames(nxt["start_s"], fps) if nxt and abs(p["end_s"] - nxt["start_s"]) < half else frames(p["end_s"], fps)
+        in_f = frames(p["start_s"], fps)
+        nxt_in = frames(nxt["start_s"], fps) if nxt is not None else None
+        if nxt is not None and abs(p["end_s"] - nxt["start_s"]) < half:
+            out = nxt_in
+        else:
+            out = frames(p["end_s"], fps)
+            if nxt_in is not None and out > nxt_in:
+                clamped = max(in_f, nxt_in)
+                warns.append(
+                    f"{p['event_id']}: overlap with {nxt['event_id']} ({out - nxt_in}f transition) "
+                    f"clamped out_frame {out} -> {clamped}"
+                )
+                out = clamped
         row: dict[str, Any] = {"event_id": p["event_id"], "kind": p["kind"] if p["kind"] in ("TAKE", "CARD") else "OTHER"}
         scene = scene_of(p["event_id"], shots)
         if scene:
@@ -47,7 +59,7 @@ def build_timeline(cut: dict[str, Any], edit: dict[str, Any], lock: dict[str, An
             else:
                 warns.append(f"{p['event_id']}: take {p['take_id']} has no source hash in the picture lock")
             row["source_in_frame"] = frames(float(edl[p["event_id"]].get("src_in_s") or 0), fps)
-        row.update(in_frame=frames(p["start_s"], fps), out_frame=out)
+        row.update(in_frame=in_f, out_frame=out)
         rows.append(row)
     end_s = float(planned.get("end_s") or 0)
     if end_s > 0 and body:

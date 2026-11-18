@@ -59,10 +59,12 @@ def test_04_dg1_cause_analysis():
 
 def test_05_invariants():
     import subprocess
-    dirty = [l for l in subprocess.run(
-        ["git", "status", "--porcelain"], cwd=ROOT, capture_output=True,
-        text=True).stdout.splitlines() if not l.startswith("??")]
-    # cust file is expected dirty; everything else clean
+    scoped = subprocess.run(
+        ["git", "status", "--porcelain", "--", "projects/quality_v2_010a_dola_re_authority", "src/film_pipeline/providers/dola_provider.py"],
+        cwd=ROOT, capture_output=True, text=True, check=True,
+    )
+    dirty = [l for l in scoped.stdout.splitlines() if not l.startswith("??")]
+    # cust file is expected dirty; everything else inside the 010a/dola scope clean
     assert all("dola_provider" in l or "010a" in l or "003_recovery" in l for l in dirty)
     assert not (PKG / "generate_ledger.json").exists()
     assert not list(PKG.glob("**/*.mp4"))

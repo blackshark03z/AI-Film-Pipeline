@@ -415,7 +415,7 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: An
     save_log(film_root, log)
     out = {"take_id": take.take_id, "status": entry.status, "reasons": reasons, "review": str(path)}
     if box is not None:
-        out["reframe"] = _merge_reframe(film_root, entry.generation_id, box)
+        out["reframe"] = _merge_reframe(film_root, entry.generation_id, box, take_id=entry.take_id)
     return out
 
 
@@ -436,12 +436,50 @@ def _check_reframe(raw: Any) -> dict[str, float]:
     return box
 
 
-def _merge_reframe(film_root: Path, gid: str, box: dict[str, float]) -> str:
-    path = Path(film_root) / "titles" / "reframe.json"
+def _merge_reframe(film_root: Path, gid: str, box: dict[str, float], *, take_id: str | None = None) -> str:
+    from film_pipeline.production.runtime import atomic_json
+
+    root = Path(film_root)
+    path = root / "titles" / "reframe.json"
     raw = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {"events": {}}
-    raw.setdefault("events", {})[gid] = box
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(raw, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    events_map = raw.setdefault("events", {})
+
+    matched_events: list[str] = []
+    edit_path = root / "05_edit.json"
+    if edit_path.is_file():
+        try:
+            edit_raw = json.loads(edit_path.read_text(encoding="utf-8"))
+            take_to_gid: dict[str, str] = {}
+            idx_path = takes_dir(root) / "index.json"
+            if idx_path.is_file():
+                try:
+                    idx_raw = json.loads(idx_path.read_text(encoding="utf-8"))
+                    for t in idx_raw.get("takes") or []:
+                        if t.get("take_id") and t.get("generation_id"):
+                            take_to_gid[str(t["take_id"])] = str(t["generation_id"])
+                except (OSError, ValueError):
+                    pass
+            for ev in edit_raw.get("events") or []:
+                if ev.get("kind", "TAKE") != "TAKE":
+                    continue
+                ev_id = str(ev.get("event_id") or "")
+                ev_tid = str(ev.get("take_id") or "")
+                if not ev_id:
+                    continue
+                if (take_id and ev_tid == take_id) or take_to_gid.get(ev_tid) == gid or ev_tid.startswith(f"{gid}_t"):
+                    if ev_id not in matched_events:
+                        matched_events.append(ev_id)
+        except (OSError, ValueError):
+            matched_events = []
+
+    if matched_events:
+        if gid in events_map and gid not in matched_events:
+            events_map.pop(gid, None)
+        for ev_id in matched_events:
+            events_map[ev_id] = box
+    else:
+        events_map[gid] = box
+    atomic_json(path, raw)
     return str(path)
 
 

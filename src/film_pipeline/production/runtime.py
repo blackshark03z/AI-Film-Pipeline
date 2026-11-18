@@ -7,6 +7,7 @@ import json
 import os
 import tempfile
 import threading
+import time
 from urllib.parse import urlsplit
 from contextlib import contextmanager, ExitStack
 from concurrent.futures import ThreadPoolExecutor
@@ -95,7 +96,7 @@ def atomic_json(path: Path, value) -> None:
 
 
 @contextmanager
-def _exclusive(key: str):
+def _exclusive(key: str, *, timeout_s: float = 0.0):
     held = getattr(_local, "held", None)
     if held is None:
         held = _local.held = set()
@@ -110,16 +111,21 @@ def _exclusive(key: str):
         if path.stat().st_size == 0:
             handle.write(b"0")
             handle.flush()
-        handle.seek(0)
-        try:
-            if os.name == "nt":
-                import msvcrt
-                msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
-            else:
-                import fcntl
-                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except OSError as exc:
-            raise WriterBusy("FILM_BUSY: another production operation owns this film or Flow session") from exc
+        deadline = time.monotonic() + max(0.0, float(timeout_s))
+        while True:
+            handle.seek(0)
+            try:
+                if os.name == "nt":
+                    import msvcrt
+                    msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+                else:
+                    import fcntl
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except OSError as exc:
+                if time.monotonic() >= deadline:
+                    raise WriterBusy("FILM_BUSY: another production operation owns this film or Flow session") from exc
+                time.sleep(0.05)
         held.add(key)
         try:
             yield
@@ -133,12 +139,26 @@ def _exclusive(key: str):
 
 
 @contextmanager
+def composer_lock(cdp: str | None = None):
+    """Exclusive lock for a single Flow composer CDP endpoint across sends/reconciles."""
+    with _exclusive(flow_lock_key(cdp)):
+        yield
+
+
+@contextmanager
+def film_lock(root: Path, *, timeout_s: float = 0.0):
+    """Short metadata/index lock for a film package directory."""
+    with _exclusive("film:" + os.path.normcase(str(Path(root).resolve())), timeout_s=timeout_s):
+        yield
+
+
+@contextmanager
 def writer(root: Path, *, flow: bool = False, cdp: str | None = None):
     with ExitStack() as stack:
         if flow:
             # One in-flight send per composer: the lock is keyed by the CDP endpoint (= the Flow profile) in use.
-            stack.enter_context(_exclusive(flow_lock_key(cdp)))
-        stack.enter_context(_exclusive("film:" + os.path.normcase(str(Path(root).resolve()))))
+            stack.enter_context(composer_lock(cdp))
+        stack.enter_context(film_lock(root))
         yield
 
 

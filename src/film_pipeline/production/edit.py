@@ -33,7 +33,7 @@ from typing import Any, Callable, Literal
 from pydantic import Field, model_validator
 
 from film_pipeline.core import ContractModel
-from film_pipeline.production.ffjoin import join_video_chunks, media_timeout, run_ffmpeg
+from film_pipeline.production.ffjoin import ffconcat_path, join_video_chunks, media_timeout, run_ffmpeg
 from film_pipeline.production.render_cache import cached as _cached_render, key_for as _render_key, save as _save_render
 
 FPS = 24
@@ -753,7 +753,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
                     start = stop
                 concat_list = work / "body_concat.txt"
                 # absolute: ffmpeg's concat demuxer resolves relative entries against the list's (temp) directory
-                concat_list.write_text("".join(f"file '{p.resolve().as_posix()}'\n" for p in chunk_paths), encoding="utf-8")
+                concat_list.write_text("".join(f"file '{ffconcat_path(p)}'\n" for p in chunk_paths), encoding="utf-8")
                 body = work / "body.mkv"
                 join_video_chunks(concat_list, body)
                 assemble([body], out, cues=[], title_lines=title, end_lines=end, title_s=section.title_s,

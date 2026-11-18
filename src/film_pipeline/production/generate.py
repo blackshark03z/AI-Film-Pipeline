@@ -37,6 +37,7 @@ from __future__ import annotations
 import json
 import os
 import re
+from contextlib import ExitStack
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
@@ -48,7 +49,8 @@ from film_pipeline.production.money import (credit_ledger, load_adjustments, mon
 from film_pipeline.production.planning import flow_credits
 from film_pipeline.production.sections import shot_seconds
 from film_pipeline.production.takes import (load_log, register_take, sha256_file, sha256_text, takes_dir)
-from film_pipeline.production.runtime import atomic_json, atomic_text, film_writer, flow_cdp, flow_project
+from film_pipeline.production.runtime import (atomic_json, atomic_text, composer_lock, film_lock, film_writer,
+                                              flow_cdp, flow_project)
 from film_pipeline.providers.capability import DEFAULT_MODEL, DEFAULT_PROVIDER, ModelCapability, get_capability
 from film_pipeline.providers.http_adapters import make_adapter
 from film_pipeline.providers.flow_ui_adapter import FlowUiAdapter, default_runner, controller_runner  # noqa: F401 - re-exported
@@ -214,9 +216,10 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
     out = root / "media" / "takes" / f"{take_id}.mp4"
     ledger = money_ledger(log, sent, load_adjustments(root).adjustments)
     spent = ledger.get(unit, {}).get("spent", 0.0)
+    from film_pipeline.production.muse_gateway import pending_muse_claims
     scope = (os.environ.get("AFP_FLOW_PROJECT", "").strip() if cdp_scope is None else cdp_scope.strip()) or None
     acct = (os.environ.get("AFP_FLOW_ACCOUNT", "").strip() if account_scope is None else account_scope.strip()) or None
-    pending = unresolved_sends(log, sent)
+    pending = {**unresolved_sends(log, sent), **pending_muse_claims(root)}
     if scope is not None or acct is not None:
         filtered = {}
         for tid, r in pending.items():
@@ -299,6 +302,10 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
             "provider": cap.provider, "provider_model": cap.model, "tier": route.tier, "cost_unit": unit,
             "expected_cost": 0.0 if pkg.header.rehearsal else cost, "spent_in_unit": spent, "cap_in_unit": cap_amount,
             "warnings": warnings, "request": request.model_dump(mode="json")}
+    if acct:
+        payload["account"] = acct
+    if scope:
+        payload["project"] = scope
     if attempts is not None:
         payload["attempts"] = attempts
     if end_still is not None:
@@ -459,28 +466,11 @@ def _sent_receipts(root: Path, film_id: str, prices: dict[str, Any]) -> dict[str
                 # a Flow receipt without a price: its shot's Flow price
                 fallback = float(price["expected_credits"])
                 out[take_id] = {**body, "expected_credits": float(body.get("expected_credits") or fallback)}
-                # P17-07: a Flow job that reconcile proved left no clip is a provider failure
-                if _provider_no_clip(root, take_id) and str(body.get("result") or "") in NO_BIND_RESULTS:
-                    out[take_id]["result"] = "FLOW_FAILED_NO_CLIP"
             else:
                 same = price.get("cost_unit") == receipt_unit(body)
                 out[take_id] = {**body, "expected_cost": float(body.get("expected_cost")
                                                                or (price.get("expected_cost", 0.0) if same else 0.0))}
     return out
-
-
-# P17-07 (film05 SC02_g2, SC04_g1): Flow took the job, then no clip and no failed tile were left. flow_reconcile proves
-# it (NOT_IN_GALLERY 10+ min after the send, `provider_no_clip`); the send is a provider failure like FLOW_FAILED:
-# its credits count, the send cap is not used.
-NO_BIND_RESULTS = ("UNBOUND", "AMBIGUOUS", "TIMEOUT", "BLOCKED", "NO_VIDEO_UNDER_TILE")
-
-
-def _provider_no_clip(root: Path, take_id: str) -> bool:
-    path = Path(root) / "media" / "takes" / f"{take_id}.reconcile.json"
-    try:
-        return bool(json.loads(path.read_text(encoding="utf-8")).get("provider_no_clip"))
-    except (OSError, ValueError):
-        return False
 
 
 def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
@@ -490,15 +480,15 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
             "duration_s", "expected_credits", "credits_spent", "credit_cap", "provider", "provider_model", "tier",
             "cost_unit", "expected_cost")
     receipt = {k: payload[k] for k in keep}
-    receipt.update({k: payload[k] for k in ("submit_protocol", "dispatch_phase", "project", "cdp") if k in payload})
+    receipt.update({k: payload[k] for k in ("submit_protocol", "dispatch_phase", "project", "cdp", "account") if k in payload})
     receipt["start_frame_sha256"] = payload["start_frame"]["sha256"]
     receipt["start_frame_source"] = payload["start_frame"]["source"]
     if "end_frame" in payload:
         receipt["end_frame_sha256"] = payload["end_frame"]["sha256"]
     receipt["blockers"] = [b["code"] for b in payload["blockers"]]
     receipt.update(extra)
-    if receipt.get("sent") and receipt.get("cost_unit", "credits") != "credits":
-        # the day of a send rules the daily cap; a later rewrite (the result) keeps the first day
+    if receipt.get("sent"):
+        # The day of a send rules the daily cap; a later rewrite keeps the first day recorded.
         try:
             first = json.loads(path.read_text(encoding="utf-8")).get("sent_on") if path.is_file() else None
         except (OSError, ValueError):
@@ -512,12 +502,21 @@ AUTO_RESEND = 1                         # P18-03: automatic resends after a prov
 PROVIDER_FAILURES_BEFORE_RESTAGE = 3    # OWNER_POLICY.md: after 3 provider failures on one shot, restage
 
 
-@film_writer(flow=True)
+def _is_flow_route(pkg: Any, generation_id: str) -> bool:
+    shots = pkg.typed.get("shots") if hasattr(pkg, "typed") else None
+    decl = next((g for g in shots.generations if g.generation_id == generation_id), None) if shots else None
+    if decl is None:
+        return False
+    route = resolve_route(pkg.header, decl)
+    return _capability(route).adapter == "flow_ui"
+
+
 def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Path | None = None,
              stills_dir: Path | None = None, start_token: str | None = None, backlog: Path | None = None,
              runner: Runner | None = None, end_token: str | None = None,
              today: date | None = None, adapter: Any | None = None, auto_resend: int = AUTO_RESEND,
-             cdp_scope: str | None = None, account_scope: str | None = None) -> dict[str, Any]:
+             cdp_scope: str | None = None, account_scope: str | None = None,
+             cdp_endpoint: str | None = None) -> dict[str, Any]:
     """``runner`` replaces flow_send on a Flow route; ``adapter`` replaces the HTTP adapter on an API route (tests and
     rehearsals: on a rehearsal package an explicit runner/adapter is a mock and records cost 0).
 
@@ -525,94 +524,115 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
     up to ``auto_resend`` times -- same shot version, same prompt, no board re-approval -- while the shot version has
     fewer than PROVIDER_FAILURES_BEFORE_RESTAGE provider failures (OWNER_POLICY: 3 on one shot -> restage). The resend
     is an ordinary send through every gate (go-live, budget, cap). Each send is logged in takes/send_log.jsonl."""
-    payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
-                            end_token=end_token, today=today, cdp_scope=cdp_scope, account_scope=account_scope)
     root = Path(pkg.root)
-    cap = get_capability(payload["provider"], payload["provider_model"])
-    flow = cap.adapter == "flow_ui"
-    live_blocked = [b for b in payload["blockers"] if not b["live_only"] or not dry_run]
     if dry_run:
-        # a dry run reports the live-only blockers too, but they do not make the dry run itself fail
-        receipt = _write_receipt(root, payload, dry_run=True, sent=False, owner_go_live=owner_go_live(backlog))
-        return {"sent": False, "dry_run": True, "ready_to_send": not payload["blockers"], "payload": payload,
-                "receipt": str(receipt)}
-    # the go-live flag guards the provider; a rehearsal package with an explicit (mock) runner never reaches one
-    mock = bool(pkg.header.rehearsal and (runner if flow else adapter) is not None)
-    go = mock or owner_go_live(backlog)
-    refusals = ([] if go else [_blocker("OWNER_GO_LIVE_NO", "the backlog header does not say OWNER_GO_LIVE: YES")])
-    refusals += live_blocked
-    if not flow:
-        adapter = adapter or make_adapter(cap)
-        health = adapter.health()
-        if not health.routable:
-            refusals.append(_blocker("PROVIDER_NOT_READY", f"{cap.provider}: {health.state} {health.diagnostic_code}",
-                                     live_only=True))
-    if refusals:
-        receipt = _write_receipt(root, payload, dry_run=False, sent=False, owner_go_live=go,
-                                 refused=[r["code"] for r in refusals])
-        return {"sent": False, "dry_run": False, "refused": refusals, "payload": payload, "receipt": str(receipt)}
-    if flow and runner is None and not mock:
-        from film_pipeline.production.preflight import check
-        environment = check(root, probe_flow=True, operation="send")
-        if not environment["ok"]:
-            return {"sent": False, "dry_run": False, "refused": [_blocker("ENVIRONMENT_NOT_READY", issue)
-                    for issue in environment["issues"]], "payload": payload, "environment": environment}
-    snapshot = takes_dir(root) / "intents" / f"{payload['take_id']}.prompt.txt"
-    prompt = Path(payload["prompt_file"]).read_text(encoding="utf-8").strip()
-    if sha256_text(prompt) != payload["prompt_sha256"]:
-        raise ValueError("prompt changed during preflight; no send was made")
-    if snapshot.exists() and snapshot.read_text(encoding="utf-8").strip() != prompt:
-        raise ValueError("immutable sent prompt snapshot conflicts; no send was made")
-    if not snapshot.exists():
-        atomic_text(snapshot, prompt + "\n")
-    old_prompt = payload["prompt_file"]
-    payload["prompt_file"] = str(snapshot)
-    payload["argv"] = [str(snapshot) if arg == old_prompt else arg for arg in payload["argv"]]
-    if flow:   # the journal names the Flow profile (CDP endpoint) and, when pinned, the project this send targets
-        payload["cdp"] = flow_cdp()
-        if flow_project():
-            payload["project"] = flow_project()
-    if flow and runner is None:
-        payload.update(submit_protocol="inprocess-checkpoint-v1", dispatch_phase="PREPARING")
-    receipt = _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
-    if not flow:
-        return _generate_api(pkg, payload, adapter, mock, receipt)
-    out = Path(payload["output"])
-    def before_submit(context):
-        payload.update(dispatch_phase="SUBMITTING", project=context.get("project") or payload.get("project", ""))
-        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
-    native_runner = runner if runner is not None else lambda argv, output: controller_runner(argv, output, before_submit)
-    # On exception keep the last durable phase; a dead controller cannot issue a later Enter.
-    manifest = FlowUiAdapter(cap, runner=native_runner).send(payload["argv"], out)
-    result: dict[str, Any] = {"sent": True, "dry_run": False, "payload": payload, "manifest_result": manifest.get("result"),
-                              "receipt": str(receipt)}
-    outcome = str(manifest.get("result"))
-    if outcome == "PASSED" and manifest.get("returncode", 0) != 0:
-        outcome = f"SENDER_EXIT_{manifest.get('returncode')}"
-    elif outcome == "PASSED" and manifest.get("sha256") and out.is_file() and manifest["sha256"] != sha256_file(out):
-        outcome = "MANIFEST_HASH_MISMATCH"
-    if outcome == "PASSED" and out.is_file():
-        entry, _ = register_take(root, pkg.header.film_id, generation_id, out,
-                                 prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
-                                 route=payload["route"], model=MODEL, credits=0.0 if mock else payload["expected_credits"],
-                                 start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"])
-        result["take"] = entry.model_dump(mode="json")
-    result["manifest_result"] = outcome
-    _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=outcome,
-                   take_registered=bool(result.get("take")))
-    normalized = cap.normalize(outcome)
-    incident = normalized == "PROVIDER_FAILED"
-    failures = _provider_failures(root, pkg.header.film_id, generation_id, payload["shot_version"]) if incident else 0
-    resend = incident and auto_resend > 0 and failures < PROVIDER_FAILURES_BEFORE_RESTAGE
-    log_send(root, payload, manifest, outcome, normalized, auto_resend=resend, provider_failures=failures)
-    if incident and not resend and failures >= PROVIDER_FAILURES_BEFORE_RESTAGE:
-        result["restage_needed"] = (f"{generation_id} v{payload['shot_version']}: {failures} provider failures; "
-                                    f"restage or simplify the prompt and record why (OWNER_POLICY)")
+        with film_lock(root, timeout_s=15.0):
+            payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
+                                    end_token=end_token, today=today, cdp_scope=cdp_scope, account_scope=account_scope)
+            receipt = _write_receipt(root, payload, dry_run=True, sent=False, owner_go_live=owner_go_live(backlog))
+            return {"sent": False, "dry_run": True, "ready_to_send": not payload["blockers"], "payload": payload,
+                    "receipt": str(receipt)}
+
+    resend = False
+    with ExitStack() as outer:
+        if _is_flow_route(pkg, generation_id):
+            outer.enter_context(composer_lock(cdp_endpoint))
+
+        # Phase A (short exclusive metadata lock): reserve take number, prompt snapshot, budget, and pending receipt.
+        with film_lock(root, timeout_s=15.0):
+            payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
+                                    end_token=end_token, today=today, cdp_scope=cdp_scope, account_scope=account_scope)
+            cap = get_capability(payload["provider"], payload["provider_model"])
+            flow = cap.adapter == "flow_ui"
+            live_blocked = list(payload["blockers"])
+            mock = bool(pkg.header.rehearsal and (runner if flow else adapter) is not None)
+            go = mock or owner_go_live(backlog)
+            refusals = ([] if go else [_blocker("OWNER_GO_LIVE_NO", "the backlog header does not say OWNER_GO_LIVE: YES")])
+            refusals += live_blocked
+            if not flow:
+                adapter = adapter or make_adapter(cap)
+                health = adapter.health()
+                if not health.routable:
+                    refusals.append(_blocker("PROVIDER_NOT_READY", f"{cap.provider}: {health.state} {health.diagnostic_code}",
+                                             live_only=True))
+            if refusals:
+                receipt = _write_receipt(root, payload, dry_run=False, sent=False, owner_go_live=go,
+                                         refused=[r["code"] for r in refusals])
+                return {"sent": False, "dry_run": False, "refused": refusals, "payload": payload, "receipt": str(receipt)}
+            if flow and runner is None and not mock:
+                from film_pipeline.production.preflight import check
+                environment = check(root, probe_flow=True, operation="send")
+                if not environment["ok"]:
+                    return {"sent": False, "dry_run": False, "refused": [_blocker("ENVIRONMENT_NOT_READY", issue)
+                            for issue in environment["issues"]], "payload": payload, "environment": environment}
+            snapshot = takes_dir(root) / "intents" / f"{payload['take_id']}.prompt.txt"
+            prompt = Path(payload["prompt_file"]).read_text(encoding="utf-8").strip()
+            if sha256_text(prompt) != payload["prompt_sha256"]:
+                raise ValueError("prompt changed during preflight; no send was made")
+            if snapshot.exists() and snapshot.read_text(encoding="utf-8").strip() != prompt:
+                raise ValueError("immutable sent prompt snapshot conflicts; no send was made")
+            if not snapshot.exists():
+                atomic_text(snapshot, prompt + "\n")
+            old_prompt = payload["prompt_file"]
+            payload["prompt_file"] = str(snapshot)
+            payload["argv"] = [str(snapshot) if arg == old_prompt else arg for arg in payload["argv"]]
+            if flow:   # the journal names the Flow profile (CDP endpoint) and, when pinned, the project this send targets
+                payload["cdp"] = flow_cdp(cdp_endpoint)
+                effective_proj = (cdp_scope if cdp_scope is not None else flow_project()).strip()
+                if effective_proj:
+                    payload["project"] = effective_proj
+            effective_acct = (account_scope if account_scope is not None else os.environ.get("AFP_FLOW_ACCOUNT", "")).strip()
+            if effective_acct:
+                payload["account"] = effective_acct
+            if flow and runner is None:
+                payload.update(submit_protocol="inprocess-checkpoint-v1", dispatch_phase="PREPARING")
+            receipt = _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
+
+        # Phase B (outside film_lock so parallel CDP accounts do not hit FILM_BUSY during provider I/O)
+        if not flow:
+            return _generate_api(pkg, payload, adapter, mock, receipt)
+        out = Path(payload["output"])
+
+        def before_submit(context):
+            with film_lock(root, timeout_s=15.0):
+                payload.update(dispatch_phase="SUBMITTING", project=context.get("project") or payload.get("project", ""))
+                _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
+
+        native_runner = runner if runner is not None else lambda argv, output: controller_runner(argv, output, before_submit)
+        # On exception keep the last durable phase; a dead controller cannot issue a later Enter.
+        manifest = FlowUiAdapter(cap, runner=native_runner).send(payload["argv"], out)
+
+        # Phase C (short exclusive metadata lock): register take, write final receipt, and append send log.
+        with film_lock(root, timeout_s=15.0):
+            result: dict[str, Any] = {"sent": True, "dry_run": False, "payload": payload, "manifest_result": manifest.get("result"),
+                                      "receipt": str(receipt)}
+            outcome = str(manifest.get("result"))
+            if outcome == "PASSED" and manifest.get("returncode", 0) != 0:
+                outcome = f"SENDER_EXIT_{manifest.get('returncode')}"
+            elif outcome == "PASSED" and manifest.get("sha256") and out.is_file() and manifest["sha256"] != sha256_file(out):
+                outcome = "MANIFEST_HASH_MISMATCH"
+            if outcome == "PASSED" and out.is_file():
+                entry, _ = register_take(root, pkg.header.film_id, generation_id, out,
+                                         prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
+                                         route=payload["route"], model=MODEL, credits=0.0 if mock else payload["expected_credits"],
+                                         start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"])
+                result["take"] = entry.model_dump(mode="json")
+            result["manifest_result"] = outcome
+            _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=outcome,
+                           take_registered=bool(result.get("take")))
+            normalized = cap.normalize(outcome)
+            incident = normalized == "PROVIDER_FAILED"
+            failures = _provider_failures(root, pkg.header.film_id, generation_id, payload["shot_version"]) if incident else 0
+            resend = incident and auto_resend > 0 and failures < PROVIDER_FAILURES_BEFORE_RESTAGE
+            log_send(root, payload, manifest, outcome, normalized, auto_resend=resend, provider_failures=failures)
+            if incident and not resend and failures >= PROVIDER_FAILURES_BEFORE_RESTAGE:
+                result["restage_needed"] = (f"{generation_id} v{payload['shot_version']}: {failures} provider failures; "
+                                            f"restage or simplify the prompt and record why (OWNER_POLICY)")
     if resend:
         result["auto_resend"] = generate(pkg, generation_id, dry_run=False, plan_out=plan_out, stills_dir=stills_dir,
                                          start_token=start_token, backlog=backlog, runner=runner, end_token=end_token,
                                          today=today, adapter=adapter, auto_resend=auto_resend - 1,
-                                         cdp_scope=cdp_scope)
+                                         cdp_scope=cdp_scope, account_scope=account_scope, cdp_endpoint=cdp_endpoint)
     return result
 
 
@@ -636,7 +656,7 @@ def log_send(root: Path, payload: dict[str, Any], manifest: dict[str, Any], outc
             "binding": manifest.get("binding", ""), "bound_in_send": outcome == "PASSED",
             "elapsed_s": manifest.get("elapsed_s"), "started": manifest.get("started", ""),
             "finished": manifest.get("finished", ""), "cdp": payload.get("cdp", ""),
-            "project": payload.get("project", ""), **extra}
+            "project": payload.get("project", ""), "account": payload.get("account", ""), **extra}
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(line, ensure_ascii=False) + "\n")
     return path
@@ -651,34 +671,37 @@ def _generate_api(pkg: Any, payload: dict[str, Any], adapter: Any, mock: bool, r
     job: dict[str, str] = {}
 
     def submitted(job_id: str) -> None:
-        job["id"] = job_id
-        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING",
-                       provider_job_id=job_id)
+        with film_lock(root, timeout_s=15.0):
+            job["id"] = job_id
+            _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING",
+                           provider_job_id=job_id)
 
     try:
         outcome = adapter.run(request, on_submitted=submitted)
     except BaseException:
-        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING",
-                       provider_job_id=job.get("id", ""),
-                       note="the adapter raised before reporting; poll the job id before resending")
+        with film_lock(root, timeout_s=15.0):
+            _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING",
+                           provider_job_id=job.get("id", ""),
+                           note="the adapter raised before reporting; poll the job id before resending")
         raise
     out = Path(payload["output"])
-    result: dict[str, Any] = {"sent": True, "dry_run": False, "payload": payload, "manifest_result": outcome.result,
-                              "provider_result": outcome.raw_result, "provider_job_id": outcome.provider_job_id,
-                              "receipt": str(receipt)}
-    final = outcome.result
-    if final == "PASSED" and not (out.is_file() and outcome.sha256 and outcome.sha256 == sha256_file(out)):
-        final = "AMBIGUOUS"  # the job says done but the bytes on disk are not the ones downloaded
-    if final == "PASSED":
-        entry, _ = register_take(root, pkg.header.film_id, payload["generation_id"], out,
-                                 prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
-                                 route=payload["route"], model=payload["model"], credits=0.0,
-                                 start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"],
-                                 provider=payload["provider"], provider_job_id=outcome.provider_job_id,
-                                 cost_unit=payload["cost_unit"], cost_amount=0.0 if mock else payload["expected_cost"])
-        result["take"] = entry.model_dump(mode="json")
-    result["manifest_result"] = final
-    _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=final,
-                   provider_result=outcome.raw_result, provider_job_id=outcome.provider_job_id,
-                   take_registered=bool(result.get("take")), **({"note": outcome.detail} if outcome.detail else {}))
-    return result
+    with film_lock(root, timeout_s=15.0):
+        result: dict[str, Any] = {"sent": True, "dry_run": False, "payload": payload, "manifest_result": outcome.result,
+                                  "provider_result": outcome.raw_result, "provider_job_id": outcome.provider_job_id,
+                                  "receipt": str(receipt)}
+        final = outcome.result
+        if final == "PASSED" and not (out.is_file() and outcome.sha256 and outcome.sha256 == sha256_file(out)):
+            final = "AMBIGUOUS"  # the job says done but the bytes on disk are not the ones downloaded
+        if final == "PASSED":
+            entry, _ = register_take(root, pkg.header.film_id, payload["generation_id"], out,
+                                     prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
+                                     route=payload["route"], model=payload["model"], credits=0.0,
+                                     start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"],
+                                     provider=payload["provider"], provider_job_id=outcome.provider_job_id,
+                                     cost_unit=payload["cost_unit"], cost_amount=0.0 if mock else payload["expected_cost"])
+            result["take"] = entry.model_dump(mode="json")
+        result["manifest_result"] = final
+        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=final,
+                       provider_result=outcome.raw_result, provider_job_id=outcome.provider_job_id,
+                       take_registered=bool(result.get("take")), **({"note": outcome.detail} if outcome.detail else {}))
+        return result

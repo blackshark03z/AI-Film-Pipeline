@@ -308,6 +308,46 @@ def sidecar_events(pkg: Any, section: EditSection, plan: dict[str, Any], rows: l
 
 # ------------------------------------------------------------------ reframe
 
+def resolve_reframes_for_section(film_root: Path, section: EditSection, events_map: dict[str, Any]) -> dict[str, Any]:
+    """Expand take/generation-keyed reframe boxes to their matching EDL TAKE event_ids without dropping unknown keys."""
+    if not events_map:
+        return {}
+    take_events = [e for e in section.events if e.kind == "TAKE"]
+    known_eids = {e.event_id for e in take_events}
+    by_take: dict[str, list[str]] = {}
+    by_gid: dict[str, list[str]] = {}
+    take_to_gid: dict[str, str] = {}
+    idx_path = Path(film_root) / "takes" / "index.json"
+    if idx_path.is_file():
+        try:
+            idx_raw = json.loads(idx_path.read_text(encoding="utf-8"))
+            for t in idx_raw.get("takes") or []:
+                if t.get("take_id") and t.get("generation_id"):
+                    take_to_gid[str(t["take_id"])] = str(t["generation_id"])
+        except (OSError, ValueError):
+            pass
+    for ev in take_events:
+        if ev.take_id:
+            by_take.setdefault(ev.take_id, []).append(ev.event_id)
+            gid = take_to_gid.get(ev.take_id)
+            if gid:
+                by_gid.setdefault(gid, []).append(ev.event_id)
+
+    resolved: dict[str, Any] = {k: v for k, v in events_map.items() if k in known_eids}
+    for k, box in events_map.items():
+        if k in known_eids:
+            continue
+        targets = by_take.get(k) or by_gid.get(k) or [
+            ev.event_id for ev in take_events if ev.take_id and ev.take_id.startswith(f"{k}_t")
+        ]
+        if targets:
+            for eid in targets:
+                resolved.setdefault(eid, box)
+        else:
+            resolved[k] = box
+    return resolved
+
+
 def reframe_problems(section: EditSection, reframes: ReframePlan) -> list[dict[str, str]]:
     kinds = {e.event_id: e.kind for e in section.events}
     tagged = {t.event_id for t in section.tags}
@@ -346,7 +386,8 @@ def prepare(pkg: Any, *, clips_dir: Path | None = None, langs: tuple[str, ...] =
     plan = timeline(section, durations, lengths)
     dialogue = dialogue_cues(pkg, section, durations, clips_dir=clips_dir)
     reframes = load_reframes(root)
-    problems = list(dialogue["problems"]) + reframe_problems(section, reframes)
+    resolved_reframes = ReframePlan(events=resolve_reframes_for_section(root, section, reframes.events))
+    problems = list(dialogue["problems"]) + reframe_problems(section, resolved_reframes)
     credits, sidecars = {}, {}
     for lang in langs:
         if lang not in LABELS:
@@ -362,7 +403,7 @@ def prepare(pkg: Any, *, clips_dir: Path | None = None, langs: tuple[str, ...] =
         else:
             sidecars[lang] = events
     return {"film_id": pkg.header.film_id, "plan": plan, "credits": credits, "rows": dialogue["rows"],
-            "cues": dialogue["cues"], "sidecars": sidecars, "reframes": dict(reframes.events), "problems": problems,
+            "cues": dialogue["cues"], "sidecars": sidecars, "reframes": dict(resolved_reframes.events), "problems": problems,
             "ok": not any(p["severity"] == "BLOCK" for p in problems)}
 
 

@@ -209,12 +209,19 @@ class _Plan:
         if self.pre.preflight.interaction_contract and decl.camera is not None:  # the declared size, not the coverage default
             size = _UNIT_SIZE.get(decl.camera.size, decl.camera.size)
         people = set(self.pre.characters) if self.pre.preflight.object_gaze_neutral_eyeline else None
+        eyelines = _anchored_eyeline(decl, people)
+        if not self.pre.preflight.interaction_contract:
+            # Legacy film03 compatibility: a third visible character outside axis_pair falls back to their axis side's eyeline.
+            eyelines = {
+                **{c: book.eyeline_toward_partner(c) for c in decl.visible if c in book.sides and not book.partner(c)},
+                **eyelines,
+            }
         shot = CoverageShot(
             shot_id=shot_id, coverage=decl.coverage, shot_size=size, subject=decl.subject,
             foreground=decl.foreground, start_s=0.0, end_s=seconds, lines=self.lines_for(decl),
             action=self.action_text(decl),
             axis=axis_record(book, shot_id, decl.visible, gaze_target=decl.gaze_target or "",
-                             eyelines=_anchored_eyeline(decl, people)))
+                             eyelines=eyelines))
         return SceneUnit(scene_id=sid, duration_s=seconds, shots=[shot], axis_book=book)
 
     def handoff_for(self, decl: ShotDecl) -> GenerationHandoff | None:

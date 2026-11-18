@@ -6,6 +6,7 @@ operator evidence, never a server-verified job ID or proof of picture/dialogue q
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -74,11 +75,26 @@ def condition_camera_prompt(prompt: str, camera) -> str:
     return hint + prompt
 
 
-def _planned(pkg, gid, *, condition_camera=False):
+def _planned(pkg, gid, *, condition_camera=False, allow_own_claim_id: str | None = None):
     # Reuse the existing compiler, storyboard/still approval and continuity checks.
     # Flow pricing/argv are source-route checks only; never export them as a Muse quote/send.
     payload = build_payload(pkg, gid)
-    blocked = [b for b in payload["blockers"] if not b.get("live_only") or b["code"] == "SEND_PENDING"]
+    only_own_pending = False
+    if allow_own_claim_id:
+        from film_pipeline.production.generate import _sent_receipts
+        from film_pipeline.production.money import unresolved_sends
+
+        root = Path(pkg.root)
+        film_id = pkg.header.film_id
+        pend_muse = pending_muse_claims(root)
+        own_key = f"muse:{allow_own_claim_id}"
+        flow_pend = unresolved_sends(T.load_log(root, film_id), _sent_receipts(root, film_id, {}))
+        only_own_pending = (own_key in pend_muse) and (len(pend_muse) == 1) and (not flow_pend)
+    blocked = [
+        b for b in payload["blockers"]
+        if (b["code"] == "SEND_PENDING" and not only_own_pending)
+        or (b["code"] != "SEND_PENDING" and not b.get("live_only"))
+    ]
     if blocked:
         raise ValueError("Muse source plan blocked: " + "; ".join(b["code"] for b in blocked))
     request = GenerationRequest.model_validate(payload["request"])
@@ -115,7 +131,8 @@ def _read(pkg, folder: Path) -> Packet:
         raise ValueError("request folder does not belong to this film")
     if packet.request.film_id != pkg.header.film_id:
         raise ValueError("request identifies another film")
-    current, _ = _planned(pkg, packet.request.generation_id, condition_camera=packet.schema_version == 2)
+    allow_claim = packet.request_id if (folder / "state.json").is_file() else None
+    current, _ = _planned(pkg, packet.request.generation_id, condition_camera=packet.schema_version == 2, allow_own_claim_id=allow_claim)
     if current != packet:
         raise ValueError("stale or altered Muse request; re-plan the shot")
     for frame in _frames(packet.request):
@@ -142,6 +159,42 @@ def _states(pkg):
     for path in sorted(_base(pkg).glob("*/state.json")):
         # An unreadable journal is not permission to send again.
         yield path, json.loads(path.read_text(encoding="utf-8"))
+
+
+def pending_muse_claims(root: Path) -> dict[str, dict[str, Any]]:
+    """Return unresolved Muse dispatch claims keyed cleanly for SEND_PENDING visibility."""
+    base = Path(root) / "media" / "muse"
+    if not base.is_dir():
+        return {}
+    out: dict[str, dict[str, Any]] = {}
+    for path in sorted(base.glob("*/state.json")):
+        req_dir = path.parent.name
+        try:
+            state = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(state, dict):
+                raise ValueError("unreadable Muse state")
+        except (OSError, ValueError):
+            out[f"muse:{req_dir}"] = {
+                "generation_id": "",
+                "provider": "muse",
+                "result": "UNREADABLE_STATE",
+                "sent": True,
+                "cost_unit": "muse_requests",
+                "expected_cost": None,
+            }
+            continue
+        if state.get("status") != "IMPORTED":
+            rid = str(state.get("request_id") or req_dir)
+            out[f"muse:{rid}"] = {
+                "generation_id": str(state.get("generation_id") or ""),
+                "provider": "muse",
+                "result": str(state.get("status") or "DISPATCH_CLAIMED"),
+                "sent": True,
+                "cost_unit": "muse_requests",
+                "expected_cost": None,
+                **({"take_id": state["take_id"]} if state.get("take_id") else {}),
+            }
+    return out
 
 
 @film_writer()
@@ -280,8 +333,19 @@ def ingest(pkg, folder: Path, clip: Path, response: dict) -> dict:
         if T.sha256_file(output) != digest:
             raise ValueError("existing output conflicts; evidence is never overwritten")
     else:
-        with output.open("xb") as dest, clip.open("rb") as source:
-            shutil.copyfileobj(source, dest)
+        fd, tmp_name = tempfile.mkstemp(prefix=output.name + ".", suffix=".tmp", dir=output.parent)
+        os.close(fd)
+        tmp_path = Path(tmp_name)
+        try:
+            with tmp_path.open("wb") as dest, clip.open("rb") as source:
+                shutil.copyfileobj(source, dest)
+                dest.flush()
+                os.fsync(dest.fileno())
+            if T.sha256_file(tmp_path) != digest:
+                raise ValueError("copied output hash mismatch")
+            os.replace(tmp_path, output)
+        finally:
+            tmp_path.unlink(missing_ok=True)
     if T.sha256_file(output) != digest:
         raise ValueError("copied output hash mismatch")
     frame = packet.request.first_frame
