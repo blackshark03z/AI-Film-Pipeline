@@ -1,0 +1,135 @@
+{
+  "take_id": "SC11_g24_t4",
+  "generation_id": "SC11_g24",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis leaves the records room alone out through the wide-open hallway doorway and walks down the exterior corridor without looking back while Naomi and Eli stay calmly inside.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis (older grey hair, dark tie, heavy quiet stride) reads resigned and cornered; Eli motionless behind counter (chest bodycam, no tie); Naomi calm left.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Inspected all144.jpg, contact.jpg, motion-2.jpg & motion-3.jpg: Naomi left customer-side, Eli motionless behind counter shelves facing Naomi, Hollis steps cleanly past doorway into bright corridor (SC11_g25 end state: Hollis outside door in hallway, counter empty of Hollis).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_BARRIER": "YES: Naomi stays left customer-side, Eli stays behind counter inside the room, and Hollis exits alone into the exterior hallway."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "0-0.6s SETUP faces open doorway; 0.6-3.6s ACTION walks steadily out through doorway into hall once; 3.6-6s HOLD continues down exterior hallway outside room while Naomi and Eli stay still.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Natural smooth walking gait from doorway threshold down sunlit hallway across all 144 frames with zero morphing or flicker.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static wide eye-level 3-shot matching camera plan.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Room, lighting, shelves, CRT desk and counter props (closed leather ledger, white ID card, open brown packet with white stack halfway out, face-down cover page, stamps) solid; bottom-right sparkle intact, other corners clean.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.0s clip; continuous single-pace exit down corridor without cuts or loops.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Faster-Whisper empty asr_segments [] matching silent exit beat.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "No speech; zero unwanted mouth motion.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames verified with ffprobe + ffmpeg -xerror; 6 credits debited on account 02.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_BARRIER"
+  ],
+  "output_sha256": "e8ba5056104ab4db40bca12bb27567959380efdfe79beeccac2c5bb643a35f2a"
+}

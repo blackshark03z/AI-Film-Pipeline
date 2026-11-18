@@ -1,0 +1,243 @@
+{
+  "take": {
+    "take_id": "SC11_g24_t2",
+    "generation_id": "SC11_g24",
+    "prompt_sha256": "bc3460ed091ccb65bf0822dcedf1b75b0d3fb129370887b4aa07c620b81dbcd2",
+    "start_frame_sha256": "e3fde28bf7a00bd26ed05a7f785f89936bdca6553bf7430b67a3c3f4e2be2bcf",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC11_g24_t2.mp4",
+    "output_sha256": "5d649fe0f0e3650722e23794b16f73f821426e02ee81ad2761b14f0f4a2adb9e",
+    "status": "GENERATED",
+    "shot_version": 2,
+    "cause": "",
+    "registered_at": "2026-11-18T00:05:48Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "MASTER",
+    "visible": [
+      "NAOMI",
+      "HOLLIS",
+      "ELI"
+    ],
+    "start_state": "SC11_g24",
+    "end_state": "SC11_g25",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 0.6,
+        "description": "HOLLIS faces right behind the counter, NAOMI frame-left, ELI left of the hallway door"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 0.6,
+        "end_s": 4.2,
+        "description": "HOLLIS walks past ELI, pulls open the hallway door, exits outside, and closes it"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.2,
+        "end_s": 6.0,
+        "description": "HOLLIS gone outside, staff side empty, door shut, NAOMI and ELI stay still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-0.6s SETUP: does this happen on screen - HOLLIS faces right behind the counter, NAOMI frame-left, ELI left of the hallway door?"
+    },
+    {
+      "group": "action",
+      "question": "0.6-4.2s ACTION: does this happen on screen - HOLLIS walks past ELI, pulls open the hallway door, exits outside, and closes it?"
+    },
+    {
+      "group": "action",
+      "question": "4.2-6s HOLD: does this happen on screen - HOLLIS gone outside, staff side empty, door shut, NAOMI and ELI stay still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): HOLLIS walks past ELI, pulls open the hallway door, exits outside, and closes it"
+    },
+    {
+      "group": "character",
+      "question": "HOLLIS: does the face/body read as cornered, pleading (restrained)? Must NOT read as: menace."
+    },
+    {
+      "group": "camera",
+      "question": "Planned size WIDE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC11_g24: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: open on the counter, papers halfway out, face down; the ledger: lying closed on the counter; the ID card: lying on the customer side of the counter; the cover page: lying face down on the counter."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC11_g25: Continues from the previous shot: HOLLIS standing outside the door; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: open on the counter, papers halfway out, face down; the ledger: lying closed on the counter; the ID card: lying on the customer side of the counter; the cover page: lying face down on the counter."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC11_g24_t2",
+    "generation_id": "SC11_g24",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "FAIL",
+        "severity": "P0",
+        "level": "SAMPLED",
+        "evidence": "Hollis never exits through the hallway door; door remains closed while Hollis dissolves/vanishes behind Eli.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "character",
+        "result": "FAIL",
+        "severity": "P0",
+        "level": "SAMPLED",
+        "evidence": "Inspecting motion-3.jpg rows 2-6: Hollis morphs/vanishes beside Eli near shelves while Eli moves right.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "FAIL",
+        "severity": "P0",
+        "level": "SAMPLED",
+        "evidence": "Motion-3.jpg frames 97-144 show the door still shut and Eli alone by the closed doorway after Hollis vanishes inside the room rather than exiting outside.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_BARRIER": "NO: Hollis never exits through the doorway; characters overlap/morph behind the counter."
+        }
+      },
+      {
+        "group": "action",
+        "result": "FAIL",
+        "severity": "P0",
+        "level": "FULL_MOTION",
+        "evidence": "1-4s ACTION fails: door stays shut and Hollis disappears inside the room instead of opening the door and exiting outside.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "FAIL",
+        "severity": "P1",
+        "level": "FULL_MOTION",
+        "evidence": "Identity swap/morph and ghostly fade of Hollis against shelves in motion-3.jpg rows 2-4.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Static wide eye-level 3-shot.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "FAIL",
+        "severity": "P0",
+        "level": "SAMPLED",
+        "evidence": "Morph artifact/shelf box distortion as Hollis dissolves in motion-3.jpg row 3-4.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "6.0s clip.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Silent take.",
+        "reviewer": "auto:whisper",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "No speech.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "640x360 24fps 144 frames valid; 6 credits debited on account 02.",
+        "reviewer": "auto:ffmpeg",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": "START_FRAME",
+    "cause_note": "Closed hallway door and edge-to-edge counter in v2 start still caused Flow to halt/morph Hollis behind Eli near the shelves instead of opening the closed door (motion-2.jpg & motion-3.jpg frames 97-144: Hollis vanishes/dissolves behind shelves while Eli steps to door; door stays shut).",
+    "required_answers": [
+      "REL_BARRIER"
+    ],
+    "output_sha256": "5d649fe0f0e3650722e23794b16f73f821426e02ee81ad2761b14f0f4a2adb9e"
+  },
+  "auto_evidence": {
+    "note": "autoqc skipped: ONNX models not installed (tools/drama_fetch_qc_models.py)",
+    "warnings": []
+  }
+}

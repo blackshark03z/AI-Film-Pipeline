@@ -1,1 +1,28 @@
-{}
+{
+  "color": {
+    "report": "color/color.json",
+    "ok": true,
+    "summary": {
+      "shots": 300,
+      "corrected": 298,
+      "worst_before": 30.706,
+      "worst_after": 11.519
+    },
+    "locked_against": "9b5fd506863bb17e480021b04c8ad0f165e24ce0d266238330bf8462fd7ae79a"
+  },
+  "titles": {
+    "report": "titles/titles.json",
+    "ok": true,
+    "summary": {
+      "cues": 270,
+      "languages": [
+        "en",
+        "vi"
+      ],
+      "reframed": 45,
+      "blocks": 0,
+      "warnings": 0
+    },
+    "locked_against": "9b5fd506863bb17e480021b04c8ad0f165e24ce0d266238330bf8462fd7ae79a"
+  }
+}

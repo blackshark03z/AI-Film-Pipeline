@@ -1,0 +1,135 @@
+{
+  "take_id": "SC11_g24_t2",
+  "generation_id": "SC11_g24",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Hollis never exits through the hallway door; door remains closed while Hollis dissolves/vanishes behind Eli.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Inspecting motion-3.jpg rows 2-6: Hollis morphs/vanishes beside Eli near shelves while Eli moves right.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Motion-3.jpg frames 97-144 show the door still shut and Eli alone by the closed doorway after Hollis vanishes inside the room rather than exiting outside.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_BARRIER": "NO: Hollis never exits through the doorway; characters overlap/morph behind the counter."
+      }
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "1-4s ACTION fails: door stays shut and Hollis disappears inside the room instead of opening the door and exiting outside.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "FAIL",
+      "severity": "P1",
+      "level": "FULL_MOTION",
+      "evidence": "Identity swap/morph and ghostly fade of Hollis against shelves in motion-3.jpg rows 2-4.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static wide eye-level 3-shot.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Morph artifact/shelf box distortion as Hollis dissolves in motion-3.jpg row 3-4.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.0s clip.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Silent take.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "No speech.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames valid; 6 credits debited on account 02.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "START_FRAME",
+  "cause_note": "Closed hallway door and edge-to-edge counter in v2 start still caused Flow to halt/morph Hollis behind Eli near the shelves instead of opening the closed door (motion-2.jpg & motion-3.jpg frames 97-144: Hollis vanishes/dissolves behind shelves while Eli steps to door; door stays shut).",
+  "required_answers": [
+    "REL_BARRIER"
+  ],
+  "output_sha256": "5d649fe0f0e3650722e23794b16f73f821426e02ee81ad2761b14f0f4a2adb9e"
+}

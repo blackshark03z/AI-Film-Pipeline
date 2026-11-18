@@ -20842,7 +20842,8 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 2,
+      "repair_of": "SC10_g05@v1",
       "coverage": "MASTER",
       "subject": "HOLLIS",
       "foreground": "",
@@ -20858,20 +20859,20 @@
           {
             "kind": "SETUP",
             "start_s": 0.0,
-            "end_s": 1.0,
-            "description": "HOLLIS stands behind the counter holding the opened packet in both hands, the seal broken"
+            "end_s": 0.8,
+            "description": "HOLLIS holds the open packet over the counter, white page edges visible left"
           },
           {
             "kind": "ACTION",
-            "start_s": 1.0,
+            "start_s": 0.8,
             "end_s": 2.8,
-            "description": "HOLLIS draws a thin stack of papers halfway out of the packet onto the counter, the pages face down"
+            "description": "HOLLIS lays the packet down and pulls the white pages halfway out left, face down"
           },
           {
             "kind": "CONSEQUENCE",
             "start_s": 2.8,
             "end_s": 4.0,
-            "description": "the papers lie halfway out of the packet on the counter, the pages face down"
+            "description": "white pages lie halfway out left of the packet, face down"
           },
           {
             "kind": "HOLD",
@@ -20881,7 +20882,7 @@
           }
         ],
         "once_actions": [
-          "HOLLIS draws a thin stack of papers halfway out of the packet onto the counter, the pages face down"
+          "HOLLIS lays the packet down and pulls the white pages halfway out left, face down"
         ],
         "gesture_budget": 1,
         "performance": [
@@ -24882,7 +24883,8 @@
       "sfx": [],
       "readout": [],
       "duration_s": 6,
-      "version": 1,
+      "version": 4,
+      "repair_of": "SC11_g24@v3",
       "coverage": "MASTER",
       "subject": "HOLLIS",
       "foreground": "",
@@ -24898,25 +24900,25 @@
           {
             "kind": "SETUP",
             "start_s": 0.0,
-            "end_s": 1.0,
-            "description": "HOLLIS stands behind the counter, NAOMI one step back from it, ELI beside the hallway door"
+            "end_s": 0.6,
+            "description": "HOLLIS faces right at the open doorway; NAOMI left, ELI still facing NAOMI"
           },
           {
             "kind": "ACTION",
-            "start_s": 1.0,
-            "end_s": 4.0,
-            "description": "HOLLIS walks out from behind the counter and leaves through the hallway door without looking back",
+            "start_s": 0.6,
+            "end_s": 3.6,
+            "description": "HOLLIS walks right into the hall past the doorframe while ELI stands still",
             "motion": "walk_across_room"
           },
           {
             "kind": "HOLD",
-            "start_s": 4.0,
+            "start_s": 3.6,
             "end_s": 6.0,
-            "description": "the counter is empty on the staff side, NAOMI and ELI stay where they are"
+            "description": "HOLLIS is gone out of sight; NAOMI and ELI stay still"
           }
         ],
         "once_actions": [
-          "HOLLIS walks out from behind the counter and leaves through the hallway door without looking back"
+          "HOLLIS walks right into the hall past the doorframe while ELI stands still"
         ],
         "gesture_budget": 1,
         "performance": [

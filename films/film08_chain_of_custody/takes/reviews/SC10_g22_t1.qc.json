@@ -1,0 +1,142 @@
+{
+  "take_id": "SC10_g22_t1",
+  "generation_id": "SC10_g22",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis speaks line 1283 ('I didn't write anything.' 0.21-1.55s, 'I opened an envelope.' 2.83-4.01s, 'That's all.' 4.93-5.37s) hoarsely to Naomi off frame-left and holds silently through 6s.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_ADDRESS:1283": "YES: Hollis angles his face and gaze off frame-left toward Naomi while speaking line 1283."
+      }
+    },
+    {
+      "group": "character",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Hollis matches char_HOLLIS (tan shirt with shoulder epaulettes, black tie, short grey hair) reading tense, hoarse, defensive.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Inspected all144.jpg & contact.jpg: solo Hollis in front of archive shelves and top-left window; irises stay shifted frame-left toward Naomi well clear of lens.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_LISTENER:NAOMI": "YES: Naomi stays off-frame to frame-left, never shown empty; Hollis's eyes point frame-left clear of the lens.",
+        "REL_GAZE": "YES: Verified on contact.jpg that Hollis looks off frame-left toward Naomi and never into the camera lens.",
+        "REL_BARRIER": "YES: Hollis stays behind counter on staff side in front of archive shelves throughout."
+      }
+    },
+    {
+      "group": "action",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Inspected all144.jpg & contact.jpg: clean three-beat delivery with brief pauses between phrases and calm closed-lip hold in final frames.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Natural head micro-movements and lip articulation across all three clauses without looping.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static eye-level close single, no cuts.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Archive shelves, top-left window, uniform epaulettes, and black tie sharp across all 144 frames; bottom-right sparkle intact.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.04s clip; dialogue finishes by 5.37s leaving calm resting hold through row 12.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Faster-Whisper verbatim: 'I didn't write anything.' (0.21-1.55s), 'I opened an envelope.' (2.83-4.01s), 'That's all.' (4.93-5.37s).",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Mouth articulates clearly across all three speech segments and closes during pauses and final hold.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames verified, sha256 c92b8b8b159ad1292da15b3afacf5b44d4be2c08f5f7479c26f0ce537d455cb4, 6 credits debited on account 571 (792->786).",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": null,
+  "cause_note": "",
+  "required_answers": [
+    "REL_ADDRESS:1283",
+    "REL_LISTENER:NAOMI",
+    "REL_GAZE",
+    "REL_BARRIER"
+  ],
+  "output_sha256": "c92b8b8b159ad1292da15b3afacf5b44d4be2c08f5f7479c26f0ce537d455cb4"
+}

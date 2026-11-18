@@ -15791,13 +15791,13 @@
     },
     "SC10_g05": {
       "file": "media/stills/start_SC10_g05.jpg",
-      "sha256": "8a7aa9677d44ea2e28596afb2d5918390e5e676f0a64bc14e1468d356ab2cf50",
-      "prompt_sha256": "5b7fa1cd78d6c66e4f9be45bbe30b3bc06dab54c4f8f00e166a0741b474af525",
-      "source": "generated via image-generator T33: wide master NAOMI left, HOLLIS center opened packet broken seal, ELI right notebook",
+      "sha256": "9870c8ab3849d338ea5404e9e2c982ba243ac5e1a5c313f164961037c1a9b965",
+      "prompt_sha256": "3b54b203b3aa5fbed6339692b1fb38de88fb2c693a8b536fefd9bec02243118f",
+      "source": "Gemini Image subagent",
       "credits": 0.0,
-      "registered_at": "2026-11-17T20:29:06+00:00",
-      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-17T20:29:06+00:00"
+      "registered_at": "2026-11-17T23:46:00+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-17T23:46:01+00:00"
     },
     "SC10_g06": {
       "file": "media/stills/start_SC10_g06.jpg",
@@ -15921,13 +15921,13 @@
     },
     "SC11_g24": {
       "file": "media/stills/start_SC11_g24.jpg",
-      "sha256": "6ca80f997fd5cb1a1bb525d00ee3b687d8f1ee276cf491823672a85a596e58ca",
-      "prompt_sha256": "2784807ccb805fe16195b10dafc590b2f5971658ed4e8891fc512cc9f133eb55",
-      "source": "generated via image-generator T50: wide master open packet blank papers halfway out, blank cover sheet, ID card face-down",
+      "sha256": "032a1713855999e1ce7fce59ed97fe18e4099e76528320f4ea49578ccace3d06",
+      "prompt_sha256": "38839e6f107c2ad76b20dec0ea6ed0be9fdf0449332d969955dce33f38b9dc21",
+      "source": "Gemini Image subagent",
       "credits": 0.0,
-      "registered_at": "2026-11-17T20:29:10+00:00",
-      "approved_by": "agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)",
-      "approved_at": "2026-11-17T20:29:10+00:00"
+      "registered_at": "2026-11-18T00:26:47+00:00",
+      "approved_by": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "approved_at": "2026-11-18T00:26:48+00:00"
     },
     "SC12_g16": {
       "file": "media/stills/start_SC12_g16.jpg",

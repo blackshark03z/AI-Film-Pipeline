@@ -1,0 +1,271 @@
+{
+  "take": {
+    "take_id": "SC10_g20_t1",
+    "generation_id": "SC10_g20",
+    "prompt_sha256": "1fce26a40026e86f4bcd3d96928ad2d30aa44617fc3eb644f1a1c36c66099954",
+    "start_frame_sha256": "c51d9e95d4ae36da84c9a1719a2bb4e7850519cb30b62411b5794709550c29bc",
+    "route": "start_frame+Khung hinh",
+    "model": "Omni 1.2 Flash 360p",
+    "credits": 6.0,
+    "output_file": "SC10_g20_t1.mp4",
+    "output_sha256": "ac6ee4ae06d66c6a9d096404f4a82d51e11f7ada4e0bbaad7e0b243c3fe87eaa",
+    "status": "GENERATED",
+    "shot_version": 1,
+    "cause": "",
+    "registered_at": "2026-11-18T00:48:39Z",
+    "review_file": "",
+    "provider": "flow",
+    "provider_job_id": "",
+    "cost_unit": "credits",
+    "cost_amount": null
+  },
+  "shot": {
+    "coverage": "SINGLE",
+    "visible": [
+      "NAOMI"
+    ],
+    "start_state": "SC10_g20",
+    "end_state": "SC10_g21",
+    "phases": [
+      {
+        "kind": "SETUP",
+        "start_s": 0.0,
+        "end_s": 0.5,
+        "description": "NAOMI looks at ELI"
+      },
+      {
+        "kind": "ACTION",
+        "start_s": 0.5,
+        "end_s": 4.7,
+        "description": "NAOMI speaks to ELI quietly"
+      },
+      {
+        "kind": "HOLD",
+        "start_s": 4.7,
+        "end_s": 6.0,
+        "description": "NAOMI holds ELI's look, quite still"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "group": "action",
+      "question": "0-0.5s SETUP: does this happen on screen - NAOMI looks at ELI?"
+    },
+    {
+      "group": "action",
+      "question": "0.5-4.7s ACTION: does this happen on screen - NAOMI speaks to ELI quietly?"
+    },
+    {
+      "group": "action",
+      "question": "4.7-6s HOLD: does this happen on screen - NAOMI holds ELI's look, quite still?"
+    },
+    {
+      "group": "action",
+      "question": "Happens exactly once (not repeated or looped): NAOMI speaks to ELI"
+    },
+    {
+      "group": "character",
+      "question": "NAOMI: does the face/body read as quiet, giving him room (restrained)? Must NOT read as: triumph."
+    },
+    {
+      "group": "sync",
+      "question": "Line 1273 is audible, spoken by the right character, lips match: NAOMI: It's sealed because every page has to reach the jury untouched."
+    },
+    {
+      "group": "audio",
+      "question": "NAOMI sounds like the voice bible: calm, even female voice; no reference take yet (the first accepted speaking take becomes it)"
+    },
+    {
+      "group": "camera",
+      "question": "Planned size CLOSE, EYE_LEVEL, STATIC: does the take match?"
+    },
+    {
+      "group": "spatial",
+      "question": "First frame matches state SC10_g20: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: open on the counter, papers halfway out, face down; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand; the cover page: held in HOLLIS's right hand, printed side away from the camera."
+    },
+    {
+      "group": "spatial",
+      "question": "Last frame matches state SC10_g21: Continues from the previous shot: HOLLIS standing behind the counter; NAOMI standing a step back from the counter, frame-left; ELI standing by the door, frame-right; the brown packet: open on the counter, papers halfway out, face down; the ledger: lying closed on the counter; the ID card: in HOLLIS's pocket; the notebook: held closed in ELI's right hand; the cover page: held in HOLLIS's right hand, printed side away from the camera."
+    },
+    {
+      "group": "visual",
+      "question": "Identity, wardrobe, set and light stable; no morphing, extra limbs, text artefacts or flicker."
+    },
+    {
+      "group": "motion",
+      "question": "Motion is physically plausible and smooth (full clip, not stills)."
+    },
+    {
+      "group": "visual",
+      "question": "Corners (all four, full size): any watermark, logo, sparkle or text? Name it and its corner. The known Gemini sparkle bottom-right is recorded, not removed (Owner decision); any other mark fails."
+    },
+    {
+      "id": "REL_ADDRESS:1273",
+      "group": "narrative",
+      "question": "Line 1273: does NAOMI clearly speak to ELI (eyes and body toward them)?"
+    },
+    {
+      "id": "REL_LISTENER:ELI",
+      "group": "spatial",
+      "question": "Is the place where ELI stands kept out of frame (never shown empty), and do NAOMI's eyes go to frame-right, well clear of the lens?"
+    },
+    {
+      "id": "REL_GAZE",
+      "group": "spatial",
+      "question": "Does NAOMI look at ELI and never into the lens?"
+    },
+    {
+      "id": "REL_BARRIER",
+      "group": "spatial",
+      "question": "Do ELI and HOLLIS stay on their own sides (frosted-glass hallway door / counter, staff side and archive shelves) the whole clip?"
+    }
+  ],
+  "instructions": "Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then `film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look. Questions with an id (REL_*) need a short answer in the group check's answers{id: text}; without it the take cannot be ACCEPTED.",
+  "qc": {
+    "take_id": "SC10_g20_t1",
+    "generation_id": "SC10_g20",
+    "checks": [
+      {
+        "group": "narrative",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Naomi speaks line 1273 quietly to Eli off frame-right across 0.53-4.51s and holds quietly through row 12.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_ADDRESS:1273": "YES: Naomi looks and speaks directly off frame-right toward Eli across line 1273."
+        }
+      },
+      {
+        "group": "character",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Naomi matches char_NAOMI (cream coat, dark collar blouse, short natural curls) reading composed and steady.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "spatial",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Inspected all144.jpg: solo Naomi positioned on public side with wooden chairs and sage wall behind; eyes remain angled frame-right well clear of lens.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {
+          "REL_LISTENER:ELI": "YES: Eli stays off-frame to frame-right behind the counter, never shown empty; Naomi's eyes remain angled frame-right clear of lens.",
+          "REL_GAZE": "YES: Naomi looks off frame-right toward Eli throughout and never into the lens.",
+          "REL_BARRIER": "YES: Counter barrier preserves separation between Naomi on the public side and Eli/Hollis on the staff side."
+        }
+      },
+      {
+        "group": "action",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Inspected all144.jpg: 0-0.5s calm gaze right, 0.53-4.51s speaks line quietly once, 4.6-6.0s calm closed-lip hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "motion",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Subtle natural head inclination and smooth lip articulation during speech; steady hold across rows 10-12.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "camera",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Static eye-level close single, no cuts.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "visual",
+        "result": "PASS",
+        "severity": null,
+        "level": "SAMPLED",
+        "evidence": "Chairs, sage wall, shelf edge, and wardrobe crisp across all 144 frames; bottom-right sparkle intact.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "temporal",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "6.04s clip; dialogue finishes at 4.51s leaving calm closing hold through row 12.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "audio",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Faster-Whisper verbatim: 'It's sealed because every page has to reach the jury untouched.' (0.53-4.51s).",
+        "reviewer": "auto:whisper",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "sync",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "Lip motion aligns smoothly with 0.53-4.51s dialogue and closes during rows 10-12 hold.",
+        "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      },
+      {
+        "group": "technical",
+        "result": "PASS",
+        "severity": null,
+        "level": "FULL_MOTION",
+        "evidence": "640x360 24fps 144 frames verified, sha256 ac6ee4ae06d66c6a9d096404f4a82d51e11f7ada4e0bbaad7e0b243c3fe87eaa, 6 credits debited on account 571 (798->792).",
+        "reviewer": "auto:ffmpeg",
+        "note": "",
+        "waiver": null,
+        "answers": {}
+      }
+    ],
+    "cause": null,
+    "cause_note": "",
+    "required_answers": [
+      "REL_ADDRESS:1273",
+      "REL_LISTENER:ELI",
+      "REL_GAZE",
+      "REL_BARRIER"
+    ],
+    "output_sha256": "ac6ee4ae06d66c6a9d096404f4a82d51e11f7ada4e0bbaad7e0b243c3fe87eaa"
+  },
+  "auto_evidence": {
+    "note": "autoqc skipped: ONNX models not installed (tools/drama_fetch_qc_models.py)",
+    "warnings": []
+  }
+}

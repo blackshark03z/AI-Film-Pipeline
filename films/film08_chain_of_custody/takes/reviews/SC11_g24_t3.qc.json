@@ -1,0 +1,135 @@
+{
+  "take_id": "SC11_g24_t3",
+  "generation_id": "SC11_g24",
+  "checks": [
+    {
+      "group": "narrative",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Wrong character exits: Eli walks down the corridor while Hollis remains inside the records room.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "character",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Checked contact.jpg & motion-2/3.jpg: Flow swaps the moving subject role, sending younger officer Eli down the hallway while keeping older Hollis behind the inbox tray inside the room.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "spatial",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "SAMPLED",
+      "evidence": "Final frame shows Hollis still standing behind the counter corner inside the room while Eli walks down the exterior hallway (violates SC11_g25 end state: Hollis outside, Eli beside door).",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {
+        "REL_BARRIER": "NO: Eli leaves his post beside the doorway and exits down the corridor while Hollis stays inside on staff side."
+      }
+    },
+    {
+      "group": "action",
+      "result": "FAIL",
+      "severity": "P0",
+      "level": "FULL_MOTION",
+      "evidence": "HOLLIS fails to exit through the hallway doorway; ELI exits instead.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "motion",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Smooth walking gait down corridor and stationary counter props, just the wrong character walking.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "camera",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Static wide eye-level 3-shot.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "visual",
+      "result": "PASS",
+      "severity": null,
+      "level": "SAMPLED",
+      "evidence": "Room lighting, open doorway, corridor and counter props solid; bottom-right sparkle intact.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "temporal",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "6.0s clip.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "audio",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "Silent take.",
+      "reviewer": "auto:whisper",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "sync",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "No speech.",
+      "reviewer": "agent:tech-lead.delegated-by.owner-khoikk03",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    },
+    {
+      "group": "technical",
+      "result": "PASS",
+      "severity": null,
+      "level": "FULL_MOTION",
+      "evidence": "640x360 24fps 144 frames valid; 6 credits debited on account 02.",
+      "reviewer": "auto:ffmpeg",
+      "note": "",
+      "waiver": null,
+      "answers": {}
+    }
+  ],
+  "cause": "PROVIDER_LIMIT",
+  "cause_note": "Both older Hollis and younger Eli wear identical tan sheriff uniforms; Flow walked Eli (standing nearer the doorway) out through the open corridor while leaving Hollis standing inside behind the right end of the counter (motion-2.jpg & motion-3.jpg).",
+  "required_answers": [
+    "REL_BARRIER"
+  ],
+  "output_sha256": "0e1dab637a8c51d01504f6c6b1e1c9d9723935b8023be173d2ab7a94f22da973"
+}

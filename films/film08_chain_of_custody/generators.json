@@ -10,5 +10,11 @@
     "name": "Google Flow",
     "model": "Nano Banana 2.1",
     "settings": "start-frame stills"
+  },
+  {
+    "role": "image",
+    "name": "Google Gemini",
+    "model": "Gemini Image",
+    "settings": "start-frame stills"
   }
 ]

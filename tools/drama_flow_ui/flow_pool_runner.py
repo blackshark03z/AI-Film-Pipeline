@@ -93,7 +93,7 @@ ACCOUNTS: dict[str, AccountConfig] = {
     ),
 }
 
-POOL_ROOT = Path(r"D:\AI FILM MAKER\_exports\FILM08_POOL_20261118")
+POOL_ROOT = Path(r"C:\Temp\FILM08_POOL_20261118")
 LEGACY_ROOT = Path(r"D:\AI FILM MAKER\_exports\FILM08_CONTINUE_20261117")
 LOCK_WRITER = Path(r"C:\Temp\afp-flow-writer.lock")
 LOCK_DOWNLOAD = Path(r"C:\Temp\afp-flow-download.lock")
@@ -261,6 +261,7 @@ class FlowTab:
         return self.api("Input.dispatchMouseEvent", dict(type=kind, x=x, y=y, **kwargs))
 
     def click(self, backend_id: int) -> None:
+        self.api("DOM.scrollIntoViewIfNeeded", {"backendNodeId": backend_id})
         x, y = self.over(backend_id)
         for evt in ("mousePressed", "mouseReleased"):
             self.mouse(evt, x, y, button="left", clickCount=1)
