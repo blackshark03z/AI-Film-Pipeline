@@ -7,10 +7,15 @@ from typing import Any
 
 from film_pipeline.production import stills as S
 from film_pipeline.production.plan import _Plan
-from film_pipeline.production.takes import load_log
+from film_pipeline.production.sections import shot_seconds
+from film_pipeline.production.takes import load_log, script_dialogue
 
 _PROP_HANDLING_RE = re.compile(
     r"\b(lays|lay|hands|hand|passes|pass|takes|take|picks up|sets|set|places|place|slides|slide)\b",
+    re.IGNORECASE,
+)
+_STAGE_DIR_LEAK_RE = re.compile(
+    r"(\([^)]{2,40}\)|\[[^\]]{2,40}\]|\bbrief pause\b|\blong pause\b|\bsighs\b|\bclears throat\b|\bvoiceover\b)",
     re.IGNORECASE,
 )
 
@@ -52,6 +57,12 @@ class PreSendCritic:
 
         plan_helper: _Plan | None = None
         still_prompt_map = S.still_prompts(pkg)
+        dialogue_lines = script_dialogue(pkg)
+        scene_dialogue = (
+            {(s.scene_id, e.line_no): e.text for s in pkg.script.scenes for e in s.elements if e.kind == "dialogue"}
+            if getattr(pkg, "script", None) is not None
+            else {}
+        )
         w_ratio, _, h_ratio = pkg.header.aspect.partition(":")
         expected_aspect = float(w_ratio) / float(h_ratio or 1) if w_ratio else 16.0 / 9.0
 
@@ -142,6 +153,60 @@ class PreSendCritic:
                                 "severity": "WARN",
                                 "detail": f"start still aspect {dims[0]}x{dims[1]} ({ratio:.2f}) differs from {pkg.header.aspect}",
                             })
+
+            # 4. End-still approval & aspect ratio check when end_frame is declared
+            end_k = S.end_key(gid)
+            if getattr(decl, "end_frame", False) and end_k in still_prompt_map:
+                e_state, e_reason = S.state_of(pkg, end_k, still_prompt_map[end_k])
+                if e_state != "APPROVED":
+                    findings.append({
+                        "generation_id": gid,
+                        "code": "END_STILL_NOT_READY",
+                        "severity": "BLOCK",
+                        "detail": f"end still {e_state}: {e_reason}",
+                    })
+                else:
+                    e_path = root / pre.stills[end_k].file
+                    e_dims = _image_size(e_path)
+                    if e_dims is not None and e_dims[1] > 0:
+                        e_ratio = e_dims[0] / e_dims[1]
+                        if abs(e_ratio - expected_aspect) > 0.08:
+                            findings.append({
+                                "generation_id": gid,
+                                "code": "END_STILL_NOT_READY",
+                                "severity": "WARN",
+                                "detail": f"end still aspect {e_dims[0]}x{e_dims[1]} ({e_ratio:.2f}) differs from {pkg.header.aspect}",
+                            })
+
+            # 5. Stage-direction leakage & spoken pacing overflow in assigned dialogue
+            if decl.dialogue:
+                spoken_texts: list[str] = []
+                for ln in decl.dialogue:
+                    txt = scene_dialogue.get((decl.scene_id, ln))
+                    if txt is None:
+                        raw_line = dialogue_lines.get(ln, "")
+                        _, _, body_txt = raw_line.partition(": ")
+                        txt = body_txt or raw_line
+                    if txt:
+                        spoken_texts.append(txt)
+                    leak = _STAGE_DIR_LEAK_RE.search(txt)
+                    if leak:
+                        findings.append({
+                            "generation_id": gid,
+                            "code": "STAGE_DIRECTION_IN_DIALOGUE",
+                            "severity": "WARN",
+                            "detail": f"dialogue line {ln} contains stage-direction token {leak.group(0)!r} that the actor may speak aloud",
+                        })
+                joined_spoken = " ".join(spoken_texts).strip()
+                secs = max(1.0, float(shot_seconds(decl, pkg.header)))
+                words_n = len(joined_spoken.split())
+                if len(joined_spoken) / secs > 22.0 or words_n / secs > 3.2:
+                    findings.append({
+                        "generation_id": gid,
+                        "code": "DIALOGUE_PACE_OVERFLOW",
+                        "severity": "WARN",
+                        "detail": f"dialogue ({words_n} words, {len(joined_spoken)} chars in {secs:g}s) risks tail cutoff; consider longer duration or split",
+                    })
 
         return {
             "film_id": pkg.header.film_id,

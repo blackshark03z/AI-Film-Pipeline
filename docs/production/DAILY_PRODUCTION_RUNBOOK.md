@@ -59,8 +59,19 @@ afp-film review-ui --film films/<film_id> --triage
 afp-film review --film films/<film_id> --ingest batch_reviews.json
 ```
 
-- `triage` scans evenly across the full clip duration (including the tail frame) and verifies `output_sha256`.
+- `triage` scans evenly across the full clip duration (including the tail frame) and verifies `output_sha256`. It caches results at `<film>/media/triage/<take_id>.json` and flags optical and acoustic risks (`FROZEN_TAKE_RISK`, `LUMA_FLICKER_SPIKE`, `SPEECH_TRUNCATED_AT_TAIL`, `AUDIO_CLIPPING_RISK`).
 - `review-ui --triage` builds a self-contained local `<film>/media/review_ui/index.html` viewer (playback `1x`/`1.5x`/`2x`, scene/triage filters, explicit `Mark All Clean Pending PASS`, required `REL_*` prompts) and exports a `batch_reviews.json` array accepted directly by `review --ingest` without bypassing human QC or `refuse_bot`. Review reframes automatically expand to matching EDL `event_id`s when `05_edit.json` exists.
+
+## 4.1 Dialogue STT Verification & Subtitle Auto-Wrapping
+
+```bash
+afp-film dialoguecheck --film films/<film_id>                          # auto-selects engine (Vosk + Whisper second opinion)
+afp-film dialoguecheck --film films/<film_id> --engine faster-whisper  # explicit offline faster-whisper-small.en
+afp-film titles --film films/<film_id> --render --jobs 4               # parallel speech window computation + balanced wrap
+```
+
+- **Dual-Engine Speech Recognition:** `dialoguecheck` decodes audio in a single 16kHz mono pass, multithreads Kaldi recognizers with zero FFmpeg process churn, and automatically queries a cached offline `faster-whisper-small.en` model for second-opinion verification on low-confidence phrases without incurring API spend.
+- **Balanced Subtitle Wrapping:** Subtitle text longer than 1120px is automatically split across two balanced lines with vertically adaptive translucent backdrops, preventing text from clipping against the 1280px frame edge. Lines `<= 1120px` remain pixel-identical to prior renders.
 
 ## 5. Scene Incremental Conform, Lock & Parallel Finishing (`16:9` Default)
 

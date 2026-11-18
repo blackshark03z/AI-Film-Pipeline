@@ -90,11 +90,18 @@ class CapabilityRouter:
             ),
         }
 
-    def checkpoint_plan(self, pkg: Any) -> dict[str, Any]:
-        results = evaluate_gates(pkg)
+    def checkpoint_plan(
+        self,
+        pkg: Any,
+        *,
+        wave_info: dict[str, Any] | None = None,
+        gate_results: list[Any] | None = None,
+    ) -> dict[str, Any]:
+        results = gate_results if gate_results is not None else evaluate_gates(pkg)
         gates = {r.gate: r.status for r in results}
         shots = pkg.typed.get("shots")
-        wave_info = WaveDAGScheduler(pkg).plan_waves() if shots is not None else {"accepted_count": 0, "total_generations": 0}
+        if wave_info is None:
+            wave_info = WaveDAGScheduler(pkg).plan_waves() if shots is not None else {"accepted_count": 0, "total_generations": 0}
 
         if all(gates.get(g) == "PASS" for g in ("1", "2", "3")):
             cp1_status = "APPROVED"

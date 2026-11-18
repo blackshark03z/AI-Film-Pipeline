@@ -203,17 +203,39 @@ def save_header(root: str | Path, header: FilmHeader) -> Path:
     return path
 
 
+def _archive_has_portrait(root: Path) -> bool:
+    """True when an already-delivered archive of `root` ships `portrait_9x16` (protects historical dual-aspect custody)."""
+    try:
+        dpath = root / "07_delivery.json"
+        if not dpath.is_file():
+            return False
+        rel = (json.loads(dpath.read_text(encoding="utf-8")).get("delivery") or {}).get("manifest")
+        manifest_path = (root / rel) if rel else (root / "delivery" / "MANIFEST.json")
+        if not manifest_path.is_file():
+            return False
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        masters = manifest.get("masters")
+        return isinstance(masters, dict) and "portrait_9x16" in masters
+    except (OSError, ValueError, TypeError):
+        return False
+
+
 def wants_portrait(pkg_or_root: Any) -> bool:
-    """True when a package opts into 9:16 portrait delivery; mock roots without film.json keep legacy behavior."""
+    """True when a package opts into 9:16 portrait delivery; mock roots without film.json or legacy portrait archives keep 9:16."""
     header = getattr(pkg_or_root, "header", None)
-    if header is not None and hasattr(header, "portrait_9x16"):
-        return bool(header.portrait_9x16)
     root = Path(pkg_or_root.root if hasattr(pkg_or_root, "root") else pkg_or_root)
+    if header is not None and hasattr(header, "portrait_9x16"):
+        fields_set = getattr(header, "model_fields_set", set()) or set()
+        if "portrait_9x16" in fields_set or bool(header.portrait_9x16):
+            return bool(header.portrait_9x16)
+        return _archive_has_portrait(root)
     header_path = root / "film.json"
     if not header_path.is_file():
         return True
     try:
         data = json.loads(header_path.read_text(encoding="utf-8"))
-        return bool(data.get("portrait_9x16", False)) if isinstance(data, dict) else False
+        if isinstance(data, dict) and "portrait_9x16" in data:
+            return bool(data["portrait_9x16"])
+        return _archive_has_portrait(root)
     except (OSError, ValueError):
         return False

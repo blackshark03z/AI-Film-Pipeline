@@ -20,18 +20,20 @@ Assets used (sfx, music) are recorded with their sha256 so P5-02 can check them 
 from __future__ import annotations
 
 import array
+from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 import math
 import re
 import subprocess
-import tempfile
 from pathlib import Path
 from typing import Any
 
 from pydantic import Field
 
 from film_pipeline.core import ContractModel
+from film_pipeline.production.ffjoin import render_workers
+from film_pipeline.production.runtime import atomic_json, scratch_tempdir
 
 SR = 48000
 TONES = (  # keywords of room_tone -> (noise colour, low-pass Hz, hum Hz or 0)
@@ -66,6 +68,7 @@ class MixPlan(ContractModel):
     target_lufs: float = -14.0
     true_peak_db: float = -1.0
     lufs_tolerance: float = 1.0
+    dialogue_cleanup: bool = False   # opt-in highpass=80Hz + afftdn=-24dB on dialogue stem
     music: list[MusicCue] = Field(default_factory=list)
 
 
@@ -90,15 +93,16 @@ def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
 
 
-def _ff(*args: str) -> None:
-    with tempfile.TemporaryDirectory() as tmp:
+def _ff(*args: str, timeout_s: float = 900.0) -> None:
+    with scratch_tempdir(prefix="afp_mix_ff_") as tmp_dir:
         argv = list(args)
         if "-filter_complex" in argv:
             index = argv.index("-filter_complex")
-            graph = Path(tmp) / "mix.filter"
+            graph = tmp_dir / "mix.filter"
             graph.write_text(argv[index + 1], encoding="utf-8")
             argv[index:index + 2] = ["-/filter_complex", str(graph)]
-        subprocess.run(["ffmpeg", "-v", "error", "-nostats", "-y", *argv], check=True, capture_output=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-nostats", "-y", *argv],
+                       check=True, capture_output=True, timeout=timeout_s)
 
 
 def tone_for(text: str) -> tuple[str, int, int]:
@@ -139,8 +143,8 @@ def calibrated_bed(tone: tuple[str, int, int], seconds: float, seed: int, lufs: 
     hum_in = ["-f", "lavfi", "-t", f"{seconds:.3f}", "-i", f"sine=frequency={hum}:sample_rate={SR}"] if hum else []
     graph = (f"[0:a]lowpass=f={lowpass}[n];[1:a]volume=-26dB[h];[n][h]amix=inputs=2:normalize=0:duration=first,"
              f"aformat=channel_layouts=stereo[o]") if hum else f"[0:a]lowpass=f={lowpass},aformat=channel_layouts=stereo[o]"
-    with tempfile.TemporaryDirectory() as tmp:
-        raw = Path(tmp) / "raw.wav"
+    with scratch_tempdir(prefix="afp_amb_bed_", root=out.parent) as tmp_dir:
+        raw = tmp_dir / "raw.wav"
         _ff("-f", "lavfi", "-i", source, *hum_in, "-filter_complex", graph, "-map", "[o]", "-c:a", "pcm_f32le", str(raw))
         measured = measure_ebur128(raw)["integrated_lufs"]
         _ff("-i", str(raw), "-af", f"volume={lufs - measured:.3f}dB", "-c:a", "pcm_f32le", str(out))
@@ -185,7 +189,7 @@ def _frames_db(path: Path, hop_s: float = 0.1, start_s: float = 0.0, end_s: floa
     """RMS in dBFS per hop (mono mix), via 8 kHz s16 (no numpy needed); optionally only [start_s, end_s]."""
     window_args = ["-ss", f"{start_s:.3f}"] + (["-t", f"{end_s - start_s:.3f}"] if end_s is not None else [])
     raw = subprocess.run(["ffmpeg", "-v", "error", *window_args, "-i", str(path), "-vn", "-ac", "1", "-ar", "8000",
-                          "-f", "s16le", "-"], capture_output=True, check=True).stdout
+                          "-f", "s16le", "-"], capture_output=True, check=True, timeout=600).stdout
     samples = array.array("h")
     samples.frombytes(raw[: len(raw) // 2 * 2])
     hop = int(8000 * hop_s)
@@ -231,19 +235,32 @@ def build_stems(pkg: Any, section: Any, cut: Path, stems_dir: Path, plan: MixPla
     dialogue = stems_dir / "dialogue.wav"
     # The picture is the clock: the cut's own audio may end a few frames before its picture, so pad it to the planned
     # length (a short dialogue stem would shorten the whole mix through amix duration=first).
-    _ff("-i", str(cut), "-vn", "-ac", "2", "-ar", str(SR), "-af", f"apad=whole_dur={total:.6f}", "-t", f"{total:.6f}",
+    cleanup_chain = "highpass=f=80,afftdn=nf=-24," if plan.dialogue_cleanup else ""
+    _ff("-i", str(cut), "-vn", "-ac", "2", "-ar", str(SR),
+        "-af", f"{cleanup_chain}apad=whole_dur={total:.6f}", "-t", f"{total:.6f}",
         "-c:a", "pcm_s16le", str(dialogue))
 
     spans = scene_spans(pkg, section, planned)
     layers, used_ambience = [], []
-    with tempfile.TemporaryDirectory() as tmp:
-        for index, span in enumerate(spans, 1):
-            length = span["end_s"] - span["start_s"]
-            tone = tone_for(span["room_tone"])
-            bed = calibrated_bed(tone, length, seed=index, lufs=plan.ambience_lufs, out=Path(tmp) / f"amb{index}.wav")
+    with scratch_tempdir(prefix="afp_amb_stems_", root=root) as tmp_dir:
+        def _build_bed(item: tuple[int, dict[str, Any]]) -> tuple[Path, str, dict[str, Any]]:
+            idx, sp = item
+            length = sp["end_s"] - sp["start_s"]
+            tone = tone_for(sp["room_tone"])
+            bed = calibrated_bed(tone, length, seed=idx, lufs=plan.ambience_lufs, out=tmp_dir / f"amb{idx}.wav")
             fade = min(EDGE_FADE_S, length / 2)
-            layers.append((bed, _timed("{in}", "{out}", span["start_s"], fade, fade, length)))
-            used_ambience.append({**span, "tone": list(tone)})
+            return bed, _timed("{in}", "{out}", sp["start_s"], fade, fade, length), {**sp, "tone": list(tone)}
+
+        indexed_spans = list(enumerate(spans, 1))
+        workers = render_workers()
+        if len(indexed_spans) > 1 and workers > 1:
+            with ThreadPoolExecutor(max_workers=min(workers, len(indexed_spans))) as pool:
+                built_beds = list(pool.map(_build_bed, indexed_spans))
+        else:
+            built_beds = [_build_bed(item) for item in indexed_spans]
+        for bed, timed_chain, amb_row in built_beds:
+            layers.append((bed, timed_chain))
+            used_ambience.append(amb_row)
         ambience = _stem(layers, total, stems_dir / "ambience.wav") if layers else _silent(total, stems_dir / "ambience.wav")
 
     # effects: placed only when an asset exists
@@ -310,8 +327,7 @@ def mix_stems(stems: dict[str, str], stems_dir: Path, plan: MixPlan, total_s: fl
 
 def _write_report(root: Path, report: dict[str, Any]) -> dict[str, Any]:
     path = audio_dir(root) / "mix.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_json(path, report)
     report["report"] = str(path)
     return report
 

@@ -13,11 +13,11 @@ it as the post item ``color`` (``film.py grade``), stamped with the picture lock
 """
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 import json
 import math
 import statistics
 import subprocess
-import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -25,6 +25,8 @@ from pydantic import Field
 
 from film_pipeline.core import ContractModel
 from film_pipeline.production.edit import gain_filter, resolve_clip
+from film_pipeline.production.ffjoin import render_workers
+from film_pipeline.production.runtime import atomic_json, scratch_tempdir
 
 SAMPLE_FRAMES = 12
 LUMA = (0.2126, 0.7152, 0.0722)
@@ -36,6 +38,7 @@ class ColorPlan(ContractModel):
     max_gain: float = Field(default=0.25, ge=0.0, le=1.0)
     tolerance: float = Field(default=6.0, gt=0)                # 0-255 levels: "matched" when every channel is this close
     look: str = ""                                             # global grade filter; empty: drama.post.GRADE
+    group_by_camera: bool = False                              # match per camera setup (side/subject) within each scene
 
 
 def plan_path(root: Path) -> Path:
@@ -51,7 +54,7 @@ def frame_stats(clip: Path, frames: int = SAMPLE_FRAMES) -> dict[str, float]:
     """Mean R, G, B (0-255) and luma over ``frames`` evenly spaced frames, measured on a 32x18 reduction."""
     raw = subprocess.run(
         ["ffmpeg", "-v", "error", "-i", str(clip), "-vf", "fps=3,scale=32:18:flags=area", "-frames:v", str(frames),
-         "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
+         "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True, timeout=120).stdout
     pixels = len(raw) // 3
     if pixels == 0:
         raise ValueError(f"{clip}: no frames decoded")
@@ -113,20 +116,41 @@ def used_takes(pkg: Any) -> list[dict[str, str]]:
     return out
 
 
+def _camera_setup_key(pkg: Any, gid: str) -> str:
+    shots = pkg.typed.get("shots")
+    decl = next((g for g in getattr(shots, "generations", []) if g.generation_id == gid), None)
+    if decl is None:
+        return "default"
+    side = getattr(getattr(decl, "camera", None), "side", "") or "ESTABLISHED"
+    focus = decl.subject or decl.coverage
+    return f"{side}:{focus}"
+
+
 def match(pkg: Any, *, clips_dir: Path | None = None, plan: ColorPlan | None = None,
-          verify: bool = True) -> dict[str, Any]:
+          verify: bool = True, jobs: int | None = None) -> dict[str, Any]:
     """Measure, choose references, compute gains and (``verify``) re-measure corrected copies for the after-numbers."""
     root = Path(pkg.root)
     plan = plan or load_plan(root)
     takes = used_takes(pkg)
     problems: list[dict[str, str]] = []
     stats: dict[str, dict[str, float]] = {}
+    workers = render_workers(jobs)
+    present_takes: list[tuple[dict[str, str], Path]] = []
     for t in takes:
         clip = resolve_clip(root, t["output_file"], clips_dir)
         if not clip.is_file():
             problems.append({"code": "CLIP_MISSING", "severity": "BLOCK", "detail": f"{t['take_id']}: {clip} not found"})
             continue
-        stats[t["take_id"]] = frame_stats(clip)
+        present_takes.append((t, clip))
+    if len(present_takes) > 1 and workers > 1:
+        with ThreadPoolExecutor(max_workers=min(workers, len(present_takes))) as pool:
+            measured_list = list(pool.map(lambda pair: frame_stats(pair[1]), present_takes))
+        for (t, _), st in zip(present_takes, measured_list):
+            stats[t["take_id"]] = st
+    else:
+        for t, clip in present_takes:
+            stats[t["take_id"]] = frame_stats(clip)
+
     scenes: dict[str, list[dict[str, str]]] = {}
     for t in takes:
         scenes.setdefault(t["scene_id"], []).append(t)
@@ -141,13 +165,27 @@ def match(pkg: Any, *, clips_dir: Path | None = None, plan: ColorPlan | None = N
             problems.append({"code": "REFERENCE_UNKNOWN", "severity": "WARN",
                              "detail": f"{scene_id}: reference shot {wanted} has no used take; median used"})
         if ref_take is not None:
-            reference, source = dict(stats[ref_take["take_id"]]), ref_take["generation_id"]
+            scene_ref, scene_source = dict(stats[ref_take["take_id"]]), ref_take["generation_id"]
         else:
-            reference = {c: round(statistics.median(stats[m["take_id"]][c] for m in have), 3) for c in ("r", "g", "b")}
-            reference["luma"] = round(sum(w * reference[c] for w, c in zip(LUMA, "rgb")), 3)
-            source = "median"
+            scene_ref = {c: round(statistics.median(stats[m["take_id"]][c] for m in have), 3) for c in ("r", "g", "b")}
+            scene_ref["luma"] = round(sum(w * scene_ref[c] for w, c in zip(LUMA, "rgb")), 3)
+            scene_source = "median"
+
+        setup_groups: dict[str, list[dict[str, str]]] = {}
+        if plan.group_by_camera and ref_take is None:
+            for m in have:
+                setup_groups.setdefault(_camera_setup_key(pkg, m["generation_id"]), []).append(m)
+
         for m in have:
             measured = stats[m["take_id"]]
+            reference, source = scene_ref, scene_source
+            if plan.group_by_camera and ref_take is None:
+                sk = _camera_setup_key(pkg, m["generation_id"])
+                peers = setup_groups.get(sk, [])
+                if len(peers) >= 2:
+                    reference = {c: round(statistics.median(stats[p["take_id"]][c] for p in peers), 3) for c in ("r", "g", "b")}
+                    reference["luma"] = round(sum(w * reference[c] for w, c in zip(LUMA, "rgb")), 3)
+                    source = f"setup:{sk}"
             skipped = m["generation_id"] in plan.skip or len(have) == 1
             gains = None if skipped else gains_for(measured, reference, plan.max_gain)
             rows.append({"generation_id": m["generation_id"], "scene_id": scene_id, "take_id": m["take_id"],
@@ -160,18 +198,37 @@ def match(pkg: Any, *, clips_dir: Path | None = None, plan: ColorPlan | None = N
             if gains is not None and any(abs(g - 1.0) > 1e-6 for g in gains):
                 corrections[m["take_id"]] = gains
     if verify:
-        with tempfile.TemporaryDirectory() as tmp:
+        take_by_id = {t["take_id"]: t for t in takes}
+        with scratch_tempdir(prefix="afp_color_", root=root) as tmp_dir:
+            to_verify: list[dict[str, Any]] = []
             for row in rows:
-                take = next(t for t in takes if t["take_id"] == row["take_id"])
                 if row["gains"] is None:
                     row["after"], row["deviation_after"] = row["measured"], row["deviation_before"]
-                    continue
-                dst = Path(tmp) / f"{row['take_id']}.mp4"
-                subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(resolve_clip(root, take["output_file"], clips_dir)),
-                                "-vf", gain_filter(tuple(row["gains"])), "-an", "-c:v", "libx264", "-crf", "12",
-                                "-pix_fmt", "yuv420p", str(dst)], check=True)
-                row["after"] = frame_stats(dst)
-                row["deviation_after"] = deviation(row["after"], row["reference_stats"])
+                else:
+                    to_verify.append(row)
+
+            def _verify_one(row: dict[str, Any]) -> tuple[dict[str, float], float]:
+                take = take_by_id[row["take_id"]]
+                dst = tmp_dir / f"{row['take_id']}.mp4"
+                subprocess.run(
+                    ["ffmpeg", "-v", "error", "-y", "-i", str(resolve_clip(root, take["output_file"], clips_dir)),
+                     "-vf", gain_filter(tuple(row["gains"])), "-an", "-c:v", "libx264", "-preset", "fast", "-crf", "12",
+                     "-pix_fmt", "yuv420p", str(dst)],
+                    check=True,
+                    timeout=180,
+                )
+                after_st = frame_stats(dst)
+                dst.unlink(missing_ok=True)
+                return after_st, deviation(after_st, row["reference_stats"])
+
+            if len(to_verify) > 1 and workers > 1:
+                with ThreadPoolExecutor(max_workers=min(workers, len(to_verify))) as pool:
+                    verified_results = list(pool.map(_verify_one, to_verify))
+                for row, (after_st, dev_after) in zip(to_verify, verified_results):
+                    row["after"], row["deviation_after"] = after_st, dev_after
+            else:
+                for row in to_verify:
+                    row["after"], row["deviation_after"] = _verify_one(row)
     for row in rows:
         after = row.get("deviation_after", row["deviation_before"])
         row["matched"] = after <= plan.tolerance
@@ -193,9 +250,7 @@ def corrections_of(report: dict[str, Any]) -> dict[str, tuple[float, float, floa
 
 def write_report(pkg: Any, report: dict[str, Any]) -> Path:
     path = Path(pkg.root) / "color" / "color.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return path
+    return atomic_json(path, report)
 
 
 def load_report(root: Path) -> dict[str, Any] | None:

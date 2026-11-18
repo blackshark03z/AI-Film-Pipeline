@@ -26,8 +26,10 @@ from pydantic import Field
 
 from ..core import ContractModel
 from ..production.ffjoin import media_timeout, run_ffmpeg, video_encode_args
+from ..production.runtime import scratch_tempdir
 
 W, H, FPS = 1280, 720, 24
+SUBTITLE_MAX_W = 1120
 FONT = "C:/Windows/Fonts/arial.ttf"
 BOLD = "C:/Windows/Fonts/arialbd.ttf"
 GRADE = ("eq=contrast=1.04:saturation=0.92:gamma=0.98,"
@@ -181,19 +183,69 @@ def ai_label_png(path: Path, text: str = "AI-generated", *, size: int = 20,
     return path
 
 
+def _wrap_subtitle_lines(text: str, draw, font, max_w: int = SUBTITLE_MAX_W) -> list[str]:
+    """Wrap subtitle paragraphs into balanced lines <= max_w px."""
+    wrapped: list[str] = []
+    for para in text.splitlines() or [""]:
+        para_clean = para.strip()
+        if not para_clean or draw.textlength(para_clean, font=font) <= max_w:
+            wrapped.append(para_clean)
+            continue
+        words = para_clean.split()
+        best_two: tuple[float, str, str] | None = None
+        for k in range(1, len(words)):
+            l1 = " ".join(words[:k])
+            l2 = " ".join(words[k:])
+            w1 = draw.textlength(l1, font=font)
+            w2 = draw.textlength(l2, font=font)
+            if w1 <= max_w and w2 <= max_w:
+                cand = (max(w1, w2), l1, l2)
+                if best_two is None or cand[0] < best_two[0]:
+                    best_two = cand
+        if best_two is not None:
+            wrapped.extend((best_two[1], best_two[2]))
+            continue
+        line = ""
+        for word in words:
+            trial = f"{line} {word}".strip()
+            if line and draw.textlength(trial, font=font) > max_w:
+                wrapped.append(line)
+                line = word
+            else:
+                line = trial
+        if line:
+            wrapped.append(line)
+    return wrapped or [""]
+
+
 def subtitle_png(path: Path, text: str, *, size: int = 34,
-                 fonts: Fonts = DEFAULT_FONTS) -> Path:
-    """Centered subtitle with a translucent box and a black stroke."""
+                 fonts: Fonts = DEFAULT_FONTS, max_w: int = SUBTITLE_MAX_W) -> Path:
+    """Centered subtitle with a translucent box, black stroke, and balanced wrapping for long cues."""
     from PIL import Image, ImageDraw, ImageFont
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     f = ImageFont.truetype(fonts[0], size)
-    w = d.textlength(text, font=f)
-    x, y = (W - w) / 2, H - 80
-    d.rectangle((x - 12, y - 6, x + w + 12, y + size + 10),
-                fill=(0, 0, 0, 140))
-    d.text((x, y), text, font=f, fill=(255, 255, 255, 255),
-           stroke_width=2, stroke_fill=(0, 0, 0, 255))
+    if "\n" not in text and d.textlength(text, font=f) <= max_w:
+        w = d.textlength(text, font=f)
+        x, y = (W - w) / 2, H - 80
+        d.rectangle((x - 12, y - 6, x + w + 12, y + size + 10),
+                    fill=(0, 0, 0, 140))
+        d.text((x, y), text, font=f, fill=(255, 255, 255, 255),
+               stroke_width=2, stroke_fill=(0, 0, 0, 255))
+    else:
+        lines = _wrap_subtitle_lines(text, d, f, max_w=max_w)
+        step = int(round(size * 1.32))
+        bottom_y = H - 80
+        top_y = bottom_y - step * (len(lines) - 1)
+        widths = [d.textlength(line, font=f) for line in lines]
+        block_w = max(widths) if widths else 0.0
+        bx0 = max(12.0, (W - block_w) / 2 - 12)
+        bx1 = min(W - 12.0, (W + block_w) / 2 + 12)
+        d.rectangle((bx0, top_y - 6, bx1, bottom_y + size + 10),
+                    fill=(0, 0, 0, 140))
+        for idx, (line, lw) in enumerate(zip(lines, widths)):
+            d.text(((W - lw) / 2, top_y + idx * step), line, font=f,
+                   fill=(255, 255, 255, 255), stroke_width=2, stroke_fill=(0, 0, 0, 255))
     path.parent.mkdir(parents=True, exist_ok=True)
     img.save(path)
     return path
@@ -280,8 +332,7 @@ def assemble(clips: list[Path], out: Path, *, cues: list[SubtitleCue],
     abs_ovs = [(offs[o.generation_id] + o.start_s,
                 offs[o.generation_id] + o.end_s, o) for o in overlays]
     out.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory() as tmp:
-        cards = Path(tmp)
+    with scratch_tempdir(prefix="afp_assemble_", root=out.parent) as cards:
         title = None if _body_only else title_card(cards / "title.png", title_lines, fonts)
         end = None if _body_only else title_card(cards / "end.png", end_lines, fonts)
         label = ai_label_png(cards / "ai_label.png", label_text, fonts=fonts)
@@ -405,14 +456,14 @@ def normalize_loudness(path: Path, *, target_i: float = -14.0,
     ceiling_db = true_peak + 0.3
     limit_db = min(-3.5, true_peak - 2.0)
     measured = {"integrated_lufs": target_i, "peak_dbfs": ceiling_db}
-    with tempfile.TemporaryDirectory() as tmp:
-        p2 = Path(tmp) / "pass2.wav"
+    with scratch_tempdir(prefix="afp_loudnorm_", root=path.parent) as tmp_dir:
+        p2 = tmp_dir / "pass2.wav"
         _run("-i", str(path), "-vn", "-af", f"{linear},aresample=48000",
              "-c:a", "pcm_f32le", str(p2), timeout_s=timeout_s)
         pass2_lufs = measure_ebur128(p2, timeout_s=min(timeout_s, 300.0))["integrated_lufs"]
         gain = (target_i - pass2_lufs) if math.isfinite(pass2_lufs) else 0.0
         gain = max(-max_gain_db, min(max_gain_db, gain))
-        p3 = Path(tmp) / "pass3.wav"
+        p3 = tmp_dir / "pass3.wav"
         tmp_out = path.with_name(path.stem + ".norm" + path.suffix)
         for _ in range(3):
             limit_lin = max(0.0625, min(1.0, 10 ** (limit_db / 20.0)))

@@ -138,7 +138,8 @@ def main(argv: list[str] | None = None) -> int:
             sub.add_argument("--sync-gates", action="store_true",
                              help="sync evaluated gate statuses into film.json['gates'] when safe")
         if name == "status":
-            sub.add_argument("--all", type=Path, metavar="FILMS_DIR", help="one row per package under FILMS_DIR: gates, credits, usable seconds, retake rate, next action")
+            sub.add_argument("--all", nargs="?", const=DEFAULT_FILMS_DIR, type=Path, metavar="FILMS_DIR",
+                             help="one row per package under FILMS_DIR (default: films/): gates, credits, usable seconds, retake rate, next action")
             sub.add_argument("--package", type=Path, help="restore check of a delivery/ archive, wherever it was copied to: every hash, the package, the disclosure, missing dependencies")
     plan = actions.add_parser("plan", help="write prompts, start-frame still prompts, storyboard and gate3.json")
     plan.add_argument("--film", required=True, type=Path)
@@ -198,7 +199,9 @@ def main(argv: list[str] | None = None) -> int:
     gn.add_argument("--no-auto-resend", action="store_true",
                     help="do not resend once after a provider failure (P18-03; default: resend once)")
     gn.add_argument("--critic", action="store_true",
-                    help="run PreSendCritic check on this generation before submitting")
+                    help="run blocking PreSendCritic check on this generation before submitting")
+    gn.add_argument("--no-critic", action="store_true",
+                    help="skip advisory PreSendCritic warnings on generate")
     mg = actions.add_parser("muse", help="browser-assisted Muse shot handoff; no automatic generation")
     mg.add_argument("verb", choices=["prepare", "dispatch", "ingest"])
     mg.add_argument("--film", required=True, type=Path)
@@ -270,8 +273,10 @@ def main(argv: list[str] | None = None) -> int:
     tt.add_argument("--hwaccel", action="store_true", default=None, help="use GPU h264_nvenc when available")
     mq = actions.add_parser("mastercheck", help="technical QC of a rendered master (black/freeze/duplicate frames, format, loudness, clipping, sync, colour, faststart) -> qc/master_qc.json")
     mq.add_argument("--film", required=True, type=Path)
-    dc = actions.add_parser("dialoguecheck", help="advisory STT check that the actors said the scripted lines (Vosk, en only) -> qc/dialogue_stt.json")
+    dc = actions.add_parser("dialoguecheck", help="advisory STT check that the actors said the scripted lines (Vosk + offline faster-whisper, en only) -> qc/dialogue_stt.json")
     dc.add_argument("--film", required=True, type=Path)
+    dc.add_argument("--engine", choices=["auto", "vosk", "faster-whisper"], default=None,
+                    help="STT engine mode (default: auto = Vosk fast pass + offline faster-whisper verification)")
     mq.add_argument("--video", type=Path, help="the master (default <film>/media/cut/mixed.mp4)")
     mq.add_argument("--cut-report", type=Path, help="the .cut.json holding the planned clock (default: next to the video, else media/cut/rough_cut.cut.json)")
     vs = actions.add_parser("versions", help="thumbnail candidates, metadata draft with AI disclosure, and opt-in 9:16 version -> versions/ (nothing is published)")
@@ -739,6 +744,7 @@ def _run(args, rest, parser) -> int:
         if args.action == "generate":
             from film_pipeline.production.generate import generate
             critic_report = None
+            critic_warnings: list[dict] = []
             if getattr(args, "critic", False):
                 from film_pipeline.agentic.pre_send_critic import PreSendCritic
 
@@ -755,6 +761,14 @@ def _run(args, rest, parser) -> int:
                         "critic": critic_report,
                     })
                     return 1
+            elif not getattr(args, "no_critic", False) and "preprod" in pkg.typed and "shots" in pkg.typed:
+                from film_pipeline.agentic.pre_send_critic import PreSendCritic
+
+                plan_dir_for_critic = args.plan_out or (Path(pkg.root) / "media" / "plan")
+                adv = PreSendCritic().inspect(
+                    pkg, plan_dir=plan_dir_for_critic, include_accepted=True, generation_id=args.gid
+                )
+                critic_warnings = [f for f in adv["findings"] if f.get("severity") == "WARN"]
             try:
                 done = generate(pkg, args.gid, dry_run=args.dry_run, plan_out=args.plan_out, stills_dir=args.stills,
                                 start_token=args.start_token, backlog=args.backlog, end_token=args.end_token,
@@ -764,6 +778,8 @@ def _run(args, rest, parser) -> int:
                 return 2
             if critic_report is not None:
                 done["critic"] = critic_report
+            elif critic_warnings:
+                done["critic_warnings"] = critic_warnings
             _emit(done)
             if args.dry_run:
                 return 0
@@ -851,7 +867,7 @@ def _run(args, rest, parser) -> int:
             from film_pipeline.production import edit as ed_mod
             from film_pipeline.production.mix import stamp_post_item
             try:
-                report = col_mod.match(pkg, clips_dir=args.clips)
+                report = col_mod.match(pkg, clips_dir=args.clips, jobs=args.jobs)
             except ValueError as exc:
                 _emit({"error": str(exc)})
                 return 1
@@ -894,7 +910,7 @@ def _run(args, rest, parser) -> int:
         if args.action == "dialoguecheck":
             from film_pipeline.production import dialogue_stt as ds_mod
             from film_pipeline.production.mix import stamp_post_item
-            report = ds_mod.check(pkg)
+            report = ds_mod.check(pkg, engine_mode=args.engine) if args.engine else ds_mod.check(pkg)
             stamp_post_item(pkg, "dialogue_stt", {"report": "qc/dialogue_stt.json", "ok": report["ok"], "summary": report["summary"]})
             _emit(report)
             return 0
@@ -955,7 +971,7 @@ def _run(args, rest, parser) -> int:
             from film_pipeline.production.mix import stamp_post_item
             try:
                 prepared = ti_mod.prepare(pkg, clips_dir=args.clips, generators=_generators(args),
-                                          langs=tuple(x for x in args.langs.split(",") if x))
+                                          langs=tuple(x for x in args.langs.split(",") if x), jobs=args.jobs)
             except ValueError as exc:
                 _emit({"error": str(exc)})
                 return 1
@@ -1054,11 +1070,29 @@ def _run(args, rest, parser) -> int:
                 SceneIncrementalConformer,
                 WaveDAGScheduler,
             )
-            waves = WaveDAGScheduler(pkg, optimistic_lookahead=args.lookahead).plan_waves()
+            from film_pipeline.agentic.scheduler import hash_files_parallel
+            from film_pipeline.production.takes import load_log
+
+            root_dir = Path(pkg.root)
+            log = load_log(root_dir, pkg.header.film_id)
+            candidate_paths: list[Path] = [
+                root_dir / "media" / "takes" / Path(t.output_file).name
+                for t in log.takes
+                if t.output_file and t.output_sha256
+            ]
+            scenes_dir = root_dir / "media" / "scenes"
+            if scenes_dir.is_dir():
+                candidate_paths.extend(scenes_dir.glob("*.mkv"))
+            verified_hashes = hash_files_parallel([p for p in candidate_paths if p.is_file()])
+            waves = WaveDAGScheduler(pkg, optimistic_lookahead=args.lookahead, verified_hashes=verified_hashes).plan_waves()
             critic = PreSendCritic().inspect(pkg, plan_dir=args.plan_dir) if "preprod" in pkg.typed and "shots" in pkg.typed else None
             repairs = CausalRepairRouter().diagnose_take_log(pkg)
-            conform = SceneIncrementalConformer().scene_status(pkg) if "shots" in pkg.typed else None
-            checkpoints = CapabilityRouter().checkpoint_plan(pkg)
+            conform = (
+                SceneIncrementalConformer().scene_status(pkg, verified_hashes=verified_hashes)
+                if "shots" in pkg.typed
+                else None
+            )
+            checkpoints = CapabilityRouter().checkpoint_plan(pkg, wave_info=waves)
             report = {
                 "film_id": pkg.header.film_id,
                 "readonly": True,

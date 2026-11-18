@@ -22,6 +22,7 @@ group PASSes. The record also keeps the measured numbers. Technical evidence onl
 from __future__ import annotations
 
 import array
+from concurrent.futures import ThreadPoolExecutor
 import json
 import re
 import statistics
@@ -32,7 +33,9 @@ from typing import Any
 from pydantic import Field
 
 from film_pipeline.core import ContractModel
+from film_pipeline.production.ffjoin import media_timeout
 from film_pipeline.production.qc_model import GroupCheck
+from film_pipeline.production.runtime import atomic_json
 
 GROUPS = ("technical", "audio", "sync", "color", "delivery")
 REVIEWER = "auto:master_qc"
@@ -105,7 +108,7 @@ def spec_for(pkg: Any | None) -> MasterSpec:
 
 def probe(video: Path) -> dict[str, Any]:
     done = subprocess.run(["ffprobe", "-v", "error", "-show_streams", "-show_format", "-of", "json", str(video)],
-                          capture_output=True, text=True, check=True)
+                          capture_output=True, text=True, check=True, timeout=120)
     return json.loads(done.stdout)
 
 
@@ -114,10 +117,11 @@ def _rate(text: str) -> float:
     return float(a) / float(b or 1) if float(b or 1) else 0.0
 
 
-def frame_series(video: Path) -> dict[str, Any]:
+def frame_series(video: Path, *, timeout_s: float = 600.0) -> dict[str, Any]:
     """Per-frame mean luma and mean absolute difference to the previous frame, on a 32x18 gray reduction."""
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(video), "-an", "-vf", f"scale={AN_W}:{AN_H}:flags=area,format=gray",
-                          "-fps_mode", "passthrough", "-f", "rawvideo", "-"], capture_output=True, check=True).stdout
+                          "-fps_mode", "passthrough", "-f", "rawvideo", "-"],
+                         capture_output=True, check=True, timeout=timeout_s).stdout
     size = AN_W * AN_H
     luma, diff, previous = [], [], None
     for i in range(0, len(raw) - size + 1, size):
@@ -220,10 +224,10 @@ def video_checks(series: dict[str, Any], fps: float, spec: MasterSpec, windows: 
     return findings, metrics
 
 
-def clipping(video: Path, spec: MasterSpec) -> list[float]:
+def clipping(video: Path, spec: MasterSpec, *, timeout_s: float = 600.0) -> list[float]:
     """Seconds at which a run of full-scale samples starts."""
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(video), "-vn", "-ac", "1", "-ar", "48000", "-f", "s16le", "-"],
-                         capture_output=True, check=True).stdout
+                         capture_output=True, check=True, timeout=timeout_s).stdout
     samples = array.array("h")
     samples.frombytes(raw[: len(raw) // 2 * 2])
     hits, chunk = [], 480
@@ -240,10 +244,10 @@ def clipping(video: Path, spec: MasterSpec) -> list[float]:
     return hits
 
 
-def silent_gaps(video: Path, spec: MasterSpec) -> list[tuple[float, float]]:
+def silent_gaps(video: Path, spec: MasterSpec, *, timeout_s: float = 600.0) -> list[tuple[float, float]]:
     done = subprocess.run(["ffmpeg", "-nostats", "-v", "info", "-i", str(video), "-vn", "-af",
                            f"silencedetect=noise={spec.silence_noise_db}dB:d={spec.silence_warn_s}", "-f", "null", "-"],
-                          capture_output=True, text=True, check=True)
+                          capture_output=True, text=True, check=True, timeout=timeout_s)
     gaps: list[list[float]] = []
     for line in done.stderr.splitlines():
         if (m := re.search(r"silence_start:\s*(-?[\d.]+)", line)):
@@ -254,12 +258,13 @@ def silent_gaps(video: Path, spec: MasterSpec) -> list[tuple[float, float]]:
 
 
 def audio_checks(video: Path, spec: MasterSpec, windows: dict[str, list[tuple[float, float]]], total_s: float,
-                 audio_codec: str) -> tuple[list[Finding], dict[str, Any]]:
+                 audio_codec: str, *, precomputed: dict[str, Any] | None = None) -> tuple[list[Finding], dict[str, Any]]:
     from film_pipeline.drama.post import measure_ebur128
     findings: list[Finding] = []
     if audio_codec != spec.acodec:
         findings.append(Finding(group="audio", code="ACODEC", severity="BLOCK", detail=f"audio codec {audio_codec}, wanted {spec.acodec}"))
-    loud = measure_ebur128(video)
+    t_out = media_timeout(max(10.0, total_s))
+    loud = precomputed["loud"] if precomputed and "loud" in precomputed else measure_ebur128(video, timeout_s=t_out)
     lufs, peak = loud["integrated_lufs"], loud["peak_dbfs"]
     if abs(lufs - spec.target_lufs) > spec.lufs_tol:
         findings.append(Finding(group="audio", code="LOUDNESS", severity="BLOCK",
@@ -267,12 +272,13 @@ def audio_checks(video: Path, spec: MasterSpec, windows: dict[str, list[tuple[fl
     if peak > spec.true_peak_max:
         findings.append(Finding(group="audio", code="TRUE_PEAK", severity="BLOCK",
                                 detail=f"peak {peak} dBFS above {spec.true_peak_max}"))
-    clips = clipping(video, spec)
+    clips = precomputed["clips"] if precomputed and "clips" in precomputed else clipping(video, spec, timeout_s=t_out)
     if clips:
         findings.append(Finding(group="audio", code="CLIPPING", severity="BLOCK", at_s=clips[0],
                                 detail=f"{len(clips)} clipped passage(s), first at {clips[0]} s"))
     exempt = windows["static"]
-    for a, b in silent_gaps(video, spec):
+    gaps = precomputed["gaps"] if precomputed and "gaps" in precomputed else silent_gaps(video, spec, timeout_s=t_out)
+    for a, b in gaps:
         for x, y in _outside(a, min(b, total_s), exempt):
             if y - x >= spec.silence_warn_s:
                 findings.append(Finding(group="audio", code="SILENCE_GAP", severity="WARN", at_s=round(x, 3),
@@ -296,7 +302,8 @@ def cue_offset(active: list[bool], start_s: float, end_s: float, spec: MasterSpe
     return {"coverage": round(coverage(0.0), 3), "best_shift_s": round(best, 3), "best_coverage": round(coverage(best), 3)}
 
 
-def sync_checks(root: Path, spec: MasterSpec, video_s: float, audio_s: float) -> tuple[list[Finding], dict[str, Any], bool]:
+def sync_checks(root: Path, spec: MasterSpec, video_s: float, audio_s: float, *,
+                active_precomputed: list[bool] | None = None) -> tuple[list[Finding], dict[str, Any], bool]:
     """(findings, metrics, assessed): ``assessed`` is False when there are no cues or no dialogue stem."""
     findings: list[Finding] = []
     if abs(video_s - audio_s) > spec.av_tol_s:
@@ -308,7 +315,7 @@ def sync_checks(root: Path, spec: MasterSpec, video_s: float, audio_s: float) ->
     cues = [c for c in json.loads(report.read_text(encoding="utf-8")).get("cues", []) if "abs_start_s" in c]
     if not cues:
         return findings, {"cues_checked": 0}, False
-    active = dialogue_activity(stem, spec)
+    active = active_precomputed if active_precomputed is not None else dialogue_activity(stem, spec)
     offsets = []
     for c in cues:
         r = cue_offset(active, c["abs_start_s"], c["abs_end_s"], spec)
@@ -387,7 +394,31 @@ def check_master(video: Path, *, pkg: Any | None = None, spec: MasterSpec | None
                 findings.append(Finding(group="technical", code="DURATION_MISMATCH", severity="BLOCK",
                                         detail=f"{total:.2f} s rendered, {planned:.2f} s planned (> {spec.duration_tol_s} s)"))
         windows = expected_windows(pkg, cut and {"planned": cut["planned"]})
-        vf, vm = video_checks(frame_series(video), fps, spec, windows, total)
+        t_out = media_timeout(max(10.0, total))
+        if a is not None:
+            from film_pipeline.drama.post import measure_ebur128
+            need_sync_active = False
+            stem_p = Path(pkg.root) / "audio" / "stems" / "dialogue.wav" if pkg is not None else None
+            titles_p = Path(pkg.root) / "titles" / "titles.json" if pkg is not None else None
+            if stem_p is not None and titles_p is not None and stem_p.is_file() and titles_p.is_file():
+                try:
+                    need_sync_active = any("abs_start_s" in c for c in json.loads(titles_p.read_text(encoding="utf-8")).get("cues", []))
+                except ValueError:
+                    need_sync_active = False
+            with ThreadPoolExecutor(max_workers=5 if need_sync_active else 4) as pool:
+                fut_series = pool.submit(frame_series, video, timeout_s=t_out)
+                fut_loud = pool.submit(measure_ebur128, video, timeout_s=t_out)
+                fut_clips = pool.submit(clipping, video, spec, timeout_s=t_out)
+                fut_gaps = pool.submit(silent_gaps, video, spec, timeout_s=t_out)
+                fut_active = pool.submit(dialogue_activity, stem_p, spec) if need_sync_active and stem_p is not None else None
+                series_data = fut_series.result()
+                pre_audio = {"loud": fut_loud.result(), "clips": fut_clips.result(), "gaps": fut_gaps.result()}
+                pre_active = fut_active.result() if fut_active is not None else None
+        else:
+            series_data = frame_series(video, timeout_s=t_out)
+            pre_audio = None
+            pre_active = None
+        vf, vm = video_checks(series_data, fps, spec, windows, total)
         findings += vf
         metrics.update(vm)
         if pkg is not None:
@@ -400,12 +431,13 @@ def check_master(video: Path, *, pkg: Any | None = None, spec: MasterSpec | None
                                             detail=f"film.py grade left a shot {summary['worst_after']} levels from its reference"))
         if a is not None:
             assessed["audio"] = True
-            af, am = audio_checks(video, spec, windows, total, a["codec_name"])
+            af, am = audio_checks(video, spec, windows, total, a["codec_name"], precomputed=pre_audio)
             findings += af
             metrics.update(am)
             audio_s = float(a.get("duration") or total)
-            sf, sm, assessed["sync"] = sync_checks(Path(pkg.root), spec, float(v.get("duration") or total), audio_s) \
-                if pkg is not None else ([], {"cues_checked": 0}, False)
+            sf, sm, assessed["sync"] = sync_checks(
+                Path(pkg.root), spec, float(v.get("duration") or total), audio_s, active_precomputed=pre_active
+            ) if pkg is not None else ([], {"cues_checked": 0}, False)
             if pkg is None and abs(float(v.get("duration") or total) - audio_s) > spec.av_tol_s:
                 sf = [Finding(group="sync", code="AV_DURATION", severity="BLOCK", detail="video and audio lengths differ")]
             findings += sf
@@ -440,6 +472,4 @@ def check_master(video: Path, *, pkg: Any | None = None, spec: MasterSpec | None
 
 def write_record(pkg: Any, record: MasterQc) -> Path:
     path = Path(pkg.root) / "qc" / "master_qc.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(record.model_dump_json(indent=2) + "\n", encoding="utf-8")
-    return path
+    return atomic_json(path, record.model_dump(mode="json"))

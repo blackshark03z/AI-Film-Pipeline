@@ -199,7 +199,7 @@ def finish(pkg, *, command, dry_run: bool = False, include_portrait: bool | None
         and "shots" in pkg.typed
         and bool(foley.unsourced_catalog_matches(pkg))
     )
-    steps += [("grade", ["grade"])]
+    steps += [("grade", ["grade", *( ["--jobs", str(jobs)] if jobs else [] )])]
     if needs_foley:
         steps.append(("foley", ["foley"]))
     cut_report = str(root / "media/cut/titled_cut.cut.json")

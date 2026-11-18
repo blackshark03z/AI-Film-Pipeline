@@ -238,7 +238,15 @@ def _cut(pkg: Any) -> dict[str, Any] | None:
 
 def next_action(report: dict[str, Any]) -> str:
     gates, production = report["gates"], report.get("production", {})
-    if report.get("pending_sends"):
+    if gates.get("6", {}).get("status") == "PASS" and all(g["status"] == "PASS" for g in gates.values()):
+        return "Nothing open on the pipeline side: delivery accepted by the Owner"
+    needs_generation = (
+        gates.get("4", {}).get("status") != "PASS"
+        or bool(production.get("not_rendered"))
+        or bool(production.get("open_retakes"))
+        or bool(production.get("awaiting_review"))
+    )
+    if report.get("pending_sends") and needs_generation:
         return f"Reconcile existing send {report['pending_sends'][0]['take_id']} before another Generate"
     for gid, g in gates.items():
         if g["status"] == "BLOCK" and int(gid) <= 3:

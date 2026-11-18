@@ -41,6 +41,7 @@ from film_pipeline.production.ffjoin import (
 )
 from film_pipeline.production.package import wants_portrait
 from film_pipeline.production.render_cache import cached as _cached_render, key_for as _render_key, save as _save_render
+from film_pipeline.production.runtime import atomic_json, scratch_tempdir
 
 PORTRAIT_H = 1280
 PORTRAIT_W = 720
@@ -73,7 +74,7 @@ def sha256_file(path: Path) -> str:
 
 def probe_size(video: Path) -> tuple[int, int, float]:
     done = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height,r_frame_rate",
-                           "-of", "json", str(video)], capture_output=True, text=True, check=True)
+                           "-of", "json", str(video)], capture_output=True, text=True, check=True, timeout=60)
     s = json.loads(done.stdout)["streams"][0]
     a, _, b = s["r_frame_rate"].partition("/")
     return int(s["width"]), int(s["height"]), float(a) / float(b or 1)
@@ -301,12 +302,9 @@ def render_portrait(source: Path, segments: list[dict[str, Any]], out: Path, hei
     workers = render_workers(jobs, hwaccel=hw)
     windows = portrait_windows(segments, fps, picture_parts)
     if len(windows) > 1:
-        import tempfile
-
         cache_dir = Path(cache_dir) if cache_dir is not None else out.parent / ".render_cache"
         audio_source = Path(audio_from) if audio_from is not None else Path(source)
-        with tempfile.TemporaryDirectory(dir=str(out.parent)) as tmp:
-            work = Path(tmp)
+        with scratch_tempdir(prefix="afp_portrait_", root=out.parent) as work:
             win_keys: list[str] = []
             win_chunks: dict[str, Path] = {}
             uncached: dict[str, dict[str, Any]] = {}
@@ -441,14 +439,14 @@ def grab_frame(video: Path, at_s: float, out: Path, width: int = 1280, extra_vf:
     out.parent.mkdir(parents=True, exist_ok=True)
     vf = f"scale={width}:-2:flags=lanczos" + (f",{extra_vf}" if extra_vf else "")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{at_s:.3f}", "-i", str(video), "-frames:v", "1",
-                    "-vf", vf, "-q:v", "2", str(out)], check=True)
+                    "-vf", vf, "-q:v", "2", str(out)], check=True, timeout=60)
     return out
 
 
 def frame_stats(image: Path) -> tuple[float, float]:
     """(mean luma, luma spread) on a 32x18 reduction."""
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(image), "-vf", "scale=32:18:flags=area,format=gray", "-f", "rawvideo",
-                          "-"], capture_output=True, check=True).stdout
+                          "-"], capture_output=True, check=True, timeout=60).stdout
     values = list(raw)
     return (statistics.fmean(values), statistics.pstdev(values)) if values else (0.0, 0.0)
 
@@ -631,7 +629,7 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
     draft, found = metadata_draft(pkg, plan, [{k: v for k, v in x.items() if k != "segments"} for x in versions], generators=generators)
     problems += found
     draft["thumbnails"] = [t["file"] for t in thumbs]
-    (out / "metadata.json").write_text(json.dumps(draft, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_json(out / "metadata.json", draft)
     report = {"film_id": pkg.header.film_id, "cut_report_sha256": cut_report_sha,
               "ok": not any(p["severity"] == "BLOCK" for p in problems),
               "versions": versions, "thumbnails": thumbs, "metadata": "versions/metadata.json", "problems": problems,
@@ -639,5 +637,5 @@ def build(pkg: Any, master: Path, cut_report: Path, *, out_dir: Path | None = No
                           "thumbnails": len(thumbs),
                           "blocks": sum(p["severity"] == "BLOCK" for p in problems),
                           "warnings": sum(p["severity"] == "WARN" for p in problems)}}
-    (out / "versions.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_json(out / "versions.json", report)
     return report

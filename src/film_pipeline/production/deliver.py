@@ -102,7 +102,10 @@ def _inputs_fingerprint(pkg, master, cut_report, disclosure, *, include_portrait
     meta = disclosure.model_dump(mode="json")
     meta.pop("created", None)  # elapsed calendar days alone do not revoke a delivered film
     portrait_mode = wants_portrait(pkg) if include_portrait is None else bool(include_portrait)
-    return hashlib.sha256(json.dumps({"files": files, "disclosure": meta, "portrait_mode": portrait_mode}, sort_keys=True).encode()).hexdigest()
+    payload: dict[str, Any] = {"files": files, "disclosure": meta}
+    if not portrait_mode:
+        payload["portrait_mode"] = False
+    return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
 
 def _publication(pkg, archive: Path, manifest: ArchiveManifest, *, reused=False, label_check=None) -> dict:
@@ -200,8 +203,8 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
     if hi <= lo:
         return {"checked": 0, "positive": 0, "ok": False, "detail": "the body is too short to sample"}
     times = [lo + (hi - lo) * i / (samples - 1) for i in range(samples)]
-    with tempfile.TemporaryDirectory() as tmp:
-        work = Path(tmp)
+    from film_pipeline.production.runtime import scratch_tempdir
+    with scratch_tempdir(prefix="afp_label_ev_", root=master.parent) as work:
         made = vs.portrait_label_png(work / "label.png", BODY_LABEL, box=False) if portrait else ai_label_png(work / "label.png", BODY_LABEL)
         alpha = Image.open(made).split()[3]
         glyph = alpha.point(lambda v: 255 if v > 100 else 0)
@@ -223,7 +226,7 @@ def label_evidence(master: Path, title_s: float, end_s: float, *, samples: int =
         for n, t in enumerate(times):
             png = work / f"f{n}.png"
             done = subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", str(master), "-frames:v", "1", str(png)],
-                                  capture_output=True, text=True)
+                                  capture_output=True, text=True, timeout=60)
             if done.returncode != 0 or not png.is_file():
                 raise ValueError(f"could not extract a frame at {t:.1f} s: {done.stderr.strip()[:200]}")
             frame = Image.open(png).convert("L").resize((W, H))
@@ -251,8 +254,8 @@ def title_card_evidence(media: Path, title_lines: list[tuple[str, int]], ai_text
     stripped_lines = [("" if text == ai_text else text, size) for text, size in title_lines]
     if stripped_lines == title_lines:
         return {"checked": 0, "positive": 0, "ok": False, "detail": "declared AI label text not found in title lines"}
-    with tempfile.TemporaryDirectory() as tmp:
-        work = Path(tmp)
+    from film_pipeline.production.runtime import scratch_tempdir
+    with scratch_tempdir(prefix="afp_title_ev_", root=media.parent) as work:
         full_path = title_card(work / "full.png", title_lines)
         without_path = title_card(work / "without.png", stripped_lines)
         full_l = Image.open(full_path).convert("L")

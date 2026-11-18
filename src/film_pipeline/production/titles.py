@@ -19,6 +19,7 @@
 """
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 import json
 import re
 import subprocess
@@ -30,6 +31,8 @@ from pydantic import Field
 from film_pipeline.core import ContractModel
 from film_pipeline.production.edit import (EditSection, Reframe, edit_problems, resolve_clip, resolved_cards, source_length,
                                            timeline)
+from film_pipeline.production.ffjoin import render_workers
+from film_pipeline.production.runtime import atomic_json
 
 MAX_CPS = 20.0          # characters per second a viewer can read
 MIN_CUE_S = 0.7
@@ -137,7 +140,7 @@ def speech_windows(clip: Path, start_s: float, length_s: float, *, noise_db: flo
     """Windows (seconds into the used part) where the clip's sound is above ``noise_db``."""
     done = subprocess.run(["ffmpeg", "-nostats", "-v", "info", "-ss", f"{start_s:.6f}", "-t", f"{length_s:.6f}", "-i", str(clip),
                            "-vn", "-af", f"silencedetect=noise={noise_db}dB:d={min_silence_s}", "-f", "null", "-"],
-                          capture_output=True, text=True, check=True)
+                          capture_output=True, text=True, check=True, timeout=120)
     silences: list[list[float]] = []
     for line in done.stderr.splitlines():
         if (m := re.search(r"silence_start:\s*(-?[\d.]+)", line)):
@@ -195,7 +198,7 @@ def _shot_lines(pkg: Any, gid: str) -> list[Any]:
 
 
 def dialogue_cues(pkg: Any, section: EditSection, durations: dict[str, float], *,
-                  clips_dir: Path | None = None) -> dict[str, Any]:
+                  clips_dir: Path | None = None, jobs: int | None = None) -> dict[str, Any]:
     """{cues: [SubtitleCue keyed by event_id], rows, problems} for the TAKE events of the EDL."""
     from film_pipeline.drama.post import SubtitleCue
     from film_pipeline.production.takes import load_log
@@ -203,6 +206,30 @@ def dialogue_cues(pkg: Any, section: EditSection, durations: dict[str, float], *
     entries = {t.take_id: t for t in load_log(root, pkg.header.film_id).takes}
     given = {(c.event_id, c.line_no): c for c in load_cue_file(root).cues}
     cues, rows, problems = [], [], []
+    pending_windows: list[tuple[str, Path, float, float]] = []
+    for event in section.events:
+        if event.kind != "TAKE":
+            continue
+        lines = _shot_lines(pkg, event.generation_id)
+        if not lines:
+            continue
+        if any((event.event_id, l.line_no) not in given for l in lines):
+            length = source_length(event, durations.get(event.take_id))
+            clip = resolve_clip(root, entries[event.take_id].output_file, clips_dir) if event.take_id in entries else None
+            if clip is not None and clip.is_file():
+                pending_windows.append((event.event_id, clip, event.src_in_s, length))
+
+    precomputed_windows: dict[str, list[tuple[float, float]]] = {}
+    workers = render_workers(jobs)
+    if len(pending_windows) > 1 and workers > 1:
+        with ThreadPoolExecutor(max_workers=min(workers, len(pending_windows))) as pool:
+            win_list = list(pool.map(lambda item: speech_windows(item[1], item[2], item[3]), pending_windows))
+        for (eid, _, _, _), wins in zip(pending_windows, win_list):
+            precomputed_windows[eid] = wins
+    else:
+        for eid, clip, src_in, length in pending_windows:
+            precomputed_windows[eid] = speech_windows(clip, src_in, length)
+
     for event in section.events:
         if event.kind != "TAKE":
             continue
@@ -215,10 +242,7 @@ def dialogue_cues(pkg: Any, section: EditSection, durations: dict[str, float], *
                                                       for l in lines if (event.event_id, l.line_no) in given}
         rest = [l for l in lines if l.line_no not in spans]
         if rest:
-            windows = []
-            clip = resolve_clip(root, entries[event.take_id].output_file, clips_dir) if event.take_id in entries else None
-            if clip is not None and clip.is_file():
-                windows = speech_windows(clip, event.src_in_s, length)
+            windows = precomputed_windows.get(event.event_id, [])
             placed = allocate(windows, [len(l.text.split()) or 1 for l in rest])
             source = "windows"
             if not placed:
@@ -372,7 +396,7 @@ def reframe_problems(section: EditSection, reframes: ReframePlan) -> list[dict[s
 # ------------------------------------------------------------------ the whole step
 
 def prepare(pkg: Any, *, clips_dir: Path | None = None, langs: tuple[str, ...] = ("en", "vi"),
-            generators: Any = "") -> dict[str, Any]:
+            generators: Any = "", jobs: int | None = None) -> dict[str, Any]:
     """Credits, dialogue cues, sidecar texts and reframe checks for the EDL. Nothing is written."""
     section = pkg.typed.get("edit")
     if section is None or not section.events:
@@ -384,7 +408,7 @@ def prepare(pkg: Any, *, clips_dir: Path | None = None, langs: tuple[str, ...] =
         raise ValueError("; ".join(f"{p['code']} {p['event_id']}: {p['detail']}" for p in problems))
     lengths = {e.event_id: source_length(e, durations.get(e.take_id)) for e in section.events}
     plan = timeline(section, durations, lengths)
-    dialogue = dialogue_cues(pkg, section, durations, clips_dir=clips_dir)
+    dialogue = dialogue_cues(pkg, section, durations, clips_dir=clips_dir, jobs=jobs)
     reframes = load_reframes(root)
     resolved_reframes = ReframePlan(events=resolve_reframes_for_section(root, section, reframes.events))
     problems = list(dialogue["problems"]) + reframe_problems(section, resolved_reframes)
@@ -414,9 +438,8 @@ def write_outputs(pkg: Any, prepared: dict[str, Any], out_dir: Path | None = Non
     out.mkdir(parents=True, exist_ok=True)
     srts = {lang: str(write_srt(merge_cues(events), out / f"{pkg.header.film_id}.{lang}.srt"))
             for lang, events in prepared["sidecars"].items()}
-    (out / "credits.json").write_text(json.dumps({lang: [{"text": t, "size": s} for t, s in lines]
-                                                  for lang, lines in prepared["credits"].items()},
-                                                 ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_json(out / "credits.json", {lang: [{"text": t, "size": s} for t, s in lines]
+                                       for lang, lines in prepared["credits"].items()})
     start = {e["event_id"]: e["start_s"] for e in prepared["plan"]["events"]}
     timed = [{**r, "abs_start_s": round(start[r["event_id"]] + r["start_s"], 3),
               "abs_end_s": round(start[r["event_id"]] + r["end_s"], 3)} for r in prepared["rows"]]
@@ -425,5 +448,5 @@ def write_outputs(pkg: Any, prepared: dict[str, Any], out_dir: Path | None = Non
               "summary": {"cues": len(prepared["rows"]), "languages": sorted(srts), "reframed": len(prepared["reframes"]),
                           "blocks": sum(p["severity"] == "BLOCK" for p in prepared["problems"]),
                           "warnings": sum(p["severity"] == "WARN" for p in prepared["problems"])}}
-    (out / "titles.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_json(out / "titles.json", report)
     return report

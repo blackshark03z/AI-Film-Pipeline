@@ -173,11 +173,34 @@ def legal(pkg: Any) -> dict[str, Any]:
             "owner_decisions": [f"{e.kind} {e.subject}: {e.status}" for e in unresolved]}
 
 
+def _accepted_current_generations(pkg: Any) -> set[str]:
+    """Generations that already have an ACCEPTED take of their current shot version (with a stored review)."""
+    from pathlib import Path
+    from film_pipeline.production import takes as T
+
+    shots = pkg.typed.get("shots") if hasattr(pkg, "typed") else None
+    root = getattr(pkg, "root", None)
+    if shots is None or root is None:
+        return set()
+    try:
+        log = T.load_log(Path(root), pkg.header.film_id)
+    except (OSError, ValueError):
+        return set()
+    versions = {g.generation_id: g.version for g in shots.generations}
+    accepted: set[str] = set()
+    for t in log.takes:
+        if t.status == "ACCEPTED" and t.shot_version == versions.get(t.generation_id) and t.review_file:
+            accepted.add(t.generation_id)
+    return accepted
+
+
 def planning_issues(pkg: Any) -> list[str]:
-    """BLOCK strings: a HIGH risk with no fallback plan, a character or location missing from a started rights ledger."""
+    """BLOCK strings: an unshot HIGH risk with no fallback plan, a character or location missing from a started rights ledger."""
     pre = pkg.typed.get("preprod")
+    accepted = _accepted_current_generations(pkg)
     out = [f"RISK_NO_FALLBACK {r['generation_id']}: {r['kind']} ({r['detail']}) needs 03_preprod.risk_fallbacks"
-           for r in risks(pkg) if r["level"] == "HIGH" and not r["fallback"].strip()]
+           for r in risks(pkg) if r["level"] == "HIGH" and not r["fallback"].strip()
+           and r["generation_id"] not in accepted]
     if pre is not None and pre.rights:
         covered = {(e.kind, e.subject) for e in pre.rights}
         out += [f"RIGHTS_MISSING character {c}: no entry in 03_preprod.rights" for c in pre.characters

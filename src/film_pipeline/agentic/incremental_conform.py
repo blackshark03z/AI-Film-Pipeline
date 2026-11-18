@@ -8,8 +8,9 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from film_pipeline.agentic.scheduler import hash_files_parallel
 from film_pipeline.production.ffjoin import ffconcat_path, media_timeout, run_ffmpeg
-from film_pipeline.production.runtime import atomic_json
+from film_pipeline.production.runtime import atomic_json, scratch_tempdir
 from film_pipeline.production.takes import load_log, sha256_file
 
 
@@ -39,6 +40,7 @@ class SceneIncrementalConformer:
         *,
         scenes_dir: Path | None = None,
         clips_dir: Path | None = None,
+        verified_hashes: dict[Path, str] | None = None,
     ) -> dict[str, Any]:
         shots = pkg.typed.get("shots")
         story = pkg.typed.get("story")
@@ -51,6 +53,16 @@ class SceneIncrementalConformer:
         cdir = Path(clips_dir) if clips_dir is not None else root / "media" / "takes"
         log = load_log(root, pkg.header.film_id)
         take_to_gid = {t.take_id: t.generation_id for t in log.takes}
+
+        def _resolve_clip(output_file: str) -> Path:
+            cand = cdir / Path(output_file).name
+            return cand if cand.is_file() else (cdir / output_file)
+
+        if verified_hashes is not None:
+            hash_cache = dict(verified_hashes)
+        else:
+            candidates = [_resolve_clip(t.output_file) for t in log.takes if t.status == "ACCEPTED" and t.output_sha256]
+            hash_cache = hash_files_parallel(candidates)
 
         by_scene: dict[str, list[Any]] = {}
         for g in shots.generations:
@@ -84,11 +96,13 @@ class SceneIncrementalConformer:
                     missing.append(g.generation_id)
                 else:
                     t = acc[-1]
-                    clip_cand = cdir / Path(t.output_file).name
-                    if not clip_cand.is_file():
-                        clip_cand = cdir / t.output_file
+                    clip_cand = _resolve_clip(t.output_file)
+                    actual_digest = hash_cache.get(clip_cand)
+                    if actual_digest is None and clip_cand.is_file():
+                        actual_digest = sha256_file(clip_cand)
+                        hash_cache[clip_cand] = actual_digest
                     source_ok = clip_cand.is_file() and (
-                        not t.output_sha256 or sha256_file(clip_cand) == t.output_sha256
+                        not t.output_sha256 or actual_digest == t.output_sha256
                     )
                     if not source_ok:
                         corrupt_sources.append(g.generation_id)
@@ -215,8 +229,7 @@ class SceneIncrementalConformer:
 
             scene_gids = {item["generation_id"] for item in row["accepted_takes"]}
             scene_edl = self._scene_edit_events(edit_section, scene_gids, take_to_gid)
-            with tempfile.TemporaryDirectory() as tmp:
-                tmp_dir = Path(tmp)
+            with scratch_tempdir(prefix=f"afp-scene-{sid}-", root=root) as tmp_dir:
                 if scene_edl and edit_section is not None:
                     from film_pipeline.production.edit import AudioCut, EditSection, Transition, render_cut
 

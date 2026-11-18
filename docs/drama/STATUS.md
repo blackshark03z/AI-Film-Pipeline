@@ -1,3 +1,34 @@
+# 2026-11-18 — Comprehensive System Audit, Quality Hardening & Production Speed Optimization (All 2,529 Tests PASS, Zero Failures)
+
+- **System-Wide Multi-Worktree Audit & Custody Verification:**
+  - Audited root repository (`D:/AI FILM MAKER/AI-Film-Pipeline`), active stable worktree (`D:/AI FILM MAKER/AFP-stable`), all 17 Git worktrees, 6 film packages (`film03`..`film08`), and the parallel Muse master (*The Spare Jacket* at `C:/film-work/black-drama-eutlzb7ycky/expanded_27min/THE_SPARE_JACKET_FINAL_25MIN.mp4`, SHA-256 `a9d502ed...`).
+  - Verified `POLICY_REF = 45f71d6226c5ffc58b4e70f3bcea1bb0151b7003` (blob `6cab2103...`) identical across all worktrees.
+  - Confirmed 100% custody and manifest integrity across delivered archives via `afp-film status --package`: `film06_six_am` (`2b1c1405...`, Gates 1–6 PASS), `film07_first_shift` (`f3476aa2...`, Gates 1–6 PASS), and `film08_chain_of_custody` (`357d662d...`, Gates 1–5 PASS, `release_ready=True`, Gate 6 `OWNER_PENDING`).
+  - Protected all 47 dirty/untracked paths at root and protected 2 dirty files in `AFP-stable` (`films/film07_first_shift/_author.py`, `films/film07_first_shift/media/takes/SC12_g23_t1.reconcile.json`).
+- **Storage & Scratch Overflow Engine:**
+  - Integrated `preflight.scratch_dir()` with disk free-space scanning and auto-overflow to large secondary storage (`E:\AFP-Scratch`, 183.5+ GiB free) when system drive `C:` has < 10 GiB available.
+  - Added `scratch_tempdir()` across `assemble()`, `normalize_loudness()`, `mix()`, `versions()`, `color()`, and `deliver()` to prevent disk exhaustion errors during 30-minute film builds.
+- **Cinematic Quality Hardening & Defect Elimination:**
+  - **Dialogue STT Acceleration & Dual-Engine Verification:** Replaced per-cue FFmpeg subprocess slicing with 1-pass 16kHz mono PCM decoding (`decode_mono_16k_pcm`) + memory slicing (`slice_pcm_16k`) and parallel `KaldiRecognizer.Reset()`. Slashed 270-cue `film08` scan time from >300s to **56.56s** (5.3x speedup). Added automated offline second-opinion STT verification using cached `faster-whisper-small.en` (recovering 1.0 recall on short/homophone errors like `SC08_g13` and `SC11_g02` without API spend).
+  - **Balanced Subtitle Auto-Wrapping:** Implemented `_wrap_subtitle_lines()` and `subtitle_png(..., max_w=1120)` in `drama/post.py`. Dynamically wraps long dialogue lines into balanced two-line blocks with height-adaptive translucent backdrops, eliminating margin overflow (e.g., `film08 SC02_g08` 1247px) while maintaining exact pixel parity for lines <= 1120px.
+  - **Multi-Angle Color Consistency:** Added `ColorPlan.group_by_camera: bool = False` (groups by `side:subject`), eliminating cross-angle color skew between bright window and dim bar directions in dialogue scenes. Multithreaded `frame_stats()` and `verify` across `render_workers(jobs)`.
+  - **Master QC Parallelization:** Parallelized all 5 QC metrics (`frame_series`, `ebur128`, `clipping`, `silent_gaps`, `dialogue_activity`) across 5 concurrent workers, with process timeouts (`media_timeout()`) and atomic JSON writes.
+  - **Dailies Triage Cache & Optical/Acoustic QC:** Implemented content-hash caching at `<film>/media/triage/<take_id>.json`, unified `warnings`/`flags` key sync, and added optical/acoustic hazard checks (`FROZEN_TAKE_RISK`, `LUMA_FLICKER_SPIKE`, `SPEECH_TRUNCATED_AT_TAIL`, `AUDIO_CLIPPING_RISK`) with parallel `triage_batch()`.
+  - **Planning False-Positive Resolution:** Updated `planning_issues()` to ignore `RISK_NO_FALLBACK` for generations having an `ACCEPTED` take matching current `shot_version` and existing `review_file`.
+  - **Pre-Send Dialogue & Pacing Critic:** Added `STAGE_DIRECTION_IN_DIALOGUE`, `END_STILL_NOT_READY`, and `DIALOGUE_PACE_OVERFLOW` checks with multi-scene Fountain `(scene_id, line_no)` dialogue lookups.
+- **Production Speed & Concurrency Upgrades:**
+  - Parallelized `incremental_conform` and `capability_router` via `hash_files_parallel()`, sharing `verified_hashes` and `wave_info` to drop `agentic-plan` execution time from 43s to **12.44s** (3.5x speedup).
+  - Parallelized clip hashing and verification in `edit_problems()` and `versions.py` for EDL event counts > 8.
+  - Provided pure Pillow fallback (`_GreyPatch`) in `flow_send.py` for environments lacking `cv2`/`numpy`, maintaining byte-for-byte sync across tools and pipeline provider.
+  - Enhanced CLI with optional `--all` films path, `--critic`/`--no-critic` in `generate`, `--engine` in `dialoguecheck`, and `--jobs` in `grade` and `titles`.
+- **Comprehensive Verification & Handoff:**
+  - Full test suite: **2,529 passed, 205 skipped, 0 failed** across all 192 test files.
+  - Focused audit suite: `tests/test_audit_quality_speed_v2.py` 11/11 passed in 5.93s.
+  - Cold wheel package qualification: `ai_film_pipeline-0.0.0-py3-none-any.whl` built and verified in clean virtualenv without `cv2` (`doctor ok: true`, exit 0).
+  - Zero paid provider credits spent, zero `git push`, Gate 6 preserved as `OWNER_PENDING` for `film08`.
+
+---
+
 # 2026-11-18 — Film08 Chain of Custody Completed (300/300 Accepted, 16:9 & 9:16 Delivered, Gate 6 OWNER_PENDING) + Phase 2/3/4 Daily-Production Stabilization & Speed Upgrade
 
 - **Film08 Production & Delivery (`98535367`, P20 M4 Candidate):**

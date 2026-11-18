@@ -3,7 +3,7 @@ name = "ai-film-pipeline"
 version = "0.0.0"
 description = "Lean local-first AI film production pipeline"
 requires-python = ">=3.11"
-dependencies = ["pydantic>=2,<3", "jsonschema>=4,<5"]
+dependencies = ["pydantic>=2,<3", "jsonschema>=4,<5", "Pillow>=10,<13"]
 
 [project.scripts]
 afp-film = "film_pipeline.cli:main"

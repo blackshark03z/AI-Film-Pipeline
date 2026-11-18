@@ -135,7 +135,8 @@ function renderGrid() {
       </div>
       <video controls preload="metadata" src="${item.video_rel}"></video>
       <div class="dialogue">${(item.dialogue || "(silent shot)").replace(/</g, "&lt;")}</div>
-      <div class="triage-box">SHA: ${item.output_sha256.slice(0, 12)} | Flags: ${(item.triage_flags || []).map(f => f.code).join(", ") || "none"}</div>
+      <div class="triage-box">SHA: ${item.output_sha256.slice(0, 12)} | Trim hint: ${item.trim_hint || "-"} | Flags: ${(item.triage_flags || []).map(f => f.code).join(", ") || "none"}</div>
+      ${(item.triage_flags && item.triage_flags.length) ? `<div class="triage-box" style="color:#f2cc60">${item.triage_flags.map(f => `${f.code}: ${(f.detail || "").replace(/</g, "&lt;")}`).join(" · ")}</div>` : ""}
       ${item.relation_questions.length ? `<div class="rel-box">${item.relation_questions.map(q => `
         <div class="rel-q"><label>${q.id}: ${q.question.replace(/</g, "&lt;")}</label>
         <input data-tid="${item.take_id}" data-qid="${q.id}" value="${(st.answers[q.id] || "").replace(/"/g, "&quot;")}" placeholder="Required short answer..."></div>`).join("")}</div>` : ""}
@@ -298,25 +299,37 @@ def build_review_ui(
     by_gid = {g.generation_id: g for g in shots.generations}
     lines = script_dialogue(pkg)
 
-    triage_fn = None
+    from film_pipeline.production.dailies_triage import load_cached_triage, triage_batch
+
+    eligible_entries = []
+    clip_paths: dict[str, Path] = {}
+    for entry in log.takes:
+        decl = by_gid.get(entry.generation_id)
+        if decl is None or (scene_id is not None and decl.scene_id != scene_id):
+            continue
+        clip_path = take_clips_dir / Path(entry.output_file).name
+        if not clip_path.is_file():
+            clip_path = take_clips_dir / entry.output_file
+        eligible_entries.append((entry, decl))
+        clip_paths[entry.take_id] = clip_path
+
+    triage_map: dict[str, dict[str, Any]] = {}
     if run_triage:
-        from film_pipeline.production.dailies_triage import triage_take as _triage_take
-        triage_fn = _triage_take
+        present_ids = [e.take_id for e, _ in eligible_entries if clip_paths[e.take_id].is_file()]
+        triage_map = triage_batch(pkg, present_ids, clips_dir=clips_dir)
+    elif clips_dir is None:
+        for entry, _ in eligible_entries:
+            cached = load_cached_triage(root, entry.take_id, entry.output_sha256)
+            if cached is not None:
+                triage_map[entry.take_id] = cached
 
     items: list[dict[str, Any]] = []
     pending_count = 0
     clean_pending_count = 0
     flagged_pending_count = 0
 
-    for entry in log.takes:
-        decl = by_gid.get(entry.generation_id)
-        if decl is None:
-            continue
-        if scene_id is not None and decl.scene_id != scene_id:
-            continue
-        clip_path = take_clips_dir / Path(entry.output_file).name
-        if not clip_path.is_file():
-            clip_path = take_clips_dir / entry.output_file
+    for entry, decl in eligible_entries:
+        clip_path = clip_paths[entry.take_id]
         try:
             video_rel = os.path.relpath(clip_path.resolve(), target_dir.resolve()).replace("\\", "/")
         except ValueError:
@@ -331,14 +344,14 @@ def build_review_ui(
 
         triage_status = "NOT_RUN"
         triage_flags: list[dict[str, Any]] = []
-        if triage_fn is not None and clip_path.is_file():
-            try:
-                tri = triage_fn(pkg, entry.take_id, clips_dir=take_clips_dir)
-                triage_flags = list(tri.get("flags", []))
-                triage_status = "FLAGGED" if triage_flags else "CLEAN"
-            except Exception as exc:  # noqa: BLE001
-                triage_status = "FLAGGED"
-                triage_flags = [{"code": "TRIAGE_ERROR", "detail": str(exc)[:160]}]
+        trim_hint = ""
+        tri = triage_map.get(entry.take_id)
+        if tri is not None:
+            triage_flags = list(tri.get("warnings") or tri.get("flags") or [])
+            triage_status = "FLAGGED" if triage_flags else "CLEAN"
+            metrics = tri.get("metrics") or {}
+            if "suggested_src_in_s" in metrics and "suggested_src_out_s" in metrics:
+                trim_hint = f"{metrics['suggested_src_in_s']}s..{metrics['suggested_src_out_s']}s"
 
         if entry.status in ("GENERATED", "INCOMPLETE"):
             pending_count += 1
@@ -360,6 +373,7 @@ def build_review_ui(
             "relation_questions": rel_payload,
             "triage_status": triage_status,
             "triage_flags": triage_flags,
+            "trim_hint": trim_hint,
         })
 
     data_json = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")

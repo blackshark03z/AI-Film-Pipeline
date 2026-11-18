@@ -1,22 +1,50 @@
 """Topological handoff-wave DAG scheduler over `04_shots.json` and `takes/index.json`."""
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 import json
 from pathlib import Path
 from typing import Any
 
+from film_pipeline.production.ffjoin import render_workers
 from film_pipeline.production.package import load_package
 from film_pipeline.production.recovery import pending_receipts
 from film_pipeline.production.runtime import atomic_json
 from film_pipeline.production.takes import load_log, sha256_file
 
 
+def hash_files_parallel(paths: list[Path], *, jobs: int | None = None) -> dict[Path, str]:
+    """Compute SHA-256 digests for distinct existing files using bounded worker threads."""
+    unique = [p for p in dict.fromkeys(paths) if p.is_file()]
+    if not unique:
+        return {}
+    workers = render_workers(jobs)
+    if len(unique) > 1 and workers > 1:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            digests = list(pool.map(sha256_file, unique))
+    else:
+        digests = [sha256_file(p) for p in unique]
+    return dict(zip(unique, digests))
+
+
 class WaveDAGScheduler:
     """Computes parallel dispatch waves without splitting worktrees."""
 
-    def __init__(self, pkg: Any, *, optimistic_lookahead: int = 0) -> None:
+    def __init__(
+        self,
+        pkg: Any,
+        *,
+        optimistic_lookahead: int = 0,
+        verified_hashes: dict[Path, str] | None = None,
+    ) -> None:
         self.pkg = pkg
         self.optimistic_lookahead = max(0, int(optimistic_lookahead))
+        self.verified_hashes = verified_hashes
+
+    def _clip_digest(self, clip: Path, cache: dict[Path, str]) -> str:
+        if clip not in cache:
+            cache[clip] = sha256_file(clip)
+        return cache[clip]
 
     def plan_waves(self) -> dict[str, Any]:
         shots = self.pkg.typed.get("shots")
@@ -30,6 +58,21 @@ class WaveDAGScheduler:
         pending_gids = sorted({str(r.get("generation_id") or "") for r in pending if r.get("generation_id")})
         pending_set = set(pending_gids)
 
+        def _resolve_clip_path(output_file: str) -> Path:
+            cand = root / "media" / "takes" / Path(output_file).name
+            return cand if cand.is_file() else (root / "media" / "takes" / output_file)
+
+        if self.verified_hashes is not None:
+            hash_cache = dict(self.verified_hashes)
+        else:
+            to_hash = [
+                _resolve_clip_path(t.output_file)
+                for t in log.takes
+                if t.output_sha256 and t.status in ("ACCEPTED", "GENERATED")
+                and t.shot_version == getattr(by_id.get(t.generation_id), "version", None)
+            ]
+            hash_cache = hash_files_parallel(to_hash)
+
         accepted_ids: set[str] = set()
         unverified_accepted: list[str] = []
         for t in log.takes:
@@ -38,11 +81,9 @@ class WaveDAGScheduler:
             review_missing = bool(t.review_file) and not (
                 (root / "takes" / t.review_file).is_file() or (root / t.review_file).is_file()
             )
-            clip = root / "media" / "takes" / Path(t.output_file).name
-            if not clip.is_file():
-                clip = root / "media" / "takes" / t.output_file
+            clip = _resolve_clip_path(t.output_file)
             clip_present = clip.is_file()
-            clip_corrupt = clip_present and bool(t.output_sha256) and sha256_file(clip) != t.output_sha256
+            clip_corrupt = clip_present and bool(t.output_sha256) and self._clip_digest(clip, hash_cache) != t.output_sha256
             if review_missing or clip_corrupt:
                 unverified_accepted.append(t.generation_id)
                 continue
@@ -114,21 +155,29 @@ class WaveDAGScheduler:
             for t in log.takes:
                 if t.status != "GENERATED" or t.shot_version != getattr(by_id.get(t.generation_id), "version", None):
                     continue
-                clip = root / "media" / "takes" / Path(t.output_file).name
-                if not clip.is_file():
-                    clip = root / "media" / "takes" / t.output_file
+                clip = _resolve_clip_path(t.output_file)
                 if not clip.is_file():
                     continue
-                if t.output_sha256 and sha256_file(clip) != t.output_sha256:
+                if t.output_sha256 and self._clip_digest(clip, hash_cache) != t.output_sha256:
                     continue
-                triage_file = root / "takes" / "triage" / f"{t.take_id}.json"
-                if triage_file.is_file():
+                triage_candidates = (
+                    root / "media" / "triage" / f"{t.take_id}.json",
+                    root / "takes" / "triage" / f"{t.take_id}.json",
+                )
+                flagged = False
+                for triage_file in triage_candidates:
+                    if not triage_file.is_file():
+                        continue
                     try:
                         triage_doc = json.loads(triage_file.read_text(encoding="utf-8"))
-                        if triage_doc.get("flags"):
-                            continue
+                        if triage_doc.get("warnings") or triage_doc.get("flags"):
+                            flagged = True
+                            break
                     except (OSError, ValueError):
-                        continue
+                        flagged = True
+                        break
+                if flagged:
+                    continue
                 speculative_base.add(t.generation_id)
 
             frontier_done = set(accepted_ids) | speculative_base

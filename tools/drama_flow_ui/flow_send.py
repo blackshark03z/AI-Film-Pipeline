@@ -111,11 +111,37 @@ PICKER_MARGIN = 3.0      # the best picker match must beat the runner-up by this
 SAME_STILL_MAX = 1.0     # ...unless the two are one still uploaded twice (their own diff at most this)
 
 
+class _GreyPatch:
+    """Lightweight float pixel vector supporting abs(a - b).mean() when cv2/numpy are absent."""
+    __slots__ = ("vals",)
+
+    def __init__(self, vals: list[float]) -> None:
+        self.vals = vals
+
+    def __sub__(self, other: "_GreyPatch") -> "_GreyPatch":
+        return _GreyPatch([x - y for x, y in zip(self.vals, other.vals)])
+
+    def __abs__(self) -> "_GreyPatch":
+        return _GreyPatch([abs(x) for x in self.vals])
+
+    def mean(self) -> float:
+        return sum(self.vals) / len(self.vals) if self.vals else 0.0
+
+
 def _grey(data: bytes):
-    import cv2
-    import numpy as np
-    img = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
-    return cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), (64, 36)).astype(float)
+    try:
+        import cv2
+        import numpy as np
+        img = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
+        if img is None:
+            raise ValueError("undecodable image bytes")
+        return cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), (64, 36)).astype(float)
+    except ImportError:
+        import io
+        from PIL import Image
+        with Image.open(io.BytesIO(data)) as im:
+            g = im.convert("L").resize((64, 36), Image.Resampling.BILINEAR)
+            return _GreyPatch([float(v) for v in g.tobytes()])
 
 
 def slot_diff(data: bytes, still: Path) -> float:
@@ -493,20 +519,39 @@ MIN_SCAN = 6               # flow_reconcile.MIN_SCAN: ... and only after this ma
 
 def tile_signatures(png: bytes, rects: list, dpr: float) -> list:
     """Grey signatures of the tiles at `rects` (CSS px) in a viewport screenshot (device px = CSS px * dpr)."""
-    import cv2
-    import numpy as np
-    img = cv2.imdecode(np.frombuffer(png, np.uint8), cv2.IMREAD_GRAYSCALE)
-    if img is None:
-        return []
-    h, w = img.shape[:2]
-    sigs = []
-    for x, y, rw, rh in rects:
-        x0, y0 = max(0, int(x * dpr)), max(0, int(y * dpr))
-        x1, y1 = min(w, int((x + rw) * dpr)), min(h, int((y + rh) * dpr))
-        if x1 - x0 < 8 or y1 - y0 < 8:
-            continue
-        sigs.append(cv2.resize(img[y0:y1, x0:x1], TILE_SIG_SIZE, interpolation=cv2.INTER_AREA).astype(float))
-    return sigs
+    try:
+        import cv2
+        import numpy as np
+        img = cv2.imdecode(np.frombuffer(png, np.uint8), cv2.IMREAD_GRAYSCALE)
+        if img is None:
+            return []
+        h, w = img.shape[:2]
+        sigs = []
+        for x, y, rw, rh in rects:
+            x0, y0 = max(0, int(x * dpr)), max(0, int(y * dpr))
+            x1, y1 = min(w, int((x + rw) * dpr)), min(h, int((y + rh) * dpr))
+            if x1 - x0 < 8 or y1 - y0 < 8:
+                continue
+            sigs.append(cv2.resize(img[y0:y1, x0:x1], TILE_SIG_SIZE, interpolation=cv2.INTER_AREA).astype(float))
+        return sigs
+    except ImportError:
+        import io
+        from PIL import Image
+        try:
+            with Image.open(io.BytesIO(png)) as raw_im:
+                gray = raw_im.convert("L")
+                w, h = gray.size
+                sigs = []
+                for x, y, rw, rh in rects:
+                    x0, y0 = max(0, int(x * dpr)), max(0, int(y * dpr))
+                    x1, y1 = min(w, int((x + rw) * dpr)), min(h, int((y + rh) * dpr))
+                    if x1 - x0 < 8 or y1 - y0 < 8:
+                        continue
+                    tile = gray.crop((x0, y0, x1, y1)).resize(TILE_SIG_SIZE, Image.Resampling.BOX)
+                    sigs.append(_GreyPatch([float(v) for v in tile.tobytes()]))
+                return sigs
+        except Exception:  # noqa: BLE001
+            return []
 
 
 def new_tiles(baseline: list, current: list, tol: float = TILE_SAME_MAX) -> int:

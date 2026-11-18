@@ -16,6 +16,7 @@ from .runtime import flow_cdp, flow_project
 MIN_SCRATCH_GIB = 10.0      # Owner 2026-11-12: lowered from 20; long renders (cut/titles/mix/versions/finish/benchmark): scratch for the whole pass
 SEND_RESERVE_GIB = 4.0      # a single Flow send/download keeps only the standing reserve ...
 SEND_TAKE_BOUND_GIB = 0.5   # ... plus a conservative bound for one take and its still (a 6-15 s 360p clip is a few MB)
+SCRATCH_ENV = "AFP_SCRATCH_DIR"
 OPERATIONS = ("render", "send")
 
 
@@ -27,13 +28,63 @@ def required_free_gib(operation: str = "render", expected_bytes: int = 0) -> flo
     raise ValueError(f"unknown preflight operation {operation!r}; use one of {OPERATIONS}")
 
 
+def _free_gib(path: Path) -> float:
+    probe = Path(path)
+    while not probe.exists() and probe.parent != probe:
+        probe = probe.parent
+    try:
+        return shutil.disk_usage(probe).free / 2**30
+    except OSError:
+        return -1.0
+
+
+def scratch_dir(root: Path | None = None, *, required_gib: float = MIN_SCRATCH_GIB) -> Path:
+    """Resolve scratch directory: explicit AFP_SCRATCH_DIR > system temp if spacious > spacious local drive > system temp."""
+    explicit = os.environ.get(SCRATCH_ENV, "").strip()
+    if explicit:
+        target = Path(explicit)
+        target.mkdir(parents=True, exist_ok=True)
+        return target
+    default_tmp = Path(tempfile.gettempdir())
+    if _free_gib(default_tmp) >= required_gib:
+        return default_tmp
+    candidates: list[Path] = []
+    if root is not None:
+        try:
+            anchor = Path(root).resolve().anchor
+        except OSError:
+            anchor = ""
+        if anchor:
+            candidates.append(Path(anchor) / "AFP-Scratch")
+    if os.name == "nt":
+        for drv in ("E:\\", "D:\\", "F:\\", "G:\\"):
+            if Path(drv).exists():
+                cand = Path(drv) / "AFP-Scratch"
+                if cand not in candidates:
+                    candidates.append(cand)
+    best_cand: Path | None = None
+    best_free = -1.0
+    for cand in candidates:
+        free = _free_gib(cand)
+        if free >= required_gib and free > best_free:
+            best_cand, best_free = cand, free
+    if best_cand is not None:
+        try:
+            best_cand.mkdir(parents=True, exist_ok=True)
+            return best_cand
+        except OSError:
+            pass
+    return default_tmp
+
+
 def check(root: Path, *, probe_flow: bool = False, operation: str = "render", expected_bytes: int = 0) -> dict:
     """``operation`` picks the disk rule: ``render`` keeps the 10 GiB long-render rule (default), ``send`` needs the
     4 GiB reserve plus the expected download (stills, sends and reconcile)."""
     need = required_free_gib(operation, expected_bytes)
     issues, warnings = [], []
     volumes = {}
-    for name, path in {"output": Path(root), "scratch": Path(tempfile.gettempdir())}.items():
+    scratch = scratch_dir(Path(root), required_gib=need)
+    for name, path in {"output": Path(root), "scratch": scratch}.items():
         while not path.exists():
             path = path.parent
         free = shutil.disk_usage(path).free / 2**30

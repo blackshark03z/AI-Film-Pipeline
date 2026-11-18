@@ -96,6 +96,17 @@ def atomic_json(path: Path, value) -> None:
 
 
 @contextmanager
+def scratch_tempdir(*, prefix: str = "afp-work-", root: Path | None = None):
+    """Temporary directory placed on the spacious scratch volume selected by preflight."""
+    from film_pipeline.production.preflight import scratch_dir
+
+    base = scratch_dir(root)
+    base.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=prefix, dir=str(base)) as tmp:
+        yield Path(tmp)
+
+
+@contextmanager
 def _exclusive(key: str, *, timeout_s: float = 0.0):
     held = getattr(_local, "held", None)
     if held is None:

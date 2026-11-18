@@ -44,6 +44,7 @@ from film_pipeline.production.ffjoin import (
     video_encode_args,
 )
 from film_pipeline.production.render_cache import cached as _cached_render, key_for as _render_key, save as _save_render
+from film_pipeline.production.runtime import atomic_json, scratch_tempdir
 
 FPS = 24
 FRAME_S = 1.0 / FPS
@@ -194,7 +195,7 @@ def probe_duration(path: Path) -> float:
 def probe_audio_duration(path: Path) -> float:
     """Seconds of the first audio stream; 0.0 when the clip has no sound (an L-cut then has no handle)."""
     out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries", "stream=duration",
-                          "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True)
+                          "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True, timeout=60)
     text = (out.stdout.strip().splitlines() or [""])[0].strip()
     return float(text) if text and text != "N/A" else 0.0
 
@@ -239,6 +240,34 @@ def edit_problems(pkg: Any, section: EditSection, *, clips_dir: Path | None = No
         problems.append({"code": code, "severity": severity, "event_id": event_id, "detail": detail})
 
     by_event = {e.event_id: e for e in section.events}
+    prehashed: dict[Path, tuple[str, float | None, Exception | None]] = {}
+    default_probe_used = probe is probe_duration
+    if default_probe_used and len(section.events) > 8:
+        unique_clips: list[Path] = []
+        seen_clips: set[Path] = set()
+        for ev in section.events:
+            if ev.kind != "TAKE":
+                continue
+            ent = entries.get(ev.take_id)
+            if ent is None:
+                continue
+            cp = resolve_clip(root, ent.output_file, clips_dir)
+            if cp not in seen_clips and cp.is_file():
+                seen_clips.add(cp)
+                unique_clips.append(cp)
+        if len(unique_clips) > 1:
+            def _inspect_clip(cp: Path) -> tuple[Path, str, float | None, Exception | None]:
+                sha = _sha256(cp)
+                try:
+                    dur = probe(cp)
+                    return cp, sha, dur, None
+                except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError, ValueError) as exc:
+                    return cp, sha, None, exc
+
+            with ThreadPoolExecutor(max_workers=min(8, len(unique_clips))) as pool:
+                for cp, sha, dur, err in pool.map(_inspect_clip, unique_clips):
+                    prehashed[cp] = (sha, dur, err)
+
     for event in section.events:
         if event.kind != "TAKE":
             continue
@@ -260,14 +289,22 @@ def edit_problems(pkg: Any, section: EditSection, *, clips_dir: Path | None = No
         if not clip.is_file():
             add("CLIP_MISSING", "BLOCK", event.event_id, f"{clip} not found")
             continue
-        if _sha256(clip) != entry.output_sha256:
+        cached_info = prehashed.get(clip)
+        actual_sha = cached_info[0] if cached_info is not None else _sha256(clip)
+        if actual_sha != entry.output_sha256:
             add("CLIP_CHANGED", "BLOCK", event.event_id, f"{clip.name} no longer matches the hash in the take log")
             continue
-        try:
-            length = probe(clip)
-        except (subprocess.CalledProcessError, OSError, ValueError) as exc:
-            add("CLIP_UNREADABLE", "BLOCK", event.event_id, f"{clip.name}: {exc}")
-            continue
+        if cached_info is not None:
+            if cached_info[2] is not None:
+                add("CLIP_UNREADABLE", "BLOCK", event.event_id, f"{clip.name}: {cached_info[2]}")
+                continue
+            length = float(cached_info[1])  # type: ignore[arg-type]
+        else:
+            try:
+                length = probe(clip)
+            except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError, ValueError) as exc:
+                add("CLIP_UNREADABLE", "BLOCK", event.event_id, f"{clip.name}: {exc}")
+                continue
         durations[event.take_id] = length
         clips_by_take[event.take_id] = clip
         if event.src_out_s is not None and event.src_out_s > length + FRAME_S / 2:
@@ -398,7 +435,7 @@ def _split_render_clip(src: Path, dst: Path, start: float, duration: float) -> P
                     f"fps={FPS},trim=start={start:.6f}:duration={duration:.6f},setpts=PTS-STARTPTS",
                     "-af", f"atrim=start={start:.6f}:duration={duration:.6f},asetpts=PTS-STARTPTS",
                     "-c:v", "libx264", "-preset", "fast", "-crf", "14", "-pix_fmt", "yuv420p",
-                    "-c:a", "pcm_s16le", str(dst)], check=True)
+                    "-c:a", "pcm_s16le", str(dst)], check=True, timeout=media_timeout(max(1.0, duration)))
     return dst
 
 
@@ -539,8 +576,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
     picture_parts = []
     font_files = [Path(p) for p in DEFAULT_FONTS]
     font_hashes = [_sha256(p) for p in font_files]
-    with tempfile.TemporaryDirectory() as tmp:
-        work = Path(tmp)
+    with scratch_tempdir(prefix="afp_render_cut_", root=root) as work:
         sources: list[Path] = []
         lengths: dict[str, float] = {}
         for event in section.events:
@@ -901,7 +937,7 @@ def render_cut(pkg: Any, section: EditSection, out: Path, *, clips_dir: Path | N
                                     "start_frame": picture_parts[-1]["end_frame"],
                                     "end_frame": picture_parts[-1]["end_frame"] + frames(section.end_s)}]
     report_path = out.with_suffix(".cut.json")
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_json(report_path, report)
     report["report"] = str(report_path)
     return report
 

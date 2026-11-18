@@ -10,18 +10,23 @@ HARD INVARIANT: ``triage_take`` NEVER writes review files and NEVER auto-PASSes 
 """
 from __future__ import annotations
 
+import array
+from concurrent.futures import ThreadPoolExecutor
+import json
 import math
 import statistics
 import subprocess
 from pathlib import Path
 from typing import Any
 
-from film_pipeline.production.mix import _frames_db
+from film_pipeline.production.ffjoin import render_workers
+from film_pipeline.production.runtime import atomic_json
 
 AN_W, AN_H = 64, 36
 EDGE_COLS = 5       # ~8% of 64px width on left and right
 CORNER_COLS = 8     # bottom-right ~12.5% width
 CORNER_ROWS = 5     # bottom-right ~13.9% height
+TRIAGE_CACHE_VERSION = 2
 
 
 def _probe_duration_s(clip: Path) -> float:
@@ -95,7 +100,7 @@ def _corner_std(frame: bytes) -> float:
 
 
 def _reference_still(pkg: Any, decl: Any) -> Path | None:
-    if decl is None or getattr(decl, "previous_generation_id", None):
+    if decl is None or (getattr(decl, "previous_generation_id", None) and not getattr(decl, "independent_still", False)):
         return None
     pre = pkg.typed.get("preprod") if hasattr(pkg, "typed") else None
     if pre is None:
@@ -107,7 +112,57 @@ def _reference_still(pkg: Any, decl: Any) -> Path | None:
     return path if path.is_file() else None
 
 
-def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dict[str, Any]:
+def _audio_triage_stats(clip: Path, *, hop_s: float = 0.05) -> tuple[list[float], int]:
+    """Single-pass 8 kHz mono s16le decode returning `(rms_dbfs_per_hop, peak_abs_sample)`."""
+    raw = subprocess.run(
+        ["ffmpeg", "-v", "error", "-i", str(clip), "-vn", "-ac", "1", "-ar", "8000", "-f", "s16le", "-"],
+        capture_output=True, check=True, timeout=60,
+    ).stdout
+    samples = array.array("h")
+    samples.frombytes(raw[: len(raw) // 2 * 2])
+    if not samples:
+        return [], 0
+    peak = max(abs(max(samples)), abs(min(samples)))
+    hop = max(1, int(8000 * hop_s))
+    dbs: list[float] = []
+    for i in range(0, len(samples) - hop + 1, hop):
+        window = samples[i:i + hop]
+        mean_sq = sum(v * v for v in window) / hop
+        dbs.append(-120.0 if mean_sq <= 0 else max(-120.0, 10.0 * math.log10(mean_sq / 32768.0 ** 2)))
+    return dbs, peak
+
+
+def triage_cache_path(root: Path, take_id: str) -> Path:
+    return Path(root) / "media" / "triage" / f"{take_id}.json"
+
+
+def load_cached_triage(root: Path, take_id: str, expected_sha256: str) -> dict[str, Any] | None:
+    if not expected_sha256:
+        return None
+    cpath = triage_cache_path(root, take_id)
+    if not cpath.is_file():
+        return None
+    try:
+        doc = json.loads(cpath.read_text(encoding="utf-8"))
+        if (
+            isinstance(doc, dict)
+            and doc.get("triage_cache_version") == TRIAGE_CACHE_VERSION
+            and doc.get("output_sha256") == expected_sha256
+            and isinstance(doc.get("warnings"), list)
+        ):
+            return doc
+    except (OSError, ValueError):
+        pass
+    return None
+
+
+def triage_take(
+    pkg: Any,
+    take_id: str,
+    *,
+    clips_dir: Path | None = None,
+    use_cache: bool = True,
+) -> dict[str, Any]:
     """Scan one generated take clip and emit assist-only QC metrics & WARN alerts (never bypasses human QC)."""
     from film_pipeline.production.takes import load_log, sha256_file
 
@@ -117,9 +172,18 @@ def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dic
     base_dir = Path(clips_dir) if clips_dir is not None else root / "media" / "takes"
     clip = base_dir / entry.output_file
     if not clip.is_file():
-        raise FileNotFoundError(f"Take clip not found for triage: {clip}")
+        clip_alt = base_dir / Path(entry.output_file).name
+        if clip_alt.is_file():
+            clip = clip_alt
+        else:
+            raise FileNotFoundError(f"Take clip not found for triage: {clip}")
     actual_sha = sha256_file(clip)
     hash_verified = not entry.output_sha256 or actual_sha == entry.output_sha256
+
+    if use_cache and clips_dir is None and hash_verified:
+        cached_doc = load_cached_triage(root, take_id, actual_sha)
+        if cached_doc is not None:
+            return cached_doc
 
     shots = pkg.typed.get("shots") if hasattr(pkg, "typed") else None
     decl = next((g for g in shots.generations if g.generation_id == entry.generation_id), None) if shots else None
@@ -151,22 +215,28 @@ def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dic
     corner_stds = [_corner_std(f) for f in frames]
     med_corner_std = statistics.median(corner_stds)
 
-    # Border motion for R44F camera stability
+    # Frame-to-frame motion, border stability (R44F), and exposure flicker
     border_deltas: list[float] = []
+    frame_motion_deltas: list[float] = []
+    frame_lumas = [sum(f) / max(len(f), 1) for f in frames]
+    luma_jumps = [abs(b - a) for a, b in zip(frame_lumas, frame_lumas[1:])]
     for a, b in zip(frames, frames[1:]):
         top = _region_mean_abs_diff(a, b, range(0, AN_W), range(0, 4))
         left = _region_mean_abs_diff(a, b, range(0, 4), all_rows)
         right = _region_mean_abs_diff(a, b, range(AN_W - 4, AN_W), all_rows)
         border_deltas.append((top + left + right) / 3.0)
+        frame_motion_deltas.append(_region_mean_abs_diff(a, b, range(0, AN_W), all_rows))
     med_border = statistics.median(border_deltas) if border_deltas else 0.0
     max_border = max(border_deltas) if border_deltas else 0.0
+    max_motion = max(frame_motion_deltas) if frame_motion_deltas else 0.0
+    max_luma_jump = max(luma_jumps) if luma_jumps else 0.0
 
-    # Audio speech activity for leading/trailing trim hints
+    # Audio speech activity & peak clipping check
     hop_s = 0.05
     try:
-        dbs = _frames_db(clip, hop_s=hop_s)
-    except (subprocess.CalledProcessError, OSError):
-        dbs = []
+        dbs, peak_sample = _audio_triage_stats(clip, hop_s=hop_s)
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+        dbs, peak_sample = [], 0
     active = [db > -45.0 for db in dbs]
     active_count = sum(1 for v in active if v)
     active_ratio = active_count / len(active) if active else 0.0
@@ -197,6 +267,18 @@ def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dic
             "severity": "WARN",
             "detail": f"bottom-right corner region shows very low texture contrast (median std={med_corner_std:.2f}); inspect watermark preservation",
         })
+    if len(frames) >= 4 and max_motion < 0.45:
+        warnings.append({
+            "code": "FROZEN_TAKE_RISK",
+            "severity": "WARN",
+            "detail": f"picture shows near-zero motion across sampled frames (max_delta={max_motion:.2f}); check for static image masquerade",
+        })
+    if max_luma_jump >= 35.0:
+        warnings.append({
+            "code": "LUMA_FLICKER_SPIKE",
+            "severity": "WARN",
+            "detail": f"abrupt exposure jump between sampled frames (max_luma_jump={max_luma_jump:.1f})",
+        })
     cam_move = decl.camera.movement if decl is not None and decl.camera is not None else ""
     if cam_move == "STATIC" and max_border >= 18.0:
         warnings.append({
@@ -210,6 +292,18 @@ def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dic
             "severity": "WARN",
             "detail": f"dialogue shot has only {active_ratio:.1%} audio frames above -45 dBFS; verify spoken line",
         })
+    elif decl is not None and decl.dialogue and duration_s >= 3.0 and 0.08 <= active_ratio < 0.95 and tail_silence < 0.06:
+        warnings.append({
+            "code": "SPEECH_TRUNCATED_AT_TAIL",
+            "severity": "WARN",
+            "detail": f"speech remains active to clip end (trailing_silence={tail_silence:.3f}s); verify final word was not cut off",
+        })
+    if peak_sample >= 32700:
+        warnings.append({
+            "code": "AUDIO_CLIPPING_RISK",
+            "severity": "WARN",
+            "detail": f"raw take audio hits near full-scale peak ({peak_sample}/32767); check for distortion",
+        })
     if not hash_verified:
         warnings.append({
             "code": "TAKE_HASH_MISMATCH",
@@ -217,7 +311,7 @@ def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dic
             "detail": f"clip sha256 {actual_sha[:12]} differs from logged output_sha256 {entry.output_sha256[:12]}",
         })
 
-    return {
+    result = {
         "take_id": take_id,
         "generation_id": entry.generation_id,
         "clip": str(clip),
@@ -226,15 +320,19 @@ def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dic
         "duration_s": round(duration_s, 3),
         "advisory_only": True,
         "auto_pass_forbidden": True,
+        "triage_cache_version": TRIAGE_CACHE_VERSION,
         "metrics": {
             "frames_sampled": len(frames),
             "baseline": "start_still" if still_path is not None else "frame_0",
             "left_edge_max_delta": round(max_left, 2),
             "right_edge_max_delta": round(max_right, 2),
             "center_median_delta": round(med_center, 2),
+            "frame_motion_max_delta": round(max_motion, 2),
+            "luma_max_jump": round(max_luma_jump, 2),
             "corner_mark_median_std": round(med_corner_std, 2),
             "border_median_delta": round(med_border, 2),
             "border_max_delta": round(max_border, 2),
+            "audio_peak_sample": peak_sample,
             "speech_active_ratio": round(active_ratio, 3),
             "leading_silence_s": lead_silence,
             "trailing_silence_s": tail_silence,
@@ -243,3 +341,50 @@ def triage_take(pkg: Any, take_id: str, *, clips_dir: Path | None = None) -> dic
         },
         "warnings": warnings,
     }
+    if use_cache and clips_dir is None and hash_verified:
+        try:
+            atomic_json(triage_cache_path(root, take_id), result)
+        except OSError:
+            pass
+    return result
+
+
+def triage_batch(
+    pkg: Any,
+    take_ids: list[str] | None = None,
+    *,
+    clips_dir: Path | None = None,
+    jobs: int | None = None,
+    use_cache: bool = True,
+) -> dict[str, dict[str, Any]]:
+    """Run `triage_take` across multiple takes concurrently using bounded worker threads."""
+    from film_pipeline.production.takes import load_log
+
+    root = Path(pkg.root)
+    if take_ids is None:
+        log = load_log(root, pkg.header.film_id)
+        ids = [t.take_id for t in log.takes]
+    else:
+        ids = list(take_ids)
+    if not ids:
+        return {}
+    workers = render_workers(jobs)
+
+    def _one(tid: str) -> tuple[str, dict[str, Any]]:
+        try:
+            return tid, triage_take(pkg, tid, clips_dir=clips_dir, use_cache=use_cache)
+        except Exception as exc:  # noqa: BLE001
+            return tid, {
+                "take_id": tid,
+                "advisory_only": True,
+                "auto_pass_forbidden": True,
+                "metrics": {},
+                "warnings": [{"code": "TRIAGE_ERROR", "severity": "WARN", "detail": str(exc)[:160]}],
+            }
+
+    if len(ids) > 1 and workers > 1:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            pairs = list(pool.map(_one, ids))
+    else:
+        pairs = [_one(tid) for tid in ids]
+    return dict(pairs)
