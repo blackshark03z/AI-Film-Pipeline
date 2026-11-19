@@ -11,8 +11,8 @@
   real balance. Account 03 was flagged on 2026-11-18: treat it as halted until checked.
 - MAR worktree f31dc: its 7 commits are on `feature/dola-session-oneclick-001` (safe); its 4 untracked
   dola_daily_quota files are backed up in `_archive/cleanup_20261119/`.
-- Owner-reserved and open: Gate 6 film08 review; `git push` (feature/drama-preprod-p0 is 870+ commits ahead of
-  origin, last push 2026-11-08); film05 rights; fate of the paused Film120-Gemini worktree.
+- Pushed 2026-11-19 on Owner's "Push": feature/drama-preprod-p0 40dbd4f5..788df5ee (875 commits) to origin.
+- Owner-reserved and open: Gate 6 film08 review; film05 rights; fate of the paused Film120-Gemini worktree.
 - Next: production-system upgrade from this baseline.
 
 ---
