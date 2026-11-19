@@ -152,7 +152,7 @@ SC = {
                  props={"the closure notice:": NOTICE_ON_COUNTER},
                  ev={1: ({"SAM": "S_CUST"}, {}),
                      8: ({}, {"the white mug:": "standing on the counter"}),
-                     16: ({}, {"the white mug:": "held in SAM's right hand at chest height"}),
+                     16: ({}, {"the white mug:": "held in SAM's left hand at chest height"}),   # SC01_g16_t1 (accepted) shows his left hand: canon until the place action
                      24: ({}, {"the white mug:": "standing on the counter"})}),
     "SC02": dict(area="counter", tod="DAWN", light="dawn", r="R_BSTAND", s="S_CUST",
                  props={"the closure notice:": NOTICE_ON_COUNTER},

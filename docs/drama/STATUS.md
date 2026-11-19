@@ -1,3 +1,24 @@
+# 2026-11-19 — Project cleanup (Owner: "dọn dẹp dự án, rác cũ, phần đã xong, worktree đã xong")
+
+- Worktrees removed (branches kept, nothing unmerged lost): AFP-provider-a, AFP-film-package,
+  AI-Film-Pipeline-System-Ship-20261110, AI-Film-Pipeline-Claude-Forensics, -Live-Qual, -Overnight,
+  -ZCode-ControlledShot-20261025, -S2-Audio-Review, C:/Users/ADMIN/.codex/worktrees/film-e2e-ship. Empty stub AFP-shard-3 removed.
+- Their untracked/uncommitted content is in `D:/AI FILM MAKER/_archive/cleanup_20261119/` (3 scratch tgz,
+  S2 OWNER_REVIEW tgz, ZCode uncommitted .patch).
+- Moved (not deleted) from C:/film-work to `E:/AFP-Archive/C-film-work/`: film07-full, film07-pilot, film07_review,
+  film07_*.log, film08 (working files; delivered archive is in films/), irene-v3-20261110, production-stability-p20.
+  Paths cited earlier in this file under C:/film-work/{film07-*,film08,production-stability-p20} now live there.
+- Deleted: AFP-stable/build/, old Temp pytest/playwright dirs, 3 stale Claude scratchpads, empty shard3 patch.
+- C: 6.3 -> 8.3 GiB free.
+- Kept: AI-Film-Pipeline (main checkout, 50 dirty), Film120-Gemini (paused WP, 1.2 GB untracked evidence),
+  Muse worktrees + C:/film-work Muse dirs (active), MAR worktrees (MAR tool state; f31dc holds 7 commits on no branch),
+  _research_pilots and _exports (written in last 72 h). Owner then said delete what is not needed:
+  C:/AFP-Live-v3-20261110 worktree removed (superseded v3 runtime; commits stay on codex/real-film-v3-20261110;
+  OWNER_REVIEW kept as _archive/cleanup_20261119/AFP-Live-v3_OWNER_REVIEW.tgz). C:/AFP-QA-20261110-audit and
+  C:/AFP-Cold-v3-20261110 are not needed but the agent's delete was blocked; Owner deletes them by hand.
+
+---
+
 # 2026-11-18 — Comprehensive System Audit, Quality Hardening & Production Speed Optimization (All 2,529 Tests PASS, Zero Failures)
 
 - **System-Wide Multi-Worktree Audit & Custody Verification:**
