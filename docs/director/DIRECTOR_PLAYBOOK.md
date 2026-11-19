@@ -350,7 +350,8 @@ accepted); then it is a WARN (`GENERABILITY_RED_WAIVED`).
 ## 9. After generation (by hand until P5–P6)
 
 Comprehension record (0 issues), cut, context cards, identity tags placed by `tag_layout.auto_place` and checked by
-eye, subtitles inside the speaking shot, two-pass loudness (−14 to −16 LUFS, peak below −1 dBFS), AI label,
+eye, subtitles inside the speaking shot, two-pass loudness (−14 LUFS ±1.5, i.e. −15.5 … −12.5, true peak ≤ −1 dBTP,
+per `master_qc.py`), AI label,
 metadata and C2PA. The dev C2PA signer is **not** release-grade. Read [film03's README](../drama/film03/README.md) for a complete worked route.
 
 ## 10. Worked example — film03 "The Front Desk"

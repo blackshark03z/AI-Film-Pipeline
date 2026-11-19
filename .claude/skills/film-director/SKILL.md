@@ -26,3 +26,11 @@ Section numbers: story §2, direction §3, pre-production §4, shots §5, writin
 - RED beats (`film.py generability`) are restaged before stills; a RED shot blocks the plan unless it carries a `generability_waiver`.
 - Generate is paused (`OWNER_GO_LIVE: NO`): plan and validate only; no credits, uploads, purchases or publishing without the Owner.
 - Report technical PASS, product proof and Owner acceptance separately.
+
+## Related skills
+
+- `film-treatment` — before writing `02_direction.json` (visual treatment, motifs, colour script).
+- `film-creative-review` — alongside technical QC at still, board, take and cut review.
+- `film-sound-design` — voice bible (`03_preprod` `characters.<id>.voice`) and the sound plan.
+- `film-lessons` — when a defect is found: which stage should have caught it, then the check.
+- `film-post` (this repo) — after `04_shots` and generation: edit, lock, post, delivery.
