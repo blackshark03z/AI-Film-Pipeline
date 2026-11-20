@@ -113,6 +113,11 @@ def check(root: Path, *, probe_flow: bool = False, operation: str = "render", ex
             pass
     if not stt_ready:
         warnings.append("dialogue STT unavailable: check the Vosk model and AFP_STT_PYTHON; no speech PASS is inferred")
+    if operation == "send":
+        from film_pipeline.production.halt import read_halt
+        halt = read_halt()
+        if halt is not None:
+            issues.append(f"production halted: {halt.get('reason', '')} (afp-film halt clear --by ... --reason ...)")
     session = "NOT_PROBED"
     if probe_flow:
         try:

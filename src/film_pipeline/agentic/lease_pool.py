@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from film_pipeline.production.halt import is_halted, set_halt
+
 
 def _iso_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -148,6 +150,8 @@ class AccountLeasePool:
         shot_version: int = 1,
     ) -> dict[str, Any] | None:
         """Atomically lease ``generation_id`` to an eligible healthy account under BEGIN IMMEDIATE."""
+        if is_halted():   # Owner rule: a halt (any account warning) stops ALL leasing until explicitly cleared
+            return None
         ts = float(time.time() if now is None else now)
         key = _lease_key(generation_id, film_id=film_id, shot_version=shot_version)
         with closing(self._connect()) as conn, self._tx(conn):
@@ -272,7 +276,9 @@ class AccountLeasePool:
             row = conn.execute("SELECT * FROM accounts WHERE account_id = ?", (account_id,)).fetchone()
             if row is None:
                 raise KeyError(f"unknown account {account_id!r}")
-            return dict(row)
+            result = dict(row)
+        set_halt(reason.strip() or "account warning", source="lease_pool", account=account_id)
+        return result
 
     def snapshot(self) -> dict[str, Any]:
         with closing(self._connect()) as conn:

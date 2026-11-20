@@ -236,6 +236,10 @@ def _take_state(pkg: Any) -> tuple[list[str], list[str]]:
                 blocks.append(f"{entry.take_id}: ACCEPTED in the log without a stored review")
                 continue
             review, claimed = found
+            need_ev = int(getattr(pkg.header, "qc_evidence_version", 1))
+            if need_ev >= 2 and review.evidence_version < need_ev:
+                blocks.append(f"{entry.take_id}: the stored review has evidence_version {review.evidence_version}, film.json "
+                              f"qc_evidence_version is {need_ev}: re-review it stating what was examined (`observed`)")
             if claimed != entry.output_sha256:
                 blocks.append(f"{entry.take_id}: the review is not bound to the logged bytes")
             if review.verdict().status != "ACCEPTED":

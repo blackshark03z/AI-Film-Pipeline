@@ -248,6 +248,7 @@ def dailies_template(pkg: Any, entry: TakeEntry, script_lines: dict[int, str] | 
         raise ValueError(f"take {entry.take_id} names {entry.generation_id}, which is not in 04_shots.json")
     qc = blank_take(entry.take_id, entry.generation_id).model_dump(mode="json")
     qc["output_sha256"] = entry.output_sha256  # the review is bound to these bytes
+    qc["evidence_version"] = max(1, int(getattr(pkg.header, "qc_evidence_version", 1)))  # the film's required evidence level
     questions = _questions(decl, pre, script_lines or {})
     instructions = ("Fill checks[] (result, severity on FAIL, level, evidence, reviewer human:<id>), then "
                     "`film.py review --film DIR --ingest FILE`. Leave a group UNASSESSED if you did not look.")
@@ -366,6 +367,18 @@ def write_dailies(pkg: Any, film_root: Path, script_lines: dict[int, str] | None
     return out
 
 
+def _film_evidence_version(film_root: Path, pkg: Any = None) -> int:
+    """The film's required QC evidence version (film.json `qc_evidence_version`; 1 when absent or unreadable)."""
+    header = getattr(pkg, "header", None)
+    if header is not None:
+        return int(getattr(header, "qc_evidence_version", 1))
+    try:
+        raw = json.loads((Path(film_root) / "film.json").read_text(encoding="utf-8"))
+        return max(1, int(raw.get("qc_evidence_version", 1)))
+    except (OSError, ValueError, TypeError, AttributeError):
+        return 1
+
+
 @film_writer()
 def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: Any = None) -> dict[str, Any]:
     """Validate a filled sheet (or a bare TakeQc), bind it to the logged bytes, store it and set the take's status."""
@@ -379,6 +392,11 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: An
     from film_pipeline.production.rehearsal import refuse_bot, refuse_undelegated
     refuse_bot(film_root, *(c.reviewer for c in take.checks), *(c.waiver.by for c in take.checks if c.waiver))
     refuse_undelegated(film_root, *(c.reviewer for c in take.checks), *(c.waiver.by for c in take.checks if c.waiver))
+    required_ev = _film_evidence_version(film_root, pkg)
+    if take.evidence_version < required_ev:
+        raise ValueError(f"review of {take.take_id} has evidence_version {take.evidence_version}, but film.json "
+                         f"qc_evidence_version is {required_ev}: state what was examined (`observed` on every judged "
+                         f"check) and set evidence_version {required_ev}")
     log = load_log(film_root, film_id)
     entry = log.get(take.take_id)
     if take.generation_id != entry.generation_id:

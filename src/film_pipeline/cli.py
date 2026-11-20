@@ -43,7 +43,8 @@ def scaffold(film_id: str, profile: str, root: Path, title: str | None, *, portr
     target = root / film_id
     if target.exists() and any(target.iterdir()):
         raise PackageError(f"{target} is not empty; refusing to overwrite")
-    header = FilmHeader(film_id=film_id, title=title or film_id, profile=profile, portrait_9x16=portrait_9x16)
+    header = FilmHeader(film_id=film_id, title=title or film_id, profile=profile, portrait_9x16=portrait_9x16,
+                        qc_evidence_version=2)
     save_header(target, header)
     for name in STAGE_FILES.values():
         (target / name).write_text("{}\n", encoding="utf-8", newline="\n")
@@ -388,6 +389,11 @@ def main(argv: list[str] | None = None) -> int:
     ls.add_argument("--spent", type=float)
     ls.add_argument("--shot-version", type=int, default=1)
     ls.add_argument("--release-leases", action="store_true")
+    ht = actions.add_parser("halt", help="machine-wide production halt (any Flow account warning stops ALL sending): "
+                                          "status | set --reason | clear --by human:ID|agent:ID --reason")
+    ht.add_argument("verb", choices=["status", "set", "clear"])
+    ht.add_argument("--reason", default="")
+    ht.add_argument("--by", default="", help="who clears the halt: human:<id> or agent:<id>")
     sc = actions.add_parser("scene-conform", help="inspect or incrementally conform completed scenes cleanly")
     sc.add_argument("--film", required=True, type=Path)
     sc.add_argument("--render", action="store_true", help="render READY_TO_CONFORM scenes to media/scenes/<scene>.mkv")
@@ -564,6 +570,25 @@ def _run(args, rest, parser) -> int:
                 "default_render_workers": ffjoin.render_workers(),
             })
             return 0 if all_ok else 1
+        if args.action == "halt":
+            from film_pipeline.production import halt as halt_mod
+
+            if args.verb == "status":
+                current = halt_mod.read_halt()
+                _emit({"ok": True, "halted": current is not None, "halt": current, "halt_file": str(halt_mod.halt_path())})
+                return 0
+            try:
+                if args.verb == "set":
+                    if not args.reason.strip():
+                        _emit({"ok": False, "error": "halt set needs --reason"})
+                        return 1
+                    _emit({"ok": True, "halted": True, "halt": halt_mod.set_halt(args.reason, source="cli")})
+                    return 0
+                _emit({"ok": True, "halted": False, "cleared": halt_mod.clear_halt(args.by, args.reason)})
+                return 0
+            except (ValueError, RuntimeError) as exc:
+                _emit({"ok": False, "error": str(exc)})
+                return 1
         if args.action == "lease":
             from film_pipeline.agentic.lease_pool import AccountLeasePool
 

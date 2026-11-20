@@ -46,6 +46,7 @@ from film_pipeline.drama.generability import DRAFTS, rate_shot
 from film_pipeline.production.plan import plan_package
 from film_pipeline.production.money import (credit_ledger, load_adjustments, money_ledger, receipt_amount, receipt_charged,
                                             unresolved_sends, receipt_result, receipt_unit)
+from film_pipeline.production.halt import is_halted, read_halt, set_halt
 from film_pipeline.production.planning import flow_credits
 from film_pipeline.production.sections import shot_seconds
 from film_pipeline.production.takes import (load_log, register_take, sha256_file, sha256_text, takes_dir)
@@ -84,6 +85,15 @@ def owner_go_live(backlog: Path | None = None) -> bool:
 
 def _blocker(code: str, detail: str, live_only: bool = False) -> dict[str, Any]:
     return {"code": code, "detail": detail, "live_only": live_only}
+
+
+def _halt_blocker() -> dict[str, Any] | None:
+    """PRODUCTION_HALT blocker while the machine-wide halt is set (Owner rule: no sending on any account)."""
+    halt = read_halt()
+    if halt is None:
+        return None
+    return _blocker("PRODUCTION_HALT", f"production halted: {halt.get('reason', '')} "
+                    f"(afp-film halt clear --by ... --reason ...)", live_only=True)
 
 
 def _problem_subject(problem: str) -> str | None:
@@ -531,6 +541,9 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
         with film_lock(root, timeout_s=15.0):
             payload = build_payload(pkg, generation_id, plan_out=plan_out, stills_dir=stills_dir, start_token=start_token,
                                     end_token=end_token, today=today, cdp_scope=cdp_scope, account_scope=account_scope)
+            halted = _halt_blocker()
+            if halted is not None:
+                payload["blockers"].append(halted)
             receipt = _write_receipt(root, payload, dry_run=True, sent=False, owner_go_live=owner_go_live(backlog))
             return {"sent": False, "dry_run": True, "ready_to_send": not payload["blockers"], "payload": payload,
                     "receipt": str(receipt)}
@@ -551,6 +564,9 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
             go = mock or owner_go_live(backlog)
             refusals = ([] if go else [_blocker("OWNER_GO_LIVE_NO", "the backlog header does not say OWNER_GO_LIVE: YES")])
             refusals += live_blocked
+            halted = None if mock else _halt_blocker()
+            if halted is not None:
+                refusals.append(halted)
             if not flow:
                 adapter = adapter or make_adapter(cap)
                 health = adapter.health()
@@ -596,6 +612,8 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
         out = Path(payload["output"])
 
         def before_submit(context):
+            if is_halted():   # re-check right before the Enter: a warning on another account may have set the halt
+                raise RuntimeError(f"PRODUCTION_HALT: {(read_halt() or {}).get('reason', '')}; nothing was submitted")
             with film_lock(root, timeout_s=15.0):
                 payload.update(dispatch_phase="SUBMITTING", project=context.get("project") or payload.get("project", ""))
                 _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
@@ -623,9 +641,13 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
             _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=outcome,
                            take_registered=bool(result.get("take")))
             normalized = cap.normalize(outcome)
+            if "FLOW_ACCOUNT_WARNING" in outcome:   # Owner rule: any account warning stops ALL sending; never auto-resend
+                set_halt(outcome, source="generate", account=str(payload.get("account", "")),
+                         film_id=pkg.header.film_id, take_id=payload["take_id"])
             incident = normalized == "PROVIDER_FAILED"
             failures = _provider_failures(root, pkg.header.film_id, generation_id, payload["shot_version"]) if incident else 0
-            resend = incident and auto_resend > 0 and failures < PROVIDER_FAILURES_BEFORE_RESTAGE
+            resend = (incident and auto_resend > 0 and failures < PROVIDER_FAILURES_BEFORE_RESTAGE
+                      and not is_halted())
             log_send(root, payload, manifest, outcome, normalized, auto_resend=resend, provider_failures=failures)
             if incident and not resend and failures >= PROVIDER_FAILURES_BEFORE_RESTAGE:
                 result["restage_needed"] = (f"{generation_id} v{payload['shot_version']}: {failures} provider failures; "

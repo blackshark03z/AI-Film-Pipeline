@@ -94,6 +94,7 @@ class FilmHeader(ContractModel):
     experiment: bool = False
     disclosure: DisclosureSettings = Field(default_factory=DisclosureSettings)
     delegated_reviewers: list[DelegatedReviewer] = Field(default_factory=list)
+    qc_evidence_version: int = Field(default=1, ge=1, le=2)  # 2: take reviews must state what was examined (qc_model.Observation)
     rehearsal: bool = False  # offline dress rehearsal copy (production/rehearsal.py): synthetic footage, never releasable
     gates: dict[str, GateState] = Field(default_factory=lambda: {k: "NOT_RUN" for k in GATE_NAMES})
 

@@ -1,3 +1,24 @@
+# 2026-11-19 — Upgrade steps 1-2 done (docs/production/UPGRADE_PLAN_20261119.md)
+
+- Step 1, honest QC evidence: `TakeQc.evidence_version` 2 + `GroupCheck.observed` (frames_viewed/frames_total/
+  full_playback/audio_listened). v2 rules: judged checks need `observed`; FULL_MOTION/CUT needs full playback or every
+  frame viewed; only `human:` may claim playback/listening, so an agent cannot PASS audio/sync by judgment (use auto:
+  tools); FULL_MOTION contradicting "contact strip / sampled / not listened" evidence is refused. New films
+  (`scaffold`) get `film.json` `qc_evidence_version: 2`; ingest and Gate 4 refuse older reviews there. film03-08 stay
+  v1, unchanged. review-ui no longer hardcodes FULL_MOTION: it records played coverage (>=98% = full playback,
+  >=90% unmuted = listened; counts 1.5x as played).
+- Step 2, machine-wide halt: `production/halt.py`, file `~/.afp/production_halt.json` (env AFP_STATE_DIR /
+  AFP_HALT_FILE). Set by any FLOW_ACCOUNT_WARNING outcome in generate, flow_pool_runner's warning detector and any
+  lease quarantine. While set: generate refuses (and re-checks right before the Enter), lease acquire returns None,
+  `doctor --operation send` is not ok, no auto-resend. Only `afp-film halt clear --by human:|agent:<id> --reason` clears
+  it; history in production_halt_history.jsonl. tests/conftest.py isolates the halt file for every test.
+- film08 SC10_g05_t1: already reconciled (native evidence hash-bound, FLOW_FAILED_UNUSUAL_ACTIVITY -> PROVIDER_FAILED,
+  booked as charged by the Flow registry). 2124 is the official spend; lowering it needs account 03's real balance.
+- test_agentic_v2 film08 checkpoint assertions updated to APPROVED after the Gate 6 acceptance.
+- Next: step 3 (off-frame intrusion prevention for new films) then step 4 (one sender + lease exclusivity + rehearsal).
+
+---
+
 # 2026-11-19 — Pre-upgrade baseline (current state)
 
 - Full suite at 88ebf731 + this commit: **2532 passed, 202 skipped, 0 failed** (28 min;

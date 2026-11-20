@@ -16,6 +16,7 @@ from film_pipeline.agentic import (
     WaveDAGScheduler,
 )
 from film_pipeline.production import takes as T
+from film_pipeline.production.halt import clear_halt, is_halted, read_halt
 from film_pipeline.production.package import load_package
 from film_pipeline.production.plan import plan_package
 
@@ -88,17 +89,29 @@ def test_account_lease_pool_atomic_reserve_cooldown_and_quarantine(tmp_path):
     # Both eligible accounts busy, acct_low below reserve
     assert pool.acquire("SC01_g3", cost_credits=6.0, now=1000.0) is None
 
-    # Quarantine acct_a without halting healthy acct_b; unresolved lease stays quarantined against double-dispatch
+    # Owner rule: an account warning on acct_a halts ALL sending on the machine, healthy acct_b included.
+    # Unresolved lease stays quarantined against double-dispatch.
+    assert not is_halted()
     q = pool.quarantine_account("acct_a", "unusual activity")
     assert q["status"] == "COOLDOWN_QUARANTINE"
+    assert is_halted() and read_halt()["source"] == "lease_pool"
 
-    # Release SC01_g2 and advance past cooldown_s -> unresolved SC01_g1 still blocked until proven NOT_SUBMITTED
+    # Release SC01_g2 (acct_b is healthy and idle) -- acquire is still refused until the halt is explicitly cleared
     pool.release("SC01_g2", credits_spent=6.0, now=1010.0)
+    assert pool.acquire("SC01_g4", cost_credits=6.0, now=1075.0) is None
+    clear_halt("agent:test-agentic", "reviewed the warning in test")
+    l4 = pool.acquire("SC01_g4", cost_credits=6.0, now=1075.0)
+    assert l4 is not None and l4["account_id"] == "acct_b"
+    pool.release("SC01_g4", credits_spent=0.0, cooldown_s=0.0, now=1076.0)
+
+    # Advance past cooldown_s -> unresolved SC01_g1 still blocked until proven NOT_SUBMITTED
     assert pool.acquire("SC01_g1", cost_credits=6.0, now=1020.0) is None
     assert pool.acquire("SC01_g1", cost_credits=6.0, now=1075.0) is None
     # After reconciliation confirms NOT_SUBMITTED, explicitly release acct_a's quarantined lease -> acct_b picks it up
     pool.quarantine_account("acct_a", "proven NOT_SUBMITTED", release_active_leases=True)
-    l1_re = pool.acquire("SC01_g1", cost_credits=6.0, now=1075.0)
+    assert pool.acquire("SC01_g1", cost_credits=6.0, now=1077.0) is None   # re-quarantine re-halts
+    clear_halt("agent:test-agentic", "proven NOT_SUBMITTED reconciled")
+    l1_re = pool.acquire("SC01_g1", cost_credits=6.0, now=1077.0)
     assert l1_re is not None and l1_re["account_id"] == "acct_b"
     snap = pool.snapshot()
     acct_b = next(a for a in snap["accounts"] if a["account_id"] == "acct_b")
@@ -221,6 +234,7 @@ def test_capability_router_and_film08_agentic_plan_readonly_cli():
     assert data["waves"]["remaining_count"] == 0
     assert data["waves"]["ready_frontier"] == []
     assert data["checkpoints"]["CP1_brief_cast_budget"]["status"] == "APPROVED"
-    assert data["checkpoints"]["CP2_pilot_scene_reel"]["status"] == "READY_FOR_PILOT_REVIEW"
-    assert data["checkpoints"]["CP3_master_acceptance"]["status"] == "OWNER_PENDING"
+    # film08 Gate 6 was accepted by the Owner on 2026-11-19, so both checkpoints read APPROVED
+    assert data["checkpoints"]["CP2_pilot_scene_reel"]["status"] == "APPROVED"
+    assert data["checkpoints"]["CP3_master_acceptance"]["status"] == "APPROVED"
     assert data["incremental_conform"]["total_scenes"] == 12

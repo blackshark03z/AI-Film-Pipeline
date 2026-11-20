@@ -32,6 +32,14 @@ _LOCAL_MARKERS = ("projects/", "projects\\", "Flow-Claude-Clean-Profile",
 _LOCAL_VALUE_ERRORS = ("qualified synthetic reference source unavailable",)
 
 
+@pytest.fixture(autouse=True)
+def _isolated_production_halt(tmp_path_factory, monkeypatch):
+    """No test may ever read or write the real ~/.afp production halt file."""
+    state = tmp_path_factory.mktemp("afp_state")
+    monkeypatch.setenv("AFP_STATE_DIR", str(state))
+    monkeypatch.setenv("AFP_HALT_FILE", str(state / "production_halt.json"))
+
+
 def _missing_local_input(excinfo: pytest.ExceptionInfo) -> str | None:
     exc = excinfo.value
     if isinstance(exc, ModuleNotFoundError) and exc.name in _OPTIONAL_MODULES:

@@ -19,9 +19,18 @@ Verdict (`TakeQc.verdict`): REJECTED when any P0 FAIL or an unwaived P1 FAIL; ot
 group is UNASSESSED, WARN, or missing; otherwise ACCEPTED. The take-level required groups are `TAKE_GROUPS`; coverage,
 sequence, color, compliance and delivery are judged on the cut / master, not on a single take. ACCEPTED means the
 declared checks hold, not that the Owner accepts the footage.
+
+Evidence version 2 (``TakeQc.evidence_version``, set per film by ``film.json`` ``qc_evidence_version``; older records
+stay version 1 and validate exactly as before): a judged check must say what was actually examined in ``observed``
+(frames viewed, whether the clip was watched in full motion in real time, whether the audio was heard). FULL_MOTION / CUT
+needs a full playback or every frame counted; SAMPLED needs at least one frame viewed; only a ``human:`` reviewer can have
+watched in real time or listened, so an ``agent:`` reviewer counts frames and leaves audio / sync verdicts to ``auto:``
+machine checks; a PASS on audio or sync by a human / agent needs ``audio_listened``; and a FULL_MOTION / CUT level whose
+evidence or note admits "contact strip" / "sampled frames only" / "not listened" is a contradiction (it was SAMPLED).
 """
 from __future__ import annotations
 
+import re
 from typing import Any, Literal
 
 from pydantic import Field, model_validator
@@ -64,6 +73,19 @@ class Waiver(ContractModel):
     by: str = Field(pattern=r"^human:[A-Za-z0-9_.\-]+$")
 
 
+_SAMPLED_ADMISSION = re.compile(r"not listened|sampled frames only|\b\d+-frame (?:contact )?strip|contact strip",
+                                re.IGNORECASE)
+
+
+class Observation(ContractModel):
+    """What the reviewer actually examined (evidence version 2)."""
+
+    frames_viewed: int = Field(ge=0)
+    frames_total: int | None = Field(default=None, ge=1)
+    full_playback: bool = False  # the whole clip watched in motion in real time
+    audio_listened: bool = False  # the audio was actually heard, not only measured
+
+
 class GroupCheck(ContractModel):
     group: Group
     result: Result = "UNASSESSED"
@@ -74,6 +96,7 @@ class GroupCheck(ContractModel):
     note: str = ""
     waiver: Waiver | None = None
     answers: dict[str, str] = Field(default_factory=dict)  # review question id -> the reviewer's short answer / evidence
+    observed: Observation | None = None  # required on judged checks of an evidence_version >= 2 record
 
     @property
     def number(self) -> int:
@@ -127,6 +150,36 @@ class TakeQc(ContractModel):
     cause: Cause | None = None  # why a REJECTED take failed; retake.py decides the next move from it
     cause_note: str = ""
     required_answers: list[str] = Field(default_factory=list)  # question ids a human must answer before ACCEPTED
+    evidence_version: int = 1  # >= 2: every judged check states what was examined (`observed`), see the module docstring
+
+    @model_validator(mode="after")
+    def _observed_rules(self) -> "TakeQc":
+        if self.evidence_version < 2:
+            return self
+        for c in self.checks:
+            if c.result == "UNASSESSED" or not c.by_human:
+                continue
+            g = f"take {self.take_id}: QC group {c.group} ({c.number})"
+            ob = c.observed
+            if ob is None:
+                raise ValueError(f"{g}: evidence_version {self.evidence_version} requires `observed` "
+                                 f"(frames viewed / full playback / audio listened) on every judged check")
+            if c.level in ("FULL_MOTION", "CUT") and not (
+                    ob.full_playback or (ob.frames_total is not None and ob.frames_viewed >= ob.frames_total)):
+                raise ValueError(f"{g}: level {c.level} needs full_playback or every frame viewed "
+                                 f"(frames_viewed {ob.frames_viewed} of frames_total {ob.frames_total}); otherwise use SAMPLED")
+            if c.level == "SAMPLED" and ob.frames_viewed < 1:
+                raise ValueError(f"{g}: level SAMPLED needs frames_viewed >= 1")
+            if (ob.full_playback or ob.audio_listened) and not c.reviewer.startswith("human:"):
+                raise ValueError(f"{g}: only a human: reviewer can claim full_playback or audio_listened "
+                                 f"(reviewer {c.reviewer}); an agent counts frames and leaves audio / sync to auto: tools")
+            if c.group in ("audio", "sync") and c.result == "PASS" and not ob.audio_listened:
+                raise ValueError(f"{g}: a PASS by {c.reviewer} needs audio_listened (only a human can hear the clip); "
+                                 f"an auto: tool may PASS it from machine evidence")
+            if c.level in ("FULL_MOTION", "CUT") and _SAMPLED_ADMISSION.search(f"{c.evidence}\n{c.note}"):
+                raise ValueError(f"{g}: level {c.level} contradicts the evidence/note, which says the take was only sampled "
+                                 f"(contact strip / sampled frames only / not listened); the level must be SAMPLED")
+        return self
 
     @model_validator(mode="after")
     def _one_check_per_group(self) -> "TakeQc":

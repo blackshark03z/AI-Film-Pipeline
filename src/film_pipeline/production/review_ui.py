@@ -85,11 +85,64 @@ const ITEMS = __DATA__;
 const GROUPS = __GROUPS__;
 let activeFilter = "pending";
 const decisions = new Map();
+// What the browser really saw per take: 0.25 s buckets of the clip that played continuously (a seek leaves a gap), and
+// the subset played unmuted with volume > 0. The export claims full playback / audio only from these, never by default.
+const BUCKET = 0.25;
+const watch = new Map();
+const FULL_COVERAGE = 0.98;
+const AUDIO_COVERAGE = 0.90;
+
+function watchOf(tid) {
+  if (!watch.has(tid)) watch.set(tid, { duration: 0, seen: new Set(), heard: new Set(), last: null });
+  return watch.get(tid);
+}
+
+function markPlayed(video, upTo) {
+  const w = watchOf(video.dataset.vid);
+  if (isFinite(video.duration) && video.duration > 0) w.duration = video.duration;
+  const audible = !video.muted && video.volume > 0;
+  if (w.last !== null && upTo > w.last && upTo - w.last <= 1.0) {
+    for (let b = Math.floor(w.last / BUCKET); b <= Math.floor(upTo / BUCKET); b++) {
+      w.seen.add(b);
+      if (audible) w.heard.add(b);
+    }
+  }
+  w.last = upTo;
+}
+
+function coverage(w, set) {
+  if (!(w.duration > 0)) return 0;
+  const total = Math.ceil(w.duration / BUCKET);
+  let n = 0;
+  for (let b = 0; b < total; b++) if (set.has(b)) n++;
+  return n / total;
+}
+
+function observation(tid, reviewer) {
+  const w = watch.get(tid);
+  const human = reviewer.startsWith("human:");  // an agent cannot watch in real time or listen
+  if (human && w && coverage(w, w.seen) >= FULL_COVERAGE) {
+    return { level: "FULL_MOTION", observed: { frames_viewed: 0, frames_total: null, full_playback: true,
+                                               audio_listened: coverage(w, w.heard) >= AUDIO_COVERAGE } };
+  }
+  return { level: "SAMPLED", observed: { frames_viewed: 1, full_playback: false, audio_listened: false } };
+}
+
+function trackVideos() {
+  document.querySelectorAll("video[data-vid]").forEach(v => {
+    v.addEventListener("loadedmetadata", () => { watchOf(v.dataset.vid).duration = v.duration; });
+    v.addEventListener("play", () => { watchOf(v.dataset.vid).last = v.currentTime; });
+    v.addEventListener("seeking", () => { watchOf(v.dataset.vid).last = null; });
+    v.addEventListener("seeked", () => { watchOf(v.dataset.vid).last = v.currentTime; });
+    v.addEventListener("timeupdate", () => { if (!v.paused && !v.seeking) markPlayed(v, v.currentTime); });
+    v.addEventListener("ended", () => { markPlayed(v, v.duration); watchOf(v.dataset.vid).last = null; });
+  });
+}
 
 for (const item of ITEMS) {
   decisions.set(item.take_id, {
     mode: "UNASSESSED",
-    evidence: `${item.output_file}: batch visual+audio review`,
+    evidence: `${item.output_file}: review-ui batch review (level and observed record what was actually played)`,
     severity: "P1",
     cause: "PROMPT",
     groups: Object.fromEntries(GROUPS.map(g => [g, item.status === "ACCEPTED" ? "PASS" : (item.status === "REJECTED" ? "FAIL" : "UNASSESSED")])),
@@ -133,7 +186,7 @@ function renderGrid() {
           <span class="badge ${triageCls}">${item.triage_status}</span>
         </div>
       </div>
-      <video controls preload="metadata" src="${item.video_rel}"></video>
+      <video controls preload="metadata" data-vid="${item.take_id}" src="${item.video_rel}"></video>
       <div class="dialogue">${(item.dialogue || "(silent shot)").replace(/</g, "&lt;")}</div>
       <div class="triage-box">SHA: ${item.output_sha256.slice(0, 12)} | Trim hint: ${item.trim_hint || "-"} | Flags: ${(item.triage_flags || []).map(f => f.code).join(", ") || "none"}</div>
       ${(item.triage_flags && item.triage_flags.length) ? `<div class="triage-box" style="color:#f2cc60">${item.triage_flags.map(f => `${f.code}: ${(f.detail || "").replace(/</g, "&lt;")}`).join(" · ")}</div>` : ""}
@@ -157,6 +210,7 @@ function renderGrid() {
     grid.appendChild(card);
   }
   applySpeed();
+  trackVideos();
   const judgedCount = ITEMS.filter(x => Object.values(decisions.get(x.take_id).groups).some(v => v === "PASS" || v === "FAIL") && isPending(x)).length;
   document.getElementById("summaryLine").textContent = `Showing ${shown}/${ITEMS.length} | Marked Pending: ${judgedCount}`;
 }
@@ -235,10 +289,12 @@ document.getElementById("exportBtn").addEventListener("click", () => {
         return;
       }
     }
+    const seen = observation(item.take_id, reviewer);
     const checks = GROUPS.map(g => {
       const res = st.groups[g];
       if (res === "UNASSESSED") return { group: g, result: "UNASSESSED" };
-      const c = { group: g, result: res, level: "FULL_MOTION", reviewer, evidence: st.evidence.trim() || item.output_file };
+      const c = { group: g, result: res, level: seen.level, observed: { ...seen.observed }, reviewer,
+                  evidence: st.evidence.trim() || item.output_file };
       if (res === "FAIL") c.severity = st.severity || "P1";
       const qAnswers = {};
       for (const q of item.relation_questions) {
@@ -252,6 +308,7 @@ document.getElementById("exportBtn").addEventListener("click", () => {
       generation_id: item.generation_id,
       output_sha256: item.output_sha256,
       required_answers: item.relation_questions.map(q => q.id),
+      evidence_version: 2,
       checks
     };
     if (checks.some(c => c.result === "FAIL")) entry.cause = st.cause || "PROMPT";
