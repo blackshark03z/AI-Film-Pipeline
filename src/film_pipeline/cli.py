@@ -123,6 +123,104 @@ def _motion(args, pkg) -> int:
     return 1 if verdict["findings"] else 0
 
 
+def _accounts(args: argparse.Namespace) -> int:
+    """``afp-film accounts``: the broker's accounts by id/label only. Never enumerates browser profiles and never reads
+    cookies; a stored CDP endpoint is never printed."""
+    from film_pipeline.agentic.broker import Broker, default_db_path
+    broker = Broker(args.db or default_db_path())
+
+    def view(extra: dict[str, object] | None = None) -> dict[str, object]:
+        return {**(extra or {}), "db": str(broker.db_path), "accounts": broker.accounts_view()}
+
+    try:
+        if args.verb == "list":
+            _emit(view({"readonly": True}))
+            return 0
+        if not args.account:
+            _emit({"ok": False, "error": f"accounts {args.verb} needs --account"})
+            return 2
+        if args.verb == "register":
+            slots = {}
+            for item in args.slots:
+                kind, _, n = item.partition("=")
+                slots[kind.strip()] = int(n)
+            broker.register_account(args.account, args.credits, provider=args.provider, label=args.label,
+                                    slots=slots or None, quota_mode=args.quota_mode, quota_unit=args.quota_unit,
+                                    daily_quota=args.daily_quota, probe_max_age_s=args.probe_max_age_s,
+                                    reserve_pct=args.reserve_pct, cdp_endpoint=args.cdp_endpoint, project=args.project)
+        elif args.verb == "set-state":
+            if not args.state:
+                _emit({"ok": False, "error": "accounts set-state needs --state, --by and --reason"})
+                return 2
+            broker.set_state(args.account, args.state, by=args.by, reason=args.reason)
+        elif args.verb == "probe":
+            if args.weekly_remaining_pct is None:
+                _emit({"ok": False, "error": "accounts probe needs --weekly-remaining-pct"})
+                return 2
+            broker.record_probe(args.account, args.weekly_remaining_pct)
+    except (KeyError, ValueError, RuntimeError) as exc:
+        _emit({"ok": False, "error": str(exc.args[0] if isinstance(exc, KeyError) and exc.args else exc)})
+        return 1
+    _emit(view({"ok": True}))
+    return 0
+
+
+def _broker_api(args: argparse.Namespace) -> int:
+    """``afp-film broker``: the lane API verbs; prints the result dict as JSON, exits with its stable code."""
+    from film_pipeline.agentic import broker_api as api
+    db = args.db
+    one = args.child[0].partition("=")[0].strip() if args.child else ""
+    if args.verb == "acquire":
+        try:
+            children = []
+            for item in args.child:
+                key, _, amount = item.partition("=")
+                children.append({"child_key": key.strip(), "take_id": key.strip(),
+                                 "amount": float(amount) if amount.strip() else None})
+        except ValueError:
+            out = {"ok": False, "code": "USAGE", "reason": "--child takes KEY=AMOUNT"}
+        else:
+            out = api.acquire(args.account, args.lease_key, children, unit=args.unit, provider=args.provider,
+                              film_root=args.film, job_kind=args.job_kind, holder=args.holder, epoch=args.epoch,
+                              db=db)
+    elif args.verb == "check":
+        out = api.check_before_enter(args.lease_key, args.token, one, epoch=args.epoch, db=db)
+    elif args.verb == "mark":
+        out = api.mark(args.lease_key, args.token, one, args.state, spent=args.spent, reason=args.reason,
+                       epoch=args.epoch, db=db)
+    elif args.verb == "release":
+        out = api.release(args.lease_key, args.token, db=db)
+    elif args.verb == "settle":
+        out = api.settle(args.lease_key, spent=args.spent, child_key=one or None, note=args.reason, db=db)
+    elif args.verb == "login-check":
+        if args.epoch is None:
+            out = {"ok": False, "code": "USAGE", "reason": "login-check needs --epoch"}
+        else:
+            out = api.check_before_login(args.account, cause=args.cause, epoch=args.epoch, lease_key=args.lease_key,
+                                         lease_token=args.token, claimant=args.claimant, db=db)
+    elif args.verb == "login-result":
+        if args.result not in ("ok", "failed"):
+            out = {"ok": False, "code": "USAGE", "reason": "login-result needs --result ok|failed"}
+        else:
+            out = api.login_result(args.account, ok=args.result == "ok", db=db)
+    elif args.verb == "claim":
+        if args.epoch is None:
+            out = {"ok": False, "code": "USAGE", "reason": "claim needs --epoch and --claimant"}
+        else:
+            out = api.claim_profile(args.account, claimant=args.claimant, epoch=args.epoch, db=db)
+    elif args.verb == "probe":
+        if args.weekly_remaining_pct is None:
+            out = {"ok": False, "code": "USAGE", "reason": "probe needs --weekly-remaining-pct"}
+        else:
+            out = api.probe(args.account, weekly_remaining_pct=args.weekly_remaining_pct, db=db)
+    elif args.verb == "import-legacy":
+        out = api.import_legacy(args.films_dir or "", db=db) if args.films_dir else             {"ok": False, "code": "USAGE", "reason": "import-legacy needs --films-dir"}
+    else:
+        out = api.halt(args.provider, args.account, args.reason, kind=args.kind, db=db)
+    _emit(out)
+    return api.exit_code(out)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_subparsers(dest="action", required=True)
@@ -399,6 +497,58 @@ def main(argv: list[str] | None = None) -> int:
     ls.add_argument("--spent", type=float)
     ls.add_argument("--shot-version", type=int, default=1)
     ls.add_argument("--release-leases", action="store_true")
+    ac = actions.add_parser("accounts", help="the S1 broker's accounts by id/label only (state, film, children in flight "
+                                             "n/slots, quota or probe age, epoch, held reason): list | register | "
+                                             "set-state --state FREE|QUARANTINED|NEEDS_LOGIN|HALTED --by --reason | "
+                                             "probe --weekly-remaining-pct P. Never lists browser profiles or cookies")
+    ac.add_argument("verb", choices=["list", "register", "set-state", "probe"])
+    ac.add_argument("--db", type=Path, help="broker database (default: the machine-wide one in the state dir)")
+    ac.add_argument("--account")
+    ac.add_argument("--provider", choices=["flow", "muse"], help="register: the account's provider")
+    ac.add_argument("--label", help="register: a display label")
+    ac.add_argument("--credits", type=float, help="register: constant quota remaining (in --quota-unit)")
+    ac.add_argument("--quota-mode", choices=["constant", "probed"], help="register: where the quota comes from")
+    ac.add_argument("--quota-unit", choices=["credits", "VND", "USD", "muse_requests"])
+    ac.add_argument("--daily-quota", type=float, help="register: a per-day quota on this account (constant mode)")
+    ac.add_argument("--probe-max-age-s", type=float, help="register: a probe older than this is refused")
+    ac.add_argument("--reserve-pct", type=float, help="register: a probe below this weekly %% is refused")
+    ac.add_argument("--slots", action="append", default=[], metavar="KIND=N",
+                    help="register: slots per job kind, e.g. video=6 (repeatable)")
+    ac.add_argument("--cdp-endpoint", help="register: the Flow profile's CDP endpoint (stored, never printed)")
+    ac.add_argument("--project", help="register: the Flow project id leases on this account must use")
+    ac.add_argument("--state", help="set-state: FREE, QUARANTINED, NEEDS_LOGIN or HALTED")
+    ac.add_argument("--by", default="", help="set-state: human:<id> or agent:<id>")
+    ac.add_argument("--reason", default="")
+    ac.add_argument("--weekly-remaining-pct", type=float, help="probe: the weekly quota left, in percent")
+    bk = actions.add_parser("broker", help="the broker's public lane API (agentic/broker_api.py), JSON out; exit 0 ok, "
+                                           "1 refused (NOT_SENT, no lease, halt, epoch, cap), 2 usage, 3 not found / "
+                                           "token mismatch: acquire | check | mark | release | settle | halt | "
+                                           "login-check | login-result | claim | probe | import-legacy")
+    bk.add_argument("verb", choices=["acquire", "check", "mark", "release", "settle", "halt", "login-check",
+                                     "login-result", "claim", "probe", "import-legacy"])
+    bk.add_argument("--db", type=Path, help="broker database (default: the machine-wide one in the state dir)")
+    bk.add_argument("--account", default="", help="acquire/halt: the account id")
+    bk.add_argument("--provider", default="", help="acquire/halt: the provider (muse, flow, ...)")
+    bk.add_argument("--lease-key", default="")
+    bk.add_argument("--token", default="", help="the lease token acquire returned")
+    bk.add_argument("--child", action="append", default=[], metavar="KEY=AMOUNT",
+                    help="acquire: one child of the batch (repeatable); check/mark/settle: the child key")
+    bk.add_argument("--unit", default="", help="acquire: credits, VND, USD or muse_requests")
+    bk.add_argument("--job-kind", default="video", choices=["video", "stills"])
+    bk.add_argument("--film", type=Path, help="acquire: the film package (its budget and scope; required)")
+    bk.add_argument("--films-dir", type=Path, help="import-legacy: a directory of film packages")
+    bk.add_argument("--cause", default="", help="login-check: AUTH_EXPIRED (the only cause that allows a re-login)")
+    bk.add_argument("--claimant", default="", help="login-check/claim: the lane's profile-claim id")
+    bk.add_argument("--result", default="", help="login-result: ok or failed")
+    bk.add_argument("--weekly-remaining-pct", type=float, help="probe: the weekly quota left, in percent")
+    bk.add_argument("--holder", default="")
+    bk.add_argument("--epoch", type=int)
+    bk.add_argument("--state", default="", help="mark: SUBMITTING, AMBIGUOUS, PASSED, PROVIDER_FAILED, "
+                                               "REJECTED_POLICY, NOT_SUBMITTED or NOT_SENT")
+    bk.add_argument("--spent", type=float, default=0.0)
+    bk.add_argument("--reason", default="")
+    bk.add_argument("--kind", default="ACCOUNT_WARNING",
+                    help="halt: CAPTCHA, VERIFICATION, UNUSUAL_ACTIVITY or ACCOUNT_WARNING")
     ht = actions.add_parser("halt", help="machine-wide production halt (any Flow account warning stops ALL sending): "
                                           "status | set --reason | clear --by human:ID|agent:ID --reason")
     ht.add_argument("verb", choices=["status", "set", "clear"])
@@ -448,12 +598,15 @@ def main(argv: list[str] | None = None) -> int:
         (args.action in readonly and not (args.action == "validate" and getattr(args, "sync_gates", False)))
         or (args.action == "foley" and getattr(args, "list", False))
         or (args.action == "lease" and getattr(args, "verb", None) == "status")
+        or (args.action == "accounts" and getattr(args, "verb", None) == "list")
         or (args.action == "scene-conform" and not getattr(args, "render", False))
         or (args.action == "setup-anchors" and not getattr(args, "apply", False))
         or (args.action == "stills" and getattr(args, "bind_matching", False) and getattr(args, "dry_run", False))
     )
     try:
-        if getattr(args, "film", None) and args.action != "generate" and not is_readonly:
+        # generate takes film_lock itself; broker, accounts and lease touch the broker, a leaf lock never taken
+        # inside film_lock (F2): lease settle reads its receipt under film_lock and settles after releasing it
+        if getattr(args, "film", None) and args.action not in ("generate", "broker", "accounts", "lease")                 and not is_readonly:
             with writer(args.film, flow=args.action == "reconcile"):
                 return _run(args, rest, parser)
         return _run(args, rest, parser)
@@ -599,6 +752,10 @@ def _run(args, rest, parser) -> int:
             except (ValueError, RuntimeError) as exc:
                 _emit({"ok": False, "error": str(exc)})
                 return 1
+        if args.action == "accounts":
+            return _accounts(args)
+        if args.action == "broker":
+            return _broker_api(args)
         if args.action == "lease":
             from film_pipeline.agentic.lease_pool import AccountLeasePool, default_db_path
 
