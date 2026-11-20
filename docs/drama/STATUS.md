@@ -1,3 +1,22 @@
+# 2026-11-20 — Studio architecture v3 agreed; Muse-first policy; POLICY_REF pinned; S1 started
+
+- Design: docs/production/STUDIO_ARCHITECTURE.md v3. Codex v2 review was ACCEPT_WITH_FIXES (F1-F6 applied). The
+  Muse Tech Lead (session local_e75f8a13) reviewed v3 and accepted it; its points are marked M1-M10.
+- Owner decisions 2026-11-20 (OWNER_POLICY.md):
+  - Muse is the video and stills provider: max resolution, no request cap, no spend approval.
+  - Flow and Vilao are paused; every Flow spend needs the Owner.
+  - Out of quota or failed login on an account: tell the Owner and continue on the other accounts.
+  - CAPTCHA, verification or warning: stop all Muse sending.
+  - Pilot P1 runs on Muse; order S1-S2-S3-S5-P1-S4-S6.
+- **D0: POLICY_REF = 1d5002742ab9c3990fb369af36aaab6c958c2d56** (Owner accepted in chat: "Accept, start S1"). Pin
+  it in every worker handoff.
+- Muse side: the CAPTCHA currently fails over to another account in standalone Muse. The Muse TL is fixing it
+  (Codex round 2); until then that is a known gap in the standalone production path.
+- Muse verification report: docs/production/muse/Bao-cao-tong-hop-kiem-chung-Muse-FINAL.md.
+- Next: S1, Broker v2, run in its own session.
+
+---
+
 # 2026-11-20 — Upgrade step 5 done: edge-intrusion detector (advisory) + defect custody
 
 - Detector `production/edge_intrusion.py`: 12 fps, frame-to-frame camera-motion compensation, changed pixels in edge
