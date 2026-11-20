@@ -1,4 +1,4 @@
-# 2026-11-21 — S1 Broker v2 built (commits f3c6dcf8..620d4c88); last Codex round REJECT, its 2 findings fixed, not re-reviewed
+# 2026-11-21 — S1 Broker v2 built (commits f3c6dcf8..acdc49cb); Codex round 5 REJECT, its 2 findings fixed, not re-reviewed
 
 - Goal: STUDIO_ARCHITECTURE.md v3 S1 (§3/§5/§6/§9, §11 row). POLICY_REF 1d500274 pinned; no POLICY_SYNC needed.
 - Built: `agentic/broker.py` (SQLite, user_version 2, migrated in place from the step-4 pool; states FREE/BUSY/
@@ -18,17 +18,23 @@
     R2-2/R3-1/R4-1, never undercount money.
   - A replay of an ACTIVE lease must be identical (unit, scope, job kind, provider, children and prices).
   - Settlement amounts must be finite and >= 0. `set_halt(db=...)` locks the broker the caller admits against.
+  - Every halt-file set/clear also takes `production_halt.json.lock` (innermost lock, after any broker lock). Why:
+    set and clear through different broker DBs (`--db`) must serialize (Codex R5-1).
+  - Import binds a migrated step-4 reservation to its receipt's take id and film scope in every state. Why: the
+    ledger credit names the take (g1_t1), the step-4 row named the generation (g1) (Codex R5-2).
 - Codex (gpt-6.1-sol, read-only; prompts/outputs in `_archive/s1_broker_20261120/`): round 1 REJECT (5), round 2
-  REJECT (3), round 3 REJECT (3), round 4 REJECT (2: per-take ledger credit, halt lock with --db). Every finding was
-  fixed with a test; the round-4 fixes were NOT re-reviewed (3-round limit reached).
-- Tests (TMP/TEMP on D:): required files green: test_broker_s1 39, test_lease_exclusivity 21 + 1 skip (env: no
-  `websockets`), rehearsal_cli_e2e, offframe_protection, edge_intrusion, defect_custody, provider_routing,
+  REJECT (3), round 3 REJECT (3), round 4 REJECT (2: per-take ledger credit, halt lock with --db), round 5 on the
+  commits (requested past the 3-round limit) REJECT: round-4 fixes confirmed FIXED, 2 new (halt clear vs --db
+  warning race; migrated rows kept the generation id). Every finding was fixed with a test (acdc49cb); the round-5
+  fixes are NOT re-reviewed.
+- Tests (TMP/TEMP on D:): required files green (214 passed, 2 skipped, both env: no `websockets`): test_broker_s1
+  41, test_lease_exclusivity 21 + 1 skip, test_agentic_v2, rehearsal_cli_e2e, offframe_protection, edge_intrusion, defect_custody, provider_routing,
   production_generate, production_halt, production_recovery_p20. Full suite on the WIP: 1 failed / 2667 passed /
   204 skipped; the failure (FILM_BUSY, global lock under LOCALAPPDATA) came from a second pytest run in parallel and
   passes alone: env.
   `uv run python -m pytest tests/test_broker_s1.py tests/test_lease_exclusivity.py -q --basetemp "D:/AI FILM MAKER/_tmp_pytest/s1"`
-- Open: no independent review of the round-4 fixes; rehearsal pools and the machine broker share one halt file.
-- Next: S2 (daemon, job journal, lanes) on top of `broker_api`; an optional extra Codex round on f3c6dcf8..HEAD.
+- Open: no independent review of the round-5 fixes (acdc49cb).
+- Next: S2 (daemon, job journal, lanes) on top of `broker_api`; optionally Codex round 6 on acdc49cb.
 
 ---
 
