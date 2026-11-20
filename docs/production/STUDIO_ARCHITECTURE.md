@@ -1,6 +1,9 @@
-# AFP Studio — multi-film production architecture
+# Film Studio (formerly AFP + Muse) — multi-film production architecture
 
-**Status: PROPOSAL v3, 2026-11-20.** The Owner agreed the outline in chat.
+**Status: PROPOSAL v3.1, 2026-11-20.** The Owner agreed the outline in chat.
+- **Name.** The merged product is **Film Studio** (Owner, 2026-11-20). The rename happens at milestone M3 (§11), not
+  before, so that running films and tools keep working.
+- v3.1 adds the fast-track merge roadmap agreed with the Muse Tech Lead (§11).
 - v1 was reviewed by Codex (gpt-6.1-sol, read-only) with the verdict **REWORK**. Review:
   `D:/AI FILM MAKER/_archive/studio_arch_20261120/review_v1.md`.
 - v2 answers its 10 findings; §14 maps each one to the section that answers it.
@@ -369,8 +372,33 @@ accounts.
 | S5 | Muse lane: video and stills jobs, multi-take, the r6-r9 rules of §9 | offline parity on fixture **B14** (`D:\Muse\_director_review_B14_20261119`: 20 shots, dialogue, 2 locations, 4 characters; copied to a short path); one test per r6-r9 rule; partial N×6 failures; auth expiry after submit; restart-safe throttling; no re-dispatch; integrity quarantine honoured by every reader; exclusive profile ownership; **recovery drill**: kill the lane after Enter and before download, then a fresh lane reopens the persisted thread URL and binds the result by batch_id + slot_id + request_id + receipt sha with zero new sends (if the drill fails, F5 falls back to UNBINDABLE + HELD only). Live parity: BIKER_DEAD_ENGINE_20261120 if the Owner accepts it, else BLACK_PILOT_EXTENDED_FEATURE_FILM (M5a) |
 | S6 | 2 films in parallel | Owner-authorised; predefined delivery, playback and listening, budget, duplicate-send and recovery criteria; separate technical, product and Owner verdicts |
 
-- Order (Owner chose Muse for P1, 2026-11-20): S1 → S2 → S3 → S5 → **P1** → S4 → S6. S4 is not needed for P1.
-  S2's lane tests use the mock and rehearsal runners; Flow live sends stay paused.
+- **Merge roadmap (v3.1, fast track agreed with the Muse Tech Lead).** The Owner asked for maximum capacity, so
+  the Muse lanes run at n usable accounts × 6.
+  - **M1, in parallel now:**
+    - S1, the broker, including a public API for external lanes;
+    - the Muse CAPTCHA stop-all fix (Codex round 15);
+    - the AFP↔Muse lane contract (`D:\Muse\docs\AFP_MUSE_LANE_CONTRACT.md`);
+    - **P0 baseline**: BLACK_PILOT made end to end on standalone Muse through `pool_runner` only. It gives
+      per-stage timings, takes, QC verdicts, defects and quota as the parity reference.
+  - **M2, operational merge = P1:**
+    - **S5-wrapped**: the AFP lane runs Muse's `pool_runner` at a pinned tag as an external process, one account
+      per lane, chosen by the broker. Muse's internal failover is off. The lane reads the ledger and receipt files.
+      No send code is ported.
+    - **S2-lite**: job rows, frozen inputs and intake, run synchronously from the direct CLI.
+    - B14 offline parity first, then P1, one real film. Ownership for P1: the AFP brain owns story, beats, Gates
+      1-3, approvals, defects and custody. Muse owns compile, keyframes, video, QC and post, as pinned tools.
+    - P1 passes when there is no duplicate send, the recovery drill passes and quality is at least P0's. **From
+      then on there is one production path**: standalone Muse stops real sends, and every send goes through the
+      broker (D5).
+  - **M3, code merge and rename to Film Studio:**
+    - one repository, with the Muse code imported with its history at the pinned tag;
+    - CLI `studio`, keeping `afp-film` as an alias;
+    - the §13 backlog ported only through parity tests;
+    - then S2 in full (daemon, git writer), S3 (conductor, wake adapters), S4 (web UI with the account panel,
+      thread count, busy/free) and **S6: two films in parallel**.
+- Former order, kept for reference: S1 → S2 → S3 → S5 → P1 → S4 → S6. It is replaced by the roadmap above: the
+  daemon (S2 full) and the conductor (S3) are not needed for P1. S2's lane tests use the mock and rehearsal
+  runners; Flow live sends stay paused.
 - **Muse non-regression rule.** Muse controls video differently from Flow (a chat agent, handoff ZIP batches, a
   submission ledger). The S5 lane wraps or ports Muse's proven code paths and rules unchanged; a rewrite is allowed
   only where a parity test proves the same behaviour. The Muse Tech Lead reviews every S5 change that touches
@@ -379,7 +407,7 @@ accounts.
 - **Until P1 passes, the standalone Muse lanes stay the production path**, with safety fixes only; after its round
   10 Muse gets no new features.
 - D5 (switching Muse production to AFP) is decided on the P1 verdicts.
-- **Ownership.** AFP Tech Lead: S1-S4, P1, S6, and the S5 implementation. Muse Tech Lead: the S5 lane spec, the
+- **Ownership.** AFP Tech Lead: S1-S4, P1, S6, the S5 adapter and M3. Muse Tech Lead: the S5 lane spec, the
   r6-r9 rule tests and the parity fixtures; the AFP Tech Lead reviews them.
 
 ## 12. Risks
