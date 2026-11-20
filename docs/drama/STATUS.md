@@ -1,3 +1,27 @@
+# 2026-11-20 — Upgrade step 5 done: edge-intrusion detector (advisory) + defect custody
+
+- Detector `production/edge_intrusion.py`: 12 fps, frame-to-frame camera-motion compensation, changed pixels in edge
+  strips with persistence; YuNet faces optional (model in production/models/, Apache-2.0, 232 KB) and off by default
+  (faces caught only 4-8% of intrusions). Labelled set: film07 50 pos / 263 clean, film08 28 / 242
+  (manifest + feature cache in `_archive/step5_edge/`). Calibration doc:
+  docs/production/edge_intrusion_calibration_20261120.md.
+- Targets (held-out recall >= 0.80 at FPR <= 0.15) NOT met: tuned on film07 -> film08 0.75 / 0.214; shipped point
+  (tuned on film08) film07 0.78 / 0.076, film08 0.75 / 0.074 but film08 is no longer a clean held-out (looked at
+  its misses). Old 12-frame check: film07 0.56 / 0.053, film08 0.21 / 0.070. Misses: intruder already in frame 0,
+  tiny/brief slivers; false alarms: push-ins with shoulder parallax, subject turning/exiting at the edge.
+- So triage emits `EDGE_INTRUSION_SUSPECT` as INFO in result["signals"] (not a warning, never a reject). Flip
+  `EDGE_INTRUSION_SEVERITY = "WARN"` only after a clean new film's first batch meets the targets. Old check kept.
+- Custody: `production/defects.py` registry (OFFFRAME_INTRUSION, IDENTITY_DRIFT, WRONG_SPEAKER_LIPSYNC,
+  DIALOGUE_TRUNCATED, GAZE_EYELINE_DRIFT, PROP_CONTINUITY_BREAK, CAMERA_INSTABILITY, PROVIDER_ARTEFACT; only
+  PROVIDER_ARTEFACT allows a plain retry; only OFFFRAME_INTRUSION may confirm EDGE_INTRUSION_SUSPECT).
+  `TakeQc.defects` (code, clip_sha256 = take hash, time ranges, optional source signal + detector version); a v2
+  REJECT needs >= 1 defect. causal_repair routes from reviewed defects, unknown codes -> STOP_UNKNOWN_DEFECT (the
+  old auto-retry fallback is gone); signals alone never trigger a repair. film06-08 reviews and Gate 4 unchanged.
+- Not done: defects in dailies_template / CLI; no time-range upper bound check.
+- Next: step 6 = Owner-authorised pilot (new film is Owner-reserved). Also pending Owner: Muse consolidation D0-D4.
+
+---
+
 # 2026-11-20 — Upgrade step 4 done: one sender, exclusive leases, CLI rehearsal with faults
 
 - One sender: `afp-film generate` is the only send path. flow_pool_runner.main() is retired (prints the generate

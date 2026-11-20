@@ -27,6 +27,7 @@ where = ["src"]
     "providers/registry/*.json",
     "providers/_flow_ui/*.py",
     "production/data/*.json",
+    "production/models/*",
     "film_package_export/*.json",
 ]
 

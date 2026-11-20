@@ -401,6 +401,10 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: An
     entry = log.get(take.take_id)
     if take.generation_id != entry.generation_id:
         raise ValueError(f"review names generation {take.generation_id}, the log has {entry.generation_id}")
+    for d in take.defects:
+        if d.clip_sha256 != entry.output_sha256:
+            raise ValueError(f"reviewed defect {d.code} is bound to clip {d.clip_sha256[:12]}…, not to {take.take_id} "
+                             f"(output_sha256 {entry.output_sha256[:12]}…)")
     if claimed != entry.output_sha256:
         raise ValueError(f"review is not bound to this take's bytes (expected output_sha256 {entry.output_sha256[:12]}…)")
     if pkg is not None:  # the questions come from the package, not from the (hand-editable) sheet
@@ -413,6 +417,9 @@ def ingest_review(film_root: Path, film_id: str, filled: dict[str, Any], pkg: An
         return _ingest_supplement(film_root, log, entry, take)
     verdict = take.verdict()
     status, reasons, cause = verdict.status, list(verdict.reasons), take.cause or ""
+    if not cause and take.defects and status == "REJECTED":  # the retake plan reads the broad cause of the first reviewed defect
+        from film_pipeline.production.defects import DEFECTS
+        cause = DEFECTS[take.defects[0].code].cause
     supp = _load_supplement(film_root, take.take_id)
     if supp is not None:  # a relations review is already on file: the main review does not erase it
         status, reasons, cause = _combine(status, reasons, cause, supp)

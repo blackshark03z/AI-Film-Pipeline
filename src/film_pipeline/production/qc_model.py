@@ -27,6 +27,12 @@ needs a full playback or every frame counted; SAMPLED needs at least one frame v
 watched in real time or listened, so an ``agent:`` reviewer counts frames and leaves audio / sync verdicts to ``auto:``
 machine checks; a PASS on audio or sync by a human / agent needs ``audio_listened``; and a FULL_MOTION / CUT level whose
 evidence or note admits "contact strip" / "sampled frames only" / "not listened" is a contradiction (it was SAMPLED).
+
+Reviewed defects (``TakeQc.defects``, optional): what a REJECT actually found, as a code from ``production.defects`` plus
+the clip hash and time ranges judged, optionally citing the detector signal that prompted the look (``source_signal``; the
+registry says which signal codes may be confirmed into which defect). ``takes.ingest_review`` refuses a defect whose
+``clip_sha256`` is not the reviewed take's bytes. A REJECTED review with evidence_version 2 must carry at least one; older
+records and reviews without defects stay valid and load unchanged.
 """
 from __future__ import annotations
 
@@ -84,6 +90,37 @@ class Observation(ContractModel):
     frames_total: int | None = Field(default=None, ge=1)
     full_playback: bool = False  # the whole clip watched in motion in real time
     audio_listened: bool = False  # the audio was actually heard, not only measured
+
+
+class SourceSignal(ContractModel):
+    """The detector signal a reviewer looked at before confirming a defect (the signal itself is only a suspicion)."""
+
+    detector: str = Field(min_length=1)
+    detector_version: str = Field(min_length=1)
+    code: str = Field(min_length=1)
+
+
+class ReviewedDefect(ContractModel):
+    """A defect a reviewer confirmed on this clip: bound to the clip bytes and the time ranges that were judged."""
+
+    code: str
+    clip_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    time_ranges: list[tuple[float, float]] = Field(min_length=1)  # seconds [start, end] in this clip
+    note: str = ""
+    source_signal: SourceSignal | None = None
+
+    @model_validator(mode="after")
+    def _rules(self) -> "ReviewedDefect":
+        from film_pipeline.production.defects import DEFECTS, signal_may_confirm
+        if self.code not in DEFECTS:
+            raise ValueError(f"unknown defect code {self.code!r}; reviewed codes: {', '.join(sorted(DEFECTS))}")
+        for t0, t1 in self.time_ranges:
+            if not (0 <= t0 < t1):
+                raise ValueError(f"defect {self.code}: time range [{t0}, {t1}] must satisfy 0 <= start < end")
+        if self.source_signal is not None and not signal_may_confirm(self.code, self.source_signal.code):
+            raise ValueError(f"defect {self.code} cannot be confirmed from detector signal {self.source_signal.code!r} "
+                             f"(allowed: {', '.join(DEFECTS[self.code].confirms_signals) or 'none'})")
+        return self
 
 
 class GroupCheck(ContractModel):
@@ -151,6 +188,14 @@ class TakeQc(ContractModel):
     cause_note: str = ""
     required_answers: list[str] = Field(default_factory=list)  # question ids a human must answer before ACCEPTED
     evidence_version: int = 1  # >= 2: every judged check states what was examined (`observed`), see the module docstring
+    defects: list[ReviewedDefect] = Field(default_factory=list)  # reviewed defects (production.defects); required on a v2 REJECT
+
+    @model_validator(mode="after")
+    def _defect_rules(self) -> "TakeQc":
+        if self.evidence_version >= 2 and not self.defects and self.verdict().status == "REJECTED":
+            raise ValueError(f"take {self.take_id}: a REJECTED review with evidence_version {self.evidence_version} must carry "
+                             f"at least one reviewed defect (`defects`: code, clip_sha256, time_ranges)")
+        return self
 
     @model_validator(mode="after")
     def _observed_rules(self) -> "TakeQc":

@@ -5,6 +5,7 @@ Computes non-authoritative technical triage metrics on a generated take MP4:
 2. Bottom-right corner mark signal (variance in the 12% x 12% Gemini sparkle corner).
 3. Gap-aware border camera stability (R44F signal for STATIC camera declarations).
 4. Audio speech-activity trim hint (dead-air lead/tail + active speech ratio).
+5. Dense edge-intrusion detector (``edge_intrusion``) on single-visible takes -> ``EDGE_INTRUSION_SUSPECT`` signal.
 
 HARD INVARIANT: ``triage_take`` NEVER writes review files and NEVER auto-PASSes any human QC group.
 """
@@ -26,7 +27,14 @@ AN_W, AN_H = 64, 36
 EDGE_COLS = 5       # ~8% of 64px width on left and right
 CORNER_COLS = 8     # bottom-right ~12.5% width
 CORNER_ROWS = 5     # bottom-right ~13.9% height
-TRIAGE_CACHE_VERSION = 2
+TRIAGE_CACHE_VERSION = 3
+# Calibration (docs/production/edge_intrusion_calibration_20261120.md): held-out targets recall >= 0.80 at
+# FPR <= 0.15 were NOT met, so the signal is advisory INFO (never WARN, never an auto-reject).
+EDGE_INTRUSION_SEVERITY = "INFO"
+EDGE_INTRUSION_NOTE = (
+    "advisory only: calibrated recall 0.78 / FPR 0.076 (film07 held-out) and 0.75 / 0.074 (film08); "
+    "targets 0.80 / 0.15 not met; inspect the flagged edge and time range, the reviewer decides"
+)
 
 
 def _probe_duration_s(clip: Path) -> float:
@@ -130,6 +138,48 @@ def _audio_triage_stats(clip: Path, *, hop_s: float = 0.05) -> tuple[list[float]
         mean_sq = sum(v * v for v in window) / hop
         dbs.append(-120.0 if mean_sq <= 0 else max(-120.0, 10.0 * math.log10(mean_sq / 32768.0 ** 2)))
     return dbs, peak
+
+
+def _edge_intrusion_signal(
+    take_id: str,
+    clip: Path,
+    clip_sha: str,
+    decl: Any,
+    signals: list[dict[str, Any]],
+    warnings: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Run the dense edge-intrusion detector on single-visible takes; append its signal when SUSPECT."""
+    visible = list(getattr(decl, "visible", None) or []) if decl is not None else []
+    if len(visible) != 1:
+        return {"status": "skipped", "reason": f"visible count {len(visible)} (detector runs on single-visible takes)"}
+    try:
+        from film_pipeline.production import edge_intrusion as EI
+    except ImportError as exc:  # numpy/opencv are the optional "qc" extra
+        return {"status": "unavailable", "reason": str(exc)[:160]}
+    try:
+        res = EI.detect_clip(clip, visible_count=1, clip_sha256=clip_sha)
+    except Exception as exc:  # noqa: BLE001 - advisory scanner must not break triage
+        return {"status": "error", "reason": str(exc)[:160]}
+    if res["verdict"] == "SUSPECT":
+        sig = EI.make_signal(res, take_id, EDGE_INTRUSION_SEVERITY)
+        signals.append(sig)
+        if EDGE_INTRUSION_SEVERITY == "WARN":
+            warnings.append(sig)
+    return {
+        "status": "ok",
+        "detector": res["detector"],
+        "detector_version": res["detector_version"],
+        "verdict": res["verdict"],
+        "score": res["score"],
+        "sides": res["sides"],
+        "time_ranges": res["time_ranges"],
+        "face_status": res["face_status"],
+        "analysis_fps": res["analysis_fps"],
+        "frames_analysed": res["frames_analysed"],
+        "runtime_s": res["runtime_s"],
+        "severity": EDGE_INTRUSION_SEVERITY,
+        "message": EDGE_INTRUSION_NOTE,
+    }
 
 
 def triage_cache_path(root: Path, take_id: str) -> Path:
@@ -254,6 +304,8 @@ def triage_take(
         sug_out = round(duration_s, 3)
 
     warnings: list[dict[str, Any]] = []
+    signals: list[dict[str, Any]] = []
+    edge_metrics = _edge_intrusion_signal(take_id, clip, actual_sha, decl, signals, warnings)
     if max(max_left, max_right) >= 25.0 and (max(max_left, max_right) >= med_center * 1.4 or max(max_left, max_right) >= 35.0):
         side = "left" if max_left >= max_right else "right"
         warnings.append({
@@ -338,8 +390,10 @@ def triage_take(
             "trailing_silence_s": tail_silence,
             "suggested_src_in_s": sug_in,
             "suggested_src_out_s": sug_out,
+            "edge_intrusion": edge_metrics,
         },
         "warnings": warnings,
+        "signals": signals,
     }
     if use_cache and clips_dir is None and hash_verified:
         try:
@@ -380,6 +434,7 @@ def triage_batch(
                 "auto_pass_forbidden": True,
                 "metrics": {},
                 "warnings": [{"code": "TRIAGE_ERROR", "severity": "WARN", "detail": str(exc)[:160]}],
+                "signals": [],
             }
 
     if len(ids) > 1 and workers > 1:
