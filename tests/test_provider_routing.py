@@ -368,23 +368,34 @@ def test_an_alias_route_counts_the_same_sends(tmp_path):
 
 
 def test_the_daily_cap_counts_other_films(tmp_path):
+    # S1 (Codex finding 1): spend another film made before S1 (a receipt without ``broker``) still counts against the
+    # machine daily cap: it is imported into the broker once, before any admission, and never twice
     from datetime import date
+    from film_pipeline.production import leases as L
     other = tmp_path / "films" / "other" / "takes" / "intents"
     other.mkdir(parents=True)
     (other / "X_t1.intent.json").write_text(json.dumps({
         "sent": True, "result": "PASSED", "provider": "vilao", "provider_model": "h3-480p", "cost_unit": "VND",
-        "expected_cost": 48000, "sent_on": date.today().isoformat()}), encoding="utf-8")
+        "expected_cost": 48000, "sent_on": date.today().isoformat(), "film_id": "other"}), encoding="utf-8")
     root = tmp_path / "films" / "film"
     pkg = _experiment(film(tmp_path / "films" / "x", 100))  # film() makes <arg>/film
     import shutil
     shutil.move(str(pkg.root), str(root))
     pkg = load_package(root)
-    p = G.build_payload(pkg, "SC01_g1", stills_dir=still(tmp_path))
-    # 48,000 elsewhere + 4,158 here > 50,000
-    plan = root / "media" / "plan"
-    assert plan.is_dir()
-    p = G.build_payload(pkg, "SC01_g1", stills_dir=still(tmp_path), plan_out=plan)
-    assert "BUDGET_DAILY_EXCEEDED" in [b["code"] for b in p["blockers"]]
+    # 48,000 elsewhere + 4,158 here > 50,000: the dry run reports it ...
+    dry = G.generate(pkg, "SC01_g1", dry_run=True, stills_dir=still(tmp_path))
+    assert "BUDGET_DAILY_EXCEEDED" in [b["code"] for b in dry["payload"]["blockers"]]
+    # ... and the broker refuses the live admission; the adapter is never called
+    adapter = FakeAdapter(job="j1")
+    live = G.generate(pkg, "SC01_g1", dry_run=False, stills_dir=still(tmp_path), backlog=backlog(tmp_path, GO),
+                      adapter=adapter)
+    assert not live["sent"] and [r["code"] for r in live["refused"]] == ["BUDGET_DAILY_EXCEEDED"]
+    assert not adapter.calls
+    # the import is durable and deduplicated: importing again never counts the receipt twice
+    pool = L.machine_pool()
+    L.import_legacy_spend(pool, root)
+    L.import_legacy_spend(pool, root)
+    assert pool.daily_usage("VND", date.today().isoformat()) == 48000.0
 
 
 def test_an_unreadable_receipt_keeps_its_flow_credits_after_a_reroute(tmp_path):
