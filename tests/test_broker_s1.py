@@ -857,3 +857,60 @@ def test_an_unregistered_account_halt_takes_the_selected_broker_lock(tmp_path, m
     assert out["ok"] and out["account_status"] == "UNREGISTERED"
     assert [Path(d).resolve() for d in locked] == [db.resolve()]
     assert H.is_halted()
+
+
+def test_a_migrated_reservation_takes_its_receipts_take_id_so_the_ledger_credit_applies(tmp_path):
+    """Codex R5-2: migration -> import -> reconcile -> next admission: the step-4 row named the generation (g1), the
+    ledger names the take (g1_t1); bound to its receipt, the settled spend is credited once, not counted twice."""
+    db = tmp_path / "pool.sqlite3"
+    _step4_db(db)
+    pool = AccountLeasePool(db, min_reserve_credits=0.0, cooldown_s=0.0, **NO_CAPS)
+    today = B.local_day()
+    rows = [{"key": f"p:{g}_t1", "lease_key": f"f:{g}_t1@p", "take_id": f"{g}_t1", "provider": "flow",
+             "unit": "credits", "amount": amount, "price": price, "day": today, "film_key": scope}
+            for g, amount, price, scope in (("g1", 4.0, 4.0, "f@p"), ("g2", 3.0, 3.0, "other@p"),
+                                            ("g3", 3.0, 3.0, "other@p"), ("g4", 8.0, 8.0, "f@p"))]
+    pool.import_legacy(tmp_path, rows)
+    pool.settle_child("f:g1_t1@p", spent=4.0)   # the reconcile of the open step-4 send
+    with sqlite3.connect(db) as conn:
+        bound = dict(conn.execute("SELECT lease_key, take_id || '|' || film_key FROM reservations WHERE lease_key IN "
+                                  "('f:g1_t1@p', 'f:g4_t1@p')").fetchall())
+    assert bound == {"f:g1_t1@p": "g1_t1|f@p", "f:g4_t1@p": "g4_t1|f@p"}
+    ledger = {"film_cap": 18.0, "film_baseline": 12.0, "film_counted": {"g1_t1": 4.0, "g4_t1": 8.0}}
+    assert pool.admit(_take_req("n6", "g5_t1", 6.0, **ledger))["ok"]   # 12 + 0 + 0 + 6 <= 18
+
+
+def test_a_clear_never_erases_a_warning_set_through_another_broker(tmp_path, monkeypatch):
+    """Codex R5-1: clear (default broker) and a warning via ``--db B`` share one halt-file lock: a clear paused after
+    its read makes the warning wait, and the warning survives."""
+    import threading
+    import time as _time
+    from film_pipeline.agentic import broker_api as A
+    monkeypatch.setenv("AFP_STATE_DIR", str(tmp_path / "state"))
+    H.set_halt("first warning", source="test")
+    db = tmp_path / "b.sqlite3"
+    Broker(db)
+    paused, go, results = threading.Event(), threading.Event(), []
+    real_read = H.read_halt
+
+    def slow_read():
+        out = real_read()
+        if threading.current_thread().name == "clear":
+            paused.set()
+            go.wait(10)
+        return out
+
+    monkeypatch.setattr(H, "read_halt", slow_read)
+    clear = threading.Thread(target=lambda: H.clear_halt("human:owner", "checked the account"), name="clear")
+    clear.start()
+    assert paused.wait(10)
+    warn = threading.Thread(target=lambda: results.append(A.halt("muse", "ghost", "CAPTCHA on Settings",
+                                                                 kind="CAPTCHA", db=db)))
+    warn.start()
+    _time.sleep(0.5)
+    assert warn.is_alive()   # waits for the clear's halt-file lock
+    go.set()
+    clear.join(10)
+    warn.join(30)
+    assert results and results[0]["ok"]
+    assert H.is_halted() and "CAPTCHA" in H.halt_reason()

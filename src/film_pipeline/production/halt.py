@@ -13,6 +13,11 @@ Setting or clearing the halt takes the broker lock (STUDIO_ARCHITECTURE §6): a 
 database in the state dir (``lease_pool.sqlite3``, when it exists), so no admission and no pre-Enter check (both
 read the halt inside that same lock) can interleave with it. The broker passes ``lock=False`` when it sets the halt
 inside its own transaction.
+
+Every read-modify-write of the halt file (set and clear, whichever broker database the caller locked) also takes the
+halt file's own lock (``production_halt.json.lock``, held only for that file update). It is the innermost lock:
+taken after a broker lock, never held while taking one, so set and clear through different brokers (``--db``)
+serialize and a clear never erases a warning written after it read the file.
 """
 from __future__ import annotations
 
@@ -21,6 +26,7 @@ import os
 import re
 import sqlite3
 import tempfile
+import time
 from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
@@ -70,6 +76,46 @@ def broker_lock(enabled: bool = True, db: Path | str | None = None):
                 conn.execute("COMMIT")
     finally:
         conn.close()
+
+
+HALT_LOCK_TIMEOUT_S = 60.0
+
+
+@contextmanager
+def _halt_file_lock(timeout_s: float = HALT_LOCK_TIMEOUT_S):
+    """Exclusive OS lock on ``<halt file>.lock`` for one read-modify-write of the halt file (innermost leaf lock)."""
+    path = halt_path()
+    lock = path.with_name(path.name + ".lock")
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    with lock.open("a+b") as handle:
+        if lock.stat().st_size == 0:
+            handle.write(b"0")
+            handle.flush()
+        deadline = time.monotonic() + max(0.0, float(timeout_s))
+        while True:
+            handle.seek(0)
+            try:
+                if os.name == "nt":
+                    import msvcrt
+                    msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+                else:
+                    import fcntl
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except OSError as exc:
+                if time.monotonic() >= deadline:
+                    raise TimeoutError(f"halt file lock {lock} busy for {timeout_s:g}s") from exc
+                time.sleep(0.02)
+        try:
+            yield
+        finally:
+            handle.seek(0)
+            if os.name == "nt":
+                import msvcrt
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
 def history_path() -> Path:
@@ -148,6 +194,13 @@ def set_halt(
 
 
 def _set_halt(reason: str, *, source: str, account: str, film_id: str, take_id: str, evidence: str) -> dict[str, Any]:
+    with _halt_file_lock():
+        return _set_halt_locked(reason, source=source, account=account, film_id=film_id, take_id=take_id,
+                                evidence=evidence)
+
+
+def _set_halt_locked(reason: str, *, source: str, account: str, film_id: str, take_id: str,
+                     evidence: str) -> dict[str, Any]:
     event = {
         "at": _now(),
         "reason": str(reason or "").strip() or "account warning",
@@ -191,6 +244,11 @@ def clear_halt(by: str, reason: str) -> dict[str, Any]:
 
 
 def _clear_halt(by: str, reason: str) -> dict[str, Any]:
+    with _halt_file_lock():
+        return _clear_halt_locked(by, reason)
+
+
+def _clear_halt_locked(by: str, reason: str) -> dict[str, Any]:
     path = halt_path()
     current = read_halt()
     if current is None:

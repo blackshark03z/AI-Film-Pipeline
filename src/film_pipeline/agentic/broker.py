@@ -592,7 +592,8 @@ class Broker:
         receipt key), so a second import updates the same row (a receipt resolved since) and never adds it again. A
         receipt whose step-4 lease is already in the broker (migrated) is never added twice: while that migrated
         reservation is open (custody held) it is priced from the receipt (``price``) and stays RESERVED; once settled
-        it keeps its settled spend. Marks ``films_dir`` imported.
+        it keeps its settled spend; in every state it takes the receipt's take id and film scope, so the film ledger's
+        credit for that take applies to it. Marks ``films_dir`` imported.
 
         Each row: ``key`` (unique per receipt), ``lease_key`` (the step-4 lease key or ''), ``take_id``, ``account``,
         ``film_key``, ``provider``, ``unit``, ``amount`` (charged amount, 0 when not charged), ``price`` (the
@@ -602,11 +603,20 @@ class Broker:
         imported = skipped = priced = 0
         with closing(self._connect()) as conn, self._tx(conn):
             for r in rows:
-                migrated = conn.execute("SELECT id, state FROM reservations WHERE lease_key = ? AND lease_token != "
-                                        "'legacy'", (r["lease_key"],)).fetchall() if r.get("lease_key") else []
+                migrated = conn.execute("SELECT id, state, lease_token, child_key, film_key FROM reservations WHERE "
+                                        "lease_key = ? AND lease_token != 'legacy'",
+                                        (r["lease_key"],)).fetchall() if r.get("lease_key") else []
                 if migrated:
                     price = float(r["price"] if r.get("price") is not None else r.get("amount") or 0.0)
                     for m in migrated:
+                        # bind the row to its exact receipt (the step-4 row named the generation, e.g. g1, and the
+                        # bare film id): take identity and film scope, in every state; a settled row keeps its spend
+                        take_id, film_key = r.get("take_id") or "", r.get("film_key") or m["film_key"]
+                        if take_id:
+                            conn.execute("UPDATE reservations SET take_id = ?, film_key = ? WHERE id = ?",
+                                         (take_id, film_key, m["id"]))
+                            conn.execute("UPDATE lease_children SET take_id = ?, film_key = ? WHERE lease_token = ? "
+                                         "AND child_key = ?", (take_id, film_key, m["lease_token"], m["child_key"]))
                         if m["state"] == "RESERVED":
                             conn.execute("UPDATE reservations SET amount = ?, unit = ?, provider = ?, film_key = ?, "
                                          "day = ?, price_known = 1 WHERE id = ?",
