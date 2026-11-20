@@ -64,10 +64,57 @@ def refuse_undelegated(film_root: Path, *names: str) -> None:
 
 # ------------------------------------------------------------------ mock runner
 
-def mock_runner(argv: list[str], out: Path) -> dict[str, Any]:
-    """Stand-in for the Flow sender: an 8 s clip (the start still + a quiet tone) and the manifest the real sender writes."""
+FAULT_ENV = "AFP_REHEARSAL_FAULT"
+FAULTS = ("crash_before_submit", "crash_after_submit", "crash_after_download", "account_warning", "provider_failed")
+CRASH_EXIT = 86   # exit code of a process that died on purpose (os._exit: nothing in Python cleans up)
+
+
+def _fault(out: Path) -> str:
+    """The fault ``AFP_REHEARSAL_FAULT`` injects into this send, or ''. Honoured ONLY when *out* lies in a rehearsal package
+    (``<package>/media/takes/<take>.mp4`` and its film.json says ``"rehearsal": true``); anywhere else it is ignored."""
+    value = os.environ.get(FAULT_ENV, "").strip()
+    if not value:
+        return ""
+    try:
+        if not is_rehearsal(Path(out).resolve().parents[2]):
+            return ""
+    except IndexError:
+        return ""
+    if value in FAULTS:
+        return value
+    if value.startswith("slow:"):
+        try:
+            if float(value[5:]) >= 0:
+                return value
+        except ValueError:
+            pass
+    raise ValueError(f"{FAULT_ENV}={value!r} is not one of {', '.join(FAULTS)}, slow:<seconds>")
+
+
+def mock_runner(argv: list[str], out: Path, before_submit: Any = None) -> dict[str, Any]:
+    """Stand-in for the Flow sender: an 8 s clip (the start still + a quiet tone) and the manifest the real sender writes.
+
+    Like the real sender it calls ``before_submit`` (which writes the SUBMITTING receipt) right before it would press Enter.
+    ``AFP_REHEARSAL_FAULT`` (rehearsal packages only, see :func:`_fault`) injects one failure: ``crash_before_submit`` raises
+    before ``before_submit``; ``crash_after_submit`` hard-exits right after it; ``crash_after_download`` hard-exits once the
+    clip and its manifest are on disk (before ``generate`` registers the take); ``account_warning`` / ``provider_failed``
+    return that outcome; ``slow:<seconds>`` sleeps inside the send (duplicate races)."""
+    fault = _fault(out)
     still = Path(argv[argv.index("--start-file") + 1])
     out.parent.mkdir(parents=True, exist_ok=True)
+    if fault == "crash_before_submit":
+        raise RuntimeError("REHEARSAL FAULT crash_before_submit: the sender died before it pressed Enter")
+    if before_submit is not None:
+        before_submit({})
+    if fault == "crash_after_submit":
+        os._exit(CRASH_EXIT)
+    if fault.startswith("slow:"):
+        time.sleep(float(fault[5:]))
+    if fault in {"account_warning", "provider_failed"}:
+        manifest = {"result": "FLOW_ACCOUNT_WARNING" if fault == "account_warning" else "FLOW_FAILED", "file": out.name,
+                    "sha256": "", "mock": True, "note": STAMP}
+        out.with_suffix(".take.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        return {**manifest, "returncode": 0}
     cmd = ["ffmpeg", "-v", "error", "-y", "-loop", "1", "-framerate", "24", "-i", str(still),
            "-f", "lavfi", "-i", "sine=frequency=220:sample_rate=48000", "-t", "8",
            # a slow drifting crop plus grain: a frozen picture would (rightly) fail master QC
@@ -79,7 +126,12 @@ def mock_runner(argv: list[str], out: Path) -> dict[str, Any]:
     manifest = {"result": "PASSED" if done.returncode == 0 and sha else "FAILED", "file": out.name, "sha256": sha,
                 "mock": True, "note": STAMP}
     out.with_suffix(".take.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    if fault == "crash_after_download":
+        os._exit(CRASH_EXIT)
     return {**manifest, "returncode": done.returncode}
+
+
+mock_runner.takes_before_submit = True   # generate hands it the before_submit checkpoint (see generate._send_flow)
 
 
 # ------------------------------------------------------------------ the chain
@@ -209,8 +261,8 @@ def rehearse(src: Path, dest: Path, *, stop_on_fail: bool = True) -> dict[str, A
                     *( ["--clean-copy"] if use_portrait else [] ), "--out", str(cut_dir / "titled_cut.mp4")]),
         ("mix", ["mix", "--film", film, "--cut", str(cut_dir / "titled_cut.mp4"), "--out", str(cut_dir / "mixed.mp4")]),
         ("mastercheck", ["mastercheck", "--film", film, "--cut-report", str(cut_dir / "titled_cut.cut.json")]),
-        ("versions", ["versions", portrait_flag, "--cut-report", str(cut_dir / "titled_cut.cut.json"), "--generators-file", gen]),
-        ("deliver", ["deliver", portrait_flag, "--cut-report", str(cut_dir / "titled_cut.cut.json"), "--generators-file", gen]),
+        ("versions", ["versions", "--film", film, portrait_flag, "--cut-report", str(cut_dir / "titled_cut.cut.json"), "--generators-file", gen]),
+        ("deliver", ["deliver", "--film", film, portrait_flag, "--cut-report", str(cut_dir / "titled_cut.cut.json"), "--generators-file", gen]),
     ]
     for name, args in chain:
         log.cli(name, *args)

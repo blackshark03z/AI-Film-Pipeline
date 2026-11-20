@@ -18,6 +18,9 @@ from film_pipeline.providers.request import FrameRef, GenerationRequest, Referen
 from film_pipeline.providers.route import RouteSpec, route_issues
 from test_production_generate import FakeRunner, backlog, film, still
 
+# a live generate() send leases a Flow account from the isolated machine pool (tests/conftest.py)
+pytestmark = pytest.mark.usefixtures("flow_lease_account")
+
 ROOT = Path(__file__).resolve().parents[1]
 FILMS = [ROOT / "films" / "film03_front_desk", ROOT / "films" / "film04_last_ticket"]
 GO = "OWNER_GO_LIVE: YES"

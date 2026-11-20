@@ -15,6 +15,9 @@ from film_pipeline.production.money import credit_ledger
 from test_production_generate import film, still, backlog
 from test_production_recovery_p20 import bound
 
+# a live generate() send leases a Flow account from the isolated machine pool (tests/conftest.py)
+pytestmark = pytest.mark.usefixtures("flow_lease_account")
+
 
 def test_async_bridge_uses_controller_process_even_inside_an_existing_loop():
     async def work():

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -377,15 +378,24 @@ def main(argv: list[str] | None = None) -> int:
     dc.add_argument("--film", type=Path, help="optional film directory to check free disk space on")
     dc.add_argument("--probe-flow", action="store_true", help="also probe active CDP endpoint for a Flow tab")
     dc.add_argument("--operation", choices=["render", "send"], default="render", help="disk reserve profile to check")
-    ls = actions.add_parser("lease", help="inspect or manage SQLite multi-account leases (<film>/takes/lease_pool.sqlite3 or --db)")
-    ls.add_argument("verb", choices=["status", "register", "quarantine", "release"])
-    ls.add_argument("--film", type=Path)
-    ls.add_argument("--db", type=Path)
+    ls = actions.add_parser("lease", help="inspect or manage the machine-wide Flow account lease pool "
+                                          "(<state dir: $AFP_STATE_DIR or ~/.afp>/lease_pool.sqlite3, or --db); "
+                                          "settle --film F --take TID releases an uncertain lease once its receipt is reconciled; "
+                                          "unquarantine --account A --by human:ID|agent:ID --reason TEXT returns a quarantined "
+                                          "account to ACTIVE (only with the production halt cleared)")
+    ls.add_argument("verb", choices=["status", "register", "quarantine", "release", "settle", "unquarantine"])
+    ls.add_argument("--by", default="", help="unquarantine: who restores the account: human:<id> or agent:<id>")
+    ls.add_argument("--film", type=Path, help="film package (release: lease key film_id; settle: where the receipt is)")
+    ls.add_argument("--db", type=Path, help="lease pool database (default: the machine-wide pool in the state dir)")
     ls.add_argument("--account")
     ls.add_argument("--credits", type=float)
+    ls.add_argument("--cdp-endpoint", help="register: the Flow profile (CDP endpoint) leases on this account must use")
+    ls.add_argument("--project", help="register: the Flow project id leases on this account must use")
     ls.add_argument("--reason", default="")
     ls.add_argument("--gid")
-    ls.add_argument("--lease-token")
+    ls.add_argument("--key", help="release: the exact lease key (instead of --gid/--film/--shot-version)")
+    ls.add_argument("--take", help="settle: the take id whose receipt names the lease")
+    ls.add_argument("--lease-token", help="release: the holder's lease token (required)")
     ls.add_argument("--spent", type=float)
     ls.add_argument("--shot-version", type=int, default=1)
     ls.add_argument("--release-leases", action="store_true")
@@ -590,12 +600,20 @@ def _run(args, rest, parser) -> int:
                 _emit({"ok": False, "error": str(exc)})
                 return 1
         if args.action == "lease":
-            from film_pipeline.agentic.lease_pool import AccountLeasePool
+            from film_pipeline.agentic.lease_pool import AccountLeasePool, default_db_path
 
-            db_path = args.db or (Path(args.film) / "takes" / "lease_pool.sqlite3" if args.film else None)
-            if db_path is None:
-                _emit({"error": "lease needs --film or --db"})
-                return 2
+            if args.verb == "settle":
+                from film_pipeline.production.leases import settle_take
+                if not args.film or not args.take:
+                    _emit({"error": "lease settle needs --film and --take"})
+                    return 2
+                try:
+                    _emit({"ok": True, **settle_take(Path(args.film), args.take, db=args.db)})
+                    return 0
+                except (OSError, KeyError, ValueError) as exc:
+                    _emit({"ok": False, "error": str(exc)})
+                    return 1
+            db_path = args.db or default_db_path()
             film_id = Path(args.film).name if args.film else "default"
             if args.film and (Path(args.film) / "film.json").is_file():
                 try:
@@ -610,7 +628,7 @@ def _run(args, rest, parser) -> int:
                 if not args.account or args.credits is None:
                     _emit({"error": "lease register needs --account and --credits"})
                     return 2
-                pool.register_account(args.account, args.credits)
+                pool.register_account(args.account, args.credits, cdp_endpoint=args.cdp_endpoint, project=args.project)
                 _emit({"ok": True, "db": str(db_path), **pool.snapshot()})
                 return 0
             if args.verb == "quarantine":
@@ -624,31 +642,39 @@ def _run(args, rest, parser) -> int:
                 )
                 _emit({"ok": True, "quarantine": out, **pool.snapshot()})
                 return 0
-            if args.verb == "release":
-                if not args.gid:
-                    _emit({"error": "lease release needs --gid"})
+            if args.verb == "unquarantine":
+                if not args.account:
+                    _emit({"error": "lease unquarantine needs --account, --by and --reason"})
                     return 2
                 try:
-                    out = pool.release(
-                        args.gid,
-                        film_id=film_id if args.film else "",
-                        shot_version=args.shot_version,
-                        lease_token=args.lease_token,
-                        credits_spent=0.0 if args.spent is None else args.spent,
-                    )
-                except KeyError:
-                    out = pool.release(
-                        args.gid,
-                        film_id="",
-                        shot_version=args.shot_version,
-                        lease_token=args.lease_token,
-                        credits_spent=0.0 if args.spent is None else args.spent,
-                    )
-                except ValueError as exc:
+                    event = pool.unquarantine_account(args.account, by=args.by, reason=args.reason)
+                except (KeyError, ValueError, RuntimeError) as exc:
+                    _emit({"ok": False, "error": str(exc.args[0] if isinstance(exc, KeyError) and exc.args else exc)})
+                    return 1
+                _emit({"ok": True, "unquarantined": event, **pool.snapshot()})
+                return 0
+            if args.verb == "release":
+                if not (args.gid or args.key) or not args.lease_token:
+                    _emit({"error": "lease release needs --key or --gid, and --lease-token"})
+                    return 2
+                spent = 0.0 if args.spent is None else args.spent
+                try:
+                    if args.key:
+                        out = pool.release(lease_key=args.key, lease_token=args.lease_token, credits_spent=spent)
+                    else:
+                        try:
+                            out = pool.release(args.gid, film_id=film_id if args.film else "",
+                                               shot_version=args.shot_version, lease_token=args.lease_token,
+                                               credits_spent=spent)
+                        except KeyError:
+                            out = pool.release(args.gid, film_id="", shot_version=args.shot_version,
+                                               lease_token=args.lease_token, credits_spent=spent)
+                except (KeyError, ValueError) as exc:
                     _emit({"ok": False, "error": str(exc)})
                     return 1
-                _emit({"ok": out is not None, "lease": out, **pool.snapshot()})
-                return 0 if out is not None else 1
+                out = {k: v for k, v in out.items() if k != "lease_token"}
+                _emit({"ok": True, "lease": out, **pool.snapshot()})
+                return 0
         pkg = load_package(args.film)
         if args.action == "finish":
             from film_pipeline.production.finish import finish
@@ -658,8 +684,11 @@ def _run(args, rest, parser) -> int:
             return 0 if report["ok"] else 1
         if args.action == "reconcile":
             from film_pipeline.production.recovery import reconcile
+            def no_live_scan(*_a, **_k):   # a rehearsal must never scan a real Flow profile; offline resolutions still run
+                raise OSError("rehearsal package: reconcile would scan live Flow; resolve the receipt in-process with "
+                              "recovery.reconcile(pkg, take_id, runner=<scan stub>)")
             try:
-                report = reconcile(pkg, args.take_id)
+                report = reconcile(pkg, args.take_id, runner=no_live_scan if pkg.header.rehearsal else None)
             except (ValueError, OSError) as exc:
                 _emit({"resolved": False, "error": str(exc)})
                 return 1
@@ -794,10 +823,19 @@ def _run(args, rest, parser) -> int:
                     pkg, plan_dir=plan_dir_for_critic, include_accepted=True, generation_id=args.gid
                 )
                 critic_warnings = [f for f in adv["findings"] if f.get("severity") == "WARN"]
+            runner = None
+            if pkg.header.rehearsal:
+                # a rehearsal package never reaches the real Flow controller: always the mock runner, its own lease pool
+                # and, unless the caller chose one, a halt file inside the copy (a rehearsed account warning must not
+                # halt the machine's real production)
+                from film_pipeline.production import rehearsal as rh_mod
+                from film_pipeline.production.takes import takes_dir
+                runner = rh_mod.mock_runner
+                os.environ.setdefault("AFP_HALT_FILE", str(takes_dir(Path(pkg.root)) / "production_halt.json"))
             try:
                 done = generate(pkg, args.gid, dry_run=args.dry_run, plan_out=args.plan_out, stills_dir=args.stills,
                                 start_token=args.start_token, backlog=args.backlog, end_token=args.end_token,
-                                auto_resend=0 if args.no_auto_resend else 1)
+                                auto_resend=0 if args.no_auto_resend else 1, runner=runner)
             except ValueError as exc:
                 _emit({"error": str(exc)})
                 return 2

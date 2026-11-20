@@ -12,6 +12,9 @@ from film_pipeline.production import generate as G, recovery as R, takes as T
 from film_pipeline.production import runtime as RT
 from test_production_generate import FakeRunner, backlog, film, still
 
+# a live generate() send leases a Flow account from the isolated machine pool (tests/conftest.py)
+pytestmark = pytest.mark.usefixtures("flow_lease_account")
+
 TOOLS = Path(__file__).resolve().parents[1] / "tools" / "drama_flow_ui"
 sys.path.insert(0, str(TOOLS))
 import flow_reconcile as fr  # noqa: E402

@@ -13,6 +13,9 @@ from film_pipeline.production import recovery as R
 from film_pipeline.production import takes as T
 from test_production_generate import FakeRunner, backlog, film, still
 
+# a live generate() send leases a Flow account from the isolated machine pool (tests/conftest.py)
+pytestmark = pytest.mark.usefixtures("flow_lease_account")
+
 GO = "OWNER_GO_LIVE: YES"
 
 
@@ -126,7 +129,9 @@ def test_before_submit_aborts_when_the_halt_appears_and_leaves_no_take(tmp_path,
 
 
 @pytest.mark.parametrize("outcome", ["FLOW_ACCOUNT_WARNING", "PRE_SUBMIT_ERROR FLOW_ACCOUNT_WARNING"])
-def test_an_account_warning_in_the_send_sets_the_halt_and_never_resends(tmp_path, outcome):
+def test_an_account_warning_in_the_send_sets_the_halt_and_never_resends(tmp_path, outcome, flow_lease_account):
+    for acct in ("acct_a", "acct_b"):
+        flow_lease_account.register_account(acct, 1000.0)
     pkg = film(tmp_path, 100)
     runner = FakeRunner(outcome)
     done = live(pkg, tmp_path, runner, account_scope="acct_a")

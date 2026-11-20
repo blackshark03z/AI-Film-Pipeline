@@ -40,6 +40,20 @@ def _isolated_production_halt(tmp_path_factory, monkeypatch):
     monkeypatch.setenv("AFP_HALT_FILE", str(state / "production_halt.json"))
 
 
+TEST_FLOW_ACCOUNT = "test-flow-account"
+
+
+@pytest.fixture
+def flow_lease_account(monkeypatch):
+    """A registered Flow account in the isolated machine lease pool (state dir), no cooldown: live generate() sends in
+    tests lease it like a real send. Tests about leases themselves build their own pool."""
+    from film_pipeline.agentic.lease_pool import AccountLeasePool
+    monkeypatch.setenv("AFP_LEASE_COOLDOWN_S", "0")
+    pool = AccountLeasePool()
+    pool.register_account(TEST_FLOW_ACCOUNT, 1_000_000.0)
+    return pool
+
+
 def _missing_local_input(excinfo: pytest.ExceptionInfo) -> str | None:
     exc = excinfo.value
     if isinstance(exc, ModuleNotFoundError) and exc.name in _OPTIONAL_MODULES:

@@ -29,12 +29,16 @@ def _now() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
 
 
+def state_dir() -> Path:
+    """The machine-wide production state directory: ``$AFP_STATE_DIR`` else ``~/.afp`` (halt, account lease pool)."""
+    return Path(os.environ.get("AFP_STATE_DIR") or (Path.home() / ".afp"))
+
+
 def halt_path() -> Path:
     override = os.environ.get("AFP_HALT_FILE")
     if override:
         return Path(override)
-    base = os.environ.get("AFP_STATE_DIR") or (Path.home() / ".afp")
-    return Path(base) / HALT_FILENAME
+    return state_dir() / HALT_FILENAME
 
 
 def history_path() -> Path:

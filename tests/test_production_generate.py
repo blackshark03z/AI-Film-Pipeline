@@ -10,6 +10,9 @@ from film_pipeline.production import takes as T
 from film_pipeline.production.package import load_package
 from film_pipeline.production.plan import plan_package
 
+# a live generate() send leases a Flow account from the isolated machine pool (tests/conftest.py)
+pytestmark = pytest.mark.usefixtures("flow_lease_account")
+
 ROOT = Path(__file__).resolve().parents[1]
 FILM03 = ROOT / "films" / "film03_front_desk"
 TOOL = ROOT / "tools" / "film.py"
@@ -324,7 +327,8 @@ def test_a_pending_receipt_on_disk_blocks_even_without_an_exception(tmp_path):
     assert [r["code"] for r in again["refused"]] == ["SEND_PENDING"]
 
 
-def test_a_failing_sender_does_not_register_an_old_clip(tmp_path):
+def test_a_failing_sender_does_not_register_an_old_clip(tmp_path, flow_lease_account):
+    flow_lease_account.register_account("second-account", 1000.0)   # the unresolved first send holds its account
     pkg = film(tmp_path, 100)
 
     class Crashes:

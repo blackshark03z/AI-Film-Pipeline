@@ -680,6 +680,10 @@ def test_tl_parallel_multi_account_generate_no_film_busy(tmp_path, monkeypatch):
     backlog = tmp_path / "backlog.md"
     backlog.write_text("OWNER_GO_LIVE: YES\n", encoding="utf-8")
     monkeypatch.setenv("AFP_FREE_GIB_MIN", "0")
+    from film_pipeline.agentic.lease_pool import AccountLeasePool
+    pool = AccountLeasePool()   # the machine lease pool (isolated state dir): one registered account per profile
+    pool.register_account("acct_alpha", 1000.0, cdp_endpoint="http://127.0.0.1:9331", project="proj-alpha")
+    pool.register_account("acct_beta", 1000.0, cdp_endpoint="http://127.0.0.1:9332", project="proj-beta")
 
     barrier = threading.Barrier(2, timeout=5.0)
     results: dict[str, dict] = {}

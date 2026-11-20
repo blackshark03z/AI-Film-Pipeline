@@ -1,3 +1,30 @@
+# 2026-11-20 — Upgrade step 4 done: one sender, exclusive leases, CLI rehearsal with faults
+
+- One sender: `afp-film generate` is the only send path. flow_pool_runner.main() is retired (prints the generate
+  route, exit 2); its helpers stay importable. flow_send's account-warning detection now uses the pool runner's
+  wording (EN + VI unusual activity / verify you are human), package and tools/ copies byte-identical.
+- Leases (agentic/lease_pool.py, production/leases.py): one machine pool `<state dir>/lease_pool.sqlite3` (same state
+  dir as the halt). An ACTIVE lease goes only to its holder; release needs the token; accounts with an ACTIVE or
+  QUARANTINED_PENDING_RECONCILE lease are never picked. Accounts may carry cdp_endpoint/project (`lease register`).
+- generate: every non-mock Flow send takes a lease in Phase A (none -> NO_ACCOUNT_LEASE with the reason); dry runs
+  only warn. Outcome settles it: charged -> credits spent + cooldown; never submitted (refusal, or crash while the
+  receipt is still PREPARING) -> released, 0 credits; crash after SUBMITTING or AMBIGUOUS -> held until `reconcile`
+  then `afp-film lease settle --film F --take T`; FLOW_ACCOUNT_WARNING -> halt + account quarantined. Back to work:
+  `halt clear`, reconcile + settle the warned take, `lease unquarantine --account A --by ... --reason ...`.
+  Knobs: AFP_LEASE_COOLDOWN_S (60), AFP_LEASE_MIN_RESERVE (20). Accounts must be registered before any live send.
+- Rehearsal through the CLI: a rehearsal package always uses mock_runner (never real Flow), its halt goes to
+  `<copy>/takes/production_halt.json`, AFP_REHEARSAL_FAULT (crash_before_submit, crash_after_submit,
+  crash_after_download, account_warning, provider_failed, slow:N) works only on rehearsal packages. CLI `reconcile`
+  refuses rehearsal packages (it would scan live Flow). tests/test_rehearsal_cli_e2e.py (12 tests) drives two film03
+  scenes through generate -> review -> cut ... deliver and each fault, incl. concurrent duplicates (exactly one send).
+- Known gaps: a hard-killed sender leaves its lease ACTIVE under a dead holder (account still blocked, settle works;
+  no expiry); cap exhaustion cannot be rehearsed (rehearsals skip budget, tested in-process instead); `afp-film
+  rehearse` on film03 stops at plan (SC03_g1 preflight-BLOCKED fixture); AI_LABEL_NOT_BURNED false-fails one sampled
+  frame of a 16 s mock body (body t=4.15 s) — investigate before a real delivery relies on it.
+- Next: step 5 (edge-intrusion detector calibrated on labelled rejects + clean takes).
+
+---
+
 # 2026-11-20 — Upgrade step 3 done: off-frame protection for new films
 
 - `film.json` `defaults_version` (1 = films shipped before 2026-11-19, 2 = new defaults); `scaffold` writes 2.

@@ -915,37 +915,16 @@ def do_acquire(tab: FlowTab, pkg: Any, film: Path, gid: str | None, title: str |
     }, ensure_ascii=False, indent=2))
 
 
+RETIRED = ("flow_pool_runner is retired as a sender (upgrade step 4): every Flow send goes through "
+           "`afp-film generate --film <film> --gid <generation>` (production/generate.py), which takes an exclusive "
+           "account lease from the machine-wide pool (`afp-film lease register --account ID --credits N "
+           "[--cdp-endpoint URL] [--project ID]`). Nothing was sent.")
+
+
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Multi-account Film08 Flow pool runner")
-    parser.add_argument("--account", required=True, choices=sorted(ACCOUNTS))
-    parser.add_argument("--action", required=True, choices=("status", "prep", "submit", "poll", "acquire"))
-    parser.add_argument("--gid", help="Generation ID (required for prep; optional guard otherwise)")
-    parser.add_argument("--title", help="Tile aria-label/title for acquire")
-    parser.add_argument("--film", default="films/film08_chain_of_custody", help="Film package path")
-    parser.add_argument("--gpm-port", type=int, default=9495)
-    parser.add_argument("--cooldown-s", type=int, default=90)
-    args = parser.parse_args(argv)
-
-    cfg = ACCOUNTS[args.account]
-    film = (REPO_ROOT / args.film).resolve() if not Path(args.film).is_absolute() else Path(args.film).resolve()
-    tab = FlowTab(cfg, gpm_port=args.gpm_port)
-    os.environ["AFP_FLOW_CDP"] = tab.local
-    os.environ["AFP_FLOW_PROJECT"] = cfg.project_id
-    pkg = load_package(film)
-
-    if args.action == "status":
-        do_status(tab, pkg)
-    elif args.action == "prep":
-        if not args.gid:
-            parser.error("--gid is required for --action prep")
-        do_prep(tab, pkg, film, args.gid)
-    elif args.action == "submit":
-        do_submit(tab, pkg, film, args.gid, args.cooldown_s)
-    elif args.action == "poll":
-        do_poll(tab, args.gid)
-    elif args.action == "acquire":
-        do_acquire(tab, pkg, film, args.gid, args.title)
-    return 0
+    """Retired: refuses to run. The helpers above stay importable (tests use FlowTab.assert_safe)."""
+    print(RETIRED, file=sys.stderr)
+    return 2
 
 
 if __name__ == "__main__":

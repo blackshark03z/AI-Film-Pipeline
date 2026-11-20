@@ -37,7 +37,7 @@ from __future__ import annotations
 import json
 import os
 import re
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
@@ -48,6 +48,7 @@ from film_pipeline.production.plan import plan_package
 from film_pipeline.production.money import (credit_ledger, load_adjustments, money_ledger, receipt_amount, receipt_charged,
                                             unresolved_sends, receipt_result, receipt_unit)
 from film_pipeline.production.halt import is_halted, read_halt, set_halt
+from film_pipeline.production import leases as L
 from film_pipeline.production.planning import flow_credits
 from film_pipeline.production.sections import shot_seconds
 from film_pipeline.production.takes import (load_log, register_take, sha256_file, sha256_text, takes_dir)
@@ -498,7 +499,8 @@ def _write_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:
             "duration_s", "expected_credits", "credits_spent", "credit_cap", "provider", "provider_model", "tier",
             "cost_unit", "expected_cost")
     receipt = {k: payload[k] for k in keep}
-    receipt.update({k: payload[k] for k in ("submit_protocol", "dispatch_phase", "project", "cdp", "account") if k in payload})
+    receipt.update({k: payload[k] for k in ("submit_protocol", "dispatch_phase", "project", "cdp", "account", "lease_key",
+                                            "lease_holder", "lease_db") if k in payload})
     receipt["start_frame_sha256"] = payload["start_frame"]["sha256"]
     receipt["start_frame_source"] = payload["start_frame"]["source"]
     if "end_frame" in payload:
@@ -550,6 +552,12 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
             halted = _halt_blocker()
             if halted is not None:
                 payload["blockers"].append(halted)
+            if _is_flow_route(pkg, generation_id) and not (pkg.header.rehearsal and runner is not None):
+                # a dry run only reports whether a live send could lease an account; it never takes a lease
+                ok, why = L.machine_pool().availability(cost_credits=float(payload["expected_credits"]),
+                                                        account_id=L.pinned_account(account_scope))
+                if not ok:
+                    payload["warnings"].append({"code": L.BLOCKER, "detail": f"a live send would be refused: {why}"})
             receipt = _write_receipt(root, payload, dry_run=True, sent=False, owner_go_live=owner_go_live(backlog))
             return {"sent": False, "dry_run": True, "ready_to_send": not payload["blockers"], "payload": payload,
                     "receipt": str(receipt)}
@@ -583,87 +591,203 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
                 receipt = _write_receipt(root, payload, dry_run=False, sent=False, owner_go_live=go,
                                          refused=[r["code"] for r in refusals])
                 return {"sent": False, "dry_run": False, "refused": refusals, "payload": payload, "receipt": str(receipt)}
-            if flow and runner is None and not mock:
-                from film_pipeline.production.preflight import check
-                environment = check(root, probe_flow=True, operation="send")
-                if not environment["ok"]:
-                    return {"sent": False, "dry_run": False, "refused": [_blocker("ENVIRONMENT_NOT_READY", issue)
-                            for issue in environment["issues"]], "payload": payload, "environment": environment}
-            snapshot = takes_dir(root) / "intents" / f"{payload['take_id']}.prompt.txt"
-            prompt = Path(payload["prompt_file"]).read_text(encoding="utf-8").strip()
-            if sha256_text(prompt) != payload["prompt_sha256"]:
-                raise ValueError("prompt changed during preflight; no send was made")
-            if snapshot.exists() and snapshot.read_text(encoding="utf-8").strip() != prompt:
-                raise ValueError("immutable sent prompt snapshot conflicts; no send was made")
-            if not snapshot.exists():
-                atomic_text(snapshot, prompt + "\n")
-            old_prompt = payload["prompt_file"]
-            payload["prompt_file"] = str(snapshot)
-            payload["argv"] = [str(snapshot) if arg == old_prompt else arg for arg in payload["argv"]]
-            if flow:   # the journal names the Flow profile (CDP endpoint) and, when pinned, the project this send targets
-                payload["cdp"] = flow_cdp(cdp_endpoint)
-                effective_proj = (cdp_scope if cdp_scope is not None else flow_project()).strip()
-                if effective_proj:
-                    payload["project"] = effective_proj
-            effective_acct = (account_scope if account_scope is not None else os.environ.get("AFP_FLOW_ACCOUNT", "")).strip()
-            if effective_acct:
-                payload["account"] = effective_acct
-            if flow and runner is None:
-                payload.update(submit_protocol="inprocess-checkpoint-v1", dispatch_phase="PREPARING")
-            receipt = _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
+            lease = pool = None
+            if flow:   # the one account lease of this send (a mock leases from the rehearsal package's own pool)
+                pool, lease, why = _take_lease(pkg, payload, mock=mock, account_scope=account_scope,
+                                               cdp_endpoint=cdp_endpoint, cdp_scope=cdp_scope)
+                if lease is None:
+                    refused = [_blocker(L.BLOCKER, why, live_only=True)]
+                    receipt = _write_receipt(root, payload, dry_run=False, sent=False, owner_go_live=go,
+                                             refused=[L.BLOCKER])
+                    return {"sent": False, "dry_run": False, "refused": refused, "payload": payload,
+                            "receipt": str(receipt)}
+            try:
+                if flow:   # the journal names the Flow profile (CDP endpoint) and, when pinned, the project this send targets
+                    lease_cdp, lease_proj = str(lease.get("cdp_endpoint") or ""), str(lease.get("project") or "")
+                    payload["cdp"] = flow_cdp(cdp_endpoint or lease_cdp or None)
+                    effective_proj = (cdp_scope if cdp_scope is not None else (lease_proj or flow_project())).strip()
+                    if effective_proj:
+                        payload["project"] = effective_proj
+                    # the lease's profile: its composer lock, and AFP_FLOW_CDP/AFP_FLOW_PROJECT for the in-process sender
+                    outer.enter_context(composer_lock(payload["cdp"]))
+                    outer.enter_context(_flow_target_env(lease_cdp if not cdp_endpoint else "",
+                                                         lease_proj if cdp_scope is None else ""))
+                    payload.update(account=lease["account_id"], lease_key=lease["lease_key"],
+                                   lease_holder=lease["holder"], lease_db=str(pool.db_path))
+                if flow and runner is None and not mock:
+                    from film_pipeline.production.preflight import check
+                    environment = check(root, probe_flow=True, operation="send")
+                    if not environment["ok"]:
+                        _drop_lease(pool, lease)
+                        return {"sent": False, "dry_run": False, "refused": [_blocker("ENVIRONMENT_NOT_READY", issue)
+                                for issue in environment["issues"]], "payload": payload, "environment": environment}
+                snapshot = takes_dir(root) / "intents" / f"{payload['take_id']}.prompt.txt"
+                prompt = Path(payload["prompt_file"]).read_text(encoding="utf-8").strip()
+                if sha256_text(prompt) != payload["prompt_sha256"]:
+                    raise ValueError("prompt changed during preflight; no send was made")
+                if snapshot.exists() and snapshot.read_text(encoding="utf-8").strip() != prompt:
+                    raise ValueError("immutable sent prompt snapshot conflicts; no send was made")
+                if not snapshot.exists():
+                    atomic_text(snapshot, prompt + "\n")
+                old_prompt = payload["prompt_file"]
+                payload["prompt_file"] = str(snapshot)
+                payload["argv"] = [str(snapshot) if arg == old_prompt else arg for arg in payload["argv"]]
+                effective_acct = (account_scope if account_scope is not None
+                                  else os.environ.get("AFP_FLOW_ACCOUNT", "")).strip()
+                if effective_acct and not flow:
+                    payload["account"] = effective_acct
+                if flow and (runner is None or getattr(runner, "takes_before_submit", False)):
+                    payload.update(submit_protocol="inprocess-checkpoint-v1", dispatch_phase="PREPARING")
+                receipt = _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
+            except BaseException:
+                _drop_lease(pool, lease)   # nothing was submitted: give the account back, no charge, no cooldown
+                raise
 
         # Phase B (outside film_lock so parallel CDP accounts do not hit FILM_BUSY during provider I/O)
         if not flow:
             return _generate_api(pkg, payload, adapter, mock, receipt)
-        out = Path(payload["output"])
-
-        def before_submit(context):
-            if is_halted():   # re-check right before the Enter: a warning on another account may have set the halt
-                raise RuntimeError(f"PRODUCTION_HALT: {(read_halt() or {}).get('reason', '')}; nothing was submitted")
-            with film_lock(root, timeout_s=15.0):
-                payload.update(dispatch_phase="SUBMITTING", project=context.get("project") or payload.get("project", ""))
-                _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
-
-        native_runner = runner if runner is not None else lambda argv, output: controller_runner(argv, output, before_submit)
-        # On exception keep the last durable phase; a dead controller cannot issue a later Enter.
-        manifest = FlowUiAdapter(cap, runner=native_runner).send(payload["argv"], out)
-
-        # Phase C (short exclusive metadata lock): register take, write final receipt, and append send log.
-        with film_lock(root, timeout_s=15.0):
-            result: dict[str, Any] = {"sent": True, "dry_run": False, "payload": payload, "manifest_result": manifest.get("result"),
-                                      "receipt": str(receipt)}
-            outcome = str(manifest.get("result"))
-            if outcome == "PASSED" and manifest.get("returncode", 0) != 0:
-                outcome = f"SENDER_EXIT_{manifest.get('returncode')}"
-            elif outcome == "PASSED" and manifest.get("sha256") and out.is_file() and manifest["sha256"] != sha256_file(out):
-                outcome = "MANIFEST_HASH_MISMATCH"
-            if outcome == "PASSED" and out.is_file():
-                entry, _ = register_take(root, pkg.header.film_id, generation_id, out,
-                                         prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
-                                         route=payload["route"], model=MODEL, credits=0.0 if mock else payload["expected_credits"],
-                                         start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"])
-                result["take"] = entry.model_dump(mode="json")
-            result["manifest_result"] = outcome
-            _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=outcome,
-                           take_registered=bool(result.get("take")))
-            normalized = cap.normalize(outcome)
-            if "FLOW_ACCOUNT_WARNING" in outcome:   # Owner rule: any account warning stops ALL sending; never auto-resend
-                set_halt(outcome, source="generate", account=str(payload.get("account", "")),
-                         film_id=pkg.header.film_id, take_id=payload["take_id"])
-            incident = normalized == "PROVIDER_FAILED"
-            failures = _provider_failures(root, pkg.header.film_id, generation_id, payload["shot_version"]) if incident else 0
-            resend = (incident and auto_resend > 0 and failures < PROVIDER_FAILURES_BEFORE_RESTAGE
-                      and not is_halted())
-            log_send(root, payload, manifest, outcome, normalized, auto_resend=resend, provider_failures=failures)
-            if incident and not resend and failures >= PROVIDER_FAILURES_BEFORE_RESTAGE:
-                result["restage_needed"] = (f"{generation_id} v{payload['shot_version']}: {failures} provider failures; "
-                                            f"restage or simplify the prompt and record why (OWNER_POLICY)")
-    if resend:
+        try:
+            result, resend = _send_flow(pkg, payload, cap, runner, mock, receipt, auto_resend, pool, lease)
+        except BaseException as exc:
+            # crash or unknown outcome: the lease stays held (uncertain) until `afp-film lease settle` after reconcile;
+            # the one exception: the durable dispatch phase is still PREPARING, i.e. the sender never reached the Enter
+            # (a dead controller cannot issue a later one), so nothing was submitted and the account is given back
+            if lease is not None and not lease.get("finished"):
+                if payload.get("dispatch_phase") == "PREPARING":
+                    _drop_lease(pool, lease)
+                else:
+                    pool.mark_uncertain(lease["lease_key"], lease_token=lease["lease_token"],
+                                        reason=f"send raised {type(exc).__name__}: {exc}"[:300])
+            raise
+    if resend:   # an ordinary send through every gate; it acquires its own lease
         result["auto_resend"] = generate(pkg, generation_id, dry_run=False, plan_out=plan_out, stills_dir=stills_dir,
                                          start_token=start_token, backlog=backlog, runner=runner, end_token=end_token,
                                          today=today, adapter=adapter, auto_resend=auto_resend - 1,
                                          cdp_scope=cdp_scope, account_scope=account_scope, cdp_endpoint=cdp_endpoint)
     return result
+
+
+def _take_lease(pkg: Any, payload: dict[str, Any], *, mock: bool, account_scope: str | None,
+                cdp_endpoint: str | None, cdp_scope: str | None) -> tuple[Any, dict[str, Any] | None, str]:
+    """Acquire this send's account lease (key ``<film_id>:<take_id>@<package>``, a fresh holder). Returns (pool, lease, why-not).
+    A pinned account (``account_scope`` / AFP_FLOW_ACCOUNT) is the only candidate; an explicit ``cdp_endpoint`` or
+    ``cdp_scope`` that contradicts the account's registered profile/project refuses the lease."""
+    from film_pipeline.agentic.lease_pool import new_holder
+    from film_pipeline.production.runtime import normalize_cdp
+    pinned = L.pinned_account(account_scope)
+    pool, pinned = L.rehearsal_pool(Path(pkg.root), pinned) if mock else (L.machine_pool(), pinned)
+    lease, why = pool.acquire_or_reason(payload["generation_id"], cost_credits=float(payload["expected_credits"]),
+                                        film_id=payload["film_id"], shot_version=payload["shot_version"],
+                                        holder=new_holder(), account_id=pinned,
+                                        lease_key=L.lease_key(payload["film_id"], payload["take_id"], Path(pkg.root)))
+    if lease is None:
+        return pool, None, why
+    conflict = ""
+    if cdp_endpoint and lease["cdp_endpoint"] and normalize_cdp(cdp_endpoint) != normalize_cdp(lease["cdp_endpoint"]):
+        conflict = f"account {lease['account_id']} uses profile {lease['cdp_endpoint']}, this send targets {cdp_endpoint}"
+    elif cdp_scope and lease["project"] and cdp_scope.strip() != lease["project"]:
+        conflict = f"account {lease['account_id']} uses project {lease['project']}, this send targets {cdp_scope}"
+    if conflict:
+        _drop_lease(pool, lease)
+        return pool, None, conflict
+    return pool, lease, ""
+
+
+def _drop_lease(pool: Any, lease: dict[str, Any] | None) -> None:
+    """Release a lease whose send was never submitted: nothing spent, no cooldown."""
+    if lease is not None and not lease.get("finished"):
+        pool.release(lease_key=lease["lease_key"], lease_token=lease["lease_token"], credits_spent=0.0, cooldown_s=0.0)
+        lease["finished"] = True
+
+
+def _finish_lease(pool: Any, lease: dict[str, Any], payload: dict[str, Any], outcome: str, normalized: str) -> None:
+    """Settle the lease from the send's outcome: an account warning quarantines the account (and halts); an unknown
+    outcome keeps the lease held (uncertain) until reconcile + `lease settle`; otherwise release it, spending the expected
+    credits when the outcome is charged (the money ledger's rule)."""
+    if "FLOW_ACCOUNT_WARNING" in outcome:
+        pool.quarantine_account(lease["account_id"], outcome)
+    elif normalized == "AMBIGUOUS":
+        pool.mark_uncertain(lease["lease_key"], lease_token=lease["lease_token"], reason=outcome)
+    else:
+        spent = float(payload["expected_credits"]) if receipt_charged({**payload, "result": outcome}) else 0.0
+        pool.release(lease_key=lease["lease_key"], lease_token=lease["lease_token"], credits_spent=spent)
+    lease["finished"] = True
+
+
+@contextmanager
+def _flow_target_env(cdp: str, project: str):
+    """Point the in-process Flow sender (AFP_FLOW_CDP / AFP_FLOW_PROJECT) at the lease's profile for this send."""
+    saved = {k: os.environ.get(k) for k in ("AFP_FLOW_CDP", "AFP_FLOW_PROJECT")}
+    try:
+        if cdp:
+            os.environ["AFP_FLOW_CDP"] = cdp
+        if project:
+            os.environ["AFP_FLOW_PROJECT"] = project
+        yield
+    finally:
+        for key, value in saved.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+
+
+def _send_flow(pkg: Any, payload: dict[str, Any], cap: Any, runner: Runner | None, mock: bool, receipt: Path,
+               auto_resend: int, pool: Any, lease: dict[str, Any] | None) -> tuple[dict[str, Any], bool]:
+    """Phase B (the Flow send) and Phase C (register the take, final receipt, lease, send log)."""
+    root = Path(pkg.root)
+    generation_id = payload["generation_id"]
+    out = Path(payload["output"])
+
+    def before_submit(context):
+        if not mock and is_halted():   # re-check right before the Enter: a warning on another account may have set the halt
+            raise RuntimeError(f"PRODUCTION_HALT: {(read_halt() or {}).get('reason', '')}; nothing was submitted")
+        with film_lock(root, timeout_s=15.0):
+            payload.update(dispatch_phase="SUBMITTING", project=context.get("project") or payload.get("project", ""))
+            _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING")
+
+    if runner is None:
+        native_runner = lambda argv, output: controller_runner(argv, output, before_submit)  # noqa: E731
+    elif getattr(runner, "takes_before_submit", False):   # the rehearsal mock: writes the SUBMITTING receipt like the sender
+        native_runner = lambda argv, output: runner(argv, output, before_submit)  # noqa: E731
+    else:
+        native_runner = runner
+    # On exception keep the last durable phase; a dead controller cannot issue a later Enter.
+    manifest = FlowUiAdapter(cap, runner=native_runner).send(payload["argv"], out)
+
+    # Phase C (short exclusive metadata lock): register take, write final receipt, and append send log.
+    with film_lock(root, timeout_s=15.0):
+        result: dict[str, Any] = {"sent": True, "dry_run": False, "payload": payload, "manifest_result": manifest.get("result"),
+                                  "receipt": str(receipt)}
+        outcome = str(manifest.get("result"))
+        if outcome == "PASSED" and manifest.get("returncode", 0) != 0:
+            outcome = f"SENDER_EXIT_{manifest.get('returncode')}"
+        elif outcome == "PASSED" and manifest.get("sha256") and out.is_file() and manifest["sha256"] != sha256_file(out):
+            outcome = "MANIFEST_HASH_MISMATCH"
+        if outcome == "PASSED" and out.is_file():
+            entry, _ = register_take(root, pkg.header.film_id, generation_id, out,
+                                     prompt_text=Path(payload["prompt_file"]).read_text(encoding="utf-8").strip(),
+                                     route=payload["route"], model=MODEL, credits=0.0 if mock else payload["expected_credits"],
+                                     start_frame=Path(payload["start_frame"]["file"]), shot_version=payload["shot_version"])
+            result["take"] = entry.model_dump(mode="json")
+        result["manifest_result"] = outcome
+        _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result=outcome,
+                       take_registered=bool(result.get("take")))
+        normalized = cap.normalize(outcome)
+        if "FLOW_ACCOUNT_WARNING" in outcome:   # Owner rule: any account warning stops ALL sending; never auto-resend
+            set_halt(outcome, source="generate", account=str(payload.get("account", "")),
+                     film_id=pkg.header.film_id, take_id=payload["take_id"])
+        if lease is not None:
+            _finish_lease(pool, lease, payload, outcome, normalized)
+        incident = normalized == "PROVIDER_FAILED"
+        failures = _provider_failures(root, pkg.header.film_id, generation_id, payload["shot_version"]) if incident else 0
+        resend = (incident and auto_resend > 0 and failures < PROVIDER_FAILURES_BEFORE_RESTAGE
+                  and not is_halted())
+        log_send(root, payload, manifest, outcome, normalized, auto_resend=resend, provider_failures=failures)
+        if incident and not resend and failures >= PROVIDER_FAILURES_BEFORE_RESTAGE:
+            result["restage_needed"] = (f"{generation_id} v{payload['shot_version']}: {failures} provider failures; "
+                                        f"restage or simplify the prompt and record why (OWNER_POLICY)")
+    return result, resend
 
 
 def _provider_failures(root: Path, film_id: str, generation_id: str, version: int) -> int:

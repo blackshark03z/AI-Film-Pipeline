@@ -448,12 +448,23 @@ def has_failed_text(text: str) -> bool:
     return any(w in (text or "") for w in FAILED_WORDS)
 
 
+# Account warning / captcha wording on a Flow page (English + Vietnamese "unusual activity", "verify you are human"):
+# the same set the retired film08 pool runner used (flow_pool_runner.WARN_RE). Any hit -> FLOW_ACCOUNT_WARNING -> halt.
+ACCOUNT_WARNING_PATTERN = (r"unusual activity|hoạt động bất thường|verify (?:you are|that you are|it.s you)"
+                           r"|xác minh bạn là người")
+
+
+def has_account_warning(text: str) -> bool:
+    return re.search(ACCOUNT_WARNING_PATTERN, text or "", re.I) is not None
+
+
 # Flow job state on the gallery page: a running job shows "NN%" (0-99), a rejected one "Không thành công"
 JS_JOB_STATE = r"""() => { const t = document.body.innerText;
   return {running: /^\s*\d{1,2}%\s*$/m.test(t),
           failed: 0,
-          account_warning: /we noticed some unusual activity/i.test(t)}; }"""
+          account_warning: 0}; }"""
 JS_JOB_STATE = JS_JOB_STATE.replace("failed: 0", "failed: (t.match(" + FAILED_JS_RE + ") || []).length")
+JS_JOB_STATE = JS_JOB_STATE.replace("account_warning: 0", "account_warning: /" + ACCOUNT_WARNING_PATTERN + "/i.test(t)")
 
 
 # The gallery is a virtual list that mixes images and videos: a young project shows only its first rows at scroll 0.

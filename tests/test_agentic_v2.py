@@ -97,12 +97,12 @@ def test_account_lease_pool_atomic_reserve_cooldown_and_quarantine(tmp_path):
     assert is_halted() and read_halt()["source"] == "lease_pool"
 
     # Release SC01_g2 (acct_b is healthy and idle) -- acquire is still refused until the halt is explicitly cleared
-    pool.release("SC01_g2", credits_spent=6.0, now=1010.0)
+    pool.release("SC01_g2", credits_spent=6.0, now=1010.0, lease_token=l2["lease_token"])
     assert pool.acquire("SC01_g4", cost_credits=6.0, now=1075.0) is None
     clear_halt("agent:test-agentic", "reviewed the warning in test")
     l4 = pool.acquire("SC01_g4", cost_credits=6.0, now=1075.0)
     assert l4 is not None and l4["account_id"] == "acct_b"
-    pool.release("SC01_g4", credits_spent=0.0, cooldown_s=0.0, now=1076.0)
+    pool.release("SC01_g4", credits_spent=0.0, cooldown_s=0.0, now=1076.0, lease_token=l4["lease_token"])
 
     # Advance past cooldown_s -> unresolved SC01_g1 still blocked until proven NOT_SUBMITTED
     assert pool.acquire("SC01_g1", cost_credits=6.0, now=1020.0) is None

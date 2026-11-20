@@ -12,6 +12,9 @@ from film_pipeline.production.runtime import WriterBusy, writer
 from film_pipeline.production.money import credit_ledger
 from test_production_generate import film, still, backlog
 
+# a live generate() send leases a Flow account from the isolated machine pool (tests/conftest.py)
+pytestmark = pytest.mark.usefixtures("flow_lease_account")
+
 
 def interrupted(tmp_path):
     pkg = film(tmp_path, estimate=100)
