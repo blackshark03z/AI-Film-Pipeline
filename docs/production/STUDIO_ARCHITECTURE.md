@@ -288,6 +288,11 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
   - **Integrity quarantine (M6).** A clip whose sha256 does not match its receipt is INTEGRITY_FAILED, recorded in
     the broker DB. Every reader honours it: the receipt and take API, discovery, QC, review, cut and promote, not
     just the unpacker. RESULT_CORRUPT is handled the same way.
+    - Integrity is judged per file: each file's own sha256 is compared with its recorded receipt or promote SHA.
+    - A promoted or canonical clip that still matches its recorded SHA stays valid, even when its source take is
+      missing or INTEGRITY_FAILED. (Muse r10 regression: an audit deleted the last good canonical clip because its
+      source had gone corrupt.)
+    - A file that fails is quarantined: moved and recorded, never deleted.
   - **Partial batch.** Missing or failed children become NO_RESULT_IN_BATCH or INTEGRITY_FAILED one by one. A new
     round is a new batch with new ids. Prompt repair between rounds goes only through the defects registry (a
     reviewed defect code → a repair action; an unknown code → STOP).
