@@ -43,6 +43,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from film_pipeline.drama.generability import DRAFTS, rate_shot
+from film_pipeline.production.interaction import offframe_leaks, protection_on, spoken_texts
 from film_pipeline.production.plan import plan_package
 from film_pipeline.production.money import (credit_ledger, load_adjustments, money_ledger, receipt_amount, receipt_charged,
                                             unresolved_sends, receipt_result, receipt_unit)
@@ -195,6 +196,11 @@ def build_payload(pkg: Any, generation_id: str, *, plan_out: Path | None = None,
                                  f"the board"))
     prompt_file = plan_out / "prompts" / f"{generation_id}.txt"
     prompt = prompt_file.read_text(encoding="utf-8").strip()
+    if protection_on(pre):  # off-frame protection: a single's prompt must not name the people who are out of frame
+        leaked = offframe_leaks(pre, decl, prompt, spoken_texts(pkg, decl))
+        if leaked:
+            blockers.append(_blocker("CROSS_ATTENTION_LEAK", f"{generation_id}: the prompt names off-frame character(s) "
+                                     f"{', '.join(leaked)} outside the dialogue; the video model draws them into the frame"))
 
     if decl.previous_generation_id and not decl.independent_still:
         prev = next(g for g in shots.generations if g.generation_id == decl.previous_generation_id)

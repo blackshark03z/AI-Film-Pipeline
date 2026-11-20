@@ -44,7 +44,7 @@ def scaffold(film_id: str, profile: str, root: Path, title: str | None, *, portr
     if target.exists() and any(target.iterdir()):
         raise PackageError(f"{target} is not empty; refusing to overwrite")
     header = FilmHeader(film_id=film_id, title=title or film_id, profile=profile, portrait_9x16=portrait_9x16,
-                        qc_evidence_version=2)
+                        qc_evidence_version=2, defaults_version=2)
     save_header(target, header)
     for name in STAGE_FILES.values():
         (target / name).write_text("{}\n", encoding="utf-8", newline="\n")

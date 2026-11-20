@@ -64,8 +64,27 @@ class PreflightLimits(ContractModel):
     de_personify_off_frame: list[str] = Field(default_factory=list)
     # multi-actor shots with prop actions: replace ambiguous "No touching." with "Nobody touches another person."
     interperson_no_touch_ids: list[str] = Field(default_factory=list)
+    # off-frame protection: behaves as if every scene id of the film were listed in safeguard_scenes, clear_eyeline_scenes,
+    # listener_unplaced_scenes, de_personify_off_frame and interperson_no_touch_ids and object_gaze_neutral_eyeline were true,
+    # and a single-person prompt that still names an off-frame character is a CROSS_ATTENTION_LEAK blocker (2026-11-19).
+    # None = follow film.json defaults_version (>= 2 is on); an explicit value wins. Expanded once by PreprodSection.
+    offframe_protection: bool | None = None
     timing: SceneTiming = Field(default_factory=SceneTiming)
     feasibility: FeasibilityLimits = Field(default_factory=FeasibilityLimits)
+
+
+def expand_offframe_protection(limits: PreflightLimits, scene_ids: list[str]) -> PreflightLimits:
+    """`limits` with off-frame protection spelled out: every scene id added to each opt-in list (existing entries and
+    their order kept) and `object_gaze_neutral_eyeline` on. Idempotent."""
+    def add(existing: list[str]) -> list[str]:
+        return [*existing, *(s for s in scene_ids if s not in existing)]
+
+    return limits.model_copy(update={
+        "offframe_protection": True, "object_gaze_neutral_eyeline": True,
+        "safeguard_scenes": add(limits.safeguard_scenes), "clear_eyeline_scenes": add(limits.clear_eyeline_scenes),
+        "listener_unplaced_scenes": add(limits.listener_unplaced_scenes),
+        "de_personify_off_frame": add(limits.de_personify_off_frame),
+        "interperson_no_touch_ids": add(limits.interperson_no_touch_ids)})
 
 
 class PreflightIssue(ContractModel):

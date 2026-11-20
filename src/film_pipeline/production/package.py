@@ -95,6 +95,9 @@ class FilmHeader(ContractModel):
     disclosure: DisclosureSettings = Field(default_factory=DisclosureSettings)
     delegated_reviewers: list[DelegatedReviewer] = Field(default_factory=list)
     qc_evidence_version: int = Field(default=1, ge=1, le=2)  # 2: take reviews must state what was examined (qc_model.Observation)
+    # production defaults generation: 1 = films shipped before 2026-11-19 (opt-in safeguards only, prompt bytes frozen);
+    # 2 = 2026-11-19 production defaults (off-frame protection on, see PreflightLimits.offframe_protection)
+    defaults_version: int = Field(default=1, ge=1, le=2)
     rehearsal: bool = False  # offline dress rehearsal copy (production/rehearsal.py): synthetic footage, never releasable
     gates: dict[str, GateState] = Field(default_factory=lambda: {k: "NOT_RUN" for k in GATE_NAMES})
 
@@ -141,6 +144,21 @@ def _read_json(path: Path) -> Any:
         raise PackageError(f"{path.name}: invalid JSON ({exc})") from exc
 
 
+def resolve_offframe_protection(explicit: bool | None, defaults_version: int) -> bool:
+    """Effective off-frame protection: the film's explicit `preflight.offframe_protection`, else on from defaults_version 2."""
+    return explicit if explicit is not None else defaults_version >= 2
+
+
+def _with_offframe_default(data: dict[str, Any], header: FilmHeader) -> dict[str, Any]:
+    """03_preprod data with the effective `preflight.offframe_protection` filled in (PreprodSection then expands it once, so
+    plan, interaction, critic and generate all read the same typed settings). Untouched unless the header turns it on."""
+    preflight = data.get("preflight")
+    if (not isinstance(preflight, dict) or preflight.get("offframe_protection") is not None
+            or not resolve_offframe_protection(None, header.defaults_version)):
+        return data
+    return {**data, "preflight": {**preflight, "offframe_protection": True}}
+
+
 def load_package(path: str | Path) -> FilmPackage:
     """Load `films/<id>/`. Missing stages are reported, not raised; a bad `film.json` raises `PackageError`."""
     root = Path(path)
@@ -177,6 +195,8 @@ def load_package(path: str | Path) -> FilmPackage:
         section = sections.get(key)
         if section is not None and data:  # an empty scaffold stage is reported by the gates, not here
             try:
+                if key == "preprod" and header.profile == "drama":
+                    data = _with_offframe_default(data, header)
                 typed[key] = section.model_validate(data)
             except ValidationError as exc:
                 issues.append(f"{name}: {exc}")

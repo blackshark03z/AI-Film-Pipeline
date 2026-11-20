@@ -332,6 +332,50 @@ def video_placement_sentences(pre: Any, decl: Any, speakers: dict[int, str]) -> 
     return out
 
 
+def protection_on(pre: Any) -> bool:
+    """True when the film's off-frame protection is in effect (resolved once at package load, see package.load_package)."""
+    return getattr(pre.preflight, "offframe_protection", None) is True
+
+
+_QUOTED = re.compile(r"\"[^\"]*\"|“[^”]*”")
+
+
+def spoken_texts(pkg: Any, decl: Any) -> list[str]:
+    """The script text of the lines `decl.dialogue` names (the start-frame prompt style does not quote it)."""
+    script = getattr(pkg, "script", None)
+    if script is None:
+        return []
+    by_no = {e.line_no: e.text for s in script.scenes if s.scene_id == decl.scene_id
+             for e in s.elements if e.kind == "dialogue"}
+    return [by_no[n] for n in decl.dialogue if n in by_no]
+
+
+def offframe_leaks(pre: Any, decl: Any, prompt: str, spoken: Any = ()) -> list[str]:
+    """Off-frame characters named in a single-person shot's prompt outside the dialogue.
+
+    For a shot with exactly one visible character: every other character of the film, by id or handle, that the prompt
+    mentions (whole word, any case) once the dialogue is cut out: text inside straight or curly double quotes (the "full"
+    prompt style) and the given `spoken` line texts (the start-frame style writes them unquoted, with names turned into
+    handles). Sorted, de-duplicated tokens; empty when the shot shows nobody or several people."""
+    if len(decl.visible) != 1:
+        return []
+    from film_pipeline.drama.prompt import apply_handles
+
+    text = _QUOTED.sub(" ", prompt)
+    handles = {n: c.handle for n, c in pre.characters.items() if c.handle}
+    for line in spoken:
+        for variant in {line, apply_handles(line, handles)}:
+            words = variant.split()
+            if words:
+                text = re.sub(r"\s+".join(re.escape(w) for w in words), " ", text, flags=re.IGNORECASE)
+    tokens: list[str] = []
+    for char_id, spec in pre.characters.items():
+        if char_id in decl.visible:
+            continue
+        tokens += [char_id, *([spec.handle.strip()] if spec.handle.strip() else [])]
+    return sorted({t for t in tokens if re.search(rf"\b{re.escape(t)}\b", text, flags=re.IGNORECASE)})
+
+
 def hidden_person_issues(pre: Any, decl: Any, index: int, texts: list[str]) -> "list[PreflightIssue]":
     """HIDDEN_PERSON_UNPLACED: a character in the scene but not in frame, named in a prompt, with no listener anchor."""
     from film_pipeline.drama.preflight import PreflightIssue

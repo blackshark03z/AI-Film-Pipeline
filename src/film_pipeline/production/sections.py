@@ -19,7 +19,7 @@ from film_pipeline.drama.choreography import GenerationChoreography
 from film_pipeline.drama.coverage import Coverage
 from film_pipeline.drama.comprehension import ContextCard, CharacterIntro, IdentityTag, StoryFact
 from film_pipeline.drama.feasibility import FeasibilityLimits
-from film_pipeline.drama.preflight import PreflightLimits
+from film_pipeline.drama.preflight import PreflightLimits, expand_offframe_protection
 from film_pipeline.production.camera import CameraSetup, LightingPlan
 from film_pipeline.production.direction import DirectionPlan
 from film_pipeline.production.edit import EditSection
@@ -167,6 +167,8 @@ class PreprodSection(ContractModel):
         for sid, scene in self.scenes.items():
             if scene.location not in self.locations:
                 raise ValueError(f"scene {sid}: unknown location {scene.location!r}")
+        if self.preflight.offframe_protection is True:
+            self.preflight = expand_offframe_protection(self.preflight, list(self.scenes))
         return self
 
 

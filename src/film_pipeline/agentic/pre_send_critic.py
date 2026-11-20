@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from film_pipeline.production import stills as S
+from film_pipeline.production.interaction import offframe_leaks, protection_on, spoken_texts as shot_spoken_texts
 from film_pipeline.production.plan import _Plan
 from film_pipeline.production.sections import shot_seconds
 from film_pipeline.production.takes import load_log, script_dialogue
@@ -101,21 +102,15 @@ class PreSendCritic:
                     prompt = prefix + compiled_plan.compiled_text
 
             # 1. Off-frame character / handle token leakage on SINGLE shots
-            if decl.coverage == "SINGLE" and len(decl.visible) == 1:
-                off_frame_tokens: list[tuple[str, str]] = []
-                for char_id, char_spec in pre.characters.items():
-                    if char_id in decl.visible:
-                        continue
-                    off_frame_tokens.append((char_id, rf"\b{re.escape(char_id)}\b"))
-                    if char_spec.handle.strip():
-                        off_frame_tokens.append((char_spec.handle.strip(), rf"\b{re.escape(char_spec.handle.strip())}\b"))
-                leaked = [tok for tok, pat in off_frame_tokens if re.search(pat, prompt, flags=re.IGNORECASE)]
+            protected = protection_on(pre)  # BLOCK when off-frame protection is in effect, else advice only
+            if len(decl.visible) == 1 and (protected or decl.coverage == "SINGLE"):
+                leaked = offframe_leaks(pre, decl, prompt, shot_spoken_texts(pkg, decl))
                 if leaked:
                     findings.append({
                         "generation_id": gid,
                         "code": "CROSS_ATTENTION_LEAK_RISK",
-                        "severity": "WARN",
-                        "detail": f"SINGLE prompt mentions off-frame token(s) {sorted(set(leaked))}; consider de_personify_off_frame",
+                        "severity": "BLOCK" if protected else "WARN",
+                        "detail": f"SINGLE prompt mentions off-frame token(s) {leaked}; consider de_personify_off_frame",
                     })
 
             # 2. Blanket 'No touching.' conflict on multi-person prop handling shots

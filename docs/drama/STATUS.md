@@ -1,3 +1,23 @@
+# 2026-11-20 — Upgrade step 3 done: off-frame protection for new films
+
+- `film.json` `defaults_version` (1 = films shipped before 2026-11-19, 2 = new defaults); `scaffold` writes 2.
+  `preflight.offframe_protection` (None = follow defaults_version, explicit value wins). When on, PreprodSection
+  expands it once: every scene id joins safeguard/clear_eyeline/listener_unplaced/de_personify_off_frame/
+  interperson_no_touch lists and object_gaze_neutral_eyeline is on, so plan, interaction, critic and generate all
+  read the same typed settings. Raw 03_preprod.json and its hash are untouched.
+- Leak check `interaction.offframe_leaks`: single-visible shot naming an off-frame character id/handle outside the
+  dialogue (quoted text and the shot's script lines are cut out, so spoken names stay legal). Protection on:
+  generate adds blocker `CROSS_ATTENTION_LEAK` (dry runs show it, no `--critic` needed) and the critic's
+  CROSS_ATTENTION_LEAK_RISK is BLOCK; protection off: unchanged (critic WARN on SINGLE only).
+- film08 measured offline (copy, protection forced on): single-visible shots leaking an off-frame name 184/285 -> 0/285
+  (before: "the older man" x83, "the woman" x77, "the young man" x24, e.g. SC01_g02 "The woman speaks to the older man").
+- film03-08 stay defaults_version 1: compiled prompts byte-identical, accepted takes not stale
+  (tests/test_offframe_protection.py checks film06/07/08 against accepted prompt_sha256).
+- Not proven live: whether the protected prompts actually cut edge intrusion; that is step 5 (detector) + step 6 (pilot).
+- Next: step 4 (one sender + lease exclusivity + rehearsal).
+
+---
+
 # 2026-11-19 — Upgrade steps 1-2 done (docs/production/UPGRADE_PLAN_20261119.md)
 
 - Step 1, honest QC evidence: `TakeQc.evidence_version` 2 + `GroupCheck.observed` (frames_viewed/frames_total/
