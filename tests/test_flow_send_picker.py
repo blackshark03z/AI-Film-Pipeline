@@ -314,6 +314,31 @@ def test_composer_text_remaining_after_enter_keeps_the_send_ambiguous(tmp_path, 
     assert get_capability("flow").normalize(result["result"]) == "AMBIGUOUS"
 
 
+def test_a_standalone_send_without_the_broker_checkpoint_never_presses_enter(tmp_path, monkeypatch):
+    """S1: flow_send's own main() (and any caller without before_submit) stops before the Enter."""
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock, Mock
+    import patchright.async_api as pa
+    box = SimpleNamespace(click=AsyncMock(), fill=AsyncMock(), evaluate=AsyncMock(return_value=""))
+    page = SimpleNamespace(url="https://flow.google.com/project/owned", set_viewport_size=AsyncMock(),
+                           keyboard=SimpleNamespace(press=AsyncMock()), wait_for_timeout=AsyncMock(), on=Mock(),
+                           locator=lambda selector: SimpleNamespace(first=box))
+    page.evaluate = AsyncMock(side_effect=lambda js: {"failed": 0} if js == fs.JS_JOB_STATE else [])
+    browser = SimpleNamespace(contexts=[SimpleNamespace(pages=[page])])
+    pw = SimpleNamespace(chromium=SimpleNamespace(connect_over_cdp=AsyncMock(return_value=browser)), stop=AsyncMock())
+    monkeypatch.setattr(pa, "async_playwright", lambda: SimpleNamespace(start=AsyncMock(return_value=pw)))
+    monkeypatch.setattr(fs, "front_snapshot", AsyncMock(return_value={"before_ids": []}))
+    monkeypatch.setattr(fs, "_fill_frame_slot", AsyncMock(return_value=None))
+    source = tmp_path / "prompt.txt"
+    source.write_text("Original fictional dialogue.", encoding="utf-8")
+    args = fs.parse_args([str(source), str(tmp_path / "out.mp4"), "--start", "tok:owned"])
+    result = asyncio.run(fs.run(args))
+    assert result["result"] == "PRE_SUBMIT_ERROR NOT_CHECKPOINTED"
+    assert all(call.args != ("Enter",) for call in page.keyboard.press.call_args_list)
+    on_disk = tmp_path / "out.take.json"   # no SUBMITTING checkpoint either
+    phase = json.loads(on_disk.read_text(encoding="utf-8")).get("submission_phase") if on_disk.exists() else ""
+    assert phase != "SUBMITTING"
+
 def test_model_label_and_match():
     assert fs.model_label("Omni 1.2 Flash\narrow_drop_down") == "Omni 1.2 Flash"
     assert fs.model_matches("Omni 1.2 Flash\narrow_drop_down", "Omni 1.2 Flash")

@@ -176,11 +176,29 @@ def probe(account_id: str, *, weekly_remaining_pct: float, db: str | Path | None
 
 @_guard
 def import_legacy(films_dir: str | Path, *, db: str | Path | None = None) -> dict[str, Any]:
-    """Import the pre-S1 spend of every film package in ``films_dir`` (idempotent, one row per receipt)."""
+    """Import the pre-S1 spend of every film package in ``films_dir`` (idempotent, one row per receipt). A receipt
+    that cannot be read leaves the import incomplete: refused (LEGACY_RECEIPT_UNREADABLE, exit 1) with the
+    ``unresolved`` keys; capped admission stays refused until each is repaired or resolved (``import_resolve``)."""
     from film_pipeline.production import leases as L
     if not Path(films_dir).is_dir():
         return _no("USAGE", f"{films_dir} is not a directory")
-    return _ok(**_broker(db).import_legacy(films_dir, L.legacy_rows(Path(films_dir))))
+    out = L.import_films_dir(_broker(db), Path(films_dir))
+    if not out["complete"]:
+        return _no("LEGACY_RECEIPT_UNREADABLE", f"{len(out['unresolved'])} pre-S1 receipt(s) could not be read; "
+                   f"repair them and import again, or record each with import-resolve", **out)
+    return _ok(**out)
+
+
+@_guard
+def import_resolve(films_dir: str | Path, key: str, *, by: str, reason: str, amount: float | None = None,
+                   unit: str = "", day: str = "", provider: str = "", db: str | Path | None = None) -> dict[str, Any]:
+    """Operator: reconcile one unreadable pre-S1 receipt (``key`` as import-legacy listed it), with who and why
+    recorded; ``amount`` > 0 (with ``unit``, ``day``, ``provider``) records what it charged, none: it charged
+    nothing."""
+    if not key:
+        return _no("USAGE", "import-resolve needs --key")
+    return _ok(**_broker(db).resolve_legacy(films_dir, key, by=by, reason=reason, amount=amount, unit=unit, day=day,
+                                            provider=provider))
 
 
 @_guard

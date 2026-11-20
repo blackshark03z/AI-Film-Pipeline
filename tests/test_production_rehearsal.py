@@ -104,11 +104,13 @@ def test_rehearsal_cannot_be_accepted(tmp_path):
 def test_mock_runner_needs_a_rehearsal_to_skip_go_live(tmp_path):
     runner_calls = []
 
-    def runner(argv, out):
+    def runner(argv, out, before_submit=None):
+        before_submit({"project": ""})   # S1: a Flow runner takes the broker's pre-Enter check
         runner_calls.append(argv)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_bytes(b"fake")
         return {"result": "PASSED"}
+    runner.takes_before_submit = True
 
     backlog = tmp_path / "backlog.md"
     backlog.write_text("OWNER_GO_LIVE: NO\n", encoding="utf-8")

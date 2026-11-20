@@ -188,10 +188,13 @@ def test_an_account_warning_quarantines_the_account_and_halts(tmp_path, flow_lea
 
 
 class RaisingRunner:
+    takes_before_submit = True
+
     def __init__(self):
         self.calls = []
 
-    def __call__(self, argv, out):
+    def __call__(self, argv, out, before_submit=None):
+        before_submit({"project": ""})
         self.calls.append(argv)
         raise RuntimeError("controller died mid-send")
 
@@ -277,3 +280,12 @@ def test_flow_pool_runner_refuses_to_send():
     done = subprocess.run([sys.executable, str(ROOT / "tools" / "drama_flow_ui" / "flow_pool_runner.py")],
                           capture_output=True, text=True, encoding="utf-8", timeout=120)
     assert done.returncode == 2 and "afp-film generate" in done.stderr
+
+
+def test_flow_pool_runner_copies_stay_identical_and_check_the_broker_before_the_click():
+    pkg = ROOT / "src" / "film_pipeline" / "providers" / "_flow_ui" / "flow_pool_runner.py"
+    assert (ROOT / "tools" / "drama_flow_ui" / "flow_pool_runner.py").read_bytes() == pkg.read_bytes()
+    src = pkg.read_text(encoding="utf-8")
+    check = src.index('before_submit({"project": cfg.project_id})')
+    assert "if before_submit is None:" in src and "runner.takes_before_submit = True" in src
+    assert check < src.rindex('for evt in ("mousePressed", "mouseReleased"):')   # the check comes right before Send

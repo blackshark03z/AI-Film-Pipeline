@@ -1253,8 +1253,10 @@ async def run(args, before_submit=None) -> dict:
             rec["result"] = f"PRE_SUBMIT_ERROR {ACCOUNT_WARNING}"
             return rec
         failed_before = job["failed"]
-        if before_submit is not None:
-            before_submit(rec)
+        if before_submit is None:   # S1: no broker pre-Enter check (halt + epoch + lease), no Enter
+            rec["result"] = "PRE_SUBMIT_ERROR NOT_CHECKPOINTED"
+            return rec
+        before_submit(rec)
         # submitting_at: a death between Enter and the SUBMITTED checkpoint still leaves a send time to settle from
         rec.update(before_ids=(pre or {}).get("before_ids", []), result="PENDING", submission_phase="SUBMITTING",
                    submitting_at=time.strftime("%Y-%m-%dT%H:%M:%S"))

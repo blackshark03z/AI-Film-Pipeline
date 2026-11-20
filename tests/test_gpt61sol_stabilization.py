@@ -690,11 +690,13 @@ def test_tl_parallel_multi_account_generate_no_film_busy(tmp_path, monkeypatch):
     errors: list[BaseException] = []
 
     def make_runner(out_bytes: bytes):
-        def _run(argv: list[str], out: Path) -> dict:
+        def _run(argv: list[str], out: Path, before_submit=None) -> dict:
             barrier.wait()  # Proves Phase B runs simultaneously on two accounts without holding film_lock
+            before_submit({"project": ""})
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_bytes(out_bytes)
             return {"result": "PASSED", "returncode": 0}
+        _run.takes_before_submit = True
         return _run
 
     def worker(gid: str, acct: str, proj: str, cdp: str, tag: bytes):

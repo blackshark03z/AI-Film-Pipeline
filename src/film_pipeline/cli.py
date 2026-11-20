@@ -215,6 +215,10 @@ def _broker_api(args: argparse.Namespace) -> int:
             out = api.probe(args.account, weekly_remaining_pct=args.weekly_remaining_pct, db=db)
     elif args.verb == "import-legacy":
         out = api.import_legacy(args.films_dir or "", db=db) if args.films_dir else             {"ok": False, "code": "USAGE", "reason": "import-legacy needs --films-dir"}
+    elif args.verb == "import-resolve":
+        out = api.import_resolve(args.films_dir, args.key, by=args.by, reason=args.reason, amount=args.amount,
+                                 unit=args.unit, day=args.day, provider=args.provider, db=db) if args.films_dir else \
+            {"ok": False, "code": "USAGE", "reason": "import-resolve needs --films-dir, --key, --by and --reason"}
     else:
         out = api.halt(args.provider, args.account, args.reason, kind=args.kind, db=db)
     _emit(out)
@@ -523,9 +527,10 @@ def main(argv: list[str] | None = None) -> int:
     bk = actions.add_parser("broker", help="the broker's public lane API (agentic/broker_api.py), JSON out; exit 0 ok, "
                                            "1 refused (NOT_SENT, no lease, halt, epoch, cap), 2 usage, 3 not found / "
                                            "token mismatch: acquire | check | mark | release | settle | halt | "
-                                           "login-check | login-result | claim | probe | import-legacy")
+                                           "login-check | login-result | claim | probe | import-legacy | "
+                                           "import-resolve")
     bk.add_argument("verb", choices=["acquire", "check", "mark", "release", "settle", "halt", "login-check",
-                                     "login-result", "claim", "probe", "import-legacy"])
+                                     "login-result", "claim", "probe", "import-legacy", "import-resolve"])
     bk.add_argument("--db", type=Path, help="broker database (default: the machine-wide one in the state dir)")
     bk.add_argument("--account", default="", help="acquire/halt: the account id")
     bk.add_argument("--provider", default="", help="acquire/halt: the provider (muse, flow, ...)")
@@ -536,7 +541,11 @@ def main(argv: list[str] | None = None) -> int:
     bk.add_argument("--unit", default="", help="acquire: credits, VND, USD or muse_requests")
     bk.add_argument("--job-kind", default="video", choices=["video", "stills"])
     bk.add_argument("--film", type=Path, help="acquire: the film package (its budget and scope; required)")
-    bk.add_argument("--films-dir", type=Path, help="import-legacy: a directory of film packages")
+    bk.add_argument("--films-dir", type=Path, help="import-legacy/import-resolve: a directory of film packages")
+    bk.add_argument("--key", default="", help="import-resolve: the unreadable receipt's key (import-legacy lists it)")
+    bk.add_argument("--by", default="", help="import-resolve: human:<id> or agent:<id>")
+    bk.add_argument("--amount", type=float, help="import-resolve: what the receipt charged (omit: nothing)")
+    bk.add_argument("--day", default="", help="import-resolve: the day it was charged, YYYY-MM-DD")
     bk.add_argument("--cause", default="", help="login-check: AUTH_EXPIRED (the only cause that allows a re-login)")
     bk.add_argument("--claimant", default="", help="login-check/claim: the lane's profile-claim id")
     bk.add_argument("--result", default="", help="login-result: ok or failed")

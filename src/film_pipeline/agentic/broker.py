@@ -32,6 +32,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import socket
 import sqlite3
 import time
@@ -44,7 +45,7 @@ from typing import Any, Iterable, Mapping
 
 from film_pipeline.production.halt import _BY_RE, read_halt, set_halt, state_dir
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 DB_FILENAME = "lease_pool.sqlite3"
 UNCERTAIN = "QUARANTINED_PENDING_RECONCILE"
 _HELD = ("ACTIVE", UNCERTAIN)
@@ -221,8 +222,10 @@ class Broker:
             version = int(conn.execute("PRAGMA user_version").fetchone()[0])
             if version >= SCHEMA_VERSION:
                 return
-            self._schema_v1(conn)
-            self._migrate_v2(conn)
+            if version < 2:
+                self._schema_v1(conn)
+                self._migrate_v2(conn)
+            self._migrate_v3(conn)
             conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
     @staticmethod
@@ -335,6 +338,21 @@ class Broker:
                           else "RESERVED", float(lease["leased_at"] or 0.0), 0.0, 1 if final else 0))
             conn.execute("UPDATE leases SET provider = 'flow', day = ?, film_key = film_id WHERE lease_key = ?",
                          (day, lease["lease_key"]))
+
+    @staticmethod
+    def _migrate_v3(conn: sqlite3.Connection) -> None:
+        """Broker v3: pre-S1 receipt evidence that could not be read. ``import_legacy`` records each such receipt in
+        ``legacy_unresolved`` and leaves its films directory's import incomplete (``legacy_imports.complete`` 0);
+        capped admission is refused until an operator resolves it (``resolve_legacy``, who and why recorded)."""
+        cols = {r["name"] for r in conn.execute("PRAGMA table_info(legacy_imports)").fetchall()}
+        if "complete" not in cols:
+            conn.execute("ALTER TABLE legacy_imports ADD COLUMN complete INTEGER NOT NULL DEFAULT 1")
+        conn.execute("""CREATE TABLE IF NOT EXISTS legacy_unresolved (
+            root TEXT NOT NULL, key TEXT NOT NULL, path TEXT NOT NULL DEFAULT '', problem TEXT NOT NULL,
+            sha256 TEXT NOT NULL DEFAULT '', found_at TEXT NOT NULL, resolved_at TEXT NOT NULL DEFAULT '',
+            resolved_by TEXT NOT NULL DEFAULT '', resolved_reason TEXT NOT NULL DEFAULT '',
+            resolved_amount REAL NOT NULL DEFAULT 0.0, resolved_unit TEXT NOT NULL DEFAULT '',
+            PRIMARY KEY (root, key))""")
 
     # ---- accounts -------------------------------------------------------------------------------------------------
     def register_account(
@@ -560,33 +578,49 @@ class Broker:
                                               f"{pcap:g}{in_unit}"
         return "", ""
 
-    def _legacy_refusal(self, conn: sqlite3.Connection, req: AdmitRequest, provider: str) -> str:
+    def _legacy_refusal(self, conn: sqlite3.Connection, req: AdmitRequest, provider: str) -> tuple[str, str]:
         """Spend sent before S1 must be in the broker before anything is admitted against a daily cap: the caller's
         films directory must be imported (``import_legacy``); a caller without one is refused while any daily cap
-        applies and no directory was ever imported."""
+        applies and no directory was ever imported. While any pre-S1 receipt on this machine could not be read
+        (``legacy_unresolved``), a capped admission is refused: its spend is unknown. Returns ``(code, reason)``,
+        ``("", "")`` when admission may go on."""
         capped = self.machine_caps.get(req.unit) is not None or any(
             caps.get(req.unit) is not None for p, caps in self.provider_caps.items() if not provider or p == provider)
         if capped or (req.film_cap is not None and not math.isinf(req.film_cap)):
+            bad = conn.execute("SELECT root, key, problem, (SELECT COUNT(*) FROM legacy_unresolved WHERE resolved_at "
+                               "= '') AS n FROM legacy_unresolved WHERE resolved_at = '' ORDER BY root, key "
+                               "LIMIT 1").fetchone()
+            if bad is not None:
+                return "LEGACY_RECEIPT_UNREADABLE", (
+                    f"{bad['n']} pre-S1 receipt(s) could not be read, so their spend is unknown; first {bad['key']} "
+                    f"({bad['problem']}) under {bad['root']}: repair the file and import again (afp-film broker "
+                    f"import-legacy --films-dir D), or record what it charged (afp-film broker import-resolve "
+                    f"--films-dir D --key K --by human:<id> --reason R [--amount A --unit U --day YYYY-MM-DD "
+                    f"--provider P])")
             # a step-4 send still open at migration counts at its receipt's price, which only the import knows
             unpriced = conn.execute("SELECT lease_key FROM reservations WHERE state = 'RESERVED' AND price_known = 0 "
                                     "ORDER BY id LIMIT 1").fetchone()
             if unpriced is not None:
-                return (f"the open step-4 send {unpriced['lease_key']} has no known price: import its films directory "
-                        f"(afp-film broker import-legacy --films-dir D) or settle it (afp-film lease settle)")
+                return "LEGACY_IMPORT_PENDING", (
+                    f"the open step-4 send {unpriced['lease_key']} has no known price: import its films directory "
+                    f"(afp-film broker import-legacy --films-dir D) or settle it (afp-film lease settle)")
         if req.legacy_root is not None:
             if conn.execute("SELECT 1 FROM legacy_imports WHERE root = ?", (req.legacy_root,)).fetchone() is None:
-                return f"the pre-S1 receipts of {req.legacy_root} are not imported into the broker yet"
-            return ""
+                return "LEGACY_IMPORT_PENDING", f"the pre-S1 receipts of {req.legacy_root} are not imported into the " \
+                                                f"broker yet"
+            return "", ""
         if capped and conn.execute("SELECT 1 FROM legacy_imports LIMIT 1").fetchone() is None:
-            return "no pre-S1 receipts were ever imported into the broker (afp-film broker import-legacy --films-dir D)"
-        return ""
+            return "LEGACY_IMPORT_PENDING", "no pre-S1 receipts were ever imported into the broker (afp-film broker " \
+                                            "import-legacy --films-dir D)"
+        return "", ""
 
     # ---- pre-S1 spend --------------------------------------------------------------------------------------------
     @staticmethod
     def legacy_root_key(films_dir: Path | str) -> str:
         return os.path.normcase(str(Path(films_dir).resolve()))
 
-    def import_legacy(self, films_dir: Path | str, rows: list[dict[str, Any]]) -> dict[str, Any]:
+    def import_legacy(self, films_dir: Path | str, rows: list[dict[str, Any]], *,
+                      problems: Iterable[dict[str, Any]] = (), seen: Iterable[str] | None = None) -> dict[str, Any]:
         """Record the spend of receipts sent before S1 (read by the caller, outside this transaction) as SPENT or
         RELEASED reservations, once per receipt: the dedup key is the reservation identity (``legacy`` token + the
         receipt key), so a second import updates the same row (a receipt resolved since) and never adds it again. A
@@ -594,6 +628,12 @@ class Broker:
         reservation is open (custody held) it is priced from the receipt (``price``) and stays RESERVED; once settled
         it keeps its settled spend; in every state it takes the receipt's take id and film scope, so the film ledger's
         credit for that take applies to it. Marks ``films_dir`` imported.
+
+        ``problems`` are the receipts that could not be read (``key``, ``path``, ``problem``, ``sha256``): each is
+        recorded in ``legacy_unresolved`` and the import of ``films_dir`` stays incomplete (capped admission is
+        refused, LEGACY_RECEIPT_UNREADABLE) until every one is resolved: by ``resolve_legacy`` (kept while the file's
+        bytes stay the same; a changed file asks again) or by a later import that reads it (``seen``: the keys of
+        every receipt read this time). A receipt that vanished stays unresolved: deleting evidence resolves nothing.
 
         Each row: ``key`` (unique per receipt), ``lease_key`` (the step-4 lease key or ''), ``take_id``, ``account``,
         ``film_key``, ``provider``, ``unit``, ``amount`` (charged amount, 0 when not charged), ``price`` (the
@@ -636,10 +676,73 @@ class Broker:
                               r.get("film_key", ""), r.get("provider", ""), r["unit"], amount, amount, r["day"], state,
                               ts, ts))
                 imported += 1
-            conn.execute("INSERT INTO legacy_imports (root, imported_at, receipts) VALUES (?, ?, ?) ON CONFLICT(root) "
-                         "DO UPDATE SET imported_at = excluded.imported_at, receipts = excluded.receipts",
-                         (root, _iso_now(), imported))
-        return {"root": root, "imported": imported, "skipped_migrated": skipped, "priced_migrated": priced}
+            at = _iso_now()
+            found = {str(p["key"]): p for p in problems}
+            for key, p in found.items():
+                old = conn.execute("SELECT sha256 FROM legacy_unresolved WHERE root = ? AND key = ?",
+                                   (root, key)).fetchone()
+                if old is not None and old["sha256"] == str(p.get("sha256") or ""):   # same bytes: keep its resolution
+                    conn.execute("UPDATE legacy_unresolved SET path = ?, problem = ? WHERE root = ? AND key = ?",
+                                 (str(p.get("path") or ""), str(p["problem"]), root, key))
+                    continue
+                conn.execute("INSERT INTO legacy_unresolved (root, key, path, problem, sha256, found_at) VALUES "
+                             "(?, ?, ?, ?, ?, ?) ON CONFLICT(root, key) DO UPDATE SET path = excluded.path, problem = "
+                             "excluded.problem, sha256 = excluded.sha256, found_at = excluded.found_at, resolved_at "
+                             "= '', resolved_by = '', resolved_reason = '', resolved_amount = 0.0, resolved_unit = ''",
+                             (root, key, str(p.get("path") or ""), str(p["problem"]), str(p.get("sha256") or ""), at))
+            readable = set(seen) if seen is not None else set()
+            for row in conn.execute("SELECT key FROM legacy_unresolved WHERE root = ? AND resolved_at = ''",
+                                    (root,)).fetchall():
+                if row["key"] not in found and row["key"] in readable:   # repaired: this import read it
+                    conn.execute("UPDATE legacy_unresolved SET resolved_at = ?, resolved_by = 'import', "
+                                 "resolved_reason = 'the receipt was read by a later import' WHERE root = ? AND key = ?",
+                                 (at, root, row["key"]))
+            open_keys = [r["key"] for r in conn.execute("SELECT key FROM legacy_unresolved WHERE root = ? AND "
+                                                        "resolved_at = '' ORDER BY key", (root,)).fetchall()]
+            conn.execute("INSERT INTO legacy_imports (root, imported_at, receipts, complete) VALUES (?, ?, ?, ?) "
+                         "ON CONFLICT(root) DO UPDATE SET imported_at = excluded.imported_at, receipts = "
+                         "excluded.receipts, complete = excluded.complete", (root, at, imported, 0 if open_keys else 1))
+        return {"root": root, "imported": imported, "skipped_migrated": skipped, "priced_migrated": priced,
+                "complete": not open_keys, "unresolved": open_keys}
+
+    def resolve_legacy(self, films_dir: Path | str, key: str, *, by: str, reason: str, amount: float | None = None,
+                       unit: str = "", day: str = "", provider: str = "", film_key: str = "") -> dict[str, Any]:
+        """Operator: reconcile one pre-S1 receipt ``import_legacy`` could not read, with who and why recorded.
+        ``amount`` > 0 records what it charged: a SPENT legacy reservation (the receipt's own identity, so a later
+        readable import updates the same row) in ``unit`` on ``day`` for ``provider``; it never lowers a spend already
+        recorded for the receipt. No amount (or 0): the operator states it charged nothing. Once every unreadable
+        receipt of ``films_dir`` is resolved, its import is complete."""
+        if not isinstance(by, str) or not _BY_RE.match(by):
+            raise ValueError("resolve_legacy: 'by' must match ^(human|agent):[A-Za-z0-9_.-]+$")
+        if not isinstance(reason, str) or len(reason.strip()) < 3:
+            raise ValueError("resolve_legacy: reason must be at least 3 characters")
+        spent = 0.0 if amount is None else float(amount)
+        _check_spent(spent)
+        if spent > 0 and not (unit and provider and re.fullmatch(r"\d{4}-\d{2}-\d{2}", day or "")):
+            raise ValueError("resolve_legacy: an amount needs --unit, --provider and --day YYYY-MM-DD")
+        root = self.legacy_root_key(films_dir)
+        ts = time.time()
+        with closing(self._connect()) as conn, self._tx(conn):
+            row = conn.execute("SELECT * FROM legacy_unresolved WHERE root = ? AND key = ?", (root, key)).fetchone()
+            if row is None:
+                raise KeyError(f"no unreadable pre-S1 receipt {key!r} under {root}")
+            if spent > 0:
+                conn.execute("INSERT INTO reservations (lease_key, lease_token, child_key, take_id, account_id, "
+                             "film_key, provider, unit, amount, spent, day, state, created_at, settled_at) VALUES "
+                             "(?, 'legacy', ?, ?, '', ?, ?, ?, ?, ?, ?, 'SPENT', ?, ?) ON CONFLICT(lease_token, "
+                             "child_key) DO UPDATE SET amount = MAX(amount, excluded.amount), spent = MAX(spent, "
+                             "excluded.spent), state = 'SPENT', settled_at = excluded.settled_at",
+                             (f"legacy:{key}", key, key.split(":", 1)[-1], film_key, provider, unit, spent, spent, day,
+                              ts, ts))
+            conn.execute("UPDATE legacy_unresolved SET resolved_at = ?, resolved_by = ?, resolved_reason = ?, "
+                         "resolved_amount = ?, resolved_unit = ? WHERE root = ? AND key = ?",
+                         (_iso_now(), by, reason.strip(), spent, unit if spent > 0 else "", root, key))
+            open_keys = [r["key"] for r in conn.execute("SELECT key FROM legacy_unresolved WHERE root = ? AND "
+                                                        "resolved_at = '' ORDER BY key", (root,)).fetchall()]
+            if not open_keys:
+                conn.execute("UPDATE legacy_imports SET complete = 1 WHERE root = ?", (root,))
+        return {"root": root, "key": key, "resolved_by": by, "amount": spent, "unit": unit if spent > 0 else "",
+                "complete": not open_keys, "unresolved": open_keys}
 
     @staticmethod
     def _replay_mismatch(conn: sqlite3.Connection, lease: sqlite3.Row, req: AdmitRequest) -> str:
@@ -716,9 +819,9 @@ class Broker:
             provider = (req.provider or "").strip()
             if not req.needs_account and not provider:
                 return refuse("BATCH_INVALID", "an admission without an account must name its provider")
-            legacy = self._legacy_refusal(conn, req, provider)
+            legacy_code, legacy = self._legacy_refusal(conn, req, provider)
             if legacy:
-                return refuse("LEGACY_IMPORT_PENDING", legacy)
+                return refuse(legacy_code, legacy)
             film_key = req.film_key or req.film_id
             film_capped = req.film_cap is not None and not math.isinf(req.film_cap)
             for c in req.children if film_capped else ():   # take identity decides what the film budget counts

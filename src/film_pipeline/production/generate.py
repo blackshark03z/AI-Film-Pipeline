@@ -624,6 +624,12 @@ def generate(pkg: Any, generation_id: str, *, dry_run: bool = True, plan_out: Pa
             halted = None if mock else _halt_blocker()
             if halted is not None:
                 refusals.append(halted)
+            if flow and runner is not None and not getattr(runner, "takes_before_submit", False):
+                # S1: every Flow Enter passes the broker's pre-Enter check (halt + epoch + lease, one transaction); a
+                # runner that cannot call it right before its Send click never sends
+                refusals.append(_blocker("RUNNER_NOT_CHECKPOINTED", "this Flow runner does not take the broker's "
+                                         "pre-Enter checkpoint (takes_before_submit); nothing is sent through it",
+                                         live_only=True))
             if not flow:
                 adapter = adapter or make_adapter(cap)
                 health = adapter.health()
@@ -744,7 +750,8 @@ def _write_unsent_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> 
 
 
 # admission refusals that keep their own code; any other (no account, lease held, epoch, batch) is NO_ACCOUNT_LEASE
-ADMISSION_CODES = ("PRODUCTION_HALT", "BUDGET_EXCEEDED", "BUDGET_DAILY_EXCEEDED", "PROVIDER_DAILY_EXCEEDED", "NO_PRICE")
+ADMISSION_CODES = ("PRODUCTION_HALT", "BUDGET_EXCEEDED", "BUDGET_DAILY_EXCEEDED", "PROVIDER_DAILY_EXCEEDED", "NO_PRICE",
+                   "LEGACY_RECEIPT_UNREADABLE")
 
 
 def _admit(pkg: Any, payload: dict[str, Any], budget: dict[str, Any], *, flow: bool, mock: bool,
@@ -877,10 +884,10 @@ def _send_flow(pkg: Any, payload: dict[str, Any], cap: Any, runner: Runner | Non
 
     if runner is None:
         native_runner = lambda argv, output: controller_runner(argv, output, before_submit)  # noqa: E731
-    elif getattr(runner, "takes_before_submit", False):   # the rehearsal mock: writes the SUBMITTING receipt like the sender
+    elif getattr(runner, "takes_before_submit", False):   # it calls before_submit right before its Send click
         native_runner = lambda argv, output: runner(argv, output, before_submit)  # noqa: E731
-    else:
-        native_runner = runner
+    else:   # refused in Phase A0 (RUNNER_NOT_CHECKPOINTED); never reached
+        raise NotSent("RUNNER_NOT_CHECKPOINTED", "the Flow runner takes no pre-Enter checkpoint")
     # On exception keep the last durable phase; a dead controller cannot issue a later Enter.
     manifest = FlowUiAdapter(cap, runner=native_runner).send(payload["argv"], out)
 

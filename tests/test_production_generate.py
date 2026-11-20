@@ -60,10 +60,14 @@ def codes(payload):
 
 
 class FakeRunner:
+    takes_before_submit = True   # S1: a live Flow runner must call the broker's pre-Enter check before its click
+
     def __init__(self, result="PASSED"):
         self.calls, self.result = [], result
 
-    def __call__(self, argv, out):
+    def __call__(self, argv, out, before_submit=None):
+        if before_submit is not None:
+            before_submit({"project": ""})
         self.calls.append(argv)
         if self.result == "PASSED":
             out.parent.mkdir(parents=True, exist_ok=True)
@@ -303,8 +307,10 @@ def test_an_interrupted_send_blocks_the_next_one(tmp_path):
 
     class Dies:
         calls = 0
+        takes_before_submit = True
 
-        def __call__(self, argv, out):
+        def __call__(self, argv, out, before_submit=None):
+            before_submit({"project": ""})
             self.calls += 1
             raise RuntimeError("process died")
 
@@ -332,7 +338,10 @@ def test_a_failing_sender_does_not_register_an_old_clip(tmp_path, flow_lease_acc
     pkg = film(tmp_path, 100)
 
     class Crashes:
-        def __call__(self, argv, out):
+        takes_before_submit = True
+
+        def __call__(self, argv, out, before_submit=None):
+            before_submit({"project": ""})
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_bytes(b"old-bytes")
             return {"result": "PASSED", "returncode": 1}
@@ -342,7 +351,10 @@ def test_a_failing_sender_does_not_register_an_old_clip(tmp_path, flow_lease_acc
     assert T.load_log(pkg.root, pkg.header.film_id).takes == []
 
     class WrongHash:
-        def __call__(self, argv, out):
+        takes_before_submit = True
+
+        def __call__(self, argv, out, before_submit=None):
+            before_submit({"project": ""})
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_bytes(b"new-bytes")
             return {"result": "PASSED", "returncode": 0, "sha256": "0" * 64}
@@ -409,9 +421,9 @@ class ScriptedRunner(FakeRunner):
         super().__init__()
         self.results = list(results)
 
-    def __call__(self, argv, out):
+    def __call__(self, argv, out, before_submit=None):
         self.result = self.results.pop(0)
-        return super().__call__(argv, out)
+        return super().__call__(argv, out, before_submit)
 
 
 def _send_log(pkg):

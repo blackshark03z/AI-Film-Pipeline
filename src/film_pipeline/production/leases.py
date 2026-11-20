@@ -15,7 +15,9 @@ QUARANTINED_PENDING_RECONCILE: the account is not leased again until ``settle_ta
 """
 from __future__ import annotations
 
+import hashlib
 import json
+import math
 import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -70,14 +72,18 @@ def film_scope(film_id: str, root: Path) -> str:
     return f"{film_id}@{_package_id(root)}"
 
 
-def legacy_rows(films_dir: Path) -> list[dict[str, Any]]:
-    """The receipts of sends made before S1 (sent, no ``broker`` flag) of every film package in ``films_dir``, as
-    ``Broker.import_legacy`` rows: the charged amount in the receipt's unit on its ``sent_on`` day. Read without the
-    other films' locks (receipts are written atomically), as the pre-S1 daily cap read them; an unreadable receipt or
-    one without a day is skipped (its day is unknown)."""
+def legacy_scan(films_dir: Path) -> dict[str, Any]:
+    """Read the receipts of every film package in ``films_dir`` for ``Broker.import_legacy``. ``rows``: the sends made
+    before S1 (sent, no ``broker`` flag): the charged amount in the receipt's unit on its ``sent_on`` day. ``problems``:
+    every receipt whose spend cannot be known (unreadable, not a JSON object, a pre-S1 send without its day or with an
+    unreadable amount), with its path and the sha256 of its bytes; none is skipped silently, the import stays
+    incomplete until each is resolved. ``seen``: the key of every receipt read without a problem. Read without the
+    other films' locks (receipts are written atomically), as the pre-S1 daily cap read them."""
     from film_pipeline.production.money import receipt_amount, receipt_charged, receipt_unit
     from film_pipeline.production.takes import takes_dir
     rows: list[dict[str, Any]] = []
+    problems: list[dict[str, Any]] = []
+    seen: list[str] = []
     folder_root = Path(films_dir)
     for other in sorted(folder_root.iterdir()) if folder_root.is_dir() else []:
         folder = takes_dir(other) / "intents"
@@ -85,32 +91,64 @@ def legacy_rows(films_dir: Path) -> list[dict[str, Any]]:
             continue
         package = _package_id(other)
         for path in sorted(folder.glob("*.intent.json")):
-            try:
-                body = json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, ValueError):
-                continue
-            if not isinstance(body, dict) or not body.get("sent") or body.get("broker") or not body.get("sent_on"):
-                continue
             take_id = path.name[:-len(".intent.json")]
+            key = f"{package}:{take_id}"
+
+            def problem(why: str, data: bytes | None) -> None:
+                problems.append({"key": key, "path": str(path), "problem": why,
+                                 "sha256": hashlib.sha256(data).hexdigest() if data is not None else ""})
+            try:
+                data = path.read_bytes()
+            except OSError as exc:
+                problem(f"unreadable ({type(exc).__name__})", None)
+                continue
+            try:
+                body = json.loads(data.decode("utf-8"))
+            except ValueError:
+                problem("not valid UTF-8 JSON", data)
+                continue
+            if not isinstance(body, dict):
+                problem("not a JSON object", data)
+                continue
+            if not body.get("sent") or body.get("broker"):   # a dry run, or a send the broker already holds
+                seen.append(key)
+                continue
+            if not body.get("sent_on"):
+                problem("a pre-S1 send without its sent_on day", data)
+                continue
+            try:
+                price = receipt_amount(body)
+                if not math.isfinite(price) or price < 0:
+                    raise ValueError(price)
+            except (TypeError, ValueError):
+                problem("a pre-S1 send with an unreadable amount", data)
+                continue
             try:
                 charged = receipt_charged(body)
             except (KeyError, ValueError):
                 charged = True   # an unknown route: count it (never undercount money)
             film_id = str(body.get("film_id") or other.name)
-            rows.append({"key": f"{package}:{take_id}", "lease_key": str(body.get("lease_key") or ""),
+            rows.append({"key": key, "lease_key": str(body.get("lease_key") or ""),
                          "take_id": take_id, "account": str(body.get("account") or ""),
                          "film_key": film_scope(film_id, other), "provider": str(body.get("provider") or "flow"),
-                         "unit": receipt_unit(body), "amount": receipt_amount(body) if charged else 0.0,
-                         "price": receipt_amount(body), "day": str(body["sent_on"])})
-    return rows
+                         "unit": receipt_unit(body), "amount": price if charged else 0.0,
+                         "price": price, "day": str(body["sent_on"])})
+            seen.append(key)
+    return {"rows": rows, "problems": problems, "seen": seen}
+
+
+def import_films_dir(pool: Any, films_dir: Path) -> dict[str, Any]:
+    """``pool.import_legacy`` of everything ``legacy_scan`` read in ``films_dir`` (rows, problems, seen keys)."""
+    scan = legacy_scan(films_dir)
+    return pool.import_legacy(films_dir, scan["rows"], problems=scan["problems"], seen=scan["seen"])
 
 
 def import_legacy_spend(pool: Any, root: Path) -> str:
     """Import the pre-S1 spend of ``root``'s films directory (its siblings and itself) into ``pool`` (idempotent, one
-    row per receipt) and return the directory key admission checks (``AdmitRequest.legacy_root``). Reads files: call
-    it outside film_lock and outside any broker transaction."""
-    films_dir = Path(root).resolve().parent
-    return pool.import_legacy(films_dir, legacy_rows(films_dir))["root"]
+    row per receipt) and return the directory key admission checks (``AdmitRequest.legacy_root``). An unreadable
+    receipt leaves the import incomplete: capped admission is then refused (LEGACY_RECEIPT_UNREADABLE). Reads files:
+    call it outside film_lock and outside any broker transaction."""
+    return import_films_dir(pool, Path(root).resolve().parent)["root"]
 
 
 def pinned_account(account_scope: str | None) -> str | None:

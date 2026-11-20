@@ -16,10 +16,20 @@ from test_production_generate import film, still, backlog
 pytestmark = pytest.mark.usefixtures("flow_lease_account")
 
 
+def never(msg):
+    """A checkpoint-capable Flow runner that must never be reached."""
+    def run(argv, out, before_submit=None):
+        pytest.fail(msg)
+    run.takes_before_submit = True
+    return run
+
+
 def interrupted(tmp_path):
     pkg = film(tmp_path, estimate=100)
-    def crash(argv, out):
+    def crash(argv, out, before_submit=None):
+        before_submit({"project": ""})
         raise RuntimeError("interrupted after submit")
+    crash.takes_before_submit = True
     with pytest.raises(RuntimeError, match="interrupted"):
         G.generate(pkg, "SC01_g1", dry_run=False, stills_dir=still(tmp_path),
                    backlog=backlog(tmp_path, "OWNER_GO_LIVE: YES"), runner=crash)
@@ -73,7 +83,7 @@ def test_reported_but_unresolved_send_also_blocks_the_next_generation(tmp_path, 
     assert pending and pending[0]["take_id"] == "SC01_g1_t1"
     result = G.generate(pkg, "SC01_g2", dry_run=False, stills_dir=still(tmp_path),
                         backlog=backlog(tmp_path, "OWNER_GO_LIVE: YES"),
-                        runner=lambda *a: pytest.fail("uncertain previous send forbids a new one"))
+                        runner=never("uncertain previous send forbids a new one"))
     assert "SEND_PENDING" in {r["code"] for r in result["refused"]}
 
 
@@ -122,8 +132,8 @@ def test_process_death_releases_flow_lock_but_keeps_pending_budget(tmp_path):
     assert credit_ledger(T.load_log(pkg.root, pkg.header.film_id), sent)["spent"] == 8
     blocked = G.generate(pkg, "SC01_g2", dry_run=False, stills_dir=still(tmp_path),
                          backlog=backlog(tmp_path, "OWNER_GO_LIVE: YES"),
-                         runner=lambda *a: pytest.fail("a pending send forbids another submission"))
-    assert blocked["refused"]
+                         runner=never("a pending send forbids another submission"))
+    assert blocked["refused"] and "RUNNER_NOT_CHECKPOINTED" not in {r["code"] for r in blocked["refused"]}
 
 
 def test_flow_composer_is_exclusive_across_different_films(tmp_path):

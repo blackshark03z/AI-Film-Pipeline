@@ -100,8 +100,10 @@ def interrupted(tmp_path, monkeypatch, cdp=A, project=PROJ_A):
         monkeypatch.setenv("AFP_FLOW_PROJECT", project)
     pkg = film(tmp_path, 100)
 
-    def crash(argv, out):
+    def crash(argv, out, before_submit=None):
+        before_submit({"project": ""})
         raise RuntimeError("interrupted after submit")
+    crash.takes_before_submit = True
     with pytest.raises(RuntimeError, match="interrupted"):
         send(pkg, tmp_path, crash)
     return pkg

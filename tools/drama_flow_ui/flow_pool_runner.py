@@ -40,6 +40,7 @@ if str(SRC_ROOT) not in sys.path:
 from film_pipeline.production import generate as G  # noqa: E402
 from film_pipeline.production import recovery as R  # noqa: E402
 from film_pipeline.production import takes as T  # noqa: E402
+from film_pipeline.production.halt import is_halted, read_halt, set_halt  # noqa: E402
 from film_pipeline.production.package import load_package  # noqa: E402
 from film_pipeline.production.runtime import atomic_json  # noqa: E402
 
@@ -242,6 +243,8 @@ class FlowTab:
     def assert_safe(nodes: list[tuple[str, str, Any]]) -> None:
         hit = next((s for _, s, _ in nodes if WARN_RE.search(s)), None)
         if hit:
+            # Owner rule: any account warning stops ALL sending on this machine until a human/agent clears it.
+            set_halt(f"ACCOUNT_WARNING_OR_CAPTCHA: {hit[:160]}", source="flow_pool_runner", evidence=hit[:160])
             raise RuntimeError(f"ACCOUNT_WARNING_OR_CAPTCHA: {hit[:160]}")
 
     def tree(self) -> list[dict[str, Any]]:
@@ -605,8 +608,14 @@ def do_prep(tab: FlowTab, pkg: Any, film: Path, gid: str) -> None:
     print("prepared", cfg.name, take_id, "balance", bal)
 
 
+def _refuse_if_halted() -> None:
+    if is_halted():
+        raise RuntimeError(f"PRODUCTION_HALT: {(read_halt() or {}).get('reason', '')}; nothing was submitted")
+
+
 def do_submit(tab: FlowTab, pkg: Any, film: Path, gid: str | None, cooldown_s: int) -> None:
     cfg = tab.cfg
+    _refuse_if_halted()
     pending = R.pending_receipts(pkg, cdp_scope=cfg.project_id)
     if pending:
         raise RuntimeError(f"Pending receipts on {cfg.name}: {pending}")
@@ -650,9 +659,12 @@ def do_submit(tab: FlowTab, pkg: Any, film: Path, gid: str | None, cooldown_s: i
     if not base:
         raise RuntimeError(f"No existing cards found to anchor before_ids on {cfg.name}")
 
-    def runner(argv: list[str], out: Path) -> dict[str, Any]:
+    def runner(argv: list[str], out: Path, before_submit: Any = None) -> dict[str, Any]:
         if out.stem != take_id:
             raise ValueError(f"Take mismatch: {out.stem} != {take_id}")
+        _refuse_if_halted()
+        if before_submit is None:   # S1: no broker pre-Enter checkpoint, no click
+            raise RuntimeError("NOT_SENT RUNNER_NOT_CHECKPOINTED: no broker pre-Enter check; nothing was submitted")
         send_btn = tab.find_node("Bắt đầu tạo")
         x, y = tab.over(send_btn)
         record: dict[str, Any] = {
@@ -672,12 +684,21 @@ def do_submit(tab: FlowTab, pkg: Any, film: Path, gid: str | None, cooldown_s: i
         if manifest.exists():
             raise FileExistsError(f"Manifest already exists: {manifest}")
         atomic_json(manifest, record)
+        if is_halted():   # re-check immediately before the click; nothing was submitted, so drop the pending manifest
+            manifest.unlink(missing_ok=True)
+            _refuse_if_halted()
+        try:   # the broker's pre-Enter check (halt + epoch + lease, one transaction) immediately before the click
+            before_submit({"project": cfg.project_id})
+        except BaseException:
+            manifest.unlink(missing_ok=True)   # NOT_SENT: nothing was submitted
+            raise
         for evt in ("mousePressed", "mouseReleased"):
             tab.mouse(evt, x, y, button="left", clickCount=1)
         record.update(submission_phase="SUBMITTED", submitted_at=_ts().isoformat(timespec="seconds"))
         atomic_json(manifest, record)
         return record
 
+    runner.takes_before_submit = True   # type: ignore[attr-defined]
     backlog = REPO_ROOT / "docs" / "production" / "LOOP_BACKLOG.md"
     with file_lock(LOCK_WRITER):
         raw = backlog.read_bytes()
