@@ -318,7 +318,17 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
 
 ## 10. Authority (answers review finding 10)
 
-Changes the Owner must write into OWNER_POLICY before S3. Proposed wording is in the S3 handoff.
+**Owner decisions, 2026-11-20** (recorded in OWNER_POLICY.md, which now replaces the old generation policy):
+- Muse is the video and stills provider, at its highest resolution and best model, with no request cap. Flow and
+  Vilao are paused for new sends.
+- Pilot P1 runs on Muse.
+- When an account is out of quota or cannot log in, the Owner is told and adds accounts; work continues on the other
+  accounts. A CAPTCHA, verification or unusual-activity notice stops ALL Muse sending (halt scope = Muse, which is
+  today the whole machine).
+- The take policy is delegated to the agent (default GREEN 1, AMBER 2, UNKNOWN 3, dialogue ≥2, RED restaged).
+- Muse's proven controls must not be broken: they are ported unchanged and proven by parity (§11).
+
+Items 1-5 below are therefore settled by the new OWNER_POLICY; only D0 (item 6) remains open.
 
 1. **Brief card = start authorisation.** A script plus a brief card authorises that film.
    - The card holds: title, budget cap per unit, route policy, target length, deadline and priority.
@@ -358,8 +368,13 @@ accounts.
 | S5 | Muse lane: video and stills jobs, multi-take, the r6-r9 rules of §9 | offline parity on fixture **B14** (`D:\Muse\_director_review_B14_20261119`: 20 shots, dialogue, 2 locations, 4 characters; copied to a short path); one test per r6-r9 rule; partial N×6 failures; auth expiry after submit; restart-safe throttling; no re-dispatch; integrity quarantine honoured by every reader; exclusive profile ownership; **recovery drill**: kill the lane after Enter and before download, then a fresh lane reopens the persisted thread URL and binds the result by batch_id + slot_id + request_id + receipt sha with zero new sends (if the drill fails, F5 falls back to UNBINDABLE + HELD only). Live parity: BIKER_DEAD_ENGINE_20261120 if the Owner accepts it, else BLACK_PILOT_EXTENDED_FEATURE_FILM (M5a) |
 | S6 | 2 films in parallel | Owner-authorised; predefined delivery, playback and listening, budget, duplicate-send and recovery criteria; separate technical, product and Owner verdicts |
 
-- Order: S1 → S2 → S3 → S5 → **P1** → S4 → S6 if P1 runs on Muse; S1 → S2 → S3 → **P1** → (S4 ∥ S5) → S6 if the
-  Owner picks Flow for P1. S4 is not needed for P1.
+- Order (Owner chose Muse for P1, 2026-11-20): S1 → S2 → S3 → S5 → **P1** → S4 → S6. S4 is not needed for P1.
+  S2's lane tests use the mock and rehearsal runners; Flow live sends stay paused.
+- **Muse non-regression rule.** Muse controls video differently from Flow (a chat agent, handoff ZIP batches, a
+  submission ledger). The S5 lane wraps or ports Muse's proven code paths and rules unchanged; a rewrite is allowed
+  only where a parity test proves the same behaviour. The Muse Tech Lead reviews every S5 change that touches
+  sending, the ledger, recovery or integrity. Reference: the Muse verification report,
+  `docs/production/muse/Bao-cao-tong-hop-kiem-chung-Muse-FINAL.md`.
 - **Until P1 passes, the standalone Muse lanes stay the production path**, with safety fixes only; after its round
   10 Muse gets no new features.
 - D5 (switching Muse production to AFP) is decided on the P1 verdicts.
