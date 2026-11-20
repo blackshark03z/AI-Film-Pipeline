@@ -32,6 +32,9 @@ The safety rules at the end of this file were NOT removed.
    - **Parallelism:** use as many lanes as there are usable accounts (up to 6 jobs per account batch).
 2. **Flow and Vilao are paused for new sends.** Using them again needs the Owner. Finishing work already in flight
    (reconcile, download, review of earlier takes) is allowed.
+   - **Flow spend always needs the Owner's approval**, for every send that can spend credits, even after Flow is
+     re-enabled. Muse spend needs none. (Owner, 2026-11-20, in the Muse Tech Lead session: "Bỏ yêu cầu duyệt chi
+     tiêu với Muse, flow vẫn cần".)
 3. **Muse keeps what it already does well.** Its sending, guard and recovery rules (the Muse project's rounds
    r6-r12) are ported unchanged and proven by parity tests, never rewritten from scratch. Until the AFP Muse lane
    passes its pilot, production runs through the standalone Muse project.
@@ -71,7 +74,7 @@ The safety rules at the end of this file were NOT removed.
 - `git push`.
 - Purchases, new accounts, and plan or credit top-ups. (The agent never creates accounts.)
 - Changing the story's meaning: cutting a scene, changing an ending, or adding characters.
-- Sending on any provider other than Muse.
+- Sending on any provider other than Muse, and every Flow spend.
 
 ## Stop conditions for unattended runs
 
