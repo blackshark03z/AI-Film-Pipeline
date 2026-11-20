@@ -4,62 +4,87 @@ This file is the Owner's standing authorisation. Every session reads it before a
 Anything this file permits needs no further question to the Owner. Only the Owner may widen it.
 The Tech Lead may tighten it or record what was done under it.
 
-**Source:** the Owner (khoikk03) wrote the following in chat on 2026-11-09:
-- "Thoải mái đi, đừng hỏi quyền. Tuy nhiên cấu hình tạo video thử nghiệm cứ dùng 360p, omni flash cho tiết kiệm nhé"
-- "Tự quyết định kỹ thuật, đừng hỏi mình, tiếp tục"
-- "Mặc định: approve mọi quyền"
-- "Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình"
-- When asked to put this into a policy file, the Owner answered: "Được"
-- Later on 2026-11-09, after supplying the Vilao key: "Với các thử nghiệm, mặc định minimax h3 480p"
+**Sources.** The Owner (khoikk03) wrote in chat:
+- 2026-11-09: "Thoải mái đi, đừng hỏi quyền", "Tự quyết định kỹ thuật, đừng hỏi mình, tiếp tục",
+  "Mặc định: approve mọi quyền", "Bạn tự duyệt. Nếu cần cố vấn thì hỏi chatgpt. Đừng dừng để hỏi mình".
+- 2026-11-20 (this revision): "Ưu tiên muse làm nhà tạo video ở thời điểm hiện tại, loại bỏ toàn bộ policy cũ cho
+  mình. Khi muse hỏng/ hết qouta phải báo, mình sẽ nạp tài khoản mới vào. Với muse thì độ phân giải cứ để max ping,
+  trần cao nhất cho mình, ưu tiên chất lượng và tốc độ. Lưu ý về muse việc kiểm soát tạo video sẽ khác so với flow,
+  bạn phải đảm bảo để không làm hỏng những thứ mà dự án muse đã làm tốt với muse"
+- 2026-11-20, on the Muse accounts: "Tài khoản được mình thêm thủ công vào muse studio (giao diện), chạy headless, có
+  đủ cookie, nếu die, AI tự dùng thông tin đăng nhập/ chạy headless".
 
-## Delegated to the agent (Tech Lead)
+**What this revision removed (2026-11-20).** The old generation policy is withdrawn:
+- the Flow route default (360p, Omni 1.2 Flash);
+- the Vilao MiniMax H3 480P default for experiments, with its 50k VND/day cap;
+- the per-film credit cap of 256.8;
+- the attempt caps GREEN 1 / AMBER 2 / RED 0;
+- the one-send `OWNER_GO_LIVE` switch for Muse sends.
+
+The safety rules at the end of this file were NOT removed.
+
+## Video provider
+
+1. **Muse is the video and stills provider.** Sending frames, references and scripts to Muse is part of a send, not
+   sharing.
+   - **Quality:** use the highest resolution and the best model Muse offers. Quality and speed come first.
+   - **Cap:** no request cap. Credits are not a constraint; the only limit is the accounts' own quota.
+   - **Parallelism:** use as many lanes as there are usable accounts (up to 6 jobs per account batch).
+2. **Flow and Vilao are paused for new sends.** Using them again needs the Owner. Finishing work already in flight
+   (reconcile, download, review of earlier takes) is allowed.
+3. **Muse keeps what it already does well.** Its sending, guard and recovery rules (the Muse project's rounds
+   r6-r12) are ported unchanged and proven by parity tests, never rewritten from scratch. Until the AFP Muse lane
+   passes its pilot, production runs through the standalone Muse project.
+
+## Delegated to the agent (Tech Lead and film brain sessions)
 
 1. **Approvals.**
-   - Approve stills and storyboards. Accept or reject takes.
-   - Sign as `agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)`. Never sign as `human:owner-*`.
+   - Approve stills and storyboards, accept or reject takes, pass gates.
+   - Sign as `agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)` or
+     `agent:film-<id> (delegated by owner-khoikk03, OWNER_POLICY.md)`. Never sign as `human:owner-*`.
    - The evidence field holds concrete review notes:
      - identity and look;
      - REL_ADDRESS, REL_LISTENER, REL_GAZE, REL_BARRIER;
      - continuity against the adjacent accepted cut.
    - Review frames as a contact sheet. Reject a take that fails any required check.
-2. **Live sends.**
-   - **Experiments** (probes, A/B tests, new-route tests) default to **MiniMax H3 480P via Vilao** (`omh3/h3-480p`),
-     through the provider adapter once it exists. Tech Lead cap: 50k VND per day of experiments unless the Owner raises it.
-   - Film takes on the Flow route stay at **360p, Omni 1.2 Flash**. A film already in production keeps its route
-     to the end (film05 = P17-01 stability run stays on Flow).
-   - Set `OWNER_GO_LIVE: YES` in `LOOP_BACKLOG.md` for one send at a time, with a trap that returns it to `NO` in the same shell command.
-3. **Caps.**
-   - Generability attempts per shot version: GREEN 1, AMBER 2, RED 0. Restage instead of retrying.
-   - Total credit cap per film: 256.8.
-   - A send that Flow rejects with no output (`FLOW_FAILED`) does not count toward the attempt cap. Its credits count only if the ledger shows a charge.
-   - After 3 provider failures on one shot, restage or simplify the prompt and record why.
-4. **Advice.** For a judgment call, consult ChatGPT in a new tab on the same GPM profile. Treat it as advice; the agent decides.
-5. **Technical decisions.**
-   - The agent decides design, restaging, coverage and fixes.
-   - The Owner decides only product meaning: story changes, a new film, publishing.
+2. **Takes per shot.** The agent picks how many parallel takes to send and keeps the best by QC. Default: GREEN 1,
+   AMBER 2, UNKNOWN 3, dialogue shots at least 2; a RED shot is restaged, never sent. Two takes of one shot never
+   share a batch.
+3. **Advice.** For a judgment call, consult ChatGPT. Treat it as advice; the agent decides.
+4. **Technical decisions.** The agent decides design, restaging, coverage and fixes. The Owner decides only product
+   meaning: story changes, publishing.
+5. **Starting a film.** A script the Owner hands over (with or without a brief card) is the authorisation to make
+   that film end to end. Making a film nobody asked for still needs the Owner.
+
+## Tell the Owner (and keep going where possible)
+
+- **A Muse account is out of quota or cannot log in** (2 failed re-logins): mark it, keep working on the other
+  accounts, and tell the Owner which account. The Owner adds new accounts.
+- **No usable Muse account is left:** stop sending, tell the Owner, and wait for new accounts.
+- **A CAPTCHA, verification page or unusual-activity notice on any Muse account:** stop ALL Muse sending at once,
+  quarantine that account, set the production halt and tell the Owner. Never move the job to another account to
+  get past it.
 
 ## Still reserved to the Owner (stop and ask)
 
-- Publishing, uploading anywhere public, or sharing outside this machine (sending frames/references to an authorised generation provider — Flow, Vilao H3 — is part of a send, not sharing).
+- Publishing, uploading anywhere public, or sharing outside this machine.
 - `git push`.
-- Purchases, new accounts, and plan or credit top-ups.
-- Raising a credit or VND cap, or any resolution or model other than 360p Omni Flash (Flow) and H3 480P (Vilao, experiments).
+- Purchases, new accounts, and plan or credit top-ups. (The agent never creates accounts.)
 - Changing the story's meaning: cutting a scene, changing an ending, or adding characters.
-- Starting a new film.
+- Sending on any provider other than Muse.
 
 ## Stop conditions for unattended runs
 
 Stop and report when any of these happens:
 - the film is assembled;
-- remaining budget is below 20 credits;
+- no usable Muse account is left;
 - a reserved item above is needed;
 - the same defect has repeated three times after pipeline fixes.
 
 ## Unchanged safety rules
 
 - Never print the GPM profile list.
-- Never read cookies. **Exception (Owner, 2026-11-20: "Tài khoản được mình thêm thủ công vào muse studio (giao diện),
-  chạy headless, có đủ cookie, nếu die, AI tự dùng thông tin đăng nhập/ chạy headless"):**
+- Never read cookies. **Exception (Owner, 2026-11-20, quoted above):**
   - **Who and what.** The Muse lane process may read the cookies and login details in the Muse Studio account store,
     only for accounts the Owner added there.
   - **How.** It uses them in memory only, to authenticate sends and re-logins. A refreshed cookie may be written back
@@ -74,6 +99,7 @@ Stop and report when any of these happens:
   - **Stop rule.** On a CAPTCHA, a verification page or an unusual-activity notice: stop, quarantine the account and
     set the production halt. Never solve or evade it.
   - **Scope.** No other route or tool may read cookies.
+- No anti-bot, stealth or fingerprint-evasion tooling.
 - No curl; use Python.
 - Never commit `uv.lock`.
 - Codex reviews run read-only.
