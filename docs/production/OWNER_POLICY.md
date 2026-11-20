@@ -58,7 +58,22 @@ Stop and report when any of these happens:
 ## Unchanged safety rules
 
 - Never print the GPM profile list.
-- Never read cookies.
+- Never read cookies. **Exception (Owner, 2026-11-20: "Tài khoản được mình thêm thủ công vào muse studio (giao diện),
+  chạy headless, có đủ cookie, nếu die, AI tự dùng thông tin đăng nhập/ chạy headless"):**
+  - **Who and what.** The Muse lane process may read the cookies and login details in the Muse Studio account store,
+    only for accounts the Owner added there.
+  - **How.** It uses them in memory only, to authenticate sends and re-logins. A refreshed cookie may be written back
+    to that store, atomically.
+  - **Never.** It never puts them in logs, traces, screenshots, receipts, events, the repo, exports, or any profile or
+    file outside that store.
+  - **Re-login limits.**
+    - At most 1 attempt per account per 2 h, tracked across restarts; after 2 consecutive failures the account is
+      marked NEEDS_LOGIN and the Owner is told.
+    - Only an expired login triggers a re-login. Quota, payment and network errors never do.
+    - A re-login never re-sends a job and never switches accounts to get past a warning.
+  - **Stop rule.** On a CAPTCHA, a verification page or an unusual-activity notice: stop, quarantine the account and
+    set the production halt. Never solve or evade it.
+  - **Scope.** No other route or tool may read cookies.
 - No curl; use Python.
 - Never commit `uv.lock`.
 - Codex reviews run read-only.
