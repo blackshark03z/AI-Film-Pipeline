@@ -8,13 +8,20 @@ The halt file is machine-wide on purpose: several worktrees/films share the same
 Flow accounts. Location: ``$AFP_HALT_FILE`` else
 ``($AFP_STATE_DIR or ~/.afp)/production_halt.json``; history is appended to
 ``production_halt_history.jsonl`` next to it.
+
+Setting or clearing the halt takes the broker lock (STUDIO_ARCHITECTURE §6): a ``BEGIN IMMEDIATE`` on the broker
+database in the state dir (``lease_pool.sqlite3``, when it exists), so no admission and no pre-Enter check (both
+read the halt inside that same lock) can interleave with it. The broker passes ``lock=False`` when it sets the halt
+inside its own transaction.
 """
 from __future__ import annotations
 
 import json
 import os
 import re
+import sqlite3
 import tempfile
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -39,6 +46,30 @@ def halt_path() -> Path:
     if override:
         return Path(override)
     return state_dir() / HALT_FILENAME
+
+
+BROKER_DB_FILENAME = "lease_pool.sqlite3"
+
+
+@contextmanager
+def broker_lock(enabled: bool = True, db: Path | str | None = None):
+    """The broker's leaf lock (held for one atomic file write): ``db``, the broker database the caller admits
+    against, default the machine broker (``agentic.broker.default_db_path()``)."""
+    db = Path(db) if db else state_dir() / BROKER_DB_FILENAME
+    if not enabled or not db.is_file():
+        yield
+        return
+    conn = sqlite3.connect(db, timeout=30.0, isolation_level=None)
+    try:
+        conn.execute("PRAGMA busy_timeout=30000")
+        conn.execute("BEGIN IMMEDIATE")
+        try:
+            yield
+        finally:
+            if conn.in_transaction:
+                conn.execute("COMMIT")
+    finally:
+        conn.close()
 
 
 def history_path() -> Path:
@@ -107,8 +138,16 @@ def set_halt(
     film_id: str = "",
     take_id: str = "",
     evidence: str = "",
+    lock: bool = True,
+    db: Path | str | None = None,
 ) -> dict[str, Any]:
-    """Set the halt; if already halted keep the first halt and append this event."""
+    """Set the halt; if already halted keep the first halt and append this event. ``lock`` takes the broker lock of
+    ``db`` (default: the machine broker; False only inside a broker transaction that already holds it)."""
+    with broker_lock(lock, db):
+        return _set_halt(reason, source=source, account=account, film_id=film_id, take_id=take_id, evidence=evidence)
+
+
+def _set_halt(reason: str, *, source: str, account: str, film_id: str, take_id: str, evidence: str) -> dict[str, Any]:
     event = {
         "at": _now(),
         "reason": str(reason or "").strip() or "account warning",
@@ -147,6 +186,11 @@ def clear_halt(by: str, reason: str) -> dict[str, Any]:
         raise ValueError("clear_halt: 'by' must match ^(human|agent):[A-Za-z0-9_.-]+$")
     if not isinstance(reason, str) or len(reason.strip()) < 3:
         raise ValueError("clear_halt: reason must be at least 3 characters")
+    with broker_lock():
+        return _clear_halt(by, reason)
+
+
+def _clear_halt(by: str, reason: str) -> dict[str, Any]:
     path = halt_path()
     current = read_halt()
     if current is None:
