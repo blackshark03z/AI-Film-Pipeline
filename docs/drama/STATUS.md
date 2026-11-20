@@ -1,3 +1,37 @@
+# 2026-11-21 — S1 Broker v2 built (commits f3c6dcf8..620d4c88); last Codex round REJECT, its 2 findings fixed, not re-reviewed
+
+- Goal: STUDIO_ARCHITECTURE.md v3 S1 (§3/§5/§6/§9, §11 row). POLICY_REF 1d500274 pinned; no POLICY_SYNC needed.
+- Built: `agentic/broker.py` (SQLite, user_version 2, migrated in place from the step-4 pool; states FREE/BUSY/
+  COOLDOWN/NEEDS_LOGIN/QUARANTINED/HELD/HALTED; slots flow 1, muse video 6 / stills 4; epoch; quota constant or
+  probed; re-login <= 1 per 2 h and 2 failures -> NEEDS_LOGIN; profile claim per epoch); one exclusive batch lease
+  per account; atomic admission (halt + epoch + account quota + film budget + provider cap + machine cap per unit,
+  units credits/VND/USD/muse_requests, "unlimited"); pre-Enter / pre-login checks in one transaction; account
+  warning = quarantine + machine halt, never auto-cleared. `agentic/broker_api.py` + `afp-film broker ...` (JSON,
+  exit 0/1/2/3) for an external lane; `afp-film accounts` lists broker ids/labels only. Direct `afp-film generate`
+  admits through the broker; `AccountLeasePool` is a step-4 facade.
+- Decisions (why):
+  - Pre-S1 spend is imported once per films directory (`legacy_imports`); admission refuses LEGACY_IMPORT_PENDING
+    until then, and while a migrated open step-4 send has no price (it is priced from its receipt, custody kept).
+    Why: the machine/provider caps must see all spend sent before S1.
+  - Under a film budget a take id is one live reservation (TAKE_REUSED); a reservation is credited only with the
+    ledger's verified amount for that take in the same unit; rows sharing a take id count in full. Why: Codex
+    R2-2/R3-1/R4-1, never undercount money.
+  - A replay of an ACTIVE lease must be identical (unit, scope, job kind, provider, children and prices).
+  - Settlement amounts must be finite and >= 0. `set_halt(db=...)` locks the broker the caller admits against.
+- Codex (gpt-6.1-sol, read-only; prompts/outputs in `_archive/s1_broker_20261120/`): round 1 REJECT (5), round 2
+  REJECT (3), round 3 REJECT (3), round 4 REJECT (2: per-take ledger credit, halt lock with --db). Every finding was
+  fixed with a test; the round-4 fixes were NOT re-reviewed (3-round limit reached).
+- Tests (TMP/TEMP on D:): required files green: test_broker_s1 39, test_lease_exclusivity 21 + 1 skip (env: no
+  `websockets`), rehearsal_cli_e2e, offframe_protection, edge_intrusion, defect_custody, provider_routing,
+  production_generate, production_halt, production_recovery_p20. Full suite on the WIP: 1 failed / 2667 passed /
+  204 skipped; the failure (FILM_BUSY, global lock under LOCALAPPDATA) came from a second pytest run in parallel and
+  passes alone: env.
+  `uv run python -m pytest tests/test_broker_s1.py tests/test_lease_exclusivity.py -q --basetemp "D:/AI FILM MAKER/_tmp_pytest/s1"`
+- Open: no independent review of the round-4 fixes; rehearsal pools and the machine broker share one halt file.
+- Next: S2 (daemon, job journal, lanes) on top of `broker_api`; an optional extra Codex round on f3c6dcf8..HEAD.
+
+---
+
 # 2026-11-20 — Studio architecture v3 agreed; Muse-first policy; POLICY_REF pinned; S1 started
 
 - Design: docs/production/STUDIO_ARCHITECTURE.md v3. Codex v2 review was ACCEPT_WITH_FIXES (F1-F6 applied). The
