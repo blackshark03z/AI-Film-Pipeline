@@ -146,7 +146,8 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
   code; its only quota signal is `weekly_remaining_pct` on the Settings page.
   - Admission refuses an account whose probe is older than a set age, or below a reserve percentage, and asks the
     lane to re-probe first.
-  - The "200/day" figure in our notes is unsourced and is not used as a limit.
+  - The "200 x 10 s per day" figure is the Owner's planning note (2026-11-14); the Muse code does not enforce it, so
+    it is a planning figure, not an admission limit.
 
 ## 6. Halt admission and lane isolation (answers review findings 2 and 5)
 
