@@ -1,13 +1,17 @@
 # AFP Studio — multi-film production architecture
 
-**Status: PROPOSAL v2.1, 2026-11-20.** The Owner agreed the outline in chat.
+**Status: PROPOSAL v3, 2026-11-20.** The Owner agreed the outline in chat.
 - v1 was reviewed by Codex (gpt-6.1-sol, read-only) with the verdict **REWORK**. Review:
   `D:/AI FILM MAKER/_archive/studio_arch_20261120/review_v1.md`.
-- v2 answers its 10 findings; §13 maps each one to the section that answers it.
+- v2 answers its 10 findings; §14 maps each one to the section that answers it.
 - v2 was re-reviewed with the verdict **ACCEPT_WITH_FIXES** (`review.md` in the same folder). v2.1 applies its 6
   ranked fixes, marked F1-F6 in place.
+- v3 folds in the Muse Tech Lead's positions (session message, 2026-11-20), marked M1-M10 in place, and the Muse
+  Tech Lead's review of v3 (ACCEPT with 4 text changes in §9 and §11, applied); §13 lists the
+  port backlog and §14 maps every finding. Muse code references point into `D:\Muse\muse_studio\`; the Muse
+  round-10 safety fixes may still move those lines.
 - Base: `feature/drama-preprod-p0` @ `2dd752ff` (upgrade steps 1-5 done).
-- The Muse merge (D5) is decided only after the Flow pilot P1 (§11).
+- Switching Muse production to AFP (D5) is decided on the pilot P1 verdicts (§11).
 
 ## 1. Goal
 
@@ -68,8 +72,9 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
     does it roll back PREPARING admissions or reuse an account.
   - An orphan lane therefore can never submit.
 - **Stable ids (F6).** The logical key `job_key` = `<film_id>:<generation_id>:v<shot_version>:<seq>` is used in the
-  DB. On disk the Windows-safe `job_dir` = `<film_id>__<generation_id>__v<shot_version>__<seq>` is used, because
-  colons are invalid in Windows paths. `enqueue` is idempotent: the same
+  DB. On disk, `job_dir` = the first 12 hex digits of sha256(`job_key`), because colons are invalid in Windows
+  paths (F6). It is kept short because Muse keyframe ids reach ~100 characters and nested batch folders overflow
+  the 260-character path limit (M8); the daemon also enables long-path support. `enqueue` is idempotent: the same
   generation and version with the same frozen-asset digest returns the existing job, and a different digest is
   refused while a job is live. `take_id` is assigned at ADMITTED, not at enqueue.
 - **One owner per transition.** A lease is never acquired without the receipt write in the same admission step.
@@ -100,8 +105,9 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
 
 ## 5. Accounts, batches and money (answers review finding 3)
 
-- **Invariant: one exclusive batch lease per account.** A batch holds 1 to `slots` children (Flow 1, Muse 6), all
-  from one film.
+- **Invariant: one exclusive batch lease per account.** A batch holds 1 to `slots` children, all from one film and
+  one job kind. Slots per batch: Flow 1; Muse video 6; Muse stills 4 (keyframes, plates, turnarounds). Stills are
+  jobs with the same custody as video (M3).
   - Each child has its own job, receipt and outcome.
   - The batch lease settles when every child is final.
   - If one child is AMBIGUOUS, the whole account stays held until that child is reconciled. This is conservative
@@ -130,6 +136,17 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
 - **Account states shown:** FREE · BUSY (film, children in flight e.g. 4/6) · COOLDOWN · NEEDS_LOGIN ·
   QUARANTINED · HELD (an ambiguous child) · HALTED.
 - **Fairness:** batches are handed out round-robin by film priority, with an optional per-film share cap.
+- **Multi-take (M2).** A shot version may have K parallel takes; each take is its own child with its own `take_id`.
+  - Two takes of the same shot version are never in one batch.
+  - The best passing take is selected by the QC `quality_score`. The brain may promote another passing take; a
+    promotion needs the immutable source clip and a matching input digest.
+  - K comes from the take policy on the brief card. Proposed default: GREEN 1, AMBER 2, UNKNOWN 3, dialogue shots
+    at least 2, RED restaged and never sent. This replaces OWNER_POLICY's attempt caps for that provider (§10).
+- **Quota source (M10).** An account's quota is either a configured constant or *probed*. Muse has no daily cap in
+  code; its only quota signal is `weekly_remaining_pct` on the Settings page.
+  - Admission refuses an account whose probe is older than a set age, or below a reserve percentage, and asks the
+    lane to re-probe first.
+  - The "200/day" figure in our notes is unsourced and is not used as a limit.
 
 ## 6. Halt admission and lane isolation (answers review findings 2 and 5)
 
@@ -150,6 +167,14 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
     is not.
   - Because no leaf holder ever waits on anything, no cycle is possible. This replaces today's composer-then-film
     nesting in `generate`, which already satisfies the rule.
+  - **Profile ownership (M9)** is a claim, not a lock anyone waits on. A Muse lane process owns its account's
+    Chromium profile for its whole life. The claim is registered in the broker with the lane epoch and checked
+    with the busy-profile probe at lane start. A second claimant is refused at once, never queued.
+- **Halt scope (M4).** The current Owner rule is that any account warning stops ALL sending, so the default is a
+  machine-wide halt.
+  - The Owner may instead choose a scoped halt: the warning quarantines the account and halts that provider only,
+    escalating to a machine-wide halt if a second account warns within 24 h.
+  - This is an Owner decision (§10) and is not assumed.
 
 ## 7. Brains, sessions and wake-up (answers review findings 6 and 10)
 
@@ -211,25 +236,73 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
     profile outside that store.
   - A refreshed cookie is written back to the store atomically.
   - The store path is configured; read access stays with the Owner's user account.
+- **Re-login never happens inside the submit path (M5).** Today `headless_muse_client` can re-log in during a
+  submit, through `account_manager._auto_login_and_verify_impl`, with no rate limit and no auth-only trigger. That
+  call is NOT ported as is.
+  - An expired session found during a submit ends the child as NOT_SENT if Enter was not reached, or AMBIGUOUS if
+    it was.
+  - The broker then schedules a rate-limited re-login under the rules below.
+  - After a successful batch the lane may write refreshed cookies back to the store, atomically, only when they
+    changed.
+  - The tempmail/OTP fallback in `account_manager` is not ported.
 - **Re-login rules**, kept in the broker so they survive restarts:
   - At most 1 attempt per account per 2 h, and 2 consecutive failures → NEEDS_LOGIN.
   - Only an expired-authentication failure triggers a re-login. Quota, payment and network errors never do.
   - A re-login never re-sends a job and never rotates to another account to get past a warning.
   - CAPTCHA, verification or unusual activity → stop, quarantine the account, set the halt. Nothing is solved or
     evaded.
-- **Recovery contract.** This is new work; today's `muse_gateway` claim journal and `reconcile` (Flow-only) do not
-  cover it.
-  - Each child of a Muse batch gets a receipt and job state as in §3.
-  - A child whose result cannot be bound after an authentication expiry is AMBIGUOUS, and its account is HELD.
-  - A Muse reconciler binds by provider job id.
-  - **Submitted, but no provider job id persisted (F5):**
-    - The lease and reservation stay held.
-    - The reconciler searches the account's job list in the submission time window for exact evidence: the frozen
-      prompt hash, the input image digests and the duration.
-    - Exactly one match → bind it. Zero or several → `UNBINDABLE`, escalated to the Tech Lead with the account
-      held.
+- **Recovery contract (M1).** This is new work; today's `muse_gateway` claim journal and `reconcile` (Flow-only) do
+  not cover it. Muse has **no provider job id**: the provider is a Muse chat agent.
+  - **Transport.** The lane uploads a handoff ZIP with the relay text `AFP MUSE BATCH REQUEST <batch_id>` (today
+    `core/batch_packager.py`, `create_batch_handoff`). Muse answers with `<batch_id>_result.zip`, which holds
+    `<slot>.mp4`, `<slot>_receipt.json` and `batch_receipt.json` (shot_id, slot_id, request_id, sha256).
+  - **Binding handle:** `batch_id` (unique per invocation, its folder created exclusively) + `slot_id` +
+    `request_id` + the receipt sha256. The lane SHOULD capture the chat thread URL into the SUBMITTING record as
+    soon as it exists. This is new work: Muse does not capture it today. Reopening the URL is a candidate
+    reconcile path, unproven until the S5 recovery drill passes (§11).
+  - Each child of a Muse batch gets a receipt and job state as in §3. A child whose result cannot be bound after an
+    authentication expiry is AMBIGUOUS, and its account is HELD.
+  - **Rules ported from Muse rounds r6-r9; each one fixed a real defect:**
+    1. The lease and epoch are re-checked right before the submit keystroke. Losing them there is
+       RESOLVED/NOT_SENT, which never blocks.
+    2. The submission record is written before Enter (PENDING_SEND). History is kept.
+       - Blocking states: PENDING_SEND, UNCONFIRMED, EXPIRED_NEEDS_RECONCILE, RESULT_CORRUPT
+         (`UNCONFIRMED_BLOCKING`, `parallel_pool_engine.py:73`).
+       - Non-blocking terminal states, set in the same run: RESOLVED with reason NOT_SENT or RESULT_RECEIVED.
+       - Non-blocking terminal states, set when a later run re-checks the ledger: RELEASED with reason
+         RESULT_RECEIVED, RECONCILED_PASSED, STALE_DESIGN, SHOT_REMOVED, or an explicit Owner or lane release.
+       - **AFP mapping:** one AFP vocabulary (§3). UNCONFIRMED and EXPIRED_NEEDS_RECONCILE map to AMBIGUOUS;
+         RESULT_CORRUPT maps to AMBIGUOUS with INTEGRITY_FAILED evidence. The Muse name is kept only as a reason
+         code.
+    3. Any exception after submit, including a bookkeeping error, keeps the child as submitted. It goes to
+       reconcile, never to a resend.
+    4. TTL expiry never re-sends. The child becomes EXPIRED_NEEDS_RECONCILE and stays blocking until a verified
+       result or an explicit release.
+    5. A 0-byte, truncated or corrupt result ZIP (it fails to open, or has no members) has not arrived. It is
+       RESULT_CORRUPT and keeps blocking.
+    6. Batch ids are unique per invocation, and batch folders are created exclusively.
+    7. The per-batch render fingerprint equals the frozen input digest of §4. A take whose digest differs from the
+       current design is STALE_INPUT (Muse calls it STALE_RENDER).
+    8. Every state writer takes a real OS lock (`film_lock`, the equivalent of Muse's SessionLock).
+    9. Multi-take rules as in §5.
+  - **Integrity quarantine (M6).** A clip whose sha256 does not match its receipt is INTEGRITY_FAILED, recorded in
+    the broker DB. Every reader honours it: the receipt and take API, discovery, QC, review, cut and promote, not
+    just the unpacker. RESULT_CORRUPT is handled the same way.
+  - **Partial batch.** Missing or failed children become NO_RESULT_IN_BATCH or INTEGRITY_FAILED one by one. A new
+    round is a new batch with new ids. Prompt repair between rounds goes only through the defects registry (a
+    reviewed defect code → a repair action; an unknown code → STOP).
+  - **Submitted but unbindable (F5).** The lease and reservation stay held. The reconciler reopens the persisted
+    thread URL and looks for exact evidence: batch_id, slot_id, request_id and the receipt sha.
+    - Exactly one match → bind it. Otherwise → `UNBINDABLE`, escalated to the Tech Lead with the account held.
+    - If no URL was captured, the reopen fails, or the card has no download → `UNBINDABLE` at once. The account
+      stays HELD and the reservation stays held; nothing is retried automatically.
     - The job is never re-dispatched automatically.
-  - There is still one dispatch per shot version, so a 6-child batch is six shot versions.
+  - **Timeouts** keep Muse's adaptive rule (`compute_adaptive_timeout`, `headless_muse_client.py:96-101`; n = slots
+    in the batch):
+    - video: max(180, min(600, 120 + 65·n)) s;
+    - stills: max(120, min(320, 90 + 35·n)) s.
+    - The result card is polled every 2.5 s, and the download window is 90 s (`headless_muse_client.py:373`, `:402`).
+    - A timeout after Enter is never NOT_SENT: it goes to reconcile.
 - **Registry and budgets.**
   - Add a `muse` registry entry, an adapter kind and the `muse_requests` unit to the capability model. Today only
     `credits`, `USD` and `VND` exist.
@@ -245,8 +318,9 @@ Changes the Owner must write into OWNER_POLICY before S3. Proposed wording is in
 1. **Brief card = start authorisation.** A script plus a brief card authorises that film.
    - The card holds: title, budget cap per unit, route policy, target length, deadline and priority.
    - Today, starting a new film is reserved to the Owner.
-2. **Delegated approvals** (stills, boards, takes) extend to film brain sessions, signed
-   `agent:film-<id> (delegated by owner, OWNER_POLICY.md)`.
+2. **Delegated approvals** (stills, boards, takes, gate passes) extend to film brain sessions, signed
+   `agent:film-<id> (delegated by owner, OWNER_POLICY.md)`. The normal loop has no Owner stop: "send a script, get
+   a film" stops only for the reserved list below (M4c).
 3. **Go-live.** The daemon's admission replaces the one-send `OWNER_GO_LIVE` switch for films with a brief card. The
    card's caps are the Owner's go-live.
 4. **Models and resolutions.** The Owner-reserved rule on models and resolutions extends to the providers a card
@@ -255,7 +329,10 @@ Changes the Owner must write into OWNER_POLICY before S3. Proposed wording is in
    authorise generation on Muse. Before S5 the Owner must also add to OWNER_POLICY:
    - Muse as an authorised generation provider (sending frames and references to it counts as part of a send);
    - the allowed Muse model(s) and resolution;
-   - the Muse cap in `muse_requests` per day and per film.
+   - the Muse cap in `muse_requests` per day and per film. The Owner has said "Credit trên Muse không phải là vấn
+     đề, tập trung vào tốc độ và chất lượng đầu ra", so the value may be very high; the mechanism stays (M4a);
+   - the Muse take policy (K takes per shot version, §5), which replaces GREEN 1 / AMBER 2 / RED 0 for Muse;
+   - the halt scope: machine-wide (today's rule) or scoped per provider (§6).
 
    Until then, a brief card cannot name Muse. `MUSE_CONSOLIDATION.md` §2.3
    is superseded on cookies.
@@ -271,14 +348,18 @@ accounts.
 | S1 | Broker v2: provider, batch leases, atomic reservations, halt admission, NEEDS_LOGIN, `afp-film accounts` | migration with held and uncertain leases; competing processes; atomic quota and budget reservation under a race; day rollover; protected-film prompt hashes unchanged |
 | S2 | Daemon: job journal, frozen assets, lane processes (Flow), intake, events, git writer | one SHARED mock broker across 2 films; a hard kill at every state boundary in §3, incl. a daemon killed while its lane lives (orphan fenced by epoch) and a kill between DB commit and projection; duplicate enqueue; partial batches; daemon restart; halt races; registration and settlement replay; a second daemon refused |
 | S3 | Conductor `next`, events, wake adapters, brain playbook, OWNER_POLICY updates | a fresh Claude and a fresh Codex session each take a rehearsal film from a named start stage to a named end stage; resume after a kill; event replay; refusal of reserved actions; a missing-skill blocker |
-| P1 | **Flow pilot**: 1 real film through S1-S3 | Owner-authorised; caps fixed in advance; full playback and listening on review; no duplicate send; recovery drill passed. Verdicts given separately: technical, product, Owner |
+| P1 | **Pilot**: 1 real film through S1-S3, plus S5 if on Muse, on the provider the Owner authorises. Muse is recommended because it is the Owner's production provider (M5b) | Owner-authorised; caps fixed in advance; full playback and listening on review; no duplicate send; recovery drill passed. Verdicts given separately: technical, product, Owner |
 | S4 | Web UI | enqueue, cancel, route and cap edits; stale-edit refusal; reconnect; token authentication with origin/CSRF checks; an automated secret-leak scan of the rendered pages |
-| S5 | Muse lane (D5) | exact parity fixture with quality criteria; partial N×6 failures; auth expiry after submit; restart-safe throttling; no re-dispatch; exclusive account ownership verified |
+| S5 | Muse lane: video and stills jobs, multi-take, the r6-r9 rules of §9 | offline parity on fixture **B14** (`D:\Muse\_director_review_B14_20261119`: 20 shots, dialogue, 2 locations, 4 characters; copied to a short path); one test per r6-r9 rule; partial N×6 failures; auth expiry after submit; restart-safe throttling; no re-dispatch; integrity quarantine honoured by every reader; exclusive profile ownership; **recovery drill**: kill the lane after Enter and before download, then a fresh lane reopens the persisted thread URL and binds the result by batch_id + slot_id + request_id + receipt sha with zero new sends (if the drill fails, F5 falls back to UNBINDABLE + HELD only). Live parity: BIKER_DEAD_ENGINE_20261120 if the Owner accepts it, else BLACK_PILOT_EXTENDED_FEATURE_FILM (M5a) |
 | S6 | 2 films in parallel | Owner-authorised; predefined delivery, playback and listening, budget, duplicate-send and recovery criteria; separate technical, product and Owner verdicts |
 
-- Order: S1 → S2 → S3 → **P1** → (S4 ∥ S5) → S6.
-- S4 is not needed for P1.
-- D5 (merge Muse) is decided after P1.
+- Order: S1 → S2 → S3 → S5 → **P1** → S4 → S6 if P1 runs on Muse; S1 → S2 → S3 → **P1** → (S4 ∥ S5) → S6 if the
+  Owner picks Flow for P1. S4 is not needed for P1.
+- **Until P1 passes, the standalone Muse lanes stay the production path**, with safety fixes only; after its round
+  10 Muse gets no new features.
+- D5 (switching Muse production to AFP) is decided on the P1 verdicts.
+- **Ownership.** AFP Tech Lead: S1-S4, P1, S6, and the S5 implementation. Muse Tech Lead: the S5 lane spec, the
+  r6-r9 rule tests and the parity fixtures; the AFP Tech Lead reviews them.
 
 ## 12. Risks
 
@@ -289,7 +370,27 @@ accounts.
 - The daemon is a new long-running component. It needs a supervisor and a heartbeat, and its state must be fully
   recoverable from SQLite and the receipts.
 
-## 13. Review finding → answer
+## 13. Port backlog from Muse (ranked by the Muse Tech Lead; diff against AFP before porting)
+
+1. **film_qc_engine detectors and `quality_score`:** freeze or partial freeze, flicker or jump cut, internal scene
+   cut, camera drift, unlicensed head motion, identity drift, black frames, spoken stage direction, dialogue
+   mismatch (Whisper WER), silent dialogue track, frozen-mouth lip-sync, hand mutation, audio clipping, and
+   aspect, duration or corrupt file. Each becomes a detector signal mapped to `production/defects.py`, calibrated
+   as in upgrade step 5.
+2. **Best-take selection and promote-take** (§5).
+3. **screenplay_compiler and staging pieces:** diff the interaction contract (AFP has one); dialogue timing with NFC
+   and DIALOGUE_OVER_CAPACITY; hand and prop detection; location plates, turnarounds and multi-character
+   keyframes.
+4. **prompt_repair_agent:** rewrites keyed on defect codes, through the registry.
+5. **srt_normalizer and srt_diarizer:** a coverage gate and speaker turns, with explicit and inferred labels kept
+   apart.
+6. **cinema_audio_engine:** voice timbre lock, dialogue cleanup, ambience.
+7. **delivery_packager and master_assembler:** M&E and dialogue stems, EBU R128, slate and credits, Netflix-style
+   SRT, i18n template, trailer, 9x16 cut, poster, chapters.
+8. **Agent layer:** the Antigravity payload handling in `.claude/hooks/stage_skills.py`, reused by the conductor
+   (§7).
+
+## 14. Review finding → answer
 
 | # | Finding | Section |
 |---|---|---|
@@ -303,3 +404,13 @@ accounts.
 | 8 | Muse recovery, registry, budgets | §9 |
 | 9 | Secrets, login boundaries, UI auth | §9, S4 |
 | 10 | Authority, roles, D0 | §7, §10 |
+| M1 | Muse has no provider job id; bind by batch/slot/request/sha + thread URL | §9 |
+| M2 | One dispatch per shot version vs multi-take | §5 |
+| M3 | Stills are Muse jobs too (4 slots) | §5 |
+| M4 | Halt scope; unlimited Muse cap; no Owner stops in the loop | §6, §10 |
+| M5 | Re-login out of the submit path; pilot provider and order | §9, §11 |
+| M6 | Durable integrity quarantine for every reader | §9 |
+| M7 | Pinned runtime | §8 (agreed) |
+| M8 | Windows MAX_PATH | §3 |
+| M9 | Profile owned for the lane's life vs leaf-lock rule | §6 |
+| M10 | Quota unknown; no daily cap in code | §5 |
