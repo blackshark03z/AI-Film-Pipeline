@@ -2,5 +2,6 @@
   "production": {"provider": "flow", "model": "omni-1.2-flash", "tier": "TEST"},
   "experiment": {"provider": "vilao", "model": "h3-480p", "tier": "TEST"},
   "daily_caps": {"VND": 50000},
+  "provider_daily_caps": {"muse": {"muse_requests": null}},
   "source": "OWNER_POLICY.md (Owner 2026-11-09: experiments default to MiniMax H3 480p, Vilao seller omh3, 4158 VND per request; 50,000 VND per day). Existing films (film03, film04, film05) keep the production route."
 }

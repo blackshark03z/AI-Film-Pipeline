@@ -6,6 +6,7 @@ permissive `dict`s until the phase that owns them replaces them with typed model
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 from typing import Any, Literal
 
@@ -46,9 +47,9 @@ SCRIPT_FILE = "script.fountain"
 class Budget(ContractModel):
     credits_estimate: float | None = Field(default=None, ge=0)
     cap_factor: float = Field(default=1.5, gt=0)
-    # per-film cap in a money unit other than Flow credits (provider routes priced in USD or VND); a unit with no cap
-    # here cannot be spent live (BUDGET_NOT_SET)
-    caps: dict[Literal["USD", "VND"], float] = Field(default_factory=dict)
+    # per-film cap in a unit other than Flow credits (provider routes priced in USD, VND or muse_requests); a unit with
+    # no cap here cannot be spent live (BUDGET_NOT_SET); "unlimited" is an explicit no-cap (Owner 2026-11-20: Muse)
+    caps: dict[Literal["USD", "VND", "muse_requests"], float | Literal["unlimited"]] = Field(default_factory=dict)
 
     @property
     def credits_cap(self) -> float | None:
@@ -56,7 +57,10 @@ class Budget(ContractModel):
 
     def cap_for(self, unit: str) -> float | None:
         """The film's cap in ``unit``: Flow credits come from the estimate x cap_factor, others from ``caps``."""
-        return self.credits_cap if unit == "credits" else self.caps.get(unit)  # type: ignore[call-overload]
+        if unit == "credits":
+            return self.credits_cap
+        cap = self.caps.get(unit)  # type: ignore[call-overload]
+        return math.inf if cap == "unlimited" else cap
 
 
 class DisclosureSettings(ContractModel):

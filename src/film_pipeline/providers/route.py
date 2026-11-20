@@ -37,7 +37,10 @@ class RouteDefaults(ContractModel):
 
     production: RouteSpec
     experiment: RouteSpec
-    daily_caps: dict[str, float] = Field(default_factory=dict)
+    daily_caps: dict[str, float | None] = Field(default_factory=dict)   # machine-wide, per unit across providers (F3)
+    # per provider and unit, in addition to the machine cap (never instead of it); null = no cap (Owner 2026-11-20:
+    # Muse has no request cap)
+    provider_daily_caps: dict[str, dict[str, float | None]] = Field(default_factory=dict)
     source: str = ""
 
 

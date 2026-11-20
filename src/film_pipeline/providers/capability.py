@@ -29,7 +29,7 @@ REGISTRY_DIR = Path(__file__).resolve().parent / "registry"
 
 NormalizedResult = Literal["NOT_SUBMITTED", "REJECTED_POLICY", "PROVIDER_FAILED", "AMBIGUOUS", "PASSED"]
 NORMALIZED: tuple[str, ...] = ("NOT_SUBMITTED", "REJECTED_POLICY", "PROVIDER_FAILED", "AMBIGUOUS", "PASSED")
-CostUnit = Literal["credits", "USD", "VND"]
+CostUnit = Literal["credits", "USD", "VND", "muse_requests"]   # muse_requests: one Muse job (S1)
 FrameRole = Literal["first_frame", "last_frame"]
 NativeAudio = Literal["true", "false", "unknown"]
 
