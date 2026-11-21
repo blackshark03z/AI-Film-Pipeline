@@ -584,6 +584,9 @@ class Broker:
         if claim["owner"] != OWNER:
             return "ALLOCATOR_NOT_OWNED", f"the allocator claim names {claim['owner']!r}, not {OWNER}: nothing is " \
                                           f"allocated"
+        if claim["db"] and claim["db"] != self._db_identity():   # the claim belongs to one broker database
+            return "ALLOCATOR_NOT_OWNED", (f"the allocator claim was made through the broker database {claim['db']}, "
+                                           f"not {self._db_identity()}: nothing is allocated here")
         return "", ""
 
     # ---- usage ----------------------------------------------------------------------------------------------------
@@ -1372,6 +1375,10 @@ class Broker:
             if claim["owner"] != OWNER:
                 return {"ok": False, "code": "ALLOCATOR_NOT_OWNED",
                         "reason": f"the allocator claim names {claim['owner']!r}: it is never overwritten"}
+            if claim["db"] and claim["db"] != self._db_identity():
+                return {"ok": False, "code": "WRONG_DATABASE",
+                        "reason": f"the claim was made through the broker database {claim['db']}, not "
+                                  f"{self._db_identity()}: one machine, one broker database"}
             return {"ok": True, "code": "", "reason": "", "owner": OWNER, "changed": False,
                     "claimed_at": claim["claimed_at"]}
 
@@ -1563,7 +1570,7 @@ class Broker:
         ``lease_token``, ACTIVE or held, on this account and admitted under the current epoch) or its profile claim
         (``claimant``, claimed under the current epoch). Losing any of them: ``go`` False, no login."""
         ts = float(time.time() if now is None else now)
-        with closing(self._connect()) as conn, self._tx(conn):
+        with closing(self._connect()) as conn, self._tx_locked(conn):   # halt-file lock: Muse publishes under it
             acct = conn.execute("SELECT * FROM accounts WHERE account_id = ?", (account_id,)).fetchone()
             if acct is None:
                 raise KeyError(f"unknown account {account_id!r}")

@@ -649,6 +649,40 @@ def test_only_the_claiming_database_may_release_the_machine_claim(tmp_path):
     assert api.allocator_release(db=db)["code"] == "WRONG_DATABASE"
 
 
+def test_another_database_cannot_allocate_under_the_claim_of_the_claiming_one(tmp_path):
+    """Codex R9-1: claim A -> admission/check through B is refused, so A's release cannot strand B's work."""
+    a, b = tmp_path / "a.sqlite3", tmp_path / "b.sqlite3"
+    broker_a, broker_b = Broker(a, **NO_CAPS), Broker(b, **NO_CAPS)
+    H.owner_path().unlink()
+    assert api.allocator_claim(db=a)["ok"]
+    refused = broker_b.admit(http("H1", "t1", "g1:v1"))
+    assert refused["code"] == "ALLOCATOR_NOT_OWNED" and "nothing is allocated here" in refused["reason"]
+    assert api.allocator_claim(db=b)["code"] == "WRONG_DATABASE"   # an existing claim is never taken over
+    lease = broker_a.admit(http("H2", "t2", "g2:v1"))
+    assert lease["ok"]
+    assert not api.check_before_enter("H2", lease["lease"]["lease_token"], "t2", db=b)["ok"]   # b has no such lease
+
+
+def test_a_pre_login_check_serializes_with_a_halt_published_under_the_halt_file_lock(tmp_path, monkeypatch):
+    db = tmp_path / "pool.sqlite3"
+    broker = Broker(db, cooldown_s=0.0, **NO_CAPS)
+    broker.register_account("m1", provider="muse", quota_mode="probed")
+    epoch = broker.accounts_view()[0]["epoch"]
+    assert broker.claim_profile("m1", claimant="c1", epoch=epoch)["ok"]
+    halt_file = tmp_path / "muse_halt.json"
+    monkeypatch.setenv("MUSE_HALT_FILE", str(halt_file))
+    out: dict = {}
+    with api.halt_file_lock():   # Muse is publishing its halt: a login decision must wait for the lock
+        worker = threading.Thread(target=lambda: out.update(broker.before_login(
+            "m1", cause="AUTH_EXPIRED", epoch=epoch, claimant="c1")))
+        worker.start()
+        worker.join(1.0)
+        assert worker.is_alive()   # blocked on the halt-file lock, not deciding on a stale read
+        halt_file.write_text(json.dumps({"reason": "captcha"}), encoding="utf-8")
+    worker.join(30)
+    assert not worker.is_alive() and out["go"] is False and out["code"] == "PRODUCTION_HALT"
+
+
 def test_the_check_refuses_without_the_claim(tmp_path):
     db = tmp_path / "pool.sqlite3"
     broker = Broker(db, **NO_CAPS)
