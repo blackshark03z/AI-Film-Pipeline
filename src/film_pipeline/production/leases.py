@@ -50,7 +50,7 @@ def rehearsal_pool(root: Path, account: str | None = None) -> "tuple[AccountLeas
     from film_pipeline.agentic.lease_pool import AccountLeasePool
     from film_pipeline.production.takes import takes_dir
     pool = AccountLeasePool(takes_dir(root) / REHEARSAL_DB, min_reserve_credits=0.0, cooldown_s=0.0, honor_halt=False,
-                            machine_caps={}, provider_caps={})
+                            machine_caps={}, provider_caps={}, require_owner=False)
     name = (account or "").strip() or REHEARSAL_ACCOUNT
     pool.register_account(name, 1e9)
     return pool, name
@@ -254,7 +254,7 @@ def settle_take(root: Path, take_id: str, *, db: Path | None = None) -> dict[str
         # a rehearsal's private pool: no cooldown, no reserve, no halt (as when its send took the lease)
         from film_pipeline.agentic.lease_pool import AccountLeasePool
         pool = AccountLeasePool(db_file, min_reserve_credits=0.0, cooldown_s=0.0, honor_halt=False, machine_caps={},
-                                provider_caps={})
+                                provider_caps={}, require_owner=False)
     else:
         pool = machine_pool(db_file)
     lease = pool.settle(key, credits_spent=spent, note=f"settled from receipt {take_id}: {resolved.get('result')}")

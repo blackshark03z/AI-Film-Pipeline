@@ -27,7 +27,9 @@ def req(key, *amounts, **kw):
     kw.setdefault("holder", "h")
     if kw.get("needs_account") is False:
         kw.setdefault("provider", "http-test")   # an account-less admission names its provider
-    return AdmitRequest(lease_key=key, children=[Child(f"{key}#{i}", a, take_id=f"{key}#{i}")
+    if not (kw.get("film_id") or kw.get("film_key")):
+        kw["film_id"] = "f"   # every admission names its film (S1 addendum item 1)
+    return AdmitRequest(lease_key=key, children=[Child(f"{key}#{i}", a, take_id=f"{key}#{i}", shot_key=f"{key}#{i}:v1")
                                                  for i, a in enumerate(amounts)], **kw)
 
 
@@ -64,9 +66,9 @@ def test_migration_keeps_every_active_uncertain_and_quarantined_lease(tmp_path):
     pool = AccountLeasePool(db, min_reserve_credits=0.0, cooldown_s=0.0, **NO_CAPS)
     AccountLeasePool(db, **NO_CAPS)   # idempotent
     snap = pool.snapshot()
-    assert snap["schema_version"] == 4
+    assert snap["schema_version"] == 5
     with sqlite3.connect(db) as conn:
-        assert conn.execute("PRAGMA user_version").fetchone()[0] == 4
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 5
     states = {lease["lease_key"]: lease["state"] for lease in snap["leases"]}
     assert states == {"f:g1_t1@p": "ACTIVE", "f:g2_t1@p": UNCERTAIN, "f:g3_t1@p": UNCERTAIN, "f:g4_t1@p": "RELEASED"}
     assert next(a for a in snap["accounts"] if a["account_id"] == "a-quarantined")["status"] == "COOLDOWN_QUARANTINE"
@@ -287,7 +289,7 @@ def test_an_ambiguous_child_keeps_the_account_held_until_settled(tmp_path):
     for c in lease["children"]:
         assert broker.before_enter("f:batch1@p", lease_token=tok, child_key=c["child_key"])["go"]
     # never a second Enter for one child
-    assert broker.before_enter("f:batch1@p", lease_token=tok, child_key="f:batch1@p#0")["code"] == "CHILD_NOT_PREPARING"
+    assert broker.before_enter("f:batch1@p", lease_token=tok, child_key="f:batch1@p#0")["code"] == "ALREADY_SUBMITTING"
     assert broker.accounts_view()[0]["in_flight"] == "3/6"
     broker.finish_child("f:batch1@p", lease_token=tok, child_key="f:batch1@p#0", outcome="PASSED", spent=1.0)
     broker.finish_child("f:batch1@p", lease_token=tok, child_key="f:batch1@p#1", outcome="AMBIGUOUS", spent=1.0)
@@ -333,7 +335,8 @@ def test_a_halt_between_admission_and_enter_gives_not_sent(tmp_path):
     lease = broker.admit(req("k", 6.0))["lease"]
     H.set_halt("another account warned", source="test")
     out = broker.before_enter("k", lease_token=lease["lease_token"], child_key="k#0")
-    assert out == {"go": False, "code": "PRODUCTION_HALT", "reason": out["reason"]}
+    assert out == {"go": False, "code": "PRODUCTION_HALT", "reason": out["reason"], "proven": True,
+                   "children": ["k#0"]}
     snap = broker.snapshot()
     assert snap["leases"][0]["state"] == "RELEASED" and snap["accounts"][0]["credits"] == 1000.0
     with sqlite3.connect(broker.db_path) as conn:
@@ -561,7 +564,7 @@ def _take_req(key, take, amount, **kw):
     kw.setdefault("film_cap", 10.0)
     kw.setdefault("film_baseline", 4.0)
     kw.setdefault("film_counted", {"old": 4.0})
-    return AdmitRequest(lease_key=key, children=[Child(f"{key}#0", amount, take_id=take)], holder="h",
+    return AdmitRequest(lease_key=key, children=[Child(f"{key}#0", amount, take_id=take, shot_key=f"{key}:v1")], holder="h",
                         film_id="f", film_key="f@p", needs_account=False, provider="http-test", **kw)
 
 
@@ -572,24 +575,25 @@ def test_a_reused_take_id_cannot_slip_past_the_film_budget(tmp_path):
     assert ledger["code"] == "TAKE_REUSED" and "money ledger" in ledger["reason"]
     first = pool.admit(_take_req("L1", "new", 4.0))
     assert first["ok"]
-    assert pool.admit(_take_req("L1", "new", 4.0))["reused"]          # the exact replay stays idempotent
+    assert pool.admit(_take_req("L1", "new", 4.0))["code"] == "LEASE_EXISTS"   # a replay never re-issues the token
     again = pool.admit(_take_req("L2", "new", 4.0))
-    assert again["code"] == "TAKE_REUSED" and "L1" in again["reason"]
+    assert again["code"] == "TAKE_REUSED" and "take new" in again["reason"]
     assert pool.admit(_take_req("L3", "other", 4.0))["code"] == "BUDGET_EXCEEDED"   # 4 ledger + 4 held + 4 > 10
     pool.release_unsent("L1", lease_token=first["lease"]["lease_token"])
     assert pool.admit(_take_req("L4", "new", 4.0))["ok"]               # a released take may be sent again
-    # without a film budget take ids do not matter (the step-4 facade keys takes by generation id)
-    assert pool.admit(_take_req("L5", "new", 1.0, film_cap=None))["ok"]
+    # take-id uniqueness holds without a film budget too (S1 addendum item 1)
+    assert pool.admit(_take_req("L5", "new", 1.0, film_cap=None))["code"] == "TAKE_REUSED"
 
 
 def test_reservations_sharing_a_ledger_take_id_are_all_counted(tmp_path):
     """Codex R3-1: when rows share a take id (made with no film budget) the ledger's row is unknown: count them all."""
     pool = AccountLeasePool(tmp_path / "pool.sqlite3", min_reserve_credits=0.0, cooldown_s=0.0, **NO_CAPS)
-    for key, amount in (("D1", 8.0), ("D2", 2.0)):
-        assert pool.admit(_take_req(key, "old", amount, film_cap=None))["ok"]
-    out = pool.admit(_take_req("D3", "x", 1.0, film_baseline=2.0, film_cap=12.0, film_counted={"old": 2.0}))
-    # 2 ledger + 8 + 2 (both "old" rows: which one the ledger covers is unknown) + 1 > 12
-    assert out["code"] == "BUDGET_EXCEEDED" and "12 spent" in out["reason"]
+    assert pool.admit(_take_req("D1", "old", 8.0, film_cap=None))["ok"]
+    # S1 addendum item 1: an uncapped film cannot make a second live row for one take id any more
+    assert pool.admit(_take_req("D2", "old", 2.0, film_cap=None))["code"] == "TAKE_REUSED"
+    out = pool.admit(_take_req("D3", "x", 5.0, film_baseline=2.0, film_cap=12.0, film_counted={"old": 2.0}))
+    # 2 ledger + (8 - the ledger's 2 for the one "old" row) + 5 > 12
+    assert out["code"] == "BUDGET_EXCEEDED"
     single = AccountLeasePool(tmp_path / "one.sqlite3", min_reserve_credits=0.0, cooldown_s=0.0, **NO_CAPS)
     assert single.admit(_take_req("S1", "old", 4.0, film_cap=None))["ok"]
     assert single.admit(_take_req("S2", "x", 6.0))["ok"]   # the one "old" row is the ledger's 4: 4 + 6 <= 10
@@ -599,7 +603,7 @@ def test_a_replay_must_repeat_the_admission_exactly(tmp_path):
     """Codex R3-2: the same key and holder with another price, child, unit or scope is not a replay."""
     pool = AccountLeasePool(tmp_path / "pool.sqlite3", min_reserve_credits=0.0, cooldown_s=0.0, **NO_CAPS)
     assert pool.admit(_take_req("R1", "t1", 1.0, film_cap=1.0, film_baseline=0.0))["ok"]
-    assert pool.admit(_take_req("R1", "t1", 1.0, film_cap=1.0, film_baseline=0.0))["reused"]
+    assert pool.admit(_take_req("R1", "t1", 1.0, film_cap=1.0, film_baseline=0.0))["code"] == "LEASE_EXISTS"
     pricier = pool.admit(_take_req("R1", "t1", 9.0, film_cap=1.0, film_baseline=0.0))
     assert pricier["code"] == "LEASE_HELD" and "children or prices" in pricier["reason"]
     other_unit = pool.admit(_take_req("R1", "t1", 1.0, film_cap=1.0, film_baseline=0.0, unit="VND"))
@@ -836,7 +840,8 @@ def test_the_lane_api_resolves_the_film_budget_and_fails_closed(tmp_path, monkey
     broker = Broker(db, cooldown_s=0.0, **NO_CAPS)
     broker.register_account("m1", provider="muse", quota_mode="probed")
     broker.record_probe("m1", 80.0)
-    kids = [{"child_key": "c1", "amount": 1.0}, {"child_key": "c2", "amount": 1.0}]
+    kids = [{"child_key": "c1", "amount": 1.0, "take_id": "c1", "shot_key": "g1:v1"},
+            {"child_key": "c2", "amount": 1.0, "take_id": "c2", "shot_key": "g2:v1"}]
     common = {"unit": "muse_requests", "provider": "muse", "db": db}
     assert api.acquire("m1", "k", kids, film_root=None, **common)["code"] == "FILM_BUDGET_UNAVAILABLE"
     assert api.acquire("m1", "k", kids, film_root=tmp_path / "nope", **common)["code"] == "FILM_BUDGET_UNAVAILABLE"
@@ -852,6 +857,7 @@ def test_the_lane_api_resolves_the_film_budget_and_fails_closed(tmp_path, monkey
     for c in ("c1", "c2"):
         assert api.check_before_enter("k", token, c, db=db)["ok"]
         assert api.mark("k", token, c, "PASSED", spent=1.0, db=db)["ok"]
+    kids = [dict(k, child_key=k["child_key"] + "b", take_id=k["take_id"] + "b") for k in kids]   # fresh takes
     over = api.acquire("m1", "k2", kids, film_root=small.root, **common)   # 2 spent + 2 > 3
     assert over["code"] == "BUDGET_EXCEEDED"
     unlimited = _muse_film(tmp_path / "unl", {"muse_requests": "unlimited"})
@@ -914,7 +920,7 @@ def test_an_external_lane_process_drives_the_broker_api(tmp_path):
     code, out = _api(db, "claim", "--account", "m1", "--claimant", "lane-2", "--epoch", "1")
     assert code == 1 and out["code"] == "PROFILE_CLAIMED"
     batch = ["--account", "m1", "--provider", "muse", "--unit", "muse_requests", "--lease-key", "B1",
-             "--child", "s1=1", "--child", "s2=1", "--child", "s3=1"]
+             "--child", "s1=1@g1:v1", "--child", "s2=1@g2:v1", "--child", "s3=1@g3:v1"]
     code, out = _api(db, "acquire", *batch)
     assert code == 1 and out["code"] == "FILM_BUDGET_UNAVAILABLE"   # no film: fail closed
     code, out = _api(db, "acquire", *batch, "--film", str(pkg.root), "--epoch", "1", "--holder", "lane-1")
@@ -1138,7 +1144,7 @@ def test_a_v2_broker_gains_the_unreadable_receipt_table_and_keeps_its_rows(tmp_p
         conn.execute("PRAGMA user_version = 2")
     Broker(db, **NO_CAPS)
     with sqlite3.connect(db) as conn:
-        assert conn.execute("PRAGMA user_version").fetchone()[0] == 4
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 5
         assert conn.execute("SELECT complete FROM legacy_imports").fetchall() == [(1,)]
         assert conn.execute("SELECT COUNT(*) FROM legacy_unresolved").fetchone()[0] == 0
 
@@ -1153,7 +1159,7 @@ def test_a_v3_broker_gains_the_film_scope_of_its_unreadable_receipts(tmp_path):
         conn.execute("PRAGMA user_version = 3")
     Broker(db, **NO_CAPS)
     with sqlite3.connect(db) as conn:
-        assert conn.execute("PRAGMA user_version").fetchone()[0] == 4
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 5
         assert conn.execute("SELECT key, film_key, resolved_at FROM legacy_unresolved").fetchall() == [
             ("p:g_t1", "", "")]   # unknown scope: resolve refuses until a re-import records it
 

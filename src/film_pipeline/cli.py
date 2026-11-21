@@ -165,39 +165,82 @@ def _accounts(args: argparse.Namespace) -> int:
     return 0
 
 
+TOKEN_VERBS = ("check", "mark", "release", "login-check", "settle", "settle-not-sent")
+
+
+def _lease_token(args: argparse.Namespace) -> tuple[str, str]:
+    """``(token, usage error)``: ``--token-stdin`` reads one JSON line ``{"lease_token": "..."}`` from stdin (the
+    lanes' way: the token never appears on a command line); ``--token`` is for tests. No error repeats the input."""
+    if not args.token_stdin:
+        return args.token, ""
+    if args.token:
+        return "", "pass --token or --token-stdin, not both"
+    line = sys.stdin.readline()
+    try:
+        body = json.loads(line)
+    except ValueError:
+        body = None
+    token = body.get("lease_token") if isinstance(body, dict) else None
+    if not isinstance(token, str) or not token.strip():
+        return "", '--token-stdin needs one JSON line {"lease_token": "..."} on stdin (the input is not shown)'
+    return token.strip(), ""
+
+
 def _broker_api(args: argparse.Namespace) -> int:
     """``afp-film broker``: the lane API verbs; prints the result dict as JSON, exits with its stable code."""
     from film_pipeline.agentic import broker_api as api
     db = args.db
     one = args.child[0].partition("=")[0].strip() if args.child else ""
-    if args.verb == "acquire":
+    token, bad = _lease_token(args) if args.verb in TOKEN_VERBS else ("", "")
+    if args.verb not in TOKEN_VERBS and (args.token or args.token_stdin):
+        bad = f"{args.verb} takes no lease token"
+    if bad:
+        out = {"ok": False, "code": "USAGE", "reason": bad}
+    elif args.verb == "acquire":
         try:
             children = []
             for item in args.child:
-                key, _, amount = item.partition("=")
-                children.append({"child_key": key.strip(), "take_id": key.strip(),
+                key, _, rest = item.partition("=")
+                amount, _, shot = rest.partition("@")
+                children.append({"child_key": key.strip(), "take_id": key.strip(), "shot_key": shot.strip(),
                                  "amount": float(amount) if amount.strip() else None})
         except ValueError:
-            out = {"ok": False, "code": "USAGE", "reason": "--child takes KEY=AMOUNT"}
+            out = {"ok": False, "code": "USAGE", "reason": "--child takes KEY=AMOUNT@SHOT_KEY"}
         else:
             out = api.acquire(args.account, args.lease_key, children, unit=args.unit, provider=args.provider,
                               film_root=args.film, job_kind=args.job_kind, holder=args.holder, epoch=args.epoch,
                               db=db)
     elif args.verb == "check":
-        out = api.check_before_enter(args.lease_key, args.token, one, epoch=args.epoch, db=db)
+        keys = [c.partition("=")[0].strip() for c in args.child]
+        out = api.check_before_enter(args.lease_key, token, child_keys=keys, epoch=args.epoch,
+                                     incarnation=args.incarnation, db=db)
     elif args.verb == "mark":
-        out = api.mark(args.lease_key, args.token, one, args.state, spent=args.spent, reason=args.reason,
-                       epoch=args.epoch, db=db)
+        out = api.mark(args.lease_key, token, one, args.state, spent=args.spent, reason=args.reason,
+                       epoch=args.epoch, incarnation=args.incarnation, db=db)
     elif args.verb == "release":
-        out = api.release(args.lease_key, args.token, db=db)
+        out = api.release(args.lease_key, token, db=db)
+    elif args.verb == "status":
+        out = api.status(db=db)
+    elif args.verb == "allocator-transfer":
+        if not args.to or args.expect_epoch is None:
+            out = {"ok": False, "code": "USAGE", "reason": "allocator-transfer needs --to afp-broker|muse-standalone "
+                                                           "and --expect-epoch N"}
+        else:
+            out = api.allocator_transfer(args.to, expect_epoch=args.expect_epoch, by=args.by, db=db)
     elif args.verb == "settle":
-        out = api.settle(args.lease_key, spent=args.spent, child_key=one or None, note=args.reason, db=db)
+        out = api.settle(args.lease_key, spent=args.spent, child_key=one or None, note=args.reason,
+                         lease_token=token or None, db=db)
+    elif args.verb == "settle-not-sent":
+        if len(args.child) != 1 or not args.evidence.strip():
+            out = {"ok": False, "code": "USAGE", "reason": "settle-not-sent needs one --child and --evidence"}
+        else:
+            out = api.settle_not_sent(one, args.evidence, lease_key=args.lease_key, lease_token=token, db=db)
     elif args.verb == "login-check":
         if args.epoch is None:
             out = {"ok": False, "code": "USAGE", "reason": "login-check needs --epoch"}
         else:
             out = api.check_before_login(args.account, cause=args.cause, epoch=args.epoch, lease_key=args.lease_key,
-                                         lease_token=args.token, claimant=args.claimant, db=db)
+                                         lease_token=token, claimant=args.claimant, db=db)
     elif args.verb == "login-result":
         if args.result not in ("ok", "failed"):
             out = {"ok": False, "code": "USAGE", "reason": "login-result needs --result ok|failed"}
@@ -524,26 +567,55 @@ def main(argv: list[str] | None = None) -> int:
     ac.add_argument("--by", default="", help="set-state: human:<id> or agent:<id>")
     ac.add_argument("--reason", default="")
     ac.add_argument("--weekly-remaining-pct", type=float, help="probe: the weekly quota left, in percent")
-    bk = actions.add_parser("broker", help="the broker's public lane API (agentic/broker_api.py), JSON out; exit 0 ok, "
-                                           "1 refused (NOT_SENT, no lease, halt, epoch, cap), 2 usage, 3 not found / "
-                                           "token mismatch: acquire | check | mark | release | settle | halt | "
-                                           "login-check | login-result | claim | probe | import-legacy | "
-                                           "import-resolve")
+    bk = actions.add_parser(
+        "broker", formatter_class=argparse.RawDescriptionHelpFormatter,
+        help="the broker's public lane API (agentic/broker_api.py), JSON out; exit 0 ok, 1 refused (NOT_SENT_PROVEN, "
+             "ALREADY_SUBMITTING: possibly sent, no lease, halt, epoch, cap), 2 usage, 3 not found / token mismatch: "
+             "acquire | check | mark | release | settle | halt | login-check | login-result | claim | probe | "
+             "import-legacy | import-resolve | status | allocator-transfer",
+        description="Lanes give the lease token on stdin (--token-stdin, one JSON line {\"lease_token\": \"...\"}), "
+                    "never on the command line; --token is for tests only. The token is printed once, by the acquire "
+                    "that created the lease, and never again.\n\n"
+                    "check: every --child goes PREPARING -> SUBMITTING in one transaction, or none.\n"
+                    "  exit 0: press Enter.\n"
+                    "  exit 1, code NOT_SENT_PROVEN: the only proven pre-submit refusal; do not press Enter (the "
+                    "children are closed NOT_SENT).\n"
+                    "  exit 1, code ALREADY_SUBMITTING: a check already passed (a lost reply): possibly sent; never press "
+                    "Enter again, treat the children as AMBIGUOUS and reconcile. Any other refusal is possibly sent too.\n"
+                    "mark --state NOT_SENT --reason ENTER_NOT_ISSUED --incarnation ID --epoch N: only the live holder's "
+                    "same incarnation closes a SUBMITTING child NOT_SENT; otherwise refused and held AMBIGUOUS.\n"
+                    "settle-not-sent --child KEY --evidence TEXT [--lease-key L]: a child still PREPARING becomes "
+                    "terminal NOT_SENT and fenced in one transaction (a later check or acquire of it is refused); a "
+                    "SUBMITTING child is refused (possibly sent).\n"
+                    "status --json: read-only (live, owner, claim epoch, db path, stop signals, pending markers).\n"
+                    "allocator-transfer --to afp-broker|muse-standalone --expect-epoch N: move the allocator claim "
+                    "(first claim: --to afp-broker --expect-epoch 0).")
     bk.add_argument("verb", choices=["acquire", "check", "mark", "release", "settle", "halt", "login-check",
-                                     "login-result", "claim", "probe", "import-legacy", "import-resolve"])
+                                     "login-result", "claim", "probe", "import-legacy", "import-resolve", "status",
+                                     "allocator-transfer", "settle-not-sent"])
     bk.add_argument("--db", type=Path, help="broker database (default: the machine-wide one in the state dir)")
     bk.add_argument("--account", default="", help="acquire/halt: the account id")
     bk.add_argument("--provider", default="", help="acquire/halt: the provider (muse, flow, ...)")
     bk.add_argument("--lease-key", default="")
-    bk.add_argument("--token", default="", help="the lease token acquire returned")
-    bk.add_argument("--child", action="append", default=[], metavar="KEY=AMOUNT",
-                    help="acquire: one child of the batch (repeatable); check/mark/settle: the child key")
+    bk.add_argument("--token", default="", help="tests only: the lease token acquire returned (lanes: --token-stdin)")
+    bk.add_argument("--token-stdin", action="store_true",
+                    help='check/mark/release/settle/settle-not-sent/login-check: read the lease token from stdin, one '
+                         'JSON line {"lease_token": "..."}; lanes must use this')
+    bk.add_argument("--evidence", default="", help="settle-not-sent: why the child is known unsent (audited)")
+    bk.add_argument("--child", action="append", default=[], metavar="KEY=AMOUNT@SHOT_KEY",
+                    help="acquire: one child of the batch, its take id = KEY (repeatable); check: every child of the "
+                         "atomic batch check (repeatable); mark/settle: the child key")
+    bk.add_argument("--incarnation", default="", help="check/mark: this lane process's incarnation id (the check binds "
+                                                       "it; only it may report ENTER_NOT_ISSUED)")
+    bk.add_argument("--to", default="", help="allocator-transfer: afp-broker or muse-standalone")
+    bk.add_argument("--expect-epoch", type=int, help="allocator-transfer: the current claim epoch (0: first claim)")
+    bk.add_argument("--json", action="store_true", help="status: JSON output (always JSON)")
     bk.add_argument("--unit", default="", help="acquire: credits, VND, USD or muse_requests")
     bk.add_argument("--job-kind", default="video", choices=["video", "stills"])
     bk.add_argument("--film", type=Path, help="acquire: the film package (its budget and scope; required)")
     bk.add_argument("--films-dir", type=Path, help="import-legacy/import-resolve: a directory of film packages")
     bk.add_argument("--key", default="", help="import-resolve: the unreadable receipt's key (import-legacy lists it)")
-    bk.add_argument("--by", default="", help="import-resolve: human:<id> or agent:<id>")
+    bk.add_argument("--by", default="", help="import-resolve: human:<id> or agent:<id>; allocator-transfer: who")
     bk.add_argument("--amount", type=float, help="import-resolve: what the receipt charged (omit: nothing)")
     bk.add_argument("--day", default="", help="import-resolve: the day it was charged, YYYY-MM-DD")
     bk.add_argument("--cause", default="", help="login-check: AUTH_EXPIRED (the only cause that allows a re-login)")
@@ -559,10 +631,13 @@ def main(argv: list[str] | None = None) -> int:
     bk.add_argument("--kind", default="ACCOUNT_WARNING",
                     help="halt: CAPTCHA, VERIFICATION, UNUSUAL_ACTIVITY or ACCOUNT_WARNING")
     ht = actions.add_parser("halt", help="machine-wide production halt (any Flow account warning stops ALL sending): "
-                                          "status | set --reason | clear --by human:ID|agent:ID --reason")
+                                          "status | set --reason | clear --by human:ID|agent:ID --reason [--include-pending]")
     ht.add_argument("verb", choices=["status", "set", "clear"])
     ht.add_argument("--reason", default="")
     ht.add_argument("--by", default="", help="who clears the halt: human:<id> or agent:<id>")
+    ht.add_argument("--include-pending", action="store_true",
+                    help="clear: first publish every halt_pending/ marker and halt_pending_unwritten/ flag into the "
+                         "halt history, remove exactly those, then clear (without it, clear refuses while any exists)")
     sc = actions.add_parser("scene-conform", help="inspect or incrementally conform completed scenes cleanly")
     sc.add_argument("--film", required=True, type=Path)
     sc.add_argument("--render", action="store_true", help="render READY_TO_CONFORM scenes to media/scenes/<scene>.mkv")
@@ -756,7 +831,8 @@ def _run(args, rest, parser) -> int:
                         return 1
                     _emit({"ok": True, "halted": True, "halt": halt_mod.set_halt(args.reason, source="cli")})
                     return 0
-                _emit({"ok": True, "halted": False, "cleared": halt_mod.clear_halt(args.by, args.reason)})
+                _emit({"ok": True, "halted": False, "cleared": halt_mod.clear_halt(
+                    args.by, args.reason, include_pending=args.include_pending)})
                 return 0
             except (ValueError, RuntimeError) as exc:
                 _emit({"ok": False, "error": str(exc)})

@@ -56,16 +56,22 @@ class AccountLeasePool(Broker):
     ) -> tuple[dict[str, Any] | None, str]:
         """``acquire`` plus, when it returns None, why (decided inside the same IMMEDIATE transaction)."""
         key = lease_key or _lease_key(generation_id, film_id=film_id, shot_version=shot_version)
-        out = self.admit(AdmitRequest(lease_key=key, children=[Child(key, float(cost_credits), take_id=generation_id)],
-                                      unit="credits", film_id=film_id, generation_id=generation_id,
+        # the step-4 identity: one child and take per acquire of the key (``key#n``), shot version ``<generation>:v<n>``
+        from contextlib import closing
+        with closing(self._connect()) as conn:
+            n = conn.execute("SELECT COUNT(*) FROM reservations WHERE lease_key = ?", (key,)).fetchone()[0]
+        child = Child(f"{key}#{n}", float(cost_credits), take_id=f"{key}#{n}",
+                      shot_key=f"{generation_id}:v{int(shot_version)}")
+        out = self.admit(AdmitRequest(lease_key=key, children=[child], unit="credits",
+                                      film_id=film_id.strip() or "step4", generation_id=generation_id,
                                       shot_version=shot_version, holder=holder, account_id=account_id, now=now))
         return (out["lease"], "") if out["ok"] else (None, out["reason"])
 
     def acquire(self, generation_id: str, **kwargs: Any) -> dict[str, Any] | None:
         """Atomically lease ``generation_id`` (or ``lease_key``) to an eligible healthy account under BEGIN IMMEDIATE.
 
-        An existing ACTIVE lease for the key is returned only to the same ``holder`` (default: this process); any other
-        holder gets None. ``account_id`` pins the account. Keywords: see ``acquire_or_reason``."""
+        An existing ACTIVE lease for the key is never returned again (its token was issued once): None.
+        ``account_id`` pins the account. Keywords: see ``acquire_or_reason``."""
         return self.acquire_or_reason(generation_id, **kwargs)[0]
 
     def release(

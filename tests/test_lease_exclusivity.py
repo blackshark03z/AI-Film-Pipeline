@@ -34,15 +34,17 @@ def test_default_db_is_the_machine_state_dir(monkeypatch, tmp_path):
     assert AccountLeasePool().db_path == default_db_path()
 
 
-def test_a_second_holder_cannot_get_an_active_lease_and_the_same_holder_is_idempotent(tmp_path):
+def test_a_second_holder_cannot_get_an_active_lease_and_the_same_holder_never_gets_the_token_again(tmp_path):
     pool = pool_with(tmp_path, "a1", "a2")
     first = pool.acquire("g1", cost_credits=6.0, now=10.0, holder="h1")
     assert first is not None and first["holder"] == "h1"
     assert pool.acquire("g1", cost_credits=6.0, now=10.0, holder="h2") is None
     lease, why = pool.acquire_or_reason("g1", cost_credits=6.0, now=10.0, holder="h2")
     assert lease is None and "held by another caller" in why
-    again = pool.acquire("g1", cost_credits=6.0, now=11.0, holder="h1")
-    assert again["lease_token"] == first["lease_token"] and again["account_id"] == first["account_id"]
+    # S1 addendum item 8: the token is issued once; a replay by the same holder is refused, never re-issued (each
+    # step-4 acquire mints a fresh child key, so the broker sees another admission under the held key)
+    again, why = pool.acquire_or_reason("g1", cost_credits=6.0, now=11.0, holder="h1")
+    assert again is None and "replay" in why
     # the default holder is unique per process, never the explicit "h1"
     assert pool.acquire("g1", cost_credits=6.0, now=11.0) is None
 

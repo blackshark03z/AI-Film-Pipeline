@@ -753,7 +753,7 @@ def _write_unsent_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> 
 
 # admission refusals that keep their own code; any other (no account, lease held, epoch, batch) is NO_ACCOUNT_LEASE
 ADMISSION_CODES = ("PRODUCTION_HALT", "BUDGET_EXCEEDED", "BUDGET_DAILY_EXCEEDED", "PROVIDER_DAILY_EXCEEDED", "NO_PRICE",
-                   "LEGACY_RECEIPT_UNREADABLE")
+                   "LEGACY_RECEIPT_UNREADABLE", "SHOT_VERSION_UNRESOLVED", "ALLOCATOR_NOT_OWNED", "ALLOCATOR_UNKNOWN")
 
 
 def _admit(pkg: Any, payload: dict[str, Any], budget: dict[str, Any], *, flow: bool, mock: bool,
@@ -878,6 +878,8 @@ def _send_flow(pkg: Any, payload: dict[str, Any], cap: Any, runner: Runner | Non
         # right before the Enter, in one broker transaction: the halt (a warning on another account may have set it),
         # the epoch and the lease; losing any of them ends the child NOT_SENT and nothing is submitted
         check = pool.before_enter(lease["lease_key"], lease_token=lease["lease_token"], child_key=payload["take_id"])
+        if not check["go"] and not check["proven"]:   # possibly sent (a check already passed): never a NOT_SENT
+            raise RuntimeError(f"pre-Enter check {check['code']}: possibly sent; {check['reason']}"[:300])
         if not check["go"]:
             raise NotSent(check["code"], check["reason"])
         with film_lock(root, timeout_s=15.0):
@@ -977,6 +979,12 @@ def _generate_api(pkg: Any, payload: dict[str, Any], adapter: Any, mock: bool, r
                            provider_job_id=job_id)
 
     check = pool.before_enter(lease["lease_key"], lease_token=lease["lease_token"], child_key=payload["take_id"])
+    if not check["go"] and not check["proven"]:   # possibly sent: hold the lease, the receipt stays PENDING
+        why = f"pre-Enter check {check['code']}: possibly sent; {check['reason']}"[:300]
+        with film_lock(root, timeout_s=15.0):
+            _write_receipt(root, payload, dry_run=False, sent=True, owner_go_live=True, result="PENDING", note=why)
+        _hold_lease(pool, lease, why)
+        raise RuntimeError(why)
     if not check["go"]:   # the broker closed the child NOT_SENT: nothing was submitted, nothing is charged
         lease["finished"] = True
         with film_lock(root, timeout_s=15.0):

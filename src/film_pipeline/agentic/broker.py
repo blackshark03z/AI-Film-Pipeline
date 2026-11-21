@@ -13,8 +13,15 @@ the step-4 lease pool, migrated in place by ``PRAGMA user_version``), is the aut
   machine-wide daily cap per unit across providers (F3). The day is the local date stored on the reservation.
 
 Every state change is one short ``BEGIN IMMEDIATE`` transaction: a **leaf lock** (F2). Nothing else is acquired while
-it is held: no other lock, no provider I/O, no waiting. The only file touched inside is the halt file (a read at
-admission and pre-Enter, an atomic replace when a warning halts the machine): ``halt.set_halt`` takes this same lock.
+it is held but the halt-file lock (``production_halt.json.lock``, innermost): admission, the pre-Enter check and the
+allocator transfer take it inside their transaction, read every stop signal (``halt.stop_signals``: the AFP halt, the
+Muse halt ``$MUSE_HALT_FILE``, ``halt_pending/`` markers, ``halt_pending_unwritten/`` flags, the send-stop event) and
+the allocator claim (``allocator_owner.json``) under it and hold it until their COMMIT; ``halt.set_halt`` takes the broker
+lock, then the halt-file lock. Lock order: broker transaction -> halt-file lock; Muse takes the halt-file lock alone.
+No provider I/O and no waiting inside.
+
+Admission and the pre-Enter check refuse unless the allocator claim names ``afp-broker`` (``allocator_transfer``
+moves it, only while no lease is live and no child unresolved here and in Muse's ``lane_leases.json``).
 
 Lease states: ``ACTIVE`` (held by its holder), ``QUARANTINED_PENDING_RECONCILE`` (HELD: a child is AMBIGUOUS or the
 account warned; never released automatically) and ``RELEASED`` (every child final). Child phases: ``PREPARING`` (admitted,
@@ -42,9 +49,10 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
-from film_pipeline.production.halt import _BY_RE, read_halt, set_halt, state_dir
+from film_pipeline.production.halt import (OWNERS, _BY_RE, _atomic_write, halt_file_lock, read_owner,
+                                           set_halt, state_dir, stop_signals, write_owner_locked)
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 DB_FILENAME = "lease_pool.sqlite3"
 UNCERTAIN = "QUARANTINED_PENDING_RECONCILE"
 _HELD = ("ACTIVE", UNCERTAIN)
@@ -186,6 +194,72 @@ class AdmitRequest:
 
 
 
+MUSE_LANE_LEASES_ENV = "MUSE_LANE_LEASES_FILE"
+
+
+def muse_live_leases(now: float, path: str | None = None) -> tuple[str, list[str]]:
+    """``(problem, live account ids)`` of Muse's ``lane_leases.json`` (``$MUSE_LANE_LEASES_FILE``). A missing or empty
+    file has no lease; an unreadable file, a bad schema or a lease without a readable ``expires_at`` is a problem
+    (fail closed); ``problem == "unset"``: the path is not configured."""
+    raw_path = (path if path is not None else os.environ.get(MUSE_LANE_LEASES_ENV, "")).strip()
+    if not raw_path:
+        return "unset", []
+    try:
+        raw = Path(raw_path).read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return "", []
+    except (OSError, UnicodeDecodeError) as exc:
+        return f"cannot be read ({type(exc).__name__})", []
+    if not raw.strip():
+        return "", []
+    try:
+        data = json.loads(raw)
+    except ValueError:
+        return "are not valid JSON", []
+    leases = data.get("leases", {}) if isinstance(data, dict) else None
+    if not isinstance(leases, dict):
+        return "have an unexpected schema", []
+    live = []
+    for account, rec in leases.items():
+        try:
+            exp = datetime.fromisoformat(str(rec["expires_at"]))
+            exp = exp if exp.tzinfo is not None else exp.replace(tzinfo=timezone.utc)
+        except (TypeError, KeyError, ValueError):
+            return f"have a lease ({account}) without a readable expires_at", []
+        if exp.timestamp() > now:
+            live.append(str(account))
+    return "", sorted(live)
+
+
+MUSE_OBLIGATIONS_ENV = "MUSE_OBLIGATIONS_FILE"
+
+
+def muse_obligations_path(path: str | None = None) -> Path:
+    """The standalone obligations registry: ``path``, else ``$MUSE_OBLIGATIONS_FILE``, else
+    ``<state dir>/muse_obligations.json``."""
+    raw = (path if path is not None else os.environ.get(MUSE_OBLIGATIONS_ENV, "")).strip()
+    return Path(raw) if raw else state_dir() / "muse_obligations.json"
+
+
+def muse_obligations(path: Path) -> tuple[str, int]:
+    """``(state, open obligations)`` of the registry: ``absent``, ``invalid`` (unreadable, not JSON, or not
+    ``{"obligations": [...]}``) or ``ok``."""
+    try:
+        raw = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return "absent", 0
+    except (OSError, UnicodeDecodeError):
+        return "invalid", 0
+    try:
+        body = json.loads(raw)
+    except ValueError:
+        return "invalid", 0
+    items = body.get("obligations") if isinstance(body, dict) else None
+    if not isinstance(items, list):
+        return "invalid", 0
+    return "ok", len(items)
+
+
 def _check_spent(spent: float) -> None:
     """A settlement amount is finite and >= 0 (a negative spend would release a reservation and restore capacity)."""
     if not math.isfinite(float(spent)) or float(spent) < 0:
@@ -203,7 +277,9 @@ class Broker:
         honor_halt: bool = True,
         machine_caps: dict[str, Any] | None = None,
         provider_caps: dict[str, dict[str, Any]] | None = None,
+        require_owner: bool = True,
     ) -> None:
+        self.require_owner = require_owner   # False only for a private rehearsal pool (no real account)
         self.db_path = Path(db_path) if db_path is not None else default_db_path()
         self.min_reserve_credits = float(min_reserve_credits)
         self.cooldown_s = float(cooldown_s)
@@ -239,6 +315,24 @@ class Broker:
             raise
 
     @contextmanager
+    def _tx_locked(self, conn: sqlite3.Connection):
+        """``BEGIN IMMEDIATE``, then the halt-file lock, held until after COMMIT (or ROLLBACK): what is read under it
+        (halt, Muse halt, allocator claim) cannot change before this transaction's writes are durable."""
+        conn.execute("BEGIN IMMEDIATE")
+        try:
+            with halt_file_lock():
+                try:
+                    yield
+                    if conn.in_transaction:
+                        conn.execute("COMMIT")
+                finally:
+                    if conn.in_transaction:
+                        conn.execute("ROLLBACK")
+        finally:
+            if conn.in_transaction:
+                conn.execute("ROLLBACK")
+
+    @contextmanager
     def transaction(self):
         """One short broker transaction (tests and the halt use it as the broker lock)."""
         with closing(self._connect()) as conn, self._tx(conn):
@@ -256,6 +350,7 @@ class Broker:
             if version < 3:
                 self._migrate_v3(conn)
             self._migrate_v4(conn)
+            self._migrate_v5(conn)
             conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
     @staticmethod
@@ -392,6 +487,35 @@ class Broker:
         if "film_key" not in cols:
             conn.execute("ALTER TABLE legacy_unresolved ADD COLUMN film_key TEXT NOT NULL DEFAULT ''")
 
+    @staticmethod
+    def _migrate_v5(conn: sqlite3.Connection) -> None:
+        """Broker v5: a child that passed the pre-Enter check is bound to the lane incarnation that asked (only that
+        incarnation may report ENTER_NOT_ISSUED), and every check / ENTER_NOT_ISSUED decision is audited."""
+        cols = {r["name"] for r in conn.execute("PRAGMA table_info(lease_children)").fetchall()}
+        if "incarnation" not in cols:
+            conn.execute("ALTER TABLE lease_children ADD COLUMN incarnation TEXT NOT NULL DEFAULT ''")
+        conn.execute("CREATE TABLE IF NOT EXISTS broker_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)")
+        conn.execute("""CREATE TABLE IF NOT EXISTS child_audit (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, at TEXT NOT NULL, lease_key TEXT NOT NULL, child_key TEXT NOT NULL,
+            action TEXT NOT NULL, incarnation TEXT NOT NULL DEFAULT '', epoch INTEGER, reason TEXT NOT NULL DEFAULT '')""")
+
+    @staticmethod
+    def _meta(conn: sqlite3.Connection, key: str) -> str:
+        row = conn.execute("SELECT value FROM broker_meta WHERE key = ?", (key,)).fetchone()
+        return str(row["value"]) if row is not None else ""
+
+    @staticmethod
+    def _set_meta(conn: sqlite3.Connection, key: str, value: str) -> None:
+        conn.execute("INSERT INTO broker_meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET "
+                     "value = excluded.value", (key, value))
+
+    @staticmethod
+    def _audit(conn: sqlite3.Connection, lease_key: str, child_key: str, action: str, *, incarnation: str = "",
+               epoch: int | None = None, reason: str = "") -> None:
+        conn.execute("INSERT INTO child_audit (at, lease_key, child_key, action, incarnation, epoch, reason) VALUES "
+                     "(?, ?, ?, ?, ?, ?, ?)", (_iso_now(), lease_key, child_key, action, incarnation, epoch,
+                                               reason[:300]))
+
     # ---- accounts -------------------------------------------------------------------------------------------------
     def register_account(
         self,
@@ -511,11 +635,32 @@ class Broker:
             return dict(conn.execute("SELECT * FROM accounts WHERE account_id = ?", (account_id,)).fetchone())
 
     # ---- halt -----------------------------------------------------------------------------------------------------
+    def _stop_refusal(self) -> tuple[str, str]:
+        """``(code, reason)`` of the first stop signal (``halt.stop_signals``: the AFP halt, the Muse halt, a pending
+        halt marker or unwritten flag, the send-stop event; unreadable => refused), ``("", "")`` when none. Read under
+        the halt-file lock where it decides (admission, the pre-Enter check)."""
+        return stop_signals() if self.honor_halt else ("", "")
+
     def _halted(self) -> bool:
-        return self.honor_halt and read_halt() is not None
+        return bool(self._stop_refusal()[0])
 
     def _halt_reason(self) -> str:
-        return f"production halted: {(read_halt() or {}).get('reason', '')}"
+        return self._stop_refusal()[1]
+
+    def _owner_refusal(self) -> tuple[str, str]:
+        """``(code, reason)`` unless the allocator claim names ``afp-broker`` (read under the halt-file lock)."""
+        if not self.require_owner:
+            return "", ""
+        claim = read_owner()
+        if claim["problem"]:
+            return "ALLOCATOR_UNKNOWN", (f"the allocator claim {claim['problem']} (allocator_owner.json in the state "
+                                         f"dir): nothing is allocated; first claim: afp-film broker allocator-transfer "
+                                         f"--to afp-broker --expect-epoch 0")
+        if claim["owner"] != "afp-broker":
+            return "ALLOCATOR_NOT_OWNED", (f"the allocator is {claim['owner']} (claim epoch {claim['claim_epoch']}): "
+                                           f"afp-film broker allocator-transfer --to afp-broker --expect-epoch "
+                                           f"{claim['claim_epoch']}")
+        return "", ""
 
     # ---- usage ----------------------------------------------------------------------------------------------------
     @staticmethod
@@ -868,7 +1013,14 @@ class Broker:
         keys = [c.child_key for c in req.children]
         if len(set(keys)) != len(keys) or not all(k.strip() for k in keys):
             return "child keys must be unique and non-empty"
-        shots = [c.shot_key for c in req.children if c.shot_key]
+        if not all(c.take_id.strip() and c.shot_key.strip() for c in req.children):
+            return "every child names its take id and its shot version (shot_key); neither may be omitted"
+        if not (req.film_key or req.film_id).strip():
+            return "an admission names its film (film_key or film_id)"
+        takes = [c.take_id for c in req.children]
+        if len(set(takes)) != len(takes):
+            return "take ids must be unique in a batch"
+        shots = [c.shot_key for c in req.children]
         if len(set(shots)) != len(shots):
             return "two takes of one shot version are never in one batch"
         if req.epoch is not None and not (req.account_id or "").strip():
@@ -877,9 +1029,13 @@ class Broker:
 
     # ---- admission ------------------------------------------------------------------------------------------------
     def admit(self, req: AdmitRequest) -> dict[str, Any]:
-        """Atomic admission (one short transaction): halt, epoch, the batch lease, and the reservations against the
-        per-account quota, the per-film budget, the per-provider daily cap and the machine daily cap per unit. Returns
-        ``{"ok": True, "lease": {...}}`` or ``{"ok": False, "code": ..., "reason": ..., "reprobe": [...]}``."""
+        """Atomic admission (one short transaction, the halt-file lock held until COMMIT): halt (AFP and Muse), the
+        allocator claim, epoch, the batch lease, the take identity (an earlier unresolved child of the same film + shot
+        version on any lease or account refuses ``SHOT_VERSION_UNRESOLVED``; a take id is used once per film unless
+        every earlier attempt is settled NOT_SENT, and then only under a fresh child key), and the reservations against
+        the per-account quota, the per-film budget, the per-provider daily cap and the machine daily cap per unit.
+        Returns ``{"ok": True, "lease": {...}}`` (the token appears here once and is never re-issued: a replay of a
+        held lease is ``LEASE_EXISTS``) or ``{"ok": False, "code": ..., "reason": ..., "reprobe": [...]}``."""
         who = (req.holder or process_holder()).strip()
         pinned = (req.account_id or "").strip() or None
         ts = float(time.time() if req.now is None else req.now)
@@ -896,9 +1052,13 @@ class Broker:
                                          for c in req.children):
             return refuse("NO_PRICE", f"the route has no price in a known unit ({req.unit}); it cannot be admitted")
         total = round(sum(float(c.amount) for c in req.children), 6)   # type: ignore[arg-type]
-        with closing(self._connect()) as conn, self._tx(conn):
-            if self._halted():   # Owner rule: a halt stops ALL admission until explicitly cleared
-                return refuse("PRODUCTION_HALT", self._halt_reason())
+        with closing(self._connect()) as conn, self._tx_locked(conn):
+            code, why = self._stop_refusal()   # Owner rule: a halt stops ALL admission until explicitly cleared
+            if code:
+                return refuse(code, why)
+            code, why = self._owner_refusal()
+            if code:
+                return refuse(code, why)
             existing = conn.execute("SELECT * FROM leases WHERE lease_key = ?", (key,)).fetchone()
             if existing is not None:
                 if existing["state"] == "ACTIVE":
@@ -907,7 +1067,10 @@ class Broker:
                         if diff:
                             return refuse("LEASE_HELD", f"lease {key} is held with a different admission ({diff}); "
                                                         f"a replay must repeat it exactly")
-                        return {"ok": True, "lease": self._lease_view(conn, existing), "reused": True}
+                        # the token is issued once, at the admission that created the lease; a caller that lost it
+                        # cannot get it back (it holds the lease for reconcile instead)
+                        return refuse("LEASE_EXISTS", f"lease {key} is already held by this caller; its token was "
+                                                      f"issued once and is never re-issued")
                     return refuse("LEASE_HELD", f"lease {key} is held by another caller")
                 if existing["state"] == UNCERTAIN:
                     return refuse("LEASE_HELD", f"lease {key} is {UNCERTAIN}; settle it after reconcile "
@@ -919,16 +1082,42 @@ class Broker:
             if legacy:
                 return refuse(legacy_code, legacy)
             film_key = req.film_key or req.film_id
+            for c in req.children:   # one unresolved send per film + shot version, on any lease or account
+                held = conn.execute(
+                    "SELECT c.lease_key, c.child_key, c.phase, c.outcome FROM lease_children c JOIN leases l "
+                    "ON l.lease_key = c.lease_key WHERE c.final = 0 AND c.film_key = ? AND (c.shot_key = ? OR "
+                    "(c.shot_key = '' AND l.generation_id || ':v' || l.shot_version = ?)) LIMIT 1",
+                    (film_key, c.shot_key, c.shot_key)).fetchone()
+                if held is not None:
+                    return refuse("SHOT_VERSION_UNRESOLVED",
+                                  f"shot version {c.shot_key} of {film_key} has an unresolved child ({held['child_key']} "
+                                  f"of lease {held['lease_key']}: {held['phase']} {held['outcome']}".rstrip()
+                                  + "); settle it first")
+            for c in req.children:   # take identity: one send per take id, for every film (capped or not)
+                earlier = conn.execute("SELECT child_key, final, outcome FROM lease_children WHERE film_key = ? AND "
+                                       "take_id = ?", (film_key, c.take_id)).fetchall()
+                if any(not (e["final"] and e["outcome"] == "NOT_SENT") for e in earlier):
+                    return refuse("TAKE_REUSED", f"take {c.take_id} of {film_key} already has an attempt that is "
+                                                 f"not settled NOT_SENT; a new send needs a new take id")
+                if any(e["child_key"] == c.child_key for e in earlier):
+                    return refuse("TAKE_REUSED", f"take {c.take_id} of {film_key} was attempted under child key "
+                                                 f"{c.child_key}; a new attempt after NOT_SENT needs a fresh child key")
+                # the fence: a child settled NOT_SENT is never admitted again, under any take id
+                fenced = conn.execute("SELECT lease_key FROM lease_children WHERE film_key = ? AND child_key = ? AND "
+                                      "final = 1 AND outcome = 'NOT_SENT' LIMIT 1", (film_key, c.child_key)).fetchone()
+                if fenced is not None:
+                    return refuse("CHILD_FENCED", f"child {c.child_key} of {film_key} was settled NOT_SENT (lease "
+                                                  f"{fenced['lease_key']}) and is fenced; a new attempt needs a fresh "
+                                                  f"child key")
             film_capped = req.film_cap is not None and not math.isinf(req.film_cap)
             for c in req.children if film_capped else ():   # take identity decides what the film budget counts
-                if not c.take_id:
-                    continue
                 if c.take_id in req.film_counted:
                     return refuse("TAKE_REUSED", f"take {c.take_id} of {film_key} is already in the film's money "
                                                  f"ledger; a new send needs a new take id")
+            for c in req.children:   # a pre-S1 / migrated reservation of the take (no child history) also counts
                 dup = conn.execute("SELECT lease_key FROM reservations WHERE film_key = ? AND take_id = ? AND state IN "
                                    "('RESERVED', 'SPENT') LIMIT 1", (film_key, c.take_id)).fetchone()
-                if dup is not None:   # an exact replay of an ACTIVE lease returned above; anything else is a reuse
+                if dup is not None:
                     return refuse("TAKE_REUSED", f"take {c.take_id} of {film_key} is already reserved or spent "
                                                  f"(lease {dup['lease_key']}); a new send needs a new take id")
             code, why = self._cap_refusal(conn, req, total, day)
@@ -1025,8 +1214,12 @@ class Broker:
                      provider: str | None = None, unit: str = "credits", job_kind: str = "video",
                      batch_size: int = 1) -> tuple[bool, str]:
         """Read-only: would an account be leasable now (dry runs)? Takes no lease, writes nothing."""
-        if self._halted():
-            return False, self._halt_reason()
+        stop = self._stop_refusal()[1]
+        if stop:
+            return False, stop
+        why_owner = self._owner_refusal()[1]
+        if why_owner:
+            return False, why_owner
         ts = float(time.time() if now is None else now)
         req = AdmitRequest(lease_key="?", children=[Child(f"c{i}", cost_credits / max(1, batch_size))
                                                     for i in range(max(1, batch_size))],
@@ -1054,44 +1247,254 @@ class Broker:
             return False, ("pinned account " if pinned else "no eligible account: ") + "; ".join(why or ["none eligible"])
 
     # ---- the lane's pre-Enter check -------------------------------------------------------------------------------
-    def before_enter(self, lease_key: str, *, lease_token: str, child_key: str, epoch: int | None = None,
+    def before_enter(self, lease_key: str, *, lease_token: str, child_key: str | None = None,
+                     child_keys: Iterable[str] | None = None, epoch: int | None = None, incarnation: str = "",
                      now: float | None = None) -> dict[str, Any]:
-        """Immediately before the provider Enter: in one short transaction re-check the halt, the lease (token, ACTIVE)
-        and the epoch, then move the child PREPARING -> SUBMITTING. Losing any of them ends the child NOT_SENT (its
-        reservation released; it never blocks) and returns ``{"go": False, "code", "reason"}``."""
+        """Immediately before the provider Enter, in one short transaction with the halt-file lock held until COMMIT:
+        re-check the lease (token, ACTIVE), the halt (AFP and Muse), the allocator claim, the account and the epoch,
+        then move EVERY named child PREPARING -> SUBMITTING bound to ``incarnation`` (the lane process that asked), or
+        none of them.
+
+        Returns ``{"go", "code", "reason", "proven", "children"}``. ``proven`` True: the broker closed every named
+        child NOT_SENT in this transaction (nothing may be sent). ``proven`` False with ``go`` False: possibly sent:
+        ``ALREADY_SUBMITTING`` (a child already passed a check: a lost reply; the caller treats it as AMBIGUOUS),
+        ``CHILD_NOT_PREPARING`` (it already has another outcome) or ``LEASE_LOST`` with no child under this token;
+        nothing is changed then."""
+        if child_key is not None and child_keys is not None:
+            raise ValueError("pass child_key or child_keys, not both")
+        keys = [child_key] if child_key is not None else list(child_keys or [])
+        if not keys or not all(isinstance(k, str) and k.strip() for k in keys) or len(set(keys)) != len(keys):
+            raise ValueError("the pre-Enter check needs one or more distinct, non-empty child keys")
+        incarnation = (incarnation or "").strip()
         ts = float(time.time() if now is None else now)
-        with closing(self._connect()) as conn, self._tx(conn):
+
+        def answer(go: bool, code: str = "", reason: str = "", proven: bool = False) -> dict[str, Any]:
+            return {"go": go, "code": code, "reason": reason, "proven": proven, "children": keys}
+
+        with closing(self._connect()) as conn, self._tx_locked(conn):
             lease = conn.execute("SELECT * FROM leases WHERE lease_key = ?", (lease_key,)).fetchone()
-            if lease is None or lease["lease_token"] != lease_token:
-                return {"go": False, "code": "LEASE_LOST", "reason": f"lease {lease_key} is not held with this token"}
-            child = conn.execute("SELECT * FROM lease_children WHERE lease_key = ? AND lease_token = ? AND child_key = ?",
-                                 (lease_key, lease_token, child_key)).fetchone()
-            if child is None:
-                return {"go": False, "code": "LEASE_LOST", "reason": f"{child_key} is not a child of {lease_key}"}
-            if child["phase"] != "PREPARING" or child["final"]:
-                # never a second Enter for one child, and never an Enter for a child that already has an outcome
-                return {"go": False, "code": "CHILD_NOT_PREPARING",
-                        "reason": f"{child_key} is {child['phase']} {child['outcome']}".strip()}
+            rows = {k: conn.execute("SELECT * FROM lease_children WHERE lease_key = ? AND lease_token = ? AND "
+                                    "child_key = ?", (lease_key, lease_token, k)).fetchone() for k in keys}
+            submitting = [k for k, r in rows.items() if r is not None and r["phase"] == "SUBMITTING" and not r["final"]]
+            if submitting:   # a lost reply: never a second Enter, and never a NOT_SENT for a child that may be out
+                return answer(False, "ALREADY_SUBMITTING",
+                              f"{', '.join(submitting)} already passed the pre-Enter check: possibly sent; treat it as "
+                              f"AMBIGUOUS and reconcile")
+            other = [f"{k} is {r['phase']} {r['outcome']}".strip() for k, r in rows.items() if r is not None
+                     and not (r["phase"] == "PREPARING" and not r["final"])
+                     and not (r["final"] and r["outcome"] == "NOT_SENT")]
+            if other:
+                return answer(False, "CHILD_NOT_PREPARING", "; ".join(other) + ": possibly sent; never re-entered")
+            missing = [k for k, r in rows.items() if r is None]
+            if missing:
+                return answer(False, "LEASE_LOST", f"{', '.join(missing)} is not a child of {lease_key} under this "
+                                                   f"token: possibly sent by another attempt; nothing changed")
             code, reason = "", ""
+            stop, owner = self._stop_refusal(), self._owner_refusal()
+            closed = [k for k, r in rows.items() if r["final"]]
             acct = conn.execute("SELECT * FROM accounts WHERE account_id = ?", (lease["account_id"],)).fetchone() \
-                if lease["account_id"] else None
-            if lease["state"] != "ACTIVE":
-                code, reason = "LEASE_LOST", f"lease {lease_key} is {lease['state']}"
-            elif self._halted():
-                code, reason = "PRODUCTION_HALT", self._halt_reason()
+                if lease is not None and lease["account_id"] else None
+            if closed:
+                code, reason = "ALREADY_NOT_SENT", f"{', '.join(closed)} is already NOT_SENT: the batch cannot go whole"
+            elif lease is None or lease["lease_token"] != lease_token or lease["state"] != "ACTIVE":
+                code, reason = "LEASE_LOST", f"lease {lease_key} is " + (
+                    lease["state"] if lease is not None and lease["lease_token"] == lease_token
+                    else "not held with this token")
+            elif stop[0]:
+                code, reason = stop
+            elif owner[0]:
+                code, reason = owner
             elif acct is not None and acct["status"] != "ACTIVE":
                 code, reason = "ACCOUNT_NOT_ACTIVE", f"{acct['account_id']} is {acct['status']}"
             elif acct is not None and (int(lease["epoch"]) != int(acct["epoch"])
                                        or (epoch is not None and int(epoch) != int(acct["epoch"]))):
                 code, reason = "STALE_EPOCH", f"{acct['account_id']} epoch is {acct['epoch']} (lease " \
                                               f"{lease['epoch']}, lane {epoch if epoch is not None else '-'})"
+            elif acct is None and epoch is not None and int(epoch) != int(lease["epoch"]):
+                code, reason = "STALE_EPOCH", f"lease epoch is {lease['epoch']} (lane {epoch})"
             if code:
-                self._close_child(conn, lease, child, "NOT_SENT", 0.0, ts, note=f"{code}: {reason}"[:300],
-                                  cooldown=0.0)
-                return {"go": False, "code": code, "reason": reason}
-            conn.execute("UPDATE lease_children SET phase = 'SUBMITTING', updated_at = ? WHERE id = ?",
-                         (_iso_now(), child["id"]))
-            return {"go": True, "code": "", "reason": ""}
+                for k, r in rows.items():
+                    if not r["final"]:   # PREPARING children exist only under the lease's current token
+                        self._close_child(conn, lease, r, "NOT_SENT", 0.0, ts, note=f"{code}: {reason}"[:300],
+                                          cooldown=0.0)
+                    self._audit(conn, lease_key, k, "CHECK_NOT_SENT", incarnation=incarnation, epoch=epoch,
+                                reason=f"{code}: {reason}")
+                return answer(False, code, reason, proven=True)
+            at = _iso_now()
+            for k, r in rows.items():
+                conn.execute("UPDATE lease_children SET phase = 'SUBMITTING', incarnation = ?, updated_at = ? "
+                             "WHERE id = ?", (incarnation, at, r["id"]))
+                self._audit(conn, lease_key, k, "CHECK_GO", incarnation=incarnation, epoch=int(lease["epoch"]))
+            return answer(True)
+
+    def enter_not_issued(self, lease_key: str, *, lease_token: str, child_key: str, incarnation: str, epoch: int,
+                         reason: str = "", now: float | None = None) -> dict[str, Any]:
+        """The lane proves it never issued the Enter for a child that passed the pre-Enter check (SUBMITTING): close it
+        NOT_SENT. Accepted only from the live holder: the same lease token, the lease still ACTIVE (not released, held
+        or re-admitted), the incarnation the check bound, and the epoch still current (lease and account). Anything
+        else is refused (``ENTER_NOT_ISSUED_REFUSED``) and a SUBMITTING child is held AMBIGUOUS for reconcile. Both
+        decisions are audited (``child_audit``)."""
+        ts = float(time.time() if now is None else now)
+        incarnation = (incarnation or "").strip()
+        note = ("ENTER_NOT_ISSUED: " + reason.strip()).strip()[:300]
+        with closing(self._connect()) as conn, self._tx(conn):
+            lease = conn.execute("SELECT * FROM leases WHERE lease_key = ?", (lease_key,)).fetchone()
+            child = conn.execute("SELECT * FROM lease_children WHERE lease_key = ? AND lease_token = ? AND "
+                                 "child_key = ?", (lease_key, lease_token, child_key)).fetchone()
+            acct = conn.execute("SELECT * FROM accounts WHERE account_id = ?", (lease["account_id"],)).fetchone() \
+                if lease is not None and lease["account_id"] else None
+            why = ""
+            if lease is None or lease["lease_token"] != lease_token:
+                why = f"lease {lease_key} is not held with this token"
+            elif child is None:
+                why = f"{child_key} is not a child of {lease_key}"
+            elif lease["state"] != "ACTIVE":
+                why = f"lease {lease_key} is {lease['state']}"
+            elif child["phase"] != "SUBMITTING" or child["final"]:
+                why = f"{child_key} is {child['phase']} {child['outcome']}".strip()
+            elif not incarnation or child["incarnation"] != incarnation:
+                why = f"{child_key} passed its check under another lane incarnation"
+            elif int(epoch) != int(lease["epoch"]) or (acct is not None and int(acct["epoch"]) != int(lease["epoch"])):
+                why = f"epoch {epoch} is not current (lease {lease['epoch']}" \
+                      + (f", account {acct['epoch']})" if acct is not None else ")")
+            elif acct is not None and acct["status"] != "ACTIVE":
+                why = f"{acct['account_id']} is {acct['status']}"
+            if not why:
+                self._close_child(conn, lease, child, "NOT_SENT", 0.0, ts, note=note, cooldown=0.0)
+                self._audit(conn, lease_key, child_key, "ENTER_NOT_ISSUED", incarnation=incarnation, epoch=int(epoch),
+                            reason=note)
+                return {"ok": True, "code": "", "reason": "", "outcome": "NOT_SENT"}
+            outcome = child["outcome"] if child is not None else ""
+            if child is not None and lease is not None and lease["lease_token"] == lease_token \
+                    and child["phase"] == "SUBMITTING" and not child["final"]:
+                self._close_child(conn, lease, child, "AMBIGUOUS", 0.0, ts, final=False,
+                                  note=f"ENTER_NOT_ISSUED refused: {why}"[:300])
+                outcome = "AMBIGUOUS"
+            self._audit(conn, lease_key, child_key, "ENTER_NOT_ISSUED_REFUSED", incarnation=incarnation,
+                        epoch=int(epoch), reason=why)
+            return {"ok": False, "code": "ENTER_NOT_ISSUED_REFUSED",
+                    "reason": f"{why}: the child stays for reconcile (possibly sent)", "outcome": outcome}
+
+    def settle_not_sent(self, child_key: str, *, evidence: str, lease_key: str | None = None,
+                        lease_token: str | None = None, now: float | None = None) -> dict[str, Any]:
+        """Atomic NOT_SENT settlement (one transaction): a child still PREPARING never passed the pre-Enter check, the
+        only way to SUBMITTING, so it is provably unsent: close it terminal NOT_SENT and fence it (a later check is
+        NOT_SENT_PROVEN with no Enter; an admission naming it is CHILD_FENCED). A child past the check (SUBMITTING or
+        a migrated UNKNOWN phase) is refused (``CHILD_PAST_ENTER``: possibly sent) and nothing changes; a child already
+        NOT_SENT is an idempotent success. ``lease_key`` picks the lease when the child key is not unique;
+        ``lease_token``, when given, must be the lease's. Audited (``child_audit``)."""
+        evidence = (evidence or "").strip()
+        if len(evidence) < 3:
+            raise ValueError("settle_not_sent needs the evidence (at least 3 characters)")
+        ts = float(time.time() if now is None else now)
+        with closing(self._connect()) as conn, self._tx(conn):
+            q = ("SELECT c.* FROM lease_children c JOIN leases l ON l.lease_key = c.lease_key AND "
+                 "l.lease_token = c.lease_token WHERE c.child_key = ?")
+            args: tuple[Any, ...] = (child_key,)
+            if lease_key:
+                q += " AND c.lease_key = ?"
+                args += (lease_key,)
+            rows = conn.execute(q, args).fetchall()
+            if not rows:
+                raise KeyError(f"no child {child_key!r}" + (f" in lease {lease_key!r}" if lease_key else ""))
+            if len(rows) > 1:
+                return {"ok": False, "code": "CHILD_AMBIGUOUS", "reason": f"{child_key} is a child of "
+                        f"{len(rows)} leases: name the lease (--lease-key)"}
+            child = rows[0]
+            lease = conn.execute("SELECT * FROM leases WHERE lease_key = ?", (child["lease_key"],)).fetchone()
+            if lease_token is not None and lease_token != lease["lease_token"]:
+                raise ValueError(f"lease_token mismatch for {lease['lease_key']!r}")
+            base = {"lease_key": lease["lease_key"], "child_key": child_key}
+            if child["final"]:
+                if child["outcome"] == "NOT_SENT":
+                    return {"ok": True, "code": "", "reason": "already NOT_SENT", **base, "outcome": "NOT_SENT",
+                            "fenced": True, "changed": False, "lease_state": lease["state"]}
+                return {"ok": False, "code": "CHILD_FINAL", "reason": f"{child_key} is already {child['outcome']}",
+                        **base, "outcome": child["outcome"]}
+            if child["phase"] != "PREPARING":
+                self._audit(conn, lease["lease_key"], child_key, "SETTLE_NOT_SENT_REFUSED",
+                            reason=f"{child['phase']}: {evidence}")
+                return {"ok": False, "code": "CHILD_PAST_ENTER", "reason": f"{child_key} is {child['phase']}: it "
+                        f"passed the pre-Enter check and is possibly sent; reconcile it (settle)", **base,
+                        "outcome": child["outcome"], "possibly_sent": True}
+            note = f"SETTLED_NOT_SENT: {evidence}"[:300]
+            self._close_child(conn, lease, child, "NOT_SENT", 0.0, ts, note=note, cooldown=0.0)
+            self._audit(conn, lease["lease_key"], child_key, "SETTLE_NOT_SENT", reason=evidence)
+            state = conn.execute("SELECT state FROM leases WHERE lease_key = ?", (lease["lease_key"],)).fetchone()[0]
+            return {"ok": True, "code": "", "reason": "", **base, "outcome": "NOT_SENT", "fenced": True,
+                    "changed": True, "lease_state": state}
+
+    # ---- the allocator claim --------------------------------------------------------------------------------------
+    def allocator_transfer(self, to: str, *, expect_epoch: int, by: str = "", now: float | None = None,
+                           muse_leases_file: str | None = None, obligations_file: str | None = None) -> dict[str, Any]:
+        """Move the allocator claim (``allocator_owner.json``) to ``to`` (``afp-broker`` or ``muse-standalone``).
+        BEGIN IMMEDIATE, then the halt-file lock; revalidate the claim and ``claim_epoch == expect_epoch``; refuse
+        while this broker has a live lease or an unresolved child, or Muse's ``lane_leases.json``
+        (``$MUSE_LANE_LEASES_FILE``) has a live lease or cannot be read (unset: refused when moving to afp-broker);
+        refuse while the Muse obligations registry (``$MUSE_OBLIGATIONS_FILE``, default ``<state dir>/
+        muse_obligations.json``) has an entry or is invalid, or is missing while ``muse_obligations_required`` is set;
+        then replace the claim atomically (``claim_epoch + 1``) and COMMIT. ``--to muse-standalone`` also sets
+        ``muse_obligations_required`` and creates the empty registry in the same transaction (a failed write fails the
+        transfer); ``--to afp-broker`` with an empty registry resets the flag. With no claim file the only transfer is
+        the bootstrap ``--to afp-broker --expect-epoch 0``."""
+        if to not in OWNERS:
+            raise ValueError(f"the allocator owner must be one of {OWNERS}")
+        if isinstance(expect_epoch, bool) or not isinstance(expect_epoch, int) or expect_epoch < 0:
+            raise ValueError("expect_epoch must be an integer >= 0")
+        ts = float(time.time() if now is None else now)
+
+        def refuse(code: str, reason: str) -> dict[str, Any]:
+            return {"ok": False, "code": code, "reason": reason}
+
+        with closing(self._connect()) as conn, self._tx_locked(conn):
+            claim = read_owner()
+            if claim["problem"] == "absent":
+                if to != "afp-broker" or expect_epoch != 0:
+                    return refuse("ALLOCATOR_UNKNOWN", "there is no allocator claim yet: the only first claim is "
+                                                       "--to afp-broker --expect-epoch 0")
+            elif claim["problem"]:
+                return refuse("ALLOCATOR_UNKNOWN", f"the allocator claim {claim['problem']}: repair it by hand; it is "
+                                                   f"never overwritten")
+            elif claim["claim_epoch"] != expect_epoch:
+                return refuse("STALE_CLAIM_EPOCH", f"the claim epoch is {claim['claim_epoch']}, not {expect_epoch} "
+                                                   f"(owner {claim['owner']})")
+            elif claim["owner"] == to:
+                return {"ok": True, "owner": to, "claim_epoch": claim["claim_epoch"], "changed": False}
+            live = conn.execute("SELECT lease_key, state FROM leases WHERE state != 'RELEASED' LIMIT 1").fetchone()
+            open_child = conn.execute("SELECT lease_key, child_key FROM lease_children WHERE final = 0 "
+                                      "LIMIT 1").fetchone()
+            if live is not None or open_child is not None:
+                what = (f"lease {live['lease_key']} is {live['state']}" if live is not None
+                        else f"child {open_child['child_key']} of {open_child['lease_key']} is unresolved")
+                return refuse("OWNER_BUSY", f"{what}: settle every lease and child first")
+            problem, live_muse = muse_live_leases(ts, muse_leases_file)
+            if problem and (to == "afp-broker" or problem != "unset"):
+                return refuse("MUSE_LEASES_UNKNOWN", f"Muse's lane leases {problem}: the transfer needs proof that no "
+                                                     f"Muse lane is live (MUSE_LANE_LEASES_FILE)")
+            if live_muse:
+                return refuse("OWNER_BUSY", f"Muse lane leases are live on {', '.join(live_muse)}")
+            # the standalone obligations registry: never an entry; when required, it must exist and be valid
+            required = self._meta(conn, "muse_obligations_required") == "1"
+            reg_path = muse_obligations_path(obligations_file)
+            state, count = muse_obligations(reg_path)
+            if state == "invalid" or (state == "absent" and required):
+                return refuse("MUSE_OBLIGATIONS_UNKNOWN", f"the Muse obligations registry {reg_path} is "
+                              f"{'missing' if state == 'absent' else 'unreadable or invalid'}"
+                              + (" (required since the claim moved to muse-standalone)" if required else "")
+                              + ": a transfer needs proof that no standalone child is open")
+            if count:
+                return refuse("OWNER_BUSY", f"the Muse obligations registry {reg_path} has {count} open "
+                                            f"obligation(s): reconcile them first")
+            epoch_now = 0 if claim["problem"] else int(claim["claim_epoch"])
+            if to == "muse-standalone":   # the flag precedes the first standalone Enter: same txn, same lock
+                self._set_meta(conn, "muse_obligations_required", "1")
+                _atomic_write(reg_path, {"schema": 1, "obligations": []})   # raises: the transfer fails, rolls back
+            elif required:   # back to afp-broker with an empty, valid registry
+                self._set_meta(conn, "muse_obligations_required", "0")
+            written = write_owner_locked(to, epoch_now + 1, by or process_holder())
+            return {"ok": True, "owner": to, "claim_epoch": epoch_now + 1, "changed": True,
+                    "previous": claim["owner"] or "", "claimed_at": written.get("claimed_at", ""),
+                    "muse_obligations_required": to == "muse-standalone"}
 
     # ---- settlement -----------------------------------------------------------------------------------------------
     def _close_child(self, conn: sqlite3.Connection, lease: sqlite3.Row, child: sqlite3.Row, outcome: str,
