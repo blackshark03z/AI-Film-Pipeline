@@ -1,3 +1,56 @@
+# 2026-11-21 — Coordinator handoff: lane contract frozen (P1), one Owner policy, P0 live — START A FRESH COORDINATOR SESSION
+
+**Goal.** One studio (Film Studio) from AFP and Muse. Roadmap in STUDIO_ARCHITECTURE §11:
+- M1 (now): S1 broker, Muse r15 stop-all fix, lane contract, P0 baseline.
+- M2 = P1: one real film through the AFP lane wrapping Muse `pool_runner`, plus S2-lite.
+- M3: one repo, rename to Film Studio, then S2 full, S3, S4, S6.
+
+**Decisions, and why:**
+- **POLICY_REF = f6f98d788736704474cb76486b97c8aa3f2439c8**, which replaces 1d500274.
+  - Owner 2026-11-21: "Hợp nhất ngay". OWNER_POLICY is now the single policy for AFP and Muse, and `D:\Muse\CLAUDE.md` defers to it.
+  - Owner 2026-11-21: "Về contact sheet thì agent duyệt". The agent approves Muse anchors, plates, keyframes, the animatic and takes. The Owner keeps the final master.
+  - Local git commits are allowed in both repos (secrets excluded); push stays reserved.
+- **P1 scope freeze** (Owner: "Đồng ý, chốt gọn"). Single mode: the broker is the only allocator while lanes run, and standalone Muse real-send refuses then. Coexistence is M3 backlog (contract Appendix M).
+  - Why: 5 Codex REJECT rounds were spent on coexistence.
+- **Review stop rule:** ACCEPT = no High finding inside scope; Mediums go to the backlog; at most 2-3 rounds per milestone. See memory `feedback-review-stop-rule-scope`.
+- **Lane contract AGREED v8** (Codex ACCEPT): `docs/production/muse/AFP_MUSE_LANE_CONTRACT.md` (c73b4dd4). A change needs both TLs plus one scoped Codex round. The review trail is in `_archive/lane_contract_20261121/`.
+- **P0 live** (Owner: "Cho chạy P0"; confirmed in the Muse TL session as "Start P0 now"):
+  - setup: BLACK_PILOT, `C:\film-work\BLACK_PILOT_P0_20261120`, one account acc_7e5b5970, one process, failover off, `--no-ui-sync`;
+  - code hashes in `P0_CODE_HASHES.txt`;
+  - timing in `_p0_timing.jsonl`, log in `_kf_run1.log`.
+
+**Files changed this milestone:**
+- STUDIO_ARCHITECTURE.md: 5ee95957, 724f0833, a753ed30.
+- OWNER_POLICY.md: f6f98d78.
+- muse/AFP_MUSE_LANE_CONTRACT.md: c73b4dd4.
+- `D:\Muse\CLAUDE.md`: policy pointer and git rule; uncommitted in the Muse repo.
+- S1: up to 5e264c45 (round-7 fixes), plus WIP of the addendum.
+
+**Open:**
+- **S1 addendum.** Session `s1-addendum` (local_488a0266-7318-45ff-85fd-88046d275c7d), Opus.
+  - Spec: `_archive/s1_broker_20261120/S1_ADDENDUM_SPEC.md`, as trimmed by the scope freeze. Items 13, 15, 16 and the transfer are dropped; item 7 = `allocator-claim` / `allocator-release`.
+  - It then runs Codex round 8 over `5e264c45^..HEAD`. The round-7 fixes were never re-reviewed.
+  - WIP backup: `wip_backup2_0926/`.
+- **Muse TL** (local_e75f8a13-ed53-45ca-815c-88ea13a3670e):
+  - r15 stop-all fix in progress (session local_3a840c58). 45/46 tests pass; the one failure is fail-safe.
+  - Then PRE-TAG #11, the accounts lock, Round A, Round B.
+  - Asked to git-track `muse_studio` now. The index holds staged scratch deletions from an older session.
+- **Next AFP work after S1 is accepted:** S2-lite plus the S5 adapter, against the v8 contract.
+- **Owner items:**
+  - approve the Muse accounts.json lock fix;
+  - re-login acc_2d9dce62;
+  - rotate the 2 Muse account credentials pasted in chat;
+  - push (about 24 local commits).
+
+**Working rules learned:**
+- Child sessions commit after each green item, because S1 was lost twice to app restarts.
+- Mechanical work with a fixed spec goes to Sonnet; Opus only reviews.
+- The coordinator briefs the Muse TL directly and keeps relays to a minimum.
+
+**Tests:** `uv run pytest tests/test_broker_s1.py tests/test_broker_lane_contract.py tests/test_provider_routing.py -q`.
+
+**Next step:** open a fresh coordinator session that reads this entry, then wait for the s1-addendum report, the r15 Codex result and the P0 numbers.
+
 # 2026-11-21 — S1 Broker v2 built (commits f3c6dcf8..acdc49cb); Codex round 5 REJECT, its 2 findings fixed, not re-reviewed
 
 - Goal: STUDIO_ARCHITECTURE.md v3 S1 (§3/§5/§6/§9, §11 row). POLICY_REF 1d500274 pinned; no POLICY_SYNC needed.
