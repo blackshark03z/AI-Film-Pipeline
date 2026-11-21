@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muse Video Studio — Multi-Account Parallel Tool</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/css/style.css?v=2">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Top Navbar -->
+  <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 px-6 py-3 flex items-center justify-between shadow-lg">
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-2">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-lg text-white shadow-md">
+          M
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            MUSE STUDIO
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">v1.0</span>
+          </h1>
+          <p class="text-xs text-slate-400">Multi-Account Parallel Video Generator</p>
+        </div>
+      </div>
+
+      <div class="h-6 w-px bg-slate-700 mx-2"></div>
+
+      <!-- Project Selector -->
+      <div class="flex items-center space-x-2">
+        <span class="text-xs text-slate-400 font-medium">Dự án:</span>
+        <select id="project-selector" class="bg-slate-800 border border-slate-700 text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-indigo-500 text-slate-200">
+          <option value="">-- Chọn dự án --</option>
+        </select>
+        <button onclick="openModal('modal-create-project')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white" title="Tạo dự án mới">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Central System Health Badges -->
+    <div class="hidden md:flex items-center space-x-4 text-xs">
+      <div class="flex items-center space-x-1.5 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-slate-400">Tài khoản sẵn sàng:</span>
+        <span id="stat-ready-accounts" class="font-bold text-emerald-400">0</span>
+      </div>
+      <div class="flex items-center space-x-1.5 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+        <span class="text-slate-400">Tổng hạn mức còn:</span>
+        <span id="stat-total-quota" class="font-bold text-cyan-400">--</span>
+      </div>
+      <div class="flex items-center space-x-1.5 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+        <span class="text-slate-400">Luồng đang chạy:</span>
+        <span id="stat-active-workers" class="font-bold text-amber-400">0</span>
+      </div>
+      <div class="flex items-center space-x-1.5 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+        <span class="text-slate-400">Tiến độ dự án:</span>
+        <span id="stat-project-progress" class="font-bold text-indigo-400">0%</span>
+      </div>
+    </div>
+
+    <!-- Quick Render Action Controls -->
+    <div class="flex items-center space-x-3">
+      <div class="flex items-center space-x-1.5 bg-slate-800 px-2 py-1 rounded-lg border border-slate-700 text-xs">
+        <label for="concurrency-input" class="text-slate-400">Luồng //:</label>
+        <input type="number" id="concurrency-input" value="3" min="1" max="10" class="w-12 bg-slate-900 border border-slate-700 text-center rounded px-1 py-0.5 text-white">
+      </div>
+
+      <label class="flex items-center space-x-1.5 text-xs text-slate-400 cursor-pointer bg-slate-800/60 px-2.5 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800">
+        <input type="checkbox" id="simulate-toggle" class="rounded bg-slate-900 border-slate-700 text-indigo-600 focus:ring-0">
+        <span>Giả lập (Test)</span>
+      </label>
+
+      <button id="btn-start-render" onclick="startRender()" class="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-sm px-4 py-1.5 rounded-lg shadow-md transition disabled:opacity-50">
+        <i data-lucide="play" class="w-4 h-4"></i>
+        <span>Bắt đầu Render</span>
+      </button>
+
+      <button id="btn-stop-render" onclick="stopRender()" class="hidden flex items-center space-x-1.5 bg-rose-600 hover:bg-rose-500 text-white font-medium text-sm px-4 py-1.5 rounded-lg shadow-md transition">
+        <i data-lucide="square" class="w-4 h-4"></i>
+        <span>Tạm dừng</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="bg-slate-900/60 border-b border-slate-800 px-6 flex space-x-8">
+    <button onclick="switchTab('tab-monitor')" id="nav-tab-monitor" class="tab-btn py-3 text-sm font-medium border-b-2 border-indigo-500 text-indigo-400 flex items-center gap-2">
+      <i data-lucide="activity" class="w-4 h-4"></i>
+      <span>Giám sát Render</span>
+    </button>
+    <button onclick="switchTab('tab-shots')" id="nav-tab-shots" class="tab-btn py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+      <i data-lucide="clapperboard" class="w-4 h-4"></i>
+      <span>Kịch bản & Tham chiếu</span>
+    </button>
+    <button onclick="switchTab('tab-accounts')" id="nav-tab-accounts" class="tab-btn py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+      <i data-lucide="users" class="w-4 h-4"></i>
+      <span>Pool Tài khoản</span>
+    </button>
+    <button onclick="switchTab('tab-gallery')" id="nav-tab-gallery" class="tab-btn py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+      <i data-lucide="film" class="w-4 h-4"></i>
+      <span>Thư viện & Xuất video</span>
+    </button>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 p-6 overflow-y-auto">
+
+    <!-- TAB 1: Giám sát Render (Live Monitor) -->
+    <div id="tab-monitor" class="tab-pane active space-y-6">
+      <!-- Active Project Banner -->
+      <div id="monitor-project-banner" class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+        <div>
+          <div class="flex items-center gap-3">
+            <h2 id="banner-proj-name" class="text-xl font-bold text-white">Chưa chọn dự án</h2>
+            <span id="banner-proj-mode" class="text-xs px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Batch Parallel</span>
+            <span id="banner-proj-status" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">IDLE</span>
+          </div>
+          <p id="banner-proj-desc" class="text-xs text-slate-400 mt-1">Chọn hoặc tạo một dự án mới để bắt đầu thiết lập cảnh và render.</p>
+        </div>
+
+        <div class="w-full md:w-72">
+          <div class="flex justify-between text-xs text-slate-400 mb-1">
+            <span>Tiến độ hoàn tất</span>
+            <span id="banner-progress-text">0/0 Cảnh</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+            <div id="banner-progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Active Worker Cards -->
+      <div>
+        <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <i data-lucide="cpu" class="w-4 h-4 text-indigo-400"></i>
+          Các luồng render đang chạy
+        </h3>
+        <div id="active-workers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="col-span-full py-8 text-center text-slate-500 bg-slate-900/40 border border-slate-800/80 rounded-xl">
+            Hiện không có luồng nào đang render. Nhấn "Bắt đầu Render" để chạy.
+          </div>
+        </div>
+      </div>
+
+      <!-- Realtime Event Logs -->
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+            <i data-lucide="terminal" class="w-4 h-4 text-emerald-400"></i>
+            Nhật ký hoạt động thời gian thực
+          </h3>
+          <button onclick="clearLogs()" class="text-xs text-slate-400 hover:text-slate-200">Xóa nhật ký</button>
+        </div>
+        <div id="realtime-logs" class="bg-slate-900 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 h-48 overflow-y-auto space-y-1">
+          <div class="text-slate-500">[System] Sẵn sàng nhận lệnh điều khiển.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Kịch bản & Tham chiếu (Shots Editor) -->
+    <div id="tab-shots" class="tab-pane space-y-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="list" class="w-5 h-5 text-indigo-400"></i>
+            Danh sách cảnh kịch bản (Shots)
+          </h2>
+          <p class="text-xs text-slate-400">Biên tập prompt, lời thoại và quản lý tối đa 9 ảnh tham chiếu cho từng cảnh.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <input type="file" id="csv-file-input" accept=".csv" class="hidden" onchange="uploadCSV(event)">
+          <button onclick="document.getElementById('csv-file-input').click()" class="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-lg border border-slate-700">
+            <i data-lucide="file-up" class="w-4 h-4"></i>
+            <span>Import CSV</span>
+          </button>
+          <button onclick="openModal('modal-add-shot')" class="flex items-center space-x-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-2 rounded-lg shadow">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Thêm cảnh mới</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Shots Table/List -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+        <table class="w-full text-left text-sm text-slate-300">
+          <thead class="bg-slate-800/80 text-xs uppercase text-slate-400 border-b border-slate-700">
+            <tr>
+              <th class="px-4 py-3 w-16">STT</th>
+              <th class="px-4 py-3 w-28">Mã cảnh</th>
+              <th class="px-4 py-3">Prompt mô tả & Lời thoại</th>
+              <th class="px-4 py-3 w-52">Ảnh tham chiếu (Tối đa 9)</th>
+              <th class="px-4 py-3 w-28">Trạng thái</th>
+              <th class="px-4 py-3 w-32">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="shots-table-body" class="divide-y divide-slate-800">
+            <tr>
+              <td colspan="6" class="px-4 py-8 text-center text-slate-500">Chưa có cảnh nào trong dự án. Hãy nhấn "Thêm cảnh mới" hoặc "Import CSV".</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: Pool Tài khoản (Account Manager) -->
+    <div id="tab-accounts" class="tab-pane space-y-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="users" class="w-5 h-5 text-indigo-400"></i>
+            Quản lý Pool Tài khoản Muse
+          </h2>
+          <p class="text-xs text-slate-400">Hỗ trợ nhập hàng loạt theo định dạng <code>email|invite_code|password|cookie</code>, tự động đăng nhập Cookie và Tempmail OTP.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btn-bulk-check" onclick="bulkCheckAccounts()" class="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-lg border border-slate-700 disabled:opacity-60">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            <span>Kiểm tra tất cả</span>
+          </button>
+          <button id="btn-bulk-redeem" onclick="bulkRedeemInviteCode()" class="flex items-center space-x-1.5 bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 text-xs px-3 py-2 rounded-lg border border-cyan-500/30 font-medium disabled:opacity-60">
+            <i data-lucide="gift" class="w-4 h-4"></i>
+            <span>Nhập mã mời (1B)</span>
+          </button>
+          <button onclick="openModal('modal-bulk-import')" class="flex items-center space-x-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs px-3.5 py-2 rounded-lg shadow font-medium">
+            <i data-lucide="file-input" class="w-4 h-4"></i>
+            <span>📥 Nhập hàng loạt (Bulk)</span>
+          </button>
+          <button onclick="openModal('modal-add-account')" class="flex items-center space-x-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3.5 py-2 rounded-lg shadow">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>+ Thêm thủ công</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="accounts-status-banner" class="hidden rounded-xl px-4 py-3 text-xs font-medium flex items-center justify-between border"></div>
+
+      <!-- Accounts Grid -->
+      <div id="accounts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Account Card items will be rendered here dynamically -->
+      </div>
+    </div>
+
+    <!-- TAB 4: Thư viện & Xuất video (Clip Gallery) -->
+    <div id="tab-gallery" class="tab-pane space-y-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="film" class="w-5 h-5 text-indigo-400"></i>
+            Thư viện Clip & Xuất Video Hoàn Chỉnh
+          </h2>
+          <p class="text-xs text-slate-400">Xem trước từng clip vừa render xong, tải toàn bộ gói ZIP hoặc bấm 1-click để ghép nối thành video dài qua FFmpeg.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="downloadProjectZip()" class="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3.5 py-2 rounded-lg border border-slate-700">
+            <i data-lucide="archive" class="w-4 h-4"></i>
+            <span>Tải gói ZIP</span>
+          </button>
+          <button onclick="mergeAllVideos()" class="flex items-center space-x-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs px-4 py-2 rounded-lg shadow-md font-medium">
+            <i data-lucide="combine" class="w-4 h-4"></i>
+            <span>1-Click Ghép toàn bộ Video</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Rendered Video Grid -->
+      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Rendered clips will be populated dynamically -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODALS -->
+
+  <!-- Modal: Create Project -->
+  <div id="modal-create-project" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <h3 class="text-lg font-bold text-white">Tạo dự án mới</h3>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Tên dự án:</label>
+          <input type="text" id="new-proj-name" placeholder="Ví dụ: Marcus Drama Ep 1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Chế độ Render:</label>
+          <select id="new-proj-mode" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+            <option value="batch_parallel">Batch Parallel (Render song song độc lập tối đa tốc độ)</option>
+            <option value="chained_continuity">Chained Continuity (Tự động trích frame cuối làm ref shot sau)</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-end space-x-2 pt-2">
+        <button onclick="closeModal('modal-create-project')" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">Hủy</button>
+        <button onclick="createProject()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs text-white font-medium">Tạo dự án</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Account -->
+  <div id="modal-add-account" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <h3 class="text-lg font-bold text-white">Thêm tài khoản vào Pool</h3>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Tên tài khoản / Ghi chú:</label>
+          <input type="text" id="new-acc-name" placeholder="Ví dụ: Muse_Account_01" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Email (Tempmail / Muse — Tùy chọn):</label>
+          <input type="text" id="new-acc-email" placeholder="user@merepost.com" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Mã mời Invite Code (1B Token — Tùy chọn):</label>
+          <input type="text" id="new-acc-invite" placeholder="Ví dụ: X4XG1F (hiệu lực cho acc mới tạo < 48h)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono uppercase text-cyan-300 focus:outline-none focus:border-cyan-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Cookie (JSON array hoặc key=value — Tùy chọn):</label>
+          <textarea id="new-acc-cookie" rows="3" placeholder='[{"name":"...","value":"..."}] hoặc key=value; ...' class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Proxy riêng biệt (Tùy chọn):</label>
+          <input type="text" id="new-acc-proxy" placeholder="host:port:user:pass hoặc http://user:pass@host:port" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+          <p class="text-[11px] text-slate-500 mt-1">Hỗ trợ proxy HTTP hoặc SOCKS5. Để trống nếu dùng chung mạng máy tính.</p>
+        </div>
+        <label class="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer pt-1">
+          <input type="checkbox" id="new-acc-autoverify" checked class="rounded bg-slate-800 border-slate-700 text-indigo-600 focus:ring-0">
+          <span>Tự động kiểm tra trạng thái & hạn mức ngay</span>
+        </label>
+      </div>
+      <div class="flex justify-end space-x-2 pt-2">
+        <button onclick="closeModal('modal-add-account')" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">Hủy</button>
+        <button onclick="addAccount()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs text-white font-medium">Lưu tài khoản</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Bulk Import Accounts -->
+  <div id="modal-bulk-import" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-xl w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="file-input" class="w-5 h-5 text-emerald-400"></i>
+            Nhập tài khoản hàng loạt
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">
+            Định dạng mỗi dòng: <code class="bg-slate-800 text-emerald-300 px-1.5 py-0.5 rounded">email|invite_code|password|cookie</code> hoặc <code class="bg-slate-800 text-cyan-300 px-1.5 py-0.5 rounded">name|||cookie|proxy</code>. Tự động lấy % hạn mức còn lại, bonus tokens & ngày reset.
+          </p>
+        </div>
+        <button onclick="closeModal('modal-bulk-import')" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <textarea id="bulk-import-text" rows="8" placeholder="user1@mailto.plus|CODE123|Pass123@|session=abc; token=xyz
+user2@mailto.plus|CODE456|Pass456@|[{&quot;name&quot;:&quot;session&quot;,&quot;value&quot;:&quot;...&quot;}]" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 font-mono focus:outline-none focus:border-emerald-500"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" id="bulk-auto-verify" checked class="rounded bg-slate-800 border-slate-700 text-emerald-600 focus:ring-0">
+            <span>Tự động xác thực Live/Die ngay sau khi nạp</span>
+          </label>
+          <span class="text-[11px] text-slate-500">Trùng email sẽ tự cập nhật Cookie mới</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-2 pt-2 border-t border-slate-800">
+        <button onclick="closeModal('modal-bulk-import')" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">Hủy</button>
+        <button onclick="submitBulkImport()" class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs text-white font-medium flex items-center gap-1.5 shadow">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>Bắt đầu Nạp & Xác thực</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add/Edit Shot -->
+  <div id="modal-add-shot" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <h3 class="text-lg font-bold text-white">Thêm Cảnh (Shot) mới</h3>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Mã cảnh (Shot ID):</label>
+          <input type="text" id="new-shot-id" placeholder="shot_01 (để trống sẽ tự động đặt)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Prompt mô tả hành động & bối cảnh:</label>
+          <textarea id="new-shot-prompt" rows="3" placeholder="Ví dụ: Cinematic shot of an officer looking skepticism at the golden pin..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Lời thoại nhân vật (Tùy chọn):</label>
+          <input type="text" id="new-shot-dialogue" placeholder="Ví dụ: This real, or you buy this online?" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Tải ảnh tham chiếu (Tối đa 9 ảnh):</label>
+          <input type="file" id="shot-ref-files" multiple accept="image/*" class="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700">
+          <div id="selected-refs-preview" class="flex flex-wrap gap-2 mt-2"></div>
+        </div>
+      </div>
+      <div class="flex justify-end space-x-2 pt-2">
+        <button onclick="closeModal('modal-add-shot')" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">Hủy</button>
+        <button onclick="saveShot()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs text-white font-medium">Lưu cảnh</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Video Player -->
+  <div id="modal-video-player" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-4 space-y-3 shadow-2xl relative">
+      <button onclick="closeVideoModal()" class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-slate-800 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center shadow">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+      <h3 id="video-modal-title" class="text-sm font-bold text-white px-1">Xem trước Video</h3>
+      <div class="rounded-xl overflow-hidden bg-black aspect-video flex items-center justify-center">
+        <video id="video-modal-player" controls autoplay class="w-full h-full object-contain"></video>
+      </div>
+      <div class="flex justify-between items-center px-1">
+        <span id="video-modal-duration" class="text-xs text-slate-400">Thời lượng: 0s</span>
+        <a id="video-modal-download" href="#" download class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Tải file MP4</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js?v=4"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

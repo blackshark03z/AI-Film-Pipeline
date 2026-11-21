@@ -1,0 +1,18 @@
+{
+  "muse-stage-skills": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python D:/Muse/.claude/hooks/stage_skills.py",
+        "timeout": 10
+      }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "python D:/Muse/.claude/hooks/stage_skills.py",
+        "timeout": 10
+      }
+    ]
+  }
+}
