@@ -11,7 +11,8 @@ tiếp").**
 - Film runs are paused: P0 (M8) stops with a PARTIAL baseline, and BIKER (M9) stays off.
 - The M3 code merge now comes before Round A/B, S2-lite, S5 and P1. The rows A2-A4 and M4-M5 are built inside the
   merged repo.
-- The merge plan is written by session `m3-merge-plan` (local_1d450294) to `docs/production/M3_MERGE_PLAN.md`.
+- The merge plan is `docs/production/M3_MERGE_PLAN.md` (session `m3-merge-plan`, local_1d450294), v3.2, accepted by the
+  coordinator after 3 Codex rounds.
 - Merge precondition: A1, M1 (with fixes a-c), M2, M3 and M6 are done.
 - How the pause is enforced: the Muse TL published a machine-wide Muse halt, reason `OWNER_PAUSE` ("Not a
   CAPTCHA"), in `D:\Muse\muse_studio\data\muse_halt.json`. It blocks every Muse sender, BIKER included, until the
@@ -21,7 +22,7 @@ tiếp").**
 
 | # | Item | Owner | State | Done means | Needed for |
 |---|---|---|---|---|---|
-| A1 | S1 broker addendum (spec `_archive/s1_broker_20261120/S1_ADDENDUM_SPEC.md`, as trimmed by the P1 freeze) | session `s1-addendum` (local_488a0266) | in progress | items committed with tests; Codex round 8 over `5e264c45^..HEAD` = ACCEPT (no High) | P1 |
+| A1 | S1 broker addendum (spec `_archive/s1_broker_20261120/S1_ADDENDUM_SPEC.md`, as trimmed by the P1 freeze) | session `s1-addendum` (local_488a0266) | done: 6e606905, cfb29744, c962414e (R8), c101a974 (R9); 285 passed / 2 skipped. R8 and R9 Highs fixed; round 10 got no verdict (Codex quota), so the coordinator reviewed c101a974 against `codex_out9.md`: both findings fixed as prescribed. ACCEPTED by the coordinator | items committed with tests; Codex round 8 over `5e264c45^..HEAD` = ACCEPT (no High) | P1 |
 | A2 | S2-lite: job rows, frozen inputs, intake, synchronous from the CLI | session `s2-lite` (local_d65dafd1, Sonnet), worktree `D:\AI FILM MAKER\wt-s2-lite`, branch `feature/s2-lite` | in progress | lane tests green with the mock/rehearsal runners | P1 |
 | A3 | S5 adapter: AFP lane wraps Muse `pool_runner` per lane contract v8 | not started | — | B14 offline parity; recovery drill passes | P1 |
 | A4 | P1 pilot: one real film through the AFP lane on Muse | not started | — | no duplicate send, recovery drill passed, quality ≥ P0; technical/product/Owner verdicts | P1 (gate) |

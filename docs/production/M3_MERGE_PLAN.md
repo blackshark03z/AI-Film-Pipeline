@@ -509,7 +509,8 @@ Muse TL reviews every change that touches sending, the ledger, recovery or integ
   and packaging check, §3; it is never a runtime.)
 - **Browser.** Muse drives Chromium through Playwright; `pip freeze` does not cover that executable. Step 4 records which
   executable `headless_muse_client` launches (bundled Playwright Chromium or an installed Chrome channel). The runtime
-  build installs it into a path owned by the runtime (`PLAYWRIGHT_BROWSERS_PATH=<tree>\browsers`) when it is the bundled
+  build installs it into a path owned by the runtime (`PLAYWRIGHT_BROWSERS_PATH=C:\film-work\_rt\<tag>.browsers`, a **sibling** of the tree like the venv, so
+  its `.dll` files never trip the untracked-file rule) when it is the bundled
   one, records its revision and the sha256 of the executable in the manifest, and runs an **offline launch check**
   (headless start on `about:blank`, no profile, no network) before the tag is accepted. Profile data stays in
   `MUSE_DATA_DIR`.
@@ -628,3 +629,6 @@ checking the `src` fixes.
   project into the lane venv) and one NEW High (the venv sat inside the runtime tree, so its installed files tripped the
   "untracked importable file" rule). Both fixed in v3.1 (§3 install mode is dependencies-only; the venv is a sibling
   `C:\film-work\_rt\<tag>.venv`). No round 4 by the coordinator's stop rule; v3.1 edits are not re-reviewed.
+- Coordinator review of v3.1 (2026-11-21, Codex out of quota): both fixes correct; the same defect remained for the
+  Playwright browsers dir (inside the tree, its `.dll` files would trip the rule), moved to a sibling
+  `<tag>.browsers` (v3.2). **Plan ACCEPTED by the coordinator** under the stop rule.
