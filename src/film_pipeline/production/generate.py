@@ -499,6 +499,8 @@ def _sent_receipts(root: Path, film_id: str, prices: dict[str, Any]) -> dict[str
             body = json.loads(path.read_text(encoding="utf-8"))
             if not isinstance(body, dict):
                 raise ValueError("unreadable intent object")
+            if not isinstance(body.get("sent"), bool):   # only an explicit false proves a dry run (Codex R7-2)
+                raise ValueError("intent without an explicit boolean sent")
             if receipt_result(body) == "AMBIGUOUS":
                 from film_pipeline.production.recovery import resolved_receipt
                 body = resolved_receipt(Path(root), take_id, body)
@@ -738,7 +740,7 @@ def _receipt_sent(root: Path, take_id: str) -> bool:
         body = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return True   # unreadable: treat it as a send (never overwrite evidence)
-    return bool(isinstance(body, dict) and body.get("sent"))
+    return not (isinstance(body, dict) and body.get("sent") is False)   # only an explicit false is no send
 
 
 def _write_unsent_receipt(root: Path, payload: dict[str, Any], **extra: Any) -> Path:

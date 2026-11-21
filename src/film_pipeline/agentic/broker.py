@@ -658,7 +658,9 @@ class Broker:
         return os.path.normcase(str(Path(films_dir).resolve()))
 
     def import_legacy(self, films_dir: Path | str, rows: list[dict[str, Any]], *,
-                      problems: Iterable[dict[str, Any]] = (), seen: Iterable[str] | None = None) -> dict[str, Any]:
+                      problems: Iterable[dict[str, Any]] = (), seen: Iterable[str] | None = None,
+                      brokered: Iterable[dict[str, Any]] = (),
+                      scopes: Mapping[str, str] | None = None) -> dict[str, Any]:
         """Record the spend of receipts sent before S1 (read by the caller, outside this transaction) as SPENT or
         RELEASED reservations, once per receipt: the dedup key is the reservation identity (``legacy`` token + the
         receipt key), so a second import updates the same row (a receipt resolved since) and never adds it again. A
@@ -672,6 +674,11 @@ class Broker:
         refused, LEGACY_RECEIPT_UNREADABLE) until every one is resolved: by ``resolve_legacy`` (kept while the file's
         bytes stay the same; a changed file asks again) or by a later import that reads it (``seen``: the keys of
         every receipt read this time). A receipt that vanished stays unresolved: deleting evidence resolves nothing.
+        ``brokered``: receipts marked as broker sends (``key``, ``lease_key``, ``take_id``, ``path``, ``sha256``,
+        ``film_key``): read (``seen``) only when this broker holds a reservation of that lease and take, else each is a
+        problem (Codex R7-2: a marker alone proves nothing). ``scopes`` (package id -> film scope): a resolved charge
+        that has no film scope (resolved by a v3 broker) is bound to its package's scope; when that scope is unknown the
+        receipt is reopened (Codex R7-1: a charge outside every film budget is spend nobody counts).
 
         Each row: ``key`` (unique per receipt), ``lease_key`` (the step-4 lease key or ''), ``take_id``, ``account``,
         ``film_key``, ``provider``, ``unit``, ``amount`` (charged amount, 0 when not charged), ``price`` (the
@@ -721,6 +728,15 @@ class Broker:
                 imported += 1
             at = _iso_now()
             found = {str(p["key"]): p for p in problems}
+            readable = set(seen) if seen is not None else set()
+            for b in brokered:
+                held = conn.execute("SELECT 1 FROM reservations WHERE lease_key = ? AND child_key = ? AND lease_token != "
+                                    "'legacy' LIMIT 1", (str(b["lease_key"]), str(b["take_id"]))).fetchone()
+                if held is not None:
+                    readable.add(str(b["key"]))
+                else:
+                    found[str(b["key"])] = {**b, "problem": f"a broker-marked send that this broker holds no record of "
+                                                            f"(lease {b['lease_key']}, take {b['take_id']})"}
             for key, p in found.items():
                 old = conn.execute("SELECT sha256 FROM legacy_unresolved WHERE root = ? AND key = ?",
                                    (root, key)).fetchone()
@@ -736,13 +752,27 @@ class Broker:
                              "resolved_amount = 0.0, resolved_unit = ''",
                              (root, key, str(p.get("path") or ""), str(p["problem"]), str(p.get("sha256") or ""), at,
                               film_key))
-            readable = set(seen) if seen is not None else set()
             for row in conn.execute("SELECT key FROM legacy_unresolved WHERE root = ? AND resolved_at = ''",
                                     (root,)).fetchall():
                 if row["key"] not in found and row["key"] in readable:   # repaired: this import read it
                     conn.execute("UPDATE legacy_unresolved SET resolved_at = ?, resolved_by = 'import', "
                                  "resolved_reason = 'the receipt was read by a later import' WHERE root = ? AND key = ?",
                                  (at, root, row["key"]))
+            # a charge resolved before film scopes were recorded (v3) counts against its film's budget
+            for rec in conn.execute("SELECT u.key, u.film_key, r.id FROM legacy_unresolved u JOIN reservations r ON "
+                                    "r.lease_token = 'legacy' AND r.child_key = u.key WHERE u.root = ? AND u.resolved_at "
+                                    "!= '' AND r.film_key = '' AND (r.amount > 0 OR r.spent > 0)",
+                                    (root,)).fetchall():
+                scope = rec["film_key"] or str((scopes or {}).get(rec["key"].split(":", 1)[0]) or "")
+                if scope:
+                    conn.execute("UPDATE reservations SET film_key = ?, take_id = CASE WHEN take_id = '' THEN ? ELSE "
+                                 "take_id END WHERE id = ?", (scope, rec["key"].split(":", 1)[-1], rec["id"]))
+                    conn.execute("UPDATE legacy_unresolved SET film_key = ? WHERE root = ? AND key = ?",
+                                 (scope, root, rec["key"]))
+                else:
+                    conn.execute("UPDATE legacy_unresolved SET resolved_at = '', problem = ? WHERE root = ? AND "
+                                 "key = ?", ("a resolved charge whose film scope is unknown (its package's film.json "
+                                             "is unreadable): repair film.json and import again", root, rec["key"]))
             open_keys = [r["key"] for r in conn.execute("SELECT key FROM legacy_unresolved WHERE root = ? AND "
                                                         "resolved_at = '' ORDER BY key", (root,)).fetchall()]
             conn.execute("INSERT INTO legacy_imports (root, imported_at, receipts, complete) VALUES (?, ?, ?, ?) "

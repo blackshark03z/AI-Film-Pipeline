@@ -78,7 +78,11 @@ def legacy_scan(films_dir: Path) -> dict[str, Any]:
     before S1 (sent, no ``broker`` flag): the charged amount in the receipt's unit on its ``sent_on`` day. ``problems``:
     every receipt whose spend cannot be known (unreadable, not a JSON object, a pre-S1 send without its day or with an
     unreadable amount), with its path and the sha256 of its bytes; none is skipped silently, the import stays
-    incomplete until each is resolved. ``seen``: the key of every receipt read without a problem. Read without the
+    incomplete until each is resolved. ``seen``: the key of every receipt read without a problem (an explicit
+    ``sent: false`` dry run or a counted pre-S1 send; a receipt without an explicit boolean ``sent`` is a problem).
+    ``brokered``: the sends marked ``broker: true`` (key, lease key, take id): the import exempts each only when the
+    broker holds its record, else it is a problem. ``scopes``: package id -> the package's film scope ('' when its
+    ``film.json`` is unreadable), to bind earlier resolved charges. Read without the
     other films' locks (receipts are written atomically), as the pre-S1 daily cap read them."""
     from film_pipeline.agentic.broker import UNITS, known_providers, valid_day
     from film_pipeline.production.money import receipt_charged
@@ -86,6 +90,8 @@ def legacy_scan(films_dir: Path) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
     problems: list[dict[str, Any]] = []
     seen: list[str] = []
+    brokered: list[dict[str, Any]] = []
+    scopes: dict[str, str] = {}
     providers = known_providers()
     folder_root = Path(films_dir)
     for other in sorted(folder_root.iterdir()) if folder_root.is_dir() else []:
@@ -95,6 +101,7 @@ def legacy_scan(films_dir: Path) -> dict[str, Any]:
         package = _package_id(other)
         header_id = _header_film_id(other)
         package_scope = film_scope(header_id, other) if header_id else ""
+        scopes[package] = package_scope
         for path in sorted(folder.glob("*.intent.json")):
             take_id = path.name[:-len(".intent.json")]
             key = f"{package}:{take_id}"
@@ -115,8 +122,21 @@ def legacy_scan(films_dir: Path) -> dict[str, Any]:
             if not isinstance(body, dict):
                 problem("not a JSON object", data)
                 continue
-            if not body.get("sent") or body.get("broker"):   # a dry run, or a send the broker already holds
+            sent = body.get("sent")
+            if not isinstance(sent, bool):   # only an explicit false proves a dry run (Codex R7-2)
+                problem(f"a receipt without an explicit boolean sent ({sent!r})", data)
+                continue
+            if not sent:   # a dry run
                 seen.append(key)
+                continue
+            if body.get("broker") is not None:   # a send the broker holds: exempt only if its record exists there
+                lease = body.get("lease_key")
+                if body.get("broker") is not True or not isinstance(lease, str) or not lease.strip():
+                    problem(f"a broker-marked send without its lease key (broker: {body.get('broker')!r}, lease_key: "
+                            f"{lease!r})", data)
+                    continue
+                brokered.append({"key": key, "path": str(path), "lease_key": lease, "take_id": take_id,
+                                 "film_key": package_scope, "sha256": hashlib.sha256(data).hexdigest()})
                 continue
             # every field the spend is counted by must be stated in the receipt; nothing defaults silently, except
             # the one documented convention: a receipt without a provider or unit is a Flow receipt in credits
@@ -174,7 +194,7 @@ def legacy_scan(films_dir: Path) -> dict[str, Any]:
                          "unit": unit, "amount": price if charged else 0.0,
                          "price": price, "day": sent_on})
             seen.append(key)
-    return {"rows": rows, "problems": problems, "seen": seen}
+    return {"rows": rows, "problems": problems, "seen": seen, "brokered": brokered, "scopes": scopes}
 
 
 def _header_film_id(package: Path) -> str:
@@ -190,7 +210,8 @@ def _header_film_id(package: Path) -> str:
 def import_films_dir(pool: Any, films_dir: Path) -> dict[str, Any]:
     """``pool.import_legacy`` of everything ``legacy_scan`` read in ``films_dir`` (rows, problems, seen keys)."""
     scan = legacy_scan(films_dir)
-    return pool.import_legacy(films_dir, scan["rows"], problems=scan["problems"], seen=scan["seen"])
+    return pool.import_legacy(films_dir, scan["rows"], problems=scan["problems"], seen=scan["seen"],
+                              brokered=scan["brokered"], scopes=scan["scopes"])
 
 
 def import_legacy_spend(pool: Any, root: Path) -> str:
