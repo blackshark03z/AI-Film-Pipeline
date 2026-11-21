@@ -26,7 +26,7 @@ tiếp").**
 | A2 | S2-lite: job rows, frozen inputs, intake, synchronous from the CLI | session `s2-lite` (local_d65dafd1, Sonnet), worktree `D:\AI FILM MAKER\wt-s2-lite`, branch `feature/s2-lite` | in progress | lane tests green with the mock/rehearsal runners | P1 |
 | A3 | S5 adapter: AFP lane wraps Muse `pool_runner` per lane contract v8 | not started | — | B14 offline parity; recovery drill passes | P1 |
 | A4 | P1 pilot: one real film through the AFP lane on Muse | not started | — | no duplicate send, recovery drill passed, quality ≥ P0; technical/product/Owner verdicts | P1 (gate) |
-| A5 | Push of ~25 local commits | Owner | pending | pushed | pre-M3 |
+| A5 | Push of the local commits | Owner | done: Owner "Yes, push" (2026-11-21); 53 commits pushed, origin at 6f8e1579 | pushed | pre-M3 |
 | A6 | film08 Gate 6 (Owner review); film05 rights | Owner | OWNER_PENDING | Owner verdict recorded | not blocking (Flow film, finished runtime) |
 | A7 | Flow films film03-film08 | — | delivered, or paused with Flow | stay as is; no migration | not blocking |
 | A8 | Old Muse attempts: worktrees `codex/muse-video-gateway` (`C:\Users\ADMIN\.codex\worktrees\muse-video-gateway\AFP-stable`) and `feature/muse-flight-pilot` (`D:\AI FILM MAKER\wt-muse-flight-pilot`). Both at 5d981c34 (2026-11-13), 9 dirty files each. Superseded by the lane contract. | coordinator | harvested: dirty diffs saved as `_archive/merge_triage/a8_*.patch`, ideas in the M3_MERGE_PLAN backlog (ce0d81aa), both branches tagged `archive/*`. Left: remove the two worktrees at M3 (the 6.4 GB pilot films stay in place) | worktrees removed | pre-M3 |
