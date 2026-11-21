@@ -13,6 +13,9 @@ tiếp").**
   merged repo.
 - The merge plan is written by session `m3-merge-plan` (local_1d450294) to `docs/production/M3_MERGE_PLAN.md`.
 - Merge precondition: A1, M1 (with fixes a-c), M2, M3 and M6 are done.
+- How the pause is enforced: the Muse TL published a machine-wide Muse halt, reason `OWNER_PAUSE` ("Not a
+  CAPTCHA"), in `D:\Muse\muse_studio\data\muse_halt.json`. It blocks every Muse sender, BIKER included, until the
+  Owner runs `--clear-halt`. The BIKER folder is left untouched (the Owner told the Muse TL not to touch it).
 
 ## AFP (`D:\AI FILM MAKER\AFP-stable`, branch `feature/drama-preprod-p0`)
 
