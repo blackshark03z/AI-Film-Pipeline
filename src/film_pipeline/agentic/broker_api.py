@@ -193,8 +193,9 @@ def import_legacy(films_dir: str | Path, *, db: str | Path | None = None) -> dic
 def import_resolve(films_dir: str | Path, key: str, *, by: str, reason: str, amount: float | None = None,
                    unit: str = "", day: str = "", provider: str = "", db: str | Path | None = None) -> dict[str, Any]:
     """Operator: reconcile one unreadable pre-S1 receipt (``key`` as import-legacy listed it), with who and why
-    recorded; ``amount`` > 0 (with ``unit``, ``day``, ``provider``) records what it charged, none: it charged
-    nothing."""
+    recorded; ``amount`` > 0 (with ``unit``, ``day``, ``provider``) records what it charged against the film of the
+    receipt's package, none: it charged nothing. An invalid unit, day or provider, or an unknown film scope: USAGE,
+    nothing changes."""
     if not key:
         return _no("USAGE", "import-resolve needs --key")
     return _ok(**_broker(db).resolve_legacy(films_dir, key, by=by, reason=reason, amount=amount, unit=unit, day=day,

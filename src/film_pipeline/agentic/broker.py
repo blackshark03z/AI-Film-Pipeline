@@ -32,7 +32,6 @@ from __future__ import annotations
 import json
 import math
 import os
-import re
 import socket
 import sqlite3
 import time
@@ -45,7 +44,7 @@ from typing import Any, Iterable, Mapping
 
 from film_pipeline.production.halt import _BY_RE, read_halt, set_halt, state_dir
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 DB_FILENAME = "lease_pool.sqlite3"
 UNCERTAIN = "QUARANTINED_PENDING_RECONCILE"
 _HELD = ("ACTIVE", UNCERTAIN)
@@ -69,6 +68,35 @@ class NotSent(RuntimeError):
         super().__init__(f"{code}: {reason}; nothing was submitted")
         self.code = code
         self.reason = reason
+
+
+def valid_day(day: object) -> bool:
+    """A real calendar day written ``YYYY-MM-DD`` (the form reservations store and caps query)."""
+    if not isinstance(day, str) or len(day) != 10:
+        return False
+    try:
+        return date.fromisoformat(day).isoformat() == day
+    except ValueError:
+        return False
+
+
+def known_providers() -> frozenset[str]:
+    """The providers spend can be recorded for: every provider of the capability registry, and Muse."""
+    from film_pipeline.providers.capability import load_registry
+    return frozenset({e.provider for e in load_registry().values()} | {"muse"})
+
+
+def _check_legacy_row(r: Mapping[str, Any]) -> None:
+    """A legacy row is written only with a known unit, provider and calendar day and finite amounts >= 0."""
+    if r.get("unit") not in UNITS:
+        raise ValueError(f"legacy row {r.get('key')!r}: unit {r.get('unit')!r} is not one of {UNITS}")
+    if r.get("provider") not in known_providers():
+        raise ValueError(f"legacy row {r.get('key')!r}: unknown provider {r.get('provider')!r}")
+    if not valid_day(r.get("day")):
+        raise ValueError(f"legacy row {r.get('key')!r}: day {r.get('day')!r} is not YYYY-MM-DD")
+    for field_name in ("amount", "price"):
+        if r.get(field_name) is not None:
+            _check_spent(r[field_name])
 
 
 def default_db_path() -> Path:
@@ -225,7 +253,9 @@ class Broker:
             if version < 2:
                 self._schema_v1(conn)
                 self._migrate_v2(conn)
-            self._migrate_v3(conn)
+            if version < 3:
+                self._migrate_v3(conn)
+            self._migrate_v4(conn)
             conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
     @staticmethod
@@ -353,6 +383,14 @@ class Broker:
             resolved_by TEXT NOT NULL DEFAULT '', resolved_reason TEXT NOT NULL DEFAULT '',
             resolved_amount REAL NOT NULL DEFAULT 0.0, resolved_unit TEXT NOT NULL DEFAULT '',
             PRIMARY KEY (root, key))""")
+
+    @staticmethod
+    def _migrate_v4(conn: sqlite3.Connection) -> None:
+        """Broker v4: an unreadable receipt keeps the film scope of its package (``film.json``), so its resolved
+        charge counts against that film's budget."""
+        cols = {r["name"] for r in conn.execute("PRAGMA table_info(legacy_unresolved)").fetchall()}
+        if "film_key" not in cols:
+            conn.execute("ALTER TABLE legacy_unresolved ADD COLUMN film_key TEXT NOT NULL DEFAULT ''")
 
     # ---- accounts -------------------------------------------------------------------------------------------------
     def register_account(
@@ -641,6 +679,9 @@ class Broker:
         root = self.legacy_root_key(films_dir)
         ts = time.time()
         imported = skipped = priced = 0
+        rows = list(rows)
+        for r in rows:   # before any write: a bad row fails the whole import (nothing half-recorded)
+            _check_legacy_row(r)
         with closing(self._connect()) as conn, self._tx(conn):
             for r in rows:
                 migrated = conn.execute("SELECT id, state, lease_token, child_key, film_key FROM reservations WHERE "
@@ -670,8 +711,10 @@ class Broker:
                 conn.execute("INSERT INTO reservations (lease_key, lease_token, child_key, take_id, account_id, film_key, "
                              "provider, unit, amount, spent, day, state, created_at, settled_at) VALUES "
                              "(?, 'legacy', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(lease_token, child_key) DO "
-                             "UPDATE SET amount = excluded.amount, spent = excluded.spent, state = excluded.state, "
-                             "day = excluded.day, settled_at = excluded.settled_at",
+                             "UPDATE SET take_id = excluded.take_id, account_id = excluded.account_id, film_key = "
+                             "excluded.film_key, provider = excluded.provider, unit = excluded.unit, amount = "
+                             "excluded.amount, spent = excluded.spent, state = excluded.state, day = excluded.day, "
+                             "settled_at = excluded.settled_at",
                              (f"legacy:{r['key']}", r["key"], r.get("take_id", ""), r.get("account", ""),
                               r.get("film_key", ""), r.get("provider", ""), r["unit"], amount, amount, r["day"], state,
                               ts, ts))
@@ -681,15 +724,18 @@ class Broker:
             for key, p in found.items():
                 old = conn.execute("SELECT sha256 FROM legacy_unresolved WHERE root = ? AND key = ?",
                                    (root, key)).fetchone()
+                film_key = str(p.get("film_key") or "")   # the package's film scope ('' when film.json is unreadable)
                 if old is not None and old["sha256"] == str(p.get("sha256") or ""):   # same bytes: keep its resolution
-                    conn.execute("UPDATE legacy_unresolved SET path = ?, problem = ? WHERE root = ? AND key = ?",
-                                 (str(p.get("path") or ""), str(p["problem"]), root, key))
+                    conn.execute("UPDATE legacy_unresolved SET path = ?, problem = ?, film_key = ? WHERE root = ? AND "
+                                 "key = ?", (str(p.get("path") or ""), str(p["problem"]), film_key, root, key))
                     continue
-                conn.execute("INSERT INTO legacy_unresolved (root, key, path, problem, sha256, found_at) VALUES "
-                             "(?, ?, ?, ?, ?, ?) ON CONFLICT(root, key) DO UPDATE SET path = excluded.path, problem = "
-                             "excluded.problem, sha256 = excluded.sha256, found_at = excluded.found_at, resolved_at "
-                             "= '', resolved_by = '', resolved_reason = '', resolved_amount = 0.0, resolved_unit = ''",
-                             (root, key, str(p.get("path") or ""), str(p["problem"]), str(p.get("sha256") or ""), at))
+                conn.execute("INSERT INTO legacy_unresolved (root, key, path, problem, sha256, found_at, film_key) "
+                             "VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(root, key) DO UPDATE SET path = excluded.path, "
+                             "problem = excluded.problem, sha256 = excluded.sha256, found_at = excluded.found_at, "
+                             "film_key = excluded.film_key, resolved_at = '', resolved_by = '', resolved_reason = '', "
+                             "resolved_amount = 0.0, resolved_unit = ''",
+                             (root, key, str(p.get("path") or ""), str(p["problem"]), str(p.get("sha256") or ""), at,
+                              film_key))
             readable = set(seen) if seen is not None else set()
             for row in conn.execute("SELECT key FROM legacy_unresolved WHERE root = ? AND resolved_at = ''",
                                     (root,)).fetchall():
@@ -706,32 +752,52 @@ class Broker:
                 "complete": not open_keys, "unresolved": open_keys}
 
     def resolve_legacy(self, films_dir: Path | str, key: str, *, by: str, reason: str, amount: float | None = None,
-                       unit: str = "", day: str = "", provider: str = "", film_key: str = "") -> dict[str, Any]:
+                       unit: str = "", day: str = "", provider: str = "") -> dict[str, Any]:
         """Operator: reconcile one pre-S1 receipt ``import_legacy`` could not read, with who and why recorded.
         ``amount`` > 0 records what it charged: a SPENT legacy reservation (the receipt's own identity, so a later
-        readable import updates the same row) in ``unit`` on ``day`` for ``provider``; it never lowers a spend already
-        recorded for the receipt. No amount (or 0): the operator states it charged nothing. Once every unreadable
-        receipt of ``films_dir`` is resolved, its import is complete."""
+        readable import updates the same row) in ``unit`` (one of ``UNITS``) on ``day`` (a real ``YYYY-MM-DD``) for
+        ``provider`` (a known provider), scoped to the film of the receipt's package as the import recorded it; it
+        never lowers a spend already recorded for the receipt. No amount (or 0): the operator states it charged
+        nothing. Refused (nothing changes) when any of these is invalid or the receipt's film scope is unknown (repair
+        the package's ``film.json`` and import again). Once every unreadable receipt of ``films_dir`` is resolved, its
+        import is complete."""
         if not isinstance(by, str) or not _BY_RE.match(by):
             raise ValueError("resolve_legacy: 'by' must match ^(human|agent):[A-Za-z0-9_.-]+$")
         if not isinstance(reason, str) or len(reason.strip()) < 3:
             raise ValueError("resolve_legacy: reason must be at least 3 characters")
         spent = 0.0 if amount is None else float(amount)
         _check_spent(spent)
-        if spent > 0 and not (unit and provider and re.fullmatch(r"\d{4}-\d{2}-\d{2}", day or "")):
-            raise ValueError("resolve_legacy: an amount needs --unit, --provider and --day YYYY-MM-DD")
+        if spent > 0 or unit or day or provider:
+            if unit not in UNITS:
+                raise ValueError(f"resolve_legacy: --unit must be one of {', '.join(UNITS)}, not {unit!r}")
+            if not valid_day(day):
+                raise ValueError(f"resolve_legacy: --day must be a real calendar day YYYY-MM-DD, not {day!r}")
+            if provider not in known_providers():
+                raise ValueError(f"resolve_legacy: --provider must be one of {', '.join(sorted(known_providers()))}, "
+                                 f"not {provider!r}")
         root = self.legacy_root_key(films_dir)
         ts = time.time()
         with closing(self._connect()) as conn, self._tx(conn):
             row = conn.execute("SELECT * FROM legacy_unresolved WHERE root = ? AND key = ?", (root, key)).fetchone()
             if row is None:
                 raise KeyError(f"no unreadable pre-S1 receipt {key!r} under {root}")
+            film_key = row["film_key"]
+            if not film_key:
+                raise ValueError(f"resolve_legacy: the film scope of {key!r} is unknown (its package's film.json is "
+                                 f"unreadable): repair film.json and import again")
             if spent > 0:
+                prior = conn.execute("SELECT unit, amount FROM reservations WHERE lease_token = 'legacy' AND "
+                                     "child_key = ?", (key,)).fetchone()
+                if prior is not None and prior["amount"] > 0 and prior["unit"] != unit:
+                    raise ValueError(f"resolve_legacy: {key!r} already counts {prior['amount']:g} {prior['unit']}; "
+                                     f"a charge in {unit} cannot replace it")
                 conn.execute("INSERT INTO reservations (lease_key, lease_token, child_key, take_id, account_id, "
                              "film_key, provider, unit, amount, spent, day, state, created_at, settled_at) VALUES "
                              "(?, 'legacy', ?, ?, '', ?, ?, ?, ?, ?, ?, 'SPENT', ?, ?) ON CONFLICT(lease_token, "
-                             "child_key) DO UPDATE SET amount = MAX(amount, excluded.amount), spent = MAX(spent, "
-                             "excluded.spent), state = 'SPENT', settled_at = excluded.settled_at",
+                             "child_key) DO UPDATE SET take_id = excluded.take_id, film_key = excluded.film_key, "
+                             "provider = excluded.provider, unit = excluded.unit, day = excluded.day, amount = "
+                             "MAX(amount, excluded.amount), spent = MAX(spent, excluded.spent), state = 'SPENT', "
+                             "settled_at = excluded.settled_at",
                              (f"legacy:{key}", key, key.split(":", 1)[-1], film_key, provider, unit, spent, spent, day,
                               ts, ts))
             conn.execute("UPDATE legacy_unresolved SET resolved_at = ?, resolved_by = ?, resolved_reason = ?, "
@@ -741,8 +807,8 @@ class Broker:
                                                         "resolved_at = '' ORDER BY key", (root,)).fetchall()]
             if not open_keys:
                 conn.execute("UPDATE legacy_imports SET complete = 1 WHERE root = ?", (root,))
-        return {"root": root, "key": key, "resolved_by": by, "amount": spent, "unit": unit if spent > 0 else "",
-                "complete": not open_keys, "unresolved": open_keys}
+        return {"root": root, "key": key, "film_key": film_key, "resolved_by": by, "amount": spent,
+                "unit": unit if spent > 0 else "", "complete": not open_keys, "unresolved": open_keys}
 
     @staticmethod
     def _replay_mismatch(conn: sqlite3.Connection, lease: sqlite3.Row, req: AdmitRequest) -> str:

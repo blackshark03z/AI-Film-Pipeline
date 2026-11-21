@@ -64,9 +64,9 @@ def test_migration_keeps_every_active_uncertain_and_quarantined_lease(tmp_path):
     pool = AccountLeasePool(db, min_reserve_credits=0.0, cooldown_s=0.0, **NO_CAPS)
     AccountLeasePool(db, **NO_CAPS)   # idempotent
     snap = pool.snapshot()
-    assert snap["schema_version"] == 3
+    assert snap["schema_version"] == 4
     with sqlite3.connect(db) as conn:
-        assert conn.execute("PRAGMA user_version").fetchone()[0] == 3
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 4
     states = {lease["lease_key"]: lease["state"] for lease in snap["leases"]}
     assert states == {"f:g1_t1@p": "ACTIVE", "f:g2_t1@p": UNCERTAIN, "f:g3_t1@p": UNCERTAIN, "f:g4_t1@p": "RELEASED"}
     assert next(a for a in snap["accounts"] if a["account_id"] == "a-quarantined")["status"] == "COOLDOWN_QUARANTINE"
@@ -625,40 +625,65 @@ def test_a_negative_or_non_finite_spend_is_refused_and_changes_nothing(tmp_path,
 
 LEGACY_BASE = {"sent": True, "result": "PASSED", "provider": "vilao", "provider_model": "h3-480p", "cost_unit": "VND",
                "expected_cost": 4158, "sent_on": "2026-11-19", "film_id": "a"}
+MTIME_DAY = "2026-11-15"
 
 
-def _legacy_films(tmp_path):
-    intents = tmp_path / "films" / "a" / "takes" / "intents"
+def _legacy_films(tmp_path, film_json=True):
+    import os
+    from datetime import datetime
+    package = tmp_path / "films" / "a"
+    intents = package / "takes" / "intents"
     intents.mkdir(parents=True)
+    if film_json:
+        (package / "film.json").write_text(json.dumps({"film_id": "a"}), encoding="utf-8")
     base = LEGACY_BASE
-    (intents / "g_t1.intent.json").write_text(json.dumps(base), encoding="utf-8")
-    (intents / "g_t2.intent.json").write_text(json.dumps({**base, "broker": True}), encoding="utf-8")   # in the broker
-    (intents / "g_t3.intent.json").write_text(json.dumps({**base, "sent": False}), encoding="utf-8")    # a dry run
+    receipts = {
+        "g_t1": base,
+        "g_t2": {**base, "broker": True},                       # in the broker
+        "g_t3": {**base, "sent": False},                        # a dry run
+        "g_t5": [base],                                         # not an object
+        "g_t6": {**base, "sent_on": "2026-99-99"},              # not a calendar day
+        "g_t7": {**base, "expected_cost": "n/a"},               # not a number
+        "g_t8": {k: v for k, v in base.items() if k != "expected_cost"},   # no amount: never 0 by default
+        "g_t9": {**base, "cost_unit": "VDN"},                   # unknown unit
+        "g_t10": {**base, "provider": "vilaoo"},                # unknown provider
+        "g_t11": {**base, "film_id": "b"},                      # another film's receipt in this package
+        "g_t12": {**{k: v for k, v in base.items() if k != "sent_on"}, "expected_cost": 0},   # explicit 0, no day
+        "g_t13": {"sent": True, "result": "PASSED", "film_id": "a", "expected_credits": 12.0},   # a step-1 Flow receipt
+    }
+    for take, body in receipts.items():
+        (intents / f"{take}.intent.json").write_text(json.dumps(body), encoding="utf-8")
     (intents / "g_t4.intent.json").write_text("{not json", encoding="utf-8")
-    (intents / "g_t5.intent.json").write_text(json.dumps([base]), encoding="utf-8")                     # not an object
-    (intents / "g_t6.intent.json").write_text(json.dumps({**base, "sent_on": ""}), encoding="utf-8")    # day unknown
-    (intents / "g_t7.intent.json").write_text(json.dumps({**base, "expected_cost": "n/a"}), encoding="utf-8")
+    ts = datetime.fromisoformat(f"{MTIME_DAY}T12:00:00").timestamp()
+    os.utime(intents / "g_t12.intent.json", (ts, ts))
     return tmp_path / "films", intents
 
 
 def test_unreadable_pre_s1_receipts_leave_the_import_incomplete_and_capped_admission_fails_closed(tmp_path):
-    """Coordinator review: a receipt whose spend cannot be read is never skipped; the import stays incomplete and
-    capped admission is refused (LEGACY_RECEIPT_UNREADABLE) until it is resolved."""
+    """Coordinator review: a receipt whose spend cannot be known is never skipped and no counted field defaults
+    silently; the import stays incomplete and capped admission is refused (LEGACY_RECEIPT_UNREADABLE)."""
     from film_pipeline.production import leases as L
     films, _ = _legacy_films(tmp_path)
     scan = L.legacy_scan(films)
-    assert [(r["take_id"], r["unit"], r["amount"], r["day"]) for r in scan["rows"]] == [("g_t1", "VND", 4158.0,
-                                                                                         "2026-11-19")]
-    assert scan["rows"][0]["film_key"] == L.film_scope("a", films / "a")
+    scope = L.film_scope("a", films / "a")
+    assert [(r["take_id"], r["provider"], r["unit"], r["amount"], r["day"], r["film_key"]) for r in scan["rows"]] == [
+        ("g_t1", "vilao", "VND", 4158.0, "2026-11-19", scope),
+        ("g_t12", "vilao", "VND", 0.0, MTIME_DAY, scope),      # no sent_on: the file's day, an upper bound
+        ("g_t13", "flow", "credits", 12.0, scan["rows"][2]["day"], scope)]   # no provider/unit: Flow credits
     package = L._package_id(films / "a")
-    assert {p["key"]: p["problem"] for p in scan["problems"]} == {
-        f"{package}:g_t4": "not valid UTF-8 JSON", f"{package}:g_t5": "not a JSON object",
-        f"{package}:g_t6": "a pre-S1 send without its sent_on day",
-        f"{package}:g_t7": "a pre-S1 send with an unreadable amount"}
-    assert all(len(p["sha256"]) == 64 for p in scan["problems"])
+    assert {p["key"].split(":")[1]: p["problem"] for p in scan["problems"]} == {
+        "g_t4": "not valid UTF-8 JSON", "g_t5": "not a JSON object",
+        "g_t6": "a pre-S1 send with an invalid sent_on day ('2026-99-99')",
+        "g_t7": "a pre-S1 send without an explicit amount (expected_cost: 'n/a')",
+        "g_t8": "a pre-S1 send without an explicit amount (expected_cost: None)",
+        "g_t9": "a pre-S1 send with no known cost_unit ('VDN')",
+        "g_t10": "a pre-S1 send with no known provider ('vilaoo')",
+        "g_t11": "a pre-S1 send of film 'b' in the package of 'a'"}
+    assert all(len(p["sha256"]) == 64 and p["film_key"] == scope and p["key"].startswith(package)
+               for p in scan["problems"])
     broker = Broker(tmp_path / "pool.sqlite3", machine_caps={"VND": 50000}, provider_caps={})
     out = L.import_films_dir(broker, films)
-    assert not out["complete"] and len(out["unresolved"]) == 4 and out["imported"] == 1
+    assert not out["complete"] and len(out["unresolved"]) == 8 and out["imported"] == 3
     assert broker.daily_usage("VND", "2026-11-19") == 4158.0   # what could be read is counted
     root = Broker.legacy_root_key(films)
     capped = broker.admit(req("x", 10.0, unit="VND", needs_account=False, provider="vilao", day="2026-11-19",
@@ -672,38 +697,60 @@ def test_unreadable_pre_s1_receipts_leave_the_import_incomplete_and_capped_admis
                             legacy_root=root))["ok"]
     # importing again changes nothing while the files are the same
     assert L.import_films_dir(broker, films)["unresolved"] == out["unresolved"]
+    # the broker itself refuses a row whose unit, provider or day it cannot count
+    for bad in ({"unit": "VDN"}, {"provider": ""}, {"day": "2026-02-30"}, {"amount": float("nan")}):
+        with pytest.raises(ValueError):
+            broker.import_legacy(films, [{**scan["rows"][0], **bad}])
 
 
-def test_import_resolve_records_who_why_and_the_charge_and_a_changed_file_asks_again(tmp_path):
+def _key(keys, take):
+    return next(k for k in keys if k.endswith(f":{take}"))
+
+
+def test_import_resolve_records_who_why_and_the_charge_in_the_film_scope_and_a_changed_file_asks_again(tmp_path):
     from film_pipeline.agentic import broker_api as api
     from film_pipeline.production import leases as L
     films, intents = _legacy_films(tmp_path)
+    scope = L.film_scope("a", films / "a")
     db = tmp_path / "pool.sqlite3"
     Broker(db, machine_caps={"VND": 50000}, provider_caps={})
     first = api.import_legacy(films, db=db)
     assert first["code"] == "LEGACY_RECEIPT_UNREADABLE" and api.exit_code(first) == 1
     keys = first["unresolved"]
-    assert api.import_resolve(films, keys[0], by="nobody", reason="x", db=db)["code"] == "USAGE"
+    k4 = _key(keys, "g_t4")
+    assert api.import_resolve(films, k4, by="nobody", reason="x", db=db)["code"] == "USAGE"
     assert api.import_resolve(films, "pkg:nope", by="human:owner", reason="checked", db=db)["code"] == "NOT_FOUND"
-    assert api.import_resolve(films, keys[0], by="human:owner", reason="vilao bill", amount=5000.0,
-                              db=db)["code"] == "USAGE"   # an amount needs its unit, day and provider
-    done = api.import_resolve(films, keys[0], by="human:owner", reason="vilao bill shows the charge", amount=5000.0,
-                              unit="VND", day="2026-11-19", provider="vilao", db=db)
-    assert done["ok"] and not done["complete"] and keys[0] not in done["unresolved"]
+    good = dict(amount=4158.0, unit="VND", day="2026-11-19", provider="vilao")
+    for bad in ({}, {"unit": ""}, {"unit": "VDN"}, {"day": "2026-99-99"}, {"day": "19/11/2026"},
+                {"provider": "vilaoo"}, {"amount": -1.0}):
+        args = {**good, **bad} if bad else {"amount": 4158.0}
+        assert api.import_resolve(films, k4, by="human:owner", reason="vilao bill", db=db, **args)["code"] == "USAGE"
+    with sqlite3.connect(db) as conn:   # a refused resolve changed nothing
+        assert conn.execute("SELECT resolved_at FROM legacy_unresolved WHERE key = ?", (k4,)).fetchone() == ("",)
+        assert conn.execute("SELECT COUNT(*) FROM reservations WHERE child_key = ?", (k4,)).fetchone() == (0,)
+    done = api.import_resolve(films, k4, by="human:owner", reason="vilao bill shows the charge", db=db, **good)
+    assert done["ok"] and done["film_key"] == scope and not done["complete"] and k4 not in done["unresolved"]
     broker = Broker(db, machine_caps={"VND": 50000}, provider_caps={})
-    assert broker.daily_usage("VND", "2026-11-19") == 4158.0 + 5000.0
-    for key in keys[1:-1]:
-        api.import_resolve(films, key, by="human:owner", reason="dry run, never sent", db=db)
-    # the last one is repaired on disk instead: the next import reads it
+    assert broker.daily_usage("VND", "2026-11-19") == 2 * 4158.0
+    with sqlite3.connect(db) as conn:
+        assert conn.execute("SELECT film_key, take_id, provider, unit, state FROM reservations WHERE child_key = ?",
+                            (k4,)).fetchone() == (scope, "g_t4", "vilao", "VND", "SPENT")
+    # the resolved charge counts against the film budget (Codex R6-2): 2 x 4158 + 4158 > 10000
+    for take in ("g_t5", "g_t6", "g_t8", "g_t9", "g_t10", "g_t11"):
+        api.import_resolve(films, _key(keys, take), by="human:owner", reason="dry run, never sent", db=db)
+    # the last one is repaired on disk instead: the next import reads it and fills its identity and scope
     (intents / "g_t7.intent.json").write_text(json.dumps({**LEGACY_BASE, "expected_cost": 100}), encoding="utf-8")
     again = api.import_legacy(films, db=db)
     assert again["ok"] and again["complete"] and again["unresolved"] == []
     root = Broker.legacy_root_key(films)
+    over = broker.admit(req("f", 4158.0, unit="VND", needs_account=False, provider="vilao", day="2026-11-19",
+                            legacy_root=root, film_key=scope, film_cap=10000.0, film_counted={}))
+    assert over["code"] == "BUDGET_EXCEEDED"
     assert broker.admit(req("x", 10.0, unit="VND", needs_account=False, provider="vilao", day="2026-11-19",
                             legacy_root=root))["ok"]
     with sqlite3.connect(db) as conn:
         assert conn.execute("SELECT resolved_by, resolved_reason, resolved_amount FROM legacy_unresolved WHERE key = ?",
-                            (keys[0],)).fetchone() == ("human:owner", "vilao bill shows the charge", 5000.0)
+                            (k4,)).fetchone() == ("human:owner", "vilao bill shows the charge", 4158.0)
     # a resolved file whose bytes change is unknown again
     (intents / "g_t4.intent.json").write_text("{still not json", encoding="utf-8")
     assert not L.import_films_dir(broker, films)["complete"]
@@ -712,6 +759,31 @@ def test_import_resolve_records_who_why_and_the_charge_and_a_changed_file_asks_a
     # deleting the evidence resolves nothing
     (intents / "g_t4.intent.json").unlink()
     assert not L.import_films_dir(broker, films)["complete"]
+
+
+def test_a_readable_import_fills_the_identity_and_scope_of_an_existing_legacy_row(tmp_path):
+    films, intents = _legacy_films(tmp_path)
+    broker = Broker(tmp_path / "pool.sqlite3", **NO_CAPS)
+    row = {"key": "k1", "lease_key": "", "take_id": "", "account": "", "film_key": "", "provider": "flow",
+           "unit": "credits", "amount": 8.0, "price": 8.0, "day": "2026-11-18"}
+    broker.import_legacy(films, [row])
+    broker.import_legacy(films, [{**row, "take_id": "g_t1", "film_key": "a@p", "provider": "vilao", "unit": "VND",
+                                  "amount": 4158.0, "price": 4158.0, "day": "2026-11-19"}])
+    with sqlite3.connect(broker.db_path) as conn:
+        assert conn.execute("SELECT take_id, film_key, provider, unit, amount, day FROM reservations WHERE child_key = "
+                            "'k1'").fetchone() == ("g_t1", "a@p", "vilao", "VND", 4158.0, "2026-11-19")
+
+
+def test_import_resolve_is_refused_while_the_film_scope_is_unknown(tmp_path):
+    from film_pipeline.agentic import broker_api as api
+    films, _ = _legacy_films(tmp_path, film_json=False)
+    db = tmp_path / "pool.sqlite3"
+    first = api.import_legacy(films, db=db)
+    key = _key(first["unresolved"], "g_t4")
+    refused = api.import_resolve(films, key, by="human:owner", reason="vilao bill", amount=4158.0, unit="VND",
+                                 day="2026-11-19", provider="vilao", db=db)
+    assert refused["code"] == "USAGE" and "film scope" in refused["reason"]
+    assert key in api.import_legacy(films, db=db)["unresolved"]
 
 
 def test_import_resolve_cli_verb(tmp_path):
@@ -1066,6 +1138,21 @@ def test_a_v2_broker_gains_the_unreadable_receipt_table_and_keeps_its_rows(tmp_p
         conn.execute("PRAGMA user_version = 2")
     Broker(db, **NO_CAPS)
     with sqlite3.connect(db) as conn:
-        assert conn.execute("PRAGMA user_version").fetchone()[0] == 3
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 4
         assert conn.execute("SELECT complete FROM legacy_imports").fetchall() == [(1,)]
         assert conn.execute("SELECT COUNT(*) FROM legacy_unresolved").fetchone()[0] == 0
+
+
+def test_a_v3_broker_gains_the_film_scope_of_its_unreadable_receipts(tmp_path):
+    db = tmp_path / "pool.sqlite3"
+    broker = Broker(db, **NO_CAPS)
+    broker.import_legacy(tmp_path, [], problems=[{"key": "p:g_t1", "path": "x", "problem": "not valid UTF-8 JSON",
+                                                  "sha256": "0" * 64, "film_key": "a@p"}])
+    with sqlite3.connect(db) as conn:   # the database exactly as the v3 broker left it
+        conn.execute("ALTER TABLE legacy_unresolved DROP COLUMN film_key")
+        conn.execute("PRAGMA user_version = 3")
+    Broker(db, **NO_CAPS)
+    with sqlite3.connect(db) as conn:
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 4
+        assert conn.execute("SELECT key, film_key, resolved_at FROM legacy_unresolved").fetchall() == [
+            ("p:g_t1", "", "")]   # unknown scope: resolve refuses until a re-import records it
