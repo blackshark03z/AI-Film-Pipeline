@@ -166,13 +166,12 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
     HALT_PUBLICATION_PENDING, retried; it is not a serialized halt). Lock order: broker transaction (outer), then
     the halt-file lock (innermost). No holder of a Muse lock ever calls the broker. Tests cover a halt published
     between check and commit, in both write orders.
-- **One allocator (lane review #3).** A durable machine claim (`allocator_owner.json`, under the halt-file lock)
-  names the allocator: `afp-broker` or `muse-standalone`. Admissions check it under broker transaction → halt-file
-  lock; an unknown or unreadable claim refuses allocation. Switching is one broker-owned transfer operation, used by
-  both sides and called with no Muse lock held: BEGIN IMMEDIATE → halt-file lock, revalidate the current owner and
-  `claim_epoch`, require no live lease and no unresolved child in both the broker and `lane_leases.json`, then
-  replace the claim and commit. `broker status` is the read-only check; `probe` is a quota write, not a liveness
-  check.
+- **One allocator (lane review #3; P1 scope freeze, Owner 2026-11-21).** In P1 the broker is the only allocator.
+  `afp-film broker allocator-claim` writes `allocator_owner.json` = `afp-broker` under broker transaction →
+  halt-file lock. Admission and check refuse unless the file exists and says `afp-broker`. Standalone Muse
+  real-send refuses while it exists. `allocator-release` (Owner) refuses while any lease is live or any child is
+  unresolved. `broker status` is the read-only check; `probe` is a quota write, not a liveness check. The full
+  transfer protocol (obligations registry, process fencing, send-stop event) is M3 backlog.
 - **One OS process per account lane**, started by the daemon with an explicit target in its arguments: CDP endpoint,
   project, account id and store path. No process-wide environment switching: `_flow_target_env` is retired from
   the daemon path.
@@ -418,6 +417,12 @@ accounts.
     - P1 passes when there is no duplicate send, the recovery drill passes and quality is at least P0's. **From
       then on there is one production path**: standalone Muse stops real sends, and every send goes through the
       broker (D5).
+    - **P1 scope freeze (Owner, 2026-11-21).** Single mode only: while Film Studio lanes are in use, no
+      standalone Muse real sends on that machine. Coexistence of standalone and AFP allocation is M3 backlog
+      (lane contract appendix). Accepted residual: a lane that can take neither the halt lock nor write its
+      pending marker stays alive refusing sends and exits 4; the supervisor then stops every lane. Review stop
+      rule: accept when no High finding remains inside P1 scope; Mediums go to the backlog.
+    - P0 runs in parallel with the contract work: one account, one process, failover off.
   - **M3, code merge and rename to Film Studio:**
     - one repository, with the Muse code imported with its history at the pinned tag;
     - CLI `studio`, keeping `afp-film` as an alias;
