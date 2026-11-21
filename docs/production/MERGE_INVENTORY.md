@@ -23,16 +23,24 @@ Columns: item · owner · state (2026-11-21) · "done" means · needed for.
 
 ## Muse (`D:\Muse`)
 
-Pending: the Muse Tech Lead (local_e75f8a13) has been asked for this half. Rows marked "unknown" are not yet
-confirmed.
+Source: the Muse Tech Lead (local_e75f8a13), checked 2026-11-21 ~10:05.
 
 | # | Item | Owner | State | Done means | Needed for |
 |---|---|---|---|---|---|
-| M1 | r15 stop-all fix, plus 2 new fixes: test guard on the production halt path; refusal → HALTED / exit 4, no silent drop | r15 session (local_3a840c58), Muse TL | in progress | Codex ACCEPT; tests green | P1 |
-| M2 | Clear the fake halt written by a test at 02:55Z | Owner | pending | halt cleared by the Owner | P0 rerun |
-| M3 | PRE-TAG #11 (no `src.unlink()`), accounts.json lock, Round A, Round B (lane contract v8) | Muse TL | not started (after M1) | per contract §14; Codex scoped round | P1 |
-| M4 | `muse_studio` under git, secrets excluded; resolve the staged scratch deletions | Muse TL, after the Owner's direct confirmation | pending | baseline commit; .gitignore covers `muse_studio/data/accounts.json*`, `profiles/`, `lane_leases.json`, cookie/session files | pre-M3 (and a safety net now) |
-| M5 | Pinned tag `muse-v1.0-r15` (D8) | Muse TL | after M1+M3 | tag exists, secret scan clean | P1 |
-| M6 | P0 BLACK_PILOT baseline (`C:\film-work\BLACK_PILOT_P0_20261120`) | Muse TL | run 1 stopped by the fake halt (22/22 plates, 12/16 anchors) | full standalone run; timings, QC, defects, quota reported | P1 (parity reference) |
-| M7 | BIKER film | unknown | lease expired 2026-11-20, process gone | unknown | unknown |
-| M8 | Other sessions and handoffs in `D:\Muse` (`HANDOFF_*`, `_director_review_*`) | unknown | unknown | listed and closed or kept | pre-M3 |
+| M1 | r15 stop-all fix | r15 session (local_3a840c58) | WIP, uncommitted; 45/46 tests (the r14 survive-clear test fails, fail-safe) | all Round 15 tests green; Codex re-review ACCEPT | P1 |
+| M1a | r15 fix A: test guard (L37). A test wrote the real halt file and stopped P0 run 1 | local_3a840c58 | briefed | tests can never reach the production halt path (pytest guard plus module-level env); test added | P1 |
+| M1b | r15 fix B: HALTED / exit 4, no silent drop (L37) | local_3a840c58 | briefed | a send-stop refusal gives HALTED / exit 4 with the halt record; a not-submitted failure with no standby goes into batch_errors (keyframe and video paths) | P1 |
+| M1c | r15 fix C: unique batch id per run (L38). P0 run 2 reused KF_ANCHOR_01, leaving 4 sends UNCONFIRMED | local_3a840c58 | briefed | per-run batch id and a fresh out dir; the result card must be a real attachment, with no loose-text fallback | P1 |
+| M2 | PRE-TAG #11 (no `src.unlink()`) | Muse TL | not started | per contract v8 round plan | P1 |
+| M3 | accounts.json lock | Muse TL | not started (after r15, same files) | locked read-modify-write; a `_read_all` error is not `[]` | P1 |
+| M4 | Round A (lane mode: forced `--no-ui-sync`, per-child RESULT, no implicit login, film ledger, no unlink) | Muse TL | not started | contract v8 Round A tests green; Codex | P1 |
+| M5 | Round B (broker bridge: token on stdin, incarnation, `child_keys` check, halt lock and pending marker, single-mode allocator refusal) | Muse TL | not started; needs A1 | contract v8 §14 Round B tests green; Codex | P1 |
+| M6 | `muse_studio` git baseline plus .gitignore for secrets; includes the 31 staged scratch deletions and the modified .gitignore | Muse TL | waiting for the Owner's direct confirmation of the new git rule in the Muse TL session | `muse_studio` tracked, secrets ignored | P1 (needed before worktrees and the tag) |
+| M7 | Pinned tag `muse-v1.0-r15` (D8) | Muse TL | after M1-M6 | tag exists; secret scan clean | P1 |
+| M8 | P0 BLACK_PILOT (`C:\film-work\BLACK_PILOT_P0_20261120`) | Muse TL | stage 2.5 live, run 3 sending; 22/22 plates, 12/16 anchors, 4 anchors UNCONFIRMED | `P0_BASELINE.json` with per-stage timing and quality, tied to the hash list in `P0_CODE_HASHES.txt` | P1 (parity reference) |
+| M9 | BIKER_DEAD_ENGINE_20261120 (`C:\film-work`, 284 shots) | unknown (not a known session; possibly Codex) | last status 2026-11-20 16:32 "NATIVE PROOF RUNNING"; no live process; lease expired. Runs on its own runtime snapshot but shares the account and profile data | finishes on its own runtime, or is closed by the Owner | not P1. Its sends would share accounts with P0 and the lanes, so it must not restart unannounced |
+| M10 | Stale film folders in `C:\film-work`: black-drama-eutlzb7ycky (11-17), muse-gateway-20261112, muse-pilot-3m-20261112 | unknown | no activity since 11-13 to 11-17 | archived or kept with a reason | pre-M3 |
+| M11 | Muse worktrees: `_worktrees/craft-skills` (clean, 11-19) and `_worktrees/pilot-60s-zero-defect` (49 dirty, 11-02) | unknown | stale | harvested, then archived | pre-M3 |
+| M12 | `HANDOFF_CLAUDE_MUSE_20261119.md`, `_director_review_B14_20261119`, `_live_v50_*` (4 dirs, 11-18) | unknown | unchanged since 11-19 | closed or kept | pre-M3 |
+| M13 | Idle sessions with cwd `D:\Muse`: local_04a27087 agy-setup, local_3af0d00b lane-leases (failed), local_dc86a1a2 p0-black-pilot (failed, superseded), local_f56b6f23 muse-director | — | idle | archived (Owner) | pre-M3 |
+| M14 | Lane contract | both TLs | AGREED v8, Codex ACCEPT, committed in AFP (c73b4dd4) | done | done |
