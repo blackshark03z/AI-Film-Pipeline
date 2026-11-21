@@ -1,0 +1,52 @@
+# Python bytecode & test caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# IDE & OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Worktrees, backups & runtime locks
+_worktrees/
+_backups/
+*.tmp
+*.log
+.autoprod.lock
+**/.autoprod.lock
+
+# Sensitive credentials, Chromium browser sessions & runtime UI state
+muse_studio/data/accounts.json
+muse_studio/data/profiles/
+muse_studio/data/projects/
+muse_studio/data/output/
+
+# Intermediate post-production build artifacts
+**/MASTER_OUTPUT/_build_*/
+
+# Runtime state, credentials and leases (never commit; backups included)
+muse_studio/data/accounts.json*
+muse_studio/data/accounts.lock
+muse_studio/data/*.lock
+muse_studio/data/lane_leases.json*
+muse_studio/data/muse_halt.json*
+**/halt_pending/
+.env
+.env.*
+*cookies*.json
+*cookies*.txt
+**/storage_state*.json
+**/session_state*.json
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+
+# Chromium profile and film work folders (outside version control)
+Default/
+BLACK_PILOT_*/
+VALERIE_214_LOCAL/
+_live_*/
+_director_review_*/
+_archive_scripts/

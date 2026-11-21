@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "purpose": "B14 fixture stays outside the repo; this manifest pins it (plan M3_MERGE_PLAN 2.3 / lane contract 14).",
+  "fixture": {
+    "path": "D:\\Muse\\_director_review_B14_20261119",
+    "access": "read-only",
+    "file_count": 318,
+    "total_bytes": 236738764,
+    "file_list_format": "sorted lines: relpath<TAB>size<TAB>sha256, each terminated by LF, relpath with forward slashes",
+    "file_list_sha256": "b546570b8831b729bdabff7fcf9326634f69e7609f652204de2872591b96fcca"
+  },
+  "supplement": {
+    "source_dir": "D:\\Muse\\BLACK_PILOT_EXTENDED_FEATURE_FILM\\assets\\anchors",
+    "note": "the 4 images shots_manifest.json needs but the fixture folder lacks",
+    "files": [
+      {
+        "name": "shot01_after_tag_fadeout.png",
+        "relpath": "shot01_after_tag_fadeout.png",
+        "size": 703488,
+        "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+        "status": "present"
+      },
+      {
+        "name": "shot02_after_tag_fadeout.png",
+        "relpath": "shot02_after_tag_fadeout.png",
+        "size": 657849,
+        "sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+        "status": "present"
+      },
+      {
+        "name": "officer_craig_anchor.png",
+        "relpath": "officer_craig_anchor.png",
+        "size": 714641,
+        "sha256": "196a1771c60ed6ec8e34f57a11a21ce07bde2849b6fe43f87b4d3d48c069a637",
+        "status": "present"
+      },
+      {
+        "name": "todd_wilson_anchor.png",
+        "relpath": "todd_wilson_anchor.png",
+        "size": 2200320,
+        "sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+        "status": "present"
+      }
+    ]
+  },
+  "layout": "the 4 supplement images go in the fixture ROOT, next to shots_manifest.json",
+  "run": {
+    "cwd": "<fixture folder> (shots_manifest.json uses bare file names, resolved against the process cwd)",
+    "PYTHONPATH": "<repo root> (the src layout after Step 4)",
+    "command": "python -m muse_studio.pool_runner videos <fixture> --simulate"
+  },
+  "baseline": {
+    "path": "_archive/m3_merge_plan/step2/b14_custody/full/",
+    "expected_result": "19/21 shots pass, exit 1, status INCOMPLETE",
+    "known_failures": "S08 has an empty first_frame_path, which also fails S07 in the same batch"
+  }
+}

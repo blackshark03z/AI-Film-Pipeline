@@ -51,3 +51,33 @@ docs/drama/film01_post/rebuild/
 # Local evidence media (never commit; see docs/production/LOOP_PROTOCOL.md)
 docs/drama/film03/takes_rejected/
 docs/drama/refs/raw/
+
+# >>> BEGIN Muse secret and runtime-state rules (M3 Step 3 import; source: docs/muse/muse.gitignore.txt)
+# Muse accounts, Chromium profiles, lane leases, halt file, cookies and sessions must never be committed.
+src/muse_studio/data/
+src/muse_studio/data/accounts.json*
+src/muse_studio/data/accounts.lock
+src/muse_studio/data/*.lock
+src/muse_studio/data/profiles/
+src/muse_studio/data/projects/
+src/muse_studio/data/output/
+src/muse_studio/data/lane_leases.json*
+src/muse_studio/data/muse_halt.json*
+accounts.json*
+lane_leases.json*
+muse_halt.json*
+**/halt_pending/
+.env
+.env.*
+*.sqlite*
+*cookies*.json
+*cookies*.txt
+**/storage_state*.json
+**/session_state*.json
+.autoprod.lock
+**/.autoprod.lock
+_worktrees/
+_backups/
+_live_*/
+_director_review_*/
+# <<< END Muse secret and runtime-state rules
