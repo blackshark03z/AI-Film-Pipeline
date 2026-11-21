@@ -242,8 +242,9 @@ Primary method: **filter in the clone, merge unrelated histories.**
   against the setuptools version in use). The step-4 gate builds the wheel, lists its contents and checks that every
   file under `static/` is present, then starts the UI (`app.py`) from the **wheel install** and requests one CSS and one
   JS asset, rather than validating only the editable dev install.
-- **Install modes.** Dev: `uv pip install -e ".[dev,qc,muse,flow]"`. Lane runtime: a non-editable install from the
-  runtime tag into its own venv (§8): `uv pip install --constraint constraints/runtime.txt ".[qc,muse]"`.
+- **Install modes.** Dev: `uv pip install -e ".[dev,qc,muse,flow]"`. Lane runtime: **dependencies only**
+  into its own venv, never an install of the project (§8): `uv pip install -r constraints/runtime.txt`; the code runs from
+  the runtime tree on `PYTHONPATH`. A non-editable wheel install is a packaging check only (gate below), not a runtime.
 - **Gate.** `uv pip install` of both modes on a clean venv succeeds; `import film_pipeline, muse_studio, film_studio`
   passes; `studio --help` and `python -m muse_studio.cli --help` (with `PYTHONIOENCODING=utf-8`) run.
 
@@ -441,7 +442,7 @@ coordinator before Step 1 is signed.
 **Step 6: Runtime tag and data move.** Owner: AFP TL; Muse TL verifies lane behaviour on the tag.
 - Do: (a) stop all Muse processes and confirm no live lease; (b) the §1.4 one-time move with sha256 verification, source
   renamed and kept; (c) `studio runtime build` creates the tag `studio-rt-<yyyymmdd>-1`, the detached worktree at
-  `C:ilm-work\_rt\...`, its venv, the browser and the `runtime_manifest.json` (§8); (d) `pool_runner --simulate` on the
+  `C:\film-work\_rt\...`, its venv, the browser and the `runtime_manifest.json` (§8); (d) `pool_runner --simulate` on the
   B14 offline fixture from the runtime tree with `MUSE_DATA_DIR`; (e) the wrong-tree drills of §8.
 - Done:
   - **Parity is judged on normalized custody records, not counts.** From the Muse baseline run (made on the tagged source
@@ -500,7 +501,7 @@ Muse TL reviews every change that touches sending, the ledger, recovery or integ
   the lane user by ACL where possible; **never** the dev worktree or a dirty tree. No `data/`, `.env`, cookies or
   accounts file exists in it (scanner check at build time).
 - **Interpreter and venv: dependencies only, code from the tree.** A venv beside the tree
-  (`C:\film-work\_rt\<tag>\.venv`), created with the pinned Python and populated **only** with third-party packages:
+  (`C:\film-work\_rt\<tag>.venv`, a **sibling** of the tree, not inside it), created with the pinned Python and populated **only** with third-party packages:
   `uv pip install -r constraints/runtime.txt` (the fully pinned list for the `qc,muse` extras). **The project itself is
   not installed** into that venv, so there is no second copy of `film_pipeline`, `film_studio` or `muse_studio` in
   `site-packages`; the code runs from `PYTHONPATH=<tree>\src`. The check asserts that no `film-studio` distribution
@@ -508,7 +509,7 @@ Muse TL reviews every change that touches sending, the ledger, recovery or integ
   and packaging check, §3; it is never a runtime.)
 - **Browser.** Muse drives Chromium through Playwright; `pip freeze` does not cover that executable. Step 4 records which
   executable `headless_muse_client` launches (bundled Playwright Chromium or an installed Chrome channel). The runtime
-  build installs it into a path owned by the runtime (`PLAYWRIGHT_BROWSERS_PATH=<tree>rowsers`) when it is the bundled
+  build installs it into a path owned by the runtime (`PLAYWRIGHT_BROWSERS_PATH=<tree>\browsers`) when it is the bundled
   one, records its revision and the sha256 of the executable in the manifest, and runs an **offline launch check**
   (headless start on `about:blank`, no profile, no network) before the tag is accepted. Profile data stays in
   `MUSE_DATA_DIR`.
@@ -516,7 +517,8 @@ Muse TL reviews every change that touches sending, the ledger, recovery or integ
   (`git rev-parse <tag>`), the commit id, the root tree id, a `source_sha256` (sha256 over sorted `(path, file sha256)` of the
   **tracked** files of the commit, read from `git ls-tree -r <commit>` for `src/`, `pyproject.toml` and `constraints/`;
   generated caches such as `__pycache__` are excluded, the launch sets `PYTHONDONTWRITEBYTECODE=1`, and **any importable
-  file (`.py`, `.pyd`, `.dll`) in the tree that is not in the tracked list is itself a mismatch**), the Python version and executable sha256, the venv
+  file (`.py`, `.pyd`, `.dll`) inside the source tree that is not in the tracked list is itself a mismatch**; the venv is
+  outside the tree and is covered by the venv fingerprint, not by this rule), the Python version and executable sha256, the venv
   fingerprint (sha256 of the sorted `pip freeze`), the browser revision and executable sha256. The manifest's sha256 is
   `runtime_manifest_sha256`; each film and each job request records it together with the tag and commit (a field added
   to contract v8.1, §6).
@@ -622,3 +624,7 @@ checking the `src` fixes.
   Step 8 incoming-history scans, retired tags, B14 baseline and normalization).
 - Stop rule reached after 2 rounds. v3 changes are **not independently re-reviewed**; the coordinator or the Step 7 review
   of the contract amendment should treat §8 as the part most worth a second look.
+- Round 3 (`codex_out3.md`, verification only): R2 H1, H2, H4, H5 FIXED; H3 NOT FIXED (§3 still said to install the
+  project into the lane venv) and one NEW High (the venv sat inside the runtime tree, so its installed files tripped the
+  "untracked importable file" rule). Both fixed in v3.1 (§3 install mode is dependencies-only; the venv is a sibling
+  `C:\film-work\_rt\<tag>.venv`). No round 4 by the coordinator's stop rule; v3.1 edits are not re-reviewed.
