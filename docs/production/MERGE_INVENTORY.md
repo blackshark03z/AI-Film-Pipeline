@@ -22,7 +22,7 @@ tiếp").**
 | # | Item | Owner | State | Done means | Needed for |
 |---|---|---|---|---|---|
 | A1 | S1 broker addendum (spec `_archive/s1_broker_20261120/S1_ADDENDUM_SPEC.md`, as trimmed by the P1 freeze) | session `s1-addendum` (local_488a0266) | in progress | items committed with tests; Codex round 8 over `5e264c45^..HEAD` = ACCEPT (no High) | P1 |
-| A2 | S2-lite: job rows, frozen inputs, intake, synchronous from the CLI | not started | — | lane tests green with the mock/rehearsal runners | P1 |
+| A2 | S2-lite: job rows, frozen inputs, intake, synchronous from the CLI | session `s2-lite` (local_d65dafd1, Sonnet), worktree `D:\AI FILM MAKER\wt-s2-lite`, branch `feature/s2-lite` | in progress | lane tests green with the mock/rehearsal runners | P1 |
 | A3 | S5 adapter: AFP lane wraps Muse `pool_runner` per lane contract v8 | not started | — | B14 offline parity; recovery drill passes | P1 |
 | A4 | P1 pilot: one real film through the AFP lane on Muse | not started | — | no duplicate send, recovery drill passed, quality ≥ P0; technical/product/Owner verdicts | P1 (gate) |
 | A5 | Push of ~25 local commits | Owner | pending | pushed | pre-M3 |
@@ -30,7 +30,7 @@ tiếp").**
 | A7 | Flow films film03-film08 | — | delivered, or paused with Flow | stay as is; no migration | not blocking |
 | A8 | Old Muse attempts: worktrees `codex/muse-video-gateway` (`C:\Users\ADMIN\.codex\worktrees\muse-video-gateway\AFP-stable`) and `feature/muse-flight-pilot` (`D:\AI FILM MAKER\wt-muse-flight-pilot`). Both at 5d981c34 (2026-11-13), 9 dirty files each. Superseded by the lane contract. | coordinator | stale | decide: harvest anything useful into the backlog, then archive the branches (no deletion without a look) | pre-M3 |
 | A9 | Old worktree `D:\AI FILM MAKER\AI-Film-Pipeline` (`mission/quality-v2-022-120s`, 2026-11-10, 50 dirty) and the paused Film120-Gemini worktree | Owner decision (fate) | stale | archived or explicitly kept | pre-M3 |
-| A10 | 28 local branches not merged into `feature/drama-preprod-p0` | coordinator | unknown | each one merged, archived or kept with a reason | pre-M3 |
+| A10 | 28 local branches not merged into `feature/drama-preprod-p0` | coordinator; triage by session `afp-triage` (local_47d7a955, read-only) | triage running | each one merged, archived or kept with a reason | pre-M3 |
 
 ## Muse (`D:\Muse`)
 
