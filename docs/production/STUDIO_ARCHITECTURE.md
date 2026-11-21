@@ -429,6 +429,15 @@ accounts.
     - the §13 backlog ported only through parity tests;
     - then S2 in full (daemon, git writer), S3 (conductor, wake adapters), S4 (web UI with the account panel,
       thread count, busy/free) and **S6: two films in parallel**.
+- **In-flight work across the merge (Owner, 2026-11-21: "Ghi và lập danh sách").**
+  - The governance merge is done now: one OWNER_POLICY, one coordinator, Muse under git.
+  - Until P1 passes, each side finishes only its in-flight list in `docs/production/MERGE_INVENTORY.md`, and adds
+    no new features.
+  - Every film finishes on the runtime it started on (§8). Standalone Muse films finish standalone, or move at a
+    stage boundary after reconcile, never mid-stage. Flow films stay paused.
+  - After P1 passes, new films go only through the AFP lane.
+  - The M3 code merge starts only when every inventory row needed before M3 is done, and both repos are clean:
+    all committed and tagged, no WIP, no open lease or unresolved child.
 - Former order, kept for reference: S1 → S2 → S3 → S5 → P1 → S4 → S6. It is replaced by the roadmap above: the
   daemon (S2 full) and the conductor (S3) are not needed for P1. S2's lane tests use the mock and rehearsal
   runners; Flow live sends stay paused.
