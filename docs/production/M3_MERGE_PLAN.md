@@ -581,6 +581,36 @@ Muse TL reviews every change that touches sending, the ledger, recovery or integ
 No code, no git operation in `D:\Muse`, nothing under `films/`, no send, no browser, no network. It defines no new
 feature; Round A/B, S2-lite and S5 follow inside the merged repo (Step 9).
 
+## M3 backlog: harvested from A8 and 88a99bee
+
+Source: `D:\AI FILM MAKER\_archive\merge_triage\AFP_TRIAGE_20261121.md`. Branches are tagged `archive/<branch>`. These are backlog
+items, not P1 scope (lane contract v8 scope freeze). Nothing here is ported yet.
+
+Dirty diffs of the two old Muse worktrees are saved as `_archive\merge_triage\a8_muse-video-gateway.patch` and
+`a8_muse-flight-pilot.patch` (git diff plus untracked-file sha256; film media not copied).
+
+| # | Idea | Source | One line |
+|---|---|---|---|
+| B1 | Thread-bound claims | `muse_gateway.py` `dispatch(thread=, max_in_flight=)` | A claim binds to one exact `muse.ai/thread/<id>`; a second claim needs another thread and a free in-flight slot; a result from another thread is rejected. This is the piece behind contract section 15 decision 1 (thread URL capture deferred). |
+| B2 | Operator-observed refusal close | `reconcile_failure`, `FailureResponse` | A visible terminal provider refusal with hashed evidence inside the request dir closes a claim as `FAILED_NO_OUTPUT`; never clears an UNKNOWN send, never retries. Compare with section 11 / M.3. |
+| B3 | `interaction.py` empty-subject guard | `placement_sentences`, `OFF_FRAME` and gaze branches | Skip the "looks toward / eyes go past the lens" sentence when the shot has no subject (today it emits "'s eyes go..."). Small AFP bug fix with a 17-line test in the patch; independent of Muse. |
+| B4 | Research docs as input to S5 and film-craft | `GEMINI_MUSE_AI_CONTINUITY_AND_PRODUCTION_RESEARCH.md`, `MUSE_CONTINUITY_AND_PROMPT_MASTERY.md` (untracked in `wt-muse-flight-pilot`) | Master keyframe + snapshot chaining against face drift, character-DNA prompting, camera control. Unreviewed agent claims: verify before use. Not in the patch file (untracked); read them in the worktree before it is archived. |
+
+Not harvested: `tools/muse_browser_batch.mjs` (browser relay, superseded by the lane) and `ingest-zip` (the lane contract already
+covers ZIP receipts).
+
+### `88a99bee` `tests/test_production_integrity.py` (336 lines, 16 tests)
+
+Verdict: **port needed, but only if the legacy runtime stays.** HEAD has no test with these names or topics (searched `tests/`:
+release accounted once, assessed continuity contract, codec fallback, complete-graph export and trim, changed-source blocks next
+stage, render failure keeps prior output, crash-after-acquisition resume, exhausted quota). Partial overlap only: audio-lane
+decode checks in `tests/test_audio_lane_010.py`, editorial trim wording in `tests/test_narrative_compiler_021.py`, changed-source
+in `tests/test_e2e.py`; none assert the same cases. The tests target the legacy v2-021/022 runner (`tools/run_v2_022_production.py`,
+`audio_lane.py`, `rough_cut.py`, `narrative/continuity.py`) and import helpers from `test_v2_021_hardening` and `mutation_authority`.
+Not checked: whether HEAD's copies of those `src` files already contain the `88a99bee` fixes (the file differs in 11 of 14 paths).
+Decision for later: if the legacy runner is retired at M3, record "retired, not ported"; otherwise port the test after
+checking the `src` fixes.
+
 ## Review record
 
 - Round 1 (`_archive/m3_merge_plan/codex_out1.md`): REJECT, 7 High (scan order vs M6 commit; `send_halt` default path;
