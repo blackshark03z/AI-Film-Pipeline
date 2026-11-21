@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import sqlite3
 import sys
 import threading
@@ -630,6 +631,22 @@ def test_allocator_claim_and_release_round_trip(tmp_path, capsys):
     assert broker.admit(http("H2", "t2", "g2:v1"))["code"] == "ALLOCATOR_UNKNOWN"
     assert api.allocator_claim(db=db)["changed"] is True
     assert broker.admit(http("H3", "t3", "g3:v1"))["ok"]
+
+
+def test_only_the_claiming_database_may_release_the_machine_claim(tmp_path):
+    """Codex R8-1: the claim is machine-wide; an unrelated (empty) broker database must not remove it."""
+    db, other = tmp_path / "pool.sqlite3", tmp_path / "other.sqlite3"
+    broker = Broker(db, **NO_CAPS)
+    H.owner_path().unlink()
+    assert api.allocator_claim(db=db)["ok"]
+    assert json.loads(H.owner_path().read_text(encoding="utf-8"))["db"] == os.path.normcase(str(db.resolve()))
+    lease = broker.admit(http("H1", "t1", "g1:v1"))
+    assert lease["ok"]
+    refused = api.allocator_release(db=other)   # the other database has no lease of its own
+    assert refused["code"] == "WRONG_DATABASE" and H.owner_path().exists()
+    hand_written = {"owner": "afp-broker", "claimed_at": "t", "claimed_by": "x"}   # no db recorded: refused too
+    H.owner_path().write_text(json.dumps(hand_written), encoding="utf-8")
+    assert api.allocator_release(db=db)["code"] == "WRONG_DATABASE"
 
 
 def test_the_check_refuses_without_the_claim(tmp_path):

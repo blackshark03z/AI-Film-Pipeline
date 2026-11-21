@@ -1238,7 +1238,7 @@ def test_only_an_explicit_sent_false_is_a_dry_run_and_a_broker_marker_needs_its_
     assert [take(k) for k in scan["seen"]] == ["g_t4"] and scan["rows"] == []
     db = tmp_path / "pool.sqlite3"
     held = Broker(db, **NO_CAPS).admit(AdmitRequest(
-        lease_key="a:g_t5@p", children=[Child("g_t5", 6.0, take_id="g_t5", shot_key="g5:v1")], needs_account=False,
+        lease_key="a:g_t5@p", children=[Child("g_t5#0", 6.0, take_id="g_t5", shot_key="g5:v1")], needs_account=False,
         provider="flow", film_id="a", holder="h"))
     assert held["ok"]
     broker = Broker(db, machine_caps={"credits": 1000}, provider_caps={})

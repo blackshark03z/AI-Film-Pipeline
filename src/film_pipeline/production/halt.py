@@ -239,7 +239,7 @@ def read_owner() -> dict[str, Any]:
     ``absent`` when there is no file; else why it cannot be trusted). ``owner`` is whatever a valid file names (the
     broker allocates only when it is ``afp-broker``). Read it under the halt-file lock when a decision depends on it."""
     path = owner_path()
-    empty = {"owner": "", "claimed_at": "", "claimed_by": ""}
+    empty = {"owner": "", "claimed_at": "", "claimed_by": "", "db": ""}
     try:
         raw = path.read_text(encoding="utf-8")
     except FileNotFoundError:
@@ -256,13 +256,13 @@ def read_owner() -> dict[str, Any]:
     if not isinstance(owner, str) or not owner.strip():
         return {**empty, "problem": f"names no owner ({owner!r})"}
     return {"owner": owner, "claimed_at": str(body.get("claimed_at") or ""),
-            "claimed_by": str(body.get("claimed_by") or ""), "problem": ""}
+            "claimed_by": str(body.get("claimed_by") or ""), "db": str(body.get("db") or ""), "problem": ""}
 
 
-def write_owner_locked(claimed_by: str) -> dict[str, Any]:
-    """Write the ``afp-broker`` claim atomically. Only ``Broker.allocator_claim`` calls it, inside its broker
+def write_owner_locked(claimed_by: str, db: str = "") -> dict[str, Any]:
+    """Write the ``afp-broker`` claim atomically, recording the broker database (``db``) that made it. Only ``Broker.allocator_claim`` calls it, inside its broker
     transaction and holding the halt-file lock."""
-    record = {"owner": OWNER, "claimed_at": _now(), "claimed_by": claimed_by}
+    record = {"owner": OWNER, "claimed_at": _now(), "claimed_by": claimed_by, "db": db}
     _atomic_write(owner_path(), record)
     return record
 

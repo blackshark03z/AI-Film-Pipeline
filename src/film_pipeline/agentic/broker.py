@@ -21,8 +21,8 @@ lock, then the halt-file lock. Lock order: broker transaction -> halt-file lock;
 No provider I/O and no waiting inside.
 
 Admission and the pre-Enter check refuse unless the allocator claim (``allocator_owner.json``) exists and names
-``afp-broker`` (``allocator_claim`` writes it, idempotent; ``allocator_release`` removes it, only while no lease is
-live and no child unresolved here).
+``afp-broker`` (``allocator_claim`` writes it, idempotent; ``allocator_release`` removes it, only through the broker
+database that claimed it and only while no lease is live and no child unresolved there).
 
 Lease states: ``ACTIVE`` (held by its holder), ``QUARANTINED_PENDING_RECONCILE`` (HELD: a child is AMBIGUOUS or the
 account warned; never released automatically) and ``RELEASED`` (every child final). Child phases: ``PREPARING`` (admitted,
@@ -799,8 +799,10 @@ class Broker:
             found = {str(p["key"]): p for p in problems}
             readable = set(seen) if seen is not None else set()
             for b in brokered:
-                held = conn.execute("SELECT 1 FROM reservations WHERE lease_key = ? AND child_key = ? AND lease_token != "
-                                    "'legacy' LIMIT 1", (str(b["lease_key"]), str(b["take_id"]))).fetchone()
+                # the receipt names a take id; a child key may differ from it (one fresh child key per attempt)
+                held = conn.execute("SELECT 1 FROM reservations WHERE lease_key = ? AND (take_id = ? OR child_key = ?) "
+                                    "AND lease_token != 'legacy' LIMIT 1",
+                                    (str(b["lease_key"]), str(b["take_id"]), str(b["take_id"]))).fetchone()
                 if held is not None:
                     readable.add(str(b["key"]))
                 else:
@@ -1349,6 +1351,9 @@ class Broker:
                     "changed": True, "lease_state": state}
 
     # ---- the allocator claim --------------------------------------------------------------------------------------
+    def _db_identity(self) -> str:
+        return os.path.normcase(str(Path(self.db_path).resolve()))
+
     def allocator_claim(self, *, by: str = "") -> dict[str, Any]:
         """Bootstrap the allocator claim ``{"owner": "afp-broker", ...}`` (``allocator_owner.json``): BEGIN IMMEDIATE,
         then the halt-file lock; idempotent (a valid ``afp-broker`` claim is kept, ``changed`` False). A claim file
@@ -1357,7 +1362,7 @@ class Broker:
         with closing(self._connect()) as conn, self._tx_locked(conn):
             claim = read_owner()
             if claim["problem"] == "absent":
-                written = write_owner_locked(by or process_holder())
+                written = write_owner_locked(by or process_holder(), self._db_identity())
                 return {"ok": True, "code": "", "reason": "", "owner": OWNER, "changed": True,
                         "claimed_at": written["claimed_at"]}
             if claim["problem"]:
@@ -1384,6 +1389,10 @@ class Broker:
             if claim["owner"] != OWNER:
                 return {"ok": False, "code": "ALLOCATOR_NOT_OWNED",
                         "reason": f"the allocator claim names {claim['owner']!r}: it is never removed"}
+            if claim["db"] != self._db_identity():   # the claim is machine-wide: only its own broker may release it
+                return {"ok": False, "code": "WRONG_DATABASE",
+                        "reason": f"the claim was made through the broker database {claim['db'] or '(unrecorded)'}, "
+                                  f"not {self._db_identity()}: release it through that database"}
             live = conn.execute("SELECT lease_key, state FROM leases WHERE state != 'RELEASED' LIMIT 1").fetchone()
             open_child = conn.execute("SELECT lease_key, child_key FROM lease_children WHERE final = 0 "
                                       "LIMIT 1").fetchone()
