@@ -14,6 +14,14 @@ The Tech Lead may tighten it or record what was done under it.
 - 2026-11-20, on the Muse accounts: "Tài khoản được mình thêm thủ công vào muse studio (giao diện), chạy headless, có
   đủ cookie, nếu die, AI tự dùng thông tin đăng nhập/ chạy headless".
 
+- 2026-11-21, on approvals: "Về contact sheet thì agent duyệt." On merging the rules of the two projects:
+  "Hợp nhất ngay".
+
+**Scope (2026-11-21).** This one file governs both projects, AFP (`D:\AI FILM MAKER\AFP-stable`) and Muse
+(`D:\Muse`), as one studio (Film Studio). `D:\Muse\CLAUDE.md` defers to it. Where an older rule in either
+project conflicts with this file, this file wins. An Owner instruction given in any session of either project is
+valid in both: sessions record it here with the exact quote, and they do not ask the Owner to repeat it.
+
 **What this revision removed (2026-11-20).** The old generation policy is withdrawn:
 - the Flow route default (360p, Omni 1.2 Flash);
 - the Vilao MiniMax H3 480P default for experiments, with its 50k VND/day cap;
@@ -39,10 +47,13 @@ The safety rules at the end of this file were NOT removed.
    r6-r12) are ported unchanged and proven by parity tests, never rewritten from scratch. Until the AFP Muse lane
    passes its pilot, production runs through the standalone Muse project.
 
-## Delegated to the agent (Tech Lead and film brain sessions)
+## Delegated to the agent (Tech Lead and film brain sessions, AFP and Muse)
 
 1. **Approvals.**
    - Approve stills and storyboards, accept or reject takes, pass gates.
+   - In Muse this covers anchors and turnarounds, location plates, keyframe contact sheets, the animatic and each
+     kept take (stage 2.5 to 5). Each approval is a written film-creative-review, PASS or RESTAGE per cell, in
+     the project's review file.
    - Sign as `agent:tech-lead (delegated by owner-khoikk03, OWNER_POLICY.md)` or
      `agent:film-<id> (delegated by owner-khoikk03, OWNER_POLICY.md)`. Never sign as `human:owner-*`.
    - The evidence field holds concrete review notes:
@@ -73,7 +84,9 @@ The safety rules at the end of this file were NOT removed.
 - Publishing, uploading anywhere public, or sharing outside this machine.
 - `git push`.
 - Purchases, new accounts, and plan or credit top-ups. (The agent never creates accounts.)
-- Changing the story's meaning: cutting a scene, changing an ending, or adding characters.
+- Changing the story's meaning (cutting a scene, changing an ending, adding characters), changing dialogue, or
+  changing a locked look.
+- Accepting the final master of a film. Technical PASS is not Owner acceptance.
 - Sending on any provider other than Muse, and every Flow spend.
 
 ## Stop conditions for unattended runs
@@ -105,5 +118,11 @@ Stop and report when any of these happens:
 - No anti-bot, stealth or fingerprint-evasion tooling.
 - No curl; use Python.
 - Never commit `uv.lock`.
+- **Git in both repositories (Owner, 2026-11-21).** Local commits of source code and docs are allowed in AFP and
+  in `D:\Muse` (this includes putting `muse_studio` under version control), staged by explicit path.
+  - Never commit secrets or private data: `data/accounts.json*`, `data/profiles/`, cookie or session files,
+    `.env`, or film work folders.
+  - Never clean, stash or reset another session's work.
+  - `git push` stays reserved.
 - Codex reviews run read-only.
 - Never use `--approve-storyboard`.
