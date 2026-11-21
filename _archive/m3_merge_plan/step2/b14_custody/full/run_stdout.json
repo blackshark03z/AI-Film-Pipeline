@@ -1,0 +1,91 @@
+{
+  "status": "INCOMPLETE",
+  "total_shots": 21,
+  "passed_count": 19,
+  "remaining_shot_ids": [
+    "S07",
+    "S08__st_e0b581116dbb"
+  ],
+  "failed_shots": [
+    {
+      "shot_id": "S07",
+      "reason": "BATCH_ERROR",
+      "defects": []
+    },
+    {
+      "shot_id": "S08__st_e0b581116dbb",
+      "reason": "BATCH_ERROR",
+      "defects": []
+    }
+  ],
+  "sends_by_shot": {
+    "S01": 1,
+    "S02": 1,
+    "S03": 1,
+    "S04": 1,
+    "S05": 1,
+    "S06": 1,
+    "S09": 1,
+    "S10": 1,
+    "S11": 1,
+    "S12": 1,
+    "S13": 1,
+    "S13__st_5ed0526572d5": 1,
+    "S14": 1,
+    "S15": 1,
+    "S16": 1,
+    "S17": 1,
+    "S18": 1,
+    "S19": 1,
+    "S20": 1
+  },
+  "takes_by_shot": {
+    "S01": 1,
+    "S02": 1,
+    "S03": 1,
+    "S04": 1,
+    "S05": 1,
+    "S06": 1,
+    "S07": 1,
+    "S08__st_e0b581116dbb": 1,
+    "S09": 1,
+    "S10": 1,
+    "S11": 1,
+    "S12": 1,
+    "S13": 1,
+    "S13__st_5ed0526572d5": 1,
+    "S14": 1,
+    "S15": 1,
+    "S16": 1,
+    "S17": 1,
+    "S18": 1,
+    "S19": 1,
+    "S20": 1
+  },
+  "submitted_unconfirmed_shot_ids": [],
+  "unconfirmed_submissions": [],
+  "unconfirmed_expired": [],
+  "unconfirmed_released": [],
+  "unconfirmed_ttl_min": 120.0,
+  "batch_errors": [
+    "POOL_2611211633191528a6_R01_B02 (sim_acc_01): [Errno 13] Permission denied: '.'",
+    "POOL_2611211633191528a6_R02_B01 (sim_acc_01): [Errno 13] Permission denied: '.'",
+    "POOL_2611211633191528a6_R03_B01 (sim_acc_01): [Errno 13] Permission denied: '.'"
+  ],
+  "qc_audit_report": "C:\\m3tmp\\b14_plus\\qc_audit_report.json",
+  "qc_strips_dir": "C:\\m3tmp\\b14_plus\\qc_strips",
+  "capacity": {
+    "granted_accounts": 2,
+    "requested_max_accounts": null,
+    "parallel_video_shots_per_wave": 12,
+    "parallel_keyframe_images_per_wave": 8,
+    "active_account_ids": [
+      "sim_acc_01",
+      "sim_acc_02"
+    ],
+    "standby_account_ids": [],
+    "skipped_busy_accounts": {},
+    "lane_id": null
+  },
+  "repair_logs": []
+}

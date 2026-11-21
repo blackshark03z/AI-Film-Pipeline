@@ -1,4 +1,4 @@
-# M3 merge checklist: Step 1 (freeze and import-source check)
+# M3 merge checklist: Steps 1-3 (freeze, source scan, import)
 
 Plan: `docs/production/M3_MERGE_PLAN.md` §7, Gate 0 and Step 1. Every line is verified by reading the repo or the
 file named, not by a session report. Status: **SIGNED 2026-11-21** by the coordinator. Step 2 may start.
@@ -34,3 +34,27 @@ file named, not by a session report. Status: **SIGNED 2026-11-21** by the coordi
 ## Sign-off
 
 - Coordinator (Techlead, Opus), 2026-11-21: Gate 0 met. AFP freeze tip ca9d328f, Muse tag `muse-v1.0-r15` = a8f2b9c6. Open, non-blocking: A9 (Owner), deferred scanner MED 8/9 -> Step 4 backlog.
+
+## Step 2: source-history scan and baseline (coordinator-verified 2026-11-21)
+
+| Item | Evidence | State |
+|---|---|---|
+| Checkpoint-1 history scan of the tag | `_archive/m3_merge_plan/step2/scan_muse-v1.0-r15.md`: 39 hits (35 large media, 3 flac blobs, 1 path-backup), 17 allowed, 0 unexplained; all hit paths listed in `step3_filter_paths.txt` | done |
+| Rule-test baseline on the tag | `step2/rule_tests_passfail.txt`: 130 passed; `test_secret_scan` 143 passed | done |
+| B14 baseline | `step2/b14_custody/full/README.md`: fixture B14 + 4 anchor images in the fixture root, cwd = fixture; 19/21, exit 1 INCOMPLETE; S08 empty `first_frame_path` fails its batch (S07 with it) | done (defect -> Step 4 backlog, new tag per plan §8) |
+
+## Step 3: import with history (coordinator-verified 2026-11-21)
+
+| Item | Evidence | State |
+|---|---|---|
+| Merge commit | `studio/m3-merge` d3ad4700 = merge of AFP e9213b53 and filtered Muse head 725a7f06 (`refs/imports/muse/muse-v1.0-r15`, local only) | done |
+| Method | git-filter-repo a40bce548d2c, one run, allow-list + renames; `step3/STEP3_REPORT.md`, `step3/commit-map.txt` | done |
+| Counts | tag 2038 files: 116 kept (src/muse_studio 86, docs/muse 12, .agents 9, .claude 6, tools 3), 1922 dropped in named classes | done |
+| Checkpoint 2 (filtered history) | `scan_muse-v1.0-r15_filtered.md`: CLEAN, 0 hits, 17 allowed | done |
+| Checkpoint 3 (staged merge) | `scan_muse-v1.0-r15_merge_staged.md`: CLEAN, 0 hits, 17 allowed | done |
+| Content-diff gate | `step3/content_diff.md`: 0 mismatches; AFP paths changed: `.gitignore` (+Muse secret block) and the 3 approved `tools/secret_scan*` files; `.claude`/`.agents` additions only | done |
+| `.gitignore` side effects | tracked-but-ignored files: 47 before and after the merge, identical sets | done |
+| B14 fixture manifest | `fixtures/muse_b14/MANIFEST.json`: 318 files, sha256 of file list, 4 supplement images, run conditions, baseline ref | done |
+
+Coordinator, 2026-11-21: Step 3 gate met. Next: Step 4 (MUSE_DATA_DIR edits, `film_studio` skeleton, allow-glob `src/` prefix).
+B14 custody media (`*.mp4`, handoff `*.zip`) stays local under `_archive/m3_merge_plan/step2/b14_custody/full/`, hashed in its README files, not committed.

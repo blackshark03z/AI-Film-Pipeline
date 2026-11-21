@@ -1,0 +1,230 @@
+{
+  "schema_version": 2,
+  "batch_id": "POOL_2611211633191528a6_R01_B03",
+  "expected_result_zip": "POOL_2611211633191528a6_R01_B03_result.zip",
+  "total_shots": 6,
+  "shots": [
+    {
+      "shot_index": 1,
+      "slot_id": "shot_01",
+      "shot_id": "S13",
+      "request_id": "dec859e25a56736d2e441d840f10c19fd59675bffa6d1b49fd94cb8d1df6cc62",
+      "folder": "shots/shot_01_S13",
+      "expected_output": "shot_01.mp4",
+      "duration_s": 10.0,
+      "speaker": "Pamela Davis",
+      "dialogue": "That's what we're trained to do. That's what 20 years of experience looks like.",
+      "audio_mode": "NATIVE_DIALOGUE",
+      "image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "source_image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "t0": {
+        "source": {
+          "file_name": "shot01_after_tag_fadeout.png",
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "cdeb9b3e0b519f00fae4371e546b5a090684fa75038b20f7f6ffa64e6337a453"
+    },
+    {
+      "shot_index": 2,
+      "slot_id": "shot_02",
+      "shot_id": "S13__st_5ed0526572d5",
+      "request_id": "263e10e9214f043f840408b703b61d829a5644eedb69112113f5f2d998da1069",
+      "folder": "shots/shot_02_S13__st_5ed0526572d5",
+      "expected_output": "shot_02.mp4",
+      "duration_s": 5.0,
+      "speaker": "",
+      "dialogue": "",
+      "audio_mode": "SILENT_ACTION",
+      "image_sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+      "source_image_sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+      "t0": {
+        "source": {
+          "file_name": "shot02_after_tag_fadeout.png",
+          "sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "4620a0ac366ad254e06958c5e5477264119f621fefe3bd1f2ac761f0efe755a2"
+    },
+    {
+      "shot_index": 3,
+      "slot_id": "shot_03",
+      "shot_id": "S14",
+      "request_id": "a5dbcd9efb285c3b5036f762217a6c9c666695724b18b3e7583935515a191a40",
+      "folder": "shots/shot_03_S14",
+      "expected_output": "shot_03.mp4",
+      "duration_s": 10.0,
+      "speaker": "Pamela Davis",
+      "dialogue": "I didn't know who she was. Nobody told me. Nobody sent me a photo. This isn't my fault.",
+      "audio_mode": "NATIVE_DIALOGUE",
+      "image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "source_image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "t0": {
+        "source": {
+          "file_name": "shot01_after_tag_fadeout.png",
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "c16f4e41016d7b4154d493ae385264a63ee39fa2424cffb786588e901feb9afe"
+    },
+    {
+      "shot_index": 4,
+      "slot_id": "shot_04",
+      "shot_id": "S15",
+      "request_id": "30f10a7e44ed9bc521f44cbc8204b1a22f2432a406965a1bb5c275e59f27bff8",
+      "folder": "shots/shot_04_S15",
+      "expected_output": "shot_04.mp4",
+      "duration_s": 5.0,
+      "speaker": "",
+      "dialogue": "",
+      "audio_mode": "SILENT_ACTION",
+      "image_sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+      "source_image_sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+      "t0": {
+        "source": {
+          "file_name": "todd_wilson_anchor.png",
+          "sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+          "width": 2048,
+          "height": 1152,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "NORMALIZED",
+          "aspect": "16:9",
+          "method": "center_crop_lanczos_png",
+          "crop_box": [
+            0,
+            0,
+            2048,
+            1152
+          ],
+          "aspect_deviation": 0.0,
+          "upscaled": false
+        },
+        "sent": {
+          "sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "3ce40b7ae3c97a08a9f1879d78e82fbce8abbdf18a70e943684e9fcf0209b356"
+    },
+    {
+      "shot_index": 5,
+      "slot_id": "shot_05",
+      "shot_id": "S16",
+      "request_id": "42925f93061858fba299dbf0c9ba2e75ec73cb1483e450ac13dc24059699a40c",
+      "folder": "shots/shot_05_S16",
+      "expected_output": "shot_05.mp4",
+      "duration_s": 5.0,
+      "speaker": "",
+      "dialogue": "",
+      "audio_mode": "SILENT_ACTION",
+      "image_sha256": "863fcb5ebd142bc003874b31478df9c85ff3404b6cca487b0f5f481c58bdca39",
+      "source_image_sha256": "196a1771c60ed6ec8e34f57a11a21ce07bde2849b6fe43f87b4d3d48c069a637",
+      "t0": {
+        "source": {
+          "file_name": "officer_craig_anchor.png",
+          "sha256": "196a1771c60ed6ec8e34f57a11a21ce07bde2849b6fe43f87b4d3d48c069a637",
+          "width": 1376,
+          "height": 768,
+          "format": "JPEG"
+        },
+        "normalization": {
+          "status": "NORMALIZED",
+          "aspect": "16:9",
+          "method": "center_crop_lanczos_png",
+          "crop_box": [
+            5,
+            0,
+            1370,
+            768
+          ],
+          "aspect_deviation": 0.007813,
+          "upscaled": false
+        },
+        "sent": {
+          "sha256": "863fcb5ebd142bc003874b31478df9c85ff3404b6cca487b0f5f481c58bdca39",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "913719267f8c808291600414e48f27119c0d6b0b758a83b3fca7944cd44658b5"
+    },
+    {
+      "shot_index": 6,
+      "slot_id": "shot_06",
+      "shot_id": "S17",
+      "request_id": "ea2cfde4c8d348fabc4083ed62589a5568026a58363d1b50f32f37b405491f2e",
+      "folder": "shots/shot_06_S17",
+      "expected_output": "shot_06.mp4",
+      "duration_s": 5.0,
+      "speaker": "",
+      "dialogue": "",
+      "audio_mode": "SILENT_ACTION",
+      "image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "source_image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "t0": {
+        "source": {
+          "file_name": "shot01_after_tag_fadeout.png",
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "581d728f016fe16112633ce1795c2b48119cd84c740a37df8108202799227d91"
+    }
+  ]
+}

@@ -1,0 +1,248 @@
+{
+  "schema_version": 2,
+  "batch_id": "POOL_2611211633191528a6_R01_B01",
+  "expected_result_zip": "POOL_2611211633191528a6_R01_B01_result.zip",
+  "total_shots": 6,
+  "shots": [
+    {
+      "shot_index": 1,
+      "slot_id": "shot_01",
+      "shot_id": "S01",
+      "request_id": "d485b4079b1ed5b73d6b05ce1d73592437bf1dd34be6fcb15c971715406546fd",
+      "folder": "shots/shot_01_S01",
+      "expected_output": "shot_01.mp4",
+      "duration_s": 5.0,
+      "speaker": "",
+      "dialogue": "",
+      "audio_mode": "SILENT_ACTION",
+      "image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "source_image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "t0": {
+        "source": {
+          "file_name": "shot01_after_tag_fadeout.png",
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "b70a16bbfdd3a618d6e222e7aaf427a2039cad318932b9966bd60fd73c57d7c0"
+    },
+    {
+      "shot_index": 2,
+      "slot_id": "shot_02",
+      "shot_id": "S02",
+      "request_id": "382e2db218707f63066671c7e33f166c77fa816132b5062abd98b5d4e6a71eea",
+      "folder": "shots/shot_02_S02",
+      "expected_output": "shot_02.mp4",
+      "duration_s": 5.0,
+      "speaker": "",
+      "dialogue": "",
+      "audio_mode": "SILENT_ACTION",
+      "image_sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+      "source_image_sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+      "t0": {
+        "source": {
+          "file_name": "shot02_after_tag_fadeout.png",
+          "sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "5dbfdad39decda0326391761add937f35afa7dd9b07894b0552656b9e8579d8a"
+    },
+    {
+      "shot_index": 3,
+      "slot_id": "shot_03",
+      "shot_id": "S03",
+      "request_id": "6eb6d9a12f150fc4e09d01dacbde1adbf20481a7870c03d63b08a6e01019825e",
+      "folder": "shots/shot_03_S03",
+      "expected_output": "shot_03.mp4",
+      "duration_s": 5.0,
+      "speaker": "",
+      "dialogue": "",
+      "audio_mode": "SILENT_ACTION",
+      "image_sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+      "source_image_sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+      "t0": {
+        "source": {
+          "file_name": "todd_wilson_anchor.png",
+          "sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+          "width": 2048,
+          "height": 1152,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "NORMALIZED",
+          "aspect": "16:9",
+          "method": "center_crop_lanczos_png",
+          "crop_box": [
+            0,
+            0,
+            2048,
+            1152
+          ],
+          "aspect_deviation": 0.0,
+          "upscaled": false
+        },
+        "sent": {
+          "sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "fb328c48f1291bad67cec036ede7b487aef1a2dc8bfb57ee1e53a7d411aba5b5"
+    },
+    {
+      "shot_index": 4,
+      "slot_id": "shot_04",
+      "shot_id": "S04",
+      "request_id": "cfc4ccd9e6a72d7235c82214244c3794cb1b14a065b056eea8bdb93e4201f792",
+      "folder": "shots/shot_04_S04",
+      "expected_output": "shot_04.mp4",
+      "duration_s": 10.0,
+      "speaker": "Todd Wilson",
+      "dialogue": "Pamela, this is Captain Brianna Johnson. She is not just the pilot assigned to Flight 1128.",
+      "audio_mode": "NATIVE_DIALOGUE",
+      "image_sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+      "source_image_sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+      "t0": {
+        "source": {
+          "file_name": "todd_wilson_anchor.png",
+          "sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+          "width": 2048,
+          "height": 1152,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "NORMALIZED",
+          "aspect": "16:9",
+          "method": "center_crop_lanczos_png",
+          "crop_box": [
+            0,
+            0,
+            2048,
+            1152
+          ],
+          "aspect_deviation": 0.0,
+          "upscaled": false
+        },
+        "sent": {
+          "sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "07c48314ecce472c2f329e0a37e8360b4d49a6cc0c7bf338b36120d1d3f22b69"
+    },
+    {
+      "shot_index": 5,
+      "slot_id": "shot_05",
+      "shot_id": "S05",
+      "request_id": "c29b8449f2017d94a518d6efba2f54eb29db1393707486374462ed1a3fac49bb",
+      "folder": "shots/shot_05_S05",
+      "expected_output": "shot_05.mp4",
+      "duration_s": 10.0,
+      "speaker": "Todd Wilson",
+      "dialogue": "She is the chief of flight safety for Atlantic Ridge Airlines. She has the authority to ground every aircraft in our fleet.",
+      "audio_mode": "NATIVE_DIALOGUE",
+      "image_sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+      "source_image_sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+      "t0": {
+        "source": {
+          "file_name": "todd_wilson_anchor.png",
+          "sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+          "width": 2048,
+          "height": 1152,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "NORMALIZED",
+          "aspect": "16:9",
+          "method": "center_crop_lanczos_png",
+          "crop_box": [
+            0,
+            0,
+            2048,
+            1152
+          ],
+          "aspect_deviation": 0.0,
+          "upscaled": false
+        },
+        "sent": {
+          "sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "6d814be87476591df82bc6768d148ba4c07f7e8c3331d4ad1d3a5ce52b634258"
+    },
+    {
+      "shot_index": 6,
+      "slot_id": "shot_06",
+      "shot_id": "S06",
+      "request_id": "636cec7775115fd151d2d499355a27a7baa59883117edd435b8884d7aa1b309a",
+      "folder": "shots/shot_06_S06",
+      "expected_output": "shot_06.mp4",
+      "duration_s": 10.0,
+      "speaker": "Todd Wilson",
+      "dialogue": "and she just shut down over 300 flights because of what you did.",
+      "audio_mode": "NATIVE_DIALOGUE",
+      "image_sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+      "source_image_sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+      "t0": {
+        "source": {
+          "file_name": "todd_wilson_anchor.png",
+          "sha256": "2b51e9953ad3c8ff89523df665e78b831d96fd6f9a8e328fe35c209938660af8",
+          "width": 2048,
+          "height": 1152,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "NORMALIZED",
+          "aspect": "16:9",
+          "method": "center_crop_lanczos_png",
+          "crop_box": [
+            0,
+            0,
+            2048,
+            1152
+          ],
+          "aspect_deviation": 0.0,
+          "upscaled": false
+        },
+        "sent": {
+          "sha256": "181c05b53ecfe1c493651a22cd2f27c607916d077b9ca3499a4d6e604670b464",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "6e1593222aff6d8019d0181cb8917608b50481a3f2b0ea2c1655fcea4f82a926"
+    }
+  ]
+}

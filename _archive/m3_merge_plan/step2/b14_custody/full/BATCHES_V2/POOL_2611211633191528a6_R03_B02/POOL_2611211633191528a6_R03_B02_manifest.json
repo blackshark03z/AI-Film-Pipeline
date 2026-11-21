@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "batch_id": "POOL_2611211633191528a6_R03_B02",
+  "expected_result_zip": "POOL_2611211633191528a6_R03_B02_result.zip",
+  "total_shots": 1,
+  "shots": [
+    {
+      "shot_index": 1,
+      "slot_id": "shot_01",
+      "shot_id": "S09",
+      "request_id": "4ce89871839064ae55d077afc8c0aee487ca0987056112f08e3d1d88c362ddc6",
+      "folder": "shots/shot_01_S09",
+      "expected_output": "shot_01.mp4",
+      "duration_s": 5.0,
+      "speaker": "",
+      "dialogue": "",
+      "audio_mode": "SILENT_ACTION",
+      "image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "source_image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "t0": {
+        "source": {
+          "file_name": "shot01_after_tag_fadeout.png",
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "fa6e3ceff0b49e54b916296424564916e634ce993cf2cda84b03b29335e829cd"
+    }
+  ]
+}

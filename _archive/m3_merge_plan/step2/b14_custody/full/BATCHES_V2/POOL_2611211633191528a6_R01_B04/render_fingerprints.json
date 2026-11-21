@@ -1,0 +1,10 @@
+{
+  "batch_id": "POOL_2611211633191528a6_R01_B04",
+  "take": 1,
+  "simulate": true,
+  "shots": {
+    "S18": "c678c5a59102e00277c7724b644bd8e1a48a499d70c56ea8df2139214aa1641b",
+    "S19": "2ff212b86d7ec3356e0f61c33125c7972a86f6f554efeff75c003d5b5c2983e8",
+    "S20": "69fc0aed6a75922d149c40cffe5aada6f6baf7ac25919899a8aa2b36c1befe02"
+  }
+}

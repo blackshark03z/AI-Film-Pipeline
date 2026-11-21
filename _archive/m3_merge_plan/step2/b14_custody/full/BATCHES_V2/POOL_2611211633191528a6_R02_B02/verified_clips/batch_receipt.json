@@ -1,0 +1,30 @@
+{
+  "batch_id": "POOL_2611211633191528a6_R02_B02",
+  "shots": [
+    {
+      "slot_id": "shot_01",
+      "shot_id": "S10",
+      "output_file": "shot_01.mp4",
+      "bytes": 11770,
+      "sha256": "f7832852a0ac60b2fd1dcf68ae608181e16461b0b6196ca82e55c5b8f8f7dc4b",
+      "status": "ok"
+    },
+    {
+      "slot_id": "shot_02",
+      "shot_id": "S11",
+      "output_file": "shot_02.mp4",
+      "bytes": 11476,
+      "sha256": "28f466b9bc556e4ad659f27d4e8cb6252095a858ad58e7457acefedcd823c253",
+      "status": "ok"
+    },
+    {
+      "slot_id": "shot_03",
+      "shot_id": "S12",
+      "output_file": "shot_03.mp4",
+      "bytes": 11716,
+      "sha256": "d8c787f6fb37eb69473ed71748a43287b5d4389b46b5630a9a7a57d91487bf16",
+      "status": "ok"
+    }
+  ],
+  "failed_shots": []
+}

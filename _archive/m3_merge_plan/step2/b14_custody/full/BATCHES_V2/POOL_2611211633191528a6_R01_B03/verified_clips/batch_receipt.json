@@ -1,0 +1,54 @@
+{
+  "batch_id": "POOL_2611211633191528a6_R01_B03",
+  "shots": [
+    {
+      "slot_id": "shot_01",
+      "shot_id": "S13",
+      "output_file": "shot_01.mp4",
+      "bytes": 11720,
+      "sha256": "e84116db27461ad597d948d1ef9a076da3a356a2fcc27f31f71842b6af25bdc3",
+      "status": "ok"
+    },
+    {
+      "slot_id": "shot_02",
+      "shot_id": "S13__st_5ed0526572d5",
+      "output_file": "shot_02.mp4",
+      "bytes": 17262,
+      "sha256": "8278d4bce93a692b039115583694f5d7e11334ed615e9e2d5886949a2ea32965",
+      "status": "ok"
+    },
+    {
+      "slot_id": "shot_03",
+      "shot_id": "S14",
+      "output_file": "shot_03.mp4",
+      "bytes": 11641,
+      "sha256": "32a314872a8747ef500c02acc14c1f231c9f2a02f0e006adf433e34969e9f2ef",
+      "status": "ok"
+    },
+    {
+      "slot_id": "shot_04",
+      "shot_id": "S15",
+      "output_file": "shot_04.mp4",
+      "bytes": 11705,
+      "sha256": "a69eaa14016af3185dc232ae647fee06f2b7b11eba1f3098bb75ebb4618b0546",
+      "status": "ok"
+    },
+    {
+      "slot_id": "shot_05",
+      "shot_id": "S16",
+      "output_file": "shot_05.mp4",
+      "bytes": 11823,
+      "sha256": "30296122e859b41dc7801c51bd4140f3d6e45bdd35dc356ea6e2e78f5f8c0302",
+      "status": "ok"
+    },
+    {
+      "slot_id": "shot_06",
+      "shot_id": "S17",
+      "output_file": "shot_06.mp4",
+      "bytes": 11646,
+      "sha256": "88503669f21b84c17f14d7d15145dde24a5e7686dda16a19f8fdc58dd92451ff",
+      "status": "ok"
+    }
+  ],
+  "failed_shots": []
+}

@@ -1,0 +1,392 @@
+[
+ {
+  "path": "DEMO_PATRICE_30S_20261030/DELIVERY/AUDIO/NARRATION_FINAL.wav",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 5760078,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "DEMO_PATRICE_30S_20261030/DELIVERY/PATRICE_SAU_CA_TRUC_30S.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 7725427,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "DEMO_PATRICE_30S_20261030/NARRATION_30S.wav",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 5760078,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "DEMO_PATRICE_30S_20261030/NARRATION_FINAL.wav",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 5760078,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "DEMO_PATRICE_30S_20261030/PATRICE_DEMO_30S_PACKAGE.zip",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 33468445,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "GOLDEN_GRIDDLE/GG_FLOW_PILOT_30S_DELIVERY.zip",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 64375769,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "GOLDEN_GRIDDLE_FIRST_PASS_EMPIRICAL_DELIVERY.zip",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 64397870,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_DEMO_60S_20261031/FINAL/marcus_demo_60s_audio.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 17274221,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_DEMO_60S_20261031/FINAL/marcus_demo_60s_silent.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 16711934,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_PIPELINE_20261101/P3/counter_0_261.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 46390289,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_PIPELINE_20261101/P3/narration_0_261.wav",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 25045998,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_PIPELINE_20261101/P60/P60_old_cut.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 10318296,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_PIPELINE_20261101/P60/P60_v1.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 13829460,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG2_20261031/FINAL/marcus_seg2_narrated.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 16996585,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG2_20261031/FINAL/marcus_seg2_narrated_v1.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 17133664,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG2_20261031/FINAL/marcus_seg2_silent.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 15463206,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG2_20261031/FINAL/marcus_seg2_silent_v1.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 15600301,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG2_20261031/narration_seg2.flac",
+  "rule": "large-blob",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 7124306,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG2_20261031/shotplan_v3.bak.json",
+  "rule": "path-backup",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 14849,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG3_20261031/FINAL/marcus_seg3_narrated.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 16347473,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG3_20261031/FINAL/marcus_seg3_post_narrated.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 40312510,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG3_20261031/FINAL/marcus_seg3_post_silent.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 38640465,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG3_20261031/FINAL/marcus_seg3_silent.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 14656285,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG3_20261031/QC/seg3_batch1.png",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 7008080,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG3_20261031/narration_seg3.flac",
+  "rule": "large-blob",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 7743705,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG4_20261101/FINAL/marcus_seg4_narrated.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 42663516,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG4_20261101/FINAL/marcus_seg4_silent.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 40939667,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG4_20261101/QC/seg4_batch1.png",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 6462272,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_SEG4_20261101/narration_seg4.flac",
+  "rule": "large-blob",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 8104571,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "PATRICE_ACTION_V2_30S_20261030/NARRATION_FINAL.wav",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 5760078,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "continuity-lab-20261029/MUSE_PIPELINE_50s_DELIVERY.zip",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 33279704,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "continuity-lab-20261029/MUSE_PIPELINE_50s_RESOURCE_GUARD.zip",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 33367031,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "continuity-lab-20261029/MUSE_PIPELINE_V1_PHIM_51_5s.zip",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 32057254,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "continuity-lab-20261029/MUSE_RQ_18_5s_QUALIFICATION.zip",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 9842133,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "continuity-lab-20261029/PIPELINE_V1_FILM_20261030/DELIVERY/DANH_CHO_LAM_VIEC_V1_51_5s.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 8990890,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "continuity-lab-20261029/PIPELINE_V1_FILM_20261030/FP6R1/FINAL_STABLE_V1R1.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 7221850,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "continuity-lab-20261029/PIPELINE_V1_FILM_20261030/MUSE_FINAL/FINAL_STABLE_V1.mp4",
+  "rule": "large-media",
+  "scan_commit": "a8f2b9c6ff6f",
+  "first_commit": "b9d6d5c",
+  "size": 7043306,
+  "present_in": "a8f2b9c,c607029,a23f677,b9d6d5c",
+  "cls": "expected",
+  "note": ""
+ },
+ {
+  "path": "MARCUS_PIPELINE_20261101/P60/P60_v2_1080p.mp4",
+  "rule": "large-media",
+  "scan_commit": "a23f67763c38",
+  "first_commit": "a23f677",
+  "size": 47391287,
+  "present_in": "a23f677",
+  "cls": "expected",
+  "note": "introduced in a23f677, not b9d6d5c"
+ },
+ {
+  "path": "MARCUS_PIPELINE_20261101/P60/P60_v2_704p.mp4",
+  "rule": "large-media",
+  "scan_commit": "a23f67763c38",
+  "first_commit": "a23f677",
+  "size": 20276185,
+  "present_in": "a23f677",
+  "cls": "expected",
+  "note": "introduced in a23f677, not b9d6d5c"
+ }
+]

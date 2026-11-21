@@ -1,0 +1,13 @@
+./BATCHES_V2/POOL_26112116280450f66f_R01_B01/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R01_B02/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R01_B03/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R01_B04/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R02_B01/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R02_B02/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R02_B03/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R02_B04/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R03_B01/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R03_B02/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R03_B03/render_fingerprints.json
+./BATCHES_V2/POOL_26112116280450f66f_R03_B04/render_fingerprints.json
+./qc_audit_report.json

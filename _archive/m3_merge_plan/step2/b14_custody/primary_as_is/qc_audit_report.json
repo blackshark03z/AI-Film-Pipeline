@@ -1,0 +1,115 @@
+{
+  "total_shots": 21,
+  "passed_count": 0,
+  "failed_or_missing_count": 21,
+  "passed_clips": {},
+  "render_fingerprints": {},
+  "per_shot_qc": {},
+  "failed_or_missing": [
+    {
+      "shot_id": "S01",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S02",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S03",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S04",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S05",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S06",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S07",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S08__st_e0b581116dbb",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S09",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S10",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S11",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S12",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S13",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S13__st_5ed0526572d5",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S14",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S15",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S16",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S17",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S18",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S19",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S20",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    }
+  ]
+}

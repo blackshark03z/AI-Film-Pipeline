@@ -1,0 +1,60 @@
+{
+  "total_shots": 21,
+  "passed_count": 19,
+  "failed_or_missing_count": 2,
+  "passed_clips": {
+    "S01": "C:\\m3tmp\\b14_plus\\verified_clips\\S01.mp4",
+    "S02": "C:\\m3tmp\\b14_plus\\verified_clips\\S02.mp4",
+    "S03": "C:\\m3tmp\\b14_plus\\verified_clips\\S03.mp4",
+    "S04": "C:\\m3tmp\\b14_plus\\verified_clips\\S04.mp4",
+    "S05": "C:\\m3tmp\\b14_plus\\verified_clips\\S05.mp4",
+    "S06": "C:\\m3tmp\\b14_plus\\verified_clips\\S06.mp4",
+    "S13": "C:\\m3tmp\\b14_plus\\verified_clips\\S13.mp4",
+    "S13__st_5ed0526572d5": "C:\\m3tmp\\b14_plus\\verified_clips\\S13__st_5ed0526572d5.mp4",
+    "S14": "C:\\m3tmp\\b14_plus\\verified_clips\\S14.mp4",
+    "S15": "C:\\m3tmp\\b14_plus\\verified_clips\\S15.mp4",
+    "S16": "C:\\m3tmp\\b14_plus\\verified_clips\\S16.mp4",
+    "S17": "C:\\m3tmp\\b14_plus\\verified_clips\\S17.mp4",
+    "S18": "C:\\m3tmp\\b14_plus\\verified_clips\\S18.mp4",
+    "S19": "C:\\m3tmp\\b14_plus\\verified_clips\\S19.mp4",
+    "S20": "C:\\m3tmp\\b14_plus\\verified_clips\\S20.mp4",
+    "S10": "C:\\m3tmp\\b14_plus\\verified_clips\\S10.mp4",
+    "S11": "C:\\m3tmp\\b14_plus\\verified_clips\\S11.mp4",
+    "S12": "C:\\m3tmp\\b14_plus\\verified_clips\\S12.mp4",
+    "S09": "C:\\m3tmp\\b14_plus\\verified_clips\\S09.mp4"
+  },
+  "render_fingerprints": {
+    "S01": "9c525f6a79b7c99228339211ba52b8f9e9115cc8fac8a50863a3f147eb1a47fd",
+    "S02": "71bee5ef78eaa86e188ea371c79035a6bd75a40bcfb6921dd1f5e719337163d6",
+    "S03": "0a6c68f643dd099447fac5049c91ff4806beae4ad55f26f0358d061ef8fe16f9",
+    "S04": "74e92e896f386f27d0643ed07410edd6e7f6ec62054ced701a0d45d9d0d0f1c1",
+    "S05": "e3f27a3275a200fd8b13e369ff4fe34453d9db5ce29e58a7eeb7883ed2e9c7e4",
+    "S06": "a696c3b408717651a727ffc62f48cbdce65de4d057d32918f4f8060862fdaa9f",
+    "S13": "0c03d8abbd8157717993121a411940dfd513e4ac692fd1a8b798551542d9d904",
+    "S13__st_5ed0526572d5": "f93c94ea85311045f8b0b4bc3f3a7539b931a74f8c3e2b35f7d9a8aba5dfb0d5",
+    "S14": "8aab788c6cc5abac6f3de7581eec076309f9a7032c7d591134c7664945293429",
+    "S15": "cac4d696571ceb395f6be2ce95cd63e606b928f4cc23553eab1e45865c36b282",
+    "S16": "28846208e5598edd196b26cded3387954340d687c3cd9849b5e7ab5ac2d356ed",
+    "S17": "962ae34a98e3c9a4e6825683ebd449f1e372691b8ee52b959b5aca3f70ccad13",
+    "S18": "c678c5a59102e00277c7724b644bd8e1a48a499d70c56ea8df2139214aa1641b",
+    "S19": "2ff212b86d7ec3356e0f61c33125c7972a86f6f554efeff75c003d5b5c2983e8",
+    "S20": "69fc0aed6a75922d149c40cffe5aada6f6baf7ac25919899a8aa2b36c1befe02",
+    "S10": "f7dcb4c3cc6805a7ef75ace770df6f976798db2fbf02e77a77477fe7cd88bfd8",
+    "S11": "19e3d813076d575953ee8406352d4f8c89b46680cd79b2baa2afe9b904306732",
+    "S12": "b4196905303ebcc99a3c80f3ffa415771ef6b2ce95ffa87f15d33ee11d681a05",
+    "S09": "c1472720ac9c4327655d82164d7ee91a494602be7ac8f25e1e1378a2abf5e258"
+  },
+  "per_shot_qc": {},
+  "failed_or_missing": [
+    {
+      "shot_id": "S07",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    },
+    {
+      "shot_id": "S08__st_e0b581116dbb",
+      "reason": "PENDING_OR_MISSING",
+      "defects": []
+    }
+  ]
+}

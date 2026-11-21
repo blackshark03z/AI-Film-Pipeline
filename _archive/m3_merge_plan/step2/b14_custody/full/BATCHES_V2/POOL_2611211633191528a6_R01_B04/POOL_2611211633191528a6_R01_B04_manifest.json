@@ -1,0 +1,110 @@
+{
+  "schema_version": 2,
+  "batch_id": "POOL_2611211633191528a6_R01_B04",
+  "expected_result_zip": "POOL_2611211633191528a6_R01_B04_result.zip",
+  "total_shots": 3,
+  "shots": [
+    {
+      "shot_index": 1,
+      "slot_id": "shot_01",
+      "shot_id": "S18",
+      "request_id": "0a5be6eb874ba0ccfffb00a19b7419a3c950ba7551c2ddb4c544a8c83fde645b",
+      "folder": "shots/shot_01_S18",
+      "expected_output": "shot_01.mp4",
+      "duration_s": 10.0,
+      "speaker": "Pamela Davis",
+      "dialogue": "Can we just sit down and talk about this, please? I think if we",
+      "audio_mode": "NATIVE_DIALOGUE",
+      "image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "source_image_sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+      "t0": {
+        "source": {
+          "file_name": "shot01_after_tag_fadeout.png",
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "f2d4fcfd84c618e207ae02b072da993982b23f0c05424901b05443b77a94b435",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "de29c3bd27019c8ac71d7ed2fc1f7f47e9691919816ae1c890ec21d2d5579987"
+    },
+    {
+      "shot_index": 2,
+      "slot_id": "shot_02",
+      "shot_id": "S19",
+      "request_id": "febd47af2d963052f1b27b6ea9c52f0d02cb9a061b0ff035fd4ca55224535074",
+      "folder": "shots/shot_02_S19",
+      "expected_output": "shot_02.mp4",
+      "duration_s": 10.0,
+      "speaker": "Captain Brianna Johnson",
+      "dialogue": "Pamela, Your union rep will be in touch.",
+      "audio_mode": "NATIVE_DIALOGUE",
+      "image_sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+      "source_image_sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+      "t0": {
+        "source": {
+          "file_name": "shot02_after_tag_fadeout.png",
+          "sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "ad9737236fa9b8412feacb0a8ea2d798bfd0bba96c89bdd693a26f2cfb371fec"
+    },
+    {
+      "shot_index": 3,
+      "slot_id": "shot_03",
+      "shot_id": "S20",
+      "request_id": "efe4bde4c8934474b8ebd28d309a7f784903de73e28fb4817a327eea2ef3efd1",
+      "folder": "shots/shot_03_S20",
+      "expected_output": "shot_03.mp4",
+      "duration_s": 5.0,
+      "speaker": "",
+      "dialogue": "",
+      "audio_mode": "SILENT_ACTION",
+      "image_sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+      "source_image_sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+      "t0": {
+        "source": {
+          "file_name": "shot02_after_tag_fadeout.png",
+          "sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        },
+        "normalization": {
+          "status": "ALREADY_NORMALIZED",
+          "aspect": "16:9"
+        },
+        "sent": {
+          "sha256": "565ff01472ea808013d6e550a5e9f7072ed09c5bb39bc0c5c0291a22d4a27053",
+          "width": 1280,
+          "height": 720,
+          "format": "PNG"
+        }
+      },
+      "prompt_sha256": "01798b3106f9afa2526f8a3a8a1ea3130c7ae7642a12d49a9fa116a0e7ea6dc7"
+    }
+  ]
+}

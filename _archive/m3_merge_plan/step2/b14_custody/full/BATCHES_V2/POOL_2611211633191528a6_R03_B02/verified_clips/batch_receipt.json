@@ -1,0 +1,14 @@
+{
+  "batch_id": "POOL_2611211633191528a6_R03_B02",
+  "shots": [
+    {
+      "slot_id": "shot_01",
+      "shot_id": "S09",
+      "output_file": "shot_01.mp4",
+      "bytes": 11983,
+      "sha256": "4539026f599f10a85fa3b91d484c194abab9fa57c4fb192f463f82d93f195473",
+      "status": "ok"
+    }
+  ],
+  "failed_shots": []
+}
