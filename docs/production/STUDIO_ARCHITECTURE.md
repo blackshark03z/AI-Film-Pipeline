@@ -160,6 +160,14 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
   - A job admitted but not yet at SUBMITTING when the halt lands is rolled back to QUEUED.
   - A SUBMITTING or SUBMITTED job is finished and reconciled, never re-sent.
   - The same rule applies to the direct CLI path and to every provider.
+  - **One halt boundary for AFP and Muse (lane review #5).** The final halt check and the SUBMITTING transition
+    read both the AFP halt and the Muse halt file (`MUSE_HALT_FILE`) under the one halt-file lock. Muse publishes
+    its halt under that same lock. Lock order: halt-file lock, then the broker transaction. Tests cover a halt
+    published between check and commit, in both write orders.
+- **One allocator (lane review #3).** A durable machine claim (`allocator_owner.json`, written under the halt-file
+  lock) names the allocator: `afp` or `muse-standalone`. Both sides take it; an unknown or unreadable claim refuses
+  allocation, and switching owner requires reconciliation. `broker status` is the read-only check; `probe` is a
+  quota write, not a liveness check.
 - **One OS process per account lane**, started by the daemon with an explicit target in its arguments: CDP endpoint,
   project, account id and store path. No process-wide environment switching: `_flow_target_env` is retired from
   the daemon path.
@@ -243,8 +251,11 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
 - **Re-login never happens inside the submit path (M5).** Today `headless_muse_client` can re-log in during a
   submit, through `account_manager._auto_login_and_verify_impl`, with no rate limit and no auth-only trigger. That
   call is NOT ported as is.
-  - An expired session found during a submit ends the child as NOT_SENT if Enter was not reached, or AMBIGUOUS if
-    it was.
+  - Lane mode disables every implicit login, unchecked-account verification and OTP fallback inside submission
+    (`headless_muse_client.py:141-151, 333-342`); an authentication expiry returns control to the broker
+    (lane review #8).
+  - An expired session found during a submit ends the child as NOT_SENT only if a pre-submit state is proven, and
+    as AMBIGUOUS otherwise.
   - The broker then schedules a rate-limited re-login under the rules below.
   - After a successful batch the lane may write refreshed cookies back to the store, atomically, only when they
     changed.
@@ -267,14 +278,20 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
   - Each child of a Muse batch gets a receipt and job state as in §3. A child whose result cannot be bound after an
     authentication expiry is AMBIGUOUS, and its account is HELD.
   - **Rules ported from Muse rounds r6-r9; each one fixed a real defect:**
-    1. The lease and epoch are re-checked right before the submit keystroke. Losing them there is
-       RESOLVED/NOT_SENT, which never blocks.
+    1. The lease and epoch are re-checked right before the submit keystroke. Losing them there, while the child is
+       provably still PREPARING, is RESOLVED/NOT_SENT, which never blocks. A lost reply, a timeout or an
+       "already submitting" refusal (`ALREADY_SUBMITTING`) is not proof: once Enter permission may have been issued,
+       the child is AMBIGUOUS/HELD until an authoritative custody readback (lane review #4).
     2. The submission record is written before Enter (PENDING_SEND). History is kept.
        - Blocking states: PENDING_SEND, UNCONFIRMED, EXPIRED_NEEDS_RECONCILE, RESULT_CORRUPT
          (`UNCONFIRMED_BLOCKING`, `parallel_pool_engine.py:73`).
        - Non-blocking terminal states, set in the same run: RESOLVED with reason NOT_SENT or RESULT_RECEIVED.
        - Non-blocking terminal states, set when a later run re-checks the ledger: RELEASED with reason
          RESULT_RECEIVED, RECONCILED_PASSED, STALE_DESIGN, SHOT_REMOVED, or an explicit Owner or lane release.
+       - STALE_DESIGN and SHOT_REMOVED only make the old result ineligible. They never settle a submitted child:
+         its account and reservation stay held until reconciled independently (lane review #6).
+       - The blocking film-level entry is published synchronously before Enter, by an atomic check-and-record
+         under the film lock. Intake updates it; intake is never its first publication (lane review #2).
        - **AFP mapping:** one AFP vocabulary (§3). UNCONFIRMED and EXPIRED_NEEDS_RECONCILE map to AMBIGUOUS;
          RESULT_CORRUPT maps to AMBIGUOUS with INTEGRITY_FAILED evidence. The Muse name is kept only as a reason
          code.
@@ -296,7 +313,13 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
     - A promoted or canonical clip that still matches its recorded SHA stays valid, even when its source take is
       missing or INTEGRITY_FAILED. (Muse r10 regression: an audit deleted the last good canonical clip because its
       source had gone corrupt.)
-    - A file that fails is quarantined: moved and recorded, never deleted.
+    - A file that fails is quarantined: moved and recorded, never deleted. If the move fails, the file is kept and
+      excluded, or the lane STOPs; Muse's `src.unlink()` fallback (`batch_packager.py:580-589`) is removed before
+      pinning (lane review #11).
+  - **Per-child result evidence (lane review #7).** RESULT needs that child's exact batch_id, slot_id and request_id
+    plus a matching receipt sha. Arrival of the batch ZIP is not enough. Missing, malformed, unknown or
+    contradictory evidence stays AMBIGUOUS/HELD unless an exact terminal failure is proven. NO_RESULT_IN_BATCH is
+    evidence, never permission to resend.
   - **Partial batch.** Missing or failed children become NO_RESULT_IN_BATCH or INTEGRITY_FAILED one by one. A new
     round is a new batch with new ids. Prompt repair between rounds goes only through the defects registry (a
     reviewed defect code → a repair action; an unknown code → STOP).
