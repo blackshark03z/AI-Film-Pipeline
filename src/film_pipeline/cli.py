@@ -186,6 +186,41 @@ def _lease_token(args: argparse.Namespace) -> tuple[str, str]:
     return token.strip(), ""
 
 
+def _lane(args: argparse.Namespace) -> int:
+    """``afp-film lane``: S2-lite jobs and intake, synchronous. Exit 0 ok, 1 needs attention, 2 usage, 3 refused/error."""
+    import sqlite3
+    from film_pipeline.agentic import lane_intake as LI
+    from film_pipeline.agentic import lane_jobs as LJ
+    try:
+        store = LJ.JobStore(args.jobs_db)
+        if args.verb == "prepare":
+            if not args.spec:
+                out = {"ok": False, "code": "USAGE", "reason": "prepare needs --spec"}
+            else:
+                try:
+                    spec = json.loads(args.spec.read_text(encoding="utf-8"))
+                except (OSError, ValueError) as exc:
+                    out = {"ok": False, "code": "USAGE", "reason": f"--spec unreadable: {type(exc).__name__}"}
+                else:
+                    out = LJ.prepare_job(spec, store=store)
+        elif not args.job:
+            out = {"ok": False, "code": "USAGE", "reason": f"{args.verb} needs --job"}
+        elif args.verb == "intake":
+            out = LI.intake_job(args.job, store=store, broker_db=args.broker_db, lane_exit_code=args.lane_exit_code,
+                                settle_broker=not args.no_broker_settle, settle_unsent=not args.no_settle_not_sent)
+        else:
+            job = store.find_job(args.job)
+            out = {"ok": False, "code": "NOT_FOUND", "reason": f"no job {args.job!r}"} if job is None else {
+                "ok": True, "code": "OK", "reason": "", "job": job, "children": store.children(job["job_key"]),
+                "events": store.events(job_key=job["job_key"])}
+    except (sqlite3.Error, OSError) as exc:
+        out = {"ok": False, "code": "ERROR", "reason": f"{type(exc).__name__}: {exc}"[:300]}
+    _emit(out)
+    if out.get("ok"):
+        return 1 if out.get("attention") else 0
+    return 2 if out.get("code") == "USAGE" else 3
+
+
 def _broker_api(args: argparse.Namespace) -> int:
     """``afp-film broker``: the lane API verbs; prints the result dict as JSON, exits with its stable code."""
     from film_pipeline.agentic import broker_api as api
@@ -628,6 +663,31 @@ def main(argv: list[str] | None = None) -> int:
     bk.add_argument("--reason", default="")
     bk.add_argument("--kind", default="ACCOUNT_WARNING",
                     help="halt: CAPTCHA, VERIFICATION, UNUSUAL_ACTIVITY or ACCOUNT_WARNING")
+    ln = actions.add_parser(
+        "lane", formatter_class=argparse.RawDescriptionHelpFormatter,
+        help="S2-lite Muse lane jobs, run synchronously (agentic/lane_jobs.py, lane_intake.py), JSON out; exit 0 ok, 1 "
+             "needs attention (an AMBIGUOUS child, an alarm), 2 usage, 3 refused/error: prepare | intake | status",
+        description="prepare --spec FILE: freeze a batch (job row, frozen inputs under <film>/takes/jobs/<job_dir>/, the "
+                    "Muse job dir created exclusively, batch_request.json per contract section 5; no token, no broker "
+                    "call, nothing is sent). The spec is a JSON object: film_root, muse_film, wave_id, kind (video), "
+                    "account_id, lease_key, epoch, muse_tag, quality, slots[{slot_id, child_key, shot_id, shot_version, "
+                    "take_index, input_digest, prompt_text, request_id?, depends_on?, rebind_of?, inputs?[{role, path}]}].\n"
+                    "intake --job KEY_OR_DIR [--lane-exit-code N]: read the lane's job dir (section 8) and decide each "
+                    "child (section 10): RESULT only with exact evidence, NOT_SENT only when the broker committed it, "
+                    "everything else AMBIGUOUS (held). Copies accepted clips into the film package, quarantines integrity "
+                    "failures (never deletes), updates the film ledger attempts, writes event rows in the same "
+                    "transaction as each state change. Idempotent.\n"
+                    "status --job KEY_OR_DIR: the job, its children and events.")
+    ln.add_argument("verb", choices=["prepare", "intake", "status"])
+    ln.add_argument("--spec", type=Path, help="prepare: the batch spec (JSON)")
+    ln.add_argument("--job", default="", help="intake/status: the job_key or the 12-hex job_dir")
+    ln.add_argument("--jobs-db", type=Path, help="job database (default: <state dir>/studio_jobs.sqlite3)")
+    ln.add_argument("--broker-db", type=Path, help="intake: broker database (default: the machine-wide one)")
+    ln.add_argument("--lane-exit-code", type=int, help="intake: the pool_runner exit code (4 sets the AFP halt)")
+    ln.add_argument("--no-broker-settle", action="store_true",
+                    help="intake: do not settle RESULT / FAILED_TERMINAL children in the broker afterwards")
+    ln.add_argument("--no-settle-not-sent", action="store_true",
+                    help="intake: never call settle_not_sent (a child with no evidence stays AMBIGUOUS)")
     ht = actions.add_parser("halt", help="machine-wide production halt (any Flow account warning stops ALL sending): "
                                           "status | set --reason | clear --by human:ID|agent:ID --reason [--include-pending]")
     ht.add_argument("verb", choices=["status", "set", "clear"])
@@ -839,6 +899,8 @@ def _run(args, rest, parser) -> int:
             return _accounts(args)
         if args.action == "broker":
             return _broker_api(args)
+        if args.action == "lane":
+            return _lane(args)
         if args.action == "lease":
             from film_pipeline.agentic.lease_pool import AccountLeasePool, default_db_path
 
