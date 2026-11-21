@@ -16,6 +16,8 @@ The Tech Lead may tighten it or record what was done under it.
 
 - 2026-11-21, on approvals: "Về contact sheet thì agent duyệt." On merging the rules of the two projects:
   "Hợp nhất ngay".
+- 2026-11-21, in the Muse coordinator session, asked to confirm the unified rules now in `D:\Muse\CLAUDE.md`
+  (this single policy, agent-approved contact sheets, local commits by explicit path, no push): "Xác nhận".
 
 **Scope (2026-11-21).** This one file governs both projects, AFP (`D:\AI FILM MAKER\AFP-stable`) and Muse
 (`D:\Muse`), as one studio (Film Studio). `D:\Muse\CLAUDE.md` defers to it. Where an older rule in either
