@@ -221,12 +221,10 @@ def _broker_api(args: argparse.Namespace) -> int:
         out = api.release(args.lease_key, token, db=db)
     elif args.verb == "status":
         out = api.status(db=db)
-    elif args.verb == "allocator-transfer":
-        if not args.to or args.expect_epoch is None:
-            out = {"ok": False, "code": "USAGE", "reason": "allocator-transfer needs --to afp-broker|muse-standalone "
-                                                           "and --expect-epoch N"}
-        else:
-            out = api.allocator_transfer(args.to, expect_epoch=args.expect_epoch, by=args.by, db=db)
+    elif args.verb == "allocator-claim":
+        out = api.allocator_claim(by=args.by, db=db)
+    elif args.verb == "allocator-release":
+        out = api.allocator_release(by=args.by, db=db)
     elif args.verb == "settle":
         out = api.settle(args.lease_key, spent=args.spent, child_key=one or None, note=args.reason,
                          lease_token=token or None, db=db)
@@ -572,7 +570,7 @@ def main(argv: list[str] | None = None) -> int:
         help="the broker's public lane API (agentic/broker_api.py), JSON out; exit 0 ok, 1 refused (NOT_SENT_PROVEN, "
              "ALREADY_SUBMITTING: possibly sent, no lease, halt, epoch, cap), 2 usage, 3 not found / token mismatch: "
              "acquire | check | mark | release | settle | halt | login-check | login-result | claim | probe | "
-             "import-legacy | import-resolve | status | allocator-transfer",
+             "import-legacy | import-resolve | status | allocator-claim | allocator-release | settle-not-sent",
         description="Lanes give the lease token on stdin (--token-stdin, one JSON line {\"lease_token\": \"...\"}), "
                     "never on the command line; --token is for tests only. The token is printed once, by the acquire "
                     "that created the lease, and never again.\n\n"
@@ -587,12 +585,14 @@ def main(argv: list[str] | None = None) -> int:
                     "settle-not-sent --child KEY --evidence TEXT [--lease-key L]: a child still PREPARING becomes "
                     "terminal NOT_SENT and fenced in one transaction (a later check or acquire of it is refused); a "
                     "SUBMITTING child is refused (possibly sent).\n"
-                    "status --json: read-only (live, owner, claim epoch, db path, stop signals, pending markers).\n"
-                    "allocator-transfer --to afp-broker|muse-standalone --expect-epoch N: move the allocator claim "
-                    "(first claim: --to afp-broker --expect-epoch 0).")
+                    "status --json: read-only (live, owner, db path, stop signals, pending markers).\n"
+                    "allocator-claim: write the afp-broker allocator claim (idempotent); admission and check refuse "
+                    "ALLOCATOR_UNKNOWN without it.\n"
+                    "allocator-release: remove the claim; refused (OWNER_BUSY) while a lease is live or a child "
+                    "unresolved.")
     bk.add_argument("verb", choices=["acquire", "check", "mark", "release", "settle", "halt", "login-check",
                                      "login-result", "claim", "probe", "import-legacy", "import-resolve", "status",
-                                     "allocator-transfer", "settle-not-sent"])
+                                     "allocator-claim", "allocator-release", "settle-not-sent"])
     bk.add_argument("--db", type=Path, help="broker database (default: the machine-wide one in the state dir)")
     bk.add_argument("--account", default="", help="acquire/halt: the account id")
     bk.add_argument("--provider", default="", help="acquire/halt: the provider (muse, flow, ...)")
@@ -607,15 +607,13 @@ def main(argv: list[str] | None = None) -> int:
                          "atomic batch check (repeatable); mark/settle: the child key")
     bk.add_argument("--incarnation", default="", help="check/mark: this lane process's incarnation id (the check binds "
                                                        "it; only it may report ENTER_NOT_ISSUED)")
-    bk.add_argument("--to", default="", help="allocator-transfer: afp-broker or muse-standalone")
-    bk.add_argument("--expect-epoch", type=int, help="allocator-transfer: the current claim epoch (0: first claim)")
     bk.add_argument("--json", action="store_true", help="status: JSON output (always JSON)")
     bk.add_argument("--unit", default="", help="acquire: credits, VND, USD or muse_requests")
     bk.add_argument("--job-kind", default="video", choices=["video", "stills"])
     bk.add_argument("--film", type=Path, help="acquire: the film package (its budget and scope; required)")
     bk.add_argument("--films-dir", type=Path, help="import-legacy/import-resolve: a directory of film packages")
     bk.add_argument("--key", default="", help="import-resolve: the unreadable receipt's key (import-legacy lists it)")
-    bk.add_argument("--by", default="", help="import-resolve: human:<id> or agent:<id>; allocator-transfer: who")
+    bk.add_argument("--by", default="", help="import-resolve: human:<id> or agent:<id>; allocator-claim/release: who")
     bk.add_argument("--amount", type=float, help="import-resolve: what the receipt charged (omit: nothing)")
     bk.add_argument("--day", default="", help="import-resolve: the day it was charged, YYYY-MM-DD")
     bk.add_argument("--cause", default="", help="login-check: AUTH_EXPIRED (the only cause that allows a re-login)")
@@ -636,8 +634,8 @@ def main(argv: list[str] | None = None) -> int:
     ht.add_argument("--reason", default="")
     ht.add_argument("--by", default="", help="who clears the halt: human:<id> or agent:<id>")
     ht.add_argument("--include-pending", action="store_true",
-                    help="clear: first publish every halt_pending/ marker and halt_pending_unwritten/ flag into the "
-                         "halt history, remove exactly those, then clear (without it, clear refuses while any exists)")
+                    help="clear: first publish every halt_pending/ marker into the halt history, remove exactly "
+                         "those, then clear (without it, clear refuses while any exists)")
     sc = actions.add_parser("scene-conform", help="inspect or incrementally conform completed scenes cleanly")
     sc.add_argument("--film", required=True, type=Path)
     sc.add_argument("--render", action="store_true", help="render READY_TO_CONFORM scenes to media/scenes/<scene>.mkv")

@@ -25,10 +25,9 @@ admission and pre-Enter check take it inside their transaction, read the AFP hal
 Muse publishes its halt holding only this lock (never a broker transaction), so a check either commits before the
 publication or sees the halt. Lock order everywhere: broker transaction -> halt-file lock.
 
-``stop_signals`` is the one reader of every stop signal: the AFP halt, the Muse halt, the lock-free pending stops a
-sender latches when it cannot publish (``halt_pending/*.json``, ``halt_pending_unwritten/<incident>.flag``) and the
-machine-wide send-stop event (``Local\\FilmStudio-SendStop``, Windows). ``clear_halt(include_pending=True)`` publishes
-the pending stops into the halt history before it removes them and clears.
+``stop_signals`` is the one reader of every stop signal: the AFP halt, the Muse halt and the lock-free pending markers
+a sender writes when it cannot publish its halt (``halt_pending/*.json``). ``clear_halt(include_pending=True)``
+publishes the pending markers into the halt history before it removes them and clears.
 """
 from __future__ import annotations
 
@@ -225,9 +224,9 @@ def read_muse_halt() -> dict[str, Any] | None:
     return {**data, "path": str(path)} if isinstance(data, dict) else {"reason": "BLOCKED", "path": str(path)}
 
 
-# ---- the allocator ownership claim (lane contract §11, architecture §6) ---------------------------------------------
+# ---- the allocator ownership claim (lane contract §11, architecture §6; P1 scope freeze) -----------------------------
 OWNER_FILENAME = "allocator_owner.json"
-OWNERS = ("afp-broker", "muse-standalone")
+OWNER = "afp-broker"   # P1: the only allocator; the Muse standalone transfer protocol is M3 backlog
 
 
 def owner_path() -> Path:
@@ -236,16 +235,16 @@ def owner_path() -> Path:
 
 
 def read_owner() -> dict[str, Any]:
-    """The allocator claim: ``owner`` (one of ``OWNERS``), ``claim_epoch`` (int >= 0), ``claimed_at``, ``claimed_by``
-    and ``problem`` ('' when valid; ``absent`` when there is no file; else why it cannot be trusted). Read it under
-    the halt-file lock when a decision depends on it."""
+    """The allocator claim: ``owner``, ``claimed_at``, ``claimed_by`` and ``problem`` ('' when the file is valid;
+    ``absent`` when there is no file; else why it cannot be trusted). ``owner`` is whatever a valid file names (the
+    broker allocates only when it is ``afp-broker``). Read it under the halt-file lock when a decision depends on it."""
     path = owner_path()
-    empty = {"owner": "", "claim_epoch": None, "claimed_at": "", "claimed_by": ""}
+    empty = {"owner": "", "claimed_at": "", "claimed_by": ""}
     try:
         raw = path.read_text(encoding="utf-8")
     except FileNotFoundError:
         return {**empty, "problem": "absent"}
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         return {**empty, "problem": f"unreadable ({type(exc).__name__})"}
     try:
         body = json.loads(raw)
@@ -253,21 +252,25 @@ def read_owner() -> dict[str, Any]:
         return {**empty, "problem": "not valid JSON"}
     if not isinstance(body, dict):
         return {**empty, "problem": "not a JSON object"}
-    owner, epoch = body.get("owner"), body.get("claim_epoch")
-    if owner not in OWNERS:
-        return {**empty, "problem": f"unknown owner {owner!r}"}
-    if isinstance(epoch, bool) or not isinstance(epoch, int) or epoch < 0:
-        return {**empty, "problem": f"invalid claim_epoch {epoch!r}"}
-    return {"owner": owner, "claim_epoch": epoch, "claimed_at": str(body.get("claimed_at") or ""),
+    owner = body.get("owner")
+    if not isinstance(owner, str) or not owner.strip():
+        return {**empty, "problem": f"names no owner ({owner!r})"}
+    return {"owner": owner, "claimed_at": str(body.get("claimed_at") or ""),
             "claimed_by": str(body.get("claimed_by") or ""), "problem": ""}
 
 
-def write_owner_locked(owner: str, claim_epoch: int, claimed_by: str) -> dict[str, Any]:
-    """Replace the claim atomically. Only ``Broker.allocator_transfer`` calls it, inside its broker transaction and
-    holding the halt-file lock."""
-    record = {"owner": owner, "claim_epoch": int(claim_epoch), "claimed_at": _now(), "claimed_by": claimed_by}
+def write_owner_locked(claimed_by: str) -> dict[str, Any]:
+    """Write the ``afp-broker`` claim atomically. Only ``Broker.allocator_claim`` calls it, inside its broker
+    transaction and holding the halt-file lock."""
+    record = {"owner": OWNER, "claimed_at": _now(), "claimed_by": claimed_by}
     _atomic_write(owner_path(), record)
     return record
+
+
+def remove_owner_locked() -> None:
+    """Remove the claim. Only ``Broker.allocator_release`` calls it, inside its broker transaction and holding the
+    halt-file lock."""
+    owner_path().unlink()
 
 
 halt_file_lock = _halt_file_lock   # the public name (broker_api.halt_file_lock)
@@ -275,20 +278,12 @@ halt_file_lock = _halt_file_lock   # the public name (broker_api.halt_file_lock)
 
 # ---- pending stops (lane contract §11): lock-free latches a sender writes when it cannot publish its halt ------------
 PENDING_DIRNAME = "halt_pending"
-UNWRITTEN_DIRNAME = "halt_pending_unwritten"
-LEGACY_UNWRITTEN_FLAG = "halt_pending_unwritten.flag"
 
 
 def pending_dir() -> Path:
     """``<state dir>/halt_pending/``: one ``<lane_id>-<incarnation_id>.json`` per sender that could not take the
     halt-file lock to publish its halt (create-exclusive, lock-free)."""
     return state_dir() / PENDING_DIRNAME
-
-
-def unwritten_dir() -> Path:
-    """``<state dir>/halt_pending_unwritten/``: one ``<incident_id>.flag`` per sender that could not even write its
-    pending marker."""
-    return state_dir() / UNWRITTEN_DIRNAME
 
 
 def _dir_entries(path: Path, pattern: str) -> tuple[str, list[Path]]:
@@ -308,104 +303,13 @@ def pending_markers() -> tuple[str, list[Path]]:
     return _dir_entries(pending_dir(), "*.json")
 
 
-def unwritten_flags() -> tuple[str, list[Path]]:
-    """``(problem, flag files)``: every entry of ``halt_pending_unwritten/`` (any name), plus the pre-item-16 single
-    ``halt_pending_unwritten.flag`` when it is still there."""
-    problem, flags = _dir_entries(unwritten_dir(), "*")
-    legacy = state_dir() / LEGACY_UNWRITTEN_FLAG
-    try:
-        if legacy.exists():
-            flags.append(legacy)
-    except OSError as exc:
-        problem = problem or f"{legacy} cannot be read ({type(exc).__name__})"
-    return problem, flags
-
-
-# ---- the machine-wide send-stop event (lane contract §11, lane review v6 #1) -----------------------------------------
-SEND_STOP_EVENT = "Local\\FilmStudio-SendStop"
-SEND_STOP_ENV = "AFP_SEND_STOP_EVENT"   # tests only: a private event name, so a test never stops this machine's lanes
-_SYNCHRONIZE, _EVENT_MODIFY_STATE = 0x00100000, 0x0002
-_ERROR_FILE_NOT_FOUND, _WAIT_OBJECT_0, _WAIT_TIMEOUT = 2, 0x0, 0x102
-
-
-def send_stop_event_name() -> str:
-    """The named kernel event every pre-Enter gate reads: ``Local\\FilmStudio-SendStop`` (per Windows logon session)."""
-    return (os.environ.get(SEND_STOP_ENV) or "").strip() or SEND_STOP_EVENT
-
-
-def _kernel32():
-    import ctypes
-    from ctypes import wintypes
-    k32 = ctypes.WinDLL("kernel32", use_last_error=True)
-    k32.OpenEventW.argtypes = (wintypes.DWORD, wintypes.BOOL, wintypes.LPCWSTR)
-    k32.OpenEventW.restype = wintypes.HANDLE
-    k32.CreateEventW.argtypes = (wintypes.LPVOID, wintypes.BOOL, wintypes.BOOL, wintypes.LPCWSTR)
-    k32.CreateEventW.restype = wintypes.HANDLE
-    k32.SetEvent.argtypes = (wintypes.HANDLE,)
-    k32.SetEvent.restype = wintypes.BOOL
-    k32.WaitForSingleObject.argtypes = (wintypes.HANDLE, wintypes.DWORD)
-    k32.WaitForSingleObject.restype = wintypes.DWORD
-    k32.CloseHandle.argtypes = (wintypes.HANDLE,)
-    k32.CloseHandle.restype = wintypes.BOOL
-    return ctypes, k32
-
-
-def send_stop_state() -> str:
-    """``""`` (absent: no such event, or it exists unsignalled; always on non-Windows), ``"SET"`` (exists and
-    signalled: refuse) or ``"unknown (...)"`` (any other query error: refuse). Opens the event for SYNCHRONIZE only and
-    never changes it."""
-    if os.name != "nt":
-        return ""
-    try:
-        ctypes, k32 = _kernel32()
-    except (OSError, AttributeError) as exc:
-        return f"unknown ({type(exc).__name__})"
-    handle = k32.OpenEventW(_SYNCHRONIZE, False, send_stop_event_name())
-    if not handle:
-        err = ctypes.get_last_error()
-        return "" if err == _ERROR_FILE_NOT_FOUND else f"unknown (OpenEventW error {err})"
-    try:
-        waited = k32.WaitForSingleObject(handle, 0)
-        if waited == _WAIT_OBJECT_0:
-            return "SET"
-        if waited == _WAIT_TIMEOUT:
-            return ""
-        return f"unknown (WaitForSingleObject {waited:#x}, error {ctypes.get_last_error()})"
-    finally:
-        k32.CloseHandle(handle)
-
-
-def raise_send_stop() -> int:
-    """A sender's first step on any block: create (or open) the send-stop event, manual-reset, and set it. Returns the
-    handle, which the caller keeps open until a durable stop (the halt, a pending marker or an unwritten flag) exists:
-    the event dies with its last handle. Needs no disk. Non-Windows: 0 (no event)."""
-    if os.name != "nt":
-        return 0
-    ctypes, k32 = _kernel32()
-    handle = k32.CreateEventW(None, True, True, send_stop_event_name())
-    if not handle:
-        raise OSError(f"CreateEventW failed (error {ctypes.get_last_error()})")
-    if not k32.SetEvent(handle):
-        err = ctypes.get_last_error()
-        k32.CloseHandle(handle)
-        raise OSError(f"SetEvent failed (error {err})")
-    return int(handle)
-
-
-def close_send_stop(handle: int) -> None:
-    """Close a handle ``raise_send_stop`` returned (the event ends with its last handle)."""
-    if os.name == "nt" and handle:
-        _kernel32()[1].CloseHandle(handle)
-
-
 # ---- every stop signal, read in one place under the halt-file lock -----------------------------------------------------
 def stop_signals() -> tuple[str, str]:
     """``(code, reason)`` of the first stop signal present (``("", "")``: none). Every pre-Enter gate reads them all
     under the halt-file lock and refuses on any; an unreadable one refuses too (fail closed):
 
     1. the AFP halt and 2. the Muse halt (``$MUSE_HALT_FILE``) -> ``PRODUCTION_HALT``;
-    3. a ``halt_pending/*.json`` marker and 4. a ``halt_pending_unwritten/`` flag -> ``HALT_PENDING``;
-    5. the send-stop event set -> ``SEND_STOP``."""
+    3. a ``halt_pending/*.json`` marker (or that dir unreadable) -> ``HALT_PENDING``."""
     afp = read_halt()
     if afp is not None:
         return "PRODUCTION_HALT", f"production halted: {afp.get('reason', '')}"
@@ -413,16 +317,13 @@ def stop_signals() -> tuple[str, str]:
     if muse is not None:
         return "PRODUCTION_HALT", f"production halted by the Muse halt file {muse.get('path', '')}: " \
                                   f"{muse.get('reason', '')}"
-    for what, (problem, entries) in (("pending halt marker", pending_markers()),
-                                     ("pending halt incident (marker unwritten)", unwritten_flags())):
-        if problem:
-            return "HALT_PENDING", f"a {what} directory {problem}: refused until it is readable"
-        if entries:
-            return "HALT_PENDING", (f"{len(entries)} {what}(s) not yet published ({', '.join(p.name for p in entries)}"
-                                    f"): afp-film halt clear --include-pending after review")
-    state = send_stop_state()
-    if state:
-        return "SEND_STOP", f"the send-stop event {send_stop_event_name()} is {state}: a sender hit a block"
+    problem, entries = pending_markers()
+    if problem:
+        return "HALT_PENDING", f"the pending halt marker directory {problem}: refused until it is readable"
+    if entries:
+        return "HALT_PENDING", (f"{len(entries)} pending halt marker(s) not yet published "
+                                f"({', '.join(p.name for p in entries)}): afp-film halt clear --include-pending "
+                                f"after review")
     return "", ""
 
 
@@ -490,11 +391,11 @@ def _set_halt_locked(reason: str, *, source: str, account: str, film_id: str, ta
 def clear_halt(by: str, reason: str, *, include_pending: bool = False) -> dict[str, Any]:
     """Explicitly clear the halt. ``by`` must be ``human:<id>`` or ``agent:<id>``.
 
-    Under the broker transaction, then the halt-file lock. Refused (RuntimeError) while a ``halt_pending/`` marker or a
-    ``halt_pending_unwritten/`` flag exists, or either dir cannot be listed, unless ``include_pending``: then each
-    marker and flag read here is first PUBLISHED into the halt and its history (``set_halt`` from it, the first halt
-    kept), exactly those files are removed, and only then is the halt cleared. A marker or flag written after this
-    read stays (and keeps every gate refusing). Nothing is ever removed unpublished."""
+    Under the broker transaction, then the halt-file lock. Refused (RuntimeError) while a ``halt_pending/`` marker
+    exists, or the dir cannot be listed, unless ``include_pending``: then each marker read here is first PUBLISHED into
+    the halt and its history (``set_halt`` from it, the first halt kept), exactly those files are removed, and only
+    then is the halt cleared. A marker written after this read stays (and keeps every gate refusing). Nothing is ever
+    removed unpublished."""
     if not isinstance(by, str) or not _BY_RE.match(by):
         raise ValueError("clear_halt: 'by' must match ^(human|agent):[A-Za-z0-9_.-]+$")
     if not isinstance(reason, str) or len(reason.strip()) < 3:
@@ -513,17 +414,16 @@ def _clear_halt(by: str, reason: str, *, include_pending: bool = False) -> dict[
 
 
 def _publish_pending_locked(by: str, include_pending: bool) -> list[str]:
-    """Publish then remove the pending markers and unwritten flags present now (halt-file lock held). Returns the ids
-    published (``halt_pending/<id>`` and ``halt_pending_unwritten/<id>``)."""
-    m_problem, markers = pending_markers()
-    f_problem, flags = unwritten_flags()
-    if m_problem or f_problem:
-        raise RuntimeError(f"clear_halt: {m_problem or f_problem}; nothing cleared")
-    if not (markers or flags):
+    """Publish then remove the pending markers present now (halt-file lock held). Returns the ids published
+    (``halt_pending/<id>``)."""
+    problem, markers = pending_markers()
+    if problem:
+        raise RuntimeError(f"clear_halt: {problem}; nothing cleared")
+    if not markers:
         return []
     if not include_pending:
-        raise RuntimeError(f"clear_halt: {len(markers)} pending halt marker(s) and {len(flags)} unwritten-marker "
-                           f"flag(s) exist; review them and use --include-pending (they are published, then removed)")
+        raise RuntimeError(f"clear_halt: {len(markers)} pending halt marker(s) exist; review them and use "
+                           f"--include-pending (they are published, then removed)")
     published: list[tuple[Path, str]] = []
     for path in markers:
         try:
@@ -539,12 +439,6 @@ def _publish_pending_locked(by: str, include_pending: bool) -> list[str]:
                          evidence=f"HALT_PENDING provider={str(body.get('provider') or '')[:40]} "
                                   f"ts={str(body.get('ts') or '')[:40]} published_by={by}")
         published.append((path, f"{PENDING_DIRNAME}/{mid}"))
-    for path in flags:
-        fid = _marker_id(path)
-        _set_halt_locked(f"pending halt incident {fid} (its marker could not be written)", source=f"halt_pending_"
-                         f"unwritten:{fid}", account="", film_id="", take_id="",
-                         evidence=f"HALT_PENDING_UNWRITTEN published_by={by}")
-        published.append((path, f"{UNWRITTEN_DIRNAME}/{fid}" if path.parent == unwritten_dir() else fid))
     for path, _ in published:   # every one is in the halt history now; remove exactly these
         path.unlink(missing_ok=True)
     return [pid for _, pid in published]

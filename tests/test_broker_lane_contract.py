@@ -1,16 +1,14 @@
 """S1 broker addendum from the AFP<->Muse lane-contract reviews (S1_ADDENDUM_SPEC items 1-16): the cross-lease
 shot-version block and required identity, the lost pre-Enter reply (ALREADY_SUBMITTING, never NOT_SENT), every stop
-signal inside the halt-file lock boundary (AFP halt, Muse halt, pending markers, unwritten flags, send-stop event), the
-read-only status, the atomic batch check, ENTER_NOT_ISSUED and incarnation binding, the allocator transfer and the Muse
-obligations registry, the token issued once and read from stdin, rebind after a fenced NOT_SENT, and the atomic
-NOT_SENT settlement."""
+signal inside the halt-file lock boundary (AFP halt, Muse halt, pending markers), the read-only status, the atomic
+batch check, ENTER_NOT_ISSUED and incarnation binding, the allocator claim/release, the token issued once and read from
+stdin, rebind after a fenced NOT_SENT, and the atomic NOT_SENT settlement. P1 scope freeze: items 13 (Muse obligations),
+15 (send-stop event), 16 (unwritten flags) and the allocator transfer protocol are M3 backlog."""
 from __future__ import annotations
 
 import io
 import json
-import os
 import sqlite3
-import subprocess
 import sys
 import threading
 
@@ -258,7 +256,7 @@ def test_an_account_warning_and_admissions_take_the_two_locks_in_one_order(tmp_p
     assert not worker.is_alive() and not errors and H.read_halt() is not None
 
 
-# ---- items 12 + 16: pending halt markers and per-incident unwritten flags ------------------------------------------
+# ---- item 12: pending halt markers ----------------------------------------------------------------------------------
 def _marker(name="muse-lane1-inc1", **body):
     H.pending_dir().mkdir(parents=True, exist_ok=True)
     path = H.pending_dir() / f"{name}.json"
@@ -267,19 +265,11 @@ def _marker(name="muse-lane1-inc1", **body):
     return path
 
 
-def _flag(incident="inc-1"):
-    H.unwritten_dir().mkdir(parents=True, exist_ok=True)
-    path = H.unwritten_dir() / f"{incident}.flag"
-    path.write_bytes(b"")
-    return path
-
-
-@pytest.mark.parametrize("make", [_marker, _flag])
-def test_a_pending_marker_or_unwritten_flag_refuses_admission_and_the_check(tmp_path, make):
+def test_a_pending_marker_refuses_admission_and_the_check(tmp_path):
     db = tmp_path / "pool.sqlite3"
     broker = Broker(db, **NO_CAPS)
     lease = broker.admit(http("H1", "t1", "g1:v1"))["lease"]
-    path = make()
+    path = _marker()
     refused = broker.admit(http("H2", "t2", "g2:v1"))
     assert refused["code"] == "HALT_PENDING" and path.name in refused["reason"]
     check = api.check_before_enter("H1", lease["lease_token"], "t1", db=db)
@@ -288,48 +278,43 @@ def test_a_pending_marker_or_unwritten_flag_refuses_admission_and_the_check(tmp_
     assert broker.admit(http("H3", "t3", "g3:v1"))["ok"]
 
 
-@pytest.mark.parametrize("dirname", [H.PENDING_DIRNAME, H.UNWRITTEN_DIRNAME])
-def test_an_unreadable_pending_dir_refuses(tmp_path, dirname):
+def test_an_unreadable_pending_dir_refuses(tmp_path):
     broker = Broker(tmp_path / "pool.sqlite3", **NO_CAPS)
-    (H.state_dir() / dirname).write_text("not a directory", encoding="utf-8")   # cannot be listed
+    H.pending_dir().write_text("not a directory", encoding="utf-8")   # cannot be listed
     refused = broker.admit(http("H1", "t1", "g1:v1"))
     assert refused["code"] == "HALT_PENDING" and "cannot be listed" in refused["reason"]
 
 
-def test_a_marker_that_is_not_json_named_is_ignored_but_any_flag_counts(tmp_path):
+def test_a_marker_that_is_not_json_named_is_ignored(tmp_path):
     broker = Broker(tmp_path / "pool.sqlite3", **NO_CAPS)
     H.pending_dir().mkdir(parents=True)
     (H.pending_dir() / "note.txt").write_text("x", encoding="utf-8")   # markers are *.json
     assert broker.admit(http("H1", "t1", "g1:v1"))["ok"]
-    H.unwritten_dir().mkdir(parents=True)
-    (H.unwritten_dir() / "whatever").write_bytes(b"")                    # any flag entry counts
-    assert broker.admit(http("H2", "t2", "g2:v1"))["code"] == "HALT_PENDING"
 
 
-def test_halt_clear_publishes_pending_stops_first_and_removes_only_those(tmp_path, monkeypatch):
-    m1, f1 = _marker("muse-lane1-inc1"), _flag("inc-1")
+def test_halt_clear_publishes_pending_markers_first_and_removes_only_those(tmp_path, monkeypatch):
+    m1 = _marker("muse-lane1-inc1")
     with pytest.raises(RuntimeError, match="--include-pending"):   # not without the flag, even with no halt
         H.clear_halt("human:owner", "reviewed")
-    assert m1.exists() and f1.exists()
-    real = H.unwritten_flags
+    assert m1.exists()
+    real = H.pending_markers
     late: list = []
 
-    def racing():   # a sender latches a new marker and flag right after the clear read the dirs
+    def racing():   # a sender latches a new marker right after the clear read the dir
         out = real()
         if not late:
             late.append(_marker("muse-lane2-inc9", reason="later block"))
-            late.append(_flag("inc-9"))
         return out
 
-    monkeypatch.setattr(H, "unwritten_flags", racing)
+    monkeypatch.setattr(H, "pending_markers", racing)
     entry = H.clear_halt("human:owner", "reviewed the markers", include_pending=True)
-    monkeypatch.setattr(H, "unwritten_flags", real)
-    assert sorted(entry["published_pending"]) == ["halt_pending/muse-lane1-inc1", "halt_pending_unwritten/inc-1"]
-    assert not m1.exists() and not f1.exists() and all(p.exists() for p in late)   # the newer ones stay
+    monkeypatch.setattr(H, "pending_markers", real)
+    assert entry["published_pending"] == ["halt_pending/muse-lane1-inc1"]
+    assert not m1.exists() and all(p.exists() for p in late)   # the newer one stays
     assert H.read_halt() is None   # the halt was cleared ...
     history = [json.loads(line) for line in H.history_path().read_text(encoding="utf-8").splitlines()]
     sources = [h["event"]["source"] for h in history if h["action"] == "set"]
-    assert sources == ["halt_pending:muse-lane1-inc1", "halt_pending_unwritten:inc-1"]   # ... after publishing both
+    assert sources == ["halt_pending:muse-lane1-inc1"]   # ... after publishing it
     assert history[-1]["action"] == "clear" and "captcha" in history[-1]["cleared_halt"]["reason"]
     assert H.stop_signals()[0] == "HALT_PENDING"   # the newer marker keeps every gate refusing
 
@@ -344,48 +329,11 @@ def test_halt_clear_keeps_the_first_halt_and_refuses_an_unreadable_pending_dir(c
     assert cleared["cleared_halt"]["reason"] == "the first warning"   # the marker was appended, the first halt kept
     assert any(e["source"] == "halt_pending:muse-lane1-inc1" for e in cleared["cleared_halt"]["events"])
     H.set_halt("again", source="test")
-    H.unwritten_dir().write_text("not a dir", encoding="utf-8")
+    H.pending_dir().rmdir()
+    H.pending_dir().write_text("not a dir", encoding="utf-8")
     with pytest.raises(RuntimeError, match="cannot be listed"):
         H.clear_halt("human:owner", "reviewed", include_pending=True)
     assert H.read_halt() is not None
-
-
-def test_the_legacy_single_unwritten_flag_still_refuses_and_is_published(tmp_path):
-    broker = Broker(tmp_path / "pool.sqlite3", **NO_CAPS)
-    legacy = H.state_dir() / H.LEGACY_UNWRITTEN_FLAG
-    legacy.write_bytes(b"")
-    assert broker.admit(http("H1", "t1", "g1:v1"))["code"] == "HALT_PENDING"
-    entry = H.clear_halt("human:owner", "reviewed", include_pending=True)
-    assert entry["published_pending"] and not legacy.exists()
-
-
-# ---- item 15: the machine-wide send-stop event ---------------------------------------------------------------------
-@pytest.mark.skipif(os.name != "nt", reason="the send-stop event is a Windows named kernel event")
-def test_a_send_stop_event_set_in_another_process_refuses_the_check(tmp_path):
-    db = tmp_path / "pool.sqlite3"
-    broker = Broker(db, **NO_CAPS)
-    lease = broker.admit(http("H1", "t1", "g1:v1"))["lease"]
-    assert api.send_stop_event_name().startswith("Local\\")
-    assert H.send_stop_state() == ""   # no event: absent
-    holder = subprocess.Popen(
-        [sys.executable, "-c", "import sys; from film_pipeline.agentic import broker_api as a; h = a.raise_send_stop(); "
-                               "print('ready', flush=True); sys.stdin.readline(); a.close_send_stop(h)"],
-        stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, env=dict(os.environ))
-    try:
-        assert holder.stdout.readline().strip() == "ready"
-        check = api.check_before_enter("H1", lease["lease_token"], "t1", db=db)
-        assert check["code"] == "NOT_SENT_PROVEN" and check["cause"] == "SEND_STOP"
-        assert broker.admit(http("H2", "t2", "g2:v1"))["code"] == "SEND_STOP"
-        assert api.status(db=db)["send_stop"] == "SET"
-    finally:
-        holder.communicate("done\n", timeout=30)
-    assert H.send_stop_state() == ""   # the event died with its last handle
-    assert broker.admit(http("H3", "t3", "g3:v1"))["ok"]
-
-
-def test_the_send_stop_event_is_absent_off_windows(monkeypatch):
-    monkeypatch.setattr(H.os, "name", "posix")
-    assert H.send_stop_state() == "" and H.raise_send_stop() == 0
 
 
 # ---- item 4: read-only status ----------------------------------------------------------------------------------------
@@ -396,13 +344,12 @@ def test_status_is_read_only_and_names_no_secret(tmp_path, capsys):
     Broker(db, **NO_CAPS)
     before = db.read_bytes()
     _marker()
-    _flag()
     out = api.status(db=db)
     assert out["live"] is True and out["schema_version"] == 5 and out["owner"] == "afp-broker"
-    assert out["claim_epoch"] == 1 and out["db"] == str(db) and out["halt_lock"] == api.halt_file_lock_path()
-    assert out["pending_markers"] == ["muse-lane1-inc1.json"] and out["unwritten_flags"] == ["inc-1.flag"]
-    assert out["stop_code"] == "HALT_PENDING" and out["send_stop"] == "absent" and out["halted"] is False
-    assert out["muse_obligations_required"] is False and out["muse_obligations_state"] == "absent"
+    assert out["db"] == str(db) and out["halt_lock"] == api.halt_file_lock_path()
+    assert out["pending_markers"] == ["muse-lane1-inc1.json"]
+    assert out["stop_code"] == "HALT_PENDING" and out["halted"] is False
+    assert not any(k.startswith(("send_stop", "unwritten", "muse_obligations", "claim_epoch")) for k in out)
     assert db.read_bytes() == before
     text = json.dumps(out).lower()
     assert not any(word in text for word in ("cookie", "password", "token", "cdp"))
@@ -652,84 +599,56 @@ def test_the_token_is_read_from_stdin_and_never_printed(tmp_path, capsys, monkey
     capsys.readouterr()
 
 
-# ---- items 7 + 13: the allocator transfer and the Muse obligations registry -----------------------------------------
-@pytest.fixture
-def muse_files(tmp_path, monkeypatch):
-    leases, registry = tmp_path / "lane_leases.json", tmp_path / "muse_obligations.json"
-    monkeypatch.setenv("MUSE_LANE_LEASES_FILE", str(leases))
-    monkeypatch.setenv("MUSE_OBLIGATIONS_FILE", str(registry))
-    return leases, registry
-
-
-def test_allocator_transfer_round_trip_with_obligations(tmp_path, muse_files, capsys):
-    leases, registry = muse_files
+# ---- item 7 (P1 scope freeze): allocator claim / release ------------------------------------------------------------
+def test_allocator_claim_and_release_round_trip(tmp_path, capsys):
     db = tmp_path / "pool.sqlite3"
     broker = Broker(db, **NO_CAPS)
     H.owner_path().unlink()   # a fresh machine: no claim
     assert broker.admit(http("H0", "t0", "g0:v1"))["code"] == "ALLOCATOR_UNKNOWN"
-    assert api.allocator_transfer("muse-standalone", expect_epoch=0, db=db)["code"] == "ALLOCATOR_UNKNOWN"
-    boot = api.allocator_transfer("afp-broker", expect_epoch=0, by="human:owner", db=db)
-    assert boot["ok"] and boot["claim_epoch"] == 1 and H.read_owner()["owner"] == "afp-broker"
-    assert api.allocator_transfer("afp-broker", expect_epoch=1, db=db)["changed"] is False   # idempotent
-    assert api.allocator_transfer("muse-standalone", expect_epoch=0, db=db)["code"] == "STALE_CLAIM_EPOCH"
+    assert api.status(db=db)["live"] is False
+    assert cli.main(["broker", "allocator-claim", "--by", "human:owner", "--db", str(db)]) == 0
+    claimed = json.loads(capsys.readouterr().out)
+    assert claimed["ok"] and claimed["changed"] is True and claimed["owner"] == "afp-broker"
+    body = json.loads(H.owner_path().read_text(encoding="utf-8"))
+    assert body["owner"] == "afp-broker" and body["claimed_by"] == "human:owner" and "claim_epoch" not in body
+    again = api.allocator_claim(db=db)   # idempotent: the claim is kept
+    assert again["ok"] and again["changed"] is False
+    assert json.loads(H.owner_path().read_text(encoding="utf-8")) == body
     lease = broker.admit(http("H1", "t1", "g1:v1"))
-    busy = api.allocator_transfer("muse-standalone", expect_epoch=1, db=db)
-    assert busy["code"] == "OWNER_BUSY" and H.read_owner()["claim_epoch"] == 1
-    broker.release_unsent("H1", lease_token=lease["lease"]["lease_token"])
-    # to muse-standalone: the flag and the empty registry in the same transaction
-    assert cli.main(["broker", "allocator-transfer", "--to", "muse-standalone", "--expect-epoch", "1", "--db",
-                     str(db)]) == 0
-    moved = json.loads(capsys.readouterr().out)
-    assert moved["claim_epoch"] == 2 and moved["muse_obligations_required"] is True
-    assert json.loads(registry.read_text(encoding="utf-8")) == {"schema": 1, "obligations": []}
-    assert api.status(db=db)["muse_obligations_required"] is True
-    assert broker.admit(http("H2", "t2", "g2:v1"))["code"] == "ALLOCATOR_NOT_OWNED"
-    # back to afp-broker: refused while an obligation is open, or the registry is missing or invalid
-    registry.write_text(json.dumps({"schema": 1, "obligations": [{"batch_id": "b", "slot_id": 1}]}), encoding="utf-8")
-    assert api.allocator_transfer("afp-broker", expect_epoch=2, db=db)["code"] == "OWNER_BUSY"
-    registry.unlink()
-    assert api.allocator_transfer("afp-broker", expect_epoch=2, db=db)["code"] == "MUSE_OBLIGATIONS_UNKNOWN"
-    registry.write_text("[]", encoding="utf-8")
-    assert api.allocator_transfer("afp-broker", expect_epoch=2, db=db)["code"] == "MUSE_OBLIGATIONS_UNKNOWN"
-    # Muse's lane leases: a live lease or an unreadable file refuses
-    registry.write_text(json.dumps({"schema": 1, "obligations": []}), encoding="utf-8")
-    leases.write_text(json.dumps({"leases": {"m1": {"expires_at": "2999-01-01T00:00:00+00:00"}}}), encoding="utf-8")
-    assert api.allocator_transfer("afp-broker", expect_epoch=2, db=db)["code"] == "OWNER_BUSY"
-    leases.write_text("{not json", encoding="utf-8")
-    assert api.allocator_transfer("afp-broker", expect_epoch=2, db=db)["code"] == "MUSE_LEASES_UNKNOWN"
-    leases.write_text(json.dumps({"leases": {"m1": {"expires_at": "2000-01-01T00:00:00+00:00"}}}), encoding="utf-8")
-    back = api.allocator_transfer("afp-broker", expect_epoch=2, db=db)
-    assert back["ok"] and back["claim_epoch"] == 3 and api.status(db=db)["muse_obligations_required"] is False
+    assert lease["ok"] and api.status(db=db)["live"] is True
+    busy = api.allocator_release(db=db)   # refused while a lease is live
+    assert busy["code"] == "OWNER_BUSY" and "H1" in busy["reason"] and H.owner_path().exists()
+    tok = lease["lease"]["lease_token"]
+    assert broker.before_enter("H1", lease_token=tok, child_key="t1")["go"]
+    broker.hold_child("H1", lease_token=tok, reason="the reply was lost", child_key="t1")
+    assert api.allocator_release(db=db)["code"] == "OWNER_BUSY"   # a held lease / an unresolved child
+    broker.settle_child("H1", spent=1.0, child_key="t1")
+    assert cli.main(["broker", "allocator-release", "--by", "human:owner", "--db", str(db)]) == 0
+    released = json.loads(capsys.readouterr().out)
+    assert released["ok"] and released["changed"] is True and not H.owner_path().exists()
+    assert api.allocator_release(db=db)["changed"] is False   # idempotent
+    assert broker.admit(http("H2", "t2", "g2:v1"))["code"] == "ALLOCATOR_UNKNOWN"
+    assert api.allocator_claim(db=db)["changed"] is True
     assert broker.admit(http("H3", "t3", "g3:v1"))["ok"]
 
 
-def test_allocator_transfer_needs_the_muse_lease_file_to_claim_for_afp(tmp_path):
-    db = tmp_path / "pool.sqlite3"
-    Broker(db, **NO_CAPS)
-    H.owner_path().unlink()
-    out = api.allocator_transfer("afp-broker", expect_epoch=0, db=db)   # MUSE_LANE_LEASES_FILE unset
-    assert out["code"] == "MUSE_LEASES_UNKNOWN" and not H.owner_path().exists()
-
-
-def test_a_failed_registry_write_fails_the_transfer_and_changes_nothing(tmp_path, monkeypatch, muse_files):
-    db = tmp_path / "pool.sqlite3"
-    Broker(db, **NO_CAPS)
-    blocker = tmp_path / "blocker"
-    blocker.write_text("a file, not a directory", encoding="utf-8")
-    monkeypatch.setenv("MUSE_OBLIGATIONS_FILE", str(blocker / "muse_obligations.json"))
-    out = api.allocator_transfer("muse-standalone", expect_epoch=1, db=db)
-    assert not out["ok"] and out["code"] == "ERROR"
-    assert H.read_owner()["owner"] == "afp-broker" and H.read_owner()["claim_epoch"] == 1
-    assert api.status(db=db)["muse_obligations_required"] is False
-
-
-def test_an_unreadable_claim_refuses_and_is_never_overwritten(tmp_path, muse_files):
+def test_the_check_refuses_without_the_claim(tmp_path):
     db = tmp_path / "pool.sqlite3"
     broker = Broker(db, **NO_CAPS)
-    for body in ("{not json", json.dumps({"owner": "someone", "claim_epoch": 1}), json.dumps(["afp-broker"]),
-                 json.dumps({"owner": "afp-broker", "claim_epoch": -1})):
+    lease = broker.admit(http("H1", "t1", "g1:v1"))["lease"]
+    H.owner_path().unlink()   # removed by hand (allocator-release refuses while the lease is live)
+    check = api.check_before_enter("H1", lease["lease_token"], "t1", db=db)
+    assert check["code"] == "NOT_SENT_PROVEN" and check["cause"] == "ALLOCATOR_UNKNOWN"
+
+
+def test_an_unreadable_claim_refuses_and_is_never_overwritten(tmp_path):
+    db = tmp_path / "pool.sqlite3"
+    broker = Broker(db, **NO_CAPS)
+    for body, code in (("{not json", "ALLOCATOR_UNKNOWN"), (json.dumps(["afp-broker"]), "ALLOCATOR_UNKNOWN"),
+                       (json.dumps({"owner": ""}), "ALLOCATOR_UNKNOWN"), ("", "ALLOCATOR_UNKNOWN"),
+                       (json.dumps({"owner": "muse-standalone"}), "ALLOCATOR_NOT_OWNED")):
         H.owner_path().write_text(body, encoding="utf-8")
-        assert broker.admit(http("H1", "t1", "g1:v1"))["code"] == "ALLOCATOR_UNKNOWN"
-        for epoch in (0, 1):
-            assert api.allocator_transfer("afp-broker", expect_epoch=epoch, db=db)["code"] == "ALLOCATOR_UNKNOWN"
+        assert broker.admit(http("H1", "t1", "g1:v1"))["code"] == code
+        assert api.allocator_claim(db=db)["code"] == code
+        assert api.allocator_release(db=db)["code"] == code
         assert H.owner_path().read_text(encoding="utf-8") == body

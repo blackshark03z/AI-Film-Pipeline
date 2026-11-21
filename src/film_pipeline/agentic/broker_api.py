@@ -3,7 +3,7 @@
 Every function opens the machine broker (``<state dir>/lease_pool.sqlite3``, or ``db``), runs one short transaction
 and returns a JSON-serialisable dict with at least ``ok`` (bool), ``code`` (str) and ``reason`` (str). The same
 operations are CLI verbs: ``afp-film broker acquire|check|mark|release|settle|halt|login-check|login-result|claim|
-probe|import-legacy|import-resolve|status|allocator-transfer|settle-not-sent`` print that dict as JSON and exit with ``EXIT_*`` below.
+probe|import-legacy|import-resolve|status|allocator-claim|allocator-release|settle-not-sent`` print that dict as JSON and exit with ``EXIT_*`` below.
 
 Only account ids, lease keys, child keys and amounts cross this API: never a cookie, password, profile path or CDP
 endpoint. The lease token is returned once, by the ``acquire`` that created the lease (a replay is ``LEASE_EXISTS``,
@@ -11,8 +11,9 @@ without it); it never appears in any other result, error or log. A lane keeps it
 stdin (``--token-stdin``: one JSON line ``{"lease_token": "..."}``), never on the command line (``--token`` is for
 tests). A halt set here is never cleared automatically (``afp-film halt clear --by ... --reason ...``).
 
-Admission and the pre-Enter check refuse unless the allocator claim (``allocator_owner.json`` in the state dir) names
-``afp-broker``; ``allocator_transfer`` moves it. Both also honour the Muse halt file (``$MUSE_HALT_FILE``). Lock order:
+Admission and the pre-Enter check refuse unless the allocator claim (``allocator_owner.json`` in the state dir) exists
+and names ``afp-broker`` (``ALLOCATOR_UNKNOWN`` when it is missing or unreadable); ``allocator_claim`` writes it,
+``allocator_release`` removes it. Both also honour the Muse halt file (``$MUSE_HALT_FILE``). Lock order:
 broker transaction (BEGIN IMMEDIATE) -> halt-file lock (``halt_file_lock_path()``), the lock held until COMMIT; Muse
 publishes its halt holding only the halt-file lock (``halt_file_lock()``), never a broker transaction inside it.
 
@@ -43,8 +44,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterator
 
-from film_pipeline.agentic.broker import (MUSE_LANE_LEASES_ENV, SCHEMA_VERSION, WARNING_KINDS, AdmitRequest, Broker,
-                                          Child, default_db_path)
+from film_pipeline.agentic.broker import (SCHEMA_VERSION, WARNING_KINDS, AdmitRequest, Broker, Child,
+                                          default_db_path)
 
 EXIT_OK = 0          # done (a check that says go, a lease taken, a child marked, ...)
 EXIT_REFUSED = 1     # refused by policy: NOT_SENT_PROVEN, ALREADY_SUBMITTING, no lease, halt, epoch, cap
@@ -139,7 +140,7 @@ def acquire(account_id: str, lease_key: str, children: list[dict[str, Any]], *, 
     amounts in ``unit`` against the account quota, the film's budget (resolved from ``film_root``, the film package:
     fail closed without it), the provider's and the machine's daily caps. Returns ``{"ok": True, "lease": {...,
     "lease_token"}}`` (the only result that carries the token) or a refusal (``code``: PRODUCTION_HALT,
-    HALT_PENDING, SEND_STOP, ALLOCATOR_NOT_OWNED, ALLOCATOR_UNKNOWN, NO_ACCOUNT_LEASE, CHILD_FENCED, LEASE_HELD, LEASE_EXISTS (a replay: the token is never
+    HALT_PENDING, ALLOCATOR_NOT_OWNED, ALLOCATOR_UNKNOWN, NO_ACCOUNT_LEASE, CHILD_FENCED, LEASE_HELD, LEASE_EXISTS (a replay: the token is never
     re-issued), SHOT_VERSION_UNRESOLVED, TAKE_REUSED, STALE_EPOCH, NO_PRICE, BATCH_INVALID, FILM_BUDGET_UNAVAILABLE,
     BUDGET_NOT_SET, LEGACY_IMPORT_PENDING or a cap code; ``reprobe``: accounts to probe again)."""
     if not (account_id or "").strip():
@@ -233,7 +234,7 @@ def check_before_enter(lease_key: str, lease_token: str, child_key: str | None =
     ``child_keys``) goes PREPARING -> SUBMITTING bound to ``incarnation`` (the lane process), or none does.
 
     * ``ok`` True: press Enter (``phase`` SUBMITTING).
-    * ``code`` NOT_SENT_PROVEN (``cause``: PRODUCTION_HALT, HALT_PENDING, SEND_STOP, STALE_EPOCH, LEASE_LOST,
+    * ``code`` NOT_SENT_PROVEN (``cause``: PRODUCTION_HALT, HALT_PENDING, STALE_EPOCH, LEASE_LOST,
       ACCOUNT_NOT_ACTIVE, ALLOCATOR_NOT_OWNED, ALLOCATOR_UNKNOWN, ALREADY_NOT_SENT; ``possibly_sent`` False): the only
       proven pre-submit refusal, given only while every named child is still PREPARING (or already NOT_SENT and
       fenced). Do not press Enter; the broker closed every named child terminal NOT_SENT and fenced it in this same
@@ -361,27 +362,6 @@ def halt(provider: str, account_id: str, reason: str, *, kind: str = "ACCOUNT_WA
 
 
 # ---- the halt-file lock (shared with Muse), status and the allocator claim -------------------------------------
-def send_stop_event_name() -> str:
-    """The machine-wide send-stop event, ``Local\\FilmStudio-SendStop`` (a Windows named kernel event, per logon
-    session). A sender that hits a block (CAPTCHA, verification, unusual activity) first creates and sets it
-    (``raise_send_stop``) and keeps the handle open until a durable stop exists (the halt, a ``halt_pending/`` marker
-    or a ``halt_pending_unwritten/`` flag). While it is set, every check and admission refuses ``SEND_STOP``.
-    Non-Windows: no event."""
-    from film_pipeline.production.halt import send_stop_event_name as _name
-    return _name()
-
-
-def raise_send_stop() -> int:
-    """Create (or open) and set the send-stop event; returns the handle to keep open (``close_send_stop`` later)."""
-    from film_pipeline.production.halt import raise_send_stop as _raise
-    return _raise()
-
-
-def close_send_stop(handle: int) -> None:
-    from film_pipeline.production.halt import close_send_stop as _close
-    _close(handle)
-
-
 def halt_file_lock_path() -> str:
     """The halt-file lock (``<state dir>/production_halt.json.lock``): the innermost lock of the machine. Muse takes
     it, and nothing else, while it writes its halt file; it never opens a broker transaction while holding it."""
@@ -409,47 +389,13 @@ def _schema_version(path: Path) -> int | None:
     return int.from_bytes(header[60:64], "big")
 
 
-def _read_meta(path: Path, key: str) -> str | None:
-    """One ``broker_meta`` value read through a read-only connection (``mode=ro``: no write, no checkpoint)."""
-    try:
-        conn = sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True, timeout=5.0)
-    except sqlite3.Error:
-        return None
-    try:
-        row = conn.execute("SELECT value FROM broker_meta WHERE key = ?", (key,)).fetchone()
-        return str(row[0]) if row else ""
-    except sqlite3.Error:
-        return None
-    finally:
-        conn.close()
-
-
-def _session_id() -> int | None:
-    """This process's Windows logon session id (``Local\\`` event names are per session); None elsewhere."""
-    import os
-    if os.name != "nt":
-        return None
-    try:
-        import ctypes
-        from ctypes import wintypes
-        sid = wintypes.DWORD()
-        ok = ctypes.WinDLL("kernel32").ProcessIdToSessionId(os.getpid(), ctypes.byref(sid))
-        return int(sid.value) if ok else None
-    except (OSError, AttributeError):
-        return None
-
-
 @_guard
 def status(*, db: str | Path | None = None) -> dict[str, Any]:
     """Read-only: is the AFP broker live? ``live`` True when its database exists with the current schema and the
-    allocator claim names ``afp-broker``. Also: the database path, the claim (``owner``, ``claim_epoch``,
-    ``owner_problem``), every stop signal (``stop_code`` / ``stop_reason``: the first one a check would refuse on;
-    ``halted``, ``muse_halted``, ``pending_markers``, ``unwritten_flags``, ``send_stop``), the Muse obligations flag
-    and registry, the halt-file lock path and this process's Windows session id. Opens nothing for writing, creates
-    nothing, and carries no token, cookie, password or profile path."""
-    import os
-
-    from film_pipeline.agentic.broker import muse_obligations, muse_obligations_path
+    allocator claim names ``afp-broker``. Also: the database path, the claim (``owner``, ``owner_problem``), every stop
+    signal (``stop_code`` / ``stop_reason``: the first one a check would refuse on; ``halted``, ``muse_halted``,
+    ``pending_markers``) and the halt-file lock path. Opens nothing for writing, creates nothing, and carries no token,
+    cookie, password or profile path."""
     from film_pipeline.production import halt as H
     path = Path(db) if db else default_db_path()
     exists = path.is_file()
@@ -458,39 +404,34 @@ def status(*, db: str | Path | None = None) -> dict[str, Any]:
     afp_halt, muse_halt = H.read_halt(), H.read_muse_halt()
     muse_path = H.muse_halt_path()
     m_problem, markers = H.pending_markers()
-    f_problem, flags = H.unwritten_flags()
     stop_code, stop_reason = H.stop_signals()
-    required = _read_meta(path, "muse_obligations_required") if exists and schema == SCHEMA_VERSION else None
-    reg = muse_obligations_path()
-    reg_state, reg_count = muse_obligations(reg)
-    return _ok(live=bool(schema == SCHEMA_VERSION and not claim["problem"] and claim["owner"] == "afp-broker"),
+    return _ok(live=bool(schema == SCHEMA_VERSION and not claim["problem"] and claim["owner"] == H.OWNER),
                db=str(path), db_exists=exists, schema_version=schema, expected_schema_version=SCHEMA_VERSION,
-               owner=claim["owner"] or None, claim_epoch=claim["claim_epoch"], owner_problem=claim["problem"],
+               owner=claim["owner"] or None, owner_problem=claim["problem"],
                stop_code=stop_code, stop_reason=stop_reason,
                halted=afp_halt is not None, halt_reason=(afp_halt or {}).get("reason", ""),
                muse_halt_file=str(muse_path) if muse_path else None, muse_halted=muse_halt is not None,
                pending_markers=[p.name for p in markers], pending_problem=m_problem,
-               unwritten_flags=[p.name for p in flags], unwritten_problem=f_problem,
-               send_stop=H.send_stop_state() or "absent", send_stop_event=H.send_stop_event_name(),
-               muse_obligations_required=None if required is None else required == "1",
-               muse_obligations_file=str(reg), muse_obligations_state=reg_state, muse_obligations_open=reg_count,
-               halt_lock=halt_file_lock_path(), session_id=_session_id(),
-               muse_lane_leases_file=os.environ.get(MUSE_LANE_LEASES_ENV, "").strip() or None)
+               halt_lock=halt_file_lock_path())
 
 
 @_guard
-def allocator_transfer(to: str, *, expect_epoch: int, by: str = "", db: str | Path | None = None) -> dict[str, Any]:
-    """Move the allocator claim to ``to`` (``afp-broker`` or ``muse-standalone``): BEGIN IMMEDIATE, then the
-    halt-file lock; the claim must be at ``expect_epoch``; refused (OWNER_BUSY) while a lease is live or a child
-    unresolved in this broker or Muse's ``$MUSE_LANE_LEASES_FILE`` has a live lease; refused (MUSE_LEASES_UNKNOWN) when
-    that file cannot be read, or is not configured and the claim moves to ``afp-broker``; refused while the Muse
-    obligations registry (``$MUSE_OBLIGATIONS_FILE``, default ``<state dir>/muse_obligations.json``, format
-    ``{"schema": 1, "obligations": [...]}``) has an entry (OWNER_BUSY) or is invalid, or is missing while
-    ``muse_obligations_required`` is set (MUSE_OBLIGATIONS_UNKNOWN). Then the claim is replaced atomically with
-    ``claim_epoch + 1``. ``to="muse-standalone"`` also sets ``muse_obligations_required`` and creates the empty registry
-    in the same transaction (its write failing fails the transfer). First claim (no file): ``to="afp-broker",
-    expect_epoch=0``."""
-    out = _broker(db).allocator_transfer(to, expect_epoch=expect_epoch, by=by)
+def allocator_claim(*, by: str = "", db: str | Path | None = None) -> dict[str, Any]:
+    """Bootstrap the allocator claim ``{"owner": "afp-broker", ...}`` under the broker transaction, then the halt-file
+    lock. Idempotent (``changed`` False when already claimed). A claim file that cannot be trusted
+    (``ALLOCATOR_UNKNOWN``) or names another owner (``ALLOCATOR_NOT_OWNED``) is never overwritten."""
+    out = _broker(db).allocator_claim(by=by)
     if not out["ok"]:
         return _no(out["code"], out["reason"])
-    return _ok(**{k: v for k, v in out.items() if k != "ok"})
+    return _ok(**{k: v for k, v in out.items() if k not in ("ok", "code", "reason")})
+
+
+@_guard
+def allocator_release(*, by: str = "", db: str | Path | None = None) -> dict[str, Any]:
+    """Remove the ``afp-broker`` claim under the same locks; refused (``OWNER_BUSY``) while any lease is live or any
+    child unresolved in this broker. Idempotent when there is no claim. After it every admission and check refuses
+    ``ALLOCATOR_UNKNOWN``."""
+    out = _broker(db).allocator_release(by=by)
+    if not out["ok"]:
+        return _no(out["code"], out["reason"])
+    return _ok(**{k: v for k, v in out.items() if k not in ("ok", "code", "reason")})

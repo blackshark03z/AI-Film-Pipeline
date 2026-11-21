@@ -39,20 +39,14 @@ def _isolated_production_halt(tmp_path_factory, monkeypatch):
     monkeypatch.setenv("AFP_STATE_DIR", str(state))
     monkeypatch.setenv("AFP_HALT_FILE", str(state / "production_halt.json"))
     monkeypatch.delenv("MUSE_HALT_FILE", raising=False)
-    monkeypatch.delenv("MUSE_LANE_LEASES_FILE", raising=False)
-    monkeypatch.delenv("MUSE_OBLIGATIONS_FILE", raising=False)
-    # a private send-stop event per test: a test never stops (or is stopped by) this machine's real senders
-    import uuid
-    monkeypatch.setenv("AFP_SEND_STOP_EVENT", "Local\\AFP-test-SendStop-" + uuid.uuid4().hex)
     claim_allocator(state)
 
 
-def claim_allocator(state, owner: str = "afp-broker", epoch: int = 1) -> None:
-    """The allocator claim a machine has after its first ``afp-film broker allocator-transfer``."""
+def claim_allocator(state, owner: str = "afp-broker") -> None:
+    """The allocator claim a machine has after ``afp-film broker allocator-claim``."""
     import json
     (state / "allocator_owner.json").write_text(json.dumps(
-        {"owner": owner, "claim_epoch": epoch, "claimed_at": "2026-11-21T00:00:00+00:00", "claimed_by": "test"}),
-        encoding="utf-8")
+        {"owner": owner, "claimed_at": "2026-11-21T00:00:00+00:00", "claimed_by": "test"}), encoding="utf-8")
 
 
 TEST_FLOW_ACCOUNT = "test-flow-account"

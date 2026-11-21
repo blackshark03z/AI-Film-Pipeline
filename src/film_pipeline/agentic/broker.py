@@ -14,14 +14,15 @@ the step-4 lease pool, migrated in place by ``PRAGMA user_version``), is the aut
 
 Every state change is one short ``BEGIN IMMEDIATE`` transaction: a **leaf lock** (F2). Nothing else is acquired while
 it is held but the halt-file lock (``production_halt.json.lock``, innermost): admission, the pre-Enter check and the
-allocator transfer take it inside their transaction, read every stop signal (``halt.stop_signals``: the AFP halt, the
-Muse halt ``$MUSE_HALT_FILE``, ``halt_pending/`` markers, ``halt_pending_unwritten/`` flags, the send-stop event) and
+allocator claim/release take it inside their transaction, read every stop signal (``halt.stop_signals``: the AFP
+halt, the Muse halt ``$MUSE_HALT_FILE``, ``halt_pending/`` markers) and
 the allocator claim (``allocator_owner.json``) under it and hold it until their COMMIT; ``halt.set_halt`` takes the broker
 lock, then the halt-file lock. Lock order: broker transaction -> halt-file lock; Muse takes the halt-file lock alone.
 No provider I/O and no waiting inside.
 
-Admission and the pre-Enter check refuse unless the allocator claim names ``afp-broker`` (``allocator_transfer``
-moves it, only while no lease is live and no child unresolved here and in Muse's ``lane_leases.json``).
+Admission and the pre-Enter check refuse unless the allocator claim (``allocator_owner.json``) exists and names
+``afp-broker`` (``allocator_claim`` writes it, idempotent; ``allocator_release`` removes it, only while no lease is
+live and no child unresolved here).
 
 Lease states: ``ACTIVE`` (held by its holder), ``QUARANTINED_PENDING_RECONCILE`` (HELD: a child is AMBIGUOUS or the
 account warned; never released automatically) and ``RELEASED`` (every child final). Child phases: ``PREPARING`` (admitted,
@@ -49,7 +50,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
-from film_pipeline.production.halt import (OWNERS, _BY_RE, _atomic_write, halt_file_lock, read_owner,
+from film_pipeline.production.halt import (OWNER, _BY_RE, halt_file_lock, read_owner, remove_owner_locked,
                                            set_halt, state_dir, stop_signals, write_owner_locked)
 
 SCHEMA_VERSION = 5
@@ -192,72 +193,6 @@ class AdmitRequest:
     day: str | None = None               # local date (default: today)
     now: float | None = None
 
-
-
-MUSE_LANE_LEASES_ENV = "MUSE_LANE_LEASES_FILE"
-
-
-def muse_live_leases(now: float, path: str | None = None) -> tuple[str, list[str]]:
-    """``(problem, live account ids)`` of Muse's ``lane_leases.json`` (``$MUSE_LANE_LEASES_FILE``). A missing or empty
-    file has no lease; an unreadable file, a bad schema or a lease without a readable ``expires_at`` is a problem
-    (fail closed); ``problem == "unset"``: the path is not configured."""
-    raw_path = (path if path is not None else os.environ.get(MUSE_LANE_LEASES_ENV, "")).strip()
-    if not raw_path:
-        return "unset", []
-    try:
-        raw = Path(raw_path).read_text(encoding="utf-8")
-    except FileNotFoundError:
-        return "", []
-    except (OSError, UnicodeDecodeError) as exc:
-        return f"cannot be read ({type(exc).__name__})", []
-    if not raw.strip():
-        return "", []
-    try:
-        data = json.loads(raw)
-    except ValueError:
-        return "are not valid JSON", []
-    leases = data.get("leases", {}) if isinstance(data, dict) else None
-    if not isinstance(leases, dict):
-        return "have an unexpected schema", []
-    live = []
-    for account, rec in leases.items():
-        try:
-            exp = datetime.fromisoformat(str(rec["expires_at"]))
-            exp = exp if exp.tzinfo is not None else exp.replace(tzinfo=timezone.utc)
-        except (TypeError, KeyError, ValueError):
-            return f"have a lease ({account}) without a readable expires_at", []
-        if exp.timestamp() > now:
-            live.append(str(account))
-    return "", sorted(live)
-
-
-MUSE_OBLIGATIONS_ENV = "MUSE_OBLIGATIONS_FILE"
-
-
-def muse_obligations_path(path: str | None = None) -> Path:
-    """The standalone obligations registry: ``path``, else ``$MUSE_OBLIGATIONS_FILE``, else
-    ``<state dir>/muse_obligations.json``."""
-    raw = (path if path is not None else os.environ.get(MUSE_OBLIGATIONS_ENV, "")).strip()
-    return Path(raw) if raw else state_dir() / "muse_obligations.json"
-
-
-def muse_obligations(path: Path) -> tuple[str, int]:
-    """``(state, open obligations)`` of the registry: ``absent``, ``invalid`` (unreadable, not JSON, or not
-    ``{"obligations": [...]}``) or ``ok``."""
-    try:
-        raw = path.read_text(encoding="utf-8")
-    except FileNotFoundError:
-        return "absent", 0
-    except (OSError, UnicodeDecodeError):
-        return "invalid", 0
-    try:
-        body = json.loads(raw)
-    except ValueError:
-        return "invalid", 0
-    items = body.get("obligations") if isinstance(body, dict) else None
-    if not isinstance(items, list):
-        return "invalid", 0
-    return "ok", len(items)
 
 
 def _check_spent(spent: float) -> None:
@@ -494,20 +429,9 @@ class Broker:
         cols = {r["name"] for r in conn.execute("PRAGMA table_info(lease_children)").fetchall()}
         if "incarnation" not in cols:
             conn.execute("ALTER TABLE lease_children ADD COLUMN incarnation TEXT NOT NULL DEFAULT ''")
-        conn.execute("CREATE TABLE IF NOT EXISTS broker_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)")
         conn.execute("""CREATE TABLE IF NOT EXISTS child_audit (
             id INTEGER PRIMARY KEY AUTOINCREMENT, at TEXT NOT NULL, lease_key TEXT NOT NULL, child_key TEXT NOT NULL,
             action TEXT NOT NULL, incarnation TEXT NOT NULL DEFAULT '', epoch INTEGER, reason TEXT NOT NULL DEFAULT '')""")
-
-    @staticmethod
-    def _meta(conn: sqlite3.Connection, key: str) -> str:
-        row = conn.execute("SELECT value FROM broker_meta WHERE key = ?", (key,)).fetchone()
-        return str(row["value"]) if row is not None else ""
-
-    @staticmethod
-    def _set_meta(conn: sqlite3.Connection, key: str, value: str) -> None:
-        conn.execute("INSERT INTO broker_meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET "
-                     "value = excluded.value", (key, value))
 
     @staticmethod
     def _audit(conn: sqlite3.Connection, lease_key: str, child_key: str, action: str, *, incarnation: str = "",
@@ -637,7 +561,7 @@ class Broker:
     # ---- halt -----------------------------------------------------------------------------------------------------
     def _stop_refusal(self) -> tuple[str, str]:
         """``(code, reason)`` of the first stop signal (``halt.stop_signals``: the AFP halt, the Muse halt, a pending
-        halt marker or unwritten flag, the send-stop event; unreadable => refused), ``("", "")`` when none. Read under
+        halt marker; unreadable => refused), ``("", "")`` when none. Read under
         the halt-file lock where it decides (admission, the pre-Enter check)."""
         return stop_signals() if self.honor_halt else ("", "")
 
@@ -653,13 +577,13 @@ class Broker:
             return "", ""
         claim = read_owner()
         if claim["problem"]:
-            return "ALLOCATOR_UNKNOWN", (f"the allocator claim {claim['problem']} (allocator_owner.json in the state "
-                                         f"dir): nothing is allocated; first claim: afp-film broker allocator-transfer "
-                                         f"--to afp-broker --expect-epoch 0")
-        if claim["owner"] != "afp-broker":
-            return "ALLOCATOR_NOT_OWNED", (f"the allocator is {claim['owner']} (claim epoch {claim['claim_epoch']}): "
-                                           f"afp-film broker allocator-transfer --to afp-broker --expect-epoch "
-                                           f"{claim['claim_epoch']}")
+            return "ALLOCATOR_UNKNOWN", (f"the allocator claim is {claim['problem']} (allocator_owner.json in the "
+                                         f"state dir): nothing is allocated"
+                                         + ("; claim it: afp-film broker allocator-claim"
+                                            if claim["problem"] == "absent" else "; repair it by hand"))
+        if claim["owner"] != OWNER:
+            return "ALLOCATOR_NOT_OWNED", f"the allocator claim names {claim['owner']!r}, not {OWNER}: nothing is " \
+                                          f"allocated"
         return "", ""
 
     # ---- usage ----------------------------------------------------------------------------------------------------
@@ -1425,76 +1349,50 @@ class Broker:
                     "changed": True, "lease_state": state}
 
     # ---- the allocator claim --------------------------------------------------------------------------------------
-    def allocator_transfer(self, to: str, *, expect_epoch: int, by: str = "", now: float | None = None,
-                           muse_leases_file: str | None = None, obligations_file: str | None = None) -> dict[str, Any]:
-        """Move the allocator claim (``allocator_owner.json``) to ``to`` (``afp-broker`` or ``muse-standalone``).
-        BEGIN IMMEDIATE, then the halt-file lock; revalidate the claim and ``claim_epoch == expect_epoch``; refuse
-        while this broker has a live lease or an unresolved child, or Muse's ``lane_leases.json``
-        (``$MUSE_LANE_LEASES_FILE``) has a live lease or cannot be read (unset: refused when moving to afp-broker);
-        refuse while the Muse obligations registry (``$MUSE_OBLIGATIONS_FILE``, default ``<state dir>/
-        muse_obligations.json``) has an entry or is invalid, or is missing while ``muse_obligations_required`` is set;
-        then replace the claim atomically (``claim_epoch + 1``) and COMMIT. ``--to muse-standalone`` also sets
-        ``muse_obligations_required`` and creates the empty registry in the same transaction (a failed write fails the
-        transfer); ``--to afp-broker`` with an empty registry resets the flag. With no claim file the only transfer is
-        the bootstrap ``--to afp-broker --expect-epoch 0``."""
-        if to not in OWNERS:
-            raise ValueError(f"the allocator owner must be one of {OWNERS}")
-        if isinstance(expect_epoch, bool) or not isinstance(expect_epoch, int) or expect_epoch < 0:
-            raise ValueError("expect_epoch must be an integer >= 0")
-        ts = float(time.time() if now is None else now)
-
-        def refuse(code: str, reason: str) -> dict[str, Any]:
-            return {"ok": False, "code": code, "reason": reason}
-
+    def allocator_claim(self, *, by: str = "") -> dict[str, Any]:
+        """Bootstrap the allocator claim ``{"owner": "afp-broker", ...}`` (``allocator_owner.json``): BEGIN IMMEDIATE,
+        then the halt-file lock; idempotent (a valid ``afp-broker`` claim is kept, ``changed`` False). A claim file
+        that cannot be trusted (``ALLOCATOR_UNKNOWN``) or names another owner (``ALLOCATOR_NOT_OWNED``) is never
+        overwritten: repair it by hand."""
         with closing(self._connect()) as conn, self._tx_locked(conn):
             claim = read_owner()
             if claim["problem"] == "absent":
-                if to != "afp-broker" or expect_epoch != 0:
-                    return refuse("ALLOCATOR_UNKNOWN", "there is no allocator claim yet: the only first claim is "
-                                                       "--to afp-broker --expect-epoch 0")
-            elif claim["problem"]:
-                return refuse("ALLOCATOR_UNKNOWN", f"the allocator claim {claim['problem']}: repair it by hand; it is "
-                                                   f"never overwritten")
-            elif claim["claim_epoch"] != expect_epoch:
-                return refuse("STALE_CLAIM_EPOCH", f"the claim epoch is {claim['claim_epoch']}, not {expect_epoch} "
-                                                   f"(owner {claim['owner']})")
-            elif claim["owner"] == to:
-                return {"ok": True, "owner": to, "claim_epoch": claim["claim_epoch"], "changed": False}
+                written = write_owner_locked(by or process_holder())
+                return {"ok": True, "code": "", "reason": "", "owner": OWNER, "changed": True,
+                        "claimed_at": written["claimed_at"]}
+            if claim["problem"]:
+                return {"ok": False, "code": "ALLOCATOR_UNKNOWN",
+                        "reason": f"the allocator claim is {claim['problem']}: repair it by hand; it is never "
+                                  f"overwritten"}
+            if claim["owner"] != OWNER:
+                return {"ok": False, "code": "ALLOCATOR_NOT_OWNED",
+                        "reason": f"the allocator claim names {claim['owner']!r}: it is never overwritten"}
+            return {"ok": True, "code": "", "reason": "", "owner": OWNER, "changed": False,
+                    "claimed_at": claim["claimed_at"]}
+
+    def allocator_release(self, *, by: str = "") -> dict[str, Any]:
+        """Remove the ``afp-broker`` claim: BEGIN IMMEDIATE, then the halt-file lock; refused (``OWNER_BUSY``) while a
+        lease is live (not RELEASED) or a child unresolved in this broker; idempotent when there is no claim. A claim
+        that cannot be trusted or names another owner is never removed (repair it by hand)."""
+        with closing(self._connect()) as conn, self._tx_locked(conn):
+            claim = read_owner()
+            if claim["problem"] == "absent":
+                return {"ok": True, "code": "", "reason": "", "changed": False}
+            if claim["problem"]:
+                return {"ok": False, "code": "ALLOCATOR_UNKNOWN",
+                        "reason": f"the allocator claim is {claim['problem']}: repair it by hand; it is never removed"}
+            if claim["owner"] != OWNER:
+                return {"ok": False, "code": "ALLOCATOR_NOT_OWNED",
+                        "reason": f"the allocator claim names {claim['owner']!r}: it is never removed"}
             live = conn.execute("SELECT lease_key, state FROM leases WHERE state != 'RELEASED' LIMIT 1").fetchone()
             open_child = conn.execute("SELECT lease_key, child_key FROM lease_children WHERE final = 0 "
                                       "LIMIT 1").fetchone()
             if live is not None or open_child is not None:
                 what = (f"lease {live['lease_key']} is {live['state']}" if live is not None
                         else f"child {open_child['child_key']} of {open_child['lease_key']} is unresolved")
-                return refuse("OWNER_BUSY", f"{what}: settle every lease and child first")
-            problem, live_muse = muse_live_leases(ts, muse_leases_file)
-            if problem and (to == "afp-broker" or problem != "unset"):
-                return refuse("MUSE_LEASES_UNKNOWN", f"Muse's lane leases {problem}: the transfer needs proof that no "
-                                                     f"Muse lane is live (MUSE_LANE_LEASES_FILE)")
-            if live_muse:
-                return refuse("OWNER_BUSY", f"Muse lane leases are live on {', '.join(live_muse)}")
-            # the standalone obligations registry: never an entry; when required, it must exist and be valid
-            required = self._meta(conn, "muse_obligations_required") == "1"
-            reg_path = muse_obligations_path(obligations_file)
-            state, count = muse_obligations(reg_path)
-            if state == "invalid" or (state == "absent" and required):
-                return refuse("MUSE_OBLIGATIONS_UNKNOWN", f"the Muse obligations registry {reg_path} is "
-                              f"{'missing' if state == 'absent' else 'unreadable or invalid'}"
-                              + (" (required since the claim moved to muse-standalone)" if required else "")
-                              + ": a transfer needs proof that no standalone child is open")
-            if count:
-                return refuse("OWNER_BUSY", f"the Muse obligations registry {reg_path} has {count} open "
-                                            f"obligation(s): reconcile them first")
-            epoch_now = 0 if claim["problem"] else int(claim["claim_epoch"])
-            if to == "muse-standalone":   # the flag precedes the first standalone Enter: same txn, same lock
-                self._set_meta(conn, "muse_obligations_required", "1")
-                _atomic_write(reg_path, {"schema": 1, "obligations": []})   # raises: the transfer fails, rolls back
-            elif required:   # back to afp-broker with an empty, valid registry
-                self._set_meta(conn, "muse_obligations_required", "0")
-            written = write_owner_locked(to, epoch_now + 1, by or process_holder())
-            return {"ok": True, "owner": to, "claim_epoch": epoch_now + 1, "changed": True,
-                    "previous": claim["owner"] or "", "claimed_at": written.get("claimed_at", ""),
-                    "muse_obligations_required": to == "muse-standalone"}
+                return {"ok": False, "code": "OWNER_BUSY", "reason": f"{what}: settle every lease and child first"}
+            remove_owner_locked()
+            return {"ok": True, "code": "", "reason": "", "changed": True, "released_by": by or process_holder()}
 
     # ---- settlement -----------------------------------------------------------------------------------------------
     def _close_child(self, conn: sqlite3.Connection, lease: sqlite3.Row, child: sqlite3.Row, outcome: str,
