@@ -1,11 +1,11 @@
 # M3 code-merge plan: AFP + Muse into one repository, "Film Studio"
 
-**Status: DRAFT v2, 2026-11-21 (Codex round 1 REJECT, 7 High, all addressed; round 2 pending).** Design only. Nothing in this document has been executed.
+**Status: v3, 2026-11-21. Codex rounds 1 and 2 both REJECT; every High of both rounds is fixed here; the stop rule (2 rounds) is reached, so v3 is not re-reviewed.** Design only. Nothing in this document has been executed.
 - Written by session `m3-merge-plan` for the coordinator. Basis: `STUDIO_ARCHITECTURE.md` §8, §11 (roadmap change of
   2026-11-21, non-regression rule), `MERGE_INVENTORY.md`, the lane contract v8
   (`docs/production/muse/AFP_MUSE_LANE_CONTRACT.md` §6, §12), `OWNER_POLICY.md`, AFP `pyproject.toml`, and a read-only
   look at `D:\Muse` (layout, `requirements.txt`, `core/config.py`, `tests/conftest.py`, `CLAUDE.md`).
-- Review: Codex `gpt-6.1-sol`, read-only; the verdict is recorded at the end.
+- Review: Codex `gpt-6.1-sol`, read-only; the record is in "Review record" at the end.
 - Scope: the order and method of the merge. The merged system's later features (Round A/B, S2-lite, S5, daemon, UI)
   are named only where they must fit the layout.
 
@@ -298,11 +298,13 @@ is one shared plugin:
     pytest-only check), `lane_leases` paths, and the `AccountManager` constructor, so a test that passes explicit
     `accounts_file` / `profiles_dir` arguments outside the root also raises.
   The pytest-only checks already in Muse stay as a second line.
-- The variable is **inherited by subprocesses**, so a spawned `pool_runner` or CLI under test is guarded too. A test that
-  scrubs the environment (`env={...}`) must pass `FILM_STUDIO_TEST_ROOT` and the five paths; step 5 greps both suites for
-  `env=` calls and `subprocess` uses that drop them, and a subprocess guard test proves a child without them still
-  cannot reach a production path (the variable is missing, so the child falls back to the pytest-only guard plus the
-  canary check).
+- **Child processes cannot lose the guard.** The plugin wraps `subprocess.Popen.__init__` for the whole session (and
+  `os.spawn*`, `os.system` and `os.exec*` are forbidden in tests by a lint check in `run_all_tests.py`): whatever `env` a
+  test passes (a scrubbed dict, `{}`, or `None`), the child's environment gets `FILM_STUDIO_TEST_ROOT` and the five paths
+  set to test-root values, **overriding** any value that points outside the root. A child therefore never starts without
+  the guard, and no test code has to remember to pass it. The subprocess guard test proves this with a child started with
+  `env={}` and with a child whose env names a production path: both are rewritten, and neither touches a production
+  path. The canary check remains the last line, not the only one.
 - An autouse function-scoped fixture repoints the five paths per test inside the root (as today) and resets
   `send_halt._reset_memory()` for both module identities (`core.send_halt` and `muse_studio.core.send_halt`). AFP's
   existing autouse fixture, which **deletes** `MUSE_HALT_FILE`, is removed in step 5; the plugin owns all five paths, so
@@ -347,13 +349,23 @@ S1 broker files, `production_halt`, lane leases, and Muse `test_review6/7/9/11`,
   1. data-location resolution: `core/config.py`, `core/send_halt.py` (`halt_path()` default only), `core/lane_leases.py`
      (default registry path only), and direct readers of `DATA_DIR`/`ACCOUNTS_FILE`/`PROFILES_DIR` (§1.4);
   2. the `require_test_owned` guard calls at the Muse resolvers and the `AccountManager` constructor (§5.2);
-  3. a **new** file `core/runtime_guard.py`, called first in `pool_runner` `main()`: when `STUDIO_RUNTIME_MANIFEST` is set,
-     it verifies the runtime identity (§8) and exits non-zero before any account, browser or send code runs; when it is
-     unset (dev tree) it does nothing. This is the smallest hook that delivers the §8 refusal; it adds no send code;
+  3. a **new**, stdlib-only, side-effect-free module `muse_studio/_runtime_bootstrap.py`, imported as the **first statement**
+     of `pool_runner.py` and of the lane entry points of `lane.py`, **before** the existing `from core... import ...`
+     lines (which load `config.py` and `AccountManager`). This is an authorised import-order edit; no other line of those
+     files changes. `muse_studio/__init__.py` must be (and is verified to be) free of side effects, because `python -m
+     muse_studio.pool_runner` executes it first. The bootstrap decides the **mode**:
+     - **lane mode** = `STUDIO_LANE=1` in the environment (set by the AFP supervisor) or a `--batch-request` argument
+       (Round A). In lane mode a trusted manifest is **required**: `STUDIO_RUNTIME_MANIFEST` unset, unreadable or not
+       matching its recorded hash means exit non-zero before any other import: no account read, no browser, no send;
+     - **standalone mode** = neither marker. The bootstrap does nothing. This is the pre-P1 standalone path that the P1
+       scope freeze already keeps (single mode, no mixing with lanes). It is the explicit, documented development
+       exemption, and it ends for real sends when P1 passes (§8);
+     - in lane mode `config.py` also never creates `accounts.json`: a missing store is an error, not an empty list.
+     It adds no send code. The bootstrap is the §8 child check.
   4. `tests/conftest.py` (reduced to the shared plugin plus Muse-only fixtures) and the new guard tests.
   **Not in M3:** writing `lane_result.json` and the `batch_request.json` request handling. They do not exist in the
   current `pool_runner` and are contract Round A work (M4), built after the merge. M3 supplies the verified identity
-  (`runtime_guard` result) that Round A later copies into `lane_result.json`.
+  (`_runtime_bootstrap` result) that Round A later copies into `lane_result.json`.
 - **Contract field names stay.** `muse_tag` and `muse_commit` keep their names in `batch_request.json` and
   `lane_result.json` (contract v8, §5, §8). Their **values** become the in-repo runtime tag and the repo commit; a new field `runtime_manifest_sha256` carries the §8
   manifest hash. This is
@@ -391,7 +403,8 @@ coordinator before Step 1 is signed.
 - Do: throwaway clone of the tag; the §2.2 checkpoint-1 scan over all reachable history, report to
   `_archive/m3_merge_plan/`; in the clone, with its own isolation env set, the Muse rule tests
   (`test_review6/7/9/11_fixes`, `test_blocked_halt`, `test_stop_all_r14`, `test_stop_all_r15`) as the **baseline result**
-  (pass/fail list and counts saved).
+  (pass/fail list and counts saved), and the **B14 baseline**: one `pool_runner --simulate` run on the B14 fixture (copied
+  to a short path), with its custody records, receipts and quarantine decisions saved under `_archive/m3_merge_plan/`.
 - Done: zero unexplained scan hits; baseline recorded; the scanner script handed to the AFP Tech Lead.
 - Rollback: delete the throwaway clone. Fix by filtering in the clone, never in `D:\Muse`.
 - Blocks: Step 3.
@@ -408,7 +421,7 @@ coordinator before Step 1 is signed.
 **Step 4: One package, one environment, data location.** Owner: AFP TL; Muse TL reviews every Muse-side edit.
 - Do: first the §1.4 data-location edits (`config.py`, `send_halt.py`, `lane_leases.py`), then new `pyproject.toml` (§3),
   `film_studio` skeleton, import audit, AST boundary tests (§4), `constraints/runtime.txt`, the `studio` and `afp-film`
-  scripts, `core/runtime_guard.py` (§6, §8), a wheel build with the static-asset check, and the Playwright browser
+  scripts, `muse_studio/_runtime_bootstrap.py` (§6, §8), a wheel build with the static-asset check, and the Playwright browser
   decision (§8).
 - Done: clean-venv install in both modes; `studio --help`, `afp-film --help` and `python -m muse_studio.cli --help` pass;
   the Muse rule tests, run with `MUSE_DATA_DIR` set to a scratch dir and the plugin of step 5 stubbed by env, reproduce the
@@ -434,12 +447,12 @@ coordinator before Step 1 is signed.
   - **Parity is judged on normalized custody records, not counts.** From the Muse baseline run (made on the tagged source
     in step 2 with the same fixture and `--simulate`) and the runtime-tree run, compare per child: the AFP-mapped state
     (RESULT / AMBIGUOUS / NOT_SENT ...), `batch_id` + `slot_id` + `request_id`, the receipt sha256, the quarantine
-    decision per file, the ledger record sequence, and the number of send attempts (0 in `--simulate`); timestamps and
-    temp paths are normalized out. Any difference is a failure.
+    decision per file, the ledger record sequence, and the number of send attempts (0 in `--simulate`); timestamps, temp paths
+    and the random per-run `batch_id` values are normalized out (each `batch_id` becomes its ordinal in creation order,
+    also inside the receipt JSON before its sha256 is compared). Any difference after normalization is a failure.
   - the §8 drills reject a modified file, a moved tag, a wrong interpreter and a wrong import origin;
   - `studio runtime check` passes; the runtime tree contains no secret (scanner clean).
-- Rollback: §1.4 rollback (source renamed back only if the destination is unchanged); remove the runtime worktree and
-  tag (tags are local; no push).
+- Rollback: §1.4 rollback (source renamed back only if the destination is unchanged); retire the runtime tag (listed, never deleted or reused; no push) and remove its worktree.
 - Blocks: Step 7 (docs would describe unproven paths) and A3.
 
 **Step 7: Governance and docs merge.** Owner: AFP TL; coordinator approves; Muse TL reviews contract text.
@@ -453,9 +466,12 @@ coordinator before Step 1 is signed.
 - Blocks: Step 8.
 
 **Step 8: Whole-tree acceptance and fast-forward.** Owner: AFP TL; independent check by the coordinator.
-- Do: merge any later AFP commits into the merge branch (R8); `studio test` on the exact final candidate (both suites +
+- Do: integrate any later AFP commits into the merge branch (R8) **one batch at a time with `--no-commit`**: first scan
+  every reachable blob of the incoming commits (those not in the tip recorded at Step 1), then scan the staged result,
+  then commit. A secret introduced and later deleted inside the incoming range is still a hit, because history is
+  scanned, not only the final tree. Then `studio test` on the exact final candidate (both suites +
   canaries); Codex read-only review of `<merge base>..HEAD` over the product-code diff (config, `film_studio`,
-  `runtime_guard`, pyproject, isolation); scan on the final tree. **If any runtime-relevant file changed since the
+  `_runtime_bootstrap`, pyproject, isolation); scan on the final tree. **If any runtime-relevant file changed since the
   step-6 tag** (anything under `src/`, `pyproject.toml`, `constraints/`), cut a new runtime tag and repeat the step-6
   runtime checks (§8 drills and B14 parity) on that exact candidate; the old tag is not reused.
 - Done: all green; Codex ACCEPT (no High); `feature/drama-preprod-p0` fast-forwarded to the merge branch (local only,
@@ -483,8 +499,13 @@ Muse TL reviews every change that touches sending, the ledger, recovery or integ
 - **Tree.** `studio runtime build <tag>`: `git worktree add --detach C:\film-work\_rt\<tag> <tag>`, made read-only for
   the lane user by ACL where possible; **never** the dev worktree or a dirty tree. No `data/`, `.env`, cookies or
   accounts file exists in it (scanner check at build time).
-- **Interpreter and venv.** A venv beside the tree (`C:ilm-work\_rt\<tag>\.venv`), created with the pinned Python and
-  `uv pip install --constraint constraints/runtime.txt ".[qc,muse]"` (non-editable).
+- **Interpreter and venv: dependencies only, code from the tree.** A venv beside the tree
+  (`C:\film-work\_rt\<tag>\.venv`), created with the pinned Python and populated **only** with third-party packages:
+  `uv pip install -r constraints/runtime.txt` (the fully pinned list for the `qc,muse` extras). **The project itself is
+  not installed** into that venv, so there is no second copy of `film_pipeline`, `film_studio` or `muse_studio` in
+  `site-packages`; the code runs from `PYTHONPATH=<tree>\src`. The check asserts that no `film-studio` distribution
+  exists in the venv and that no package of ours resolves outside the tree. (A wheel install of the project remains a dev
+  and packaging check, §3; it is never a runtime.)
 - **Browser.** Muse drives Chromium through Playwright; `pip freeze` does not cover that executable. Step 4 records which
   executable `headless_muse_client` launches (bundled Playwright Chromium or an installed Chrome channel). The runtime
   build installs it into a path owned by the runtime (`PLAYWRIGHT_BROWSERS_PATH=<tree>rowsers`) when it is the bundled
@@ -492,13 +513,16 @@ Muse TL reviews every change that touches sending, the ledger, recovery or integ
   (headless start on `about:blank`, no profile, no network) before the tag is accepted. Profile data stays in
   `MUSE_DATA_DIR`.
 - **Manifest (`runtime_manifest.json`, written at build, hashed).** It records: the tag name, the **tag object id**
-  (`git rev-parse <tag>`), the commit id, the root tree id, a `source_sha256` (sha256 over sorted `(path, file sha256)` of
-  every file under `src/`, `pyproject.toml` and `constraints/`), the Python version and executable sha256, the venv
+  (`git rev-parse <tag>`), the commit id, the root tree id, a `source_sha256` (sha256 over sorted `(path, file sha256)` of the
+  **tracked** files of the commit, read from `git ls-tree -r <commit>` for `src/`, `pyproject.toml` and `constraints/`;
+  generated caches such as `__pycache__` are excluded, the launch sets `PYTHONDONTWRITEBYTECODE=1`, and **any importable
+  file (`.py`, `.pyd`, `.dll`) in the tree that is not in the tracked list is itself a mismatch**), the Python version and executable sha256, the venv
   fingerprint (sha256 of the sorted `pip freeze`), the browser revision and executable sha256. The manifest's sha256 is
   `runtime_manifest_sha256`; each film and each job request records it together with the tag and commit (a field added
   to contract v8.1, §6).
-- **Tags are immutable.** A runtime tag is never moved or re-made. A tag whose object id differs from the recorded one is
-  an error; a changed runtime is always a new tag name.
+- **Tags are immutable.** A runtime tag is never moved, re-made or deleted. A tag whose object id differs from the recorded
+  one is an error; a changed or failed runtime is always a **new tag name**. A failed or abandoned tag is **retired**: it
+  is kept and listed in `docs/production/RETIRED_RUNTIME_TAGS.md` with the reason, so its name is never reused.
 - **Launch.** The AFP lane starts `python -m muse_studio.pool_runner ...` with that venv's interpreter, `cwd` = the
   runtime tree, `PYTHONPATH=<tree>\src`, `STUDIO_RUNTIME_MANIFEST=<manifest path>` and `MUSE_DATA_DIR`, `MUSE_HALT_FILE`,
   `MUSE_LEASES_FILE`, `AFP_STATE_DIR` from the supervisor. The lease token goes only on stdin (contract §5, §14 Round B);
@@ -508,17 +532,20 @@ Muse TL reviews every change that touches sending, the ledger, recovery or integ
      tag object id and commit still equal the recorded ones; the tree is clean (`git status --porcelain` empty for the
      worktree) and the recomputed `source_sha256` equals the manifest; the interpreter, venv fingerprint and browser
      hash equal the manifest. Any mismatch: no spawn, a JSON error, no send.
-  2. *Inside the child* (`muse_studio/core/runtime_guard.py`, first call of `pool_runner` `main()`): it recomputes
+  2. *Inside the child* (`muse_studio/_runtime_bootstrap.py`, the first statement of `pool_runner.py`, before `config.py` or `AccountManager` is imported): it recomputes
      `source_sha256` over the tree it was loaded from, checks the interpreter path and version, and checks **import
-     origins**: `muse_studio.__file__` and `core.__file__` (and the already imported `pool_runner`) resolve inside the
-     runtime tree, never to a dev tree or an installed copy elsewhere. A mismatch exits non-zero before any account,
+     origins**: for every module already in `sys.modules` whose name starts with `muse_studio`, `core`, `film_pipeline`
+     or `film_studio` (both Muse aliases are covered whichever is loaded), `__file__` lies inside the runtime tree, never in
+     a dev tree or an installed copy elsewhere; it repeats the check once after the lane's imports finish and before the
+     first account is read. A mismatch exits non-zero before any account,
      browser or send code runs. Modified source leaves the commit id unchanged but changes `source_sha256`, which is why
      the hash, not the tag name, is the identity.
   3. Round A (post-merge) copies the verified identity into `lane_result.json` (`muse_tag`, `muse_commit`,
-     `runtime_manifest_sha256`); in M3 the guard's result is checked by the drills below.
+     `runtime_manifest_sha256`); in M3 the bootstrap's result is checked by the drills below.
 - **Wrong-tree drills (step 6).** Each must fail closed with no send: a tree with one modified file; a moved/re-made tag;
-  a different interpreter; a `PYTHONPATH` pointing at the dev tree; a changed browser executable; an unset manifest on a
-  real (non-simulate) request.
+  a different interpreter; a `PYTHONPATH` pointing at the dev tree; a changed browser executable; an extra importable file in the tree; a
+  `film-studio` copy in `site-packages`; **lane mode with the manifest unset or wrong** (refused before any account read;
+  the drill uses a scratch data dir with an access-tracked decoy store and asserts it was never opened).
 - **One tag for both halves.** AFP code (broker, job rows, intake) and Muse code (the subprocess) now come from one
   commit, so a runtime tag pins both. The AFP orchestrator process may run from the dev tree during development; for
   a real film the whole `studio` process also runs from the runtime tag.
@@ -553,3 +580,15 @@ Muse TL reviews every change that touches sending, the ledger, recovery or integ
 
 No code, no git operation in `D:\Muse`, nothing under `films/`, no send, no browser, no network. It defines no new
 feature; Round A/B, S2-lite and S5 follow inside the merged repo (Step 9).
+
+## Review record
+
+- Round 1 (`_archive/m3_merge_plan/codex_out1.md`): REJECT, 7 High (scan order vs M6 commit; `send_halt` default path;
+  guards on defaults only; Gate 0/M7 circularity; allowed-edit list could not deliver the gates; tag/freeze identity
+  too weak; cross-volume move deleting the source on size checks) and 5 Medium. All fixed in v2.
+- Round 2 (`codex_out2.md`): REJECT, 5 High (env-scrubbed child; guard did nothing without a manifest; non-editable install
+  hid a second code copy; guard called after module-level imports; Step 8 scanned only the final tree) and 4 Medium. All fixed
+  in v3 (§5.2 Popen wrapper, §6/§8 lane-mode bootstrap before imports, §8 dependencies-only venv and tracked-file manifest,
+  Step 8 incoming-history scans, retired tags, B14 baseline and normalization).
+- Stop rule reached after 2 rounds. v3 changes are **not independently re-reviewed**; the coordinator or the Step 7 review
+  of the contract amendment should treat §8 as the part most worth a second look.
