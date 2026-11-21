@@ -28,9 +28,9 @@ tiếp").**
 | A5 | Push of ~25 local commits | Owner | pending | pushed | pre-M3 |
 | A6 | film08 Gate 6 (Owner review); film05 rights | Owner | OWNER_PENDING | Owner verdict recorded | not blocking (Flow film, finished runtime) |
 | A7 | Flow films film03-film08 | — | delivered, or paused with Flow | stay as is; no migration | not blocking |
-| A8 | Old Muse attempts: worktrees `codex/muse-video-gateway` (`C:\Users\ADMIN\.codex\worktrees\muse-video-gateway\AFP-stable`) and `feature/muse-flight-pilot` (`D:\AI FILM MAKER\wt-muse-flight-pilot`). Both at 5d981c34 (2026-11-13), 9 dirty files each. Superseded by the lane contract. | coordinator | stale | decide: harvest anything useful into the backlog, then archive the branches (no deletion without a look) | pre-M3 |
+| A8 | Old Muse attempts: worktrees `codex/muse-video-gateway` (`C:\Users\ADMIN\.codex\worktrees\muse-video-gateway\AFP-stable`) and `feature/muse-flight-pilot` (`D:\AI FILM MAKER\wt-muse-flight-pilot`). Both at 5d981c34 (2026-11-13), 9 dirty files each. Superseded by the lane contract. | coordinator | harvested: dirty diffs saved as `_archive/merge_triage/a8_*.patch`, ideas in the M3_MERGE_PLAN backlog (ce0d81aa), both branches tagged `archive/*`. Left: remove the two worktrees at M3 (the 6.4 GB pilot films stay in place) | worktrees removed | pre-M3 |
 | A9 | Old worktree `D:\AI FILM MAKER\AI-Film-Pipeline` (`mission/quality-v2-022-120s`, 2026-11-10, 50 dirty) and the paused Film120-Gemini worktree | Owner decision (fate) | stale | archived or explicitly kept | pre-M3 |
-| A10 | 28 local branches not merged into `feature/drama-preprod-p0` | coordinator; triage by session `afp-triage` (local_47d7a955, read-only) | triage running | each one merged, archived or kept with a reason | pre-M3 |
+| A10 | 28 local branches not merged into `feature/drama-preprod-p0` | coordinator | triaged (`_archive/merge_triage/AFP_TRIAGE_20261121.md`): 12 merged-equivalent, 3 harvest (done), 9 keep, 4 Owner-data. All 28 tagged `archive/<branch>`; no branch deleted yet | each one merged, archived or kept with a reason | pre-M3 |
 
 ## Muse (`D:\Muse`)
 
