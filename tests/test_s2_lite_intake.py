@@ -409,3 +409,75 @@ def test_unknown_files_in_the_batch_are_reported_not_trusted(tmp_path):
 def test_intake_of_an_unknown_or_unprepared_job(tmp_path):
     w = make_world(tmp_path, n=1)
     assert LI.intake_job("nope", store=w.store, broker_db=w.broker.db_path)["code"] == "NOT_FOUND"
+
+
+# ---- regressions from the Codex review (round 1) ------------------------------------------------------------------------
+def test_broker_committed_not_sent_with_an_unreadable_ledger_is_held(tmp_path):
+    w = make_world(tmp_path, n=1)
+    assert w.settle_not_sent(0)["ok"]
+    w.write_ledger(None, raw="{nope")
+    w.write_lane_result([])
+    out = intake(w)
+    assert out["state"] == "AMBIGUOUS" and states(w)["shot_01"][1] == "FILM_LEDGER_UNREADABLE_OR_INVALID"
+    assert "LEDGER_UNREADABLE_NOT_SENT" in alarm_codes(w)
+
+
+def test_batch_receipt_that_says_failed_contradicts_an_ok_slot_receipt(tmp_path):
+    w = make_world(tmp_path, n=1)
+    w.clean_run()
+    s = w.slot(0)
+    (w.batch_dir() / "batch_receipt.json").write_text(json.dumps(
+        {"batch_id": w.job["job_dir"], "shots": [{"slot_id": s["slot_id"], "request_id": s["request_id"],
+                                                   "status": "failed"}]}), encoding="utf-8")
+    intake(w)
+    assert states(w)["shot_01"][1] == "BATCH_RECEIPT_CONTRADICTS_SLOT_RECEIPT" and take_files(w) == []
+
+
+def test_lane_entry_without_the_exact_identity_is_not_a_result(tmp_path):
+    w = make_world(tmp_path, n=1)
+    assert w.check(0)["go"]
+    a = w.good_slot(0)
+    w.write_ledger([a])
+    child = w.lane_child(0)
+    child.pop("request_id")
+    w.write_lane_result([child])
+    intake(w)
+    assert states(w)["shot_01"][1] == "LANE_IDENTITY_INCOMPLETE" and take_files(w) == []
+
+
+def test_a_broker_child_that_failed_elsewhere_cannot_be_a_result(tmp_path):
+    import sqlite3
+    w = make_world(tmp_path, n=1)
+    w.clean_run()
+    with sqlite3.connect(w.broker.db_path) as conn:
+        conn.execute("UPDATE lease_children SET outcome = 'PROVIDER_FAILED', final = 1 WHERE child_key = ?",
+                     (w.slot(0)["child_key"],))
+    intake(w, settle_broker=False)
+    assert states(w)["shot_01"][1] == "BROKER_STATE_CONTRADICTS_LANE" and take_files(w) == []
+
+
+def test_verified_clips_are_promoted_only_for_registered_shots(tmp_path):
+    w = make_world(tmp_path, n=2)
+    assert w.check(0, 1)["go"]
+    a0 = w.good_slot(0)
+    w.write_clip(1)                                  # slot 2: clip but no receipt -> held
+    w.write_ledger([a0, w.attempt(1)])
+    w.write_lane_result([w.lane_child(0), w.lane_child(1)])
+    vc = w.job_dir / "verified_clips"
+    vc.mkdir()
+    (vc / "S1.mp4").write_bytes(b"v1")
+    (vc / "S2.mp4").write_bytes(b"v2")
+    intake(w)
+    assert states(w)["shot_02"][0] == "AMBIGUOUS"
+    assert sorted(p.name for p in (w.muse / "verified_clips").iterdir()) == ["S1.mp4"]
+    assert (w.film / "takes" / "jobs" / w.job["job_dir"] / "intake" / "verified_clips" / "S2.mp4").is_file()
+
+
+def test_a_structured_lane_status_never_reaches_the_event_payload(tmp_path):
+    w = make_world(tmp_path, n=1)
+    assert w.check(0)["go"]
+    w.write_ledger([w.attempt(0)])
+    w.write_lane_result([], status={"lease_token": "SYNTHETIC_CANARY"})
+    intake(w)
+    dump = json.dumps(w.store.events(job_key=w.job["job_key"]), default=str)
+    assert "SYNTHETIC_CANARY" not in dump and "TOKEN_FIELD_IN_LANE_RESULT" in alarm_codes(w)

@@ -56,7 +56,8 @@ _SHA = re.compile(r"^[0-9a-f]{64}$")
 OK_STATUSES = {"ok", "completed"}
 FAILED_STATUSES = {"failed", "error", "failed_terminal"}
 # ledger statuses under which a RESULT may still be recorded (the lane may or may not have updated its attempt yet)
-RESULT_OK_STATUSES = {"PENDING_SEND", "UNCONFIRMED", "EXPIRED_NEEDS_RECONCILE"}
+BROKER_FAILURE_OUTCOMES = {"PROVIDER_FAILED", "REJECTED_POLICY", "NOT_SUBMITTED", "NOT_SENT"}
+RESULT_OK_STATUSES ={"PENDING_SEND", "UNCONFIRMED", "EXPIRED_NEEDS_RECONCILE"}
 LANE_CUSTODY = ("NOT_SENT_PROVEN", "RESULT", "FAILED_TERMINAL", "AMBIGUOUS")
 EXIT_OK, EXIT_ATTENTION, EXIT_USAGE, EXIT_ERROR = 0, 1, 2, 3
 
@@ -342,9 +343,10 @@ def decide_child(slot: dict[str, Any], ctx: Context) -> Decision:
     if final and bro["outcome"] == "NOT_SENT":
         if custody not in (None, "NOT_SENT_PROVEN") or has_files:
             return ambiguous("CONTRADICTION_NOT_SENT_WITH_EVIDENCE")
-        if ctx.ledger is None:   # the broker is authoritative; the ledger cannot be updated and that is reported
+        if ctx.ledger is None:   # a missing/invalid ledger never establishes NOT_SENT: held, loud
             d.alarms.append(("LEDGER_UNREADABLE_NOT_SENT", ctx.ledger_problem))
-        elif attempt is None and lane_entry is not None:
+            return ambiguous("FILM_LEDGER_UNREADABLE_OR_INVALID", detail=ctx.ledger_problem)
+        if attempt is None and lane_entry is not None:
             d.alarms.append(("LEDGER_ATTEMPT_MISSING", sid))
             return ambiguous("LEDGER_ATTEMPT_MISSING")
         elif attempt is not None and (attempt.get("status") == "RESOLVED" and attempt.get("reason") != "NOT_SENT"):
@@ -374,6 +376,12 @@ def decide_child(slot: dict[str, Any], ctx: Context) -> Decision:
                          problem=ctx.lane_problem)
     if custody not in ("RESULT", "FAILED_TERMINAL"):
         return ambiguous("LANE_CUSTODY_" + str(custody))
+    if lane_entry.get("child_key") != slot["child_key"] or lane_entry.get("request_id") != slot["request_id"]:
+        return ambiguous("LANE_IDENTITY_INCOMPLETE")   # a result needs the exact identity, not an absent field
+    # the broker's own record must not contradict a result
+    if bro["phase"] == "UNKNOWN" or (final and bro["outcome"] in BROKER_FAILURE_OUTCOMES) \
+            or (final and custody == "FAILED_TERMINAL" and bro["outcome"] == "PASSED"):
+        return ambiguous("BROKER_STATE_CONTRADICTS_LANE", phase=bro["phase"], outcome=bro["outcome"])
     if attempt is None:
         d.alarms.append(("LEDGER_ATTEMPT_MISSING", sid))
         return ambiguous("LEDGER_ATTEMPT_MISSING")
@@ -405,8 +413,7 @@ def decide_child(slot: dict[str, Any], ctx: Context) -> Decision:
         if entry.get("slot_id") not in (None, sid) or entry.get("request_id") not in (None, slot["request_id"]) \
                 or (cls == "ok" and entry.get("sha256") not in (None, sha)) \
                 or (entry["__group"] == "failed_shots") != (cls == "failed") \
-                or (entry.get("status") is not None and _status_class(entry) not in (cls, "failed")
-                    and entry["__group"] == "shots"):
+                or (entry.get("status") is not None and _status_class(entry) != cls):
             return ambiguous("BATCH_RECEIPT_CONTRADICTS_SLOT_RECEIPT")
     if cls == "failed":
         if custody != "FAILED_TERMINAL" or clips:
@@ -627,11 +634,6 @@ def _commit(job: dict[str, Any], request: dict[str, Any], ctx: Context, decision
     for rel, dst_root in (("BATCHES_V2/" + batch_id, muse_film / "BATCHES_V2" / batch_id),):
         for c in merge_move(stage_muse / rel, dst_root, muse_film / ".staging" / "conflicts" / job_dir_name / rel):
             alarms.append(("MUSE_FILE_CONFLICT", c))
-    vc_src = stage_muse / "verified_clips"
-    if vc_src.is_dir():
-        for p in sorted(vc_src.rglob("*")):
-            if p.is_file() and not _place_file(p, muse_film / "verified_clips" / p.relative_to(vc_src)):
-                alarms.append(("VERIFIED_CLIP_CONFLICT", p.name))
     for d in decisions:
         slot = d.slot
         for staged, name in d.quarantine:
@@ -656,6 +658,16 @@ def _commit(job: dict[str, Any], request: dict[str, Any], ctx: Context, decision
             except (OSError, ValueError) as exc:
                 d.state, d.reason = "AMBIGUOUS", "TAKE_REGISTER_REFUSED"
                 d.evidence["detail"] = f"{type(exc).__name__}: {exc}"[:200]
+    # verified_clips/<sid>.mp4 become canonical on the Muse side only for a shot whose slot was registered; the rest stays
+    # as evidence copies in the film package (a held slot is never promoted)
+    vc_src = stage_muse / "verified_clips"
+    if vc_src.is_dir():
+        ok_shots = {d.slot["shot_id"] for d in decisions if d.state == "REGISTERED"}
+        for p in sorted(vc_src.rglob("*")):
+            if not p.is_file() or p.stem not in ok_shots:
+                continue
+            if not _place_file(p, muse_film / "verified_clips" / p.relative_to(vc_src)):
+                alarms.append(("VERIFIED_CLIP_CONFLICT", p.name))
     for c in merge_move(stage_afp, afp_root / "takes" / "jobs" / job_dir_name / "intake", conflict_root):
         alarms.append(("AFP_EVIDENCE_CONFLICT", c))
     # 3. the ledger: update the attempts the lane published (never create one)
@@ -723,7 +735,14 @@ def _write_decisions(store: JobStore, job: dict[str, Any], decisions: list[Decis
                                            job["job_key"]))
         add_event(conn, film_id=job["film_id"], job_key=job["job_key"], kind="JOB_" + new_state, state=new_state,
                   payload={"children": {d.slot["slot_id"]: d.state for d in decisions},
-                           "lane_status": (lane or {}).get("status")})
+                           "lane_status": _safe_status(lane)})
+
+
+def _safe_status(lane: dict[str, Any] | None) -> str | None:
+    """The lane's status word for the event payload: a short plain word only (the lane file is untrusted; a structured
+    value could carry a token)."""
+    status = (lane or {}).get("status")
+    return status[:40] if isinstance(status, str) and status.replace("_", "").isalnum() else None
 
 
 def _commit_only_ambiguous(job: dict[str, Any], store: JobStore, decisions: list[Decision], lane_exit_code: int | None,
@@ -797,9 +816,11 @@ def _post_commit(job: dict[str, Any], store: JobStore, broker_db: Path, lane_exi
                 add_event(conn, film_id=job["film_id"], job_key=job["job_key"], kind="ALARM",
                           state="BROKER_SETTLE_FAILED", reason="; ".join(failures))
             else:
-                conn.execute("UPDATE jobs SET broker_settled = 1 WHERE job_key = ?", (job["job_key"],))
-                add_event(conn, film_id=job["film_id"], job_key=job["job_key"], kind="BROKER_SETTLED",
-                          payload={"children": [c["child_key"] for c in kids]})
+                won = conn.execute("UPDATE jobs SET broker_settled = 1 WHERE job_key = ? AND broker_settled = 0",
+                                   (job["job_key"],)).rowcount
+                if won:   # two concurrent intakes: the broker settle is idempotent, the event is recorded once
+                    add_event(conn, film_id=job["film_id"], job_key=job["job_key"], kind="BROKER_SETTLED",
+                              payload={"children": [c["child_key"] for c in kids]})
         post["broker_settled"] = not failures
         if failures:
             post["broker_settle_failures"] = failures
