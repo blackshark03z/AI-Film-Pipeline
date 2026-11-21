@@ -429,6 +429,18 @@ accounts.
     - the §13 backlog ported only through parity tests;
     - then S2 in full (daemon, git writer), S3 (conductor, wake adapters), S4 (web UI with the account panel,
       thread count, busy/free) and **S6: two films in parallel**.
+- **Roadmap change (Owner, 2026-11-21: "Tạm bỏ qua, hoàn thành việc hợp nhất và hoàn thiện hệ thống trước khi
+  chạy tiếp").** Film runs pause: P0 stops after its in-flight batch with a PARTIAL baseline, and BIKER stays off.
+  The new order is:
+  1. land the in-flight code (S1 addendum; Muse r15 with fixes A/B/C, PRE-TAG #11, accounts lock, git baseline);
+  2. **M3 code merge into one repository (Film Studio)**;
+  3. inside it, Muse Round A/B, S2-lite and the S5 lane;
+  4. P1 as the acceptance test of the merged system;
+  5. then films resume.
+
+  The lane contract's process boundary stays: the Muse code runs as one subprocess per lane. Only packaging
+  changes, so the cross-repo pinned tag (D8) becomes an in-repo runtime tag (§8). This supersedes the M2-before-M3
+  order below.
 - **In-flight work across the merge (Owner, 2026-11-21: "Ghi và lập danh sách").**
   - The governance merge is done now: one OWNER_POLICY, one coordinator, Muse under git.
   - Until P1 passes, each side finishes only its in-flight list in `docs/production/MERGE_INVENTORY.md`, and adds
