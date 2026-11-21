@@ -6,6 +6,14 @@ The coordinator keeps this file current; change a row's state when its work is v
 
 Columns: item · owner · state (2026-11-21) · "done" means · needed for.
 
+**Order change (Owner, 2026-11-21: "Tạm bỏ qua, hoàn thành việc hợp nhất và hoàn thiện hệ thống trước khi chạy
+tiếp").**
+- Film runs are paused: P0 (M8) stops with a PARTIAL baseline, and BIKER (M9) stays off.
+- The M3 code merge now comes before Round A/B, S2-lite, S5 and P1. The rows A2-A4 and M4-M5 are built inside the
+  merged repo.
+- The merge plan is written by session `m3-merge-plan` (local_1d450294) to `docs/production/M3_MERGE_PLAN.md`.
+- Merge precondition: A1, M1 (with fixes a-c), M2, M3 and M6 are done.
+
 ## AFP (`D:\AI FILM MAKER\AFP-stable`, branch `feature/drama-preprod-p0`)
 
 | # | Item | Owner | State | Done means | Needed for |
