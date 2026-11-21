@@ -161,13 +161,18 @@ A **job** is the unit of custody. Its states, with the owner of each transition:
   - A SUBMITTING or SUBMITTED job is finished and reconciled, never re-sent.
   - The same rule applies to the direct CLI path and to every provider.
   - **One halt boundary for AFP and Muse (lane review #5).** The final halt check and the SUBMITTING transition
-    read both the AFP halt and the Muse halt file (`MUSE_HALT_FILE`) under the one halt-file lock. Muse publishes
-    its halt under that same lock. Lock order: halt-file lock, then the broker transaction. Tests cover a halt
-    published between check and commit, in both write orders.
-- **One allocator (lane review #3).** A durable machine claim (`allocator_owner.json`, written under the halt-file
-  lock) names the allocator: `afp` or `muse-standalone`. Both sides take it; an unknown or unreadable claim refuses
-  allocation, and switching owner requires reconciliation. `broker status` is the read-only check; `probe` is a
-  quota write, not a liveness check.
+    read both the AFP halt and the Muse halt file (`MUSE_HALT_FILE`) under the one halt-file lock, held until the
+    SUBMITTING commit. Muse publishes its halt under that same lock and never without it (a lock timeout is
+    HALT_PUBLICATION_PENDING, retried; it is not a serialized halt). Lock order: broker transaction (outer), then
+    the halt-file lock (innermost). No holder of a Muse lock ever calls the broker. Tests cover a halt published
+    between check and commit, in both write orders.
+- **One allocator (lane review #3).** A durable machine claim (`allocator_owner.json`, under the halt-file lock)
+  names the allocator: `afp-broker` or `muse-standalone`. Admissions check it under broker transaction → halt-file
+  lock; an unknown or unreadable claim refuses allocation. Switching is one broker-owned transfer operation, used by
+  both sides and called with no Muse lock held: BEGIN IMMEDIATE → halt-file lock, revalidate the current owner and
+  `claim_epoch`, require no live lease and no unresolved child in both the broker and `lane_leases.json`, then
+  replace the claim and commit. `broker status` is the read-only check; `probe` is a quota write, not a liveness
+  check.
 - **One OS process per account lane**, started by the daemon with an explicit target in its arguments: CDP endpoint,
   project, account id and store path. No process-wide environment switching: `_flow_target_env` is retired from
   the daemon path.
