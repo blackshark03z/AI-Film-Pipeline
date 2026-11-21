@@ -120,7 +120,8 @@ Stop and report when any of these happens:
 - Never commit `uv.lock`.
 - **Git in both repositories (Owner, 2026-11-21).** Local commits of source code and docs are allowed in AFP and
   in `D:\Muse` (this includes putting `muse_studio` under version control), staged by explicit path.
-  - Never commit secrets or private data: `data/accounts.json*`, `data/profiles/`, cookie or session files,
+  - Never commit secrets or private data: `muse_studio/data/accounts.json*` (backups included), `muse_studio/data/profiles/`,
+    `muse_studio/data/lane_leases.json`, any cookie or session file,
     `.env`, or film work folders.
   - Never clean, stash or reset another session's work.
   - `git push` stays reserved.
