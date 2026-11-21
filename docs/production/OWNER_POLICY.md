@@ -18,6 +18,8 @@ The Tech Lead may tighten it or record what was done under it.
   "Hợp nhất ngay".
 - 2026-11-21, in the Muse coordinator session, asked to confirm the unified rules now in `D:\Muse\CLAUDE.md`
   (this single policy, agent-approved contact sheets, local commits by explicit path, no push): "Xác nhận".
+- 2026-11-21, on push and pace: "Hãy push khi phù hợp, không cần hỏi mình. và đẩy nhanh tiến độ hợp nhất/ hoàn
+  thành dự án. Nếu cần nâng effort vì độ khó thì nhắn mình".
 
 **Scope (2026-11-21).** This one file governs both projects, AFP (`D:\AI FILM MAKER\AFP-stable`) and Muse
 (`D:\Muse`), as one studio (Film Studio). `D:\Muse\CLAUDE.md` defers to it. Where an older rule in either
@@ -84,7 +86,8 @@ The safety rules at the end of this file were NOT removed.
 ## Still reserved to the Owner (stop and ask)
 
 - Publishing, uploading anywhere public, or sharing outside this machine.
-- `git push`.
+- `git push` to a new remote, a force push, or making any repository public. (Plain pushes to the existing
+  origin are delegated, see below.)
 - Purchases, new accounts, and plan or credit top-ups. (The agent never creates accounts.)
 - Changing the story's meaning (cutting a scene, changing an ending, adding characters), changing dialogue, or
   changing a locked look.
@@ -126,6 +129,8 @@ Stop and report when any of these happens:
     `muse_studio/data/lane_leases.json`, any cookie or session file,
     `.env`, or film work folders.
   - Never clean, stash or reset another session's work.
-  - `git push` stays reserved.
+  - `git push` (Owner, 2026-11-21): the agent pushes committed work to the existing `origin` remote when it is
+    ready, without asking. Never `--force`, never a new remote or a public repository, never a branch holding
+    secrets or film work folders. Muse has no remote yet; adding one stays with the Owner.
 - Codex reviews run read-only.
 - Never use `--approve-storyboard`.
