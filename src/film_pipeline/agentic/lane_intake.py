@@ -107,7 +107,7 @@ def read_lane_result(job_dir: Path, request: dict[str, Any]) -> tuple[dict[str, 
     except (OSError, ValueError):
         return None, "LANE_RESULT_INVALID", {}
     if not isinstance(data, dict) or not isinstance(data.get("children"), list) \
-            or not all(isinstance(c, dict) for c in data["children"]):
+            or not all(isinstance(c, dict) and isinstance(c.get("slot_id"), (str, type(None))) for c in data["children"]):
         return None, "LANE_RESULT_INVALID", {}
     for key, want in (("batch_id", request["batch_id"]), ("muse_tag", request["muse_tag"])):
         if data.get(key) not in (None, want):
@@ -349,8 +349,11 @@ def decide_child(slot: dict[str, Any], ctx: Context) -> Decision:
         if attempt is None and lane_entry is not None:
             d.alarms.append(("LEDGER_ATTEMPT_MISSING", sid))
             return ambiguous("LEDGER_ATTEMPT_MISSING")
-        elif attempt is not None and (attempt.get("status") == "RESOLVED" and attempt.get("reason") != "NOT_SENT"):
-            return ambiguous("LEDGER_CONTRADICTS_NOT_SENT")
+        elif attempt is not None and not (attempt.get("status") == "PENDING_SEND"
+                                          or (attempt.get("status") == "RESOLVED" and attempt.get("reason") == "NOT_SENT")):
+            # the lane publishes PENDING_SEND before Enter; any other status (UNCONFIRMED, RESULT_CORRUPT, ...) says it
+            # may have been sent, so a broker NOT_SENT contradicts it (section 10: held, never fenced/rebound)
+            return ambiguous("LEDGER_CONTRADICTS_NOT_SENT", status=str(attempt.get("status")))
         d.state, d.reason, d.fenced = "NOT_SENT", "BROKER_COMMITTED_NOT_SENT", True
         d.ledger_status, d.ledger_reason = "RESOLVED", "NOT_SENT"
         return d
@@ -379,7 +382,7 @@ def decide_child(slot: dict[str, Any], ctx: Context) -> Decision:
     if lane_entry.get("child_key") != slot["child_key"] or lane_entry.get("request_id") != slot["request_id"]:
         return ambiguous("LANE_IDENTITY_INCOMPLETE")   # a result needs the exact identity, not an absent field
     # the broker's own record must not contradict a result
-    if bro["phase"] == "UNKNOWN" or (final and bro["outcome"] in BROKER_FAILURE_OUTCOMES) \
+    if bro["phase"] == "UNKNOWN" or (final and custody == "RESULT" and bro["outcome"] in BROKER_FAILURE_OUTCOMES) \
             or (final and custody == "FAILED_TERMINAL" and bro["outcome"] == "PASSED"):
         return ambiguous("BROKER_STATE_CONTRADICTS_LANE", phase=bro["phase"], outcome=bro["outcome"])
     if attempt is None:
@@ -415,6 +418,9 @@ def decide_child(slot: dict[str, Any], ctx: Context) -> Decision:
                 or (entry["__group"] == "failed_shots") != (cls == "failed") \
                 or (entry.get("status") is not None and _status_class(entry) != cls):
             return ambiguous("BATCH_RECEIPT_CONTRADICTS_SLOT_RECEIPT")
+    resolved_as = attempt.get("reason") if status == "RESOLVED" else None
+    if (cls == "failed" and resolved_as == "RESULT_RECEIVED") or (cls == "ok" and resolved_as == "FAILED_TERMINAL"):
+        return ambiguous("LEDGER_CONTRADICTS_RECEIPT", ledger_reason=str(resolved_as))
     if cls == "failed":
         if custody != "FAILED_TERMINAL" or clips:
             return ambiguous("LANE_RECEIPT_DISAGREE")
@@ -555,7 +561,7 @@ def intake_job(ref: str, *, store: JobStore | None = None, broker_db: Path | str
                                     "shot_version": k["shot_version"], "take_index": k["take_index"],
                                     "request_id": k["request_id"], "input_digest": k["input_digest"]},
                               state="AMBIGUOUS", reason="REQUEST_MODIFIED_OR_MISSING") for k in kids]
-        return _commit_only_ambiguous(job, store, decisions, lane_exit_code, broker_db, afp_root)
+        return _commit_only_ambiguous(job, store, decisions, lane_exit_code, broker_db, afp_root, settle_broker)
     lane, lane_problem, lane_children = read_lane_result(job_dir, request)
     ev = discover(job_dir, request)
     stage_muse = muse_film / ".staging" / job["job_dir"]
@@ -662,9 +668,15 @@ def _commit(job: dict[str, Any], request: dict[str, Any], ctx: Context, decision
     # as evidence copies in the film package (a held slot is never promoted)
     vc_src = stage_muse / "verified_clips"
     if vc_src.is_dir():
-        ok_shots = {d.slot["shot_id"] for d in decisions if d.state == "REGISTERED"}
+        ok_shas: dict[str, set[str]] = {}   # shot_id -> receipt-verified sha256 of its registered clip(s)
+        for d in decisions:
+            if d.state == "REGISTERED" and d.sha:
+                ok_shas.setdefault(d.slot["shot_id"], set()).add(d.sha)
         for p in sorted(vc_src.rglob("*")):
-            if not p.is_file() or p.stem not in ok_shots:
+            if not p.is_file() or p.stem not in ok_shas:
+                continue
+            if sha256_file(p) not in ok_shas[p.stem]:   # a canonical clip must be the receipt-verified bytes (s7.1, s10 #7)
+                alarms.append(("VERIFIED_CLIP_SHA_MISMATCH", p.name))
                 continue
             if not _place_file(p, muse_film / "verified_clips" / p.relative_to(vc_src)):
                 alarms.append(("VERIFIED_CLIP_CONFLICT", p.name))
@@ -746,10 +758,14 @@ def _safe_status(lane: dict[str, Any] | None) -> str | None:
 
 
 def _commit_only_ambiguous(job: dict[str, Any], store: JobStore, decisions: list[Decision], lane_exit_code: int | None,
-                           broker_db: Path, afp_root: Path) -> dict[str, Any]:
+                           broker_db: Path, afp_root: Path, settle_broker: bool = True) -> dict[str, Any]:
     _write_decisions(store, job, decisions, [("REQUEST_MODIFIED_OR_MISSING", job["job_key"])], None, lane_exit_code)
+    fresh = store.find_job(job["job_key"]) or job
+    # the halt signals (lane exit 4, muse_halt.json, PENDING publication) apply even when the request is unusable (s7.4)
+    post = _post_commit(fresh, store, broker_db, lane_exit_code, settle_broker, afp_root, None, decisions)
     project_events_safely(store, afp_root, job["film_id"])
-    return _result(job, store, changed=True, alarms=[{"code": "REQUEST_MODIFIED_OR_MISSING", "detail": job["job_key"]}])
+    return _result(job, store, changed=True, post=post,
+                   alarms=[{"code": "REQUEST_MODIFIED_OR_MISSING", "detail": job["job_key"]}])
 
 
 # ---- phase C: after the commit ---------------------------------------------------------------------------------------
@@ -802,6 +818,8 @@ def _post_commit(job: dict[str, Any], store: JobStore, broker_db: Path, lane_exi
             row = info.get(c["child_key"])
             if info.get("__error__") or not isinstance(row, dict):
                 failures.append(f"{c['slot_id']}: broker child unreadable")
+                continue
+            if row.get("final"):   # the broker already closed this child (e.g. a committed PROVIDER_FAILED)
                 continue
             amount = float(row["amount"]) if row.get("amount") is not None else None
             if amount is None:

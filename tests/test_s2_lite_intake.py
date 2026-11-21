@@ -465,12 +465,79 @@ def test_verified_clips_are_promoted_only_for_registered_shots(tmp_path):
     w.write_lane_result([w.lane_child(0), w.lane_child(1)])
     vc = w.job_dir / "verified_clips"
     vc.mkdir()
-    (vc / "S1.mp4").write_bytes(b"v1")
-    (vc / "S2.mp4").write_bytes(b"v2")
+    (vc / "S1.mp4").write_bytes(w.clips[w.slot(0)["slot_id"]])   # the receipt-verified bytes
+    (vc / "S2.mp4").write_bytes(w.clips[w.slot(1)["slot_id"]])
     intake(w)
     assert states(w)["shot_02"][0] == "AMBIGUOUS"
     assert sorted(p.name for p in (w.muse / "verified_clips").iterdir()) == ["S1.mp4"]
     assert (w.film / "takes" / "jobs" / w.job["job_dir"] / "intake" / "verified_clips" / "S2.mp4").is_file()
+
+
+def test_a_verified_clip_with_other_bytes_than_the_receipt_is_never_promoted(tmp_path):
+    w = make_world(tmp_path, n=1)
+    w.clean_run()
+    vc = w.job_dir / "verified_clips"
+    vc.mkdir()
+    (vc / "S1.mp4").write_bytes(b"not the receipt-verified bytes")
+    intake(w)
+    assert states(w)["shot_01"][0] == "REGISTERED"
+    assert not (w.muse / "verified_clips").exists() or list((w.muse / "verified_clips").iterdir()) == []
+    assert "VERIFIED_CLIP_SHA_MISMATCH" in alarm_codes(w)
+
+
+def test_an_agreeing_broker_failure_keeps_failed_terminal(tmp_path):
+    import sqlite3
+    w = make_world(tmp_path, n=1)
+    assert w.check(0)["go"]
+    w.write_receipt(0, digest="0" * 64, status="failed")
+    w.write_ledger([w.attempt(0)])
+    w.write_lane_result([w.lane_child(0, "FAILED_TERMINAL")])
+    with sqlite3.connect(w.broker.db_path) as conn:
+        conn.execute("UPDATE lease_children SET outcome = 'PROVIDER_FAILED', final = 1 WHERE child_key = ?",
+                     (w.slot(0)["child_key"],))
+    intake(w)
+    assert states(w)["shot_01"] == ("FAILED_TERMINAL", "RECEIPT_EXPLICIT_FAILURE")
+
+
+def test_a_broker_not_sent_over_a_result_corrupt_attempt_is_held(tmp_path):
+    w = make_world(tmp_path, n=1)
+    assert w.settle_not_sent(0)["ok"]
+    w.write_ledger([w.attempt(0, "RESULT_CORRUPT")])
+    w.write_lane_result([])
+    intake(w)
+    assert states(w)["shot_01"][1] == "LEDGER_CONTRADICTS_NOT_SENT"
+    a = attempt_of(w, 0)
+    assert a["status"] == "RESULT_CORRUPT" and a["fenced"] is False
+
+
+def test_a_failure_receipt_over_a_result_received_ledger_is_held(tmp_path):
+    w = make_world(tmp_path, n=1)
+    assert w.check(0)["go"]
+    w.write_receipt(0, digest="0" * 64, status="failed")
+    w.write_ledger([w.attempt(0, "RESOLVED", reason="RESULT_RECEIVED")])
+    w.write_lane_result([w.lane_child(0, "FAILED_TERMINAL")])
+    intake(w)
+    assert states(w)["shot_01"][1] == "LEDGER_CONTRADICTS_RECEIPT"
+    assert attempt_of(w, 0)["reason"] == "RESULT_RECEIVED"
+
+
+def test_lane_exit_code_4_halts_even_when_the_request_is_modified(tmp_path):
+    from film_pipeline.production import halt as H
+    w = make_world(tmp_path, n=1)
+    w.clean_run()
+    p = w.job_dir / "batch_request.json"
+    p.write_text(p.read_text(encoding="utf-8").replace("max", "fast"), encoding="utf-8")
+    out = intake(w, lane_exit_code=4)
+    assert out["state"] == "AMBIGUOUS" and out["post"].get("halt_set") is True
+    assert w.store.find_job(w.job["job_key"])["halt_set"] == 1 and H.is_halted()
+
+
+def test_a_non_string_slot_id_in_the_lane_result_does_not_crash_intake(tmp_path):
+    w = make_world(tmp_path, n=1)
+    w.clean_run()
+    w.write_lane_result([{"slot_id": [], "custody": "RESULT"}])
+    intake(w)
+    assert states(w)["shot_01"][0] == "AMBIGUOUS" and take_files(w) == []
 
 
 def test_a_structured_lane_status_never_reaches_the_event_payload(tmp_path):
